@@ -5,6 +5,13 @@ const MAX_DETAILED_LIVE_FIXTURES = 6;
 const LIVE_STATUSES = new Set(['1H','HT','2H','ET','BT','P','INT','LIVE']);
 
 let cache = { at: 0, payload: null };
+let apiQuota = {
+  dailyLimit: null,
+  dailyRemaining: null,
+  minuteLimit: null,
+  minuteRemaining: null,
+  observedAt: null
+};
 
 function apiHeaders() {
   const key = process.env.API_FOOTBALL_KEY;
@@ -12,14 +19,39 @@ function apiHeaders() {
   return { 'x-apisports-key': key, Accept: 'application/json' };
 }
 
+function numericHeader(headers, name) {
+  const raw = headers.get(name);
+  if (raw == null || raw === '') return null;
+  const value = Number(raw);
+  return Number.isFinite(value) ? value : null;
+}
+
+function captureQuota(headers) {
+  const dailyLimit = numericHeader(headers, 'x-ratelimit-requests-limit');
+  const dailyRemaining = numericHeader(headers, 'x-ratelimit-requests-remaining');
+  const minuteLimit = numericHeader(headers, 'x-ratelimit-limit');
+  const minuteRemaining = numericHeader(headers, 'x-ratelimit-remaining');
+
+  if (dailyLimit !== null) apiQuota.dailyLimit = dailyLimit;
+  if (dailyRemaining !== null) apiQuota.dailyRemaining = dailyRemaining;
+  if (minuteLimit !== null) apiQuota.minuteLimit = minuteLimit;
+  if (minuteRemaining !== null) apiQuota.minuteRemaining = minuteRemaining;
+  apiQuota.observedAt = new Date().toISOString();
+}
+
 async function apiGet(path) {
   const response = await fetch(`${API_BASE}${path}`, { headers: apiHeaders() });
+  captureQuota(response.headers);
   if (!response.ok) throw new Error(`API-Football HTTP ${response.status}`);
   const data = await response.json();
   if (data?.errors && Object.keys(data.errors).length) {
     throw new Error(`API-Football: ${JSON.stringify(data.errors)}`);
   }
   return data;
+}
+
+function quotaMeta() {
+  return { ...apiQuota };
 }
 
 function todayInTimezone(timeZone = DISPLAY_TIMEZONE) {
@@ -156,7 +188,8 @@ async function buildLivePayload() {
         date,
         timezone: DISPLAY_TIMEZONE,
         fetchedAt: new Date().toISOString(),
-        fixtureCount: 0
+        fixtureCount: 0,
+        quota: quotaMeta()
       }
     };
   }
@@ -187,7 +220,8 @@ async function buildLivePayload() {
       fetchedAt: new Date().toISOString(),
       fixtureCount: matches.length,
       liveFixtureCount: matches.filter((m) => m.isLive).length,
-      cacheSeconds: CACHE_TTL_MS / 1000
+      cacheSeconds: CACHE_TTL_MS / 1000,
+      quota: quotaMeta()
     }
   };
 }
@@ -200,11 +234,11 @@ export default async function handler(req, res) {
 
   try {
     if (cache.payload && Date.now() - cache.at < CACHE_TTL_MS) {
-      return res.status(200).json({ ...cache.payload, meta: { ...cache.payload.meta, cache: 'HIT' } });
+      return res.status(200).json({ ...cache.payload, meta: { ...cache.payload.meta, quota: quotaMeta(), cache: 'HIT' } });
     }
     const payload = await buildLivePayload();
     cache = { at: Date.now(), payload };
-    return res.status(200).json({ ...payload, meta: { ...payload.meta, cache: 'MISS' } });
+    return res.status(200).json({ ...payload, meta: { ...payload.meta, quota: quotaMeta(), cache: 'MISS' } });
   } catch (error) {
     return res.status(503).json({
       error: error.message,
@@ -214,7 +248,8 @@ export default async function handler(req, res) {
         live: false,
         mode: 'TODAY',
         timezone: DISPLAY_TIMEZONE,
-        fetchedAt: new Date().toISOString()
+        fetchedAt: new Date().toISOString(),
+        quota: quotaMeta()
       }
     });
   }
