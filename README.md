@@ -1,58 +1,60 @@
-# ARGUS OMNI LIVE
+# ARGUS OMNI LIVE V2
 
-ARGUS OMNI LIVE is a live / in-play football intelligence dashboard designed to ingest match events and market snapshots, evaluate match state, quantify uncertainty, and surface disciplined decision signals.
+ARGUS OMNI LIVE is a live / in-play football intelligence dashboard. V2 adds a secure server-side API-Football integration so ARGUS can retrieve matches in progress automatically instead of requiring manual match data.
 
-## V1 included
-- Live command-center dashboard
-- Match-state scoring engine
-- Confidence, pressure and market-edge calculations
-- PRIME / WATCH / NO BET classifications
-- Demo live feed for immediate testing
-- Provider adapter layer for future APIs
-- GitHub Pages deployment workflow
+## V2 architecture
 
-## Run locally
-Open `index.html` directly, or serve the repository with:
+- Live fixtures from API-SPORTS / API-Football
+- Batched fixture-detail retrieval (up to 20 fixture IDs per request)
+- Live match statistics normalization
+- Live 1X2 odds ingestion when available
+- 60-second server cache to protect API quota
+- API key kept server-side via `API_FOOTBALL_KEY`
+- PRIME / WATCH / NO BET governance
+- Mandatory real-market check: no PRIME or WATCH without complete live 1X2 odds
+- Demo feed retained as a safe fallback
 
-```bash
-python -m http.server 8080
+## Secure deployment
+
+GitHub Pages can serve the static dashboard but cannot securely hold a private API key. Deploy V2 on Vercel (or another serverless host) so `/api/live` runs server-side.
+
+Required environment variable:
+
+```text
+API_FOOTBALL_KEY=your_api_sports_key
 ```
 
-Then open `http://localhost:8080`.
+Never commit the real key to this repository.
 
-## Live data architecture
-The frontend must never contain private sportsbook/data-provider keys. Connect live feeds through a secure backend/serverless proxy and return normalized match data to the browser.
+## Live flow
 
-Expected normalized match shape:
+1. Browser calls `/api/live`.
+2. Server requests `/fixtures?live=all` from API-Football.
+3. Live fixture IDs are grouped in batches of 20 and enriched through `/fixtures?ids=...`.
+4. Server requests `/odds/live` and extracts usable 1X2 prices when coverage exists.
+5. Responses are normalized into the ARGUS match schema.
+6. The ARGUS engine calculates pressure, data quality, uncertainty, model probabilities, fair odds, market edge and classification.
 
-```json
-{
-  "id": "match-001",
-  "competition": "Competition",
-  "home": "Home",
-  "away": "Away",
-  "minute": 63,
-  "score": { "home": 1, "away": 1 },
-  "stats": {
-    "possessionHome": 54,
-    "shotsHome": 11,
-    "shotsAway": 7,
-    "shotsOnTargetHome": 5,
-    "shotsOnTargetAway": 2,
-    "cornersHome": 6,
-    "cornersAway": 3,
-    "dangerousAttacksHome": 38,
-    "dangerousAttacksAway": 24
-  },
-  "markets": {
-    "home": 2.25,
-    "draw": 3.10,
-    "away": 3.70,
-    "over25": 1.95,
-    "under25": 1.85
-  }
-}
-```
+## Quota strategy
 
-## Disclaimer
-ARGUS OMNI LIVE is an analytical decision-support system. Outputs are probabilistic, may be wrong, and are not guarantees of profit.
+The live backend caches results for 60 seconds and reuses grouped API calls. This is intentional: a free API-Football account has a limited daily request allowance, so V2 prioritizes disciplined retrieval over excessive polling.
+
+## Files
+
+- `index.html` — command-center UI
+- `styles.css` — interface styling
+- `app.js` — dashboard behavior
+- `src/engine.js` — ARGUS decision engine
+- `src/providers.js` — live/demo provider adapter
+- `api/live.js` — secure serverless API-Football proxy
+- `data/demo-matches.json` — deterministic fallback feed
+- `vercel.json` — Vercel function configuration
+- `.env.example` — required secret name
+
+## Local development
+
+For the static demo, serve the repository with any static server. For real V2 live mode, use a Vercel-compatible local runtime and configure `API_FOOTBALL_KEY` in the local environment.
+
+## Governance
+
+ARGUS outputs are probabilistic decision-support signals. Missing statistics, incomplete market coverage, stale data or missing odds reduce data quality. V2 refuses PRIME/WATCH classifications when a valid complete 1X2 live market is unavailable. No output guarantees profit.
