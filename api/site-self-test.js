@@ -1,4 +1,4 @@
-function authorized(req){const secret=process.env.CRON_SECRET;return !secret||req.headers.authorization===`Bearer ${secret}`}
+function allowed(req){const secret=process.env.CRON_SECRET;if(!secret)return true;if(req.headers.authorization===`Bearer ${secret}`)return true;const origin=String(req.headers.origin||'');const host=String(req.headers['x-forwarded-host']||req.headers.host||'');if(!origin||!host)return false;try{return new URL(origin).host===host}catch(_){return false}}
 async function probe(base,path){
   const started=Date.now();
   try{
@@ -9,7 +9,7 @@ async function probe(base,path){
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
-  if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
+  if(!allowed(req))return res.status(401).json({error:'Unauthorized'});
   const proto=String(req.headers['x-forwarded-proto']||'https').split(',')[0];
   const host=req.headers['x-forwarded-host']||req.headers.host;
   if(!host)return res.status(500).json({error:'Host unavailable'});
@@ -18,5 +18,5 @@ export default async function handler(req,res){
   const checks=await Promise.all(paths.map(p=>probe(base,p)));
   const failures=checks.filter(x=>!x.ok);
   const slow=checks.filter(x=>x.ok&&x.ms>2500).map(x=>({path:x.path,ms:x.ms}));
-  return res.status(200).json({version:'SITE-SELF-TEST-1',generatedAt:new Date().toISOString(),status:failures.length?'DEGRADED':slow.length?'SLOW':'HEALTHY',checked:checks.length,failures,slow,checks});
+  return res.status(200).json({version:'SITE-SELF-TEST-2',generatedAt:new Date().toISOString(),status:failures.length?'DEGRADED':slow.length?'SLOW':'HEALTHY',checked:checks.length,failures,slow,checks});
 }
