@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+<title id="title">ARGUS football vision</title>
+<desc id="desc">A calm night football stadium viewed from behind a human observer, with subtle field lines, light and a minimal vision motif.</desc>
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1115"/><stop offset=".58" stop-color="#151b20"/><stop offset="1" stop-color="#0f1316"/></linearGradient>
+  <linearGradient id="pitch" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#314338"/><stop offset="1" stop-color="#17241d"/></linearGradient>
+  <radialGradient id="light"><stop offset="0" stop-color="#f4ead7" stop-opacity=".82"/><stop offset=".35" stop-color="#d7c9aa" stop-opacity=".22"/><stop offset="1" stop-color="#d7c9aa" stop-opacity="0"/></radialGradient>
+  <linearGradient id="stand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3032"/><stop offset="1" stop-color="#121619"/></linearGradient>
+  <filter id="soft"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="1200" height="720" fill="url(#sky)"/>
+<ellipse cx="870" cy="155" rx="240" ry="170" fill="url(#light)" filter="url(#soft)" opacity=".55"/>
+<path d="M0 250 Q600 160 1200 250 L1200 410 Q600 350 0 410Z" fill="url(#stand)"/>
+<g opacity=".6" fill="#d9cfba">
+  <circle cx="120" cy="282" r="3"/><circle cx="180" cy="270" r="2"/><circle cx="238" cy="292" r="2.5"/><circle cx="305" cy="268" r="3"/><circle cx="390" cy="284" r="2"/><circle cx="470" cy="261" r="2.5"/><circle cx="555" cy="287" r="2"/><circle cx="648" cy="263" r="3"/><circle cx="740" cy="286" r="2"/><circle cx="824" cy="265" r="2.5"/><circle cx="914" cy="286" r="2"/><circle cx="1008" cy="270" r="3"/><circle cx="1088" cy="290" r="2"/>
+</g>
+<path d="M145 418 L1075 418 L1180 700 L25 700Z" fill="url(#pitch)"/>
+<g fill="none" stroke="#d9dccf" stroke-opacity=".35" stroke-width="2">
+  <path d="M145 418 L1075 418 L1180 700 L25 700Z"/>
+  <path d="M610 418 L610 700"/>
+  <ellipse cx="610" cy="535" rx="88" ry="43"/>
+  <path d="M310 418 L292 507 L420 507"/><path d="M910 418 L928 507 L800 507"/>
+</g>
+<g opacity=".42" stroke="#90a98b" fill="none">
+  <ellipse cx="850" cy="520" rx="120" ry="56" stroke-width="2"/>
+  <ellipse cx="850" cy="520" rx="76" ry="36" stroke-width="1.5"/>
+  <ellipse cx="850" cy="520" rx="36" ry="18"/>
+  <path d="M704 520 H996"/><path d="M850 451 V589"/>
+  <circle cx="850" cy="520" r="6" fill="#90a98b" stroke="none"/>
+</g>
+<path d="M500 720 C494 635 510 558 548 526 C567 510 583 501 610 497 C637 501 653 510 672 526 C710 558 726 635 720 720Z" fill="#090b0d"/>
+<circle cx="610" cy="455" r="54" fill="#090b0d"/>
+<path d="M566 449 Q610 404 654 449 Q646 414 610 405 Q574 414 566 449Z" fill="#111518"/>
+<path d="M530 558 Q610 522 690 558" stroke="#31383a" stroke-width="3" fill="none" opacity=".7"/>
+<g opacity=".28" stroke="#c99a59" fill="none">
+  <path d="M790 375 Q870 325 962 365" stroke-width="1.5"/>
+  <circle cx="966" cy="366" r="4" fill="#c99a59" stroke="none"/>
+  <path d="M966 366 L1015 337"/>
+</g>
+<g opacity=".75">
+  <circle cx="865" cy="148" r="3" fill="#e7dcc5"/><circle cx="931" cy="124" r="2" fill="#e7dcc5"/><circle cx="1000" cy="174" r="2.5" fill="#e7dcc5"/>
+</g>
+<rect width="1200" height="720" fill="none" stroke="#ffffff" stroke-opacity=".04"/>
+</svg>
