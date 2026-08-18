@@ -2,7 +2,7 @@ name: ARGUS Market Autopilot
 
 on:
   schedule:
-    - cron: '*/15 4-22 * * *'
+    - cron: '*/5 4-22 * * *'
   workflow_dispatch:
 
 permissions:
@@ -17,13 +17,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Scan ARGUS market and build adaptive decision plan
+      - name: Resolve adaptive cadence and scan when due
         env:
           ARGUS_BASE_URL: ${{ vars.ARGUS_BASE_URL }}
         run: |
           set -euo pipefail
           BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
-          echo "ARGUS Autopilot scan: ${BASE}"
+          echo "ARGUS Autopilot heartbeat: ${BASE}"
+
+          # Cheap heartbeat: consult the persisted plan before consuming live-data budget.
+          if curl --fail --silent --show-error --max-time 15 "${BASE}/api/decision-scheduler" -o /tmp/current-plan.json; then
+            LAST=$(jq -r '.generatedAt // empty' /tmp/current-plan.json)
+            CADENCE=$(jq '[.plan[]? | select(.cadenceMinutes != null) | .cadenceMinutes] | min // 30' /tmp/current-plan.json)
+            MODE=$(jq -r '.summary.quotaMode // "UNKNOWN"' /tmp/current-plan.json)
+            echo "Current cadence: ${CADENCE}m · quota mode: ${MODE} · last plan: ${LAST:-none}"
+            if [ -n "${LAST}" ]; then
+              LAST_TS=$(date -d "${LAST}" +%s 2>/dev/null || echo 0)
+              NOW_TS=$(date +%s)
+              AGE=$(( (NOW_TS - LAST_TS) / 60 ))
+              if [ "${AGE}" -lt "${CADENCE}" ]; then
+                echo "Heavy scan not due yet (${AGE}m < ${CADENCE}m). Heartbeat complete."
+                exit 0
+              fi
+            fi
+          else
+            echo "No prior decision plan available; performing bootstrap scan."
+          fi
 
           curl --fail --silent --show-error --retry 2 --max-time 45 \
             "${BASE}/api/live" -o /tmp/argus-live.json
@@ -31,20 +50,17 @@ jobs:
           jq '{matches:(.matches // []), meta:(.meta // {})}' /tmp/argus-live.json > /tmp/autopilot-payload.json
           MATCHES=$(jq '.matches | length' /tmp/autopilot-payload.json)
           echo "Fixtures observed: ${MATCHES}"
-
           if [ "${MATCHES}" -eq 0 ]; then
             echo "No fixtures returned; nothing to persist."
             exit 0
           fi
 
-          echo "Persisting Market Memory..."
           curl --fail --silent --show-error --retry 2 --max-time 30 \
             -X POST "${BASE}/api/market-memory" \
             -H 'Content-Type: application/json' \
             --data-binary @/tmp/autopilot-payload.json
           echo
 
-          echo "Building quota-aware decision schedule..."
           curl --fail --silent --show-error --retry 2 --max-time 30 \
             -X POST "${BASE}/api/decision-scheduler" \
             -H 'Content-Type: application/json' \
@@ -52,4 +68,4 @@ jobs:
             -o /tmp/decision-plan.json
 
           jq '{generatedAt, summary, topPriority:(.plan[0:8] | map({fixtureId,home,away,tier,score,cadenceMinutes}))}' /tmp/decision-plan.json
-          echo "ARGUS adaptive Market Autopilot complete."
+          echo "ARGUS adaptive Market Autopilot scan complete."
