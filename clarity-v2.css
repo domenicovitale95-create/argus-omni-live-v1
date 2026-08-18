@@ -1,0 +1,159 @@
+/* ARGUS OMNI — Clarity V2: human-first, decision-first visual hierarchy */
+:root{
+  --clear-bg:#111318;
+  --clear-surface:#181b21;
+  --clear-surface-soft:#1d2027;
+  --clear-text:#f6f3ec;
+  --clear-muted:#aaa69d;
+  --clear-prime:#7f9a74;
+  --clear-value:#7189a8;
+  --clear-watch:#c69659;
+}
+
+/* Overall rhythm */
+body{background:var(--clear-bg)}
+.shell{width:min(1320px,92vw)}
+main{padding-top:24px}
+.panel{border-radius:20px;box-shadow:0 14px 40px rgba(0,0,0,.14)}
+.ambient-grid{display:none}
+body:before{opacity:.20;filter:saturate(.45) brightness(.28) blur(.2px)}
+
+/* Header: fewer competing elements */
+.topbar{min-height:72px}
+.brand .eyebrow{display:none}
+.brand h1{font-size:21px}
+.mark{width:42px;height:42px;border-radius:13px;font-size:20px}
+.top-status{gap:3px}
+.nav-link{padding:9px 10px;font-size:10px;color:#a9aaa5}
+.nav-link.system-link{opacity:.55}
+.system-status{margin-left:8px;padding:7px 10px;border-radius:12px;background:rgba(255,255,255,.035)}
+.system-status small{display:none}
+
+/* Hero: quiet and much shorter. The decision starts sooner. */
+.command-hero{min-height:0;padding:36px 40px;grid-template-columns:minmax(0,1.4fr) minmax(330px,.6fr);gap:30px;border:0;background:linear-gradient(135deg,rgba(31,34,40,.94),rgba(23,26,32,.82))}
+.hero-copy-block:before{content:"SEE THE GAME MORE CLEARLY.";white-space:normal;margin:10px 0 12px;font-size:clamp(38px,4.4vw,58px);line-height:.98;max-width:630px}
+.hero-copy-block:after{content:"ARGUS reviews the noise for you and surfaces only the decisions worth your attention.";font-size:13px;line-height:1.6;max-width:570px;color:#b6b3ab}
+.hero-label{font-size:9px}
+.hero-stats{grid-template-columns:repeat(2,1fr);gap:9px}
+.hero-stats>div{min-height:78px;padding:14px 16px;border:0;background:rgba(255,255,255,.035);border-radius:14px}
+.hero-stats strong{font-size:23px;margin-top:6px}
+.hero-stats small{display:none}
+.hero-stats>div:nth-child(5){display:none}
+.hero-stat-prime{background:rgba(127,154,116,.11)!important;border:0!important}
+
+/* Start here: the strongest hierarchy on page */
+.section-heading-row{margin:32px 0 14px}
+.section-heading-row .eyebrow{display:none}
+.section-heading-row h3{font-size:30px;margin-bottom:4px}
+.section-subtitle{font-size:12px;max-width:590px}
+.primary{font-size:11px;padding:14px 18px;border-radius:13px;min-width:210px}
+
+.top-pick{min-height:210px;border:0;background:linear-gradient(120deg,rgba(127,154,116,.13),rgba(28,31,37,.96) 60%);box-shadow:0 18px 50px rgba(0,0,0,.16)}
+.top-pick .opportunity-card.number-one{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.6fr);column-gap:28px;align-items:start;padding:34px;border:0;background:transparent}
+.top-pick .opp-head,.top-pick h4,.top-pick .bet-block,.top-pick p,.top-pick .detail-btn{grid-column:1}
+.top-pick .opp-metrics{grid-column:2;grid-row:1/6;margin:0;align-self:stretch;display:grid;grid-template-columns:1fr;gap:10px}
+.top-pick .opp-metrics div{display:flex;justify-content:space-between;align-items:center;min-height:66px;padding:14px 16px;background:rgba(255,255,255,.045)}
+.top-pick .opp-metrics strong{font-size:18px}
+.top-pick .opp-metrics span{font-size:9px}
+.top-pick h4{font-size:34px;margin:16px 0 13px}
+.top-pick .bet-block{padding:16px 18px;background:rgba(255,255,255,.055)}
+.top-pick .bet-block strong{font-size:24px}
+.top-pick p{font-size:12px;margin:14px 0;color:#b0ada5}
+.empty-pick{padding:34px 36px;min-height:185px}
+.empty-pick strong{font-size:28px}
+
+/* Secondary opportunities: fewer and easier */
+.opportunity-grid{grid-template-columns:repeat(3,1fr);gap:12px}
+.opportunity-card{padding:20px;background:rgba(27,30,36,.86);border:0}
+.opportunity-card h4{font-size:20px}
+.opportunity-card .opp-metrics{grid-template-columns:1fr 1fr}
+.opportunity-card .opp-metrics div{background:rgba(255,255,255,.035)}
+.opportunity-card p{font-size:10px;color:#9f9d96}
+
+/* Remove duplicate summary noise */
+.today-verdict{display:none}
+
+/* Filters: show only what matters visually */
+.board-toolbar{margin:30px 0 18px;padding-top:4px;border-top:1px solid rgba(255,255,255,.06)}
+.signal-filters{gap:7px}
+.filter-btn{font-size:9px;padding:10px 13px;background:transparent;border:1px solid rgba(255,255,255,.08)}
+.filter-btn.active{background:#f0eee8;color:#171913}
+.filter-btn.quiet{opacity:.48}
+.sort-control{font-size:9px}
+
+/* Main list now gets full width; learning/system panels stop competing */
+.workspace{grid-template-columns:1fr}
+.side-column{display:none}
+.section-title{margin:4px 0 12px}
+.section-title .eyebrow{display:none}
+.section-title h3{font-size:26px}
+.section-title>span{font-size:10px}
+
+.match-grid{gap:10px}
+.match-card{grid-template-columns:minmax(260px,1.25fr) minmax(210px,.9fr) minmax(170px,.65fr) 150px;gap:18px;padding:19px 21px;border:1px solid rgba(255,255,255,.07);background:rgba(25,28,34,.78);box-shadow:none}
+.match-card:hover{transform:none;border-color:rgba(255,255,255,.13);box-shadow:none}
+.match-card h4{font-size:19px;margin:6px 0 4px}
+.match-card p{display:none}
+.match-topline{font-size:8px}
+.decision-cell strong{font-size:16px}
+.decision-cell small{display:none}
+.confidence-cell strong{font-size:15px}
+.confidence-cell small{font-size:9px}
+.signal{padding:10px 12px}
+.signal strong{font-size:9px}
+.signal small{font-size:8px}
+.signal .detail-btn{margin-top:7px}
+.analysis-detail.open{margin-top:10px}
+
+/* Educational legend becomes optional by being visually removed from homepage */
+.verdict-guide{display:none}
+footer{margin-top:28px}
+
+/* Small movement, not techy */
+.opportunity-card,.match-card,.primary{transition:background-color .16s ease,border-color .16s ease,transform .16s ease}
+.opportunity-card:hover{transform:translateY(-1px)}
+
+@media(max-width:1000px){
+  .command-hero{grid-template-columns:1fr;padding:32px}
+  .hero-stats{grid-template-columns:repeat(4,1fr)}
+  .top-pick .opportunity-card.number-one{grid-template-columns:1fr}
+  .top-pick .opp-metrics{grid-column:1;grid-row:auto;grid-template-columns:1fr 1fr;margin-top:12px}
+  .opportunity-grid{grid-template-columns:1fr 1fr}
+  .opportunity-grid .opportunity-card:nth-child(3){display:none}
+  .match-card{grid-template-columns:minmax(220px,1fr) minmax(180px,.8fr) 145px}
+  .match-card .confidence-cell{display:none}
+}
+
+@media(max-width:720px){
+  .shell{width:94vw}
+  .top-status .nav-link{display:none}
+  .system-status{background:transparent;padding:0;margin-left:0}
+  .command-hero{padding:25px 21px;border-radius:18px}
+  .hero-copy-block:before{font-size:38px;max-width:430px}
+  .hero-copy-block:after{font-size:12px}
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .hero-stats>div{min-height:70px;padding:12px 13px}
+  .hero-stats strong{font-size:20px}
+  .section-heading-row{margin-top:28px;gap:14px}
+  .section-heading-row h3{font-size:26px}
+  .section-subtitle{font-size:11px}
+  .primary{width:100%;min-width:0}
+  .top-pick{min-height:0}
+  .top-pick .opportunity-card.number-one{padding:24px 20px}
+  .top-pick h4{font-size:27px}
+  .top-pick .bet-block strong{font-size:21px}
+  .top-pick .opp-metrics{grid-template-columns:1fr 1fr}
+  .top-pick .opp-metrics div{display:block;min-height:0}
+  .empty-pick{padding:26px 22px}
+  .empty-pick strong{font-size:24px}
+  .opportunity-grid{grid-template-columns:1fr}
+  .opportunity-grid .opportunity-card:nth-child(3){display:block}
+  .board-toolbar{align-items:stretch}
+  .signal-filters{display:flex;overflow-x:auto;flex-wrap:nowrap;padding-bottom:3px}
+  .filter-btn{width:auto;white-space:nowrap;flex:0 0 auto}
+  .sort-control{display:none}
+  .section-title h3{font-size:23px}
+  .match-card{grid-template-columns:1fr;padding:18px;gap:12px}
+  .match-card .confidence-cell{display:block}
+  .match-card .signal{text-align:left}
+}
