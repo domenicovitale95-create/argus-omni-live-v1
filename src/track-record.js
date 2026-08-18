@@ -6,9 +6,7 @@
     catch (_) { return []; }
   }
 
-  function save(records) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-  }
+  function save(records) { localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); }
 
   function probabilityForSelection(analysis) {
     const key = analysis.bestMarket === 'HOME' ? 'home' : analysis.bestMarket === 'DRAW' ? 'draw' : analysis.bestMarket === 'AWAY' ? 'away' : null;
@@ -27,7 +25,12 @@
       timestamp: new Date().toISOString(),
       argus_version: analysis.versionStack?.app || 'ARGUS OMNI LIVE',
       knowledge_version: analysis.versionStack?.master || 'MASTER KNOWLEDGE',
+      ensemble_version: analysis.versionStack?.ensemble || 'ARGUS V5',
       calibration_version: analysis.versionStack?.calibration || 'ARGUS V7',
+      track_record_version: analysis.versionStack?.trackRecord || 'ARGUS V8',
+      live_version: analysis.versionStack?.live || 'ARGUS V10',
+      data_layer_version: analysis.versionStack?.dataLayer || 'ARGUS V11',
+      cognitive_version: analysis.versionStack?.cognitive || 'ARGUS V12',
       match_id: match.id,
       match: `${match.home} vs ${match.away}`,
       competition: match.competition,
@@ -47,17 +50,23 @@
       conservative_fair_odds: analysis.conservativeFairOdds,
       minimum_acceptable_odds: analysis.minimumAcceptableOdds,
       probability_edge_pct: analysis.rawEdge ?? analysis.edge,
+      surviving_edge_pct: analysis.survivingEdge,
       base_ev_pct: analysis.baseEV,
       conservative_ev_pct: analysis.conservativeEV,
       confidence: analysis.confidence,
       data_quality: analysis.quality,
+      data_validity_score: analysis.dataValidityScore,
+      model_consensus_score: analysis.modelConsensusScore,
+      adversarial_score: analysis.adversarialScore,
+      adversarial_flags: analysis.adversarialFlags || [],
+      freshness_status: analysis.freshnessStatus || 'UNKNOWN',
       lineup_status: 'UNKNOWN / NOT INTEGRATED',
       engine_status: analysis.engineStatus,
       shrinkage_status: analysis.shrinkageStatus,
       uncertainty_status: analysis.uncertaintyStatus,
       classification: analysis.classification,
       models_executed: analysis.modelsExecuted || [],
-      main_risks: [analysis.governanceReason].filter(Boolean),
+      main_risks: [analysis.governanceReason, ...(analysis.adversarialFlags || [])].filter(Boolean),
       settled: false
     });
 
