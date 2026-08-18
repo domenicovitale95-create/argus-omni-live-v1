@@ -5,6 +5,7 @@
   "crons": [
     { "path": "/api/autopilot", "schedule": "*/5 * * * *" },
     { "path": "/api/shadow-cron", "schedule": "7 * * * *" },
+    { "path": "/api/self-improvement-loop", "schedule": "30 */6 * * *" },
     { "path": "/api/daily-cron", "schedule": "55 21,22 * * *" }
   ]
 }
