@@ -4,6 +4,7 @@
   "trailingSlash": false,
   "crons": [
     { "path": "/api/autopilot", "schedule": "*/5 * * * *" },
+    { "path": "/api/shadow-cron", "schedule": "7 * * * *" },
     { "path": "/api/daily-cron", "schedule": "55 21,22 * * *" }
   ]
 }
