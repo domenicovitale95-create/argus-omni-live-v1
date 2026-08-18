@@ -24,6 +24,21 @@ function kickoffText(match) {
   return match.statusLong || match.status || 'SCHEDULED';
 }
 
+function updateQuota(meta) {
+  const el = $('requestQuota');
+  if (!el) return;
+  const quota = meta?.quota;
+  if (!quota || quota.dailyRemaining == null) {
+    el.textContent = '—';
+    el.classList.remove('ok');
+    return;
+  }
+  el.textContent = quota.dailyLimit != null
+    ? `${quota.dailyRemaining} / ${quota.dailyLimit}`
+    : String(quota.dailyRemaining);
+  el.classList.toggle('ok', quota.dailyRemaining > 20);
+}
+
 function cardTemplate(match, analysis) {
   const signalClass = analysis.classification.toLowerCase().replace(' ', '-');
   const score = `${match.score?.home ?? 0} — ${match.score?.away ?? 0}`;
@@ -100,6 +115,7 @@ function render() {
   $('watchCount').textContent = watch;
   $('modeLabel').textContent = state.mode;
   updateFilterCounts();
+  updateQuota(state.meta);
 
   const stamp = state.meta?.fetchedAt ? new Date(state.meta.fetchedAt) : new Date();
   $('lastUpdate').textContent = state.matches.length
@@ -170,6 +186,7 @@ async function detectLiveBackend() {
   if (status.ready) {
     $('liveStatus').textContent = 'READY';
     $('liveStatus').classList.add('ok');
+    updateQuota(status.meta);
   } else {
     $('liveStatus').textContent = 'V2 BACKEND REQUIRED';
   }
