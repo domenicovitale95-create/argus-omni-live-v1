@@ -1,14 +1,18 @@
 const API_BASE = 'https://v3.football.api-sports.io';
 const CACHE_TTL_MS = 60_000;
+const HISTORY_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const DISPLAY_TIMEZONE = 'Europe/Brussels';
+const HISTORY_DAYS = 90;
 const MAX_DETAILED_LIVE_FIXTURES = 6;
-const MAX_PREMATCH_PREDICTIONS = 30;
+const MAX_PREMATCH_PREDICTIONS = 24;
+const MAX_HISTORY_TEAMS_PER_SCAN = 36;
 const MAX_ODDS_PAGES = 5;
-const QUOTA_RESERVE = 20;
+const QUOTA_RESERVE = 16;
 const LIVE_STATUSES = new Set(['1H','HT','2H','ET','BT','P','INT','LIVE']);
 const FINISHED_STATUSES = new Set(['FT','AET','PEN','CANC','ABD','AWD','WO']);
 
 let cache = { at: 0, payload: null };
+const historyCache = new Map();
 let apiQuota = {
   dailyLimit: null,
   dailyRemaining: null,
@@ -55,12 +59,18 @@ async function apiGet(path) {
 
 function quotaMeta() { return { ...apiQuota }; }
 
-function todayInTimezone(timeZone = DISPLAY_TIMEZONE) {
+function dateInTimezone(date, timeZone = DISPLAY_TIMEZONE) {
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone, year: 'numeric', month: '2-digit', day: '2-digit'
-  }).formatToParts(new Date());
+  }).formatToParts(date);
   const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
   return `${map.year}-${map.month}-${map.day}`;
+}
+
+function todayInTimezone() { return dateInTimezone(new Date()); }
+function daysAgoInTimezone(days) {
+  const d = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  return dateInTimezone(d);
 }
 
 function statValue(stats = [], name) {
@@ -76,16 +86,11 @@ function extractStats(fixture) {
   const home = blocks[0]?.statistics || [];
   const away = blocks[1]?.statistics || [];
   return {
-    shotsHome: statValue(home, 'Total Shots'),
-    shotsAway: statValue(away, 'Total Shots'),
-    shotsOnTargetHome: statValue(home, 'Shots on Goal'),
-    shotsOnTargetAway: statValue(away, 'Shots on Goal'),
-    cornersHome: statValue(home, 'Corner Kicks'),
-    cornersAway: statValue(away, 'Corner Kicks'),
-    possessionHome: statValue(home, 'Ball Possession'),
-    possessionAway: statValue(away, 'Ball Possession'),
-    dangerousAttacksHome: null,
-    dangerousAttacksAway: null
+    shotsHome: statValue(home, 'Total Shots'), shotsAway: statValue(away, 'Total Shots'),
+    shotsOnTargetHome: statValue(home, 'Shots on Goal'), shotsOnTargetAway: statValue(away, 'Shots on Goal'),
+    cornersHome: statValue(home, 'Corner Kicks'), cornersAway: statValue(away, 'Corner Kicks'),
+    possessionHome: statValue(home, 'Ball Possession'), possessionAway: statValue(away, 'Ball Possession'),
+    dangerousAttacksHome: null, dangerousAttacksAway: null
   };
 }
 
@@ -96,7 +101,6 @@ function extract1x2(oddsPayload, fixtureId) {
   if (!match) return {};
   const containers = match.bookmakers || match.odds || [];
   const candidates = [];
-
   for (const bookmaker of containers) {
     for (const bet of bookmaker.bets || []) {
       const name = normalizeLabel(bet.name);
@@ -113,7 +117,6 @@ function extract1x2(oddsPayload, fixtureId) {
       if (out.home && out.draw && out.away) candidates.push(out);
     }
   }
-
   if (!candidates.length) return {};
   const median = (values) => {
     const sorted = values.slice().sort((a, b) => a - b);
@@ -150,6 +153,104 @@ function extractPrediction(payload) {
   };
 }
 
+function summarizeTeamHistory(fixtures, teamId) {
+  const rows = (fixtures || [])
+    .filter(f => ['FT','AET','PEN'].includes(f.fixture?.status?.short))
+    .sort((a, b) => (a.fixture?.timestamp || 0) - (b.fixture?.timestamp || 0));
+
+  let wins = 0, draws = 0, losses = 0, gf = 0, ga = 0, cleanSheets = 0, failedToScore = 0, btts = 0, over25 = 0;
+  let homeGames = 0, homePoints = 0, awayGames = 0, awayPoints = 0;
+  const results = [];
+
+  for (const f of rows) {
+    const isHome = Number(f.teams?.home?.id) === Number(teamId);
+    const isAway = Number(f.teams?.away?.id) === Number(teamId);
+    if (!isHome && !isAway) continue;
+    const scored = Number(isHome ? f.goals?.home : f.goals?.away) || 0;
+    const conceded = Number(isHome ? f.goals?.away : f.goals?.home) || 0;
+    const points = scored > conceded ? 3 : scored === conceded ? 1 : 0;
+    if (points === 3) wins++; else if (points === 1) draws++; else losses++;
+    gf += scored; ga += conceded;
+    if (conceded === 0) cleanSheets++;
+    if (scored === 0) failedToScore++;
+    if (scored > 0 && conceded > 0) btts++;
+    if (scored + conceded > 2) over25++;
+    if (isHome) { homeGames++; homePoints += points; } else { awayGames++; awayPoints += points; }
+    results.push({
+      fixtureId: f.fixture?.id,
+      timestamp: f.fixture?.timestamp || null,
+      competition: f.league?.name || null,
+      venue: isHome ? 'H' : 'A',
+      opponent: isHome ? f.teams?.away?.name : f.teams?.home?.name,
+      gf: scored, ga: conceded, points
+    });
+  }
+
+  const n = results.length;
+  const recent = results.slice(-5);
+  const recentPoints = recent.reduce((sum, r) => sum + r.points, 0);
+  const round = (v) => Number(v.toFixed(3));
+  return {
+    matches: n,
+    wins, draws, losses,
+    pointsPerGame: n ? round((wins * 3 + draws) / n) : 0,
+    goalsForPerGame: n ? round(gf / n) : 0,
+    goalsAgainstPerGame: n ? round(ga / n) : 0,
+    winRate: n ? round(wins / n) : 0,
+    cleanSheetRate: n ? round(cleanSheets / n) : 0,
+    failedToScoreRate: n ? round(failedToScore / n) : 0,
+    bttsRate: n ? round(btts / n) : 0,
+    over25Rate: n ? round(over25 / n) : 0,
+    homeGames,
+    homePPG: homeGames ? round(homePoints / homeGames) : null,
+    awayGames,
+    awayPPG: awayGames ? round(awayPoints / awayGames) : null,
+    last5PPG: recent.length ? round(recentPoints / recent.length) : 0,
+    recentResults: recent.map(r => r.points === 3 ? 'W' : r.points === 1 ? 'D' : 'L').join(''),
+    windowDays: HISTORY_DAYS,
+    from: daysAgoInTimezone(HISTORY_DAYS),
+    to: todayInTimezone(),
+    allMatches: results
+  };
+}
+
+async function fetchTeamHistory(teamId, from, to) {
+  const key = `${teamId}:${from}:${to}`;
+  const cached = historyCache.get(key);
+  if (cached && Date.now() - cached.at < HISTORY_CACHE_TTL_MS) return cached.value;
+  const payload = await apiGet(`/fixtures?team=${teamId}&from=${from}&to=${to}&status=FT-AET-PEN`);
+  const summary = summarizeTeamHistory(payload.response || [], teamId);
+  historyCache.set(key, { at: Date.now(), value: summary });
+  return summary;
+}
+
+async function fetchHistories(fixtures) {
+  const from = daysAgoInTimezone(HISTORY_DAYS);
+  const to = todayInTimezone();
+  const teamIds = [];
+  const seen = new Set();
+  for (const f of fixtures) {
+    if (isFinishedFixture(f)) continue;
+    for (const id of [f.teams?.home?.id, f.teams?.away?.id]) {
+      if (!id || seen.has(Number(id))) continue;
+      seen.add(Number(id));
+      teamIds.push(Number(id));
+    }
+  }
+
+  const available = apiQuota.dailyRemaining == null
+    ? MAX_HISTORY_TEAMS_PER_SCAN
+    : Math.max(0, apiQuota.dailyRemaining - QUOTA_RESERVE);
+  const budget = Math.min(MAX_HISTORY_TEAMS_PER_SCAN, available, teamIds.length);
+  const histories = new Map();
+
+  for (const teamId of teamIds.slice(0, budget)) {
+    if (apiQuota.dailyRemaining !== null && apiQuota.dailyRemaining <= QUOTA_RESERVE) break;
+    try { histories.set(teamId, await fetchTeamHistory(teamId, from, to)); } catch (_) {}
+  }
+  return { histories, totalTeams: teamIds.length, attemptedTeams: budget, from, to };
+}
+
 async function enrichLiveFixtures(fixtures) {
   const liveFixtures = fixtures.filter(isLiveFixture).slice(0, MAX_DETAILED_LIVE_FIXTURES);
   const detailsById = new Map();
@@ -184,7 +285,6 @@ async function fetchPrematchPredictions(fixtures) {
   const candidates = fixtures.filter(f => !isLiveFixture(f) && !isFinishedFixture(f));
   const remaining = apiQuota.dailyRemaining == null ? MAX_PREMATCH_PREDICTIONS : Math.max(0, apiQuota.dailyRemaining - QUOTA_RESERVE);
   const budget = Math.min(MAX_PREMATCH_PREDICTIONS, remaining, candidates.length);
-
   for (const fixture of candidates.slice(0, budget)) {
     if (apiQuota.dailyRemaining !== null && apiQuota.dailyRemaining <= QUOTA_RESERVE) break;
     const id = fixture.fixture?.id;
@@ -197,10 +297,12 @@ async function fetchPrematchPredictions(fixtures) {
   return predictions;
 }
 
-function normalizeFixture(fixture, liveOdds, prematchOdds, predictions) {
+function normalizeFixture(fixture, liveOdds, prematchOdds, predictions, histories) {
   const live = isLiveFixture(fixture);
   const finished = isFinishedFixture(fixture);
   const id = fixture.fixture?.id;
+  const homeTeamId = fixture.teams?.home?.id || null;
+  const awayTeamId = fixture.teams?.away?.id || null;
   return {
     id,
     competition: fixture.league?.name,
@@ -212,12 +314,18 @@ function normalizeFixture(fixture, liveOdds, prematchOdds, predictions) {
     timestamp: fixture.fixture?.timestamp || null,
     isLive: live,
     isFinished: finished,
+    homeTeamId,
+    awayTeamId,
     home: fixture.teams?.home?.name || 'Home',
     away: fixture.teams?.away?.name || 'Away',
     score: { home: fixture.goals?.home ?? 0, away: fixture.goals?.away ?? 0 },
     stats: extractStats(fixture),
     markets: live ? extract1x2(liveOdds, id) : extract1x2(prematchOdds, id),
-    preMatchModel: live || finished ? null : (predictions.get(Number(id)) || null),
+    preMatchModel: finished ? null : (predictions.get(Number(id)) || null),
+    history90d: {
+      home: histories.get(Number(homeTeamId)) || null,
+      away: histories.get(Number(awayTeamId)) || null
+    },
     source: 'API-FOOTBALL',
     observedAt: new Date().toISOString()
   };
@@ -227,7 +335,6 @@ async function buildPayload() {
   const date = todayInTimezone();
   const day = await apiGet(`/fixtures?date=${date}&timezone=${encodeURIComponent(DISPLAY_TIMEZONE)}`);
   const fixtures = day.response || [];
-
   if (!fixtures.length) {
     return { matches: [], meta: { provider: 'API-FOOTBALL', mode: 'TODAY', date, timezone: DISPLAY_TIMEZONE, fetchedAt: new Date().toISOString(), fixtureCount: 0, quota: quotaMeta() } };
   }
@@ -237,14 +344,15 @@ async function buildPayload() {
   if (enriched.some(isLiveFixture)) {
     try { liveOdds = await apiGet('/odds/live'); } catch (_) {}
   }
-
   const prematchOdds = await fetchPrematchOddsByDate(date);
+  const historyResult = await fetchHistories(enriched);
   const predictions = await fetchPrematchPredictions(enriched);
 
   const matches = enriched
-    .map((fixture) => normalizeFixture(fixture, liveOdds, prematchOdds, predictions))
+    .map((fixture) => normalizeFixture(fixture, liveOdds, prematchOdds, predictions, historyResult.histories))
     .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
 
+  const historyCompleteMatches = matches.filter(m => m.history90d?.home && m.history90d?.away).length;
   return {
     matches,
     meta: {
@@ -252,6 +360,12 @@ async function buildPayload() {
       fetchedAt: new Date().toISOString(), fixtureCount: matches.length,
       liveFixtureCount: matches.filter((m) => m.isLive).length,
       prematchAnalyzedCount: matches.filter((m) => m.preMatchModel).length,
+      historyWindowDays: HISTORY_DAYS,
+      historyFrom: historyResult.from,
+      historyTo: historyResult.to,
+      historyTeamsCovered: historyResult.histories.size,
+      historyTeamsTotal: historyResult.totalTeams,
+      historyCompleteMatches,
       cacheSeconds: CACHE_TTL_MS / 1000,
       quota: quotaMeta()
     }
@@ -263,7 +377,6 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
-
   try {
     if (cache.payload && Date.now() - cache.at < CACHE_TTL_MS) {
       return res.status(200).json({ ...cache.payload, meta: { ...cache.payload.meta, quota: quotaMeta(), cache: 'HIT' } });
