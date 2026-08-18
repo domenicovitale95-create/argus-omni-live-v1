@@ -4,7 +4,8 @@ const state = {
   matches: [],
   analyses: [],
   mode: 'DEMO',
-  meta: null
+  meta: null,
+  filter: 'signals'
 };
 
 function tickClock() {
@@ -52,6 +53,44 @@ function cardTemplate(match, analysis) {
   `;
 }
 
+function classifyMatch(match, analysis) {
+  if (!match.isLive) return 'scheduled';
+  if (analysis.classification === 'PRIME') return 'prime';
+  if (analysis.classification === 'WATCH') return 'watch';
+  return 'no-bet';
+}
+
+function filteredRows() {
+  return state.matches.map((match, index) => ({ match, analysis: state.analyses[index], type: classifyMatch(match, state.analyses[index]) }))
+    .filter((row) => {
+      if (state.filter === 'all') return true;
+      if (state.filter === 'signals') return row.type === 'prime' || row.type === 'watch';
+      return row.type === state.filter;
+    });
+}
+
+function updateFilterCounts() {
+  const rows = state.matches.map((match, index) => classifyMatch(match, state.analyses[index]));
+  const prime = rows.filter(x => x === 'prime').length;
+  const watch = rows.filter(x => x === 'watch').length;
+  const scheduled = rows.filter(x => x === 'scheduled').length;
+  const noBet = rows.filter(x => x === 'no-bet').length;
+  $('signalCount').textContent = prime + watch;
+  $('primeFilterCount').textContent = prime;
+  $('watchFilterCount').textContent = watch;
+  $('scheduledFilterCount').textContent = scheduled;
+  $('noBetFilterCount').textContent = noBet;
+  $('allFilterCount').textContent = rows.length;
+}
+
+function setFilter(filter) {
+  state.filter = filter;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === filter);
+  });
+  render();
+}
+
 function render() {
   const prime = state.matches.filter((m, i) => m.isLive && state.analyses[i]?.classification === 'PRIME').length;
   const watch = state.matches.filter((m, i) => m.isLive && state.analyses[i]?.classification === 'WATCH').length;
@@ -60,6 +99,7 @@ function render() {
   $('primeCount').textContent = prime;
   $('watchCount').textContent = watch;
   $('modeLabel').textContent = state.mode;
+  updateFilterCounts();
 
   const stamp = state.meta?.fetchedAt ? new Date(state.meta.fetchedAt) : new Date();
   $('lastUpdate').textContent = state.matches.length
@@ -72,7 +112,14 @@ function render() {
     return;
   }
 
-  grid.innerHTML = state.matches.map((match, index) => cardTemplate(match, state.analyses[index])).join('');
+  const rows = filteredRows();
+  if (!rows.length) {
+    const label = state.filter === 'signals' ? 'PRIME OR WATCH' : state.filter.toUpperCase().replace('-', ' ');
+    grid.innerHTML = `<div class="empty-state">NO ${label} MATCHES CURRENTLY</div>`;
+    return;
+  }
+
+  grid.innerHTML = rows.map(({ match, analysis }) => cardTemplate(match, analysis)).join('');
 }
 
 function analyzeMatches(matches, meta = null) {
@@ -130,4 +177,5 @@ async function detectLiveBackend() {
 
 $('demoBtn').addEventListener('click', loadDemo);
 $('scanBtn').addEventListener('click', scanToday);
+document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', () => setFilter(btn.dataset.filter)));
 detectLiveBackend();
