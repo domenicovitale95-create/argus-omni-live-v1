@@ -2,36 +2,54 @@ name: ARGUS Market Autopilot
 
 on:
   schedule:
-    - cron: '*/30 4-22 * * *'
+    - cron: '*/15 4-22 * * *'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: argus-market-autopilot
+  cancel-in-progress: true
 
 jobs:
   market-memory-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Scan ARGUS market and persist observations
+      - name: Scan ARGUS market and build adaptive decision plan
         env:
           ARGUS_BASE_URL: ${{ vars.ARGUS_BASE_URL }}
         run: |
           set -euo pipefail
           BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
           echo "ARGUS Autopilot scan: ${BASE}"
+
           curl --fail --silent --show-error --retry 2 --max-time 45 \
             "${BASE}/api/live" -o /tmp/argus-live.json
-          jq '{matches:(.matches // []), meta:(.meta // {})}' /tmp/argus-live.json > /tmp/market-payload.json
-          MATCHES=$(jq '.matches | length' /tmp/market-payload.json)
+
+          jq '{matches:(.matches // []), meta:(.meta // {})}' /tmp/argus-live.json > /tmp/autopilot-payload.json
+          MATCHES=$(jq '.matches | length' /tmp/autopilot-payload.json)
           echo "Fixtures observed: ${MATCHES}"
+
           if [ "${MATCHES}" -eq 0 ]; then
             echo "No fixtures returned; nothing to persist."
             exit 0
           fi
+
+          echo "Persisting Market Memory..."
           curl --fail --silent --show-error --retry 2 --max-time 30 \
             -X POST "${BASE}/api/market-memory" \
             -H 'Content-Type: application/json' \
-            --data-binary @/tmp/market-payload.json
+            --data-binary @/tmp/autopilot-payload.json
           echo
-          echo "Market Memory scan complete."
+
+          echo "Building quota-aware decision schedule..."
+          curl --fail --silent --show-error --retry 2 --max-time 30 \
+            -X POST "${BASE}/api/decision-scheduler" \
+            -H 'Content-Type: application/json' \
+            --data-binary @/tmp/autopilot-payload.json \
+            -o /tmp/decision-plan.json
+
+          jq '{generatedAt, summary, topPriority:(.plan[0:8] | map({fixtureId,home,away,tier,score,cadenceMinutes}))}' /tmp/decision-plan.json
+          echo "ARGUS adaptive Market Autopilot complete."
