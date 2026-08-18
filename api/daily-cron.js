@@ -3,17 +3,17 @@ function brusselsParts(){
   return Object.fromEntries(parts.map(p=>[p.type,p.value]));
 }
 function authorized(req){const secret=process.env.CRON_SECRET;return !secret||req.headers.authorization===`Bearer ${secret}`}
+async function getJson(url,authorization){const r=await fetch(url,{headers:{Accept:'application/json',Authorization:authorization||''}});const data=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,data}}
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
   const p=brusselsParts();
   if(Number(p.hour)!==23)return res.status(200).json({ok:true,skipped:true,reason:'NOT_23H_BRUSSELS',localHour:p.hour});
-  const date=`${p.year}-${p.month}-${p.day}`;
-  const proto=(req.headers['x-forwarded-proto']||'https').split(',')[0];
-  const host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app';
-  const r=await fetch(`${proto}://${host}/api/daily-report?date=${date}&force=1`,{headers:{Accept:'application/json',Authorization:req.headers.authorization||''}});
-  const data=await r.json().catch(()=>({}));
-  if(!r.ok)return res.status(r.status).json({ok:false,error:data.error||'Daily report failed'});
-  return res.status(200).json({ok:true,date,summary:data.summary||null});
+  const date=`${p.year}-${p.month}-${p.day}`,proto=(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app',base=`${proto}://${host}`,auth=req.headers.authorization||'';
+  const report=await getJson(`${base}/api/daily-report?date=${date}&force=1`,auth);
+  if(!report.ok)return res.status(report.status).json({ok:false,error:report.data.error||'Daily report failed'});
+  const shadow=await getJson(`${base}/api/shadow-mode?mode=settle&date=${date}`,auth);
+  const training=await getJson(`${base}/api/training-memory`,auth);
+  return res.status(200).json({ok:true,date,summary:report.data.summary||null,shadowSettlement:shadow.ok?shadow.data:{error:shadow.data.error||'Shadow settlement failed'},training:training.ok?{totalSettled:training.data.totalSettled||0,shadowSettled:training.data.shadowSettled||0}:null});
 }
