@@ -7,6 +7,10 @@
     return value > 1 ? 1 / value : 0;
   }
 
+  function hasComplete1x2(markets = {}) {
+    return safe(markets.home) > 1 && safe(markets.draw) > 1 && safe(markets.away) > 1;
+  }
+
   function normalizeMarket(markets = {}) {
     const raw = {
       home: impliedProbability(markets.home),
@@ -78,6 +82,7 @@
   }
 
   function analyze(match) {
+    const marketAvailable = hasComplete1x2(match.markets);
     const market = normalizeMarket(match.markets);
     const pressure = Math.round(pressureIndex(match));
     const model = modelProbabilities(match, pressure);
@@ -88,16 +93,16 @@
       { key: 'HOME', probability: model.home, marketProbability: market.home, odds: safe(match.markets?.home) },
       { key: 'DRAW', probability: model.draw, marketProbability: market.draw, odds: safe(match.markets?.draw) },
       { key: 'AWAY', probability: model.away, marketProbability: market.away, odds: safe(match.markets?.away) }
-    ].map(item => ({ ...item, edge: item.probability - item.marketProbability }))
+    ].map(item => ({ ...item, edge: marketAvailable ? item.probability - item.marketProbability : 0 }))
       .sort((a, b) => b.edge - a.edge);
 
     const best = candidates[0];
-    const edgePct = best.edge * 100;
+    const edgePct = marketAvailable ? best.edge * 100 : 0;
     const confidence = clamp(Math.round(quality * 0.58 + (100 - uncertaintyScore) * 0.29 + Math.abs(pressure - 50) * 0.26));
 
     let classification = 'NO BET';
-    if (quality >= 78 && confidence >= 69 && edgePct >= 7.5 && safe(match.minute) >= 18) classification = 'PRIME';
-    else if (quality >= 62 && confidence >= 54 && edgePct >= 3.5) classification = 'WATCH';
+    if (marketAvailable && quality >= 78 && confidence >= 69 && edgePct >= 7.5 && safe(match.minute) >= 18) classification = 'PRIME';
+    else if (marketAvailable && quality >= 62 && confidence >= 54 && edgePct >= 3.5) classification = 'WATCH';
 
     return {
       pressure,
@@ -106,13 +111,14 @@
       confidence,
       model,
       market,
-      bestMarket: best.key,
+      marketAvailable,
+      bestMarket: marketAvailable ? best.key : 'NO MARKET',
       edge: Number(edgePct.toFixed(1)),
-      fairOdds: best.probability > 0 ? Number((1 / best.probability).toFixed(2)) : null,
-      marketOdds: best.odds,
+      fairOdds: marketAvailable && best.probability > 0 ? Number((1 / best.probability).toFixed(2)) : null,
+      marketOdds: marketAvailable ? best.odds : null,
       classification
     };
   }
 
-  window.ArgusEngine = { analyze, normalizeMarket, pressureIndex };
+  window.ArgusEngine = { analyze, normalizeMarket, pressureIndex, hasComplete1x2 };
 })();
