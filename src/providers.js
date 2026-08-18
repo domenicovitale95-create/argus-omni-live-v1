@@ -1,7 +1,8 @@
 (function () {
-  const CACHE_KEY = 'argus-live-cache-v4';
+  const CACHE_KEY = 'argus-live-cache-v5';
   const NORMAL_TTL = 60 * 1000;
   const SAFE_TTL = 5 * 60 * 1000;
+  const AVAILABILITY_WINDOW_MS = 100 * 60 * 1000;
 
   function readCache() {
     try {
@@ -39,6 +40,27 @@
     matches.meta = { ...(row?.meta || {}), clientCache:true, clientCacheAgeMs:Date.now()-row.savedAt };
     return matches;
   }
+  function availabilityIds(matches){
+    const now=Date.now();
+    return matches.filter(m=>{
+      if(m?.isFinished) return false;
+      if(m?.isLive) return true;
+      const k=new Date(m?.kickoff||0).getTime();
+      return Number.isFinite(k)&&k>0&&k-now<=AVAILABILITY_WINDOW_MS&&k-now>=-30*60*1000;
+    }).map(m=>Number(m.id)).filter(Boolean);
+  }
+  async function mergeAvailability(matches,meta){
+    const ids=availabilityIds(matches);
+    if(!ids.length) return {matches,meta};
+    try{
+      const date=encodeURIComponent(meta?.date||'');
+      const res=await fetch(`/api/availability?ids=${ids.join('-')}${date?`&date=${date}`:''}`,{headers:{Accept:'application/json'},cache:'no-store'});
+      if(!res.ok) return {matches,meta};
+      const data=await res.json(),map=data.availability||{};
+      const merged=matches.map(m=>map[String(m.id)]?{...m,availability:map[String(m.id)]}:m);
+      return {matches:merged,meta:{...(meta||{}),availability:data.meta||null}};
+    }catch(_){return {matches,meta};}
+  }
   async function persistPredictions(matches, meta = null) {
     if (!Array.isArray(matches) || !matches.length || !window.ArgusEngine) return;
     try {
@@ -64,7 +86,8 @@
     const response=await fetch(endpoint,{headers:{Accept:'application/json'},cache:'no-store'});
     const payload=await response.json().catch(()=>({}));
     if(!response.ok) throw new Error(payload.error||`Live endpoint error ${response.status}`);
-    const normalized={matches:Array.isArray(payload)?payload:payload.matches||[],meta:payload.meta||null};
+    const base={matches:Array.isArray(payload)?payload:payload.matches||[],meta:payload.meta||null};
+    const normalized=await mergeAvailability(base.matches,base.meta);
     writeCache(normalized); persistPredictions(normalized.matches,normalized.meta);
     const matches=normalized.matches.slice(); matches.meta=normalized.meta; return matches;
   }
