@@ -30,6 +30,17 @@
     return text;
   };
 
+  function ensureDailySlipNav(){
+    const nav=document.querySelector('.top-status');
+    if(!nav||nav.querySelector('a[href="daily-slip.html"]'))return;
+    const a=document.createElement('a');
+    a.className='nav-link daily-slip-link';
+    a.href='daily-slip.html';
+    a.textContent='Daily Slip';
+    const training=nav.querySelector('a[href="training-dashboard.html"]');
+    nav.insertBefore(a,training||nav.querySelector('.system-link')||null);
+  }
+
   function polishText(root=document) {
     root.querySelectorAll('span,strong,small,b,button,p').forEach(el => {
       if (el.children.length) return;
@@ -63,6 +74,7 @@
   }
 
   function run() {
+    ensureDailySlipNav();
     polishText();
     polishEmptyStates();
     markFreshness();
