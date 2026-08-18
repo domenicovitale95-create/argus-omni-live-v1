@@ -1,0 +1,54 @@
+:root{
+  --argus-bg:#0f1317;
+  --argus-surface:#171c21;
+  --argus-surface-2:#1c2228;
+  --argus-cream:#f3efe7;
+  --argus-sage:#8fa784;
+  --argus-sage-soft:rgba(143,167,132,.14);
+  --argus-blue:#7f9fbd;
+  --argus-blue-soft:rgba(127,159,189,.14);
+  --argus-amber:#d3a15f;
+  --argus-amber-soft:rgba(211,161,95,.13);
+  --argus-coral:#c97870;
+  --argus-coral-soft:rgba(201,120,112,.12);
+  --argus-violet:#9b91b9;
+  --argus-violet-soft:rgba(155,145,185,.11);
+}
+body{background:var(--argus-bg)!important}
+body:after{background:linear-gradient(90deg,rgba(12,16,19,.94),rgba(15,20,24,.80) 40%,rgba(20,25,29,.62) 72%,rgba(12,16,19,.86)),linear-gradient(180deg,rgba(15,20,24,.30),rgba(10,14,17,.88))!important}
+.panel{background:linear-gradient(180deg,rgba(27,33,38,.90),rgba(18,23,27,.90))!important;border-color:rgba(255,255,255,.09)!important}
+.mark{border-color:rgba(143,167,132,.45)!important;color:var(--argus-sage)!important;background:linear-gradient(145deg,rgba(143,167,132,.14),rgba(127,159,189,.07))!important}
+.brand h1 span,.command-hero h2 span,.hero-label,.pick-kicker{color:var(--argus-sage)!important}
+.nav-link{border-color:rgba(255,255,255,.10)!important;background:rgba(255,255,255,.035)!important;color:#d8d7d2!important}
+.nav-link:hover{background:var(--argus-cream)!important;color:#171b1f!important}
+.pulse,.live-dot,.status-orb{background:var(--argus-sage)!important;box-shadow:0 0 16px rgba(143,167,132,.42)!important}
+.command-hero:after{background:radial-gradient(circle,rgba(127,159,189,.10),rgba(143,167,132,.045) 35%,transparent 68%)!important}
+.hero-stat-prime{border-color:rgba(143,167,132,.30)!important;background:linear-gradient(180deg,rgba(143,167,132,.12),rgba(22,28,32,.62))!important}
+.primary{background:var(--argus-cream)!important;border-color:var(--argus-cream)!important;color:#181c20!important;box-shadow:0 8px 26px rgba(0,0,0,.22)!important}
+.primary:hover{box-shadow:0 10px 34px rgba(127,159,189,.14)!important}
+.top-pick{border-color:rgba(143,167,132,.24)!important;background:linear-gradient(120deg,rgba(143,167,132,.08),rgba(127,159,189,.045) 55%,rgba(27,33,38,.92))!important}
+.top-pick:before{background:linear-gradient(105deg,rgba(143,167,132,.08),rgba(127,159,189,.035),transparent 58%)!important}
+.pick-state-icon{border-color:rgba(143,167,132,.34)!important;color:var(--argus-sage)!important;background:var(--argus-sage-soft)!important}
+.opportunity-card,.match-card{background:linear-gradient(180deg,rgba(29,35,41,.92),rgba(21,26,31,.94))!important}
+.opportunity-card.prime,.match-card.prime{border-color:rgba(143,167,132,.42)!important;box-shadow:inset 3px 0 0 rgba(143,167,132,.70)}
+.opportunity-card.value,.opportunity-card.strong-value,.match-card.value,.match-card.strong-value{border-color:rgba(127,159,189,.40)!important;box-shadow:inset 3px 0 0 rgba(127,159,189,.70)}
+.opportunity-card.watch,.match-card.watch{border-color:rgba(211,161,95,.36)!important;box-shadow:inset 3px 0 0 rgba(211,161,95,.70)}
+.signal-badge.prime,.signal.prime{color:var(--argus-sage)!important}
+.signal-badge.value,.signal-badge.strong-value,.signal.value,.signal.strong-value{color:var(--argus-blue)!important}
+.signal-badge.watch,.signal.watch{color:var(--argus-amber)!important}
+.signal.prime{border-color:rgba(143,167,132,.35)!important;background:var(--argus-sage-soft)!important}
+.signal.value,.signal.strong-value{border-color:rgba(127,159,189,.34)!important;background:var(--argus-blue-soft)!important}
+.signal.watch{border-color:rgba(211,161,95,.34)!important;background:var(--argus-amber-soft)!important}
+.signal.no-bet{border-color:rgba(201,120,112,.18)!important;background:rgba(201,120,112,.035)!important}
+.bet-block{border-left-color:var(--argus-sage)!important;background:rgba(143,167,132,.06)!important}
+.confidence-bar i{background:linear-gradient(90deg,var(--argus-blue),var(--argus-sage))!important}
+.filter-btn.active{border-color:rgba(127,159,189,.34)!important;background:var(--argus-blue-soft)!important;color:#d9e2ea!important}
+.record-btn{color:var(--argus-sage)!important;border-color:rgba(143,167,132,.25)!important;background:rgba(143,167,132,.06)!important}
+.verdict-card.prime{background:linear-gradient(145deg,var(--argus-sage-soft),rgba(255,255,255,.018))!important}
+.verdict-card.value{background:linear-gradient(145deg,var(--argus-blue-soft),rgba(255,255,255,.018))!important}
+.verdict-card.watch{background:linear-gradient(145deg,var(--argus-amber-soft),rgba(255,255,255,.018))!important}
+.verdict-card.nobet{background:linear-gradient(145deg,var(--argus-coral-soft),rgba(255,255,255,.018))!important}
+.market-shortcut:nth-child(1){background:linear-gradient(145deg,var(--argus-sage-soft),rgba(255,255,255,.025))!important}
+.market-shortcut:nth-child(2){background:linear-gradient(145deg,var(--argus-blue-soft),rgba(255,255,255,.025))!important}
+.market-shortcut:nth-child(3){background:linear-gradient(145deg,var(--argus-violet-soft),rgba(255,255,255,.025))!important}
+@media (max-width:700px){.opportunity-card.prime,.opportunity-card.value,.opportunity-card.strong-value,.opportunity-card.watch,.match-card.prime,.match-card.value,.match-card.strong-value,.match-card.watch{box-shadow:none}}
