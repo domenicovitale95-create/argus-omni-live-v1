@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050606" />
+  <title>DANGER — Exact Scores — ARGUS OMNI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root{--danger-red:#ff5b57;--danger-soft:rgba(255,91,87,.09);--danger-line:rgba(255,91,87,.38)}
+    .danger-shell{width:min(1380px,94vw);margin:auto}.danger-nav{min-height:86px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:18px}.danger-links{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.danger-links a{color:var(--accent);text-decoration:none;font-size:9px;font-weight:800;letter-spacing:.12em;border:1px solid var(--line-strong);padding:10px 12px;border-radius:7px}.danger-links a.active{color:var(--danger-red);border-color:var(--danger-line);background:var(--danger-soft)}
+    .danger-hero{margin-top:28px;padding:32px;border-color:var(--danger-line);background:linear-gradient(125deg,rgba(255,91,87,.065),rgba(8,12,12,.92) 44%)}.danger-hero .eyebrow{color:var(--danger-red)}.danger-hero h2{margin:8px 0 12px;font:700 clamp(38px,5vw,68px)/.96 "Space Grotesk";letter-spacing:-.045em}.danger-hero h2 span{color:var(--danger-red)}.danger-hero p{color:var(--muted2);max-width:860px;line-height:1.7}.danger-warning{margin-top:18px;display:inline-flex;align-items:center;gap:9px;border:1px solid var(--danger-line);background:var(--danger-soft);color:#ffd4d2;padding:10px 13px;border-radius:7px;font-size:9px;font-weight:800;letter-spacing:.08em}
+    .danger-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 28px}.danger-summary article{padding:17px}.danger-summary span{display:block;color:var(--muted);font-size:8px;letter-spacing:.13em}.danger-summary strong{display:block;margin-top:7px;font:600 25px "Space Grotesk"}.danger-list{display:grid;gap:10px}.danger-row{display:grid;grid-template-columns:minmax(240px,1.35fr) 150px 125px minmax(220px,1fr);gap:14px;align-items:center;padding:18px;border:1px solid var(--line);border-left:3px solid var(--danger-red);border-radius:8px;background:linear-gradient(90deg,rgba(255,91,87,.045),rgba(8,12,12,.91) 24%)}.danger-row.live{border-left-color:var(--accent)}.danger-row.unavailable{border-left-color:#4c5456;opacity:.68}.danger-row span,.danger-row small{display:block;color:var(--muted);font-size:8px;letter-spacing:.06em}.danger-row strong{display:block;margin-top:5px}.danger-row .match strong{font:600 17px "Space Grotesk"}.exact-score{font:700 27px "Space Grotesk"!important;color:var(--danger-red)}.danger-row.live .exact-score{color:var(--accent)}.score-prob{font:700 15px "Space Grotesk"!important}.alternatives{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.alternatives b{border:1px solid var(--line);padding:7px 9px;border-radius:5px;font-size:9px;color:#c9d0d1}.danger-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 16px}.danger-controls button{border:1px solid var(--danger-line);background:var(--danger-soft);color:#ffd4d2;padding:10px 13px;border-radius:6px;font-size:8px;font-weight:900;letter-spacing:.1em;cursor:pointer}.danger-meta{color:var(--muted);font-size:9px}.method-note{margin-top:24px;padding:18px;color:#899294;font-size:9px;line-height:1.65}.method-note strong{color:#d7dcdd}
+    @media(max-width:900px){.danger-summary{grid-template-columns:1fr 1fr}.danger-row{grid-template-columns:1fr 1fr}}@media(max-width:560px){.danger-summary{grid-template-columns:1fr 1fr}.danger-hero{padding:22px}.danger-row{grid-template-columns:1fr}.danger-nav{align-items:flex-start;padding:14px 0}.danger-nav .brand .eyebrow{display:none}.danger-controls{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="danger-shell">
+    <header class="danger-nav">
+      <div class="brand"><div class="mark">A</div><div><p class="eyebrow">ARGUS OMNI</p><h1>DANGER</h1></div></div>
+      <div class="danger-links"><a href="/">COMMAND CENTER</a><a href="compte-rendu-des-predictions.html">COMPTE RENDU</a><a href="correct-results.html">CORRECT RESULTS</a><a class="active" href="danger.html">DANGER</a></div>
+    </header>
+    <main>
+      <section class="danger-hero panel">
+        <p class="eyebrow">HIGH VARIANCE · EXACT SCORE LAB</p>
+        <h2>Exact score.<br><span>Danger zone.</span></h2>
+        <p>ARGUS calcule le score final le plus probable à partir de la forme des 90 derniers jours, des buts marqués/encaissés, du contexte domicile/extérieur et, en live, du score et du temps restant. Un score exact reste un événement à faible probabilité : cette page est séparée des signaux PRIME / VALUE.</p>
+        <div class="danger-warning">⚠ EXACT SCORE ≠ HIGH-CONFIDENCE BET · DO NOT TREAT AS PRIME</div>
+      </section>
+      <section id="dangerSummary" class="danger-summary"></section>
+      <section>
+        <div class="section-heading-row"><div><p class="eyebrow">TODAY'S EXACT SCORE MODEL</p><h3>ARGUS score predictions</h3><p class="section-subtitle">Le score principal et les deux scénarios les plus proches, triés par probabilité du modèle.</p></div></div>
+        <div class="danger-controls"><button id="refreshDanger">REFRESH SCORES</button><span id="dangerMeta" class="danger-meta">Chargement…</span></div>
+        <div id="dangerList" class="danger-list"><div class="empty-state">CALCUL DES SCORES EXACTS…</div></div>
+      </section>
+      <section class="method-note panel"><strong>Méthode ARGUS :</strong> modèle Poisson calibré sur les statistiques 90 jours disponibles. En live, le modèle part du score actuel et réduit l'intensité de buts selon le temps restant, avec un ajustement léger de pression. ARGUS affiche « DATA INSUFFICIENT » plutôt que d'inventer un score lorsqu'il manque l'historique nécessaire.</section>
+    </main>
+    <footer><span>ARGUS OMNI · EXACT SCORE IS HIGH VARIANCE.</span><span>DANGER LAB</span></footer>
+  </div>
+  <script src="src/engine.js"></script>
+  <script src="src/providers.js"></script>
+  <script src="src/persistent-cache.js"></script>
+  <script src="danger.js"></script>
+</body>
+</html>
