@@ -1,0 +1,10 @@
+{
+  "name": "ARGUS OMNI",
+  "short_name": "ARGUS",
+  "description": "Football intelligence and high-signal alerts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#101419",
+  "theme_color": "#101419",
+  "icons": []
+}
