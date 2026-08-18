@@ -25,7 +25,6 @@ jobs:
           BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
           echo "ARGUS Autopilot heartbeat: ${BASE}"
 
-          # Cheap heartbeat: consult the persisted plan before consuming live-data budget.
           if curl --fail --silent --show-error --max-time 15 "${BASE}/api/decision-scheduler" -o /tmp/current-plan.json; then
             LAST=$(jq -r '.generatedAt // empty' /tmp/current-plan.json)
             CADENCE=$(jq '[.plan[]? | select(.cadenceMinutes != null) | .cadenceMinutes] | min // 30' /tmp/current-plan.json)
@@ -56,16 +55,26 @@ jobs:
           fi
 
           curl --fail --silent --show-error --retry 2 --max-time 30 \
+            -X POST "${BASE}/api/live-events" \
+            -H 'Content-Type: application/json' \
+            --data-binary @/tmp/autopilot-payload.json \
+            -o /tmp/live-events.json
+
+          jq '{detected,forcedRechecks,forceImmediateRefresh,events:(.events // [] | map({fixtureId,type,severity,minute,forceRecheck}))}' /tmp/live-events.json
+
+          curl --fail --silent --show-error --retry 2 --max-time 30 \
             -X POST "${BASE}/api/market-memory" \
             -H 'Content-Type: application/json' \
             --data-binary @/tmp/autopilot-payload.json
           echo
 
+          jq --slurpfile ev /tmp/live-events.json '. + {events:($ev[0].events // [])}' /tmp/autopilot-payload.json > /tmp/scheduler-payload.json
+
           curl --fail --silent --show-error --retry 2 --max-time 30 \
             -X POST "${BASE}/api/decision-scheduler" \
             -H 'Content-Type: application/json' \
-            --data-binary @/tmp/autopilot-payload.json \
+            --data-binary @/tmp/scheduler-payload.json \
             -o /tmp/decision-plan.json
 
-          jq '{generatedAt, summary, topPriority:(.plan[0:8] | map({fixtureId,home,away,tier,score,cadenceMinutes}))}' /tmp/decision-plan.json
-          echo "ARGUS adaptive Market Autopilot scan complete."
+          jq '{generatedAt, summary, topPriority:(.plan[0:8] | map({fixtureId,home,away,tier,score,cadenceMinutes,eventDriven,eventTypes}))}' /tmp/decision-plan.json
+          echo "ARGUS event-driven Market Autopilot scan complete."
