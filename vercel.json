@@ -5,6 +5,7 @@
   "functions": {
     "api/live.js": { "maxDuration": 60 },
     "api/availability.js": { "maxDuration": 60 },
+    "api/prekickoff-gate.js": { "maxDuration": 60 },
     "api/predictions.js": { "maxDuration": 30 },
     "api/market-memory.js": { "maxDuration": 30 },
     "api/argus-lab.js": { "maxDuration": 60 },
