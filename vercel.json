@@ -11,6 +11,7 @@
     "api/adaptive-weights.js": { "maxDuration": 30 },
     "api/adaptive-registry.js": { "maxDuration": 15 },
     "api/model-health.js": { "maxDuration": 30 },
+    "api/decision-scheduler.js": { "maxDuration": 15 },
     "api/danger-data.js": { "maxDuration": 30 },
     "api/reports.js": { "maxDuration": 20 },
     "api/daily-report.js": { "maxDuration": 30 }
