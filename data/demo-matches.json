@@ -1,0 +1,65 @@
+[
+  {
+    "id": "demo-001",
+    "competition": "ARGUS DEMO LEAGUE",
+    "home": "North City",
+    "away": "Union Athletic",
+    "minute": 63,
+    "status": "IN PLAY",
+    "score": { "home": 1, "away": 1 },
+    "stats": {
+      "possessionHome": 58,
+      "shotsHome": 15,
+      "shotsAway": 7,
+      "shotsOnTargetHome": 7,
+      "shotsOnTargetAway": 2,
+      "cornersHome": 7,
+      "cornersAway": 3,
+      "dangerousAttacksHome": 47,
+      "dangerousAttacksAway": 25
+    },
+    "markets": { "home": 2.55, "draw": 2.85, "away": 4.15, "over25": 1.80, "under25": 2.02 }
+  },
+  {
+    "id": "demo-002",
+    "competition": "ARGUS DEMO LEAGUE",
+    "home": "Royal 04",
+    "away": "Sporting Vale",
+    "minute": 41,
+    "status": "IN PLAY",
+    "score": { "home": 0, "away": 0 },
+    "stats": {
+      "possessionHome": 51,
+      "shotsHome": 6,
+      "shotsAway": 5,
+      "shotsOnTargetHome": 2,
+      "shotsOnTargetAway": 2,
+      "cornersHome": 2,
+      "cornersAway": 3,
+      "dangerousAttacksHome": 21,
+      "dangerousAttacksAway": 20
+    },
+    "markets": { "home": 2.30, "draw": 2.60, "away": 3.90, "over25": 2.30, "under25": 1.60 }
+  },
+  {
+    "id": "demo-003",
+    "competition": "ARGUS DEMO CUP",
+    "home": "Olympic Red",
+    "away": "AC Meridian",
+    "minute": 78,
+    "status": "IN PLAY",
+    "score": { "home": 0, "away": 1 },
+    "stats": {
+      "possessionHome": 64,
+      "shotsHome": 18,
+      "shotsAway": 6,
+      "shotsOnTargetHome": 6,
+      "shotsOnTargetAway": 3,
+      "cornersHome": 9,
+      "cornersAway": 2,
+      "dangerousAttacksHome": 61,
+      "dangerousAttacksAway": 22
+    },
+    "markets": { "home": 5.20, "draw": 3.35, "away": 1.72, "over25": 2.05, "under25": 1.72 }
+  }
+]
