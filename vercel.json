@@ -3,26 +3,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "api/live.js": { "maxDuration": 60 },
-    "api/availability.js": { "maxDuration": 60 },
-    "api/prekickoff-gate.js": { "maxDuration": 60 },
-    "api/player-impact.js": { "maxDuration": 60 },
-    "api/player-memory.js": { "maxDuration": 60 },
-    "api/team-tactical-memory.js": { "maxDuration": 60 },
-    "api/predictions.js": { "maxDuration": 30 },
-    "api/market-memory.js": { "maxDuration": 30 },
-    "api/argus-lab.js": { "maxDuration": 60 },
-    "api/reliability.js": { "maxDuration": 60 },
-    "api/adaptive-weights.js": { "maxDuration": 60 },
-    "api/adaptive-registry.js": { "maxDuration": 30 },
-    "api/model-health.js": { "maxDuration": 60 },
-    "api/decision-scheduler.js": { "maxDuration": 30 },
-    "api/live-events.js": { "maxDuration": 30 },
-    "api/danger-data.js": { "maxDuration": 60 },
-    "api/daily-report.js": { "maxDuration": 60 },
-    "api/reports.js": { "maxDuration": 30 },
-    "api/autopilot.js": { "maxDuration": 120 },
-    "api/daily-cron.js": { "maxDuration": 60 }
+    "api/*.js": { "maxDuration": 60 },
+    "api/autopilot.js": { "maxDuration": 120 }
   },
   "crons": [
     { "path": "/api/autopilot", "schedule": "*/5 * * * *" },
