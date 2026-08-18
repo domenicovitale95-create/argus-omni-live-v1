@@ -46,11 +46,11 @@ function updateHistoryCoverage(meta) {
   el.classList.toggle('ok', meta.historyTeamsTotal > 0 && meta.historyTeamsCovered === meta.historyTeamsTotal);
 }
 
-function strongestModelSide(analysis) {
-  const model = analysis.model || {};
-  const entries = [['HOME', model.home], ['DRAW', model.draw], ['AWAY', model.away]].filter(([,v]) => Number.isFinite(Number(v)));
-  entries.sort((a,b) => Number(b[1]) - Number(a[1]));
-  return entries[0] || ['—', 0];
+function updateGovernanceStatus() {
+  const status = window.ArgusGovernance?.systemStatus?.();
+  if ($('calibrationStatus')) $('calibrationStatus').textContent = status?.calibration || 'UNKNOWN';
+  if ($('primeGateStatus')) $('primeGateStatus').textContent = status?.primeGate || 'UNKNOWN';
+  if ($('trackRecordCount')) $('trackRecordCount').textContent = window.ArgusTrackRecord?.count?.() ?? 0;
 }
 
 function historyFormText(match) {
@@ -60,20 +60,31 @@ function historyFormText(match) {
   return `H ${Number(home.pointsPerGame || 0).toFixed(2)} · A ${Number(away.pointsPerGame || 0).toFixed(2)} PPG`;
 }
 
-function cardTemplate(match, analysis) {
-  const signalClass = analysis.classification.toLowerCase().replace(' ', '-');
+function pct(v) {
+  return Number.isFinite(Number(v)) ? `${(Number(v) * 100).toFixed(1)}%` : '—';
+}
+
+function signalClass(analysis) {
+  const c = String(analysis.classification || 'NO BET').toUpperCase();
+  if (c.includes('PRIME')) return 'prime';
+  if (c.includes('STRONG VALUE')) return 'strong-value';
+  if (c.includes('VALUE')) return 'value';
+  if (c.includes('WATCH')) return 'watch';
+  return 'no-bet';
+}
+
+function cardTemplate(match, analysis, stateIndex) {
   const score = `${match.score?.home ?? 0} — ${match.score?.away ?? 0}`;
   const marketText = analysis.marketOdds ? `${analysis.bestMarket} @ ${analysis.marketOdds}` : (match.isLive ? 'NO LIVE 1X2 ODDS' : 'NO PRE-MATCH 1X2 ODDS');
-  const [modelSide, modelProb] = strongestModelSide(analysis);
   const historyText = historyFormText(match);
-  const inputLabel = match.isLive ? 'Pressure' : (historyText ? '90D form' : 'Model lean');
-  const inputValue = match.isLive
-    ? `${analysis.pressure}/100`
-    : (historyText || (analysis.phase === 'PREMATCH' && modelProb > 0 ? `${modelSide} ${Math.round(modelProb * 100)}%` : 'NO MODEL'));
+  const inputLabel = match.isLive ? 'Pressure' : '90D form';
+  const inputValue = match.isLive ? `${analysis.pressure ?? '—'}/100` : (historyText || 'HISTORY INCOMPLETE');
   const phase = match.isLive ? 'LIVE' : (analysis.phase === 'FINISHED' ? 'FINISHED' : 'PRE-MATCH');
-  const homeHistoryN = match.history90d?.home?.matches || 0;
-  const awayHistoryN = match.history90d?.away?.matches || 0;
-  const historySuffix = (homeHistoryN && awayHistoryN) ? ` · 90D ${homeHistoryN}+${awayHistoryN} GAMES` : '';
+  const modelLine = `RAW ${pct(analysis.rawProbability)} · SHR ${pct(analysis.shrunkProbability)} · CONS ${pct(analysis.conservativeProbability)}`;
+  const evLine = analysis.conservativeEV == null
+    ? `${analysis.confidence ?? 0}% CONF · ${analysis.governanceReason || 'DATA INCOMPLETE'}`
+    : `CONS EV ${analysis.conservativeEV >= 0 ? '+' : ''}${analysis.conservativeEV}% · ${analysis.confidence}% CONF`;
+  const canRecord = !match.isFinished && analysis.marketAvailable && analysis.classification !== 'NO BET';
 
   return `
     <article class="match-card panel">
@@ -81,45 +92,58 @@ function cardTemplate(match, analysis) {
         <small>${match.competition || 'MATCH'} · ${match.country || ''} · ${phase}</small>
         <div class="teams">${match.home} <span class="score">${score}</span> ${match.away}</div>
         <div class="minute">${kickoffText(match)}</div>
+        ${canRecord ? `<button class="record-btn" data-record-index="${stateIndex}">FREEZE V8 RECORD</button>` : ''}
       </div>
       <div>
         <span class="mini-label">${inputLabel}</span>
         <span class="value">${inputValue}</span>
+        <small class="governance-line">${analysis.engineStatus || 'ENGINE STATUS UNKNOWN'}</small>
       </div>
       <div>
-        <span class="mini-label">Best market</span>
+        <span class="mini-label">Current market</span>
         <span class="value">${marketText}</span>
+        <small class="governance-line">${modelLine}</small>
       </div>
-      <div class="signal ${signalClass}">
+      <div class="signal ${signalClass(analysis)}">
         <strong>${analysis.classification}</strong>
-        <small>${analysis.marketAvailable ? `${analysis.edge > 0 ? '+' : ''}${analysis.edge}% EDGE · ${analysis.confidence}% CONF${historySuffix}` : `${analysis.confidence}% CONF · DATA INCOMPLETE${historySuffix}`}</small>
+        <small>${evLine}</small>
+        <small>${analysis.shrinkageStatus || ''}</small>
       </div>
     </article>
   `;
 }
 
 function classifyMatch(_match, analysis) {
-  if (analysis.classification === 'PRIME') return 'prime';
-  if (analysis.classification === 'WATCH') return 'watch';
+  const c = String(analysis?.classification || '').toUpperCase();
+  if (c.includes('PRIME')) return 'prime';
+  if (c.includes('STRONG VALUE')) return 'strong-value';
+  if (c.includes('VALUE')) return 'value';
+  if (c.includes('WATCH')) return 'watch';
   return 'no-bet';
 }
 
+function rowsWithTypes() {
+  return state.matches.map((match, index) => ({ match, analysis: state.analyses[index], type: classifyMatch(match, state.analyses[index]), index }));
+}
+
 function filteredRows() {
-  return state.matches.map((match, index) => ({ match, analysis: state.analyses[index], type: classifyMatch(match, state.analyses[index]) }))
-    .filter((row) => {
-      if (state.filter === 'all') return true;
-      if (state.filter === 'signals') return row.type === 'prime' || row.type === 'watch';
-      return row.type === state.filter;
-    });
+  return rowsWithTypes().filter((row) => {
+    if (state.filter === 'all') return true;
+    if (state.filter === 'signals') return ['prime','strong-value','value','watch'].includes(row.type);
+    if (state.filter === 'value') return row.type === 'value' || row.type === 'strong-value';
+    return row.type === state.filter;
+  });
 }
 
 function updateFilterCounts() {
-  const rows = state.matches.map((match, index) => classifyMatch(match, state.analyses[index]));
+  const rows = rowsWithTypes().map(r => r.type);
   const prime = rows.filter(x => x === 'prime').length;
+  const value = rows.filter(x => x === 'value' || x === 'strong-value').length;
   const watch = rows.filter(x => x === 'watch').length;
   const noBet = rows.filter(x => x === 'no-bet').length;
-  $('signalCount').textContent = prime + watch;
+  $('signalCount').textContent = prime + value + watch;
   $('primeFilterCount').textContent = prime;
+  $('valueFilterCount').textContent = value;
   $('watchFilterCount').textContent = watch;
   $('noBetFilterCount').textContent = noBet;
   $('allFilterCount').textContent = rows.length;
@@ -131,9 +155,26 @@ function setFilter(filter) {
   render();
 }
 
+function bindRecordButtons() {
+  document.querySelectorAll('[data-record-index]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = Number(btn.dataset.recordIndex);
+      try {
+        const frozen = window.ArgusTrackRecord.record(state.matches[index], state.analyses[index]);
+        btn.textContent = 'FROZEN ✓';
+        btn.disabled = true;
+        updateGovernanceStatus();
+        alert(`V8 record frozen: ${frozen.prediction_id}`);
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  });
+}
+
 function render() {
-  const prime = state.analyses.filter(a => a?.classification === 'PRIME').length;
-  const watch = state.analyses.filter(a => a?.classification === 'WATCH').length;
+  const prime = state.analyses.filter(a => classifyMatch(null, a) === 'prime').length;
+  const watch = state.analyses.filter(a => classifyMatch(null, a) === 'watch').length;
 
   $('matchCount').textContent = state.matches.length;
   $('primeCount').textContent = prime;
@@ -142,6 +183,7 @@ function render() {
   updateFilterCounts();
   updateQuota(state.meta);
   updateHistoryCoverage(state.meta);
+  updateGovernanceStatus();
 
   const stamp = state.meta?.fetchedAt ? new Date(state.meta.fetchedAt) : new Date();
   $('lastUpdate').textContent = state.matches.length
@@ -156,18 +198,22 @@ function render() {
 
   const rows = filteredRows();
   if (!rows.length) {
-    const label = state.filter === 'signals' ? 'PRIME OR WATCH' : state.filter.toUpperCase().replace('-', ' ');
+    const label = state.filter === 'signals' ? 'ACTIONABLE / WATCH' : state.filter.toUpperCase().replace('-', ' ');
     grid.innerHTML = `<div class="empty-state">NO ${label} MATCHES CURRENTLY</div>`;
     return;
   }
 
-  grid.innerHTML = rows.map(({ match, analysis }) => cardTemplate(match, analysis)).join('');
+  grid.innerHTML = rows.map(({ match, analysis, index }) => cardTemplate(match, analysis, index)).join('');
+  bindRecordButtons();
 }
 
 function analyzeMatches(matches, meta = null) {
   state.matches = matches;
   state.meta = meta;
-  state.analyses = matches.map(match => window.ArgusEngine.analyze(match));
+  state.analyses = matches.map(match => {
+    const base = window.ArgusEngine.analyze(match);
+    return window.ArgusGovernance ? window.ArgusGovernance.apply(base, match) : base;
+  });
   render();
 }
 
@@ -217,6 +263,7 @@ async function detectLiveBackend() {
   } else {
     $('liveStatus').textContent = 'V2 BACKEND REQUIRED';
   }
+  updateGovernanceStatus();
 }
 
 $('demoBtn').addEventListener('click', loadDemo);
