@@ -1,7 +1,9 @@
 (function(){
   const KEY='argus-training-memory-v1',TTL=15*60*1000,FALLBACK={version:'TRAINING-MEMORY-1',totalSettled:0,policy:{minimumSample:20,positiveSample:60,minMultiplier:.80,maxMultiplier:1.02},leagueMarket:{},market:{},league:{}};
-  function loadScript(src){return new Promise(resolve=>{if(document.querySelector(`script[data-argus-src="${src}"]`))return resolve();const s=document.createElement('script');s.src=src;s.dataset.argusSrc=src;s.onload=()=>resolve();s.onerror=()=>resolve();document.head.appendChild(s)})}
-  async function ensureConsensus(){await loadScript('src/model-consensus.js');await loadScript('src/model-consensus-integration.js');const tryGov=()=>{if(window.ArgusGovernance)loadScript('src/model-consensus-governance.js')};tryGov();setTimeout(tryGov,0);setTimeout(tryGov,250)}
+  function normalizedSrc(src){try{return new URL(src,document.baseURI).href}catch(_){return src}}
+  function scriptExists(src){const wanted=normalizedSrc(src);return [...document.scripts].some(s=>normalizedSrc(s.getAttribute('src')||'')===wanted)}
+  function loadScript(src){return new Promise(resolve=>{if(scriptExists(src))return resolve(true);const s=document.createElement('script');s.src=src;s.dataset.argusSrc=src;s.onload=()=>resolve(true);s.onerror=()=>resolve(false);document.head.appendChild(s)})}
+  async function ensureConsensus(){await loadScript('src/model-consensus.js');await loadScript('src/model-consensus-integration.js');let attempts=0;const tryGov=()=>{if(window.ArgusGovernance){loadScript('src/model-consensus-governance.js');return}if(++attempts<20)setTimeout(tryGov,250)};tryGov()}
   async function ensureEvolution(){await loadScript('src/model-evolution.js');await loadScript('src/model-evolution-integration.js');await loadScript('src/hierarchical-evolution.js');await loadScript('src/hierarchical-evolution-integration.js')}
   function readRow(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(_){return null}}
   function save(payload){try{localStorage.setItem(KEY,JSON.stringify({savedAt:Date.now(),payload}))}catch(_){}return payload}
