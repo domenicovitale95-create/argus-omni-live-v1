@@ -6,17 +6,33 @@
   }
 
   async function live() {
-    const endpoint = window.ARGUS_LIVE_ENDPOINT;
-    if (!endpoint) throw new Error('No live endpoint configured');
-
+    const endpoint = window.ARGUS_LIVE_ENDPOINT || '/api/live';
     const response = await fetch(endpoint, {
-      headers: { 'Accept': 'application/json' },
+      headers: { Accept: 'application/json' },
       cache: 'no-store'
     });
-    if (!response.ok) throw new Error(`Live endpoint error ${response.status}`);
-    const payload = await response.json();
-    return Array.isArray(payload) ? payload : payload.matches || [];
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(payload.error || `Live endpoint error ${response.status}`);
+    }
+
+    const matches = Array.isArray(payload) ? payload : payload.matches || [];
+    matches.meta = payload.meta || null;
+    return matches;
   }
 
-  window.ArgusProviders = { demo, live };
+  async function health() {
+    const endpoint = window.ARGUS_LIVE_ENDPOINT || '/api/live';
+    try {
+      const response = await fetch(endpoint, { headers: { Accept: 'application/json' }, cache: 'no-store' });
+      if (!response.ok) return { ready: false };
+      const payload = await response.json();
+      return { ready: true, meta: payload.meta || null, matches: payload.matches || [] };
+    } catch (_) {
+      return { ready: false };
+    }
+  }
+
+  window.ArgusProviders = { demo, live, health };
 })();
