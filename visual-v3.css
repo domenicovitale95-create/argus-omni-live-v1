@@ -1,0 +1,72 @@
+/* ARGUS OMNI — Visual V3: original imagery + clearer human hierarchy */
+body:before{opacity:.08!important;filter:saturate(.35) brightness(.22)!important}
+
+.command-hero{
+  position:relative;
+  overflow:hidden;
+  min-height:360px;
+  padding:44px 42px;
+  grid-template-columns:minmax(0,1.08fr) minmax(340px,.72fr);
+  background:
+    linear-gradient(90deg,rgba(18,20,25,.98) 0%,rgba(18,20,25,.94) 42%,rgba(18,20,25,.62) 66%,rgba(18,20,25,.30) 100%),
+    linear-gradient(180deg,rgba(18,20,25,.12),rgba(18,20,25,.68)),
+    url('assets/argus-vision-hero.svg') right center/68% cover no-repeat;
+  border:1px solid rgba(255,255,255,.07);
+}
+.command-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(13,15,19,.62));pointer-events:none}
+.command-hero>*{position:relative;z-index:2}
+.hero-copy-block{align-self:center;max-width:690px}
+.hero-copy-block:before{font-size:clamp(42px,5vw,66px);max-width:650px;text-wrap:balance}
+.hero-copy-block:after{font-size:14px;max-width:590px;color:#c1beb6}
+.hero-label{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.055);backdrop-filter:blur(10px);color:#d5d7d1}
+.hero-stats{align-self:end;grid-template-columns:1fr 1fr;padding:12px;border-radius:18px;background:rgba(13,15,19,.48);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.07)}
+.hero-stats>div{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.045)}
+.hero-stat-prime{background:rgba(127,154,116,.15)!important}
+
+.section-heading-row h3{max-width:720px;text-wrap:balance}
+.section-subtitle{max-width:650px;font-size:13px}
+
+.top-pick{position:relative;overflow:hidden;background:linear-gradient(120deg,rgba(31,35,40,.96),rgba(25,29,34,.96))}
+.top-pick:before{content:"";position:absolute;right:-70px;top:-90px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(127,154,116,.18),rgba(127,154,116,0) 68%);pointer-events:none}
+.top-pick .opportunity-card.number-one{position:relative;z-index:1}
+.top-pick h4{letter-spacing:-.04em}
+.top-pick .bet-block{background:#f1eee7;color:#171a18;border-radius:14px}
+.top-pick .bet-block span{color:#64655f}
+.top-pick .bet-block strong{color:#171a18}
+.top-pick .detail-btn{background:rgba(255,255,255,.07)}
+
+.opportunity-card{border:1px solid rgba(255,255,255,.07)}
+.opportunity-card:hover{border-color:rgba(255,255,255,.14)}
+.opp-head{align-items:center}
+.signal-badge{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.05)}
+.signal-badge.prime{background:rgba(127,154,116,.12)}
+.signal-badge.value,.signal-badge.strong-value{background:rgba(113,137,168,.11)}
+.signal-badge.watch{background:rgba(198,150,89,.11)}
+
+.board-toolbar{background:rgba(255,255,255,.018);padding:10px;border-radius:15px;border:1px solid rgba(255,255,255,.05)}
+.filter-btn{border:0!important;background:transparent}
+.filter-btn.active{background:#efede7!important;color:#151813!important}
+
+.match-card{border-radius:18px;background:linear-gradient(135deg,rgba(28,31,37,.92),rgba(23,26,31,.82));}
+.match-card .signal{border-radius:12px}
+.match-card.prime{border-color:rgba(127,154,116,.28)}
+.match-card.value,.match-card.strong-value{border-color:rgba(113,137,168,.23)}
+.match-card.watch{border-color:rgba(198,150,89,.23)}
+
+.empty-state{min-height:220px;border:1px dashed rgba(255,255,255,.10);background:linear-gradient(135deg,rgba(255,255,255,.025),rgba(255,255,255,.012));border-radius:18px}
+.empty-state:before{content:"◉";display:block;margin-bottom:5px;font-size:26px;color:#879b81;opacity:.8}
+
+@media(max-width:1000px){
+  .command-hero{grid-template-columns:1fr;min-height:0;background:linear-gradient(90deg,rgba(18,20,25,.97),rgba(18,20,25,.72)),url('assets/argus-vision-hero.svg') 72% center/cover no-repeat}
+  .hero-stats{max-width:620px;grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:720px){
+  .command-hero{padding:28px 22px 22px;background:linear-gradient(180deg,rgba(18,20,25,.82) 0%,rgba(18,20,25,.96) 58%),url('assets/argus-vision-hero.svg') center top/cover no-repeat}
+  .hero-copy-block{padding-top:80px}
+  .hero-copy-block:before{font-size:40px}
+  .hero-copy-block:after{font-size:12.5px}
+  .hero-stats{grid-template-columns:1fr 1fr;background:rgba(13,15,19,.58)}
+  .section-heading-row h3{font-size:25px}
+  .top-pick .bet-block{padding:14px 15px}
+  .board-toolbar{padding:8px}
+}
