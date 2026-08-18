@@ -9,6 +9,7 @@
     "api/argus-lab.js": { "maxDuration": 30 },
     "api/reliability.js": { "maxDuration": 30 },
     "api/adaptive-weights.js": { "maxDuration": 30 },
+    "api/adaptive-registry.js": { "maxDuration": 15 },
     "api/model-health.js": { "maxDuration": 30 },
     "api/danger-data.js": { "maxDuration": 30 },
     "api/reports.js": { "maxDuration": 20 },
