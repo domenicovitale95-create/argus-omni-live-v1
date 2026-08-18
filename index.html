@@ -15,84 +15,101 @@
     <header class="topbar">
       <div class="brand">
         <div class="mark">A</div>
-        <div>
-          <p class="eyebrow">FOOTBALL INTELLIGENCE</p>
-          <h1>ARGUS <span>OMNI</span></h1>
-        </div>
+        <div><p class="eyebrow">LIVE FOOTBALL INTELLIGENCE</p><h1>ARGUS <span>OMNI</span></h1></div>
       </div>
-      <div class="system-status">
-        <span class="pulse"></span>
-        <div><strong>GOVERNANCE ONLINE</strong><small id="clock">--:--:--</small></div>
+      <div class="top-status">
+        <div class="safe-chip" id="safeModeChip" title="ARGUS is conserving today's remaining API requests. Cached data remains available.">API SAFE MODE</div>
+        <div class="system-status"><span class="pulse"></span><div><strong>GOVERNANCE ONLINE</strong><small id="clock">--:--:--</small></div></div>
       </div>
     </header>
 
     <main>
-      <section class="hero panel">
-        <div>
-          <p class="eyebrow">MASTER + V5 + V7 + V8 + V9 + V10</p>
-          <h2>Read the match.<br><span>Reject the noise.</span></h2>
-          <p class="hero-copy">ARGUS now executes the complete governance stack: observed data → market prior → supported models → RAW → SHRUNK → CONSERVATIVE → Edge Survival → price discipline → adversarial governance → decision.</p>
+      <section class="command-hero panel">
+        <div class="hero-copy-block">
+          <p class="eyebrow">ARGUS BETTING COMMAND CENTER</p>
+          <h2>Know what matters.<br><span>Ignore everything else.</span></h2>
+          <p class="hero-copy">ARGUS scans today's matches and ranks only the strongest betting opportunities.</p>
         </div>
-        <div class="hero-actions">
-          <button id="scanBtn" class="primary">ANALYZE TODAY'S MATCHES</button>
-          <button id="demoBtn" class="secondary">RUN DEMO FEED</button>
+        <div class="hero-stats">
+          <div><span>API</span><strong id="heroQuota">—</strong></div>
+          <div><span>LAST UPDATE</span><strong id="heroUpdate">—</strong></div>
+          <div><span>ANALYSED</span><strong id="heroAnalysed">0</strong></div>
+          <div><span>PRIME</span><strong id="heroPrime">0</strong></div>
+          <div><span>WATCH</span><strong id="heroWatch">0</strong></div>
         </div>
       </section>
 
-      <section class="metrics-grid">
-        <article class="metric panel"><span>Matches tracked</span><strong id="matchCount">0</strong><small>current session</small></article>
-        <article class="metric panel"><span>PRIME signals</span><strong id="primeCount">0</strong><small>validated gate only</small></article>
-        <article class="metric panel"><span>Watchlist</span><strong id="watchCount">0</strong><small>governed candidates</small></article>
-        <article class="metric panel"><span>Data mode</span><strong id="modeLabel" class="metric-text">DEMO</strong><small>provider adapter</small></article>
+      <section class="top-opportunities-wrap">
+        <div class="section-heading-row">
+          <div><p class="eyebrow">DECISION FIRST</p><h3>Top opportunities</h3></div>
+          <button id="scanBtn" class="primary compact">ANALYZE TODAY'S MATCHES</button>
+        </div>
+        <div id="topPick" class="top-pick empty-pick panel">
+          <span class="pick-kicker">ARGUS #1 PICK</span>
+          <strong>NO ACTIONABLE SIGNAL LOADED</strong>
+          <small>ARGUS will not invent a bet to fill this space.</small>
+        </div>
+        <div id="topOpportunities" class="opportunity-grid"></div>
+      </section>
+
+      <section class="today-verdict panel">
+        <div><p class="eyebrow">ARGUS TODAY</p><strong id="todayCounts">0 PRIME · 0 VALUE · 0 WATCH · 0 NO BET · 0 PASSED</strong></div>
+        <p id="strongestSignal">No current actionable signal.</p>
+      </section>
+
+      <section class="board-toolbar">
+        <div class="signal-filters" role="group" aria-label="Signal filters">
+          <button class="filter-btn active" data-filter="signals">ACTIONABLE <span id="signalCount">0</span></button>
+          <button class="filter-btn" data-filter="prime">PRIME <span id="primeFilterCount">0</span></button>
+          <button class="filter-btn" data-filter="value">VALUE <span id="valueFilterCount">0</span></button>
+          <button class="filter-btn" data-filter="watch">WATCH <span id="watchFilterCount">0</span></button>
+          <button class="filter-btn" data-filter="all">ALL ACTIVE <span id="allFilterCount">0</span></button>
+          <button class="filter-btn quiet" data-filter="no-bet">NO BET <span id="noBetFilterCount">0</span></button>
+          <button class="filter-btn quiet" data-filter="past">PASSED <span id="pastFilterCount">0</span></button>
+        </div>
+        <label class="sort-control">SORT BY
+          <select id="sortSelect">
+            <option value="rank">ARGUS Rank</option>
+            <option value="confidence">Confidence</option>
+            <option value="edge">Edge</option>
+            <option value="kickoff">Kickoff</option>
+            <option value="live">Live First</option>
+          </select>
+        </label>
       </section>
 
       <section class="workspace">
         <div class="main-column">
-          <div class="section-title"><div><p class="eyebrow">V9 COMMAND CENTER</p><h3>ARGUS analysis</h3></div><span id="lastUpdate">Awaiting scan</span></div>
-          <div class="signal-filters" role="group" aria-label="Signal filters">
-            <button class="filter-btn active" data-filter="signals">SIGNALS <span id="signalCount">0</span></button>
-            <button class="filter-btn" data-filter="prime">PRIME <span id="primeFilterCount">0</span></button>
-            <button class="filter-btn" data-filter="value">VALUE <span id="valueFilterCount">0</span></button>
-            <button class="filter-btn" data-filter="watch">WATCH <span id="watchFilterCount">0</span></button>
-            <button class="filter-btn" data-filter="no-bet">NO BET <span id="noBetFilterCount">0</span></button>
-            <button class="filter-btn" data-filter="all">ALL ACTIVE <span id="allFilterCount">0</span></button>
-            <button class="filter-btn" data-filter="past">PAST MATCHES <span id="pastFilterCount">0</span></button>
-          </div>
-          <div id="matchGrid" class="match-grid">
-            <div class="empty panel"><div class="radar"></div><h3>No active analysis</h3><p>Load today's matches to start ARGUS.</p></div>
-          </div>
+          <div class="section-title"><div><p class="eyebrow">TODAY'S BOARD</p><h3>Active analysis</h3></div><span id="lastUpdate">Awaiting scan</span></div>
+          <div id="matchGrid" class="match-grid"><div class="empty-state">RUN A SCAN TO LOAD TODAY'S MATCHES</div></div>
         </div>
 
         <aside class="side-column">
-          <section class="panel doctrine">
-            <p class="eyebrow">ARGUS DOCTRINE</p>
-            <h3>Governance hierarchy</h3>
-            <ol>
-              <li><span>01</span><div><strong>Data integrity</strong><small>Observed facts remain separate from model estimates.</small></div></li>
-              <li><span>02</span><div><strong>Market-first V5</strong><small>Liquid 1X2 prices remain the dominant prior.</small></div></li>
-              <li><span>03</span><div><strong>Calibration V7</strong><small>Heuristic shrinkage is labelled and cannot unlock PRIME.</small></div></li>
-              <li><span>04</span><div><strong>Audit V8 / Live V10</strong><small>Freeze forecasts; recalculate live state after material events.</small></div></li>
-            </ol>
-          </section>
-
           <section class="panel provider-box">
-            <p class="eyebrow">SYSTEM CHECK</p>
-            <h3>Governance status</h3>
-            <div class="provider-row"><span>API endpoint</span><b id="liveStatus">NOT SET</b></div>
+            <p class="eyebrow">SYSTEM CHECK</p><h3>ARGUS status</h3>
+            <div class="provider-row"><span>API endpoint</span><b id="liveStatus">READY</b></div>
+            <div class="provider-row"><span>API requests left</span><b id="requestQuota">—</b></div>
             <div class="provider-row"><span>90D history teams</span><b id="historyCoverage">—</b></div>
             <div class="provider-row"><span>Calibration</span><b id="calibrationStatus">HEURISTIC</b></div>
             <div class="provider-row"><span>PRIME gate</span><b id="primeGateStatus">LOCKED</b></div>
             <div class="provider-row"><span>V8 frozen records</span><b id="trackRecordCount">0</b></div>
-            <div class="provider-row"><span>API requests left</span><b id="requestQuota">—</b></div>
-            <p class="muted">GOVERNANCE WINS. PRIME remains unavailable until the relevant engine and calibration methodology have replicated out-of-sample validation.</p>
+            <p class="muted">UI actions, filters and sorting use already-loaded data and do not consume API requests.</p>
+          </section>
+          <section class="panel doctrine compact-doctrine">
+            <p class="eyebrow">ARGUS DOCTRINE</p><h3>Decision hierarchy</h3>
+            <ol>
+              <li><span>01</span><div><strong>Data integrity</strong><small>No fabricated inputs.</small></div></li>
+              <li><span>02</span><div><strong>Market first</strong><small>Price is the benchmark.</small></div></li>
+              <li><span>03</span><div><strong>Conservative survival</strong><small>Fragile edges are rejected.</small></div></li>
+              <li><span>04</span><div><strong>Governance wins</strong><small>PRIME stays rare.</small></div></li>
+            </ol>
           </section>
         </aside>
       </section>
     </main>
 
-    <footer><span>ARGUS OMNI · ANALYZE EVERYTHING. BET ALMOST NOTHING.</span><span>V2.6 · FULL STACK</span></footer>
+    <footer><span>ARGUS OMNI · ANALYZE EVERYTHING. BET ALMOST NOTHING.</span><span>V2.7 · COMMAND CENTER</span></footer>
   </div>
-
   <script src="src/engine.js"></script>
   <script src="src/governance.js"></script>
   <script src="src/track-record.js"></script>
