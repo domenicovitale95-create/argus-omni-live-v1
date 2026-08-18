@@ -1,0 +1,13 @@
+(function(){
+  const KEY='argus-hierarchical-evolution-v1',TTL=30*60*1000,FALLBACK={registry:{global:'BASELINE',league:{},market:{},combo:{}}};
+  const clamp=(v,min=.01,max=.99)=>Math.max(min,Math.min(max,v));
+  function read(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(_){return null}}
+  function save(payload){try{localStorage.setItem(KEY,JSON.stringify({savedAt:Date.now(),payload}))}catch(_){}return payload}
+  function payload(){return read()?.payload||FALLBACK}
+  async function refresh(force=false){const r=read();if(!force&&r&&Date.now()-r.savedAt<TTL)return r.payload;try{const x=await fetch('/api/hierarchical-evolution',{cache:'no-store'}),j=await x.json();if(!x.ok)throw new Error();return save(j)}catch(_){return r?.payload||FALLBACK}}
+  function family(k='UNKNOWN'){const x=String(k).toLowerCase();if(x.startsWith('score:'))return'EXACT SCORE';if(x.includes('btts'))return'BTTS';if(x.includes('over')||x.includes('under'))return'GOALS';if(x.includes('doublechance'))return'DOUBLE CHANCE';if(x.includes('corner'))return'CORNERS';return String(k).toUpperCase()}
+  function champion(match,marketKey){const r=payload()?.registry||FALLBACK.registry,lg=match?.competition||'UNKNOWN',mk=family(marketKey),combo=r.combo?.[`${lg}|||${mk}`];if(combo)return{name:combo,scope:'LEAGUE_MARKET',key:`${lg}|||${mk}`};if(r.market?.[mk])return{name:r.market[mk],scope:'MARKET',key:mk};if(r.league?.[lg])return{name:r.league[lg],scope:'LEAGUE',key:lg};return{name:r.global||'BASELINE',scope:'GLOBAL',key:'GLOBAL'}}
+  function applyName(name,p,mp){let out=p;if(name==='CONSERVATIVE'||name==='SHRINK_90')out=.5+(p-.5)*.90;else if(name==='DEFENSIVE')out=.5+(p-.5)*.82;else if(name==='SOFT_SHRINK'||name==='SHRINK_95')out=.5+(p-.5)*.95;else if(name==='MARKET_AWARE'&&Number.isFinite(mp))out=p*.75+mp*.25;else if(name==='LIGHT_MARKET'&&Number.isFinite(mp))out=p*.88+mp*.12;return clamp(out)}
+  function apply(match,marketKey,probability,marketProbability){const p=Number(probability),mp=Number(marketProbability),c=champion(match,marketKey);if(!Number.isFinite(p))return{evolvedProbability:probability,...c,applied:false};const out=applyName(c.name,p,mp);return{rawProbability:p,evolvedProbability:out,champion:c.name,scope:c.scope,key:c.key,applied:c.name!=='BASELINE',delta:Number(((out-p)*100).toFixed(2))}}
+  window.ArgusHierarchicalEvolution={refresh,payload,champion,apply,family};refresh(false);
+})();
