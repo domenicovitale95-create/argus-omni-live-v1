@@ -13,21 +13,10 @@
   }
   function systemSnapshot(matches=[],analyses=[]){
     const rows=matches.map((m,i)=>({match:m,analysis:analyses[i]||{},quality:scoreMatch(m,analyses[i]||{})}));
-    const active=rows.filter(r=>!r.match?.isFinished);
-    const avg=active.length?Math.round(active.reduce((s,r)=>s+r.quality.score,0)/active.length):0;
-    const strong=active.filter(r=>r.quality.score>=75).length;
-    const weak=active.filter(r=>r.quality.score<55).length;
-    const track=window.ArgusTrackRecord?.audit?.()||{total:0,settled:0,note:'NO TRACK RECORD'};
-    const adaptive=window.ArgusAdaptiveWeights?.payload?.()||{};
-    const leagueProfiles=Object.values(adaptive.league||{});
-    const learned=leagueProfiles.filter(x=>['VALIDATING_POSITIVE','RECOVERING','NEUTRAL'].includes(String(x?.status||''))).length;
-    const caution=leagueProfiles.filter(x=>['CAUTION','DEGRADED'].includes(String(x?.status||''))).length;
-    const next=[];
-    if(track.settled<25)next.push('Need more settled predictions before trusting performance learning');
-    if(weak>0)next.push(`${weak} current match${weak===1?'':'es'} need better data before stronger decisions`);
-    if(caution>0)next.push(`${caution} reliability profile${caution===1?'':'s'} currently need caution`);
-    if(!next.length)next.push('No major training weakness detected in the current cached sample');
-    return {avg,strong,weak,total:active.length,track,learned,caution,next,rows};
+    const active=rows.filter(r=>!r.match?.isFinished),avg=active.length?Math.round(active.reduce((s,r)=>s+r.quality.score,0)/active.length):0,strong=active.filter(r=>r.quality.score>=75).length,weak=active.filter(r=>r.quality.score<55).length;
+    const track=window.ArgusTrackRecord?.audit?.()||{total:0,settled:0,note:'NO TRACK RECORD'},adaptive=window.ArgusAdaptiveWeights?.payload?.()||{},leagueProfiles=Object.values(adaptive.league||{}),learned=leagueProfiles.filter(x=>['VALIDATING_POSITIVE','RECOVERING','NEUTRAL'].includes(String(x?.status||''))).length,caution=leagueProfiles.filter(x=>['CAUTION','DEGRADED'].includes(String(x?.status||''))).length,training=window.ArgusTrainingMemory?.summary?.()||{settled:0,profiles:0,validated:0,positive:0,caution:0,learning:0};
+    const next=[];if(track.settled<25)next.push('Need more settled predictions before trusting performance learning');if(training.learning>0)next.push(`${training.learning} league × market profile${training.learning===1?' is':'s are'} still collecting evidence`);if(training.caution>0)next.push(`${training.caution} market training profile${training.caution===1?' needs':'s need'} reduced trust`);if(weak>0)next.push(`${weak} current match${weak===1?'':'es'} need better data before stronger decisions`);if(caution>0)next.push(`${caution} reliability profile${caution===1?'':'s'} currently need caution`);if(!next.length)next.push('No major training weakness detected in the current cached sample');
+    return {avg,strong,weak,total:active.length,track,learned,caution,training,next,rows};
   }
   window.ArgusSelfImprovement={scoreMatch,systemSnapshot};
 })();
