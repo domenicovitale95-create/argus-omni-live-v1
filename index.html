@@ -22,16 +22,16 @@
       </div>
       <div class="system-status">
         <span class="pulse"></span>
-        <div><strong>ENGINE ONLINE</strong><small id="clock">--:--:--</small></div>
+        <div><strong>GOVERNANCE ONLINE</strong><small id="clock">--:--:--</small></div>
       </div>
     </header>
 
     <main>
       <section class="hero panel">
         <div>
-          <p class="eyebrow">COMMAND CENTER · PRE-MATCH + LIVE + 90D HISTORY</p>
+          <p class="eyebrow">MASTER + V5 + V7 + V8 + V9 + V10</p>
           <h2>Read the match.<br><span>Reject the noise.</span></h2>
-          <p class="hero-copy">ARGUS combines 90-day team form, pre-match probabilities and market pricing before kickoff, then adds live pressure and match-state data once the game starts.</p>
+          <p class="hero-copy">ARGUS now executes the complete governance stack: observed data → market prior → supported models → RAW → SHRUNK → CONSERVATIVE → Edge Survival → price discipline → adversarial governance → decision.</p>
         </div>
         <div class="hero-actions">
           <button id="scanBtn" class="primary">ANALYZE TODAY'S MATCHES</button>
@@ -41,17 +41,18 @@
 
       <section class="metrics-grid">
         <article class="metric panel"><span>Matches tracked</span><strong id="matchCount">0</strong><small>current session</small></article>
-        <article class="metric panel"><span>PRIME signals</span><strong id="primeCount">0</strong><small>pre-match + live</small></article>
-        <article class="metric panel"><span>Watchlist</span><strong id="watchCount">0</strong><small>pre-match + live</small></article>
+        <article class="metric panel"><span>PRIME signals</span><strong id="primeCount">0</strong><small>validated gate only</small></article>
+        <article class="metric panel"><span>Watchlist</span><strong id="watchCount">0</strong><small>governed candidates</small></article>
         <article class="metric panel"><span>Data mode</span><strong id="modeLabel" class="metric-text">DEMO</strong><small>provider adapter</small></article>
       </section>
 
       <section class="workspace">
         <div class="main-column">
-          <div class="section-title"><div><p class="eyebrow">DAILY BOARD</p><h3>ARGUS analysis</h3></div><span id="lastUpdate">Awaiting scan</span></div>
+          <div class="section-title"><div><p class="eyebrow">V9 COMMAND CENTER</p><h3>ARGUS analysis</h3></div><span id="lastUpdate">Awaiting scan</span></div>
           <div class="signal-filters" role="group" aria-label="Signal filters">
             <button class="filter-btn active" data-filter="signals">SIGNALS <span id="signalCount">0</span></button>
             <button class="filter-btn" data-filter="prime">PRIME <span id="primeFilterCount">0</span></button>
+            <button class="filter-btn" data-filter="value">VALUE <span id="valueFilterCount">0</span></button>
             <button class="filter-btn" data-filter="watch">WATCH <span id="watchFilterCount">0</span></button>
             <button class="filter-btn" data-filter="no-bet">NO BET <span id="noBetFilterCount">0</span></button>
             <button class="filter-btn" data-filter="all">ALL <span id="allFilterCount">0</span></button>
@@ -64,32 +65,36 @@
         <aside class="side-column">
           <section class="panel doctrine">
             <p class="eyebrow">ARGUS DOCTRINE</p>
-            <h3>Decision hierarchy</h3>
+            <h3>Governance hierarchy</h3>
             <ol>
-              <li><span>01</span><div><strong>Data integrity</strong><small>No signal survives bad inputs.</small></div></li>
-              <li><span>02</span><div><strong>90-day form layer</strong><small>Every available recent result changes the prior.</small></div></li>
-              <li><span>03</span><div><strong>Independent model</strong><small>Historical model is blended with provider probabilities.</small></div></li>
-              <li><span>04</span><div><strong>Market survival</strong><small>Price must justify risk after uncertainty penalties.</small></div></li>
+              <li><span>01</span><div><strong>Data integrity</strong><small>Observed facts remain separate from model estimates.</small></div></li>
+              <li><span>02</span><div><strong>Market-first V5</strong><small>Liquid 1X2 prices remain the dominant prior.</small></div></li>
+              <li><span>03</span><div><strong>Calibration V7</strong><small>Heuristic shrinkage is labelled and cannot unlock PRIME.</small></div></li>
+              <li><span>04</span><div><strong>Audit V8 / Live V10</strong><small>Freeze forecasts; recalculate live state after material events.</small></div></li>
             </ol>
           </section>
 
           <section class="panel provider-box">
-            <p class="eyebrow">DATA LAYER</p>
-            <h3>Provider status</h3>
-            <div class="provider-row"><span>Demo adapter</span><b class="ok">READY</b></div>
+            <p class="eyebrow">SYSTEM CHECK</p>
+            <h3>Governance status</h3>
             <div class="provider-row"><span>API endpoint</span><b id="liveStatus">NOT SET</b></div>
             <div class="provider-row"><span>90D history teams</span><b id="historyCoverage">—</b></div>
+            <div class="provider-row"><span>Calibration</span><b id="calibrationStatus">HEURISTIC</b></div>
+            <div class="provider-row"><span>PRIME gate</span><b id="primeGateStatus">LOCKED</b></div>
+            <div class="provider-row"><span>V8 frozen records</span><b id="trackRecordCount">0</b></div>
             <div class="provider-row"><span>API requests left</span><b id="requestQuota">—</b></div>
-            <p class="muted">Secure Vercel backend connected to API-Football. Historical coverage is quota-aware; missing history reduces confidence rather than being guessed.</p>
+            <p class="muted">GOVERNANCE WINS. PRIME remains unavailable until the relevant engine and calibration methodology have replicated out-of-sample validation.</p>
           </section>
         </aside>
       </section>
     </main>
 
-    <footer><span>ARGUS OMNI · Decision support, not certainty.</span><span>V2.4</span></footer>
+    <footer><span>ARGUS OMNI · ANALYZE EVERYTHING. BET ALMOST NOTHING.</span><span>V2.5 · FULL STACK</span></footer>
   </div>
 
   <script src="src/engine.js"></script>
+  <script src="src/governance.js"></script>
+  <script src="src/track-record.js"></script>
   <script src="src/providers.js"></script>
   <script src="app.js"></script>
 </body>
