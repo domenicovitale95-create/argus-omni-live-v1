@@ -9,19 +9,16 @@ const state = {
 };
 
 function tickClock() {
-  const now = new Date();
-  $('clock').textContent = now.toLocaleTimeString([], { hour12: false });
+  $('clock').textContent = new Date().toLocaleTimeString([], { hour12: false });
 }
 setInterval(tickClock, 1000);
 tickClock();
 
 function kickoffText(match) {
   if (match.isLive) return `${match.minute || 0}' LIVE`;
-  if (['FT','AET','PEN'].includes(match.status)) return match.status;
-  if (match.kickoff) {
-    return new Date(match.kickoff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
-  return match.statusLong || match.status || 'SCHEDULED';
+  if (['FT','AET','PEN','CANC','ABD','AWD','WO'].includes(match.status)) return match.status;
+  if (match.kickoff) return new Date(match.kickoff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return match.statusLong || match.status || 'PRE-MATCH';
 }
 
 function updateQuota(meta) {
@@ -33,43 +30,50 @@ function updateQuota(meta) {
     el.classList.remove('ok');
     return;
   }
-  el.textContent = quota.dailyLimit != null
-    ? `${quota.dailyRemaining} / ${quota.dailyLimit}`
-    : String(quota.dailyRemaining);
+  el.textContent = quota.dailyLimit != null ? `${quota.dailyRemaining} / ${quota.dailyLimit}` : String(quota.dailyRemaining);
   el.classList.toggle('ok', quota.dailyRemaining > 20);
+}
+
+function strongestModelSide(analysis) {
+  const model = analysis.model || {};
+  const entries = [['HOME', model.home], ['DRAW', model.draw], ['AWAY', model.away]].filter(([,v]) => Number.isFinite(Number(v)));
+  entries.sort((a,b) => Number(b[1]) - Number(a[1]));
+  return entries[0] || ['—', 0];
 }
 
 function cardTemplate(match, analysis) {
   const signalClass = analysis.classification.toLowerCase().replace(' ', '-');
   const score = `${match.score?.home ?? 0} — ${match.score?.away ?? 0}`;
-  const marketText = analysis.marketOdds ? `${analysis.bestMarket} @ ${analysis.marketOdds}` : (match.isLive ? 'NO LIVE 1X2 ODDS' : 'PRE-MATCH / NO LIVE EDGE');
-  const decision = match.isLive ? analysis.classification : 'SCHEDULED';
-  const decisionClass = match.isLive ? signalClass : 'no-bet';
+  const marketText = analysis.marketOdds ? `${analysis.bestMarket} @ ${analysis.marketOdds}` : (match.isLive ? 'NO LIVE 1X2 ODDS' : 'NO PRE-MATCH 1X2 ODDS');
+  const [modelSide, modelProb] = strongestModelSide(analysis);
+  const inputLabel = match.isLive ? 'Pressure' : 'Model lean';
+  const inputValue = match.isLive ? `${analysis.pressure}/100` : (analysis.phase === 'PREMATCH' && modelProb > 0 ? `${modelSide} ${Math.round(modelProb * 100)}%` : 'NO MODEL');
+  const phase = match.isLive ? 'LIVE' : (analysis.phase === 'FINISHED' ? 'FINISHED' : 'PRE-MATCH');
+
   return `
     <article class="match-card panel">
       <div class="match-meta">
-        <small>${match.competition || 'MATCH'} · ${match.country || ''} · ${match.status || 'NS'}</small>
+        <small>${match.competition || 'MATCH'} · ${match.country || ''} · ${phase}</small>
         <div class="teams">${match.home} <span class="score">${score}</span> ${match.away}</div>
         <div class="minute">${kickoffText(match)}</div>
       </div>
       <div>
-        <span class="mini-label">Pressure</span>
-        <span class="value">${match.isLive ? `${analysis.pressure}/100` : '—'}</span>
+        <span class="mini-label">${inputLabel}</span>
+        <span class="value">${inputValue}</span>
       </div>
       <div>
         <span class="mini-label">Best market</span>
         <span class="value">${marketText}</span>
       </div>
-      <div class="signal ${decisionClass}">
-        <strong>${decision}</strong>
-        <small>${match.isLive ? `${analysis.edge > 0 ? '+' : ''}${analysis.edge}% EDGE · ${analysis.confidence}% CONF` : 'DAILY MATCH CENTER'}</small>
+      <div class="signal ${signalClass}">
+        <strong>${analysis.classification}</strong>
+        <small>${analysis.marketAvailable ? `${analysis.edge > 0 ? '+' : ''}${analysis.edge}% EDGE · ${analysis.confidence}% CONF` : `${analysis.confidence}% CONF · DATA INCOMPLETE`}</small>
       </div>
     </article>
   `;
 }
 
-function classifyMatch(match, analysis) {
-  if (!match.isLive) return 'scheduled';
+function classifyMatch(_match, analysis) {
   if (analysis.classification === 'PRIME') return 'prime';
   if (analysis.classification === 'WATCH') return 'watch';
   return 'no-bet';
@@ -88,27 +92,23 @@ function updateFilterCounts() {
   const rows = state.matches.map((match, index) => classifyMatch(match, state.analyses[index]));
   const prime = rows.filter(x => x === 'prime').length;
   const watch = rows.filter(x => x === 'watch').length;
-  const scheduled = rows.filter(x => x === 'scheduled').length;
   const noBet = rows.filter(x => x === 'no-bet').length;
   $('signalCount').textContent = prime + watch;
   $('primeFilterCount').textContent = prime;
   $('watchFilterCount').textContent = watch;
-  $('scheduledFilterCount').textContent = scheduled;
   $('noBetFilterCount').textContent = noBet;
   $('allFilterCount').textContent = rows.length;
 }
 
 function setFilter(filter) {
   state.filter = filter;
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.filter === filter);
-  });
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
   render();
 }
 
 function render() {
-  const prime = state.matches.filter((m, i) => m.isLive && state.analyses[i]?.classification === 'PRIME').length;
-  const watch = state.matches.filter((m, i) => m.isLive && state.analyses[i]?.classification === 'WATCH').length;
+  const prime = state.analyses.filter(a => a?.classification === 'PRIME').length;
+  const watch = state.analyses.filter(a => a?.classification === 'WATCH').length;
 
   $('matchCount').textContent = state.matches.length;
   $('primeCount').textContent = prime;
@@ -162,7 +162,7 @@ async function loadDemo() {
 
 async function scanToday() {
   $('scanBtn').disabled = true;
-  $('scanBtn').textContent = 'LOADING TODAY…';
+  $('scanBtn').textContent = 'ANALYZING TODAY…';
   try {
     const matches = await window.ArgusProviders.live();
     state.mode = 'TODAY';
@@ -177,7 +177,7 @@ async function scanToday() {
     alert(`${error.message}. V2 requires API_FOOTBALL_KEY on the server deployment.`);
   } finally {
     $('scanBtn').disabled = false;
-    $('scanBtn').textContent = "LOAD TODAY'S MATCHES";
+    $('scanBtn').textContent = "ANALYZE TODAY'S MATCHES";
   }
 }
 
