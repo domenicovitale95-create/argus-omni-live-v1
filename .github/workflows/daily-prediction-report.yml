@@ -27,6 +27,6 @@ jobs:
           REPORT_CRON_SECRET: ${{ secrets.REPORT_CRON_SECRET }}
           REPORT_DATE: ${{ steps.report_date.outputs.date }}
         run: |
-          curl --fail --silent --show-error --retry 3 \
+          curl --fail --silent --show-error \
             -H "Authorization: Bearer ${REPORT_CRON_SECRET}" \
             "https://argus-omni-live.vercel.app/api/daily-report?date=${REPORT_DATE}"
