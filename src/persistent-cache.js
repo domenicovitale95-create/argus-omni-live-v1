@@ -84,4 +84,14 @@
   }
 
   providers.lastPersistentBoard = load;
+
+  // Remove the legacy dynamically injected report link. The real navigation
+  // already contains the canonical COMPTE RENDU button.
+  const removeLegacyReportLink = () => {
+    const legacy = document.getElementById('predictionReportLink');
+    if (legacy) legacy.remove();
+  };
+  removeLegacyReportLink();
+  const navObserver = new MutationObserver(removeLegacyReportLink);
+  navObserver.observe(document.documentElement, { childList: true, subtree: true });
 })();
