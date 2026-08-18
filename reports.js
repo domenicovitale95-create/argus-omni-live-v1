@@ -48,7 +48,7 @@ function dailyCard(r){
 
 async function load(){
   try{
-    const res=await fetch('/api/reports?limit=60',{headers:{Accept:'application/json'},cache:'no-store'});
+    const res=await fetch('/api/daily-report?mode=list&limit=60',{headers:{Accept:'application/json'},cache:'no-store'});
     const payload=await res.json();
     const reports=Array.isArray(payload.reports)?payload.reports:[];
     if(payload.storageReady===false){$('storageWarning').innerHTML='<div class="storage-warning">ARCHIVE PERSISTANTE NON CONFIGURÉE — crée un Vercel Blob privé pour activer l’enregistrement automatique des prédictions et les rapports quotidiens.</div>';}
