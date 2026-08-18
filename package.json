@@ -1,9 +1,12 @@
 {
   "name": "argus-omni-live-v2",
-  "version": "2.0.0",
+  "version": "2.8.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.3.0"
   }
 }
