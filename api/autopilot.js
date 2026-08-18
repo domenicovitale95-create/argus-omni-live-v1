@@ -1,3 +1,4 @@
+export const config={maxDuration:120};
 function authorized(req){const secret=process.env.CRON_SECRET;return !secret||req.headers.authorization===`Bearer ${secret}`}
 function brusselsClock(){const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Brussels',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));return{hour:Number(p.hour),minute:Number(p.minute)}}
 async function jsonFetch(url,options={}){const r=await fetch(url,{...options,headers:{Accept:'application/json',...(options.headers||{})}});const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(`${url} -> HTTP ${r.status}: ${data.error||'request failed'}`);return data}
