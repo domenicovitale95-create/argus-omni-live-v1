@@ -1,62 +1,11 @@
 const $=(id)=>document.getElementById(id);
-
-function n(v,d=0){return Number.isFinite(Number(v))?Number(v):d;}
-function pct(v){return v==null?'—':`${n(v).toFixed(1)}%`;}
-function pl(v){if(v==null)return '—';const x=n(v);return `${x>=0?'+':''}${x.toFixed(2)}u`;}
-function cls(outcome){return String(outcome||'').toLowerCase().replace(/\s+/g,'-');}
-function predictionLabel(p){
-  if(!p)return 'NO SNAPSHOT';
-  const s=String(p.selection||'').toUpperCase();
-  if(s==='HOME')return 'HOME WIN';if(s==='AWAY')return 'AWAY WIN';if(s==='DRAW')return 'DRAW';return s||'NO BET';
-}
-
-function globalSummary(reports){
-  const sums=reports.map(r=>r.summary||{});
-  const total=(k)=>sums.reduce((a,s)=>a+n(s[k]),0);
-  const settled=total('settled'),wins=total('wins'),bets=total('actionableSettled'),betWins=total('actionableWins'),flat=sums.reduce((a,s)=>a+n(s.flatStakePL),0);
-  const cards=[
-    ['REPORTS',reports.length],['PREDICTIONS',total('predicted')],['HIT RATE',settled?`${(wins/settled*100).toFixed(1)}%`:'—'],['ACTIONABLE',bets],['BET HIT RATE',bets?`${(betWins/bets*100).toFixed(1)}%`:'—'],['FLAT P/L',`${flat>=0?'+':''}${flat.toFixed(2)}u`]
-  ];
-  $('globalSummary').innerHTML=cards.map(([a,b])=>`<article class="panel"><span>${a}</span><strong>${b}</strong></article>`).join('');
-}
-
-function dailyCard(r){
-  const s=r.summary||{};
-  const rows=(r.matches||[]).map(m=>{
-    const p=m.prediction;
-    const conf=p?.confidence==null?'—':`${p.confidence}%`;
-    const edge=p?.edge==null?'—':`${n(p.edge)>=0?'+':''}${n(p.edge).toFixed(1)}%`;
-    const score=m.finalScore?`${m.finalScore.home} — ${m.finalScore.away}`:(m.finalStatus||'PENDING');
-    return `<div class="report-row">
-      <div><strong>${m.home||'—'} vs ${m.away||'—'}</strong><small>${m.competition||''} · ${score}</small></div>
-      <div><strong>${p?.classification||'NO RECORD'}</strong><small>${p?.phase||'—'}</small></div>
-      <div><strong>${predictionLabel(p)}</strong><small>${p?.odds?`@ ${p.odds}`:'NO ODDS'}</small></div>
-      <div><strong>${conf}</strong><small>EDGE ${edge}</small></div>
-      <div class="outcome ${cls(m.outcome)}">${m.outcome||'—'}</div>
-      <div><strong>${pl(m.pl)}</strong><small>${m.snapshotCount||0} SNAPSHOT(S)</small></div>
-    </div>`;
-  }).join('');
-  return `<article class="daily-report panel">
-    <div class="daily-head">
-      <div><p class="eyebrow">DAILY REPORT</p><h3>${r.date}</h3><p>${r.integrity||''}</p></div>
-      <div class="daily-stats"><span>${s.predicted||0} predictions</span><span>${pct(s.hitRate)} hit rate</span><span>${s.actionableSettled||0} actionable</span><span>${pct(s.roi)} ROI</span><span>${pl(s.flatStakePL)}</span></div>
-    </div>
-    <div class="report-table">${rows||'<div class="empty-state">AUCUNE PRÉDICTION ENREGISTRÉE</div>'}</div>
-    <div class="integrity">${r.methodology||''}</div>
-  </article>`;
-}
-
-async function load(){
-  try{
-    const res=await fetch('/api/reports?limit=60',{headers:{Accept:'application/json'},cache:'no-store'});
-    const payload=await res.json();
-    const reports=Array.isArray(payload.reports)?payload.reports:[];
-    if(payload.storageReady===false){$('storageWarning').innerHTML='<div class="storage-warning">ARCHIVE PERSISTANTE NON CONFIGURÉE — crée un Vercel Blob privé pour activer l’enregistrement automatique des prédictions et les rapports quotidiens.</div>';}
-    globalSummary(reports);
-    $('reportCount').textContent=`${reports.length} rapport${reports.length===1?'':'s'}`;
-    $('reportList').innerHTML=reports.length?reports.map(dailyCard).join(''):'<div class="empty-state">AUCUN RAPPORT ENCORE · LE PREMIER SERA CRÉÉ APRÈS LA PROCHAINE CLÔTURE QUOTIDIENNE</div>';
-  }catch(e){
-    $('reportList').innerHTML=`<div class="empty-state">ERREUR DE CHARGEMENT · ${e.message}</div>`;
-  }
-}
+function n(v,d=0){return Number.isFinite(Number(v))?Number(v):d}
+function pct(v){return v==null?'—':`${n(v).toFixed(1)}%`}
+function pl(v){if(v==null)return'—';const x=n(v);return`${x>=0?'+':''}${x.toFixed(2)}u`}
+function cls(outcome){return String(outcome||'').toLowerCase().replace(/\s+/g,'-')}
+function predictionLabel(p){if(!p)return'NO SNAPSHOT';const s=String(p.selection||'').toUpperCase();if(s==='HOME')return'HOME WIN';if(s==='AWAY')return'AWAY WIN';if(s==='DRAW')return'DRAW';return s||'NO BET'}
+function aggregate(reports){const sums=reports.map(r=>r.summary||{}),total=k=>sums.reduce((a,s)=>a+n(s[k]),0),settled=total('settled'),wins=total('wins'),actionable=total('actionableSettled'),actionableWins=total('actionableWins'),flat=sums.reduce((a,s)=>a+n(s.flatStakePL),0);return{reports:reports.length,predicted:total('predicted'),settled,wins,hitRate:settled?wins/settled*100:null,actionable,actionableWins,actionableHitRate:actionable?actionableWins/actionable*100:null,flatPL:flat,roi:actionable?flat/actionable*100:null}}
+function renderSummary(a){const cards=[['SETTLED',a.settled],['HIT RATE',pct(a.hitRate)],['ACTIONABLE',a.actionable],['FLAT P/L',pl(a.flatPL)]];$('globalSummary').innerHTML=cards.map(([k,v])=>`<article><span>${k}</span><strong>${v}</strong></article>`).join('');$('overallLines').innerHTML=[['Recorded predictions',a.predicted],['Actionable hit rate',pct(a.actionableHitRate)],['Flat-stake ROI',pct(a.roi)],['Daily reports',a.reports]].map(([k,v])=>`<div class="overall-line"><span>${k}</span><strong>${v}</strong></div>`).join('');let status='BUILDING EVIDENCE',note='ARGUS needs a meaningful settled sample before performance conclusions become reliable.';if(a.settled>=100&&a.roi!=null){if(a.roi>3){status='POSITIVE EVIDENCE';note='The settled sample is becoming meaningful, but performance can still change.'}else if(a.roi<-3){status='REVIEW REQUIRED';note='The current evidence does not support increasing trust. Training should remain defensive.'}else{status='NEUTRAL EVIDENCE';note='The current sample does not yet show a durable performance advantage.'}}else if(a.settled>=50){status='EARLY VALIDATION';note='The sample is growing, but ARGUS should still avoid strong performance claims.'}$('performanceStatus').textContent=status;$('performanceNote').textContent=note}
+function dailyCard(r,index){const s=r.summary||{},rows=(r.matches||[]).filter(m=>m.prediction).map(m=>{const p=m.prediction,score=m.finalScore?`${m.finalScore.home} — ${m.finalScore.away}`:(m.finalStatus||'PENDING');return`<div class="report-row"><div><strong>${m.home||'—'} vs ${m.away||'—'}</strong><small>${m.competition||''} · ${score}</small></div><div><strong>${predictionLabel(p)}</strong><small>${p?.odds?`@ ${p.odds}`:'NO ODDS'}</small></div><div><strong>${p?.classification||'—'}</strong><small>${p?.confidence==null?'—':p.confidence+'% confidence'}</small></div><div class="outcome ${cls(m.outcome)}">${m.outcome||'—'}</div><div><strong>${pl(m.pl)}</strong></div></div>`}).join('');return`<article class="daily-report ${index===0?'open':''}"><button class="daily-toggle" type="button"><div class="daily-date"><strong>${r.date}</strong><small>${s.predicted||0} predictions recorded</small></div><div class="daily-metric"><strong>${pct(s.hitRate)}</strong><small>HIT RATE</small></div><div class="daily-metric"><strong>${s.actionableSettled||0}</strong><small>ACTIONABLE</small></div><div class="daily-metric"><strong>${pct(s.roi)}</strong><small>ROI</small></div><div class="daily-metric"><strong>${pl(s.flatStakePL)}</strong><small>P/L</small></div><span class="chev">⌄</span></button><div class="daily-body"><div class="report-table">${rows||'<div class="empty-state">No recorded prediction for this day.</div>'}</div><div class="integrity">${r.integrity||''}</div></div></article>`}
+async function load(){try{const res=await fetch('/api/reports?limit=60',{headers:{Accept:'application/json'},cache:'no-store'}),payload=await res.json(),reports=Array.isArray(payload.reports)?payload.reports:[];if(payload.storageReady===false)$('storageWarning').innerHTML='<div class="storage-warning">Persistent performance storage is not configured. Training evidence cannot be preserved reliably.</div>';const a=aggregate(reports);renderSummary(a);$('reportCount').textContent=`${reports.length} report${reports.length===1?'':'s'}`;$('reportList').innerHTML=reports.length?reports.map(dailyCard).join(''):'<div class="empty-state">No reports yet. Performance will appear after settled predictions are recorded.</div>';document.querySelectorAll('.daily-toggle').forEach(btn=>btn.addEventListener('click',()=>btn.closest('.daily-report')?.classList.toggle('open')))}catch(e){$('reportList').innerHTML=`<div class="empty-state">Unable to load performance · ${e.message}</div>`}}
 load();
