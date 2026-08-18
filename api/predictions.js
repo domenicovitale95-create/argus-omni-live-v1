@@ -2,6 +2,7 @@ import { readJson, storageReady, writeJson } from './_report-store.js';
 
 const FINISHED = new Set(['FT','AET','PEN','CANC','ABD','AWD','WO']);
 const TZ = 'Europe/Brussels';
+const MAX_SNAPSHOTS_PER_FIXTURE = 120;
 
 function dateInBrussels(value) {
   const d = value ? new Date(value) : new Date();
@@ -88,7 +89,7 @@ export default async function handler(req,res) {
       const last = fixture.snapshots[fixture.snapshots.length-1];
       if (!last || signature(last) !== signature(snap)) {
         fixture.snapshots.push(snap);
-        if (fixture.snapshots.length > 30) fixture.snapshots = fixture.snapshots.slice(-30);
+        if (fixture.snapshots.length > MAX_SNAPSHOTS_PER_FIXTURE) fixture.snapshots = fixture.snapshots.slice(-MAX_SNAPSHOTS_PER_FIXTURE);
         saved++;
       }
       store.fixtures[id] = fixture;
@@ -97,5 +98,5 @@ export default async function handler(req,res) {
     await writeJson(path,store);
   }
 
-  return res.status(200).json({ ok:true, saved, dates:[...grouped.keys()] });
+  return res.status(200).json({ ok:true, saved, maxSnapshotsPerFixture:MAX_SNAPSHOTS_PER_FIXTURE, dates:[...grouped.keys()] });
 }
