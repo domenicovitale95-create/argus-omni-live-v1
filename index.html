@@ -34,7 +34,7 @@
           <p class="hero-copy">ARGUS evaluates match state, pressure, market pricing and uncertainty before surfacing a signal.</p>
         </div>
         <div class="hero-actions">
-          <button id="scanBtn" class="primary">SCAN LIVE MATCHES</button>
+          <button id="scanBtn" class="primary">LOAD TODAY'S MATCHES</button>
           <button id="demoBtn" class="secondary">RUN DEMO FEED</button>
         </div>
       </section>
@@ -48,9 +48,17 @@
 
       <section class="workspace">
         <div class="main-column">
-          <div class="section-title"><div><p class="eyebrow">LIVE BOARD</p><h3>Active analysis</h3></div><span id="lastUpdate">Awaiting scan</span></div>
+          <div class="section-title"><div><p class="eyebrow">DAILY BOARD</p><h3>Active analysis</h3></div><span id="lastUpdate">Awaiting scan</span></div>
+          <div class="signal-filters" role="group" aria-label="Signal filters">
+            <button class="filter-btn active" data-filter="signals">SIGNALS <span id="signalCount">0</span></button>
+            <button class="filter-btn" data-filter="prime">PRIME <span id="primeFilterCount">0</span></button>
+            <button class="filter-btn" data-filter="watch">WATCH <span id="watchFilterCount">0</span></button>
+            <button class="filter-btn" data-filter="scheduled">SCHEDULED <span id="scheduledFilterCount">0</span></button>
+            <button class="filter-btn" data-filter="no-bet">NO BET <span id="noBetFilterCount">0</span></button>
+            <button class="filter-btn" data-filter="all">ALL <span id="allFilterCount">0</span></button>
+          </div>
           <div id="matchGrid" class="match-grid">
-            <div class="empty panel"><div class="radar"></div><h3>No active analysis</h3><p>Run the demo feed or connect a secure live provider endpoint.</p></div>
+            <div class="empty panel"><div class="radar"></div><h3>No active analysis</h3><p>Load today's matches to start ARGUS.</p></div>
           </div>
         </div>
 
@@ -71,13 +79,13 @@
             <h3>Provider status</h3>
             <div class="provider-row"><span>Demo adapter</span><b class="ok">READY</b></div>
             <div class="provider-row"><span>Live endpoint</span><b id="liveStatus">NOT SET</b></div>
-            <p class="muted">Set <code>window.ARGUS_LIVE_ENDPOINT</code> through a secure deployment configuration. Never expose private API keys in this repository.</p>
+            <p class="muted">Secure Vercel backend connected to API-Football. Private API keys remain server-side.</p>
           </section>
         </aside>
       </section>
     </main>
 
-    <footer><span>ARGUS OMNI LIVE · Decision support, not certainty.</span><span>V1.0</span></footer>
+    <footer><span>ARGUS OMNI LIVE · Decision support, not certainty.</span><span>V2.1</span></footer>
   </div>
 
   <script src="src/engine.js"></script>
