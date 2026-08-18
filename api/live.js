@@ -1,5 +1,6 @@
 const API_BASE = 'https://v3.football.api-sports.io';
-const CACHE_TTL_MS = 60_000;
+const CACHE_TTL_MS = 180_000;
+const MAX_DETAILED_FIXTURES = 4;
 
 let cache = { at: 0, payload: null };
 
@@ -11,8 +12,8 @@ function apiHeaders() {
 
 async function apiGet(path) {
   const response = await fetch(`${API_BASE}${path}`, { headers: apiHeaders() });
+  const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(`API-Football HTTP ${response.status}`);
-  const data = await response.json();
   if (data?.errors && Object.keys(data.errors).length) {
     throw new Error(`API-Football: ${JSON.stringify(data.errors)}`);
   }
@@ -83,7 +84,7 @@ function extract1x2(oddsPayload, fixtureId) {
   };
 }
 
-function normalizeFixture(fixture, oddsPayload) {
+function normalizeFixture(fixture, oddsPayload, detailed = false) {
   return {
     id: fixture.fixture?.id,
     competition: fixture.league?.name,
@@ -99,46 +100,83 @@ function normalizeFixture(fixture, oddsPayload) {
     stats: extractStats(fixture),
     markets: extract1x2(oddsPayload, fixture.fixture?.id),
     source: 'API-FOOTBALL',
+    detailLevel: detailed ? 'FULL' : 'LIVE_SCORE',
     observedAt: new Date().toISOString()
   };
 }
 
 async function buildLivePayload() {
+  // FREE PLAN SAFE: never use the paid-plan `ids` parameter.
   const live = await apiGet('/fixtures?live=all');
-  const fixtures = live.response || [];
-  if (!fixtures.length) {
-    return { matches: [], meta: { provider: 'API-FOOTBALL', live: true, fetchedAt: new Date().toISOString() } };
-  }
-
-  const ids = fixtures.map((x) => x.fixture?.id).filter(Boolean);
-  const detailed = [];
-  for (let i = 0; i < ids.length; i += 20) {
-    const chunk = ids.slice(i, i + 20).join('-');
-    const result = await apiGet(`/fixtures?ids=${chunk}`);
-    detailed.push(...(result.response || []));
+  const liveFixtures = live.response || [];
+  if (!liveFixtures.length) {
+    return {
+      matches: [],
+      meta: {
+        provider: 'API-FOOTBALL',
+        live: true,
+        planMode: 'FREE_SAFE',
+        fetchedAt: new Date().toISOString()
+      }
+    };
   }
 
   let odds = { response: [] };
   try {
     odds = await apiGet('/odds/live');
   } catch (_) {
-    // Odds coverage can be unavailable while score/stat data is still valid.
+    // Live scores remain usable even when in-play odds have no coverage.
   }
 
+  // Prioritize fixtures that actually have live 1X2 market data. Those are the
+  // fixtures where ARGUS can evaluate market edge instead of inventing one.
+  const withOdds = [];
+  const withoutOdds = [];
+  for (const fixture of liveFixtures) {
+    const market = extract1x2(odds, fixture.fixture?.id);
+    (market.home && market.draw && market.away ? withOdds : withoutOdds).push(fixture);
+  }
+  const prioritized = [...withOdds, ...withoutOdds];
+
+  const detailTargets = prioritized.slice(0, MAX_DETAILED_FIXTURES);
+  const detailMap = new Map();
+
+  // Singular `id=` requests are compatible with the free plan. We deliberately
+  // cap the count to protect the 100 requests/day quota.
+  for (const fixture of detailTargets) {
+    const id = fixture.fixture?.id;
+    if (!id) continue;
+    try {
+      const detail = await apiGet(`/fixtures?id=${id}`);
+      if (detail.response?.[0]) detailMap.set(Number(id), detail.response[0]);
+    } catch (_) {
+      // Fall back to the live-score fixture instead of failing the whole scan.
+    }
+  }
+
+  const matches = prioritized.map((fixture) => {
+    const id = Number(fixture.fixture?.id);
+    const detailed = detailMap.get(id);
+    return normalizeFixture(detailed || fixture, odds, Boolean(detailed));
+  });
+
   return {
-    matches: detailed.map((fixture) => normalizeFixture(fixture, odds)),
+    matches,
     meta: {
       provider: 'API-FOOTBALL',
       live: true,
+      planMode: 'FREE_SAFE',
       fetchedAt: new Date().toISOString(),
-      fixtureCount: detailed.length,
+      fixtureCount: matches.length,
+      detailedFixtureCount: detailMap.size,
+      detailedFixtureLimit: MAX_DETAILED_FIXTURES,
       cacheSeconds: CACHE_TTL_MS / 1000
     }
   };
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Cache-Control', 's-maxage=45, stale-while-revalidate=15');
+  res.setHeader('Cache-Control', 's-maxage=150, stale-while-revalidate=30');
   res.setHeader('Access-Control-Allow-Origin', '*');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
@@ -154,7 +192,12 @@ export default async function handler(req, res) {
     return res.status(503).json({
       error: error.message,
       matches: [],
-      meta: { provider: 'API-FOOTBALL', live: false, fetchedAt: new Date().toISOString() }
+      meta: {
+        provider: 'API-FOOTBALL',
+        live: false,
+        planMode: 'FREE_SAFE',
+        fetchedAt: new Date().toISOString()
+      }
     });
   }
 }
