@@ -7,6 +7,7 @@
     "api/predictions.js": { "maxDuration": 15 },
     "api/market-memory.js": { "maxDuration": 15 },
     "api/argus-lab.js": { "maxDuration": 30 },
+    "api/reliability.js": { "maxDuration": 30 },
     "api/danger-data.js": { "maxDuration": 30 },
     "api/reports.js": { "maxDuration": 20 },
     "api/daily-report.js": { "maxDuration": 30 }
