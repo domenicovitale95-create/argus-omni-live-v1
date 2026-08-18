@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#050505" />
+  <meta name="theme-color" content="#050706" />
+  <meta name="description" content="ARGUS OMNI — live football intelligence and decision-first betting command center." />
   <title>ARGUS OMNI LIVE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,13 +12,18 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="ambient-grid" aria-hidden="true"></div>
   <div class="shell">
     <header class="topbar">
-      <div class="brand">
+      <a class="brand" href="/" aria-label="ARGUS OMNI home">
         <div class="mark">A</div>
-        <div><p class="eyebrow">LIVE FOOTBALL INTELLIGENCE</p><h1>ARGUS <span>OMNI</span></h1></div>
-      </div>
+        <div>
+          <p class="eyebrow">LIVE FOOTBALL INTELLIGENCE</p>
+          <h1>ARGUS <span>OMNI</span></h1>
+        </div>
+      </a>
       <div class="top-status">
+        <a class="nav-link" href="compte-rendu-des-predictions.html">COMPTE RENDU</a>
         <div class="safe-chip" id="safeModeChip" title="ARGUS is conserving today's remaining API requests. Cached data remains available.">API SAFE MODE</div>
         <div class="system-status"><span class="pulse"></span><div><strong>GOVERNANCE ONLINE</strong><small id="clock">--:--:--</small></div></div>
       </div>
@@ -26,41 +32,45 @@
     <main>
       <section class="command-hero panel">
         <div class="hero-copy-block">
-          <p class="eyebrow">ARGUS BETTING COMMAND CENTER</p>
+          <div class="hero-label"><span class="live-dot"></span> ARGUS BETTING COMMAND CENTER</div>
           <h2>Know what matters.<br><span>Ignore everything else.</span></h2>
-          <p class="hero-copy">ARGUS scans today's matches and ranks only the strongest betting opportunities.</p>
+          <p class="hero-copy">One screen. One hierarchy. ARGUS scans today's matches and surfaces only the positions strong enough to deserve attention.</p>
+          <div class="hero-rule"><strong>PRIME</strong><i></i><strong>VALUE</strong><i></i><strong>WATCH</strong><i></i><span>everything else = PASS</span></div>
         </div>
-        <div class="hero-stats">
-          <div><span>API</span><strong id="heroQuota">—</strong></div>
-          <div><span>LAST UPDATE</span><strong id="heroUpdate">—</strong></div>
-          <div><span>ANALYSED</span><strong id="heroAnalysed">0</strong></div>
-          <div><span>PRIME</span><strong id="heroPrime">0</strong></div>
-          <div><span>WATCH</span><strong id="heroWatch">0</strong></div>
+        <div class="hero-stats" aria-label="ARGUS live statistics">
+          <div><span>API</span><strong id="heroQuota">—</strong><small>budget</small></div>
+          <div><span>LAST UPDATE</span><strong id="heroUpdate">—</strong><small>data time</small></div>
+          <div><span>ANALYSED</span><strong id="heroAnalysed">0</strong><small>matches</small></div>
+          <div class="hero-stat-prime"><span>PRIME</span><strong id="heroPrime">0</strong><small>elite</small></div>
+          <div><span>WATCH</span><strong id="heroWatch">0</strong><small>monitor</small></div>
         </div>
       </section>
 
       <section class="top-opportunities-wrap">
         <div class="section-heading-row">
-          <div><p class="eyebrow">DECISION FIRST</p><h3>Top opportunities</h3></div>
+          <div><p class="eyebrow">DECISION FIRST</p><h3>What should I bet on?</h3><p class="section-subtitle">If there is no edge, ARGUS says so immediately.</p></div>
           <button id="scanBtn" class="primary compact">ANALYZE TODAY'S MATCHES</button>
         </div>
         <div id="topPick" class="top-pick empty-pick panel">
-          <span class="pick-kicker">ARGUS #1 PICK</span>
-          <strong>NO ACTIONABLE SIGNAL LOADED</strong>
-          <small>ARGUS will not invent a bet to fill this space.</small>
+          <div class="pick-state-icon" aria-hidden="true">×</div>
+          <div class="pick-copy">
+            <span class="pick-kicker">ARGUS #1 PICK</span>
+            <strong>NO ACTIONABLE SIGNAL LOADED</strong>
+            <small>ARGUS will not invent a bet to fill this space.</small>
+          </div>
         </div>
         <div id="topOpportunities" class="opportunity-grid"></div>
       </section>
 
       <section class="today-verdict panel">
-        <div><p class="eyebrow">ARGUS TODAY</p><strong id="todayCounts">0 PRIME · 0 VALUE · 0 WATCH · 0 NO BET · 0 PASSED</strong></div>
-        <p id="strongestSignal">No current actionable signal.</p>
+        <div class="today-main"><p class="eyebrow">ARGUS TODAY</p><strong id="todayCounts">0 PRIME · 0 VALUE · 0 WATCH · 0 NO BET · 0 PASSED</strong></div>
+        <div class="today-signal"><span class="status-orb"></span><p id="strongestSignal">No current actionable signal.</p></div>
       </section>
 
-      <section class="board-toolbar">
+      <section class="board-toolbar" aria-label="Match analysis filters">
         <div class="signal-filters" role="group" aria-label="Signal filters">
           <button class="filter-btn active" data-filter="signals">ACTIONABLE <span id="signalCount">0</span></button>
-          <button class="filter-btn" data-filter="prime">PRIME <span id="primeFilterCount">0</span></button>
+          <button class="filter-btn prime-filter" data-filter="prime">PRIME <span id="primeFilterCount">0</span></button>
           <button class="filter-btn" data-filter="value">VALUE <span id="valueFilterCount">0</span></button>
           <button class="filter-btn" data-filter="watch">WATCH <span id="watchFilterCount">0</span></button>
           <button class="filter-btn" data-filter="all">ALL ACTIVE <span id="allFilterCount">0</span></button>
@@ -80,8 +90,11 @@
 
       <section class="workspace">
         <div class="main-column">
-          <div class="section-title"><div><p class="eyebrow">TODAY'S BOARD</p><h3>Active analysis</h3></div><span id="lastUpdate">Awaiting scan</span></div>
-          <div id="matchGrid" class="match-grid"><div class="empty-state">RUN A SCAN TO LOAD TODAY'S MATCHES</div></div>
+          <div class="section-title">
+            <div><p class="eyebrow">TODAY'S BOARD</p><h3>Active analysis</h3></div>
+            <span id="lastUpdate">Awaiting scan</span>
+          </div>
+          <div id="matchGrid" class="match-grid"><div class="empty-state"><strong>NO DATA LOADED YET</strong><span>Run today's scan to populate the decision board.</span></div></div>
         </div>
 
         <aside class="side-column">
@@ -93,10 +106,12 @@
             <div class="provider-row"><span>Calibration</span><b id="calibrationStatus">HEURISTIC</b></div>
             <div class="provider-row"><span>PRIME gate</span><b id="primeGateStatus">LOCKED</b></div>
             <div class="provider-row"><span>V8 frozen records</span><b id="trackRecordCount">0</b></div>
-            <p class="muted">UI actions, filters and sorting use already-loaded data and do not consume API requests.</p>
+            <p class="muted">Filters, sorting and detail views use already-loaded data. They do not consume additional API requests.</p>
           </section>
           <section class="panel doctrine compact-doctrine">
             <p class="eyebrow">ARGUS DOCTRINE</p><h3>Decision hierarchy</h3>
+            <div class="hierarchy-line"><span class="rank prime-rank">01</span><strong>PRIME</strong><i></i><span class="rank value-rank">02</span><strong>VALUE</strong><i></i><span class="rank watch-rank">03</span><strong>WATCH</strong></div>
+            <p class="doctrine-mantra">QUALITY BEFORE QUANTITY.<br>EDGE BEFORE ACTION.</p>
             <ol>
               <li><span>01</span><div><strong>Data integrity</strong><small>No fabricated inputs.</small></div></li>
               <li><span>02</span><div><strong>Market first</strong><small>Price is the benchmark.</small></div></li>
@@ -108,7 +123,7 @@
       </section>
     </main>
 
-    <footer><span>ARGUS OMNI · ANALYZE EVERYTHING. BET ALMOST NOTHING.</span><span>V2.7 · COMMAND CENTER</span></footer>
+    <footer><span>ARGUS OMNI · ANALYZE EVERYTHING. BET ALMOST NOTHING.</span><span>DECISION-FIRST COMMAND CENTER</span></footer>
   </div>
   <script src="src/engine.js"></script>
   <script src="src/governance.js"></script>
