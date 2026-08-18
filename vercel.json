@@ -3,17 +3,24 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "api/live.js": { "maxDuration": 30 },
-    "api/predictions.js": { "maxDuration": 15 },
-    "api/market-memory.js": { "maxDuration": 15 },
-    "api/argus-lab.js": { "maxDuration": 30 },
-    "api/reliability.js": { "maxDuration": 30 },
-    "api/adaptive-weights.js": { "maxDuration": 30 },
-    "api/adaptive-registry.js": { "maxDuration": 15 },
-    "api/model-health.js": { "maxDuration": 30 },
-    "api/decision-scheduler.js": { "maxDuration": 15 },
-    "api/live-events.js": { "maxDuration": 15 },
-    "api/danger-data.js": { "maxDuration": 30 },
-    "api/daily-report.js": { "maxDuration": 30 }
-  }
+    "api/live.js": { "maxDuration": 60 },
+    "api/predictions.js": { "maxDuration": 30 },
+    "api/market-memory.js": { "maxDuration": 30 },
+    "api/argus-lab.js": { "maxDuration": 60 },
+    "api/reliability.js": { "maxDuration": 60 },
+    "api/adaptive-weights.js": { "maxDuration": 60 },
+    "api/adaptive-registry.js": { "maxDuration": 30 },
+    "api/model-health.js": { "maxDuration": 60 },
+    "api/decision-scheduler.js": { "maxDuration": 30 },
+    "api/live-events.js": { "maxDuration": 30 },
+    "api/danger-data.js": { "maxDuration": 60 },
+    "api/daily-report.js": { "maxDuration": 60 },
+    "api/reports.js": { "maxDuration": 30 },
+    "api/autopilot.js": { "maxDuration": 120 },
+    "api/daily-cron.js": { "maxDuration": 60 }
+  },
+  "crons": [
+    { "path": "/api/autopilot", "schedule": "*/5 * * * *" },
+    { "path": "/api/daily-cron", "schedule": "55 21,22 * * *" }
+  ]
 }
