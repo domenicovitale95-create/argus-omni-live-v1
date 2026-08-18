@@ -7,6 +7,7 @@
     "api/availability.js": { "maxDuration": 60 },
     "api/prekickoff-gate.js": { "maxDuration": 60 },
     "api/player-impact.js": { "maxDuration": 60 },
+    "api/player-memory.js": { "maxDuration": 60 },
     "api/predictions.js": { "maxDuration": 30 },
     "api/market-memory.js": { "maxDuration": 30 },
     "api/argus-lab.js": { "maxDuration": 60 },
