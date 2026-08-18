@@ -1,0 +1,28 @@
+import { readJson, writeJson, storageReady } from './_report-store.js';
+
+const STATE_PATH='argus/autopilot/decision-plan.json';
+function n(v,f=0){const x=Number(v);return Number.isFinite(x)?x:f}
+function implied(o){return n(o)>1?1/n(o):0}
+function marketProb(m={}){const h=implied(m.home),d=implied(m.draw),a=implied(m.away),s=h+d+a;return s?{home:h/s,draw:d/s,away:a/s}:null}
+function modelProb(match){const p=match?.preMatchModel;if(!p)return null;const h=Math.max(0,n(p.home)),d=Math.max(0,n(p.draw)),a=Math.max(0,n(p.away)),s=h+d+a;return s?{home:h/s,draw:d/s,away:a/s}:null}
+function bestResidual(match){const market=marketProb(match?.markets),model=modelProb(match);if(!market||!model)return null;const rows=['home','draw','away'].map(k=>({side:k,edge:(model[k]-market[k])*100,prob:model[k]})).sort((a,b)=>b.edge-a.edge);return rows[0]}
+function minutesToKickoff(match){const t=new Date(match?.kickoff||0).getTime();return Number.isFinite(t)?Math.round((t-Date.now())/60000):99999}
+function tier(match){
+  if(match?.isFinished||['FT','AET','PEN','CANC','ABD','AWD','WO'].includes(match?.status))return{tier:'ARCHIVE',score:0,cadenceMinutes:null,reason:'Finished'};
+  const q=n(match?.dataQuality||match?.quality,0),res=bestResidual(match),edge=res?.edge??0,ko=minutesToKickoff(match),live=Boolean(match?.isLive),minute=n(match?.minute,0);
+  let score=10,reasons=[];
+  if(res){score+=Math.min(35,Math.max(0,edge*3));reasons.push(`market residual ${edge.toFixed(1)}%`)}
+  if(q>=70){score+=10;reasons.push('good data quality')}
+  if(live){score+=25;reasons.push(`live ${minute}'`);if(edge>=4)score+=20}
+  else if(ko>=0&&ko<=60){score+=18;reasons.push('kickoff <60m')}
+  else if(ko>60&&ko<=360){score+=10;reasons.push('kickoff <6h')}
+  if(!match?.markets?.home||!match?.markets?.draw||!match?.markets?.away)score-=18;
+  score=Math.max(0,Math.min(100,Math.round(score)));
+  if(live&&score>=70)return{tier:'LIVE_PRIORITY',score,cadenceMinutes:5,reason:reasons.join(' + ')};
+  if(score>=65)return{tier:'VALUE_CANDIDATE',score,cadenceMinutes:10,reason:reasons.join(' + ')};
+  if(score>=45)return{tier:'WATCH',score,cadenceMinutes:15,reason:reasons.join(' + ')};
+  return{tier:'BASE',score,cadenceMinutes:30,reason:reasons.join(' + ')||'No elevated signal'};
+}
+function quotaMode(meta={}){const q=meta?.quota||{},remaining=n(q.dailyRemaining,-1),limit=n(q.dailyLimit,-1);if(remaining<0||limit<=0)return'UNKNOWN';const ratio=remaining/limit;if(ratio<=.08)return'EMERGENCY';if(ratio<=.20)return'SAFE';if(ratio<=.45)return'CONSERVE';return'NORMAL'}
+function applyQuotaCadence(plan,mode){const factor=mode==='EMERGENCY'?4:mode==='SAFE'?2:mode==='CONSERVE'?1.5:1;return plan.map(x=>({...x,cadenceMinutes:x.cadenceMinutes?Math.max(5,Math.round(x.cadenceMinutes*factor)):null,quotaMode:mode}))}
+export default async function handler(req,res){res.setHeader('Cache-Control','no-store');if(!storageReady())return res.status(503).json({error:'Decision scheduler storage unavailable'});if(req.method==='GET')return res.status(200).json(await readJson(STATE_PATH,{version:'DECISION-SCHEDULER-1',generatedAt:null,plan:[],summary:{}}));if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});const matches=Array.isArray(req.body?.matches)?req.body.matches:[],meta=req.body?.meta||{},mode=quotaMode(meta);let plan=matches.map(m=>({fixtureId:m.id,competition:m.competition,home:m.home,away:m.away,kickoff:m.kickoff,status:m.status,isLive:Boolean(m.isLive),minute:m.minute??null,...tier(m)}));plan=applyQuotaCadence(plan,mode).sort((a,b)=>b.score-a.score);const summary={total:plan.length,livePriority:plan.filter(x=>x.tier==='LIVE_PRIORITY').length,valueCandidates:plan.filter(x=>x.tier==='VALUE_CANDIDATE').length,watch:plan.filter(x=>x.tier==='WATCH').length,base:plan.filter(x=>x.tier==='BASE').length,archive:plan.filter(x=>x.tier==='ARCHIVE').length,quotaMode:mode,nextUrgentFixture:plan.find(x=>['LIVE_PRIORITY','VALUE_CANDIDATE','WATCH'].includes(x.tier))?.fixtureId||null};const state={version:'DECISION-SCHEDULER-1',generatedAt:new Date().toISOString(),policy:{rule:'Prioritization controls monitoring cadence only. It never creates or upgrades a betting verdict.',minimumCadenceMinutes:5,quotaAware:true},summary,plan:plan.slice(0,500)};await writeJson(STATE_PATH,state);return res.status(200).json(state)}
