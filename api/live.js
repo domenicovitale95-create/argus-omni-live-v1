@@ -5,7 +5,6 @@ const CACHE_TTL_MS = 60_000;
 const HISTORY_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const PREDICTION_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const ODDS_CACHE_TTL_MS = 10 * 60 * 1000;
-const INJURY_CACHE_TTL_MS = 4 * 60 * 60 * 1000;
 const DISPLAY_TIMEZONE = 'Europe/Brussels';
 const HISTORY_DAYS = 90;
 const REQUEST_DEADLINE_MS = 22_000;
@@ -13,7 +12,6 @@ const CONCURRENCY = 6;
 const MIN_DAILY_RESERVE = 80;
 const MAX_DAILY_RESERVE = 250;
 const MIN_MINUTE_RESERVE = 4;
-const DETAIL_WINDOW_MS = 100 * 60 * 1000;
 const LIVE_STATUSES = new Set(['1H','HT','2H','ET','BT','P','INT','LIVE']);
 const FINISHED_STATUSES = new Set(['FT','AET','PEN','CANC','ABD','AWD','WO']);
 
@@ -60,8 +58,6 @@ function todayInTimezone(){return dateInTimezone(new Date())}
 function daysAgoInTimezone(days){return dateInTimezone(new Date(Date.now()-days*86400000))}
 function isLiveFixture(f){return LIVE_STATUSES.has(f.fixture?.status?.short)}
 function isFinishedFixture(f){return FINISHED_STATUSES.has(f.fixture?.status?.short)}
-function kickoffMs(f){const ts=Number(f.fixture?.timestamp);if(Number.isFinite(ts)&&ts>0)return ts*1000;const parsed=new Date(f.fixture?.date||0).getTime();return Number.isFinite(parsed)?parsed:0}
-function isImminentFixture(f){if(isLiveFixture(f)||isFinishedFixture(f))return isLiveFixture(f);const k=kickoffMs(f);return k>0&&k-Date.now()<=DETAIL_WINDOW_MS&&k-Date.now()>=-30*60*1000}
 function statValue(stats=[],name){const item=stats.find(e=>String(e.type).toLowerCase()===name.toLowerCase());if(!item||item.value==null)return null;if(typeof item.value==='string'&&item.value.endsWith('%'))return Number(item.value.replace('%',''));const n=Number(item.value);return Number.isFinite(n)?n:null}
 function extractStats(fixture){const blocks=fixture.statistics||[],home=blocks[0]?.statistics||[],away=blocks[1]?.statistics||[];return {shotsHome:statValue(home,'Total Shots'),shotsAway:statValue(away,'Total Shots'),shotsOnTargetHome:statValue(home,'Shots on Goal'),shotsOnTargetAway:statValue(away,'Shots on Goal'),cornersHome:statValue(home,'Corner Kicks'),cornersAway:statValue(away,'Corner Kicks'),possessionHome:statValue(home,'Ball Possession'),possessionAway:statValue(away,'Ball Possession'),dangerousAttacksHome:null,dangerousAttacksAway:null}}
 function normalizeLabel(v){return String(v||'').trim().toLowerCase()}
@@ -96,23 +92,11 @@ async function fetchHistories(fixtures,deadline){
   return {histories,totalTeams:teamIds.length,loadedThisScan:loaded,missingAfter:teamIds.length-histories.size,from,to};
 }
 
-function chunk(items,size){const out=[];for(let i=0;i<items.length;i+=size)out.push(items.slice(i,i+size));return out}
-async function enrichPriorityFixtures(fixtures,deadline){
-  const targets=fixtures.filter(isImminentFixture),detailsById=new Map();
-  const idGroups=chunk(targets.map(f=>Number(f.fixture?.id)).filter(Boolean),20);
-  for(const ids of idGroups){if(Date.now()>=deadline||!canSpend())break;try{const detail=await apiGet(`/fixtures?ids=${ids.join('-')}&timezone=${encodeURIComponent(DISPLAY_TIMEZONE)}`);for(const row of detail.response||[])if(row?.fixture?.id)detailsById.set(Number(row.fixture.id),row)}catch(_){}
-  return {fixtures:fixtures.map(f=>detailsById.get(Number(f.fixture?.id))||f),requested:targets.length,loaded:detailsById.size,calls:idGroups.length};
+async function enrichLiveFixtures(fixtures,deadline){
+  const liveFixtures=fixtures.filter(isLiveFixture),detailsById=new Map();
+  const rows=await mapConcurrent(liveFixtures,async fixture=>{const id=fixture.fixture?.id;if(!id)return null;const detail=await apiGet(`/fixtures?id=${id}`);return detail.response?.[0]||null},deadline);
+  for(const row of rows)if(row?.fixture?.id)detailsById.set(Number(row.fixture.id),row);return fixtures.map(f=>detailsById.get(Number(f.fixture?.id))||f);
 }
-
-async function fetchInjuriesByDate(date,deadline){
-  const cachePath=`argus/data/injuries-${date}.json`;const cached=await loadAggregate(cachePath,null);
-  if(cached?.savedAt&&Date.now()-new Date(cached.savedAt).getTime()<INJURY_CACHE_TTL_MS&&Array.isArray(cached.response))return {response:cached.response,cache:'HIT',loadedThisScan:0};
-  if(Date.now()>=deadline||!canSpend())return {response:cached?.response||[],cache:cached?.response?'STALE':'MISS',loadedThisScan:0};
-  try{const payload=await apiGet(`/injuries?date=${date}&timezone=${encodeURIComponent(DISPLAY_TIMEZONE)}`);const response=payload.response||[];await saveAggregate(cachePath,{savedAt:new Date().toISOString(),response});return {response,cache:'MISS',loadedThisScan:1}}catch(_){return {response:cached?.response||[],cache:cached?.response?'STALE':'ERROR',loadedThisScan:0}}
-}
-function injuryIndex(rows=[]){const map=new Map();for(const row of rows){const fixtureId=Number(row.fixture?.id),teamId=Number(row.team?.id);if(!fixtureId||!teamId)continue;const key=`${fixtureId}:${teamId}`;if(!map.has(key))map.set(key,[]);map.get(key).push({playerId:row.player?.id||null,name:row.player?.name||null,type:row.player?.type||null,reason:row.player?.reason||null})}return map}
-function lineupForTeam(fixture,teamId){const lineups=Array.isArray(fixture.lineups)?fixture.lineups:[];const row=lineups.find(x=>Number(x.team?.id)===Number(teamId));if(!row)return null;const starters=(row.startXI||[]).map(x=>({id:x.player?.id||null,name:x.player?.name||null,number:x.player?.number||null,pos:x.player?.pos||null,grid:x.player?.grid||null}));const bench=(row.substitutes||[]).map(x=>({id:x.player?.id||null,name:x.player?.name||null,number:x.player?.number||null,pos:x.player?.pos||null}));return {confirmed:starters.length>=11,formation:row.formation||null,coach:row.coach?.name||null,starters,bench}}
-function availabilityForFixture(fixture,index){const id=Number(fixture.fixture?.id),homeId=Number(fixture.teams?.home?.id),awayId=Number(fixture.teams?.away?.id),homeLineup=lineupForTeam(fixture,homeId),awayLineup=lineupForTeam(fixture,awayId),homeAbs=index.get(`${id}:${homeId}`)||[],awayAbs=index.get(`${id}:${awayId}`)||[],confirmed=Boolean(homeLineup?.confirmed&&awayLineup?.confirmed);return {lineupsConfirmed:confirmed,lineupStatus:confirmed?'CONFIRMED':(isImminentFixture(fixture)?'PENDING_OR_UNAVAILABLE':'NOT_DUE'),home:{formation:homeLineup?.formation||null,coach:homeLineup?.coach||null,starters:homeLineup?.starters||[],bench:homeLineup?.bench||[],absences:homeAbs,absenceCount:homeAbs.length},away:{formation:awayLineup?.formation||null,coach:awayLineup?.coach||null,starters:awayLineup?.starters||[],bench:awayLineup?.bench||[],absences:awayAbs,absenceCount:awayAbs.length},policy:'Availability data is contextual only until player-importance calibration is validated.'}}
 
 async function fetchPrematchOddsByDate(date,deadline){
   const cachePath=`argus/data/odds-${date}.json`;const cached=await loadAggregate(cachePath,null);if(cached?.savedAt&&Date.now()-new Date(cached.savedAt).getTime()<ODDS_CACHE_TTL_MS&&cached.payload)return cached.payload;
@@ -126,19 +110,18 @@ async function fetchPrematchPredictions(fixtures,date,deadline){
   let loaded=0;for(const row of rows){if(!row)continue;predictions.set(row.id,row.data);store.fixtures[String(row.id)]={savedAt:new Date().toISOString(),data:row.data};loaded++}if(loaded)await saveAggregate(cachePath,store);return {predictions,total:candidates.length,loadedThisScan:loaded,missingAfter:Math.max(0,candidates.length-predictions.size)};
 }
 
-function normalizeFixture(fixture,liveOdds,prematchOdds,predictions,histories,injuries){const live=isLiveFixture(fixture),finished=isFinishedFixture(fixture),id=fixture.fixture?.id,homeTeamId=fixture.teams?.home?.id||null,awayTeamId=fixture.teams?.away?.id||null;return {id,competition:fixture.league?.name,country:fixture.league?.country,status:fixture.fixture?.status?.short||'NS',statusLong:fixture.fixture?.status?.long||'',minute:fixture.fixture?.status?.elapsed||0,kickoff:fixture.fixture?.date||null,timestamp:fixture.fixture?.timestamp||null,isLive:live,isFinished:finished,homeTeamId,awayTeamId,home:fixture.teams?.home?.name||'Home',away:fixture.teams?.away?.name||'Away',score:{home:fixture.goals?.home??0,away:fixture.goals?.away??0},stats:extractStats(fixture),markets:live?extract1x2(liveOdds,id):extract1x2(prematchOdds,id),preMatchModel:finished?null:(predictions.get(Number(id))||null),history90d:{home:histories.get(Number(homeTeamId))||null,away:histories.get(Number(awayTeamId))||null},availability:availabilityForFixture(fixture,injuries),source:'API-FOOTBALL',observedAt:new Date().toISOString()}}
+function normalizeFixture(fixture,liveOdds,prematchOdds,predictions,histories){const live=isLiveFixture(fixture),finished=isFinishedFixture(fixture),id=fixture.fixture?.id,homeTeamId=fixture.teams?.home?.id||null,awayTeamId=fixture.teams?.away?.id||null;return {id,competition:fixture.league?.name,country:fixture.league?.country,status:fixture.fixture?.status?.short||'NS',statusLong:fixture.fixture?.status?.long||'',minute:fixture.fixture?.status?.elapsed||0,kickoff:fixture.fixture?.date||null,timestamp:fixture.fixture?.timestamp||null,isLive:live,isFinished:finished,homeTeamId,awayTeamId,home:fixture.teams?.home?.name||'Home',away:fixture.teams?.away?.name||'Away',score:{home:fixture.goals?.home??0,away:fixture.goals?.away??0},stats:extractStats(fixture),markets:live?extract1x2(liveOdds,id):extract1x2(prematchOdds,id),preMatchModel:finished?null:(predictions.get(Number(id))||null),history90d:{home:histories.get(Number(homeTeamId))||null,away:histories.get(Number(awayTeamId))||null},source:'API-FOOTBALL',observedAt:new Date().toISOString()}}
 
 async function buildPayload(){
   const started=Date.now(),deadline=started+REQUEST_DEADLINE_MS,date=todayInTimezone();const day=await apiGet(`/fixtures?date=${date}&timezone=${encodeURIComponent(DISPLAY_TIMEZONE)}`),fixtures=day.response||[];
   if(!fixtures.length)return {matches:[],meta:{provider:'API-FOOTBALL',mode:'PRO-DYNAMIC',date,timezone:DISPLAY_TIMEZONE,fetchedAt:new Date().toISOString(),fixtureCount:0,quota:quotaMeta()}};
-  const detailResult=await enrichPriorityFixtures(fixtures,deadline),enriched=detailResult.fixtures;let liveOdds={response:[]};if(enriched.some(isLiveFixture)&&Date.now()<deadline&&canSpend()){try{liveOdds=await apiGet('/odds/live')}catch(_){}}
+  const enriched=await enrichLiveFixtures(fixtures,deadline);let liveOdds={response:[]};if(enriched.some(isLiveFixture)&&Date.now()<deadline&&canSpend()){try{liveOdds=await apiGet('/odds/live')}catch(_){}}
   const prematchOdds=Date.now()<deadline&&canSpend()?await fetchPrematchOddsByDate(date,deadline):{response:[]};
-  const injuryResult=Date.now()<deadline?await fetchInjuriesByDate(date,deadline):{response:[],cache:'SKIPPED',loadedThisScan:0},injuries=injuryIndex(injuryResult.response);
   const historyResult=Date.now()<deadline?await fetchHistories(enriched,deadline):{histories:new Map(),totalTeams:0,loadedThisScan:0,missingAfter:0,from:daysAgoInTimezone(HISTORY_DAYS),to:date};
   const predictionResult=Date.now()<deadline?await fetchPrematchPredictions(enriched,date,deadline):{predictions:new Map(),total:0,loadedThisScan:0,missingAfter:0};
-  const matches=enriched.map(f=>normalizeFixture(f,liveOdds,prematchOdds,predictionResult.predictions,historyResult.histories,injuries)).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
-  const historyCompleteMatches=matches.filter(m=>m.history90d?.home&&m.history90d?.away).length,lineupsConfirmed=matches.filter(m=>m.availability?.lineupsConfirmed).length,matchesWithAbsences=matches.filter(m=>(m.availability?.home?.absenceCount||0)+(m.availability?.away?.absenceCount||0)>0).length;
-  return {matches,meta:{provider:'API-FOOTBALL',mode:'PRO-DYNAMIC',date,timezone:DISPLAY_TIMEZONE,fetchedAt:new Date().toISOString(),fixtureCount:matches.length,liveFixtureCount:matches.filter(m=>m.isLive).length,prematchAnalyzedCount:matches.filter(m=>m.preMatchModel).length,prematchTotal:predictionResult.total,prematchLoadedThisScan:predictionResult.loadedThisScan,prematchMissing:predictionResult.missingAfter,historyWindowDays:HISTORY_DAYS,historyFrom:historyResult.from,historyTo:historyResult.to,historyTeamsCovered:historyResult.histories.size,historyTeamsTotal:historyResult.totalTeams,historyLoadedThisScan:historyResult.loadedThisScan,historyTeamsMissing:historyResult.missingAfter,historyCompleteMatches,detailFixturesRequested:detailResult.requested,detailFixturesLoaded:detailResult.loaded,detailBatchCalls:detailResult.calls,lineupsConfirmed,matchesWithAbsences,injuryCache:injuryResult.cache,injuryRows:injuryResult.response.length,storage:storageReady()?'BLOB':'MEMORY',requestBudgetMs:REQUEST_DEADLINE_MS,elapsedMs:Date.now()-started,cacheSeconds:CACHE_TTL_MS/1000,quota:quotaMeta()}};
+  const matches=enriched.map(f=>normalizeFixture(f,liveOdds,prematchOdds,predictionResult.predictions,historyResult.histories)).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+  const historyCompleteMatches=matches.filter(m=>m.history90d?.home&&m.history90d?.away).length;
+  return {matches,meta:{provider:'API-FOOTBALL',mode:'PRO-DYNAMIC',date,timezone:DISPLAY_TIMEZONE,fetchedAt:new Date().toISOString(),fixtureCount:matches.length,liveFixtureCount:matches.filter(m=>m.isLive).length,prematchAnalyzedCount:matches.filter(m=>m.preMatchModel).length,prematchTotal:predictionResult.total,prematchLoadedThisScan:predictionResult.loadedThisScan,prematchMissing:predictionResult.missingAfter,historyWindowDays:HISTORY_DAYS,historyFrom:historyResult.from,historyTo:historyResult.to,historyTeamsCovered:historyResult.histories.size,historyTeamsTotal:historyResult.totalTeams,historyLoadedThisScan:historyResult.loadedThisScan,historyTeamsMissing:historyResult.missingAfter,historyCompleteMatches,storage:storageReady()?'BLOB':'MEMORY',requestBudgetMs:REQUEST_DEADLINE_MS,elapsedMs:Date.now()-started,cacheSeconds:CACHE_TTL_MS/1000,quota:quotaMeta()}};
 }
 
 export default async function handler(req,res){
