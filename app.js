@@ -34,6 +34,18 @@ function updateQuota(meta) {
   el.classList.toggle('ok', quota.dailyRemaining > 20);
 }
 
+function updateHistoryCoverage(meta) {
+  const el = $('historyCoverage');
+  if (!el) return;
+  if (meta?.historyTeamsCovered == null || meta?.historyTeamsTotal == null) {
+    el.textContent = '—';
+    el.classList.remove('ok');
+    return;
+  }
+  el.textContent = `${meta.historyTeamsCovered} / ${meta.historyTeamsTotal}`;
+  el.classList.toggle('ok', meta.historyTeamsTotal > 0 && meta.historyTeamsCovered === meta.historyTeamsTotal);
+}
+
 function strongestModelSide(analysis) {
   const model = analysis.model || {};
   const entries = [['HOME', model.home], ['DRAW', model.draw], ['AWAY', model.away]].filter(([,v]) => Number.isFinite(Number(v)));
@@ -41,14 +53,27 @@ function strongestModelSide(analysis) {
   return entries[0] || ['—', 0];
 }
 
+function historyFormText(match) {
+  const home = match.history90d?.home;
+  const away = match.history90d?.away;
+  if (!home || !away) return null;
+  return `H ${Number(home.pointsPerGame || 0).toFixed(2)} · A ${Number(away.pointsPerGame || 0).toFixed(2)} PPG`;
+}
+
 function cardTemplate(match, analysis) {
   const signalClass = analysis.classification.toLowerCase().replace(' ', '-');
   const score = `${match.score?.home ?? 0} — ${match.score?.away ?? 0}`;
   const marketText = analysis.marketOdds ? `${analysis.bestMarket} @ ${analysis.marketOdds}` : (match.isLive ? 'NO LIVE 1X2 ODDS' : 'NO PRE-MATCH 1X2 ODDS');
   const [modelSide, modelProb] = strongestModelSide(analysis);
-  const inputLabel = match.isLive ? 'Pressure' : 'Model lean';
-  const inputValue = match.isLive ? `${analysis.pressure}/100` : (analysis.phase === 'PREMATCH' && modelProb > 0 ? `${modelSide} ${Math.round(modelProb * 100)}%` : 'NO MODEL');
+  const historyText = historyFormText(match);
+  const inputLabel = match.isLive ? 'Pressure' : (historyText ? '90D form' : 'Model lean');
+  const inputValue = match.isLive
+    ? `${analysis.pressure}/100`
+    : (historyText || (analysis.phase === 'PREMATCH' && modelProb > 0 ? `${modelSide} ${Math.round(modelProb * 100)}%` : 'NO MODEL'));
   const phase = match.isLive ? 'LIVE' : (analysis.phase === 'FINISHED' ? 'FINISHED' : 'PRE-MATCH');
+  const homeHistoryN = match.history90d?.home?.matches || 0;
+  const awayHistoryN = match.history90d?.away?.matches || 0;
+  const historySuffix = (homeHistoryN && awayHistoryN) ? ` · 90D ${homeHistoryN}+${awayHistoryN} GAMES` : '';
 
   return `
     <article class="match-card panel">
@@ -67,7 +92,7 @@ function cardTemplate(match, analysis) {
       </div>
       <div class="signal ${signalClass}">
         <strong>${analysis.classification}</strong>
-        <small>${analysis.marketAvailable ? `${analysis.edge > 0 ? '+' : ''}${analysis.edge}% EDGE · ${analysis.confidence}% CONF` : `${analysis.confidence}% CONF · DATA INCOMPLETE`}</small>
+        <small>${analysis.marketAvailable ? `${analysis.edge > 0 ? '+' : ''}${analysis.edge}% EDGE · ${analysis.confidence}% CONF${historySuffix}` : `${analysis.confidence}% CONF · DATA INCOMPLETE${historySuffix}`}</small>
       </div>
     </article>
   `;
@@ -116,6 +141,7 @@ function render() {
   $('modeLabel').textContent = state.mode;
   updateFilterCounts();
   updateQuota(state.meta);
+  updateHistoryCoverage(state.meta);
 
   const stamp = state.meta?.fetchedAt ? new Date(state.meta.fetchedAt) : new Date();
   $('lastUpdate').textContent = state.matches.length
@@ -187,6 +213,7 @@ async function detectLiveBackend() {
     $('liveStatus').textContent = 'READY';
     $('liveStatus').classList.add('ok');
     updateQuota(status.meta);
+    updateHistoryCoverage(status.meta);
   } else {
     $('liveStatus').textContent = 'V2 BACKEND REQUIRED';
   }
