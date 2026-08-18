@@ -1,7 +1,7 @@
 (function () {
-  const CACHE_KEY = 'argus-live-cache-v3';
-  const NORMAL_TTL = 5 * 60 * 1000;
-  const SAFE_TTL = 12 * 60 * 1000;
+  const CACHE_KEY = 'argus-live-cache-v4';
+  const NORMAL_TTL = 60 * 1000;
+  const SAFE_TTL = 5 * 60 * 1000;
 
   function readCache() {
     try {
@@ -13,15 +13,26 @@
   function writeCache(payload) {
     try { localStorage.setItem(CACHE_KEY, JSON.stringify({ matches: payload.matches || [], meta: payload.meta || null, savedAt: Date.now() })); } catch (_) {}
   }
-  function quotaFrom(row) { return row?.meta?.quota?.dailyRemaining; }
+  function quotaInfo(row) {
+    const q = row?.meta?.quota || {};
+    const remaining = Number(q.dailyRemaining);
+    const limit = Number(q.dailyLimit);
+    const reserve = Number(q.dynamicReserve);
+    return {
+      remaining: Number.isFinite(remaining) ? remaining : null,
+      limit: Number.isFinite(limit) ? limit : null,
+      reserve: Number.isFinite(reserve) ? reserve : null
+    };
+  }
   function cacheStatus() {
     const row = readCache();
     if (!row) return { available:false, fresh:false, ageMs:null, safeMode:false };
     const ageMs = Date.now() - row.savedAt;
-    const remaining = quotaFrom(row);
-    const safeMode = Number.isFinite(Number(remaining)) && Number(remaining) <= 10;
+    const q = quotaInfo(row);
+    const threshold = q.reserve ?? (q.limit ? Math.max(80, Math.ceil(q.limit * 0.02)) : 80);
+    const safeMode = q.remaining != null && q.remaining <= threshold;
     const ttl = safeMode ? SAFE_TTL : NORMAL_TTL;
-    return { available:true, fresh:ageMs < ttl, ageMs, safeMode, remaining };
+    return { available:true, fresh:ageMs < ttl, ageMs, safeMode, remaining:q.remaining, limit:q.limit, threshold };
   }
   function cachedMatches(row) {
     const matches = (row?.matches || []).slice();
@@ -62,14 +73,5 @@
     if(row&&status.fresh){ persistPredictions(row.matches||[],row.meta||null); return {ready:true,cached:true,meta:{...(row.meta||{}),clientCache:true,clientCacheAgeMs:status.ageMs},matches:row.matches||[]}; }
     return {ready:true,cached:false,meta:row?.meta||null,matches:row?.matches||[]};
   }
-  function addReportLink(){
-    const host=document.querySelector('.top-status');
-    if(!host || document.getElementById('predictionReportLink')) return;
-    const a=document.createElement('a');
-    a.id='predictionReportLink'; a.href='/compte-rendu-des-predictions'; a.textContent='COMPTE RENDU';
-    a.style.cssText='color:#d8ff45;text-decoration:none;border:1px solid #3b4424;background:#11150d;padding:8px 10px;font-size:8px;font-weight:800;letter-spacing:.12em';
-    host.insertBefore(a,host.firstChild);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',addReportLink); else addReportLink();
   window.ArgusProviders={demo,live,health,cacheStatus,readCache,persistPredictions};
 })();
