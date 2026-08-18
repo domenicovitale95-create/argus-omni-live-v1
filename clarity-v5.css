@@ -1,0 +1,44 @@
+/* ARGUS OMNI — Clarity V5: premium decision-first UI */
+:root{--v5-bg:#101216;--v5-surface:#191c21;--v5-surface-2:#20242a;--v5-text:#f5f2eb;--v5-muted:#aaa69e;--v5-prime:#829b78;--v5-value:#748aa7;--v5-watch:#c6975d;--v5-skip:#777d82}
+html{scroll-behavior:smooth}
+body{background:var(--v5-bg)}
+.shell{width:min(1180px,92vw)}
+main{padding-top:18px}
+
+/* Header: only what matters */
+.topbar{min-height:64px;border-bottom:1px solid rgba(255,255,255,.06)}
+.mark{width:40px;height:40px;border-radius:12px}.brand h1{font-size:20px}.top-status{gap:2px}.nav-link{font-size:10px;padding:8px 10px}.top-status a[href="#matches"],.top-status .system-link{display:none}.system-status{margin-left:4px;background:transparent!important;padding:0 0 0 8px!important}.system-status small{display:none}
+
+/* Hero: brand statement, not dashboard */
+.command-hero{min-height:300px;padding:36px 38px;grid-template-columns:minmax(0,1.2fr) minmax(275px,.52fr);gap:26px;border-radius:24px;background:linear-gradient(90deg,rgba(14,16,20,.985) 0%,rgba(14,16,20,.93) 46%,rgba(14,16,20,.50) 74%),url('assets/argus-vision-hero.svg') right center/60% cover no-repeat;box-shadow:0 22px 70px rgba(0,0,0,.22)}
+.command-hero:before{background:linear-gradient(180deg,transparent 52%,rgba(10,12,15,.60))}
+.hero-copy-block:before{font-size:clamp(40px,5vw,60px);line-height:.96;max-width:590px;margin:10px 0 12px}.hero-copy-block:after{max-width:500px;font-size:13px;line-height:1.55;color:#c4c0b8}.hero-label{font-size:8px;padding:6px 9px;background:rgba(255,255,255,.045)}
+.hero-stats{grid-template-columns:1fr 1fr;gap:8px;padding:9px;border-radius:16px;background:rgba(10,12,15,.56);border:1px solid rgba(255,255,255,.06)}.hero-stats>div{min-height:66px;padding:11px 13px;border-radius:12px}.hero-stats>div:nth-child(3),.hero-stats>div:nth-child(5){display:none!important}.hero-stats strong{font-size:21px}.hero-stats span{font-size:8px}
+
+/* Start here */
+.section-heading-row{margin:24px 0 12px;gap:20px}.section-heading-row h3{font-size:28px;letter-spacing:-.045em;max-width:630px}.section-subtitle{max-width:560px;font-size:11.5px;line-height:1.5;color:#a8a49c}.primary{min-width:205px;padding:14px 17px;border-radius:14px;background:#f3f0e8;color:#151812;font-weight:800;font-size:10px;box-shadow:0 8px 24px rgba(0,0,0,.18)}.primary:hover{background:#fff;transform:translateY(-1px)}
+
+/* #1 decision becomes the centerpiece */
+.top-pick{min-height:0;border-radius:22px;border:1px solid rgba(130,155,120,.20);background:linear-gradient(125deg,rgba(130,155,120,.12),rgba(24,27,32,.98) 46%,rgba(20,23,28,.98));box-shadow:0 20px 56px rgba(0,0,0,.18)}
+.top-pick .opportunity-card.number-one{padding:30px;grid-template-columns:minmax(0,1.3fr) minmax(225px,.5fr);column-gap:24px}.top-pick .opp-head{margin-bottom:2px}.top-pick .signal-badge{font-size:8px}.top-pick h4{font-size:34px;line-height:1.02;margin:13px 0 12px;letter-spacing:-.045em}.top-pick h4 em{opacity:.45;font-style:normal;font-size:.55em}.top-pick .bet-block{padding:15px 16px;border-radius:14px;background:#f2efe8}.top-pick .bet-block span{color:#66655f}.top-pick .bet-block strong{font-size:23px;line-height:1.1;color:#171a18}.top-pick p{font-size:11.5px;line-height:1.55;max-width:610px;color:#b4b0a8}.top-pick .opp-metrics{gap:8px}.top-pick .opp-metrics div{min-height:56px;padding:12px 14px;border-radius:12px}.top-pick .opp-metrics span{font-size:8px}.top-pick .opp-metrics strong{font-size:16px}.decision-action{padding:9px 13px}.opportunity-actions{margin-top:7px}
+
+/* Secondary opportunities: only two on desktop */
+.opportunity-grid{grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.opportunity-grid .opportunity-card:nth-child(n+3){display:none}.opportunity-card{padding:17px;border-radius:17px;background:rgba(25,28,33,.82)}.opportunity-card h4{font-size:18px;margin:13px 0 10px}.opportunity-card .bet-block{padding:12px 13px}.opportunity-card .bet-block strong{font-size:16px}.opportunity-card p{font-size:10px;line-height:1.45}.opportunity-card .opp-metrics div{padding:9px 10px}.opportunity-card .opp-metrics strong{font-size:13px}
+
+/* Toolbar becomes secondary */
+.board-toolbar{margin:24px 0 14px;padding:0;border:0;background:transparent}.signal-filters{gap:5px}.filter-btn{font-size:8px;padding:8px 11px;border-radius:999px!important;background:rgba(255,255,255,.03)!important}.filter-btn.active{background:#efede7!important;color:#161914!important}.filter-btn.quiet{display:none}.sort-control{display:none}
+
+/* Match list: simple rows */
+.section-title{margin:2px 0 10px}.section-title h3{font-size:23px}.section-title>span{font-size:9px;opacity:.65}.match-grid{gap:7px}.match-card{grid-template-columns:minmax(230px,1.15fr) minmax(185px,.82fr) 130px;gap:16px;padding:16px 17px;border-radius:15px;background:rgba(25,28,33,.76);border:1px solid rgba(255,255,255,.055)}.match-card .confidence-cell{display:none}.match-card h4{font-size:17px;margin:5px 0 2px}.match-topline{font-size:7px}.decision-cell span{font-size:7px}.decision-cell strong{font-size:14px}.signal{padding:8px 9px;border-radius:10px}.signal strong{font-size:8px}.signal small{font-size:7px}.row-action{font-size:7px;padding:5px 8px}.analysis-detail{margin-top:8px;border-radius:10px;background:rgba(255,255,255,.025)}
+
+/* Empty states feel intentional */
+.empty-pick{padding:30px}.empty-pick strong{font-size:26px}.empty-pick small{max-width:620px}.empty-state{min-height:150px;border-radius:16px}.empty-state:before{font-size:20px}.empty-state strong{font-size:15px}.empty-state span{font-size:11px}
+footer{margin-top:24px;font-size:8px;opacity:.55}
+
+@media(max-width:900px){
+  .command-hero{grid-template-columns:1fr;min-height:0;background:linear-gradient(180deg,rgba(14,16,20,.70),rgba(14,16,20,.96) 58%),url('assets/argus-vision-hero.svg') center/cover no-repeat}.hero-stats{max-width:480px}.top-pick .opportunity-card.number-one{grid-template-columns:1fr}.top-pick .opp-metrics{grid-template-columns:1fr 1fr;margin-top:10px}.match-card{grid-template-columns:1fr 150px}.match-card .decision-cell{grid-column:1}.match-card .signal{grid-column:2;grid-row:1/3;align-self:center}.opportunity-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:720px){
+  .shell{width:94vw}.topbar{min-height:60px}.brand h1{font-size:19px}.top-status .nav-link{display:none}.command-hero{padding:23px 19px 18px;border-radius:19px}.hero-copy-block{padding-top:54px}.hero-copy-block:before{font-size:36px;max-width:410px}.hero-copy-block:after{font-size:11.5px;max-width:400px}.hero-stats{grid-template-columns:1fr 1fr}.hero-stats>div{min-height:60px}.hero-stats strong{font-size:18px}.section-heading-row{margin-top:22px;gap:12px}.section-heading-row h3{font-size:23px}.section-subtitle{font-size:10.5px}.primary{width:100%;min-width:0}.top-pick .opportunity-card.number-one{padding:20px 17px}.top-pick h4{font-size:25px}.top-pick .bet-block strong{font-size:19px}.top-pick .opp-metrics{grid-template-columns:1fr 1fr}.top-pick .opp-metrics div{min-height:0}.opportunity-grid{grid-template-columns:1fr}.opportunity-grid .opportunity-card:nth-child(2){display:none}.board-toolbar{margin-top:20px}.signal-filters{display:flex;overflow-x:auto;flex-wrap:nowrap}.filter-btn{white-space:nowrap;flex:0 0 auto}.section-title h3{font-size:21px}.match-card{grid-template-columns:1fr;padding:15px;gap:10px}.match-card .signal{grid-column:1;grid-row:auto;text-align:left}.match-card .decision-cell{grid-column:1}.opportunity-actions{justify-content:space-between}.empty-pick{padding:24px 20px}.empty-pick strong{font-size:22px}
+}
