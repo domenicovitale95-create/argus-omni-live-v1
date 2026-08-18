@@ -22,6 +22,17 @@ function pickSnapshot(fixture){
   return live.length?live[live.length-1]:null;
 }
 
+function resultFromStored(stored){
+  const snaps=Array.isArray(stored?.snapshots)?stored.snapshots:[];
+  const final=snaps.slice().reverse().find(s=>FINAL_STATUSES.has(s.status)||VOID_STATUSES.has(s.status));
+  if(!final) return {state:'PENDING'};
+  if(VOID_STATUSES.has(final.status)) return {state:'VOID'};
+  const h=Number(final.score?.home), a=Number(final.score?.away);
+  if(!Number.isFinite(h)||!Number.isFinite(a)) return {state:'PENDING'};
+  const winner=h>a?'HOME':h<a?'AWAY':'DRAW';
+  return {state:'FINAL',winner,home:h,away:a};
+}
+
 function outcomeFromFixture(row){
   const status=row?.fixture?.status?.short;
   if(VOID_STATUSES.has(status)) return {state:'VOID'};
@@ -87,10 +98,21 @@ export default async function handler(req,res){
   const existing=await readJson(`argus/reports/${date}.json`,null);
   if(existing && req.query?.force!=='1') return res.status(200).json({...existing,idempotent:true});
 
-  const [fixtures,predictionStore]=await Promise.all([
-    fetchFixtures(date),
-    readJson(`argus/predictions/${date}.json`,{date,fixtures:{}})
-  ]);
+  const predictionStore=await readJson(`argus/predictions/${date}.json`,{date,fixtures:{}});
+  let fixtures=[];
+  let fixtureSource='ARCHIVE_ONLY';
+  let providerError=null;
+
+  // Prefer provider results when available, but never fail the daily audit because
+  // the free API quota is exhausted. Archived snapshots remain auditable and any
+  // unresolved outcomes stay PENDING instead of producing a 500 response.
+  try {
+    fixtures=await fetchFixtures(date);
+    fixtureSource='API_FOOTBALL';
+  } catch(error) {
+    providerError=error.message;
+  }
+
   const byId=new Map(fixtures.map(f=>[String(f.fixture?.id),f]));
   const ids=new Set([...byId.keys(),...Object.keys(predictionStore.fixtures||{})]);
   const rows=[];
@@ -99,7 +121,7 @@ export default async function handler(req,res){
     const fixture=byId.get(id);
     const stored=predictionStore.fixtures?.[id]||null;
     const prediction=pickSnapshot(stored);
-    const result=fixture?outcomeFromFixture(fixture):{state:'PENDING'};
+    const result=fixture?outcomeFromFixture(fixture):resultFromStored(stored);
     const settlement=settle(prediction,result);
     rows.push({
       fixtureId:Number(id),
@@ -118,9 +140,9 @@ export default async function handler(req,res){
   }
   rows.sort((a,b)=>new Date(a.kickoff||0)-new Date(b.kickoff||0));
   const report={
-    date,timezone:TZ,generatedAt:new Date().toISOString(),
+    date,timezone:TZ,generatedAt:new Date().toISOString(),fixtureSource,providerError,
     integrity:'NO HINDSIGHT — report evaluates snapshots stored before settlement.',
-    methodology:'Final pre-match snapshot is evaluated first; if absent, latest live snapshot is used.',
+    methodology:'Final pre-match snapshot is evaluated first; if absent, latest live snapshot is used. If provider data is unavailable, unresolved outcomes remain PENDING.',
     summary:buildSummary(rows),
     matches:rows
   };
