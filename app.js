@@ -3,7 +3,8 @@ const $ = (id) => document.getElementById(id);
 const state = {
   matches: [],
   analyses: [],
-  mode: 'DEMO'
+  mode: 'DEMO',
+  meta: null
 };
 
 function tickClock() {
@@ -13,13 +14,10 @@ function tickClock() {
 setInterval(tickClock, 1000);
 tickClock();
 
-function formatPct(value) {
-  return `${Math.round(value)}%`;
-}
-
 function cardTemplate(match, analysis) {
   const signalClass = analysis.classification.toLowerCase().replace(' ', '-');
   const score = `${match.score?.home ?? 0} — ${match.score?.away ?? 0}`;
+  const marketText = analysis.marketOdds ? `${analysis.bestMarket} @ ${analysis.marketOdds}` : 'NO LIVE 1X2 ODDS';
   return `
     <article class="match-card panel">
       <div class="match-meta">
@@ -33,7 +31,7 @@ function cardTemplate(match, analysis) {
       </div>
       <div>
         <span class="mini-label">Best market</span>
-        <span class="value">${analysis.bestMarket} @ ${analysis.marketOdds || '—'}</span>
+        <span class="value">${marketText}</span>
       </div>
       <div class="signal ${signalClass}">
         <strong>${analysis.classification}</strong>
@@ -51,16 +49,24 @@ function render() {
   $('primeCount').textContent = prime;
   $('watchCount').textContent = watch;
   $('modeLabel').textContent = state.mode;
-  $('lastUpdate').textContent = state.matches.length ? `Updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}` : 'Awaiting scan';
+
+  const stamp = state.meta?.fetchedAt ? new Date(state.meta.fetchedAt) : new Date();
+  $('lastUpdate').textContent = state.matches.length
+    ? `Updated ${stamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`
+    : state.mode === 'LIVE' ? 'Live feed connected · no match in play' : 'Awaiting scan';
 
   const grid = $('matchGrid');
-  if (!state.matches.length) return;
+  if (!state.matches.length) {
+    grid.innerHTML = `<div class="empty-state">${state.mode === 'LIVE' ? 'LIVE DATA CONNECTED — NO MATCH CURRENTLY IN PLAY' : 'RUN A SCAN TO LOAD MATCHES'}</div>`;
+    return;
+  }
 
   grid.innerHTML = state.matches.map((match, index) => cardTemplate(match, state.analyses[index])).join('');
 }
 
-function analyzeMatches(matches) {
+function analyzeMatches(matches, meta = null) {
   state.matches = matches;
+  state.meta = meta;
   state.analyses = matches.map(match => window.ArgusEngine.analyze(match));
   render();
 }
@@ -86,21 +92,31 @@ async function scanLive() {
   try {
     const matches = await window.ArgusProviders.live();
     state.mode = 'LIVE';
-    analyzeMatches(matches);
+    analyzeMatches(matches, matches.meta || null);
+    $('liveStatus').textContent = 'CONNECTED';
+    $('liveStatus').classList.add('ok');
   } catch (error) {
-    state.mode = window.ARGUS_LIVE_ENDPOINT ? 'LIVE ERROR' : 'DEMO';
+    state.mode = 'LIVE ERROR';
+    $('liveStatus').textContent = 'NOT CONFIGURED';
+    $('liveStatus').classList.remove('ok');
     render();
-    alert(`${error.message}. Configure a secure live-data endpoint before using live mode.`);
+    alert(`${error.message}. V2 requires API_FOOTBALL_KEY on the server deployment.`);
   } finally {
     $('scanBtn').disabled = false;
     $('scanBtn').textContent = 'SCAN LIVE MATCHES';
   }
 }
 
+async function detectLiveBackend() {
+  const status = await window.ArgusProviders.health();
+  if (status.ready) {
+    $('liveStatus').textContent = 'READY';
+    $('liveStatus').classList.add('ok');
+  } else {
+    $('liveStatus').textContent = 'V2 BACKEND REQUIRED';
+  }
+}
+
 $('demoBtn').addEventListener('click', loadDemo);
 $('scanBtn').addEventListener('click', scanLive);
-
-if (window.ARGUS_LIVE_ENDPOINT) {
-  $('liveStatus').textContent = 'READY';
-  $('liveStatus').classList.add('ok');
-}
+detectLiveBackend();
