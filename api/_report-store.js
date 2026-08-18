@@ -2,8 +2,11 @@ import { get, list, put } from '@vercel/blob';
 
 const ACCESS = 'private';
 
+// New Vercel Blob stores use OIDC/system credentials rather than a
+// long-lived BLOB_READ_WRITE_TOKEN. BLOB_STORE_ID is injected when the
+// private store is linked to the project. Keep legacy-token compatibility.
 export function storageReady() {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  return Boolean(process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN);
 }
 
 export async function readJson(pathname, fallback = null) {
@@ -15,7 +18,7 @@ export async function readJson(pathname, fallback = null) {
 }
 
 export async function writeJson(pathname, value) {
-  if (!storageReady()) throw new Error('BLOB_READ_WRITE_TOKEN is not configured');
+  if (!storageReady()) throw new Error('Vercel Blob storage is not linked to this project');
   return put(pathname, JSON.stringify(value, null, 2), {
     access: ACCESS,
     addRandomSuffix: false,
