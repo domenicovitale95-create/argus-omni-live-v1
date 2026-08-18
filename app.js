@@ -1,5 +1,7 @@
 const $ = (id) => document.getElementById(id);
 
+const FINISHED_STATUSES = new Set(['FT','AET','PEN','CANC','ABD','AWD','WO']);
+
 const state = {
   matches: [],
   analyses: [],
@@ -14,9 +16,13 @@ function tickClock() {
 setInterval(tickClock, 1000);
 tickClock();
 
+function isPastMatch(match, analysis) {
+  return Boolean(match?.isFinished || FINISHED_STATUSES.has(match?.status) || analysis?.phase === 'FINISHED');
+}
+
 function kickoffText(match) {
   if (match.isLive) return `${match.minute || 0}' LIVE`;
-  if (['FT','AET','PEN','CANC','ABD','AWD','WO'].includes(match.status)) return match.status;
+  if (FINISHED_STATUSES.has(match.status)) return match.status;
   if (match.kickoff) return new Date(match.kickoff).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   return match.statusLong || match.status || 'PRE-MATCH';
 }
@@ -74,17 +80,18 @@ function signalClass(analysis) {
 }
 
 function cardTemplate(match, analysis, stateIndex) {
+  const past = isPastMatch(match, analysis);
   const score = `${match.score?.home ?? 0} — ${match.score?.away ?? 0}`;
   const marketText = analysis.marketOdds ? `${analysis.bestMarket} @ ${analysis.marketOdds}` : (match.isLive ? 'NO LIVE 1X2 ODDS' : 'NO PRE-MATCH 1X2 ODDS');
   const historyText = historyFormText(match);
   const inputLabel = match.isLive ? 'Pressure' : '90D form';
   const inputValue = match.isLive ? `${analysis.pressure ?? '—'}/100` : (historyText || 'HISTORY INCOMPLETE');
-  const phase = match.isLive ? 'LIVE' : (analysis.phase === 'FINISHED' ? 'FINISHED' : 'PRE-MATCH');
+  const phase = match.isLive ? 'LIVE' : (past ? 'FINISHED' : 'PRE-MATCH');
   const modelLine = `RAW ${pct(analysis.rawProbability)} · SHR ${pct(analysis.shrunkProbability)} · CONS ${pct(analysis.conservativeProbability)}`;
   const evLine = analysis.conservativeEV == null
     ? `${analysis.confidence ?? 0}% CONF · ${analysis.governanceReason || 'DATA INCOMPLETE'}`
     : `CONS EV ${analysis.conservativeEV >= 0 ? '+' : ''}${analysis.conservativeEV}% · ${analysis.confidence}% CONF`;
-  const canRecord = !match.isFinished && analysis.marketAvailable && analysis.classification !== 'NO BET';
+  const canRecord = !past && analysis.marketAvailable && analysis.classification !== 'NO BET';
 
   return `
     <article class="match-card panel">
@@ -96,24 +103,25 @@ function cardTemplate(match, analysis, stateIndex) {
       </div>
       <div>
         <span class="mini-label">${inputLabel}</span>
-        <span class="value">${inputValue}</span>
-        <small class="governance-line">${analysis.engineStatus || 'ENGINE STATUS UNKNOWN'}</small>
+        <span class="value">${past ? 'FINAL' : inputValue}</span>
+        <small class="governance-line">${past ? 'ARCHIVED RESULT' : (analysis.engineStatus || 'ENGINE STATUS UNKNOWN')}</small>
       </div>
       <div>
-        <span class="mini-label">Current market</span>
-        <span class="value">${marketText}</span>
-        <small class="governance-line">${modelLine}</small>
+        <span class="mini-label">${past ? 'Match status' : 'Current market'}</span>
+        <span class="value">${past ? 'COMPLETED' : marketText}</span>
+        <small class="governance-line">${past ? 'Excluded from active signal categories' : modelLine}</small>
       </div>
-      <div class="signal ${signalClass(analysis)}">
-        <strong>${analysis.classification}</strong>
-        <small>${evLine}</small>
-        <small>${analysis.shrinkageStatus || ''}</small>
+      <div class="signal ${past ? 'no-bet' : signalClass(analysis)}">
+        <strong>${past ? 'PAST MATCH' : analysis.classification}</strong>
+        <small>${past ? 'FINISHED · ARCHIVED' : evLine}</small>
+        <small>${past ? '' : (analysis.shrinkageStatus || '')}</small>
       </div>
     </article>
   `;
 }
 
-function classifyMatch(_match, analysis) {
+function classifyMatch(match, analysis) {
+  if (isPastMatch(match, analysis)) return 'past';
   const c = String(analysis?.classification || '').toUpperCase();
   if (c.includes('PRIME')) return 'prime';
   if (c.includes('STRONG VALUE')) return 'strong-value';
@@ -128,6 +136,8 @@ function rowsWithTypes() {
 
 function filteredRows() {
   return rowsWithTypes().filter((row) => {
+    if (state.filter === 'past') return row.type === 'past';
+    if (row.type === 'past') return false;
     if (state.filter === 'all') return true;
     if (state.filter === 'signals') return ['prime','strong-value','value','watch'].includes(row.type);
     if (state.filter === 'value') return row.type === 'value' || row.type === 'strong-value';
@@ -137,16 +147,19 @@ function filteredRows() {
 
 function updateFilterCounts() {
   const rows = rowsWithTypes().map(r => r.type);
-  const prime = rows.filter(x => x === 'prime').length;
-  const value = rows.filter(x => x === 'value' || x === 'strong-value').length;
-  const watch = rows.filter(x => x === 'watch').length;
-  const noBet = rows.filter(x => x === 'no-bet').length;
+  const activeRows = rows.filter(x => x !== 'past');
+  const prime = activeRows.filter(x => x === 'prime').length;
+  const value = activeRows.filter(x => x === 'value' || x === 'strong-value').length;
+  const watch = activeRows.filter(x => x === 'watch').length;
+  const noBet = activeRows.filter(x => x === 'no-bet').length;
+  const past = rows.filter(x => x === 'past').length;
   $('signalCount').textContent = prime + value + watch;
   $('primeFilterCount').textContent = prime;
   $('valueFilterCount').textContent = value;
   $('watchFilterCount').textContent = watch;
   $('noBetFilterCount').textContent = noBet;
-  $('allFilterCount').textContent = rows.length;
+  $('allFilterCount').textContent = activeRows.length;
+  $('pastFilterCount').textContent = past;
 }
 
 function setFilter(filter) {
@@ -173,8 +186,9 @@ function bindRecordButtons() {
 }
 
 function render() {
-  const prime = state.analyses.filter(a => classifyMatch(null, a) === 'prime').length;
-  const watch = state.analyses.filter(a => classifyMatch(null, a) === 'watch').length;
+  const activePairs = state.matches.map((m, i) => ({ match: m, analysis: state.analyses[i] })).filter(x => !isPastMatch(x.match, x.analysis));
+  const prime = activePairs.filter(x => classifyMatch(x.match, x.analysis) === 'prime').length;
+  const watch = activePairs.filter(x => classifyMatch(x.match, x.analysis) === 'watch').length;
 
   $('matchCount').textContent = state.matches.length;
   $('primeCount').textContent = prime;
@@ -198,7 +212,8 @@ function render() {
 
   const rows = filteredRows();
   if (!rows.length) {
-    const label = state.filter === 'signals' ? 'ACTIONABLE / WATCH' : state.filter.toUpperCase().replace('-', ' ');
+    const labels = { signals: 'ACTIONABLE / WATCH', past: 'PAST MATCH', all: 'ACTIVE' };
+    const label = labels[state.filter] || state.filter.toUpperCase().replace('-', ' ');
     grid.innerHTML = `<div class="empty-state">NO ${label} MATCHES CURRENTLY</div>`;
     return;
   }
