@@ -2,10 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
-  "functions": {
-    "api/*.js": { "maxDuration": 60 },
-    "api/autopilot.js": { "maxDuration": 120 }
-  },
   "crons": [
     { "path": "/api/autopilot", "schedule": "*/5 * * * *" },
     { "path": "/api/daily-cron", "schedule": "55 21,22 * * *" }
