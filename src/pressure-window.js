@@ -3,7 +3,7 @@
 'use strict';
 const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,Number(v)||0));
 const num=(v,f=null)=>Number.isFinite(Number(v))?Number(v):f;
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const FOLLOW_KEY='argus-followed-live-matches-v1';
 const SNAP_KEY='argus-pressure-local-v1';
 const ALERT_SEEN_KEY='argus-pressure-open-seen-v1';
