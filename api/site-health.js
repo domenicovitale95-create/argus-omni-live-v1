@@ -15,12 +15,12 @@ export default async function handler(req,res){
   };
 
   const critical=['footballData','persistentStorage'];
-  const optional=['cronAuth','webPush','emailAlerts'];
+  const optional=['webPush','emailAlerts'];
   const missingCritical=critical.filter(k=>!checks[k]);
   const optionalMissing=optional.filter(k=>!checks[k]);
-  // SITE HEALTH must describe whether the core website can operate. Optional notification
-  // integrations are reported separately and must not downgrade an otherwise healthy site.
   const status=missingCritical.length?'DEGRADED':'HEALTHY';
+  const securityStatus=checks.cronAuth?'SECURE':'ATTENTION';
+  const securityIssues=checks.cronAuth?[]:['CRON_SECRET_MISSING'];
   const featureAvailability=optionalMissing.length?'OPTIONAL_FEATURES_MISSING':'FULL';
   const deployment={
     provider:'VERCEL',
@@ -32,21 +32,15 @@ export default async function handler(req,res){
   };
 
   return res.status(200).json({
-    version:'SITE-HEALTH-3',
-    generatedAt:new Date().toISOString(),
-    status,
-    featureAvailability,
-    checks,
-    missingCritical,
-    optionalMissing,
-    deployment,
+    version:'SITE-HEALTH-4',generatedAt:new Date().toISOString(),status,securityStatus,securityIssues,
+    featureAvailability,checks,missingCritical,optionalMissing,deployment,
     notes:{
       footballData:'Required for live football ingestion.',
       persistentStorage:'Required for reports, training memory, alerts and self-improvement.',
-      cronAuth:'Recommended security feature; absence does not make the core website unavailable.',
-      webPush:'Optional notification channel. Missing configuration does not make the website unhealthy.',
-      emailAlerts:'Optional notification channel. Missing configuration does not make the website unhealthy.',
-      deployment:'Safe metadata used by the watchdog to detect production/repository version drift.'
+      cronAuth:'Security-critical for autonomous scheduled and mutating endpoints. Missing configuration is reported without disabling Autopilot automatically.',
+      webPush:'Optional notification channel.',
+      emailAlerts:'Optional notification channel.',
+      deployment:'Safe metadata used to detect production/repository drift.'
     },
     secretValuesExposed:false
   });
