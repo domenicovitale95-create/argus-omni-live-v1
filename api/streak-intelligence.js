@@ -5,7 +5,6 @@ const STATS='argus/research/historical-stats-enrichment.json';
 const OUT='argus/research/streak-intelligence.json';
 const MIN_STREAK=3;
 const RECENT_WINDOW=10;
-const ELITE_STREAK=20;
 const n=(v,f=null)=>Number.isFinite(Number(v))?Number(v):f;
 
 function teamView(f,teamId){
@@ -47,18 +46,19 @@ const CONDITIONS=[
   {id:'SOT_OVER_7_5',label:'Match shots on target Over 7.5',family:'SHOTS',stats:true,test:(_,s)=>s.shotsOnTargetTotal!=null&&s.shotsOnTargetTotal>7.5},
   {id:'TEAM_SOT_OVER_3_5',label:'Team shots on target Over 3.5',family:'SHOTS',stats:true,test:(_,s)=>s.teamShotsOnTarget!=null&&s.teamShotsOnTarget>3.5}
 ];
-function currentStreak(evals){let c=0;for(let i=evals.length-1;i>=0;i--){if(evals[i]===true)c++;else if(evals[i]===false)break;}return c}
-function strength(streak,hitRate,sample){if(streak>=ELITE_STREAK)return'ELITE_20_PLUS';if(streak>=10&&sample>=8&&hitRate>=80)return'EXTREME';if(streak>=8&&sample>=8&&hitRate>=80)return'VERY_STRONG';if(streak>=5&&sample>=6&&hitRate>=70)return'STRONG';if(streak>=3)return'ACTIVE';return'NONE'}
+function currentStreakStrict(evals){let c=0;for(let i=evals.length-1;i>=0;i--){if(evals[i]===true)c++;else break;}return c}
+function strength(streak,hitRate,sample,complete){if(!complete)return'INCOMPLETE_DATA';if(streak===10&&hitRate===100)return'PERFECT_10';if(streak>=8&&sample===10&&hitRate>=80)return'VERY_STRONG';if(streak>=5&&sample===10&&hitRate>=70)return'STRONG';if(streak>=3)return'ACTIVE';return'NONE'}
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
-  const archive=await readJson(ARCHIVE,null);if(!archive)return res.status(200).json({version:'STREAK-INTELLIGENCE-2',status:'WAITING_FOR_HISTORY',teams:[],trends:[]});
+  const archive=await readJson(ARCHIVE,null);if(!archive)return res.status(200).json({version:'STREAK-INTELLIGENCE-3',status:'WAITING_FOR_HISTORY',teams:[],trends:[]});
   const statStore=await readJson(STATS,{fixtures:{}}),statsById=statStore.fixtures||{},fixtures=Object.values(archive.fixtures||{}).sort((a,b)=>Number(a.timestamp||0)-Number(b.timestamp||0)),teams=new Map();
   for(const f of fixtures){for(const side of ['home','away']){const id=Number(f[`${side}Id`]);if(!id)continue;const t=teams.get(id)||{teamId:id,team:f[side]||String(id),matches:[]};t.team=f[side]||t.team;t.matches.push(f);teams.set(id,t)}}
   const trends=[];
   for(const t of teams.values()){
-    const recent=t.matches.slice(-Math.max(RECENT_WINDOW,60));
-    for(const c of CONDITIONS){const evals=[],usable=[];for(const f of recent){const tv=teamView(f,t.teamId),sv=statsView(statsById[String(f.fixtureId)],tv.home);if(c.stats&&!sv.available){evals.push(null);continue}const ok=Boolean(c.test(tv,sv));evals.push(ok);usable.push({ok,f,tv,sv})}
-      const nonNull=evals.filter(x=>x!==null),streak=currentStreak(nonNull);if(streak<MIN_STREAK)continue;const last10=usable.slice(-RECENT_WINDOW),hits=last10.filter(x=>x.ok).length,hitRate=last10.length?Number((hits/last10.length*100).toFixed(1)):null,coverage=c.stats?Number((usable.length/recent.length*100).toFixed(1)):100,last=usable[usable.length-1];trends.push({teamId:t.teamId,team:t.team,condition:c.id,label:c.label,family:c.family,currentStreak:streak,recentSample:last10.length,recentHits:hits,recentHitRate:hitRate,dataCoveragePct:coverage,strength:strength(streak,hitRate||0,last10.length),elite20Plus:streak>=ELITE_STREAK,eliteSignal:streak>=ELITE_STREAK?'20+ CONSECUTIVE':null,lastMatch:last?.f?.date||null,lastOpponent:last?((last.tv.home?last.f.away:last.f.home)||null):null,source:c.stats?'HISTORICAL_FIXTURE_STATS':'VERIFIED_FINAL_SCORE',warning:'A streak is descriptive evidence, not a guarantee that the next match will continue the pattern.'})}}
-  trends.sort((a,b)=>Number(b.elite20Plus)-Number(a.elite20Plus)||b.currentStreak-a.currentStreak||(b.recentHitRate||0)-(a.recentHitRate||0));
-  const report={version:'STREAK-INTELLIGENCE-2',generatedAt:new Date().toISOString(),historicalFixtures:fixtures.length,teamsAnalyzed:teams.size,activeTrends:trends.length,elite20PlusCount:trends.filter(x=>x.elite20Plus).length,policy:{minimumStreak:MIN_STREAK,recentWindow:RECENT_WINDOW,eliteStreakThreshold:ELITE_STREAK,noPrimeCreation:true,descriptiveNotPredictive:true,statsMarketsRequireCoverage:true,noFabrication:true},families:[...new Set(CONDITIONS.map(x=>x.family))],trends:trends.slice(0,1500)};await writeJson(OUT,report);return res.status(200).json(report)
+    const recent=t.matches.slice(-RECENT_WINDOW);
+    if(recent.length<RECENT_WINDOW)continue;
+    for(const c of CONDITIONS){const evals=[];let usable=0;for(const f of recent){const tv=teamView(f,t.teamId),sv=statsView(statsById[String(f.fixtureId)],tv.home);if(c.stats&&!sv.available){evals.push(null);continue}evals.push(Boolean(c.test(tv,sv)));usable++}
+      const complete=usable===RECENT_WINDOW;const streak=currentStreakStrict(evals);if(streak<MIN_STREAK)continue;const hits=evals.filter(x=>x===true).length,hitRate=Number((hits/RECENT_WINDOW*100).toFixed(1)),coverage=Number((usable/RECENT_WINDOW*100).toFixed(1)),last=recent[recent.length-1],tvLast=teamView(last,t.teamId);trends.push({teamId:t.teamId,team:t.team,condition:c.id,label:c.label,family:c.family,currentStreak:streak,recentSample:RECENT_WINDOW,recentHits:hits,recentHitRate:hitRate,dataCoveragePct:coverage,completeWindow:complete,strength:strength(streak,hitRate,RECENT_WINDOW,complete),perfect10:complete&&streak===10&&hits===10,lastMatch:last?.date||null,lastOpponent:(tvLast.home?last.away:last.home)||null,source:c.stats?'HISTORICAL_FIXTURE_STATS':'VERIFIED_FINAL_SCORE',warning:'Trend uses exactly the 10 most recent consecutive team matches. Missing statistics break the streak; older matches are never pulled in to fill gaps.'})}}
+  trends.sort((a,b)=>Number(b.perfect10)-Number(a.perfect10)||Number(b.completeWindow)-Number(a.completeWindow)||b.currentStreak-a.currentStreak||b.recentHitRate-a.recentHitRate);
+  const report={version:'STREAK-INTELLIGENCE-3',generatedAt:new Date().toISOString(),historicalFixtures:fixtures.length,teamsAnalyzed:teams.size,activeTrends:trends.length,perfect10Count:trends.filter(x=>x.perfect10).length,policy:{minimumStreak:MIN_STREAK,recentWindow:RECENT_WINDOW,strictLatestTen:true,noGapFilling:true,missingStatsBreakStreak:true,olderMatchesNeverSubstitute:true,noPrimeCreation:true,descriptiveNotPredictive:true,noFabrication:true},families:[...new Set(CONDITIONS.map(x=>x.family))],trends:trends.slice(0,1500)};await writeJson(OUT,report);return res.status(200).json(report)
 }
