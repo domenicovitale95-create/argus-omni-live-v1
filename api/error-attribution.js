@@ -1,0 +1,21 @@
+import { listJson, readManyJson, writeJson, storageReady } from './_report-store.js';
+
+const PREFIX='argus/ledger/';
+const OUT='argus/learning/error-attribution.json';
+const n=(v,f=null)=>Number.isFinite(Number(v))?Number(v):f;
+function confBucket(v){const x=n(v);if(x==null)return'UNKNOWN';const lo=Math.floor(x/10)*10;return`${lo}-${lo+9}`}
+function oddsBucket(v){const x=n(v);if(x==null)return'NO_PRICE';if(x<1.5)return'<1.50';if(x<1.8)return'1.50-1.79';if(x<2.2)return'1.80-2.19';if(x<3)return'2.20-2.99';return'3.00+'}
+function regime(r){const x=r?.context?.regime||r?.marketRegime||{};return String(x.type||x.regime||x.label||'UNKNOWN').toUpperCase()}
+function stats(rows){const s=rows.filter(r=>['WIN','LOSS'].includes(r.settlement?.status)),wins=s.filter(r=>r.settlement.status==='WIN').length,losses=s.length-wins,mc=s.length?Number((s.reduce((a,r)=>a+n(r.confidence,0),0)/s.length).toFixed(1)):null,hit=s.length?Number((wins/s.length*100).toFixed(1)):null,priced=s.filter(r=>Number.isFinite(Number(r.settlement?.pl))),pl=priced.reduce((a,r)=>a+Number(r.settlement.pl),0),roi=priced.length?Number((pl/priced.length*100).toFixed(1)):null;return{sample:s.length,wins,losses,hitRate:hit,meanConfidence:mc,calibrationGap:hit==null||mc==null?null:Number((mc-hit).toFixed(1)),priced:priced.length,roi}}
+function severity(s){if(s.sample<20)return{status:'LEARNING',penalty:0,reason:'Insufficient sample'};const gap=n(s.calibrationGap,0),roi=s.roi;if(gap>=18||(roi!=null&&roi<=-18))return{status:'SEVERE',penalty:8,reason:'Persistent severe negative evidence'};if(gap>=12||(roi!=null&&roi<=-10))return{status:'HIGH',penalty:5,reason:'Material negative evidence'};if(gap>=8||(roi!=null&&roi<=-5))return{status:'MODERATE',penalty:3,reason:'Moderate negative evidence'};return{status:'STABLE',penalty:0,reason:'No persistent negative signal'}}
+function group(rows,keyFn){const m={};for(const r of rows){const k=keyFn(r);(m[k]||(m[k]=[])).push(r)}return Object.fromEntries(Object.entries(m).map(([k,v])=>{const s=stats(v);return[k,{...s,...severity(s)}]}))}
+function suspectedLossReasons(r){const out=[];const c=n(r.confidence),o=n(r.odds),rg=regime(r),risks=(r.risks||[]).map(String),pos=(r.positive||[]).map(String);if(c!=null&&c>=70)out.push('HIGH_CONFIDENCE_MISS');if(o!=null&&o<1.8)out.push('SHORT_PRICE_MISS');if(o!=null&&o>=3)out.push('LONGSHOT_MISS');if(rg!=='UNKNOWN'&&rg!=='STABLE')out.push(`REGIME_${rg}`);if(r.preKickoffGate&&r.preKickoffGate!=='CONFIRMED')out.push(`GATE_${r.preKickoffGate}`);if(r.lineupsConfirmed===false)out.push('LINEUPS_UNCONFIRMED');if(risks.some(x=>/VOLATILE|STALE|WIDE|CAUTION|LOW_DATA/i.test(x)))out.push('KNOWN_RISK_PRESENT');if(pos.some(x=>/EDGE_/i.test(x)))out.push('EDGE_FAILED_TO_SURVIVE');return [...new Set(out)]}
+export default async function handler(req,res){
+  res.setHeader('Cache-Control','no-store');
+  if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
+  if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
+  const blobs=await listJson(PREFIX,180),books=await readManyJson(blobs),rows=books.flatMap(b=>b?.records||[]).filter(r=>['WIN','LOSS'].includes(r.settlement?.status)),losses=rows.filter(r=>r.settlement.status==='LOSS');
+  const reasonCounts={};for(const r of losses)for(const x of suspectedLossReasons(r))reasonCounts[x]=(reasonCounts[x]||0)+1;
+  const matrix={version:'ERROR-ATTRIBUTION-1',generatedAt:new Date().toISOString(),totalSettled:rows.length,totalLosses:losses.length,policy:{principle:'Attribution is statistical evidence, not proof of causality.',minSampleForPenalty:20,maxTargetedConfidencePenalty:8,negativeOnly:true,positiveEvidenceCannotCreatePrime:true},global:{...stats(rows),...severity(stats(rows))},byLeague:group(rows,r=>r.competition||'UNKNOWN'),bySelection:group(rows,r=>String(r.selection||'UNKNOWN').toUpperCase()),byVerdict:group(rows,r=>String(r.verdict||'UNKNOWN').toUpperCase()),byConfidence:group(rows,r=>confBucket(r.confidence)),byOdds:group(rows,r=>oddsBucket(r.odds)),byRegime:group(rows,r=>regime(r)),suspectedLossContributors:Object.entries(reasonCounts).sort((a,b)=>b[1]-a[1]).map(([reason,count])=>({reason,count,shareOfLosses:losses.length?Number((count/losses.length*100).toFixed(1)):0})).slice(0,20)};
+  await writeJson(OUT,matrix);return res.status(200).json(matrix)
+}
