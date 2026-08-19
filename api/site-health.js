@@ -15,9 +15,13 @@ export default async function handler(req,res){
   };
 
   const critical=['footballData','persistentStorage'];
+  const optional=['cronAuth','webPush','emailAlerts'];
   const missingCritical=critical.filter(k=>!checks[k]);
-  const optionalMissing=Object.keys(checks).filter(k=>!checks[k]&&!critical.includes(k));
-  const status=missingCritical.length?'DEGRADED':optionalMissing.length?'PARTIAL':'HEALTHY';
+  const optionalMissing=optional.filter(k=>!checks[k]);
+  // SITE HEALTH must describe whether the core website can operate. Optional notification
+  // integrations are reported separately and must not downgrade an otherwise healthy site.
+  const status=missingCritical.length?'DEGRADED':'HEALTHY';
+  const featureAvailability=optionalMissing.length?'OPTIONAL_FEATURES_MISSING':'FULL';
   const deployment={
     provider:'VERCEL',
     environment:process.env.VERCEL_ENV||null,
@@ -28,9 +32,10 @@ export default async function handler(req,res){
   };
 
   return res.status(200).json({
-    version:'SITE-HEALTH-2',
+    version:'SITE-HEALTH-3',
     generatedAt:new Date().toISOString(),
     status,
+    featureAvailability,
     checks,
     missingCritical,
     optionalMissing,
@@ -38,9 +43,9 @@ export default async function handler(req,res){
     notes:{
       footballData:'Required for live football ingestion.',
       persistentStorage:'Required for reports, training memory, alerts and self-improvement.',
-      cronAuth:'Recommended to protect scheduled endpoints.',
-      webPush:'Required for notifications when the PWA is closed.',
-      emailAlerts:'Required for automatic email alerts.',
+      cronAuth:'Recommended security feature; absence does not make the core website unavailable.',
+      webPush:'Optional notification channel. Missing configuration does not make the website unhealthy.',
+      emailAlerts:'Optional notification channel. Missing configuration does not make the website unhealthy.',
       deployment:'Safe metadata used by the watchdog to detect production/repository version drift.'
     },
     secretValuesExposed:false
