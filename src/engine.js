@@ -1,6 +1,6 @@
 (function () {
   const clamp = (value, min = 0, max = 100) => Math.min(max, Math.max(min, value));
-  const safe = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+  const safe = (value, fallback = 0) => {if(value===null||value===undefined||value==='')return fallback;const n=Number(value);return Number.isFinite(n)?n:fallback};
   function impliedProbability(odds){const value=safe(odds);return value>1?1/value:0}
   function hasComplete1x2(markets={}){return safe(markets.home)>1&&safe(markets.draw)>1&&safe(markets.away)>1}
   function normalizeMarket(markets={}){const raw={home:impliedProbability(markets.home),draw:impliedProbability(markets.draw),away:impliedProbability(markets.away)},overround=raw.home+raw.draw+raw.away;if(!overround)return{home:0,draw:0,away:0,overround:0};return{home:raw.home/overround,draw:raw.draw/overround,away:raw.away/overround,overround}}
