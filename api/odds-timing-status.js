@@ -1,0 +1,2 @@
+import { readJson, storageReady } from './_report-store.js';
+export default async function handler(req,res){res.setHeader('Cache-Control','s-maxage=120, stale-while-revalidate=300');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!storageReady())return res.status(503).json({error:'Odds timing storage unavailable'});return res.status(200).json(await readJson('argus/learning/odds-timing.json',{version:'ODDS-TIMING-1',generatedAt:null,observations:0,profiles:{byTiming:{},byLeagueTiming:{},bySelectionTiming:{}},policy:{}}))}
