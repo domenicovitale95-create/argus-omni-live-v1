@@ -1,3 +1,4 @@
+export const config={maxDuration:120};
 import { listJson, readManyJson, readJson, writeJson, storageReady } from './_report-store.js';
 
 const OUT='argus/learning/steam-learning.json';
