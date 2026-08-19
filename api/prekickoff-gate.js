@@ -16,10 +16,12 @@ function evaluate(match,availability){
  const model=Boolean(match?.preMatchModel);
  if(!history)issues.push('HISTORY_INCOMPLETE');if(!odds)issues.push('MARKET_MISSING');if(!model)issues.push('MODEL_MISSING');
  if(window===10&&!av.lineupsConfirmed)issues.push('LINEUPS_NOT_CONFIRMED');
+ const criticalHome=(match?.playerImpact?.home?.criticalAbsences||[]).length,criticalAway=(match?.playerImpact?.away?.criticalAbsences||[]).length;
+ if(window===10&&(criticalHome+criticalAway)>0)issues.push('CRITICAL_ABSENCE_REVIEW');
  if(edge&&edge.edge<3)issues.push('EDGE_BELOW_FLOOR');
  const hardBlock=issues.some(x=>['HISTORY_INCOMPLETE','MARKET_MISSING','MODEL_MISSING','LINEUPS_NOT_CONFIRMED'].includes(x));
  const status=hardBlock?'BLOCKED':issues.length?'CAUTION':'CONFIRMED';
- return {fixtureId:match.id,home:match.home,away:match.away,kickoff:match.kickoff,minutesToKickoff:minutes,windowMinutes:window,status,issues,bestCandidate:edge,lineupsConfirmed:Boolean(av.lineupsConfirmed),homeAbsences:n(av.home?.absenceCount),awayAbsences:n(av.away?.absenceCount),checkedAt:new Date().toISOString(),carriedForward:false,policy:'Gate validates freshness and evidence only. It cannot create a PRIME verdict by itself.'};
+ return {fixtureId:match.id,home:match.home,away:match.away,kickoff:match.kickoff,minutesToKickoff:minutes,windowMinutes:window,status,issues,bestCandidate:edge,lineupsConfirmed:Boolean(av.lineupsConfirmed),homeAbsences:n(av.home?.absenceCount),awayAbsences:n(av.away?.absenceCount),criticalHomeAbsences:criticalHome,criticalAwayAbsences:criticalAway,checkedAt:new Date().toISOString(),carriedForward:false,policy:'Final gate requires confirmed lineups. Critical absences force caution. The gate may downgrade or block but cannot create PRIME.'};
 }
 function carryForward(prev,match){if(!prev)return null;const minutes=minutesToKickoff(match);if(minutes<0||minutes>60)return null;const previousWindow=n(prev.windowMinutes,null);if(![60,30,10].includes(previousWindow))return null;const nextBoundary=previousWindow===60?30:previousWindow===30?10:-1;if(minutes<=previousWindow&&minutes>nextBoundary)return{...prev,minutesToKickoff:minutes,carriedForward:true,carriedFromWindow:previousWindow,carriedAt:new Date().toISOString()};return null}
 export default async function handler(req,res){
@@ -27,7 +29,7 @@ export default async function handler(req,res){
  const matches=Array.isArray(req.body?.matches)?req.body.matches:[],availability=req.body?.availability||{},candidates=matches.filter(m=>!m.isLive&&!m.isFinished&&minutesToKickoff(m)>=0&&minutesToKickoff(m)<=69);
  const previous=storageReady()?await readJson(STATE_PATH,{gates:[]}):{gates:[]},previousById=new Map((previous?.gates||[]).map(g=>[String(g.fixtureId),g])),gates=[];
  for(const m of candidates){const window=gateWindow(minutesToKickoff(m));if(window){gates.push(evaluate(m,availability[String(m.id)]||null));continue}const carried=carryForward(previousById.get(String(m.id)),m);if(carried)gates.push(carried)}
- const state={version:'PREKICKOFF-GATE-3',generatedAt:new Date().toISOString(),windows:WINDOWS,summary:{checked:gates.filter(g=>!g.carriedForward).length,carried:gates.filter(g=>g.carriedForward).length,confirmed:gates.filter(g=>g.status==='CONFIRMED').length,caution:gates.filter(g=>g.status==='CAUTION').length,blocked:gates.filter(g=>g.status==='BLOCKED').length},policy:{windows:WINDOWS,lastGatePersistsUntilNextWindow:true,blockedPersistsUntilRecheck:true,finalGatePersistsThroughKickoff:true,automaticBetPlacement:false},gates};
+ const state={version:'PREKICKOFF-GATE-4',generatedAt:new Date().toISOString(),windows:WINDOWS,summary:{checked:gates.filter(g=>!g.carriedForward).length,carried:gates.filter(g=>g.carriedForward).length,confirmed:gates.filter(g=>g.status==='CONFIRMED').length,caution:gates.filter(g=>g.status==='CAUTION').length,blocked:gates.filter(g=>g.status==='BLOCKED').length,lineupsConfirmed:gates.filter(g=>g.lineupsConfirmed).length,criticalAbsenceReviews:gates.filter(g=>g.issues?.includes('CRITICAL_ABSENCE_REVIEW')).length},policy:{windows:WINDOWS,lastGatePersistsUntilNextWindow:true,blockedPersistsUntilRecheck:true,finalGatePersistsThroughKickoff:true,finalGateRequiresConfirmedLineups:true,criticalAbsenceMayDowngrade:true,automaticBetPlacement:false},gates};
  if(storageReady())try{await writeJson(STATE_PATH,state)}catch(_){}
  return res.status(200).json(state);
 }
