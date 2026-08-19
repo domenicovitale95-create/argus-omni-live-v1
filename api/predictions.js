@@ -88,6 +88,7 @@ export default async function handler(req,res) {
     const path = `argus/predictions/${date}.json`;
     const store = await readJson(path, { date, timezone:TZ, createdAt:new Date().toISOString(), updatedAt:null, fixtures:{} });
     store.fixtures ||= {};
+    let savedThisDate=0;
 
     for (const {match,analysis} of rows) {
       const id = String(Number(match.id));
@@ -106,10 +107,11 @@ export default async function handler(req,res) {
         fixture.snapshots.push(snap);
         if (fixture.snapshots.length > MAX_SNAPSHOTS_PER_FIXTURE) fixture.snapshots = fixture.snapshots.slice(-MAX_SNAPSHOTS_PER_FIXTURE);
         saved++;
+        savedThisDate++;
       }
       store.fixtures[id] = fixture;
     }
-    if(saved>0){store.updatedAt = new Date().toISOString(); await writeJson(path,store);}
+    if(savedThisDate>0){store.updatedAt = new Date().toISOString(); await writeJson(path,store);}
   }
 
   return res.status(200).json({ ok:true, saved, maxSnapshotsPerFixture:MAX_SNAPSHOTS_PER_FIXTURE, maxRowsPerPost:MAX_ROWS_PER_POST, dates:[...grouped.keys()] });
