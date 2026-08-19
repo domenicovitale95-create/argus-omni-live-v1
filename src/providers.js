@@ -11,8 +11,10 @@
       return row;
     } catch (_) { return null; }
   }
+  function notifyDataUpdated(detail={}) { try { document.dispatchEvent(new CustomEvent('argus:data-updated',{detail})); } catch (_) {} }
   function writeCache(payload) {
     try { localStorage.setItem(CACHE_KEY, JSON.stringify({ matches: payload.matches || [], meta: payload.meta || null, savedAt: Date.now() })); } catch (_) {}
+    notifyDataUpdated({matches:payload.matches||[],meta:payload.meta||null});
   }
   function quotaInfo(row) {
     const q = row?.meta?.quota || {};
@@ -81,7 +83,7 @@
   }
   async function live(options={}) {
     const force=Boolean(options.force), row=readCache(), status=cacheStatus();
-    if(!force && row && status.fresh){ const matches=cachedMatches(row); persistPredictions(matches,matches.meta); return matches; }
+    if(!force && row && status.fresh){ const matches=cachedMatches(row); persistPredictions(matches,matches.meta); notifyDataUpdated({matches,meta:matches.meta,cached:true}); return matches; }
     const endpoint=window.ARGUS_LIVE_ENDPOINT||'/api/live';
     const response=await fetch(endpoint,{headers:{Accept:'application/json'},cache:'no-store'});
     const payload=await response.json().catch(()=>({}));
