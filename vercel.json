@@ -13,6 +13,7 @@
     { "path": "/api/historical-decade-backfill?dates=72", "schedule": "5,25,45 0-5 * * *" },
     { "path": "/api/historical-market-outcomes", "schedule": "8,28,48 0-5 * * *" },
     { "path": "/api/historical-stats-enrichment?fixtures=18", "schedule": "11,31,51 0-5 * * *" },
+    { "path": "/api/streak-intelligence", "schedule": "13,33,53 0-5 * * *" },
     { "path": "/api/historical-walk-forward", "schedule": "15,35,55 0-5 * * *" },
     { "path": "/api/historical-candidate-gate", "schedule": "18,38,58 0-5 * * *" },
     { "path": "/api/self-improvement-loop", "schedule": "30 */6 * * *" },
