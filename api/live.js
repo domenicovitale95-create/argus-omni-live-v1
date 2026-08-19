@@ -61,7 +61,7 @@ function isFinishedFixture(f){return FINISHED_STATUSES.has(f.fixture?.status?.sh
 function statValue(stats=[],name){const item=stats.find(e=>String(e.type).toLowerCase()===name.toLowerCase());if(!item||item.value==null)return null;if(typeof item.value==='string'&&item.value.endsWith('%'))return Number(item.value.replace('%',''));const n=Number(item.value);return Number.isFinite(n)?n:null}
 function extractStats(fixture){const blocks=fixture.statistics||[],home=blocks[0]?.statistics||[],away=blocks[1]?.statistics||[];return {shotsHome:statValue(home,'Total Shots'),shotsAway:statValue(away,'Total Shots'),shotsOnTargetHome:statValue(home,'Shots on Goal'),shotsOnTargetAway:statValue(away,'Shots on Goal'),cornersHome:statValue(home,'Corner Kicks'),cornersAway:statValue(away,'Corner Kicks'),possessionHome:statValue(home,'Ball Possession'),possessionAway:statValue(away,'Ball Possession'),dangerousAttacksHome:null,dangerousAttacksAway:null}}
 function normalizeLabel(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
-function median(values){const s=values.filter(v=>Number.isFinite(v)&&v>1).sort((a,b)=>a-b);return s.length?s[Math.floor(s.length/2)]:null}
+function median(values){const s=values.filter(v=>Number.isFinite(v)&&v>1).sort((a,b)=>a-b);if(!s.length)return null;const mid=Math.floor(s.length/2);return s.length%2?s[mid]:(s[mid-1]+s[mid])/2}
 function oddsMatch(payload,fixtureId){return (payload?.response||[]).find(item=>Number(item.fixture?.id)===Number(fixtureId))||null}
 function allBets(match){
   const rows=[];
@@ -95,7 +95,11 @@ function extract1x2(oddsPayload,fixtureId){
 function valueHasLine(label,side,line){
   const s=normalizeLabel(label);
   const sideOk=side==='over'?/\bover\b/.test(s):/\bunder\b/.test(s);
-  return sideOk&&(s.includes(String(line))||s.includes(String(line).replace('.','')));
+  if(!sideOk)return false;
+  const target=Number(line);
+  if(!Number.isFinite(target))return false;
+  const nums=(s.match(/\d+(?:[.,]\d+)?/g)||[]).map(x=>Number(x.replace(',','.'))).filter(Number.isFinite);
+  return nums.some(x=>Math.abs(x-target)<1e-9);
 }
 function extractMultiMarkets(oddsPayload,fixtureId){
   const match=oddsMatch(oddsPayload,fixtureId);if(!match)return {};
