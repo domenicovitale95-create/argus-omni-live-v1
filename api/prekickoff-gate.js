@@ -2,7 +2,7 @@ import { readJson, writeJson, storageReady } from './_report-store.js';
 
 const STATE_PATH='argus/autopilot/prekickoff-gates.json';
 const WINDOWS=[60,30,10];
-function n(v,f=0){const x=Number(v);return Number.isFinite(x)?x:f}
+function n(v,f=0){if(v===null||v===undefined||v==='')return f;const x=Number(v);return Number.isFinite(x)?x:f}
 function implied(o){return n(o)>1?1/n(o):0}
 function probs(match){const p=match?.preMatchModel;if(!p)return null;const h=Math.max(0,n(p.home)),d=Math.max(0,n(p.draw)),a=Math.max(0,n(p.away)),s=h+d+a;return s?{home:h/s,draw:d/s,away:a/s}:null}
 function market(match){const m=match?.markets||{},h=implied(m.home),d=implied(m.draw),a=implied(m.away),s=h+d+a;return s?{home:h/s,draw:d/s,away:a/s}:null}
@@ -19,14 +19,15 @@ function evaluate(match,availability){
  if(edge&&edge.edge<3)issues.push('EDGE_BELOW_FLOOR');
  const hardBlock=issues.some(x=>['HISTORY_INCOMPLETE','MARKET_MISSING','MODEL_MISSING','LINEUPS_NOT_CONFIRMED'].includes(x));
  const status=hardBlock?'BLOCKED':issues.length?'CAUTION':'CONFIRMED';
- return {fixtureId:match.id,home:match.home,away:match.away,kickoff:match.kickoff,minutesToKickoff:minutes,windowMinutes:window,status,issues,bestCandidate:edge,lineupsConfirmed:Boolean(av.lineupsConfirmed),homeAbsences:n(av.home?.absenceCount),awayAbsences:n(av.away?.absenceCount),checkedAt:new Date().toISOString(),policy:'Gate validates freshness and evidence only. It cannot create a PRIME verdict by itself.'};
+ return {fixtureId:match.id,home:match.home,away:match.away,kickoff:match.kickoff,minutesToKickoff:minutes,windowMinutes:window,status,issues,bestCandidate:edge,lineupsConfirmed:Boolean(av.lineupsConfirmed),homeAbsences:n(av.home?.absenceCount),awayAbsences:n(av.away?.absenceCount),checkedAt:new Date().toISOString(),carriedForward:false,policy:'Gate validates freshness and evidence only. It cannot create a PRIME verdict by itself.'};
 }
+function carryForward(prev,match){if(!prev)return null;const minutes=minutesToKickoff(match);if(minutes<0||minutes>60)return null;const previousWindow=n(prev.windowMinutes,null);if(![60,30,10].includes(previousWindow))return null;const nextBoundary=previousWindow===60?30:previousWindow===30?10:0;if(minutes<=previousWindow&&minutes>nextBoundary)return{...prev,minutesToKickoff:minutes,carriedForward:true,carriedFromWindow:previousWindow,carriedAt:new Date().toISOString()};return null}
 export default async function handler(req,res){
  res.setHeader('Cache-Control','no-store');if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
- const matches=Array.isArray(req.body?.matches)?req.body.matches:[],availability=req.body?.availability||{};
- const candidates=matches.filter(m=>!m.isLive&&!m.isFinished&&minutesToKickoff(m)>=0&&minutesToKickoff(m)<=69);
- const gates=candidates.map(m=>evaluate(m,availability[String(m.id)]||null)).filter(g=>g.windowMinutes);
- const state={version:'PREKICKOFF-GATE-1',generatedAt:new Date().toISOString(),windows:WINDOWS,summary:{checked:gates.length,confirmed:gates.filter(g=>g.status==='CONFIRMED').length,caution:gates.filter(g=>g.status==='CAUTION').length,blocked:gates.filter(g=>g.status==='BLOCKED').length},gates};
+ const matches=Array.isArray(req.body?.matches)?req.body.matches:[],availability=req.body?.availability||{},candidates=matches.filter(m=>!m.isLive&&!m.isFinished&&minutesToKickoff(m)>=0&&minutesToKickoff(m)<=69);
+ const previous=storageReady()?await readJson(STATE_PATH,{gates:[]}):{gates:[]},previousById=new Map((previous?.gates||[]).map(g=>[String(g.fixtureId),g])),gates=[];
+ for(const m of candidates){const window=gateWindow(minutesToKickoff(m));if(window){gates.push(evaluate(m,availability[String(m.id)]||null));continue}const carried=carryForward(previousById.get(String(m.id)),m);if(carried)gates.push(carried)}
+ const state={version:'PREKICKOFF-GATE-2',generatedAt:new Date().toISOString(),windows:WINDOWS,summary:{checked:gates.filter(g=>!g.carriedForward).length,carried:gates.filter(g=>g.carriedForward).length,confirmed:gates.filter(g=>g.status==='CONFIRMED').length,caution:gates.filter(g=>g.status==='CAUTION').length,blocked:gates.filter(g=>g.status==='BLOCKED').length},policy:{windows:WINDOWS,lastGatePersistsUntilNextWindow:true,blockedPersistsUntilRecheck:true,automaticBetPlacement:false},gates};
  if(storageReady())try{await writeJson(STATE_PATH,state)}catch(_){}
  return res.status(200).json(state);
 }
