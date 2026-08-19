@@ -3,6 +3,14 @@ import { readJson, storageReady, writeJson } from './_report-store.js';
 const FINISHED = new Set(['FT','AET','PEN','CANC','ABD','AWD','WO']);
 const TZ = 'Europe/Brussels';
 const MAX_SNAPSHOTS_PER_FIXTURE = 120;
+const MAX_ROWS_PER_POST = 120;
+
+function sameOrigin(req) {
+  const origin = String(req.headers.origin || '');
+  const host = String(req.headers['x-forwarded-host'] || req.headers.host || '');
+  if (!origin || !host) return false;
+  try { return new URL(origin).host === host; } catch (_) { return false; }
+}
 
 function dateInBrussels(value) {
   const d = value ? new Date(value) : new Date();
@@ -11,29 +19,35 @@ function dateInBrussels(value) {
   return `${m.year}-${m.month}-${m.day}`;
 }
 
+function finiteOrNull(v) { const n=Number(v); return Number.isFinite(n)?n:null; }
+function validMatch(match) {
+  const id=Number(match?.id), k=new Date(match?.kickoff||0).getTime();
+  return Number.isFinite(id)&&id>0&&Number.isFinite(k)&&typeof match?.home==='string'&&match.home.length<=120&&typeof match?.away==='string'&&match.away.length<=120;
+}
+
 function snapshotFrom(match, analysis) {
   return {
     recordedAt: new Date().toISOString(),
     phase: analysis?.phase || (match?.isLive ? 'LIVE' : 'PREMATCH'),
     status: match?.status || null,
-    minute: match?.minute ?? null,
+    minute: finiteOrNull(match?.minute),
     score: match?.score || null,
-    classification: analysis?.classification || 'NO BET',
-    selection: analysis?.bestMarket || null,
-    odds: analysis?.marketOdds ?? null,
-    confidence: analysis?.confidence ?? null,
-    edge: analysis?.edge ?? null,
-    dataQuality: analysis?.quality ?? null,
-    rawProbability: analysis?.rawProbability ?? null,
-    shrunkProbability: analysis?.shrunkProbability ?? null,
-    conservativeProbability: analysis?.conservativeProbability ?? null,
-    conservativeEV: analysis?.conservativeEV ?? null,
+    classification: String(analysis?.classification || 'NO BET').slice(0,40),
+    selection: analysis?.bestMarket ? String(analysis.bestMarket).slice(0,80) : null,
+    odds: finiteOrNull(analysis?.marketOdds),
+    confidence: finiteOrNull(analysis?.confidence),
+    edge: finiteOrNull(analysis?.edge),
+    dataQuality: finiteOrNull(analysis?.quality),
+    rawProbability: finiteOrNull(analysis?.rawProbability),
+    shrunkProbability: finiteOrNull(analysis?.shrunkProbability),
+    conservativeProbability: finiteOrNull(analysis?.conservativeProbability),
+    conservativeEV: finiteOrNull(analysis?.conservativeEV),
     model: analysis?.model || null,
     market: analysis?.market || null,
     marketAvailable: Boolean(analysis?.marketAvailable),
     engineStatus: analysis?.engineStatus || null,
     shrinkageStatus: analysis?.shrinkageStatus || null,
-    governanceReason: analysis?.governanceReason || null
+    governanceReason: analysis?.governanceReason ? String(analysis.governanceReason).slice(0,500) : null
   };
 }
 
@@ -52,18 +66,19 @@ export default async function handler(req,res) {
   }
 
   if (req.method !== 'POST') return res.status(405).json({ error:'Method not allowed' });
+  if (!sameOrigin(req)) return res.status(403).json({ error:'Same-origin POST required' });
 
   const body = req.body || {};
   const matches = Array.isArray(body.matches) ? body.matches : [];
   const analyses = Array.isArray(body.analyses) ? body.analyses : [];
-  if (!matches.length || matches.length !== analyses.length) return res.status(400).json({ error:'Invalid prediction snapshot payload' });
+  if (!matches.length || matches.length !== analyses.length || matches.length>MAX_ROWS_PER_POST) return res.status(400).json({ error:'Invalid prediction snapshot payload' });
 
   const grouped = new Map();
   for (let i=0;i<matches.length;i++) {
     const match = matches[i];
     const analysis = analyses[i];
-    if (!match?.id || FINISHED.has(match.status) || analysis?.phase === 'FINISHED') continue;
-    const date = dateInBrussels(match.kickoff || Date.now());
+    if (!validMatch(match) || FINISHED.has(match.status) || analysis?.phase === 'FINISHED') continue;
+    const date = dateInBrussels(match.kickoff);
     if (!grouped.has(date)) grouped.set(date, []);
     grouped.get(date).push({ match, analysis });
   }
@@ -75,9 +90,9 @@ export default async function handler(req,res) {
     store.fixtures ||= {};
 
     for (const {match,analysis} of rows) {
-      const id = String(match.id);
+      const id = String(Number(match.id));
       const fixture = store.fixtures[id] || {
-        fixtureId: match.id,
+        fixtureId: Number(match.id),
         competition: match.competition || null,
         country: match.country || null,
         home: match.home,
@@ -94,9 +109,8 @@ export default async function handler(req,res) {
       }
       store.fixtures[id] = fixture;
     }
-    store.updatedAt = new Date().toISOString();
-    await writeJson(path,store);
+    if(saved>0){store.updatedAt = new Date().toISOString(); await writeJson(path,store);}
   }
 
-  return res.status(200).json({ ok:true, saved, maxSnapshotsPerFixture:MAX_SNAPSHOTS_PER_FIXTURE, dates:[...grouped.keys()] });
+  return res.status(200).json({ ok:true, saved, maxSnapshotsPerFixture:MAX_SNAPSHOTS_PER_FIXTURE, maxRowsPerPost:MAX_ROWS_PER_POST, dates:[...grouped.keys()] });
 }
