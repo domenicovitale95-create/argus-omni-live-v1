@@ -28,6 +28,9 @@ Purpose: make ARGUS continuously more rigorous, selective, observable, testable 
 23. Prefer removal of duplicated or weak logic over adding another layer that masks the same problem.
 24. Every apparent edge must survive an adversarial question: what alternative explanation, leakage, market move, selection bias or lucky concentration could produce this result?
 25. A decision to abstain is a first-class successful outcome when evidence quality is insufficient.
+26. Daily research inputs from the assistant should be treated as inputs from a trusted research partner: investigate them seriously, test them skeptically, operationalize them when evidence supports them, and reject them when evidence does not.
+27. Friendship/collaboration means honesty, not agreement: ARGUS must never increase trust in an idea merely because the assistant proposed it.
+28. Speed to readiness comes from faster elimination of bad ideas and faster accumulation of valid evidence, not from faster promotion.
 
 ## Daily self-improvement loop
 A. Observe: inspect system health, data freshness, storage, quota, crons, Watchtower, ledger, calibration, CLV, drift, specialists, NO BET behavior and recent failures.
@@ -66,6 +69,8 @@ N. Repeat indefinitely.
 - fair-price consistency across markets
 - market-baseline incremental value testing
 - confidence decomposition into model/data/market/governance components
+- tail calibration for rare/extreme outcomes
+- probability stability under small input perturbations
 
 ### Market truth
 - richer opening-to-closing snapshots
@@ -76,6 +81,7 @@ N. Repeat indefinitely.
 - liquidity proxies
 - market reaction to lineups/news
 - shadow market maker / complete fair-price surface
+- cross-venue benchmark checks against sharp sportsbooks/exchanges where legally and technically available
 
 ### Specialist intelligence
 - true market-specific predictive models
@@ -96,6 +102,9 @@ N. Repeat indefinitely.
 - confidence ceilings by league/market/data quality
 - explicit OOD abstention
 - abstention-quality scoring
+- selective prediction with calibrated deferral
+- minimum evidence clock before stronger verdicts
+- sequential-testing protection against premature conclusions
 
 ### Scientific validation
 - strict walk-forward
@@ -110,6 +119,9 @@ N. Repeat indefinitely.
 - automatic rollback readiness
 - pre-registration for major experiments
 - concentration and luck-adjusted performance checks
+- experiment collision detection
+- one-major-change-at-a-time rule for causal attribution of improvements
+- fragility tests under parameter and feature perturbation
 
 ### MLOps and reliability
 - CI integration gate
@@ -123,6 +135,7 @@ N. Repeat indefinitely.
 - incident classification
 - safe self-healing
 - structural simplification and fault isolation
+- delayed-ground-truth monitoring architecture for cases where settlements arrive later than predictions
 
 ### Resource intelligence
 - API value-per-call measurement
@@ -142,6 +155,7 @@ N. Repeat indefinitely.
 - daily executive summary
 - weekly scientific report
 - monthly reality check
+- decision readiness score separate from raw model confidence
 
 ### Autonomous research
 - hypothesis generator
@@ -155,6 +169,29 @@ N. Repeat indefinitely.
 - self-critique engine
 - adversarial hypothesis challenge
 - explicit unknown/ignorance registry
+- research diversity rule across data/model/calibration/market/MLOps/architecture/resource themes
+
+## Maximum acceleration ideas
+1. Selective conformal abstention: research methods that preserve useful coverage guarantees when predictions are only emitted for selected high-quality cases. Use only in RESEARCH until assumptions are validated for ARGUS.
+2. Drift-aware online calibration: investigate calibration-set updates that react to smooth or abrupt distribution change without contaminating future information.
+3. Adaptive model aggregation under drift: when several well-calibrated specialists exist, evaluate online aggregation rather than brittle winner-takes-all model switching.
+4. Recurrent-regime memory: detect when a previously seen league/season/regime distribution returns and reuse a historically validated specialist instead of retraining from scratch when safe.
+5. Tail calibration: separately evaluate whether rare outcomes and extreme probability tails are calibrated; cap confidence when tail evidence is weak.
+6. Red-Team / Devil's Advocate Gate: every PRIME candidate should be challenged by an adversarial layer looking for leakage, stale data, market disagreement, instability, contradictory evidence and alternative explanations.
+7. Confidence Budget: final confidence must be capped by the weakest of data quality, calibration, market agreement/edge evidence, temporal integrity, drift status and model stability.
+8. Decision Readiness Score: separate 'probability estimate' from 'is this decision mature enough to act on?'. High probability with low readiness remains WATCH/NO BET.
+9. Ensemble Diversity Audit: measure correlation of model errors so multiple near-duplicate models cannot masquerade as independent consensus.
+10. Edge Inflation Monitor: alert when estimated edges rise materially without corresponding improvement in CLV, calibration or market-truth evidence.
+11. PRIME Scarcity Monitor: treat a sudden increase in PRIME frequency as a possible calibration/governance defect.
+12. Temporal Consistency Score: track unexplained probability jumps between T-24h/T-6h/T-1h/T-15m and require a data/event explanation for large moves.
+13. Signal Half-Life Registry: learn how long each feature remains informative and expire stale information automatically.
+14. Feature Retirement Engine: quarantine or remove features that fail to add stable OOS/calibration/CLV value.
+15. Baseline Survival Test: complex models must beat simple market-only, Elo/Poisson or logistic baselines on the relevant probabilistic metrics.
+16. No-Bet Regret Matrix: measure not only bad bets taken, but also good opportunities rejected, to calibrate abstention rather than maximizing abstention blindly.
+17. Information Shock Score: distinguish meaningful new information from narrative noise and measure whether the market already incorporated it.
+18. Evidence Debt: every unvalidated feature/model/automation accumulates visible evidence debt until its proof requirements are met.
+19. Architecture Entropy Score: monitor duplication, dependency count, coupling, cron fragility and stale-state paths so structural debt becomes measurable.
+20. Maximum Simplicity Challenge: periodically test whether current performance can be reproduced with fewer features/models/modules; prefer the simpler equivalent system.
 
 ## My highest-priority improvement principles
 1. Truth before action: improve probability truthfulness before trying to increase the number of bets.
@@ -177,6 +214,9 @@ N. Repeat indefinitely.
 18. Reliability before speed: a slower correct pipeline is better than a fast corrupted one.
 19. Fail-safe before graceful optimism: when integrity or freshness fails, downgrade to observation rather than fabricate confidence.
 20. Evidence density before feature volume: fewer high-quality features beat many weak narrative features.
+21. Selection-aware uncertainty before aggressive filtering: if ARGUS only acts on selected cases, calibration must be evaluated on those selected cases too, not only globally.
+22. Drift-aware learning before continuous mutation: adapt calibration/weights only when the observed non-stationarity warrants it and evidence is sufficient.
+23. Friend-as-research-partner principle: assistant inputs deserve serious testing and rapid operationalization, but never immunity from falsification.
 
 ## Execution priority
 1. Integrity and reproducibility
