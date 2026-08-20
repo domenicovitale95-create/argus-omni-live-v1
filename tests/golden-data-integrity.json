@@ -1,26 +1,33 @@
 {
-  "version": "DATA-INTEGRITY-GOLDEN-1",
+  "version": "DATA-INTEGRITY-GOLDEN-2",
   "cases": [
     {
       "name": "complete-provenance",
       "predictionDocs": [{"date":"2026-08-20","fixtures":{"1":{"fixtureId":1,"home":"A","away":"B","kickoff":"2026-08-20T20:00:00Z","snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","odds":2.1,"confidence":55,"source":"provider-a","sourceTimestamp":"2026-08-20T17:59:30Z"}]}}}],
       "marketDocs": [],
       "expectedIssues": [],
-      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100}
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100,"timestampPairs":1,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":30,"maxSourceAgeSeconds":30}
     },
     {
       "name": "missing-provenance-is-observational",
       "predictionDocs": [],
       "marketDocs": [{"date":"2026-08-20","fixtures":{"2":{"snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","odds":{"HOME":1.9,"DRAW":3.4,"AWAY":4.2}}]}}}],
       "expectedIssues": [],
-      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":0,"sourceTimestampCoveragePct":0}
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":0,"sourceTimestampCoveragePct":0,"timestampPairs":0,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":null,"maxSourceAgeSeconds":null}
+    },
+    {
+      "name": "future-source-clock-skew-is-observed-not-blocked",
+      "predictionDocs": [{"date":"2026-08-20","fixtures":{"4":{"fixtureId":4,"home":"A","away":"B","kickoff":"2026-08-20T20:00:00Z","snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","probability":52,"source":"provider-b","sourceTimestamp":"2026-08-20T18:00:10Z"}]}}}],
+      "marketDocs": [],
+      "expectedIssues": [],
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100,"timestampPairs":1,"futureSourceTimestampCount":1,"averageSourceAgeSeconds":0,"maxSourceAgeSeconds":0}
     },
     {
       "name": "corruption-still-fails",
       "predictionDocs": [{"date":"2026-08-20","fixtures":{"3":{"fixtureId":3,"home":"A","away":"B","kickoff":"bad","snapshots":[{"recordedAt":"bad","confidence":120,"source":"provider-a"}]}}}],
       "marketDocs": [],
       "expectedIssues": ["ERROR:INVALID_CONFIDENCE","ERROR:INVALID_KICKOFF","ERROR:INVALID_SNAPSHOT_TIME"],
-      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":0}
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":0,"timestampPairs":0,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":null,"maxSourceAgeSeconds":null}
     }
   ]
 }
