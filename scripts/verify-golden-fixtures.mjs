@@ -1,10 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { uncertaintyBand, uniquePenalty, promotionEvidence, GOVERNANCE_VERSION } from '../api/_governance-core.js';
+import { auditPredictionDoc, auditMarketDoc, auditReports } from '../api/temporal-integrity.js';
 
 const ROOT = process.cwd();
-const file = path.join(ROOT, 'tests/golden-governance.json');
-const golden = JSON.parse(fs.readFileSync(file, 'utf8'));
+const governanceFile = path.join(ROOT, 'tests/golden-governance.json');
+const temporalFile = path.join(ROOT, 'tests/golden-temporal-integrity.json');
+const golden = JSON.parse(fs.readFileSync(governanceFile, 'utf8'));
+const temporal = JSON.parse(fs.readFileSync(temporalFile, 'utf8'));
 const failures = [];
 
 function fail(message) { failures.push(message); }
@@ -32,12 +35,24 @@ for (const row of golden.promotionEvidence || []) {
   if (got.ready !== row.ready) fail(`promotionEvidence ${row.name} expected ready=${row.ready} got ${got.ready}; checks=${JSON.stringify(got.checks)}`);
 }
 
+for (const testCase of temporal.cases || []) {
+  const issues = [];
+  for (const doc of testCase.predictionDocs || []) auditPredictionDoc(doc, issues);
+  for (const doc of testCase.marketDocs || []) auditMarketDoc(doc, issues);
+  auditReports(testCase.reports || [], issues);
+  const got = issues.map(x => `${x.severity}:${x.code}`).sort();
+  const expected = [...(testCase.expected || [])].sort();
+  if (!sameArray(got, expected)) fail(`temporal ${testCase.name} expected ${JSON.stringify(expected)} got ${JSON.stringify(got)}`);
+}
+
 console.log(`ARGUS golden governance verification — ${golden.version} against ${GOVERNANCE_VERSION}`);
+console.log(`ARGUS golden temporal verification — ${temporal.version}`);
 if (failures.length) {
   for (const message of failures) console.error(`FAIL ${message}`);
   process.exit(1);
 }
 console.log(`OK  ${golden.uncertaintyBands?.length || 0} uncertainty boundary fixture(s)`);
-console.log(`OK  unique penalty deduplication invariant`);
+console.log('OK  unique penalty deduplication invariant');
 console.log(`OK  ${golden.promotionEvidence?.length || 0} promotion hard-gate fixture(s)`);
-console.log('OK  deterministic governance golden fixtures passed');
+console.log(`OK  ${temporal.cases?.length || 0} temporal integrity fixture(s)`);
+console.log('OK  deterministic governance and temporal golden fixtures passed');
