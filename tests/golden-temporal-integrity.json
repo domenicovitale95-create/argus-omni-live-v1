@@ -1,0 +1,111 @@
+{
+  "version": "ARGUS-GOLDEN-TEMPORAL-1",
+  "cases": [
+    {
+      "name": "valid-prematch-and-settlement-order",
+      "predictionDocs": [
+        {
+          "date": "2026-08-20",
+          "fixtures": {
+            "101": {
+              "kickoff": "2026-08-20T18:00:00.000Z",
+              "snapshots": [
+                { "recordedAt": "2026-08-20T17:59:59.000Z", "phase": "PREMATCH", "frozen": true }
+              ]
+            }
+          }
+        }
+      ],
+      "marketDocs": [
+        {
+          "date": "2026-08-20",
+          "fixtures": {
+            "101": {
+              "kickoff": "2026-08-20T18:00:00.000Z",
+              "snapshots": [
+                { "recordedAt": "2026-08-20T18:01:00.000Z", "phase": "PREMATCH" }
+              ]
+            }
+          }
+        }
+      ],
+      "reports": [
+        {
+          "date": "2026-08-20",
+          "matches": [
+            {
+              "fixtureId": "101",
+              "kickoff": "2026-08-20T18:00:00.000Z",
+              "settledAt": "2026-08-20T20:00:00.000Z",
+              "prediction": { "recordedAt": "2026-08-20T17:59:00.000Z", "phase": "PREMATCH" }
+            }
+          ]
+        }
+      ],
+      "expected": []
+    },
+    {
+      "name": "prediction-at-kickoff-must-fail-closed",
+      "predictionDocs": [
+        {
+          "date": "2026-08-20",
+          "fixtures": {
+            "202": {
+              "kickoff": "2026-08-20T18:00:00.000Z",
+              "snapshots": [
+                { "recordedAt": "2026-08-20T18:00:00.000Z", "phase": "PREMATCH", "frozen": true }
+              ]
+            }
+          }
+        }
+      ],
+      "marketDocs": [],
+      "reports": [],
+      "expected": [
+        "ERROR:FROZEN_PREDICTION_AFTER_KICKOFF",
+        "ERROR:PREMATCH_SNAPSHOT_AT_OR_AFTER_KICKOFF"
+      ]
+    },
+    {
+      "name": "market-snapshot-beyond-grace-window-must-warn",
+      "predictionDocs": [],
+      "marketDocs": [
+        {
+          "date": "2026-08-20",
+          "fixtures": {
+            "303": {
+              "kickoff": "2026-08-20T18:00:00.000Z",
+              "snapshots": [
+                { "recordedAt": "2026-08-20T18:01:01.000Z", "phase": "PREMATCH" }
+              ]
+            }
+          }
+        }
+      ],
+      "reports": [],
+      "expected": ["WARN:PREMATCH_MARKET_SNAPSHOT_AFTER_KICKOFF"]
+    },
+    {
+      "name": "impossible-settlement-and-late-report-prediction-must-fail",
+      "predictionDocs": [],
+      "marketDocs": [],
+      "reports": [
+        {
+          "date": "2026-08-20",
+          "matches": [
+            {
+              "fixtureId": "404",
+              "kickoff": "2026-08-20T18:00:00.000Z",
+              "settledAt": "2026-08-20T17:30:00.000Z",
+              "prediction": { "recordedAt": "2026-08-20T18:00:01.000Z", "phase": "PREMATCH" }
+            }
+          ]
+        }
+      ],
+      "expected": [
+        "ERROR:REPORT_REFERENCES_LATE_PREMATCH_PREDICTION",
+        "ERROR:SETTLEMENT_BEFORE_KICKOFF"
+      ]
+    }
+  ]
+}
