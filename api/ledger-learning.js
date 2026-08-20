@@ -1,7 +1,9 @@
 import { listJson, readManyJson, writeJson, storageReady } from './_report-store.js';
+import { AUTONOMOUS_DIRECTIVE, AUTONOMOUS_DIRECTIVE_VERSION } from './_autonomous-directive.js';
 
 const PREFIX='argus/ledger/';
 const OUT='argus/learning/ledger-diagnostics.json';
+const GATES=AUTONOMOUS_DIRECTIVE.evidenceGates;
 const n=(v,f=null)=>Number.isFinite(Number(v))?Number(v):f;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 function bucket(v,step=10){const x=n(v);if(x==null)return'UNKNOWN';const lo=Math.floor(x/step)*step;return`${lo}-${lo+step-1}`}
@@ -23,11 +25,11 @@ function rowStats(rows){
  return{sample:settled.length,wins,losses:settled.length-wins,hitRate:settled.length?Number((wins/settled.length*100).toFixed(1)):null,priced:priced.length,flatPL:Number(pl.toFixed(2)),roi:priced.length?Number((pl/priced.length*100).toFixed(1)):null,brier:brier==null?null:Number(brier.toFixed(4)),logLoss:logLoss==null?null:Number(logLoss.toFixed(4)),meanConfidence:meanConfidence==null?null:Number(meanConfidence.toFixed(1)),calibrationError:calibrationError==null?null:Number(calibrationError.toFixed(1)),confidenceGap:calibrationError==null?null:Number((meanConfidence-(wins/Math.max(1,settled.length)*100)).toFixed(1))};
 }
 function classify(s){
- if(s.sample<20)return{status:'LEARNING',multiplier:1,confidencePenalty:0,reason:'Sample <20; no adaptation'};
+ if(s.sample<GATES.negativeAdaptationMinSample)return{status:'LEARNING',multiplier:1,confidencePenalty:0,reason:`Sample <${GATES.negativeAdaptationMinSample}; no adaptation`};
  let mult=1,penalty=0,status='NEUTRAL',reason='No material evidence';
- if((s.roi!=null&&s.priced>=20&&s.roi<=-12)||(s.calibrationError!=null&&s.calibrationError>=15)||(s.brier!=null&&s.brier>=.30)){status='DEGRADED';mult=.80;penalty=8;reason='Strong negative evidence, poor calibration or weak probability quality'}
- else if((s.roi!=null&&s.priced>=20&&s.roi<=-5)||(s.calibrationError!=null&&s.calibrationError>=9)||(s.brier!=null&&s.brier>=.27)){status='CAUTION';mult=.90;penalty=4;reason='Negative evidence or calibration gap'}
- else if(s.sample>=100&&s.priced>=60&&s.roi!=null&&s.roi>3&&s.calibrationError!=null&&s.calibrationError<=5&&s.brier!=null&&s.brier<.25){status='VALIDATING_POSITIVE';mult=1.01;penalty=0;reason='Large sample with positive ROI and stable probability calibration'}
+ if((s.roi!=null&&s.priced>=GATES.negativeAdaptationMinSample&&s.roi<=-12)||(s.calibrationError!=null&&s.calibrationError>=15)||(s.brier!=null&&s.brier>=.30)){status='DEGRADED';mult=.80;penalty=8;reason='Strong negative evidence, poor calibration or weak probability quality'}
+ else if((s.roi!=null&&s.priced>=GATES.negativeAdaptationMinSample&&s.roi<=-5)||(s.calibrationError!=null&&s.calibrationError>=9)||(s.brier!=null&&s.brier>=.27)){status='CAUTION';mult=.90;penalty=4;reason='Negative evidence or calibration gap'}
+ else if(s.sample>=GATES.positiveAdaptationMinSample&&s.priced>=GATES.positivePricedMinSample&&s.roi!=null&&s.roi>3&&s.calibrationError!=null&&s.calibrationError<=5&&s.brier!=null&&s.brier<.25){status='VALIDATING_POSITIVE';mult=1.01;penalty=0;reason='Large sample with positive ROI and stable probability calibration'}
  return{status,multiplier:mult,confidencePenalty:penalty,reason};
 }
 function group(rows,keyFn){const m={};for(const r of rows){const k=keyFn(r);(m[k]||(m[k]=[])).push(r)}return Object.fromEntries(Object.entries(m).map(([k,v])=>{const s=rowStats(v);return[k,{...s,...classify(s)}]}));}
@@ -35,6 +37,6 @@ export default async function handler(req,res){
  res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
  const blobs=await listJson(PREFIX,3650),books=await readManyJson(blobs),rows=books.flatMap(b=>b?.records||[]).filter(r=>['WIN','LOSS'].includes(r.settlement?.status));
  const globalStats=rowStats(rows);
- const diagnostics={version:'LEDGER-LEARNING-2',generatedAt:new Date().toISOString(),totalSettled:rows.length,policy:{historyWindowDays:3650,negativeAdaptationMinSample:20,positiveAdaptationMinSample:100,positivePricedMinSample:60,minMultiplier:.80,maxMultiplier:1.01,metrics:['hitRate','roi','brier','logLoss','calibrationError','confidenceGap'],paperBetting:true,noHindsight:true,principle:'Learn fast to distrust; learn slowly to boost. Probability quality outranks raw win rate. No segment may create PRIME by itself.'},global:{...globalStats,...classify(globalStats)},byLeague:group(rows,r=>r.competition||'UNKNOWN'),byVerdict:group(rows,r=>String(r.verdict||'UNKNOWN').toUpperCase()),bySelection:group(rows,r=>r.selection||'UNKNOWN'),byConfidence:group(rows,r=>bucket(r.confidence,10)),byOdds:group(rows,r=>oddsBucket(r.odds)),byRegime:group(rows,r=>regime(r)),byLeagueVerdict:group(rows,r=>`${r.competition||'UNKNOWN'}|||${String(r.verdict||'UNKNOWN').toUpperCase()}`)};
+ const diagnostics={version:'LEDGER-LEARNING-3',directiveVersion:AUTONOMOUS_DIRECTIVE_VERSION,generatedAt:new Date().toISOString(),totalSettled:rows.length,policy:{historyWindowDays:3650,negativeAdaptationMinSample:GATES.negativeAdaptationMinSample,positiveAdaptationMinSample:GATES.positiveAdaptationMinSample,positivePricedMinSample:GATES.positivePricedMinSample,minMultiplier:.80,maxMultiplier:1.01,metrics:['hitRate','roi','brier','logLoss','calibrationError','confidenceGap'],paperBetting:true,noHindsight:true,principle:'Learn fast to distrust; learn slowly to boost. Probability quality outranks raw win rate. No segment may create PRIME by itself.'},global:{...globalStats,...classify(globalStats)},byLeague:group(rows,r=>r.competition||'UNKNOWN'),byVerdict:group(rows,r=>String(r.verdict||'UNKNOWN').toUpperCase()),bySelection:group(rows,r=>r.selection||'UNKNOWN'),byConfidence:group(rows,r=>bucket(r.confidence,10)),byOdds:group(rows,r=>oddsBucket(r.odds)),byRegime:group(rows,r=>regime(r)),byLeagueVerdict:group(rows,r=>`${r.competition||'UNKNOWN'}|||${String(r.verdict||'UNKNOWN').toUpperCase()}`)};
  await writeJson(OUT,diagnostics);return res.status(200).json(diagnostics);
 }
