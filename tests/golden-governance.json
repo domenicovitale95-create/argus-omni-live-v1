@@ -1,0 +1,40 @@
+{
+  "version": "ARGUS-GOLDEN-GOVERNANCE-1",
+  "uncertaintyBands": [
+    { "score": 0, "status": "LOW_UNCERTAINTY", "penalty": 0, "hardBlock": false },
+    { "score": 29.99, "status": "LOW_UNCERTAINTY", "penalty": 0, "hardBlock": false },
+    { "score": 30, "status": "MODERATE", "penalty": 2, "hardBlock": false },
+    { "score": 45, "status": "ELEVATED", "penalty": 5, "hardBlock": false },
+    { "score": 60, "status": "HIGH", "penalty": 8, "hardBlock": false },
+    { "score": 75, "status": "EXTREME", "penalty": 10, "hardBlock": true },
+    { "score": 100, "status": "EXTREME", "penalty": 10, "hardBlock": true }
+  ],
+  "uniquePenalty": {
+    "parts": [
+      { "key": "FRESHNESS", "value": 4 },
+      { "key": "freshness", "value": 9 },
+      { "key": "MARKET", "value": 3 },
+      { "key": "ZERO", "value": 0 }
+    ],
+    "total": 7,
+    "acceptedKeys": ["FRESHNESS", "MARKET"],
+    "duplicateKeys": ["FRESHNESS"]
+  },
+  "promotionEvidence": [
+    {
+      "name": "insufficient-sample-must-not-promote",
+      "input": { "reviewScore": 90, "shadowStatus": "SHADOW_PASS", "shadowSample": 59, "shadowDeltaPL": 20, "avoidedLosses": 10, "missedWins": 2 },
+      "ready": false
+    },
+    {
+      "name": "all-hard-gates-satisfied",
+      "input": { "reviewScore": 80, "shadowStatus": "SHADOW_PASS", "shadowSample": 60, "shadowDeltaPL": 8, "avoidedLosses": 8, "missedWins": 5 },
+      "ready": true
+    },
+    {
+      "name": "weak-loss-asymmetry-must-not-promote",
+      "input": { "reviewScore": 80, "shadowStatus": "SHADOW_PASS", "shadowSample": 100, "shadowDeltaPL": 15, "avoidedLosses": 7, "missedWins": 5 },
+      "ready": false
+    }
+  ]
+}
