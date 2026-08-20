@@ -1,0 +1,45 @@
+name: ARGUS Historical Learning
+
+on:
+  schedule:
+    - cron: '20 1 * * *'
+    - cron: '20 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  historical-learning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Backfill recent-first historical archive
+        env:
+          ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
+          curl --fail --silent --show-error --max-time 300 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "$BASE/api/historical-decade-backfill?dates=48"
+
+      - name: Recompute walk-forward research
+        env:
+          ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
+          curl --fail --silent --show-error --max-time 300 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "$BASE/api/historical-walk-forward"
+
+      - name: Refresh governed self-improvement snapshot
+        env:
+          ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
+          curl --fail --silent --show-error --max-time 300 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "$BASE/api/self-improvement-loop"
