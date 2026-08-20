@@ -1,0 +1,26 @@
+{
+  "version": "DATA-INTEGRITY-GOLDEN-1",
+  "cases": [
+    {
+      "name": "complete-provenance",
+      "predictionDocs": [{"date":"2026-08-20","fixtures":{"1":{"fixtureId":1,"home":"A","away":"B","kickoff":"2026-08-20T20:00:00Z","snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","odds":2.1,"confidence":55,"source":"provider-a","sourceTimestamp":"2026-08-20T17:59:30Z"}]}}}],
+      "marketDocs": [],
+      "expectedIssues": [],
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100}
+    },
+    {
+      "name": "missing-provenance-is-observational",
+      "predictionDocs": [],
+      "marketDocs": [{"date":"2026-08-20","fixtures":{"2":{"snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","odds":{"HOME":1.9,"DRAW":3.4,"AWAY":4.2}}]}}}],
+      "expectedIssues": [],
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":0,"sourceTimestampCoveragePct":0}
+    },
+    {
+      "name": "corruption-still-fails",
+      "predictionDocs": [{"date":"2026-08-20","fixtures":{"3":{"fixtureId":3,"home":"A","away":"B","kickoff":"bad","snapshots":[{"recordedAt":"bad","confidence":120,"source":"provider-a"}]}}}],
+      "marketDocs": [],
+      "expectedIssues": ["ERROR:INVALID_CONFIDENCE","ERROR:INVALID_KICKOFF","ERROR:INVALID_SNAPSHOT_TIME"],
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":0}
+    }
+  ]
+}
