@@ -18,6 +18,16 @@ Purpose: make ARGUS continuously more rigorous, selective, observable, testable 
 13. Track failed ideas and do not repeatedly retest the same hypothesis without new evidence.
 14. Treat unusually strong performance as a reason for extra validation, not immediate trust.
 15. Keep the system understandable to a human operator through Watchtower and concise audit trails.
+16. Market price is a strong baseline, not an enemy. ARGUS must prove persistent incremental information beyond a no-vig market baseline.
+17. Every confidence number should eventually be decomposable into model, data, market and governance confidence.
+18. ARGUS must explicitly model ignorance: out-of-distribution states, missing information and model disagreement should reduce action, not be silently averaged away.
+19. Reliability improvements outrank feature proliferation. A smaller system with stronger evidence is preferable to a larger unvalidated one.
+20. Every recurring process should justify its API, compute, latency and maintenance cost through measurable information value.
+21. Every major decision path should be reproducible from immutable inputs, model/version identifiers and timestamps.
+22. Any detected structural fragility should enter the perfection backlog even when it is not yet causing visible errors.
+23. Prefer removal of duplicated or weak logic over adding another layer that masks the same problem.
+24. Every apparent edge must survive an adversarial question: what alternative explanation, leakage, market move, selection bias or lucky concentration could produce this result?
+25. A decision to abstain is a first-class successful outcome when evidence quality is insufficient.
 
 ## Daily self-improvement loop
 A. Observe: inspect system health, data freshness, storage, quota, crons, Watchtower, ledger, calibration, CLV, drift, specialists, NO BET behavior and recent failures.
@@ -30,7 +40,10 @@ G. Inject: implement on a safe work branch when low risk; otherwise create a res
 H. Verify: syntax/tests/integration/temporal integrity/data integrity/Watchtower impact.
 I. Measure: define evidence required to keep/reject/promote the idea.
 J. Record: what changed, why, evidence, result, blocker, rollback and next step.
-K. Repeat indefinitely.
+K. Self-critique: ask what ARGUS believes it knows, what remains uncertain, and what could be fooling it.
+L. Simplify: inspect whether any existing module, cron, feature, cache, storage path or experiment can be merged, retired or removed safely.
+M. Re-prioritize: update the perfection order based on new evidence, failures, quota pressure and structural risk.
+N. Repeat indefinitely.
 
 ## Perfection backlog categories
 ### Integrity
@@ -51,6 +64,8 @@ K. Repeat indefinitely.
 - model-disagreement analysis
 - OOD/unknown-unknown detection
 - fair-price consistency across markets
+- market-baseline incremental value testing
+- confidence decomposition into model/data/market/governance components
 
 ### Market truth
 - richer opening-to-closing snapshots
@@ -60,6 +75,7 @@ K. Repeat indefinitely.
 - price-path/timing model
 - liquidity proxies
 - market reaction to lineups/news
+- shadow market maker / complete fair-price surface
 
 ### Specialist intelligence
 - true market-specific predictive models
@@ -78,6 +94,8 @@ K. Repeat indefinitely.
 - drawdown governance
 - opportunity-cost ranking
 - confidence ceilings by league/market/data quality
+- explicit OOD abstention
+- abstention-quality scoring
 
 ### Scientific validation
 - strict walk-forward
@@ -90,6 +108,8 @@ K. Repeat indefinitely.
 - cross-season/cross-league robustness
 - champion/challenger tournament
 - automatic rollback readiness
+- pre-registration for major experiments
+- concentration and luck-adjusted performance checks
 
 ### MLOps and reliability
 - CI integration gate
@@ -102,6 +122,7 @@ K. Repeat indefinitely.
 - dependency/security checks
 - incident classification
 - safe self-healing
+- structural simplification and fault isolation
 
 ### Resource intelligence
 - API value-per-call measurement
@@ -110,6 +131,7 @@ K. Repeat indefinitely.
 - event-driven refresh where useful
 - compute allocation by uncertainty/opportunity
 - degraded-mode policies
+- cost-to-information score per recurring job
 
 ### Human interface
 - single Watchtower health score
@@ -130,6 +152,31 @@ K. Repeat indefinitely.
 - negative-result memory
 - continuous literature/method scouting
 - periodic architecture simplification review
+- self-critique engine
+- adversarial hypothesis challenge
+- explicit unknown/ignorance registry
+
+## My highest-priority improvement principles
+1. Truth before action: improve probability truthfulness before trying to increase the number of bets.
+2. Calibration before confidence: confidence is earned only through repeated out-of-sample calibration.
+3. Market baseline before model pride: compare every model against no-vig market probabilities and ask whether ARGUS adds incremental information.
+4. Abstention before forced prediction: when uncertainty is high, NO BET is a correct output.
+5. Temporal integrity before backtest performance: any suspected leakage invalidates the evidence.
+6. CLV before short-term ROI: closing-line value is a primary external truth signal; ROI is noisier and secondary.
+7. Robustness before promotion: every challenger must survive different periods, leagues, odds bands and plausible perturbations.
+8. Simplicity before complexity: new complexity must beat a simpler baseline and justify its operational cost.
+9. Reproducibility before self-modification: every improvement must be traceable, versioned and reversible.
+10. Structural health before feature count: remove duplication, coupling and fragile sequencing before adding more modules.
+11. Value of Information before API spending: collect the next piece of data only when it has a plausible chance to change or improve the decision.
+12. Self-critique before self-confidence: ARGUS must actively search for reasons its own conclusion could be wrong.
+13. Unknown detection before extrapolation: unfamiliar regimes should lower confidence automatically.
+14. Negative evidence before positive adaptation: weak segments can be downgraded quickly; stronger trust accumulates slowly.
+15. Portfolio truth before isolated wins: evaluate correlated exposure and aggregate risk, not only individual picks.
+16. Research memory before repeated experimentation: preserve failures, rejected ideas and null results.
+17. Human interpretability before opaque automation: any strong output should have an auditable reason and evidence-quality explanation.
+18. Reliability before speed: a slower correct pipeline is better than a fast corrupted one.
+19. Fail-safe before graceful optimism: when integrity or freshness fails, downgrade to observation rather than fabricate confidence.
+20. Evidence density before feature volume: fewer high-quality features beat many weak narrative features.
 
 ## Execution priority
 1. Integrity and reproducibility
