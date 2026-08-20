@@ -27,7 +27,7 @@
       "predictionDocs": [],
       "marketDocs": [{"date":"2026-08-20","fixtures":{"5":{"snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T17:59:40Z"},{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T17:57:00Z"},{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T17:50:00Z"},{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T17:30:00Z"},{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T16:00:00Z"}]}}}],
       "expectedIssues": [],
-      "expectedProvenance": {"snapshots":5,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100,"timestampPairs":5,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":1552,"maxSourceAgeSeconds":7200,"freshnessDistribution":{"counts":{"le60s":1,"le5m":1,"le15m":1,"le1h":1,"gt1h":1},"pct":{"le60s":20,"le5m":20,"le15m":20,"le1h":20,"gt1h":20}}}
+      "expectedProvenance": {"snapshots":5,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100,"timestampPairs":5,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":1960,"maxSourceAgeSeconds":7200,"freshnessDistribution":{"counts":{"le60s":1,"le5m":1,"le15m":1,"le1h":1,"gt1h":1},"pct":{"le60s":20,"le5m":20,"le15m":20,"le1h":20,"gt1h":20}}}
     },
     {
       "name": "corruption-still-fails",
