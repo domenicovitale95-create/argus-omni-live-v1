@@ -8,6 +8,7 @@
     { "path": "/api/alert-engine", "schedule": "2-57/5 * * * *" },
     { "path": "/api/push-dispatch", "schedule": "3-58/5 * * * *" },
     { "path": "/api/email-alert-dispatch", "schedule": "4-59/5 * * * *" },
+    { "path": "/api/watchtower", "schedule": "6,21,36,51 * * * *" },
     { "path": "/api/shadow-cron", "schedule": "7 * * * *" },
     { "path": "/api/deployment-verifier", "schedule": "12,27,42,57 * * * *" },
     { "path": "/api/site-self-test", "schedule": "17 * * * *" },
