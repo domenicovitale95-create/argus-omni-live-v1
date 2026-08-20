@@ -15,6 +15,7 @@ const failures = [];
 
 function fail(message) { failures.push(message); }
 function sameArray(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
+function sameJson(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
 
 for (const row of golden.uncertaintyBands || []) {
   const got = uncertaintyBand(row.score);
@@ -49,7 +50,7 @@ for (const testCase of temporal.cases || []) {
 }
 
 for (const testCase of dataIntegrity.cases || []) {
-  const issues = [], coverage = { snapshots: 0, withSource: 0, withSourceTimestamp: 0, timestampPairs: 0, futureSourceTimestampCount: 0, sourceAgeSecondsSum: 0, maxSourceAgeSeconds: 0 };
+  const issues = [], coverage = { snapshots: 0, withSource: 0, withSourceTimestamp: 0, timestampPairs: 0, futureSourceTimestampCount: 0, sourceAgeSecondsSum: 0, maxSourceAgeSeconds: 0, freshnessBuckets: {} };
   for (const doc of testCase.predictionDocs || []) auditDataPredictionDoc(doc, issues, coverage);
   for (const doc of testCase.marketDocs || []) auditDataMarketDoc(doc, issues, coverage);
   const gotIssues = issues.map(x => `${x.severity}:${x.code}`).sort();
@@ -58,6 +59,9 @@ for (const testCase of dataIntegrity.cases || []) {
   const gotCoverage = provenanceCoverage(coverage), expected = testCase.expectedProvenance || {};
   for (const key of ['snapshots','sourceCoveragePct','sourceTimestampCoveragePct','timestampPairs','futureSourceTimestampCount','averageSourceAgeSeconds','maxSourceAgeSeconds']) {
     if (Object.prototype.hasOwnProperty.call(expected,key) && gotCoverage[key] !== expected[key]) fail(`data-integrity ${testCase.name} expected ${key}=${expected[key]} got ${gotCoverage[key]}`);
+  }
+  if (Object.prototype.hasOwnProperty.call(expected,'freshnessDistribution') && !sameJson(gotCoverage.freshnessDistribution,expected.freshnessDistribution)) {
+    fail(`data-integrity ${testCase.name} expected freshnessDistribution=${JSON.stringify(expected.freshnessDistribution)} got ${JSON.stringify(gotCoverage.freshnessDistribution)}`);
   }
 }
 
