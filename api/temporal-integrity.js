@@ -5,7 +5,7 @@ const OUT='argus/integrity/temporal-integrity.json';
 const arr=v=>Array.isArray(v)?v:[];
 const ts=v=>{const t=new Date(v||0).getTime();return Number.isFinite(t)&&t>0?t:null};
 function push(issues,severity,code,fixtureId,date,details={}){issues.push({severity,code,fixtureId:String(fixtureId||'UNKNOWN'),date:date||null,...details})}
-function auditPredictionDoc(doc,issues){
+export function auditPredictionDoc(doc,issues){
   for(const [id,f] of Object.entries(doc?.fixtures||{})){
     const ko=ts(f?.kickoff);if(!ko)continue;
     for(const s of arr(f?.snapshots)){
@@ -16,7 +16,7 @@ function auditPredictionDoc(doc,issues){
     }
   }
 }
-function auditMarketDoc(doc,issues){
+export function auditMarketDoc(doc,issues){
   for(const [id,f] of Object.entries(doc?.fixtures||{})){
     const ko=ts(f?.kickoff);if(!ko)continue;
     for(const s of arr(f?.snapshots)){
@@ -26,7 +26,7 @@ function auditMarketDoc(doc,issues){
     }
   }
 }
-function auditReports(reports,issues){
+export function auditReports(reports,issues){
   for(const rdoc of reports){for(const r of arr(rdoc?.matches)){
     const ko=ts(r?.kickoff),settled=ts(r?.settledAt||r?.verifiedAt||rdoc?.generatedAt);if(ko&&settled&&settled<ko)push(issues,'ERROR','SETTLEMENT_BEFORE_KICKOFF',r?.fixtureId,rdoc?.date,{settledAt:r?.settledAt||r?.verifiedAt||rdoc?.generatedAt,kickoff:r?.kickoff});
     const p=r?.prediction||{};const pt=ts(p?.recordedAt||p?.publishedAt||p?.frozenAt);if(ko&&pt&&String(p?.phase||'PREMATCH').toUpperCase()==='PREMATCH'&&pt>=ko)push(issues,'ERROR','REPORT_REFERENCES_LATE_PREMATCH_PREDICTION',r?.fixtureId,rdoc?.date,{predictionAt:p?.recordedAt||p?.publishedAt||p?.frozenAt,kickoff:r?.kickoff});
