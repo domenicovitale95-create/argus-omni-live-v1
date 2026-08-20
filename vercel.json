@@ -25,7 +25,10 @@
     { "path": "/api/skill-map", "schedule": "35 */6 * * *" },
     { "path": "/api/market-truth", "schedule": "38 */6 * * *" },
     { "path": "/api/market-specialists", "schedule": "41 */6 * * *" },
-    { "path": "/api/policy-governance-cycle", "schedule": "45 */6 * * *" },
+    { "path": "/api/calibration-watchdog", "schedule": "43 */6 * * *" },
+    { "path": "/api/drift-engine", "schedule": "44 */6 * * *" },
+    { "path": "/api/no-bet-optimizer", "schedule": "46 */6 * * *" },
+    { "path": "/api/policy-governance-cycle", "schedule": "48 */6 * * *" },
     { "path": "/api/daily-slip", "schedule": "30 7 * * *" },
     { "path": "/api/daily-cron", "schedule": "55 21,22 * * *" }
   ]
