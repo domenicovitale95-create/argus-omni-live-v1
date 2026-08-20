@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   verify:
-    name: Syntax and integration invariants
+    name: Syntax, integration and golden invariants
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -34,3 +34,6 @@ jobs:
 
       - name: Run bounded integration verification
         run: node scripts/verify-integration.mjs
+
+      - name: Run deterministic governance golden fixtures
+        run: node scripts/verify-golden-fixtures.mjs
