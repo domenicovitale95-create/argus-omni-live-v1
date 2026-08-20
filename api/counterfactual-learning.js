@@ -5,44 +5,26 @@ const OUT='argus/learning/counterfactual.json';
 const n=(v,f=null)=>Number.isFinite(Number(v))?Number(v):f;
 const pct=(x,d=1)=>Number.isFinite(Number(x))?Number(Number(x).toFixed(d)):null;
 function validResult(r){return ['WIN','LOSS'].includes(r?.settlement?.status)}
-function implied(o){const x=n(o);return x&&x>1?1/x:null}
 function regime(rec){const r=rec?.context?.regime||rec?.marketRegime||{};return String(r.type||r.regime||r.label||'UNKNOWN').toUpperCase()}
-function decisionBucket(rec){return `${String(rec.verdict||'UNKNOWN').toUpperCase()}|${String(rec.selection||'UNKNOWN').toUpperCase()}|${regime(rec)}`}
-function alternativeFor(rec){
-  const status=rec?.settlement?.status, conf=n(rec?.confidence), odds=n(rec?.odds), rank=n(rec?.rankScore), risks=Array.isArray(rec?.risks)?rec.risks:[];
-  const loss=status==='LOSS';
-  const highRisk=risks.length>=2||regime(rec).includes('VOLATILE')||regime(rec).includes('STALE')||regime(rec).includes('WIDE');
-  const expensive=odds!=null&&odds<1.55;
-  const marginal=conf!=null&&conf<64;
-  const weakRank=rank!=null&&rank<75;
-  if(loss&&(highRisk||marginal||weakRank))return{alternative:'NO_BET_OR_WAIT',avoidedLoss:true,reason:[highRisk?'risk flags':'',marginal?'marginal confidence':'',weakRank?'weak rank':''].filter(Boolean).join(' + ')};
-  if(loss&&expensive)return{alternative:'WAIT_FOR_PRICE_OR_SKIP',avoidedLoss:true,reason:'short price loss'};
-  if(status==='WIN'&&conf!=null&&conf>=68&&!highRisk)return{alternative:'KEEP_POLICY',avoidedLoss:false,reason:'winner with adequate confidence and no severe context risk'};
-  return{alternative:'KEEP_POLICY',avoidedLoss:false,reason:'no clear counterfactual improvement from frozen evidence'};
-}
-function group(rows,keyFn){
-  const map={};
-  for(const r of rows){const k=keyFn(r);(map[k]||(map[k]=[])).push(r)}
-  const out={};
-  for(const [k,arr] of Object.entries(map)){
-    const settled=arr.filter(validResult), losses=settled.filter(r=>r.settlement.status==='LOSS'), wins=settled.length-losses.length;
-    const alt=settled.map(r=>alternativeFor(r));
-    const avoidable=alt.filter(x=>x.avoidedLoss).length;
-    const priced=settled.filter(r=>Number.isFinite(Number(r.settlement?.pl)));
-    const pl=priced.reduce((s,r)=>s+Number(r.settlement.pl),0);
-    const counterfactualPL=priced.reduce((s,r)=>{const a=alternativeFor(r);return s+(a.avoidedLoss&&r.settlement.status==='LOSS'?0:Number(r.settlement.pl));},0);
-    out[k]={sample:settled.length,wins,losses,observedFlatPL:pct(pl,2),observedROI:priced.length?pct(pl/priced.length*100):null,avoidableLossesHeuristic:avoidable,avoidableLossRate:losses.length?pct(avoidable/losses.length*100):0,counterfactualFlatPL:pct(counterfactualPL,2),estimatedDeltaPL:pct(counterfactualPL-pl,2),status:settled.length<20?'LEARNING':avoidable>=Math.max(5,Math.ceil(losses.length*.35))?'POLICY_REVIEW':'STABLE'};
-  }
-  return out;
-}
+function risks(rec){return Array.isArray(rec?.risks)?rec.risks:[]}
+function frozenFeatures(rec){return{edge:n(rec?.edge),confidence:n(rec?.confidence),odds:n(rec?.odds),rankScore:n(rec?.rankScore),regime:regime(rec),riskCount:risks(rec).length,verdict:String(rec?.verdict||'UNKNOWN').toUpperCase()}}
+const POLICIES={
+ STRICT_EDGE_4:f=>f.edge!=null&&f.edge<4,
+ STRICT_EDGE_6:f=>f.edge!=null&&f.edge<6,
+ CONFIDENCE_60:f=>f.confidence!=null&&f.confidence<60,
+ CONFIDENCE_68:f=>f.confidence!=null&&f.confidence<68,
+ RISK_OFF:f=>f.riskCount>=2||['VOLATILE','STALE','WIDE'].some(x=>f.regime.includes(x)),
+ SHORT_PRICE_WAIT:f=>f.odds!=null&&f.odds<1.55,
+ CONSERVATIVE_COMBO:f=>(f.edge!=null&&f.edge<4)||(f.confidence!=null&&f.confidence<60)||f.riskCount>=2||['VOLATILE','STALE','WIDE'].some(x=>f.regime.includes(x))
+};
+function evalPolicy(rec,name,fn){const f=frozenFeatures(rec),skip=Boolean(fn(f)),pl=n(rec?.settlement?.pl,rec?.settlement?.status==='LOSS'?-1:0)||0;return{name,skip,observedPL:pl,counterfactualPL:skip?0:pl,deltaPL:(skip?0:pl)-pl,avoidedLoss:skip&&rec.settlement.status==='LOSS',missedWin:skip&&rec.settlement.status==='WIN',features:f}}
+function policyStats(rows,name,fn){const ev=rows.map(r=>evalPolicy(r,name,fn)),acted=ev.filter(x=>x.skip),observed=ev.reduce((s,x)=>s+x.observedPL,0),cf=ev.reduce((s,x)=>s+x.counterfactualPL,0),avoided=acted.filter(x=>x.avoidedLoss).length,missed=acted.filter(x=>x.missedWin).length,losses=rows.filter(r=>r.settlement.status==='LOSS').length,wins=rows.length-losses,delta=cf-observed;let status='LEARNING';if(rows.length>=40){if(delta>=5&&avoided>=Math.max(5,missed+2))status='REVIEW_CANDIDATE';else if(delta<=-5&&missed>avoided)status='REJECTED';else status='NEUTRAL'}return{sample:rows.length,wins,losses,policyTriggers:acted.length,avoidedLosses:avoided,missedWins:missed,observedFlatPL:pct(observed,2),counterfactualFlatPL:pct(cf,2),estimatedDeltaPL:pct(delta,2),avoidableLossRate:losses?pct(avoided/losses*100):0,missedWinRate:wins?pct(missed/wins*100):0,status}}
+function groupPolicies(rows,keyFn){const groups={};for(const r of rows){const k=keyFn(r);(groups[k]||(groups[k]=[])).push(r)}const out={};for(const[k,arr]of Object.entries(groups)){out[k]={};for(const[name,fn]of Object.entries(POLICIES))out[k][name]=policyStats(arr,name,fn)}return out}
 export default async function handler(req,res){
-  res.setHeader('Cache-Control','no-store');
-  if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
-  if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
-  const blobs=await listJson(PREFIX,180),books=await readManyJson(blobs),rows=books.flatMap(b=>b?.records||[]).filter(validResult);
-  const decisions=rows.map(r=>({id:r.id,fixtureId:r.fixtureId,match:`${r.home||'—'} vs ${r.away||'—'}`,competition:r.competition||'UNKNOWN',selection:r.selection,verdict:r.verdict,confidence:r.confidence,odds:r.odds,rankScore:r.rankScore,regime:regime(r),result:r.settlement.status,...alternativeFor(r)}));
-  const losses=rows.filter(r=>r.settlement.status==='LOSS').length,avoidable=decisions.filter(d=>d.avoidedLoss).length;
-  const report={version:'COUNTERFACTUAL-LEARNING-1',generatedAt:new Date().toISOString(),policy:{principle:'Compare frozen decisions with safer alternatives using only information already present at prediction time. No post-match features may influence alternatives.',noHindsight:true,positiveEvidenceCannotCreatePrime:true,minimumSampleForPolicyAction:20,action:'downgrade-only'},summary:{settled:rows.length,wins:rows.length-losses,losses,avoidableLossesHeuristic:avoidable,avoidableLossRate:losses?pct(avoidable/losses*100):0},byDecisionRegime:group(rows,decisionBucket),byLeague:group(rows,r=>r.competition||'UNKNOWN'),byVerdict:group(rows,r=>String(r.verdict||'UNKNOWN').toUpperCase()),recent:decisions.sort((a,b)=>String(b.id).localeCompare(String(a.id))).slice(0,100)};
-  await writeJson(OUT,report);
-  return res.status(200).json(report);
+ res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
+ const blobs=await listJson(PREFIX,240),books=await readManyJson(blobs),rows=books.flatMap(b=>b?.records||[]).filter(validResult),losses=rows.filter(r=>r.settlement.status==='LOSS').length;
+ const policies={};for(const[name,fn]of Object.entries(POLICIES))policies[name]=policyStats(rows,name,fn);
+ const best=Object.entries(policies).filter(([,p])=>p.status==='REVIEW_CANDIDATE').sort((a,b)=>(b[1].estimatedDeltaPL||0)-(a[1].estimatedDeltaPL||0))[0]||null;
+ const heuristic=policies.CONSERVATIVE_COMBO,report={version:'COUNTERFACTUAL-LEARNING-2',generatedAt:new Date().toISOString(),policy:{principle:'Evaluate safer decision rules using only features frozen at decision time; settlement is used only to score the hypothetical policy.',noHindsightInPolicyChoice:true,noRetroactiveTrackRecordRewrite:true,automaticPolicyMutation:false,positiveEvidenceCannotCreatePrime:true,minimumSampleForPolicyReview:40,action:'research-and-downgrade-only'},summary:{settled:rows.length,wins:rows.length-losses,losses,avoidableLossesHeuristic:heuristic.avoidedLosses,avoidableLossRate:heuristic.avoidableLossRate,bestReviewCandidate:best?best[0]:null,bestEstimatedDeltaPL:best?best[1].estimatedDeltaPL:null},policies,byLeague:groupPolicies(rows,r=>r.competition||'UNKNOWN'),byVerdict:groupPolicies(rows,r=>String(r.verdict||'UNKNOWN').toUpperCase()),recent:rows.slice(-100).reverse().map(r=>({id:r.id,fixtureId:r.fixtureId,match:`${r.home||'—'} vs ${r.away||'—'}`,competition:r.competition||'UNKNOWN',result:r.settlement.status,features:frozenFeatures(r),policies:Object.fromEntries(Object.entries(POLICIES).map(([name,fn])=>{const x=evalPolicy(r,name,fn);return[name,{skip:x.skip,deltaPL:pct(x.deltaPL,2),avoidedLoss:x.avoidedLoss,missedWin:x.missedWin}]}))}))};
+ await writeJson(OUT,report);return res.status(200).json(report)
 }
