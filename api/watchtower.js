@@ -6,33 +6,38 @@ const fresh=(v,max)=>{const a=ageMin(v);return a!=null&&a>=0&&a<=max};
 const clamp=(v,min=0,max=100)=>Math.max(min,Math.min(max,v));
 function grade(score){if(score>=90)return'HEALTHY';if(score>=75)return'WATCH';if(score>=55)return'DEGRADED';return'CRITICAL'}
 function domain(name,score,status,details={}){return{name,score:clamp(Math.round(score)),status,details}}
+function integrityScore(doc){const s=String(doc?.status||'UNKNOWN').toUpperCase();if(s==='PASS')return100;if(s==='WATCH')return75;if(s==='FAIL')return30;return60}
 
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!storageReady())return res.status(503).json({error:'Watchtower storage unavailable'});
 
-  const [plan,resource,self,skill,truth,specialists,ledger]=await Promise.all([
+  const [plan,resource,self,skill,truth,specialists,ledger,dataIntegrity,temporalIntegrity]=await Promise.all([
     readJson('argus/autopilot/decision-plan.json',{}),
     readJson('argus/autopilot/resource-policy.json',{}),
     readJson('argus/self-improvement/latest.json',{}),
     readJson('argus/learning/skill-map.json',{}),
     readJson('argus/learning/market-truth.json',{}),
     readJson('argus/learning/market-specialists.json',{}),
-    readJson('argus/learning/ledger-diagnostics.json',{})
+    readJson('argus/learning/ledger-diagnostics.json',{}),
+    readJson('argus/integrity/data-integrity.json',{}),
+    readJson('argus/integrity/temporal-integrity.json',{})
   ]);
 
-  const planAge=ageMin(plan.generatedAt),resourceAge=ageMin(resource.generatedAt),selfAge=ageMin(self.generatedAt),skillAge=ageMin(skill.generatedAt),truthAge=ageMin(truth.generatedAt),specialistAge=ageMin(specialists.generatedAt),ledgerAge=ageMin(ledger.generatedAt);
+  const planAge=ageMin(plan.generatedAt),resourceAge=ageMin(resource.generatedAt),selfAge=ageMin(self.generatedAt),skillAge=ageMin(skill.generatedAt),truthAge=ageMin(truth.generatedAt),specialistAge=ageMin(specialists.generatedAt),ledgerAge=ageMin(ledger.generatedAt),dataIntegrityAge=ageMin(dataIntegrity.generatedAt),temporalIntegrityAge=ageMin(temporalIntegrity.generatedAt);
   const quotaMode=resource.quotaMode||resource.mode||'UNKNOWN';
-  const dataScore=(fresh(plan.generatedAt,20)?35:10)+(fresh(skill.generatedAt,420)?25:10)+(fresh(truth.generatedAt,420)?20:8)+(fresh(specialists.generatedAt,420)?20:8);
+  const dataScore=(fresh(plan.generatedAt,20)?30:8)+(fresh(skill.generatedAt,420)?20:8)+(fresh(truth.generatedAt,420)?15:6)+(fresh(specialists.generatedAt,420)?15:6)+Math.round(integrityScore(dataIntegrity)*.20);
   const automationScore=(fresh(plan.generatedAt,20)?35:10)+(fresh(resource.generatedAt,45)?25:10)+(fresh(self.generatedAt,420)?25:10)+(fresh(ledger.generatedAt,420)?15:6);
   const quotaScore=quotaMode==='EMERGENCY'?35:quotaMode==='SAFE'?60:quotaMode==='CONSERVE'?80:quotaMode==='NORMAL'||quotaMode==='EXPAND'?100:75;
   const ledgerStatus=String(ledger.status||ledger.globalStatus||'UNKNOWN').toUpperCase();
   const calibrationScore=ledgerStatus==='DEGRADED'?45:ledgerStatus==='CAUTION'?70:ledgerStatus==='VALIDATING_POSITIVE'?95:ledgerStatus==='LEARNING'?80:85;
   const learningScore=(fresh(self.generatedAt,420)?35:12)+(fresh(skill.generatedAt,420)?25:10)+(fresh(truth.generatedAt,420)?20:8)+(fresh(specialists.generatedAt,420)?20:8);
+  const temporalScore=integrityScore(temporalIntegrity);
 
   const domains={
-    DATA:domain('DATA',dataScore,grade(dataScore),{decisionPlanAgeMinutes:planAge,skillMapAgeMinutes:skillAge,marketTruthAgeMinutes:truthAge,specialistsAgeMinutes:specialistAge}),
+    DATA:domain('DATA',dataScore,grade(dataScore),{decisionPlanAgeMinutes:planAge,skillMapAgeMinutes:skillAge,marketTruthAgeMinutes:truthAge,specialistsAgeMinutes:specialistAge,dataIntegrityStatus:dataIntegrity.status||'UNKNOWN',dataIntegrityAgeMinutes:dataIntegrityAge,dataIntegrityErrors:Number(dataIntegrity?.counts?.errors||0),dataIntegrityWarnings:Number(dataIntegrity?.counts?.warnings||0)}),
+    TEMPORAL_INTEGRITY:domain('TEMPORAL_INTEGRITY',temporalScore,grade(temporalScore),{status:temporalIntegrity.status||'UNKNOWN',ageMinutes:temporalIntegrityAge,errors:Number(temporalIntegrity?.counts?.errors||0),warnings:Number(temporalIntegrity?.counts?.warnings||0)}),
     AUTOMATION:domain('AUTOMATION',automationScore,grade(automationScore),{resourceAgeMinutes:resourceAge,selfImprovementAgeMinutes:selfAge,ledgerLearningAgeMinutes:ledgerAge}),
     API_QUOTA:domain('API_QUOTA',quotaScore,grade(quotaScore),{quotaMode}),
     CALIBRATION:domain('CALIBRATION',calibrationScore,grade(calibrationScore),{ledgerStatus,sample:Number(ledger.sample||0),brier:ledger.brier??null,logLoss:ledger.logLoss??null,calibrationError:ledger.calibrationError??null}),
@@ -46,17 +51,21 @@ export default async function handler(req,res){
   if(resourceAge==null||resourceAge>45)silentFailures.push('RESOURCE_POLICY_STALE');
   if(selfAge==null||selfAge>420)silentFailures.push('SELF_IMPROVEMENT_STALE');
   if(ledgerAge==null||ledgerAge>420)silentFailures.push('LEDGER_LEARNING_STALE');
+  if(dataIntegrityAge==null||dataIntegrityAge>90)silentFailures.push('DATA_INTEGRITY_STALE');
+  if(temporalIntegrityAge==null||temporalIntegrityAge>90)silentFailures.push('TEMPORAL_INTEGRITY_STALE');
 
-  const humanActionRequired=critical.length>0||quotaMode==='EMERGENCY';
-  const recommendedMode=critical.length?'SAFE_OBSERVE_ONLY':degraded.length||silentFailures.length?'DEGRADED_MONITORING':'NORMAL';
+  const integrityFailure=String(dataIntegrity.status||'').toUpperCase()==='FAIL'||String(temporalIntegrity.status||'').toUpperCase()==='FAIL';
+  const humanActionRequired=critical.length>0||quotaMode==='EMERGENCY'||integrityFailure;
+  const recommendedMode=integrityFailure?'SAFE_OBSERVE_ONLY':critical.length?'SAFE_OBSERVE_ONLY':degraded.length||silentFailures.length?'DEGRADED_MONITORING':'NORMAL';
   const state={
-    version:'ARGUS-WATCHTOWER-1',generatedAt:new Date().toISOString(),healthScore,status,domains,
+    version:'ARGUS-WATCHTOWER-2',generatedAt:new Date().toISOString(),healthScore,status,domains,
     silentFailures,
     humanActionRequired,
     recommendedMode,
+    trustGate:{strongOutputsAllowed:!integrityFailure&&critical.length===0,reason:integrityFailure?'Integrity violation detected':critical.length?'Critical subsystem health detected':'No integrity-level veto detected'},
     message:humanActionRequired?'Human review recommended before trusting strong outputs.':silentFailures.length?'ARGUS is running but one or more freshness checks require attention.':'No human action required.',
-    safeguards:{readOnlySupervisor:true,neverCreatesPrime:true,neverRaisesConfidence:true,automaticRealMoneyBetting:false,productionMutation:false},
-    sources:{decisionPlan:plan.generatedAt||null,resourcePolicy:resource.generatedAt||null,selfImprovement:self.generatedAt||null,skillMap:skill.generatedAt||null,marketTruth:truth.generatedAt||null,marketSpecialists:specialists.generatedAt||null,ledgerLearning:ledger.generatedAt||null}
+    safeguards:{readOnlySupervisor:true,neverCreatesPrime:true,neverRaisesConfidence:true,automaticRealMoneyBetting:false,productionMutation:false,integrityFailureBlocksTrust:true},
+    sources:{decisionPlan:plan.generatedAt||null,resourcePolicy:resource.generatedAt||null,selfImprovement:self.generatedAt||null,skillMap:skill.generatedAt||null,marketTruth:truth.generatedAt||null,marketSpecialists:specialists.generatedAt||null,ledgerLearning:ledger.generatedAt||null,dataIntegrity:dataIntegrity.generatedAt||null,temporalIntegrity:temporalIntegrity.generatedAt||null}
   };
   await writeJson(OUT,state);
   return res.status(200).json(state);
