@@ -6,6 +6,13 @@ const n=v=>Number.isFinite(Number(v))?Number(v):null;
 const arr=v=>Array.isArray(v)?v:[];
 const hasText=v=>typeof v==='string'&&v.trim().length>0;
 const timeMs=v=>{const t=new Date(v||0).getTime();return Number.isFinite(t)&&t>0?t:null};
+const FRESHNESS_BUCKETS=[
+  {key:'le60s',max:60},
+  {key:'le5m',max:300},
+  {key:'le15m',max:900},
+  {key:'le1h',max:3600},
+  {key:'gt1h',max:Infinity}
+];
 function provenanceOf(s){
   const source=s?.source??s?.provider??s?.providerName??s?.bookmaker??s?.provenance?.source??null;
   const capturedAt=s?.sourceRecordedAt??s?.sourceTimestamp??s?.observedAt??s?.provenance?.capturedAt??null;
@@ -25,6 +32,9 @@ function observeProvenance(s,coverage){
     const ageSeconds=Math.max(0,lagSeconds);
     coverage.sourceAgeSecondsSum=(coverage.sourceAgeSecondsSum||0)+ageSeconds;
     coverage.maxSourceAgeSeconds=Math.max(Number(coverage.maxSourceAgeSeconds||0),ageSeconds);
+    coverage.freshnessBuckets=coverage.freshnessBuckets||{};
+    const bucket=FRESHNESS_BUCKETS.find(x=>ageSeconds<=x.max);
+    if(bucket)coverage.freshnessBuckets[bucket.key]=Number(coverage.freshnessBuckets[bucket.key]||0)+1;
   }
 }
 export function auditPredictionDoc(doc,issues=[],coverage=null){
@@ -64,7 +74,15 @@ export function auditMarketDoc(doc,issues=[],coverage=null){
 export function provenanceCoverage(coverage={}){
   const total=Number(coverage.snapshots||0),pairs=Number(coverage.timestampPairs||0);
   const pct=v=>total?Math.round((Number(v||0)/total)*10000)/100:100;
+  const pairPct=v=>pairs?Math.round((Number(v||0)/pairs)*10000)/100:null;
   const round=v=>Math.round(Number(v)*100)/100;
+  const bucketCounts={};
+  const bucketPct={};
+  for(const bucket of FRESHNESS_BUCKETS){
+    const count=Number(coverage.freshnessBuckets?.[bucket.key]||0);
+    bucketCounts[bucket.key]=count;
+    bucketPct[bucket.key]=pairPct(count);
+  }
   return{
     snapshots:total,
     withSource:Number(coverage.withSource||0),
@@ -74,15 +92,16 @@ export function provenanceCoverage(coverage={}){
     timestampPairs:pairs,
     futureSourceTimestampCount:Number(coverage.futureSourceTimestampCount||0),
     averageSourceAgeSeconds:pairs?round(Number(coverage.sourceAgeSecondsSum||0)/pairs):null,
-    maxSourceAgeSeconds:pairs?round(Number(coverage.maxSourceAgeSeconds||0)):null
+    maxSourceAgeSeconds:pairs?round(Number(coverage.maxSourceAgeSeconds||0)):null,
+    freshnessDistribution:{counts:bucketCounts,pct:bucketPct}
   };
 }
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!storageReady())return res.status(503).json({error:'Data integrity storage unavailable'});
-  const [pb,mb]=await Promise.all([listJson('argus/predictions/',120),listJson('argus/market-memory/',120)]),[preds,markets]=await Promise.all([readManyJson(pb),readManyJson(mb)]),issues=[],coverage={snapshots:0,withSource:0,withSourceTimestamp:0,timestampPairs:0,futureSourceTimestampCount:0,sourceAgeSecondsSum:0,maxSourceAgeSeconds:0};
+  const [pb,mb]=await Promise.all([listJson('argus/predictions/',120),listJson('argus/market-memory/',120)]),[preds,markets]=await Promise.all([readManyJson(pb),readManyJson(mb)]),issues=[],coverage={snapshots:0,withSource:0,withSourceTimestamp:0,timestampPairs:0,futureSourceTimestampCount:0,sourceAgeSecondsSum:0,maxSourceAgeSeconds:0,freshnessBuckets:{}};
   for(const d of preds)auditPredictionDoc(d,issues,coverage);for(const d of markets)auditMarketDoc(d,issues,coverage);
   const errors=issues.filter(x=>x.severity==='ERROR').length,warnings=issues.filter(x=>x.severity==='WARN').length;
   const status=errors?'FAIL':warnings?'WATCH':'PASS';
-  const state={version:'DATA-INTEGRITY-3',generatedAt:new Date().toISOString(),status,scanned:{predictionDocs:preds.length,marketDocs:markets.length},counts:{errors,warnings,total:issues.length},provenance:provenanceCoverage(coverage),issues:issues.slice(0,200),policy:{failClosedOnCriticalDataCorruption:true,neverRepairsHistoricalPredictions:true,neverInventsMissingData:true,readOnlyAudit:true,provenanceCoverageIsObservational:true,sourceFreshnessIsObservational:true,missingProvenanceDoesNotYetBlock:true}};
+  const state={version:'DATA-INTEGRITY-4',generatedAt:new Date().toISOString(),status,scanned:{predictionDocs:preds.length,marketDocs:markets.length},counts:{errors,warnings,total:issues.length},provenance:provenanceCoverage(coverage),issues:issues.slice(0,200),policy:{failClosedOnCriticalDataCorruption:true,neverRepairsHistoricalPredictions:true,neverInventsMissingData:true,readOnlyAudit:true,provenanceCoverageIsObservational:true,sourceFreshnessIsObservational:true,missingProvenanceDoesNotYetBlock:true,freshnessDistributionIsObservational:true}};
   await writeJson(OUT,state);return res.status(200).json(state)
 }
