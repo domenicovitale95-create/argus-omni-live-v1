@@ -1,33 +1,40 @@
 {
-  "version": "DATA-INTEGRITY-GOLDEN-2",
+  "version": "DATA-INTEGRITY-GOLDEN-3",
   "cases": [
     {
       "name": "complete-provenance",
       "predictionDocs": [{"date":"2026-08-20","fixtures":{"1":{"fixtureId":1,"home":"A","away":"B","kickoff":"2026-08-20T20:00:00Z","snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","odds":2.1,"confidence":55,"source":"provider-a","sourceTimestamp":"2026-08-20T17:59:30Z"}]}}}],
       "marketDocs": [],
       "expectedIssues": [],
-      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100,"timestampPairs":1,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":30,"maxSourceAgeSeconds":30}
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100,"timestampPairs":1,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":30,"maxSourceAgeSeconds":30,"freshnessDistribution":{"counts":{"le60s":1,"le5m":0,"le15m":0,"le1h":0,"gt1h":0},"pct":{"le60s":100,"le5m":0,"le15m":0,"le1h":0,"gt1h":0}}}
     },
     {
       "name": "missing-provenance-is-observational",
       "predictionDocs": [],
       "marketDocs": [{"date":"2026-08-20","fixtures":{"2":{"snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","odds":{"HOME":1.9,"DRAW":3.4,"AWAY":4.2}}]}}}],
       "expectedIssues": [],
-      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":0,"sourceTimestampCoveragePct":0,"timestampPairs":0,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":null,"maxSourceAgeSeconds":null}
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":0,"sourceTimestampCoveragePct":0,"timestampPairs":0,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":null,"maxSourceAgeSeconds":null,"freshnessDistribution":{"counts":{"le60s":0,"le5m":0,"le15m":0,"le1h":0,"gt1h":0},"pct":{"le60s":null,"le5m":null,"le15m":null,"le1h":null,"gt1h":null}}}
     },
     {
       "name": "future-source-clock-skew-is-observed-not-blocked",
       "predictionDocs": [{"date":"2026-08-20","fixtures":{"4":{"fixtureId":4,"home":"A","away":"B","kickoff":"2026-08-20T20:00:00Z","snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","probability":52,"source":"provider-b","sourceTimestamp":"2026-08-20T18:00:10Z"}]}}}],
       "marketDocs": [],
       "expectedIssues": [],
-      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100,"timestampPairs":1,"futureSourceTimestampCount":1,"averageSourceAgeSeconds":0,"maxSourceAgeSeconds":0}
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100,"timestampPairs":1,"futureSourceTimestampCount":1,"averageSourceAgeSeconds":0,"maxSourceAgeSeconds":0,"freshnessDistribution":{"counts":{"le60s":1,"le5m":0,"le15m":0,"le1h":0,"gt1h":0},"pct":{"le60s":100,"le5m":0,"le15m":0,"le1h":0,"gt1h":0}}}
+    },
+    {
+      "name": "freshness-distribution-is-bounded-and-observational",
+      "predictionDocs": [],
+      "marketDocs": [{"date":"2026-08-20","fixtures":{"5":{"snapshots":[{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T17:59:40Z"},{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T17:57:00Z"},{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T17:50:00Z"},{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T17:30:00Z"},{"recordedAt":"2026-08-20T18:00:00Z","source":"provider-a","sourceTimestamp":"2026-08-20T16:00:00Z"}]}}}],
+      "expectedIssues": [],
+      "expectedProvenance": {"snapshots":5,"sourceCoveragePct":100,"sourceTimestampCoveragePct":100,"timestampPairs":5,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":1552,"maxSourceAgeSeconds":7200,"freshnessDistribution":{"counts":{"le60s":1,"le5m":1,"le15m":1,"le1h":1,"gt1h":1},"pct":{"le60s":20,"le5m":20,"le15m":20,"le1h":20,"gt1h":20}}}
     },
     {
       "name": "corruption-still-fails",
       "predictionDocs": [{"date":"2026-08-20","fixtures":{"3":{"fixtureId":3,"home":"A","away":"B","kickoff":"bad","snapshots":[{"recordedAt":"bad","confidence":120,"source":"provider-a"}]}}}],
       "marketDocs": [],
       "expectedIssues": ["ERROR:INVALID_CONFIDENCE","ERROR:INVALID_KICKOFF","ERROR:INVALID_SNAPSHOT_TIME"],
-      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":0,"timestampPairs":0,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":null,"maxSourceAgeSeconds":null}
+      "expectedProvenance": {"snapshots":1,"sourceCoveragePct":100,"sourceTimestampCoveragePct":0,"timestampPairs":0,"futureSourceTimestampCount":0,"averageSourceAgeSeconds":null,"maxSourceAgeSeconds":null,"freshnessDistribution":{"counts":{"le60s":0,"le5m":0,"le15m":0,"le1h":0,"gt1h":0},"pct":{"le60s":null,"le5m":null,"le15m":null,"le1h":null,"gt1h":null}}}
     }
   ]
 }
