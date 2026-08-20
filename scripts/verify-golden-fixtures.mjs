@@ -49,14 +49,16 @@ for (const testCase of temporal.cases || []) {
 }
 
 for (const testCase of dataIntegrity.cases || []) {
-  const issues = [], coverage = { snapshots: 0, withSource: 0, withSourceTimestamp: 0 };
+  const issues = [], coverage = { snapshots: 0, withSource: 0, withSourceTimestamp: 0, timestampPairs: 0, futureSourceTimestampCount: 0, sourceAgeSecondsSum: 0, maxSourceAgeSeconds: 0 };
   for (const doc of testCase.predictionDocs || []) auditDataPredictionDoc(doc, issues, coverage);
   for (const doc of testCase.marketDocs || []) auditDataMarketDoc(doc, issues, coverage);
   const gotIssues = issues.map(x => `${x.severity}:${x.code}`).sort();
   const expectedIssues = [...(testCase.expectedIssues || [])].sort();
   if (!sameArray(gotIssues, expectedIssues)) fail(`data-integrity ${testCase.name} expected issues ${JSON.stringify(expectedIssues)} got ${JSON.stringify(gotIssues)}`);
   const gotCoverage = provenanceCoverage(coverage), expected = testCase.expectedProvenance || {};
-  for (const key of ['snapshots','sourceCoveragePct','sourceTimestampCoveragePct']) if (gotCoverage[key] !== expected[key]) fail(`data-integrity ${testCase.name} expected ${key}=${expected[key]} got ${gotCoverage[key]}`);
+  for (const key of ['snapshots','sourceCoveragePct','sourceTimestampCoveragePct','timestampPairs','futureSourceTimestampCount','averageSourceAgeSeconds','maxSourceAgeSeconds']) {
+    if (Object.prototype.hasOwnProperty.call(expected,key) && gotCoverage[key] !== expected[key]) fail(`data-integrity ${testCase.name} expected ${key}=${expected[key]} got ${gotCoverage[key]}`);
+  }
 }
 
 console.log(`ARGUS golden governance verification — ${golden.version} against ${GOVERNANCE_VERSION}`);
@@ -70,5 +72,5 @@ console.log(`OK  ${golden.uncertaintyBands?.length || 0} uncertainty boundary fi
 console.log('OK  unique penalty deduplication invariant');
 console.log(`OK  ${golden.promotionEvidence?.length || 0} promotion hard-gate fixture(s)`);
 console.log(`OK  ${temporal.cases?.length || 0} temporal integrity fixture(s)`);
-console.log(`OK  ${dataIntegrity.cases?.length || 0} data integrity/provenance fixture(s)`);
+console.log(`OK  ${dataIntegrity.cases?.length || 0} data integrity/provenance/freshness fixture(s)`);
 console.log('OK  deterministic governance, temporal and data-integrity golden fixtures passed');
