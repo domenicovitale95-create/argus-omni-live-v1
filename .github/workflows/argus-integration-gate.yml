@@ -1,0 +1,36 @@
+name: ARGUS Integration Gate
+
+on:
+  push:
+    branches:
+      - argus-autonomous-learning-loop
+      - 'argus-autonomous-learning-loop-*'
+      - 'autopilot/**'
+      - 'fix/**'
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: argus-integration-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Syntax and integration invariants
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run bounded integration verification
+        run: node scripts/verify-integration.mjs
