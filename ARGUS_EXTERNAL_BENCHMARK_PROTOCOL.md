@@ -7,6 +7,30 @@ STUDY BROADLY. COPY NOTHING BLINDLY. TEST EVERYTHING.
 
 External sources are research inputs, not truth. ARGUS should extract mechanisms, assumptions and measurable ideas, then reproduce them in controlled RESEARCH/SHADOW experiments before trust can increase.
 
+## Autonomous researcher -> ARGUS mentoring loop
+The research process should replicate, automatically, the productive interaction that would otherwise require the human operator to ask for ideas manually.
+
+Every research cycle must act in two roles:
+1. RESEARCHER/MENTOR: independently search, study, compare, synthesize and criticize external methods and ARGUS's current design.
+2. ARGUS ENGINEER/SCIENTIST: translate the best lesson into the smallest concrete measurable change, experiment, instrumentation, simplification or structural improvement.
+
+The RESEARCHER/MENTOR must proactively ask:
+- What is ARGUS currently missing?
+- What would a top forecasting or ML research team test next?
+- Which ARGUS assumption is least proven?
+- Which existing module creates complexity without enough evidence?
+- What information would most reduce uncertainty today?
+- What would make ARGUS fail silently?
+- What could make an apparent edge disappear out of sample?
+- What external method could simplify rather than enlarge the system?
+- What can be learned faster using replay, ablation, synthetic tests or existing frozen data?
+- Which new data source would actually change a decision rather than merely enrich a dashboard?
+
+The ARGUS ENGINEER/SCIENTIST must then convert the best answer into:
+HYPOTHESIS -> MINIMUM TEST -> EXPECTED SIGNAL -> FAILURE CONDITION -> EVIDENCE NEEDED -> SAFE IMPLEMENTATION/SHADOW -> MEASURE -> KEEP/REJECT/RETIRE.
+
+This loop must happen without waiting for the human operator to manually request more ideas.
+
 ## Daily benchmark targets
 Study current high-quality public work from categories such as:
 - peer-reviewed / primary ML and probabilistic forecasting research
@@ -89,6 +113,9 @@ Examples of useful public benchmark families include Google Cloud MLOps guidance
 - feature retirement
 - experiment retirement
 - maximum-simplicity challenge
+- active learning / value-of-information prioritization
+- uncertainty-reduction-per-unit-cost ranking
+- rapid research synthesis into one concrete daily action
 
 ### MLOps / reliability
 - continuous integration and integration gates
@@ -143,6 +170,8 @@ Accelerate:
 - instrumentation
 - experiment throughput
 - removal of bad ideas
+- uncertainty reduction
+- conversion of research into testable engineering tasks
 
 Do NOT accelerate:
 - confidence inflation
@@ -157,9 +186,25 @@ Every daily research cycle should produce at most:
 2. UP TO TWO WATCH IDEAS: promising but not yet actionable.
 3. REJECTED/DEFERRED: important ideas rejected or postponed and why.
 4. PROOF REQUIRED: exact evidence needed before ARGUS is allowed to trust TODAY'S INPUT more.
+5. PRACTICAL ADVICE TO ARGUS: one concise engineering/scientific instruction explaining what ARGUS should do differently today.
+6. NEXT RESEARCH QUESTION: the most important unresolved question to study next.
+
+## Hourly mentor behavior
+When an hourly cycle is available and useful, do not merely repeat the daily report. Use the latest evidence to either:
+- advance TODAY'S INPUT by one safe measurable step,
+- test one assumption,
+- reject one weak hypothesis,
+- improve instrumentation,
+- simplify one structural weakness,
+- reduce one uncertainty,
+- or formulate a sharper next research question.
+
+Every useful hourly cycle should leave ARGUS with either more evidence, less uncertainty, less complexity, better observability or a safer decision boundary.
 
 ## Partner principle
 Treat assistant research inputs as coming from a trusted research partner and friend: investigate them seriously, translate strong ideas quickly into measurable experiments, and challenge them aggressively. Friendship means helping ARGUS improve and protecting it from overconfidence, not agreeing blindly.
+
+The assistant/mentor should behave as a persistent scientific ally: proactive, critical, practical, evidence-seeking, protective of integrity, and willing to tell ARGUS when an idea is weak, premature or unnecessary.
 
 ## Definition of successful benchmarking
 External research counts as useful only when it leads to one of:
