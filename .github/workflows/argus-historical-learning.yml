@@ -33,6 +33,15 @@ jobs:
             -H "Authorization: Bearer ${CRON_SECRET}" \
             "$BASE/api/historical-walk-forward"
 
+      - name: Refresh learned source reliability
+        env:
+          ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+        run: |
+          set -euo pipefail
+          BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
+          curl --fail --silent --show-error --max-time 300 \
+            -X POST "$BASE/api/source-reliability-learning"
+
       - name: Refresh governed self-improvement snapshot
         env:
           ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
