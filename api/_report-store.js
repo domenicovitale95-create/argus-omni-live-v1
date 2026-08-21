@@ -19,7 +19,7 @@ export async function readJson(pathname, fallback = null) {
 
 export async function writeJson(pathname, value) {
   if (!storageReady()) throw new Error('Vercel Blob storage is not linked to this project');
-  return put(pathname, JSON.stringify(value, null, 2), {
+  return put(pathname, JSON.stringify(value), {
     access: ACCESS,
     addRandomSuffix: false,
     allowOverwrite: true,
