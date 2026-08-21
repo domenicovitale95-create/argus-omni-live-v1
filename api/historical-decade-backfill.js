@@ -1,4 +1,4 @@
-import { readJson, writeJson, storageReady } from './_report-store.js';
+import { readJson, writeJson, listJson, storageReady } from './_report-store.js';
 
 const API_BASE='https://v3.football.api-sports.io';
 const TZ='Europe/Brussels';
@@ -18,6 +18,8 @@ function normalize(f){const status=f?.fixture?.status?.short;if(!FINAL.has(statu
 async function fetchDate(date){const key=process.env.API_FOOTBALL_KEY;if(!key)throw new Error('API_FOOTBALL_KEY is not configured');const r=await fetch(`${API_BASE}/fixtures?date=${date}&timezone=${encodeURIComponent(TZ)}`,{headers:{'x-apisports-key':key,Accept:'application/json'}});const q=quota(r.headers);if(!r.ok)throw new Error(`API-Football HTTP ${r.status}`);const j=await r.json();if(j?.errors&&Object.keys(j.errors).length)throw new Error(`API-Football: ${JSON.stringify(j.errors)}`);return{rows:(j.response||[]).map(normalize).filter(Boolean),quota:q}}
 export default async function handler(req,res){
  res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!authorized(req))return res.status(401).json({error:'Unauthorized'});if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
+ const archiveMeta=(await listJson(ARCHIVE,10)).find((b)=>b.pathname===ARCHIVE)||null;
+ console.log('[historical-decade-backfill] archive_meta',JSON.stringify({pathname:archiveMeta?.pathname||ARCHIVE,sizeBytes:Number.isFinite(archiveMeta?.size)?archiveMeta.size:null,uploadedAt:archiveMeta?.uploadedAt||null}));
  const dates=dateList(),archive=await readJson(ARCHIVE,{version:'HISTORICAL-DECADE-ARCHIVE-2',fixtures:{},dates:{}}),state=await readJson(STATE,{complete:false});archive.fixtures||={};archive.dates||={};let processed=0,newFixtures=0,lastQuota=null,errors=[];
  const requested=Math.max(1,Math.min(MAX_BATCH,Number(req.query?.dates)||DEFAULT_BATCH));
  const pending=dates.filter(date=>!archive.dates[date]?.complete);
