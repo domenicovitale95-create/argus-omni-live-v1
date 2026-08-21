@@ -38,5 +38,8 @@ jobs:
       - name: Run deterministic governance and temporal golden fixtures
         run: node scripts/verify-golden-fixtures.mjs
 
+      - name: Verify autopilot transient outage degradation
+        run: node scripts/verify-autopilot-transient-degrade.mjs
+
       - name: Run deployment readiness and rollback gate
         run: node scripts/verify-deployment-readiness.mjs
