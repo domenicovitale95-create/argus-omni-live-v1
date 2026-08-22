@@ -2,7 +2,7 @@ name: TRAINING_READINESS evidence gate regression
 
 on:
   push:
-    branches: [argus-payload-stability-hotfix]
+    branches: [main, argus-payload-stability-hotfix]
     paths:
       - 'api/autopilot-readiness.js'
       - '.github/workflows/training-readiness-regression.yml'
