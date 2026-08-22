@@ -19,17 +19,17 @@ export default async function handler(req,res){
   const [reports,ledgers,shadows]=await Promise.all([readManyJson(reportBlobs),readManyJson(ledgerBlobs),readManyJson(shadowBlobs)]);
 
   let recordedSettled=0,recordedActionable=0,reportSettled=0,shadowSettled=0,shadowPriced=0,shadowPicks=0,clvN=0,clvSum=0,lateFreeze=0,missingFreeze=0,brierSum=0,calN=0,strongSettled=0,strongCandidates=0;
-  const marketKeys=new Set(),leagueKeys=new Set(),buckets={},cohorts={};
+  const marketKeys=new Set(),observedLeagueKeys=new Set(),evidenceLeagueKeys=new Set(),buckets={},cohorts={};
 
-  for(const report of reports)for(const row of report.matches||[]){if(row.competition)leagueKeys.add(row.competition);if(['WIN','LOSS'].includes(row.outcome))reportSettled++}
+  for(const report of reports)for(const row of report.matches||[]){if(row.competition)observedLeagueKeys.add(row.competition);if(['WIN','LOSS'].includes(row.outcome))reportSettled++}
   for(const book of ledgers)for(const row of book.records||[]){
-    if(row.competition)leagueKeys.add(row.competition);
+    if(row.competition)observedLeagueKeys.add(row.competition);
     const settled=['WIN','LOSS'].includes(row.settlement?.status),immutablePrematch=row.integrity?.frozenBeforeKickoff===true&&row.integrity?.evidenceFrozenAtDecisionTime===true;
-    if(settled&&immutablePrematch){recordedSettled++;if(Number(row.recommendedStakePct)>0)recordedActionable++}
+    if(settled&&immutablePrematch){recordedSettled++;if(row.competition)evidenceLeagueKeys.add(row.competition);if(Number(row.recommendedStakePct)>0)recordedActionable++}
   }
 
   for(const book of shadows)for(const f of Object.values(book.fixtures||{})){
-    if(f.competition)leagueKeys.add(f.competition);
+    if(f.competition)observedLeagueKeys.add(f.competition);
     const ko=new Date(f.kickoff||0).getTime(),fr=new Date(f.frozenAt||0).getTime();
     const freezeValid=Boolean(f.frozenAt)&&Number.isFinite(ko)&&Number.isFinite(fr)&&fr<ko;
     if(!f.frozenAt)missingFreeze++;else if(Number.isFinite(ko)&&Number.isFinite(fr)&&fr>=ko)lateFreeze++;
@@ -42,7 +42,7 @@ export default async function handler(req,res){
         const league=String(f.competition||'UNKNOWN_LEAGUE'),market=String(p.key||'UNKNOWN_MARKET'),ck=`${league}::${market}`;
         const c=cohorts[ck]||(cohorts[ck]={league,market,settled:0,strongSettled:0,wins:0,losses:0,calibrationSamples:0});
         c.settled++;if(p.outcome==='WIN')c.wins++;else c.losses++;
-        if(freezeValid&&probValid&&priceValid){strongSettled++;c.strongSettled++}
+        if(freezeValid&&probValid&&priceValid){strongSettled++;c.strongSettled++;if(f.competition)evidenceLeagueKeys.add(f.competition)}
         if(Number.isFinite(Number(p.clv))){clvN++;clvSum+=Number(p.clv)}
         if(probValid){const y=p.outcome==='WIN'?1:0;brierSum+=(pr-y)**2;calN++;c.calibrationSamples++;const b=bucket(pr);if(!buckets[b])buckets[b]={n:0,p:0,y:0};buckets[b].n++;buckets[b].p+=pr;buckets[b].y+=y}
       }
@@ -54,7 +54,7 @@ export default async function handler(req,res){
   const clvCoverage=pct(clvN,shadowSettled),avgCLV=clvN?clvSum/clvN:null,freezeIntegrity=cap(100-lateFreeze*20-missingFreeze*10),brier=calN?brierSum/calN:null;
   let ece=0;if(calN)for(const b of Object.values(buckets)){ece+=(b.n/calN)*Math.abs(b.p/b.n-b.y/b.n)}
   const calibrationEvidence=cap(Math.round(calN/1.2)),calibrationAccuracy=calN?cap(Math.round(100-ece*500)):0,calibrationMaturity=Math.round(calibrationEvidence*.55+calibrationAccuracy*.45),auto=automationEvidence(plan),decisionAudit=decisionIntegrity(plan),integrityScore=Math.min(freezeIntegrity,decisionAudit.score);
-  const components={dataPersistence:100,trackRecord:cap(recordedSettled),shadowLearning:cap(Math.round(shadowSettled/1.2)),marketCoverage:cap(Math.round((marketKeys.size/12)*100)),realPriceCoverage:cap(pct(shadowPriced,shadowPicks)),calibrationMaturity,leagueDiversity:cap(Math.round((leagueKeys.size/12)*100)),clvCoverage:cap(clvCoverage),integrity:integrityScore,automation:auto.score};
+  const components={dataPersistence:100,trackRecord:cap(recordedSettled),shadowLearning:cap(Math.round(shadowSettled/1.2)),marketCoverage:cap(Math.round((marketKeys.size/12)*100)),realPriceCoverage:cap(pct(shadowPriced,shadowPicks)),calibrationMaturity,leagueDiversity:cap(Math.round((evidenceLeagueKeys.size/12)*100)),clvCoverage:cap(clvCoverage),integrity:integrityScore,automation:auto.score};
   const weights={dataPersistence:.08,trackRecord:.14,shadowLearning:.14,marketCoverage:.09,realPriceCoverage:.08,calibrationMaturity:.15,leagueDiversity:.05,clvCoverage:.10,integrity:.10,automation:.07};
   const score=Math.round(Object.entries(weights).reduce((s,[k,w])=>s+components[k]*w,0));
   const status=score>=85&&integrityScore>=95&&calibrationMaturity>=70?'AUTOPILOT READY FOR SUPERVISED USE':score>=70?'ADVANCED TRAINING':score>=50?'TRAINING IN PROGRESS':'EARLY TRAINING';
@@ -65,6 +65,7 @@ export default async function handler(req,res){
   if(recordedSettled<50)rootCause.push('INSUFFICIENT_VALID_RECORDED_SETTLEMENTS');
   if(calN<60)rootCause.push('CALIBRATION_SAMPLE_INSUFFICIENT');
   if(validatedCohorts<3)rootCause.push('LEAGUE_MARKET_COHORT_MEMORY_SPARSE');
+  if(evidenceLeagueKeys.size<3)rootCause.push('EVIDENCE_BACKED_LEAGUE_DIVERSITY_LOW');
   if(components.realPriceCoverage<60)rootCause.push('REAL_PRICE_COVERAGE_LOW');
   if(freezeIntegrity<95)rootCause.push('PREMATCH_FREEZE_INTEGRITY_GAP');
   if(decisionAudit.critical)rootCause.push('DECISION_GOVERNANCE_CONTRADICTION');
@@ -80,10 +81,11 @@ export default async function handler(req,res){
   if(decisionAudit.critical)blockers.push(`Decision governance audit found ${decisionAudit.critical} critical contradiction(s); model promotion must remain frozen`);
   if(decisionAudit.high)blockers.push(`Decision governance audit found ${decisionAudit.high} high-severity inconsistency warning(s)`);
   if(calN<60)blockers.push('Probability calibration still needs more settled forecasts');
+  if(evidenceLeagueKeys.size<3)blockers.push('Evidence-backed league diversity is still too low; observed leagues alone do not count toward readiness');
   if(ece>.08&&calN>=20)blockers.push('Calibration error remains high: predicted probabilities and observed frequencies diverge materially');
   if(marketKeys.size<8)blockers.push('More market families need settled evidence');
   if(validatedCohorts<3)blockers.push('League × market cohort evidence is too sparse for cohort-level trust');
   if(auto.score<60&&!auto.scheduledIdle)blockers.push('Persisted Autopilot decision plan is missing or very stale; verify scheduler execution without disabling autonomy');
 
-  return res.status(200).json({version:'AUTOPILOT-READINESS-8',generatedAt:new Date().toISOString(),score,status,trainingReadiness:{state,strongData:{count:strongSettled,total:shadowSettled,candidatePrematchCount:strongCandidates,coveragePct:pct(strongSettled,shadowSettled)},validSettledCount:recordedSettled,leagueMarketCohortStatus:{total:Object.keys(cohorts).length,validated:validatedCohorts,learning:learningCohorts,sparse:sparseCohorts,top:cohortRows.slice(0,20)},calibrationSampleStatus:{samples:calN,status:calN>=60?'SUFFICIENT_FOR_GATE':calN>=20?'LEARNING':'INSUFFICIENT'},rootCause,trustTransitionRule:'TRAINING_WEAK -> LEARNING -> VALIDATED only from immutable prematch, valid settlement, calibration, cohort and integrity gates; no manual override.'},components,automationEvidence:auto,decisionIntegrity:decisionAudit,evidence:{reports:reports.length,reportSettled,ledgerBooks:ledgers.length,recordedSettled,recordedActionable,shadowBooks:shadows.length,shadowPicks,shadowSettled,shadowPriced,strongSettled,strongCandidates,marketFamilies:marketKeys.size,leagues:leagueKeys.size,cohorts:Object.keys(cohorts).length,validatedCohorts,learningCohorts,sparseCohorts,clvSamples:clvN,clvCoveragePct:clvCoverage,avgCLV:avgCLV==null?null:Number(avgCLV.toFixed(2)),lateFreeze,missingFreeze,calibrationSamples:calN,brier:brier==null?null:Number(brier.toFixed(4)),ecePct:calN?Number((ece*100).toFixed(1)):null},blockers,methodology:'Readiness is evidence-only. The official track record comes from immutable pre-kickoff Prediction Ledger records with valid WIN/LOSS settlement. Strong shadow evidence requires a pre-kickoff freeze, valid probability, real price, and valid WIN/LOSS settlement. Historical replay is never counted as fresh OOS evidence. Cohort diagnostics are observational and do not lower validation thresholds or authorize autonomous wagering.'});
+  return res.status(200).json({version:'AUTOPILOT-READINESS-9',generatedAt:new Date().toISOString(),score,status,trainingReadiness:{state,strongData:{count:strongSettled,total:shadowSettled,candidatePrematchCount:strongCandidates,coveragePct:pct(strongSettled,shadowSettled)},validSettledCount:recordedSettled,leagueMarketCohortStatus:{total:Object.keys(cohorts).length,validated:validatedCohorts,learning:learningCohorts,sparse:sparseCohorts,top:cohortRows.slice(0,20)},calibrationSampleStatus:{samples:calN,status:calN>=60?'SUFFICIENT_FOR_GATE':calN>=20?'LEARNING':'INSUFFICIENT'},rootCause,trustTransitionRule:'TRAINING_WEAK -> LEARNING -> VALIDATED only from immutable prematch, valid settlement, calibration, cohort and integrity gates; no manual override.'},components,automationEvidence:auto,decisionIntegrity:decisionAudit,evidence:{reports:reports.length,reportSettled,ledgerBooks:ledgers.length,recordedSettled,recordedActionable,shadowBooks:shadows.length,shadowPicks,shadowSettled,shadowPriced,strongSettled,strongCandidates,marketFamilies:marketKeys.size,leagues:evidenceLeagueKeys.size,observedLeagues:observedLeagueKeys.size,evidenceBackedLeagues:evidenceLeagueKeys.size,cohorts:Object.keys(cohorts).length,validatedCohorts,learningCohorts,sparseCohorts,clvSamples:clvN,clvCoveragePct:clvCoverage,avgCLV:avgCLV==null?null:Number(avgCLV.toFixed(2)),lateFreeze,missingFreeze,calibrationSamples:calN,brier:brier==null?null:Number(brier.toFixed(4)),ecePct:calN?Number((ece*100).toFixed(1)):null},blockers,methodology:'Readiness is evidence-only. The official track record comes from immutable pre-kickoff Prediction Ledger records with valid WIN/LOSS settlement. League diversity counts only leagues represented by immutable settled ledger evidence or strong settled shadow evidence; observed leagues remain diagnostic only. Strong shadow evidence requires a pre-kickoff freeze, valid probability, real price, and valid WIN/LOSS settlement. Historical replay is never counted as fresh OOS evidence. Cohort diagnostics are observational and do not lower validation thresholds or authorize autonomous wagering.'});
 }
