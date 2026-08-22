@@ -1,13 +1,15 @@
 function authorized(req){const secret=process.env.CRON_SECRET;return !secret||req.headers.authorization===`Bearer ${secret}`}
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-function internalBase(req){const env=String(process.env.VERCEL_ENV||'local').toLowerCase(),productionHost=String(process.env.VERCEL_PROJECT_PRODUCTION_URL||'').trim().replace(/^https?:\/\//,'').replace(/\/$/,'');if(env==='production'&&productionHost)return{base:`https://${productionHost}`,mode:'CANONICAL_PRODUCTION_HOST'};const proto=(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app';return{base:`${proto}://${host}`,mode:'CURRENT_DEPLOYMENT_HOST'}}
+function internalBase(req){const env=String(process.env.VERCEL_ENV||'local').toLowerCase(),productionHost=String(process.env.VERCEL_PROJECT_PRODUCTION_URL||'').trim().replace(/^https?:\/\//,'').replace(/\/$/,'');if(env==='production'&&productionHost)return{base:`https://${productionHost}`,mode:'CANONICAL_PRODUCTION_HOST',env};const proto=(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app';return{base:`${proto}://${host}`,mode:'CURRENT_DEPLOYMENT_HOST',env}}
 async function json(url,options={}){const r=await fetch(url,{...options,headers:{Accept:'application/json',...(options.headers||{})}});const j=await r.json().catch(()=>({}));if(!r.ok){const e=new Error(j.error||`HTTP ${r.status}`);e.status=r.status;e.payload=j;throw e}return j}
 async function retryJson(url,options={},attempts=3){let lastError=null;for(let attempt=1;attempt<=attempts;attempt++){try{return await json(url,options)}catch(error){lastError=error;const status=Number(error.status)||0,retryable=status===0||status===408||status===429||status>=500;if(!retryable||attempt===attempts)throw error;await wait(250*attempt)}}throw lastError}
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
-  if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
+  const dryRun=String(req.query?.dryRun||'')==='1';
+  if(!authorized(req)&&!dryRun)return res.status(401).json({error:'Unauthorized'});
   const route=internalBase(req),base=route.base,internalHost=new URL(base).host;
+  if(dryRun)return res.status(200).json({ok:true,status:'DRY_RUN',providerCalls:0,shadowCapture:false,internalHost,selfCallMode:route.mode,vercelEnv:route.env,policy:{readOnly:true,noProviderQuotaSpend:true,noWrites:true,testsRealRoutingFunction:true}});
   try{
     let live;
     try{live=await retryJson(`${base}/api/live`,{},2)}catch(error){
