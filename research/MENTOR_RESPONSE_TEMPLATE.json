@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "incidentFingerprint": null,
+  "generatedAt": null,
+  "observed": [],
+  "hypotheses": [
+    {
+      "rank": 1,
+      "hypothesis": null,
+      "evidenceFor": [],
+      "evidenceAgainst": [],
+      "falsificationTest": null
+    }
+  ],
+  "redTeam": [],
+  "recommendedAction": null,
+  "whyNow": null,
+  "smallestValidTest": null,
+  "metricToWatch": [],
+  "failureCondition": [],
+  "rollback": null,
+  "decision": "WATCH",
+  "nextBestAction": null,
+  "executionClass": "R_AND_D_ONLY",
+  "constraintsAcknowledged": [
+    "NO_SECRETS",
+    "NO_MAIN_MERGE",
+    "NO_PRODUCTION_PROMOTION",
+    "NO_FROZEN_PREDICTION_REWRITE",
+    "NO_PRIME_CREATION",
+    "NO_STAKING_CHANGE",
+    "NO_REAL_MONEY_WAGERING"
+  ]
+}
