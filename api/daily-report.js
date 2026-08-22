@@ -2,6 +2,7 @@ import { readJson, listJson, readManyJson, storageReady, writeJson } from './_re
 
 const API_BASE='https://v3.football.api-sports.io';
 const TZ='Europe/Brussels';
+const QUOTA_GUARD_PATH='argus/data/api-football-quota-guard.json';
 const FINAL_STATUSES=new Set(['FT','AET','PEN']);
 const VOID_STATUSES=new Set(['CANC','ABD','AWD','WO']);
 
@@ -27,8 +28,8 @@ export default async function handler(req,res){
   if(!storageReady())return res.status(503).json({error:'Prediction archive storage is not configured'});
   const secret=process.env.REPORT_CRON_SECRET;if(secret&&req.headers.authorization!==`Bearer ${secret}`)return res.status(401).json({error:'Unauthorized'});
   const date=String(req.query?.date||dateInBrussels()),existing=await readJson(`argus/reports/${date}.json`,null);if(existing&&req.query?.force!=='1')return res.status(200).json({...existing,idempotent:true});
-  const predictionStore=await readJson(`argus/predictions/${date}.json`,{date,fixtures:{}});let fixtures=[],fixtureSource='ARCHIVE_ONLY',providerError=null;try{fixtures=await fetchFixtures(date);fixtureSource='API_FOOTBALL'}catch(error){providerError=error.message}
+  const predictionStore=await readJson(`argus/predictions/${date}.json`,{date,fixtures:{}}),guard=await readJson(QUOTA_GUARD_PATH,null),providerBlocked=Boolean(guard?.date===date&&guard?.exhausted);let fixtures=[],fixtureSource=providerBlocked?'ARCHIVE_ONLY_QUOTA_GUARD':'ARCHIVE_ONLY',providerError=providerBlocked?'PROVIDER_BLOCKED_BY_QUOTA_GUARD':null;if(!providerBlocked)try{fixtures=await fetchFixtures(date);fixtureSource='API_FOOTBALL'}catch(error){providerError=error.message}
   const byId=new Map(fixtures.map(f=>[String(f.fixture?.id),f])),ids=new Set([...byId.keys(),...Object.keys(predictionStore.fixtures||{})]),rows=[];
   for(const id of ids){const fixture=byId.get(id),stored=predictionStore.fixtures?.[id]||null,prediction=pickSnapshot(stored),result=fixture?outcomeFromFixture(fixture):resultFromStored(stored),settlement=settle(prediction,result);rows.push({fixtureId:Number(id),competition:fixture?.league?.name||stored?.competition||null,country:fixture?.league?.country||stored?.country||null,home:fixture?.teams?.home?.name||stored?.home||null,away:fixture?.teams?.away?.name||stored?.away||null,kickoff:fixture?.fixture?.date||stored?.kickoff||null,finalStatus:fixture?.fixture?.status?.short||null,finalScore:result.state==='FINAL'?{home:result.home,away:result.away}:null,prediction,snapshotCount:stored?.snapshots?.length||0,outcome:settlement.outcome,pl:settlement.pl})}
-  rows.sort((a,b)=>new Date(a.kickoff||0)-new Date(b.kickoff||0));const report={date,timezone:TZ,generatedAt:new Date().toISOString(),fixtureSource,providerError,integrity:'NO HINDSIGHT — report evaluates snapshots stored before settlement.',methodology:'Final pre-match snapshot is evaluated first; if absent, latest live snapshot is used. If provider data is unavailable, unresolved outcomes remain PENDING.',summary:buildSummary(rows),matches:rows};await writeJson(`argus/reports/${date}.json`,report);return res.status(200).json(report)
+  rows.sort((a,b)=>new Date(a.kickoff||0)-new Date(b.kickoff||0));const report={date,timezone:TZ,generatedAt:new Date().toISOString(),fixtureSource,providerBlocked,providerError,integrity:'NO HINDSIGHT — report evaluates snapshots stored before settlement.',methodology:'Final pre-match snapshot is evaluated first; if absent, latest live snapshot is used. If provider data is unavailable or quota-guarded, unresolved outcomes remain PENDING.',summary:buildSummary(rows),matches:rows};await writeJson(`argus/reports/${date}.json`,report);return res.status(200).json(report)
 }
