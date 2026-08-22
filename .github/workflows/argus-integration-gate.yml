@@ -5,6 +5,7 @@ on:
     branches:
       - argus-autonomous-learning-loop
       - 'argus-autonomous-learning-loop-*'
+      - argus-match-universe-learning
       - 'autopilot/**'
       - 'fix/**'
   pull_request:
@@ -37,6 +38,9 @@ jobs:
 
       - name: Run deterministic governance and temporal golden fixtures
         run: node scripts/verify-golden-fixtures.mjs
+
+      - name: Verify Match-Universe scheduler safety boundaries
+        run: node scripts/verify-match-universe.mjs
 
       - name: Verify autopilot transient outage degradation
         run: node scripts/verify-autopilot-transient-degrade.mjs
