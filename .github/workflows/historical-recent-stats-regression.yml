@@ -1,0 +1,43 @@
+name: Historical Recent Stats Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/historical-recent-stats-enrichment.js'
+      - 'api/streak-intelligence.js'
+      - 'vercel.json'
+      - '.github/workflows/historical-recent-stats-regression.yml'
+  pull_request:
+    paths:
+      - 'api/historical-recent-stats-enrichment.js'
+      - 'api/streak-intelligence.js'
+      - 'vercel.json'
+      - '.github/workflows/historical-recent-stats-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  recent-stats-shards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify recent stats are sharded and quota-aware
+        run: |
+          grep -Fq "FIXTURE_PREFIX='argus/research/historical-recent/'" api/historical-recent-stats-enrichment.js
+          grep -Fq "STATS_PREFIX='argus/research/historical-recent-stats/'" api/historical-recent-stats-enrichment.js
+          grep -Fq "guard?.date===today&&guard?.exhausted" api/historical-recent-stats-enrichment.js
+          grep -Fq "status:'PAUSED_QUOTA_GUARD'" api/historical-recent-stats-enrichment.js
+          grep -Fq "status:'DRY_RUN'" api/historical-recent-stats-enrichment.js
+          grep -Fq "noLegacyRewrite:true" api/historical-recent-stats-enrichment.js
+      - name: Verify streak consumes observed recent stats only
+        run: |
+          grep -Fq "RECENT_STATS_PREFIX='argus/research/historical-recent-stats/'" api/streak-intelligence.js
+          grep -Fq "recentStatsById" api/streak-intelligence.js
+          grep -Fq "statsMayUseLegacyOrRecentShards:true" api/streak-intelligence.js
+          grep -Fq "missingStatsSuppressTrend:true" api/streak-intelligence.js
+      - name: Verify recent stats cron replaces memory-blocked legacy enrichment
+        run: |
+          grep -Fq '"path": "/api/historical-recent-stats-enrichment?fixtures=4", "schedule": "35 1 * * *"' vercel.json
+          ! grep -Fq '"path": "/api/historical-stats-enrichment?fixtures=4"' vercel.json
