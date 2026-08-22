@@ -1,0 +1,35 @@
+name: Site Self-Test Semantic Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/site-self-test.js'
+      - 'api/trend-integrity-audit.js'
+      - 'api/decision-integrity-audit.js'
+      - '.github/workflows/site-self-test-semantic-regression.yml'
+  pull_request:
+    paths:
+      - 'api/site-self-test.js'
+      - 'api/trend-integrity-audit.js'
+      - 'api/decision-integrity-audit.js'
+      - '.github/workflows/site-self-test-semantic-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  semantic-health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify no-data cannot become healthy
+        run: |
+          grep -Fq "SEMANTIC_WAITING=new Set(['NO_DATA','WAITING_FOR_TRENDS'])" api/site-self-test.js
+          grep -Fq "semanticWaiting=SEMANTIC_AUDITS.has(path)" api/site-self-test.js
+          grep -Fq "status:failures.length?'DEGRADED':waiting.length?'WAITING_FOR_EVIDENCE'" api/site-self-test.js
+          grep -Fq "semanticNoDataIsNotHealthy:true" api/site-self-test.js
+      - name: Preserve true semantic failures
+        run: |
+          grep -Fq "body.status==='FAIL'" api/site-self-test.js
+          grep -Fq "failures=checks.filter(x=>!x.ok&&x.semanticState!=='WAITING')" api/site-self-test.js
