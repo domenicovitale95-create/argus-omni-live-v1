@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0",
+  "mode": "DORMANT_RESEARCH_ONLY",
+  "generatedAt": null,
+  "cycleId": null,
+  "observed": {
+    "health": null,
+    "deploymentParity": null,
+    "runtimeErrors": [],
+    "resourcePressure": null,
+    "cronHealth": null,
+    "storageHealth": null,
+    "quota": null,
+    "freshnessProvenance": null,
+    "temporalIntegrity": null,
+    "ledgerIntegrity": null,
+    "settlementHealth": null,
+    "calibration": null,
+    "clv": null,
+    "drift": null,
+    "learningHealth": null
+  },
+  "evidenceDelta": [],
+  "unresolvedFailures": [],
+  "recentChanges": [],
+  "rankedHypotheses": [],
+  "highestValueQuestion": null,
+  "constraints": [
+    "NO_SECRETS",
+    "NO_MAIN_MERGE",
+    "NO_PRODUCTION_PROMOTION",
+    "NO_FROZEN_PREDICTION_REWRITE",
+    "NO_PRIME_CREATION",
+    "NO_STAKING_CHANGE",
+    "NO_REAL_MONEY_WAGERING"
+  ],
+  "requestedResponse": [
+    "OBSERVED",
+    "HYPOTHESES",
+    "RED_TEAM",
+    "RECOMMENDED_ACTION",
+    "WHY_NOW",
+    "SMALLEST_VALID_TEST",
+    "METRIC_TO_WATCH",
+    "FAILURE_CONDITION",
+    "ROLLBACK",
+    "KEEP_WATCH_REJECT",
+    "NEXT_BEST_ACTION"
+  ]
+}
