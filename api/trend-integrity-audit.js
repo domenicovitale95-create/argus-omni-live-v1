@@ -8,10 +8,10 @@ export default async function handler(req,res){
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
   const report=await readJson(IN,null);
-  if(!report)return res.status(200).json({version:'TREND-INTEGRITY-AUDIT-2',status:'WAITING_FOR_TRENDS',violations:[]});
-  const yesterday=addDays(dateTZ(),-1),violations=[];
+  if(!report)return res.status(200).json({version:'TREND-INTEGRITY-AUDIT-3',status:'WAITING_FOR_TRENDS',checked:0,violations:[],evidenceState:'NO_REPORT'});
+  const yesterday=addDays(dateTZ(),-1),violations=[],trends=Array.isArray(report.trends)?report.trends:[];
   if(report.requiredContinuityThrough!==yesterday)violations.push({id:'REPORT',type:'CONTINUITY_NOT_THROUGH_YESTERDAY',expected:yesterday,value:report.requiredContinuityThrough||null});
-  for(const t of report.trends||[]){
+  for(const t of trends){
     const id=`${t.team||t.teamId}|${t.condition||t.label}`;
     if(Number(t.recentSample)!==10)violations.push({id,type:'WINDOW_NOT_10',value:t.recentSample});
     if(Number(t.dataCoveragePct)!==100)violations.push({id,type:'COVERAGE_NOT_100',value:t.dataCoveragePct});
@@ -28,5 +28,6 @@ export default async function handler(req,res){
   if(policy.noGapFilling!==true)violations.push({id:'POLICY',type:'GAP_FILLING_NOT_BLOCKED'});
   if(policy.missingStatsSuppressTrend!==true)violations.push({id:'POLICY',type:'MISSING_STATS_NOT_SUPPRESSED'});
   if(policy.calendarContinuityRequiredThroughYesterday!==true)violations.push({id:'POLICY',type:'YESTERDAY_CONTINUITY_POLICY_DISABLED'});
-  return res.status(200).json({version:'TREND-INTEGRITY-AUDIT-2',generatedAt:new Date().toISOString(),sourceVersion:report.version||null,expectedContinuityThrough:yesterday,status:violations.length?'FAIL':'PASS',checked:(report.trends||[]).length,violations:violations.slice(0,200),policy:{requireExactly10:true,requireCoverage100:true,requireCalendarContinuity:true,requireContinuityThroughYesterday:true,requireNoGapFilling:true}})
+  const checked=trends.length,status=violations.length?'FAIL':checked>0?'PASS':'NO_DATA',evidenceState=checked>0?'OBSERVED_TRENDS':'ZERO_TRENDS';
+  return res.status(200).json({version:'TREND-INTEGRITY-AUDIT-3',generatedAt:new Date().toISOString(),sourceVersion:report.version||null,expectedContinuityThrough:yesterday,status,evidenceState,checked,violations:violations.slice(0,200),policy:{requireExactly10:true,requireCoverage100:true,requireCalendarContinuity:true,requireContinuityThroughYesterday:true,requireNoGapFilling:true,passRequiresCheckedData:true,zeroDataIsNotPass:true}})
 }
