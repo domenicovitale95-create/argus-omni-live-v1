@@ -1,0 +1,61 @@
+name: TRAINING_READINESS evidence gate regression
+
+on:
+  push:
+    branches: [argus-payload-stability-hotfix]
+    paths:
+      - 'api/autopilot-readiness.js'
+      - '.github/workflows/training-readiness-regression.yml'
+  pull_request:
+    paths:
+      - 'api/autopilot-readiness.js'
+      - '.github/workflows/training-readiness-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assert immutable evidence-only trust gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          f='api/autopilot-readiness.js'
+          test -f "$f"
+
+          # VALIDATED must remain gated by real settled/OOS evidence, calibration,
+          # cohort sufficiency, and integrity. These are minimum floors, not targets
+          # that may be lowered to improve dashboard appearance.
+          grep -Fq "recordedSettled>=50" "$f"
+          grep -Fq "shadowSettled>=100" "$f"
+          grep -Fq "calN>=60" "$f"
+          grep -Fq "strongSettled>=60" "$f"
+          grep -Fq "validatedCohorts>=3" "$f"
+          grep -Fq "integrityScore>=95" "$f"
+
+          # LEARNING cannot begin from labels alone; it needs observed evidence.
+          grep -Fq "shadowSettled>=20||calN>=20||strongSettled>=20" "$f"
+          grep -Fq "return'TRAINING_WEAK'" "$f"
+
+          # Strong evidence must be temporally valid prematch evidence with a
+          # probability and a real price, then a valid WIN/LOSS settlement.
+          grep -Fq "fr<ko" "$f"
+          grep -Fq "freezeValid&&probValid&&priceValid" "$f"
+          grep -Fq "['WIN','LOSS'].includes(p.outcome)" "$f"
+
+          # Historical replay must remain explicitly excluded from fresh OOS trust.
+          grep -Fq "Historical replay is never counted as fresh OOS evidence" "$f"
+          grep -Fq "no manual override" "$f"
+
+          # TRAINING_READINESS must expose the requested scientific diagnostics.
+          grep -Fq "strongData:{count:strongSettled,total:shadowSettled" "$f"
+          grep -Fq "validSettledCount:recordedSettled" "$f"
+          grep -Fq "leagueMarketCohortStatus" "$f"
+          grep -Fq "calibrationSampleStatus" "$f"
+          grep -Fq "rootCause" "$f"
+
+          echo 'PASS: evidence-only TRAINING_READINESS gates are intact.'
