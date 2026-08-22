@@ -2,7 +2,7 @@ name: Tracking Health Regression
 
 on:
   push:
-    branches: [argus-payload-stability-hotfix]
+    branches: [main, argus-payload-stability-hotfix]
     paths:
       - 'api/tracking-health.js'
       - '.github/workflows/tracking-health-regression.yml'
