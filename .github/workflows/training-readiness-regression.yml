@@ -56,6 +56,16 @@ jobs:
           grep -Fq "['WIN','LOSS'].includes(p.outcome)" "$f"
           grep -Fq "SHADOW_EVIDENCE_PIPELINE_EMPTY" "$f"
 
+          # League diversity must be evidence-backed. Merely observing a league in a
+          # report cannot improve readiness without immutable/strong settled evidence.
+          grep -Fq "observedLeagueKeys=new Set(),evidenceLeagueKeys=new Set()" "$f"
+          grep -Fq "if(row.competition)evidenceLeagueKeys.add(row.competition)" "$f"
+          grep -Fq "if(f.competition)evidenceLeagueKeys.add(f.competition)" "$f"
+          grep -Fq "leagueDiversity:cap(Math.round((evidenceLeagueKeys.size/12)*100))" "$f"
+          grep -Fq "observedLeagues:observedLeagueKeys.size" "$f"
+          grep -Fq "evidenceBackedLeagues:evidenceLeagueKeys.size" "$f"
+          grep -Fq "EVIDENCE_BACKED_LEAGUE_DIVERSITY_LOW" "$f"
+
           # Historical replay must remain explicitly excluded from fresh OOS trust.
           grep -Fq "Historical replay is never counted as fresh OOS evidence" "$f"
           grep -Fq "no manual override" "$f"
