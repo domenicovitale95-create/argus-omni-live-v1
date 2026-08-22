@@ -12,7 +12,7 @@
     { "path": "/api/shadow-cron", "schedule": "7 * * * *" },
     { "path": "/api/deployment-verifier", "schedule": "12,27,42,57 * * * *" },
     { "path": "/api/site-self-test", "schedule": "17 * * * *" },
-    { "path": "/api/historical-decade-backfill?dates=6", "schedule": "5 1 * * *" },
+    { "path": "/api/historical-recent-backfill?dates=6", "schedule": "15 0 * * *" },
     { "path": "/api/historical-market-outcomes", "schedule": "20 1 * * *" },
     { "path": "/api/historical-stats-enrichment?fixtures=4", "schedule": "35 1 * * *" },
     { "path": "/api/streak-intelligence", "schedule": "50 1 * * *" },
