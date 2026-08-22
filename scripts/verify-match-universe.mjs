@@ -12,7 +12,7 @@ if(!fs.existsSync(target)){
 }
 const source=fs.readFileSync(target,'utf8');
 
-requireMatch(/version:\s*['"]MATCH-UNIVERSE-SCHEDULER-1['"]/, 'scheduler version contract missing');
+requireMatch(/version:\s*['"]MATCH-UNIVERSE-SCHEDULER-2['"]/, 'scheduler version contract missing');
 requireMatch(/providerCalls:\s*0\b/, 'scheduler must declare zero provider calls');
 requireMatch(/readOnly:\s*true\b/, 'scheduler must remain read-only');
 requireMatch(/liveIsSensorNotBrain:\s*true\b/, 'LIVE sensor doctrine missing');
@@ -27,6 +27,8 @@ requireMatch(/mayChangeVerdict:\s*false\b/, 'scheduler must not mutate verdicts'
 requireMatch(/mayChangeStake:\s*false\b/, 'scheduler must not mutate stakes');
 requireMatch(/mayPromote:\s*false\b/, 'scheduler must not promote models or policies');
 requireMatch(/HALT:70,EXHAUSTED:70,EMERGENCY:60,SAFE:45,CONSERVE:25/, 'quota pressure must penalize LIVE value-of-information');
+requireMatch(/argus\/autopilot\/quota-efficiency\.json/, 'quota-efficiency snapshot reuse missing');
+requireMatch(/quotaEfficiencySnapshot:\s*true\b/, 'quota-efficiency reuse contract missing');
 requireMatch(/PAUSED_MEMORY_GUARD/, 'historical memory-guard branch missing');
 requireMatch(/INSUFFICIENT_HISTORY/, 'historical insufficient-evidence branch missing');
 
@@ -38,5 +40,6 @@ console.log('ARGUS Match-Universe scheduler verification');
 if(failures.length){for(const f of failures)console.error(`FAIL ${f}`);process.exit(1)}
 console.log('OK  four populations present');
 console.log('OK  LIVE is resource-penalized under quota pressure');
+console.log('OK  quota-efficiency intelligence is reused without provider calls');
 console.log('OK  provider-free, read-only and no-promotion boundaries preserved');
 console.log('OK  historical memory/evidence fail-safe branches preserved');
