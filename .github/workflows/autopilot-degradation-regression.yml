@@ -2,8 +2,7 @@ name: Autopilot Degradation Regression
 
 on:
   push:
-    branches:
-      - argus-payload-stability-hotfix
+    branches: [main, argus-payload-stability-hotfix]
     paths:
       - 'api/autopilot.js'
       - '.github/workflows/autopilot-degradation-regression.yml'
@@ -38,4 +37,3 @@ jobs:
           grep -Fq "path==='/api/decision-robustness'" api/autopilot.js
           grep -Fq "path==='/api/portfolio-risk'" api/autopilot.js
           grep -Fq 'const projected=projectBody(path,body)' api/autopilot.js
-
