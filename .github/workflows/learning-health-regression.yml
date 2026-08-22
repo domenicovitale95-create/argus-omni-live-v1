@@ -1,0 +1,38 @@
+name: Learning Health Regression
+
+on:
+  push:
+    branches: [argus-payload-stability-hotfix]
+    paths:
+      - 'api/learning-health.js'
+      - '.github/workflows/learning-health-regression.yml'
+  pull_request:
+    paths:
+      - 'api/learning-health.js'
+      - '.github/workflows/learning-health-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  immutable-learning-health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify immutable ledger is the learning source of truth
+        run: |
+          grep -Fq "listJson('argus/ledger/',400)" api/learning-health.js
+          grep -Fq "r?.integrity?.frozenBeforeKickoff===true" api/learning-health.js
+          grep -Fq "r?.integrity?.evidenceFrozenAtDecisionTime===true" api/learning-health.js
+          grep -Fq "sourceOfTruth:'IMMUTABLE_PREDICTION_LEDGER'" api/learning-health.js
+          grep -Fq "dailyReportsDiagnosticOnly:true" api/learning-health.js
+      - name: Verify economic and predictive samples stay separated
+        run: |
+          grep -Fq "actionableSettled" api/learning-health.js
+          grep -Fq "Number(r.recommendedStakePct)>0" api/learning-health.js
+          grep -Fq "immutablePredicted:predicted" api/learning-health.js
+      - name: Verify small samples cannot inflate health via coverage alone
+        run: |
+          grep -Fq "predictedWeight=Math.min(1,predicted/20)" api/learning-health.js
+          grep -Fq "settledWeight=Math.min(1,settled/20)" api/learning-health.js
+          grep -Fq "coverageContributionsSampleWeighted:true" api/learning-health.js
