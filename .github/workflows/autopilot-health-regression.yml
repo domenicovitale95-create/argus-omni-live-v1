@@ -1,0 +1,31 @@
+name: Autopilot Health Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/autopilot-health.js'
+      - '.github/workflows/autopilot-health-regression.yml'
+  pull_request:
+    paths:
+      - 'api/autopilot-health.js'
+      - '.github/workflows/autopilot-health-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  zero-quota-health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify intentional zero-quota pause is not stale failure
+        run: |
+          grep -Fq "QUOTA_GUARD_PATH='argus/data/api-football-quota-guard.json'" api/autopilot-health.js
+          grep -Fq "guard?.date===brusselsDate()&&guard?.exhausted&&guard?.temporary" api/autopilot-health.js
+          grep -Fq "if(zeroQuota)status='PAUSED_ZERO_QUOTA'" api/autopilot-health.js
+          grep -Fq "intentionalZeroQuotaPauseIsNotFailure:true" api/autopilot-health.js
+      - name: Verify health remains provider-free and read-only
+        run: |
+          grep -Fq "providerCalls:false" api/autopilot-health.js
+          grep -Fq "persistentWrites:false" api/autopilot-health.js
