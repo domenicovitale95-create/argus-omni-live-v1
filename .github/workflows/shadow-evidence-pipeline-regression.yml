@@ -1,0 +1,39 @@
+name: Shadow Evidence Pipeline Regression
+
+on:
+  push:
+    branches:
+      - argus-payload-stability-hotfix
+    paths:
+      - 'api/shadow-cron.js'
+      - 'api/shadow-mode.js'
+      - 'api/autopilot-readiness.js'
+      - '.github/workflows/shadow-evidence-pipeline-regression.yml'
+  pull_request:
+    paths:
+      - 'api/shadow-cron.js'
+      - 'api/shadow-mode.js'
+      - 'api/autopilot-readiness.js'
+      - '.github/workflows/shadow-evidence-pipeline-regression.yml'
+
+jobs:
+  shadow-evidence-pipeline-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify production self-calls use canonical host
+        run: |
+          grep -Fq "VERCEL_PROJECT_PRODUCTION_URL" api/shadow-cron.js
+          grep -Fq "env==='production'&&productionHost" api/shadow-cron.js
+          grep -Fq "CANONICAL_PRODUCTION_HOST" api/shadow-cron.js
+          grep -Fq "CURRENT_DEPLOYMENT_HOST" api/shadow-cron.js
+      - name: Verify shadow capture remains immutable and pre-kickoff
+        run: |
+          grep -Fq "argus/shadow/" api/shadow-mode.js
+          grep -Fq "now>=kickoff" api/shadow-mode.js
+          grep -Fq "IMMUTABLE FIRST FREEZE" api/shadow-mode.js
+      - name: Verify readiness consumes persisted shadow evidence
+        run: |
+          grep -Fq "listJson('argus/shadow/',180)" api/autopilot-readiness.js
+          grep -Fq "freezeValid" api/autopilot-readiness.js
+          grep -Fq "strongSettled" api/autopilot-readiness.js
