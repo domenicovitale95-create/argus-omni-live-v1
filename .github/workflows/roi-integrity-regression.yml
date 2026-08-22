@@ -31,6 +31,12 @@ jobs:
           grep -Fq "pl:isActionable&&o&&o>1?" api/prediction-ledger.js
           grep -Fq "actionableSettled=settled.filter(actionable)" api/prediction-ledger.js
           grep -Fq "roiExcludesZeroStakePredictions:true" api/prediction-ledger.js
+      - name: Verify provider fallback obeys persistent quota guard
+        run: |
+          grep -Fq "QUOTA_GUARD_PATH='argus/data/api-football-quota-guard.json'" api/prediction-ledger.js
+          grep -Fq "guard?.date===brusselsDate()&&guard?.exhausted" api/prediction-ledger.js
+          grep -Fq "PROVIDER_BLOCKED_BY_QUOTA_GUARD" api/prediction-ledger.js
+          grep -Fq "providerFallbackHonorsQuotaGuard:true" api/prediction-ledger.js
       - name: Verify learning separates calibration from economic ROI
         run: |
           grep -Fq "actionableSettled=settled.filter(actionable)" api/ledger-learning.js
