@@ -9,6 +9,8 @@ on:
       - 'api/provider-status.js'
       - 'api/_report-store.js'
       - 'api/prediction-ledger.js'
+      - 'api/daily-report.js'
+      - 'api/shadow-mode.js'
       - 'api/daily-cron.js'
       - 'vercel.json'
       - '.github/workflows/quota-guard-regression.yml'
@@ -18,6 +20,8 @@ on:
       - 'api/provider-status.js'
       - 'api/_report-store.js'
       - 'api/prediction-ledger.js'
+      - 'api/daily-report.js'
+      - 'api/shadow-mode.js'
       - 'api/daily-cron.js'
       - 'vercel.json'
       - '.github/workflows/quota-guard-regression.yml'
@@ -42,10 +46,14 @@ jobs:
           grep -Fq "pathname !== QUOTA_GUARD_PATH" api/_report-store.js
           grep -Fq "brusselsDate() !== TEMP_ZERO_QUOTA_DATE" api/_report-store.js
           grep -Fq "expiresAutomaticallyAt: '2026-08-23T00:00:00+02:00'" api/_report-store.js
-      - name: Verify settlement paths obey quota guard
+      - name: Verify every settlement/report path obeys quota guard
         run: |
           grep -Fq "PROVIDER_BLOCKED_BY_QUOTA_GUARD" api/prediction-ledger.js
           grep -Fq "providerFallbackHonorsQuotaGuard:true" api/prediction-ledger.js
+          grep -Fq "providerBlocked=Boolean(guard?.date===date&&guard?.exhausted)" api/daily-report.js
+          grep -Fq "ARCHIVE_ONLY_QUOTA_GUARD" api/daily-report.js
+          grep -Fq "providerCallSkipped:true" api/shadow-mode.js
+          grep -Fq "PROVIDER_BLOCKED_BY_QUOTA_GUARD" api/shadow-mode.js
           grep -Fq "providerBlocked=Boolean(guard?.date===date&&guard?.exhausted)" api/daily-cron.js
           grep -Fq "automaticResumeOnNewBrusselsDate:true" api/daily-cron.js
       - name: Verify provider watchdog and safe autopilot cadence
