@@ -14,7 +14,7 @@
     { "path": "/api/site-self-test", "schedule": "17 * * * *" },
     { "path": "/api/historical-recent-backfill?dates=6", "schedule": "15 1 * * *" },
     { "path": "/api/historical-market-outcomes", "schedule": "20 1 * * *" },
-    { "path": "/api/historical-stats-enrichment?fixtures=4", "schedule": "35 1 * * *" },
+    { "path": "/api/historical-recent-stats-enrichment?fixtures=4", "schedule": "35 1 * * *" },
     { "path": "/api/streak-intelligence", "schedule": "50 1 * * *" },
     { "path": "/api/historical-walk-forward", "schedule": "5 2 * * *" },
     { "path": "/api/historical-candidate-gate", "schedule": "20 2 * * *" },
