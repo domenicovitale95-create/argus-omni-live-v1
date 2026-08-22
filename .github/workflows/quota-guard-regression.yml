@@ -4,10 +4,21 @@ on:
   push:
     branches:
       - argus-payload-stability-hotfix
+    paths:
+      - 'api/live.js'
+      - 'api/provider-status.js'
+      - 'api/_report-store.js'
+      - 'api/prediction-ledger.js'
+      - 'api/daily-cron.js'
+      - 'vercel.json'
+      - '.github/workflows/quota-guard-regression.yml'
   pull_request:
     paths:
       - 'api/live.js'
       - 'api/provider-status.js'
+      - 'api/_report-store.js'
+      - 'api/prediction-ledger.js'
+      - 'api/daily-cron.js'
       - 'vercel.json'
       - '.github/workflows/quota-guard-regression.yml'
 
@@ -25,6 +36,18 @@ jobs:
         run: |
           grep -Eq "MIN_DAILY_RESERVE = 1[5-9][0-9]{2}|MIN_DAILY_RESERVE = [2-9][0-9]{3}" api/live.js
           grep -q "SECONDARY_CALL_BUDGET_PER_BUILD" api/live.js
+      - name: Verify temporary zero-quota window is narrow and self-expiring
+        run: |
+          grep -Fq "TEMP_ZERO_QUOTA_DATE = '2026-08-22'" api/_report-store.js
+          grep -Fq "pathname !== QUOTA_GUARD_PATH" api/_report-store.js
+          grep -Fq "brusselsDate() !== TEMP_ZERO_QUOTA_DATE" api/_report-store.js
+          grep -Fq "expiresAutomaticallyAt: '2026-08-23T00:00:00+02:00'" api/_report-store.js
+      - name: Verify settlement paths obey quota guard
+        run: |
+          grep -Fq "PROVIDER_BLOCKED_BY_QUOTA_GUARD" api/prediction-ledger.js
+          grep -Fq "providerFallbackHonorsQuotaGuard:true" api/prediction-ledger.js
+          grep -Fq "providerBlocked=Boolean(guard?.date===date&&guard?.exhausted)" api/daily-cron.js
+          grep -Fq "automaticResumeOnNewBrusselsDate:true" api/daily-cron.js
       - name: Verify provider watchdog and safe autopilot cadence
         run: |
           test -f api/provider-status.js
