@@ -1,6 +1,31 @@
 import { get, list, put } from '@vercel/blob';
 
 const ACCESS = 'private';
+const QUOTA_GUARD_PATH = 'argus/data/api-football-quota-guard.json';
+const TEMP_ZERO_QUOTA_DATE = '2026-08-22';
+
+function brusselsDate() {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Brussels', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date()).map((x) => [x.type, x.value]));
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
+
+// Operator-requested temporary safety window. It is active only on 2026-08-22
+// in Europe/Brussels and therefore self-expires automatically at local midnight.
+// Only reads of the provider quota guard are overridden; all other Blob reads are unchanged.
+function temporaryQuotaGuard(pathname) {
+  if (pathname !== QUOTA_GUARD_PATH || brusselsDate() !== TEMP_ZERO_QUOTA_DATE) return null;
+  return {
+    date: TEMP_ZERO_QUOTA_DATE,
+    exhausted: true,
+    dailyRemaining: 0,
+    providerError: 'TEMPORARY_ZERO_QUOTA_WINDOW',
+    observedAt: new Date().toISOString(),
+    temporary: true,
+    expiresAutomaticallyAt: '2026-08-23T00:00:00+02:00'
+  };
+}
 
 // New Vercel Blob stores use OIDC/system credentials rather than a
 // long-lived BLOB_READ_WRITE_TOKEN. BLOB_STORE_ID is injected when the
@@ -10,6 +35,8 @@ export function storageReady() {
 }
 
 export async function readJson(pathname, fallback = null) {
+  const forced = temporaryQuotaGuard(pathname);
+  if (forced) return forced;
   if (!storageReady()) return fallback;
   const result = await get(pathname, { access: ACCESS });
   if (!result || result.statusCode !== 200 || !result.stream) return fallback;
