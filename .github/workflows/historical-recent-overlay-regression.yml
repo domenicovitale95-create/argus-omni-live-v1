@@ -33,6 +33,12 @@ jobs:
           grep -Fq "providerCalls:0" api/historical-recent-backfill.js
           grep -Fq "status:'DRY_RUN'" api/historical-recent-backfill.js
           grep -Fq "noLegacyRewrite:true" api/historical-recent-backfill.js
+      - name: Verify incomplete dates are deferred rather than certified
+        run: |
+          grep -Fq "ACTIVE_OR_SCHEDULED" api/historical-recent-backfill.js
+          grep -Fq "settlementReady:active.length===0" api/historical-recent-backfill.js
+          grep -Fq "DEFERRED_UNSETTLED" api/historical-recent-backfill.js
+          grep -Fq "activeOrScheduledDatesDeferred:true" api/historical-recent-backfill.js
       - name: Verify streak continuity can use only certified sources
         run: |
           grep -Fq "archive?.dates?.[date]?.complete||recentIndex?.dates?.[date]?.complete" api/streak-intelligence.js
@@ -42,5 +48,5 @@ jobs:
           grep -Fq "continuityMayUseLegacyOrCertifiedRecentOverlay:true" api/streak-intelligence.js
       - name: Verify cron no longer targets oversized legacy monolith
         run: |
-          grep -Fq '"path": "/api/historical-recent-backfill?dates=6", "schedule": "15 0 * * *"' vercel.json
+          grep -Fq '"path": "/api/historical-recent-backfill?dates=6", "schedule": "15 1 * * *"' vercel.json
           ! grep -Fq '"path": "/api/historical-decade-backfill?dates=6"' vercel.json
