@@ -1,0 +1,38 @@
+name: Trend Integrity Regression
+
+on:
+  push:
+    branches: [argus-payload-stability-hotfix]
+    paths:
+      - 'api/trend-integrity-audit.js'
+      - '.github/workflows/trend-integrity-regression.yml'
+  pull_request:
+    paths:
+      - 'api/trend-integrity-audit.js'
+      - '.github/workflows/trend-integrity-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  trend-integrity-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify PASS requires observed trend evidence
+        run: |
+          grep -Fq "status=violations.length?'FAIL':checked>0?'PASS':'NO_DATA'" api/trend-integrity-audit.js
+          grep -Fq "evidenceState=checked>0?'OBSERVED_TRENDS':'ZERO_TRENDS'" api/trend-integrity-audit.js
+          grep -Fq "passRequiresCheckedData:true" api/trend-integrity-audit.js
+          grep -Fq "zeroDataIsNotPass:true" api/trend-integrity-audit.js
+      - name: Verify missing report is explicitly waiting, never passing
+        run: |
+          grep -Fq "status:'WAITING_FOR_TRENDS'" api/trend-integrity-audit.js
+          grep -Fq "checked:0" api/trend-integrity-audit.js
+          grep -Fq "evidenceState:'NO_REPORT'" api/trend-integrity-audit.js
+      - name: Preserve strict trend integrity requirements
+        run: |
+          grep -Fq "WINDOW_NOT_10" api/trend-integrity-audit.js
+          grep -Fq "COVERAGE_NOT_100" api/trend-integrity-audit.js
+          grep -Fq "CALENDAR_CONTINUITY_UNVERIFIED" api/trend-integrity-audit.js
+          grep -Fq "GAP_FILLING_NOT_BLOCKED" api/trend-integrity-audit.js
