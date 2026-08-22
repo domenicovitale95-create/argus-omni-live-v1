@@ -1,0 +1,41 @@
+name: Autopilot Degradation Regression
+
+on:
+  push:
+    branches:
+      - argus-payload-stability-hotfix
+    paths:
+      - 'api/autopilot.js'
+      - '.github/workflows/autopilot-degradation-regression.yml'
+  pull_request:
+    paths:
+      - 'api/autopilot.js'
+      - '.github/workflows/autopilot-degradation-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  autopilot-degradation-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify upstream status is preserved
+        run: |
+          grep -Fq 'error.status=r.status' api/autopilot.js
+      - name: Verify quota/provider unavailability does not become Autopilot 500
+        run: |
+          grep -Fq "[429,503].includes(Number(error?.status))" api/autopilot.js
+          grep -Fq "reason:'LIVE_TEMPORARILY_UNAVAILABLE'" api/autopilot.js
+          grep -Fq 'retryable:true' api/autopilot.js
+      - name: Verify preview cannot self-route through production
+        run: |
+          grep -Fq "isProduction=vercelEnv==='production'" api/autopilot.js
+          grep -Fq 'base=isProduction&&productionHost' api/autopilot.js
+      - name: Verify large internal payloads remain compacted
+        run: |
+          grep -Fq "path==='/api/bet-eligibility'" api/autopilot.js
+          grep -Fq "path==='/api/decision-robustness'" api/autopilot.js
+          grep -Fq "path==='/api/portfolio-risk'" api/autopilot.js
+          grep -Fq 'const projected=projectBody(path,body)' api/autopilot.js
+
