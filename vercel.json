@@ -19,6 +19,7 @@
     { "path": "/api/historical-walk-forward", "schedule": "5 2 * * *" },
     { "path": "/api/historical-candidate-gate", "schedule": "20 2 * * *" },
     { "path": "/api/self-improvement-loop", "schedule": "30 */6 * * *" },
+    { "path": "/api/cognitive-cycle", "schedule": "40 */6 * * *" },
     { "path": "/api/policy-governance-cycle", "schedule": "45 */6 * * *" },
     { "path": "/api/daily-slip", "schedule": "30 7 * * *" },
     { "path": "/api/daily-cron", "schedule": "55 21,22 * * *" }
