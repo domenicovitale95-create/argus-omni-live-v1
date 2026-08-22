@@ -1,0 +1,95 @@
+{
+  "dossierDate": "2026-08-22",
+  "pipeline": "OBSERVED -> DERIVED -> HYPOTHESIS -> SAFE_EXPERIMENT -> EVIDENCE_GATE",
+  "productionChanged": false,
+  "targetBranch": "argus-autonomous-learning-loop",
+  "findings": [
+    {
+      "id": "CAL-SELECTED-001",
+      "status": "KEEP",
+      "evidenceType": "OBSERVED",
+      "source": "https://scikit-learn.org/stable/modules/calibration.html",
+      "evidence": "Official scikit-learn documentation states that Brier/log-loss are proper scoring rules but do not isolate calibration alone; calibration curves/reliability diagrams and independent calibration data are needed.",
+      "derived": "ARGUS should not treat a lower global Brier score alone as proof that PRIME/VALUE probabilities are better calibrated.",
+      "hypothesis": "Selected-case reliability curves plus Brier decomposition/skill versus baseline will reveal overconfidence hidden by global metrics.",
+      "module": ["calibration-watchdog","ledger-diagnostics","decision-readiness"],
+      "experiment": "Shadow-only: compute reliability bins, Brier, log-loss and skill score separately for all predictions and for PRIME/VALUE-selected subsets using time-separated validation.",
+      "requiredEvidence": "At least 200 settled selected predictions overall before directional conclusions; prefer 500+ and per-market minimums before promotion.",
+      "failureCondition": "Selected calibration unstable across walk-forward windows or apparent gain disappears versus no-vig/naive baseline.",
+      "rollback": "Remove selected-case dashboard fields; leave current predictor unchanged."
+    },
+    {
+      "id": "ABSTAIN-RISK-001",
+      "status": "WATCH",
+      "evidenceType": "OBSERVED",
+      "source": "https://arxiv.org/abs/2603.24704",
+      "evidence": "SCoRE (2026) develops selective conformal risk control for trusted/positive cases with finite-sample risk control under exchangeability assumptions and extensions toward shift.",
+      "derived": "ARGUS abstention should be evaluated on risk among accepted predictions, not merely hit rate or volume reduction.",
+      "hypothesis": "A coverage-risk curve can improve NO BET thresholds without changing the base forecasting model.",
+      "module": ["no-bet-optimizer","decision-readiness","maximum-pilot"],
+      "experiment": "Offline only: rank predictions by existing readiness/confidence signals and plot empirical risk versus retained coverage by market and time window; compare current threshold to conservative alternatives.",
+      "requiredEvidence": "Multiple walk-forward windows with enough accepted cases per threshold; no threshold promotion from a single season/league slice.",
+      "failureCondition": "Risk reduction is not stable out-of-time, or retained coverage collapses without meaningful calibration/log-loss gain.",
+      "rollback": "Keep current NO BET logic; discard candidate threshold."
+    },
+    {
+      "id": "LIVE-DEPENDENCE-001",
+      "status": "KEEP",
+      "evidenceType": "OBSERVED",
+      "source": "https://arxiv.org/abs/2406.16171",
+      "evidence": "A 2024 sports win-probability simulation study shows clustered in-game observations sharing the same eventual outcome can inflate effective sample size and make ordinary bootstrap intervals too narrow.",
+      "derived": "ARGUS must not count thousands of states from the same match as thousands of independent validation examples.",
+      "hypothesis": "Match-clustered evaluation and uncertainty intervals will materially reduce false confidence in live/in-play modules.",
+      "module": ["live-engine","calibration-watchdog","walk-forward-validation"],
+      "experiment": "Change evaluation only: aggregate/cluster uncertainty by match, report both state-count and independent-match-count, and compare naive versus match-block bootstrap intervals.",
+      "requiredEvidence": "At least several hundred independent matches spanning score/time/game-state regimes before trusting live calibration slices.",
+      "failureCondition": "No material difference in intervals and no decision impact; then retain only independent-match count as a lightweight guardrail.",
+      "rollback": "Revert reporting layer only; no predictor mutation."
+    },
+    {
+      "id": "LIVE-COMPLEXITY-001",
+      "status": "REJECT",
+      "evidenceType": "OBSERVED",
+      "source": "https://arxiv.org/abs/2511.18730",
+      "evidence": "A 2025 axial-transformer football paper reports large-scale recurrent in-game prediction using rich player/team/game state data.",
+      "derived": "The method is technically interesting but depends on a richer event/player data regime than ARGUS currently proves it possesses reliably.",
+      "hypothesis": "Adding a transformer now would increase complexity faster than evidence quality.",
+      "module": ["live-engine","model-rnd"],
+      "experiment": "None now. Reconsider only after event-state provenance, latency, missingness and replay validation are mature.",
+      "requiredEvidence": "Stable high-frequency event/player feed, replayable timestamps, independent-match validation and a strong simple baseline.",
+      "failureCondition": "N/A: rejected for present transferability and stability reasons.",
+      "rollback": "No change made."
+    },
+    {
+      "id": "CAL-INDEPENDENCE-001",
+      "status": "KEEP",
+      "evidenceType": "OBSERVED",
+      "source": "https://scikit-learn.org/stable/modules/calibration.html",
+      "evidence": "Official documentation warns that calibrators should ideally be fit on data independent from model training; otherwise probabilities can become biased toward extremes.",
+      "derived": "ARGUS calibration layers must be temporally separated from model fitting and from threshold tuning.",
+      "hypothesis": "Strict train -> calibration -> test chronology will reduce optimistic probability estimates and leakage.",
+      "module": ["temporal-integrity","calibration-watchdog","champion-challenger"],
+      "experiment": "Audit current calibration datasets and attach provenance fields train_end, calibration_start/end, test_start/end; fail closed on overlap.",
+      "requiredEvidence": "Zero temporal overlap across all evaluated candidate models and reproducible hashes/manifests for each split.",
+      "failureCondition": "Any overlap or post-event data contaminates calibration; mark affected evidence invalid and rebuild.",
+      "rollback": "Metadata-only audit is reversible; do not promote any calibrator until clean splits exist."
+    }
+  ],
+  "priorityNext": [
+    "selected-case calibration and reliability",
+    "accepted-risk versus coverage curves for abstention",
+    "match-clustered live evaluation",
+    "strict calibration split provenance"
+  ],
+  "explicitRejects": [
+    "Do not add a high-capacity transformer solely because recent literature reports good live forecasting.",
+    "Do not interpret lower Brier alone as calibration improvement.",
+    "Do not use repeated in-match states as independent sample-size evidence.",
+    "Do not change PRIME thresholds from a single short-term ROI slice."
+  ],
+  "maximumPilotDirective": {
+    "mode": "research_shadow_only",
+    "allowed": ["metrics","audits","reports","shadow thresholds"],
+    "forbidden": ["production prediction mutation","automatic real-money betting","confidence increase without independent validation"]
+  }
+}
