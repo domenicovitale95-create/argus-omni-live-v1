@@ -1,0 +1,33 @@
+name: Historical Archive Health Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/historical-archive-health.js'
+      - '.github/workflows/historical-archive-health-regression.yml'
+  pull_request:
+    paths:
+      - 'api/historical-archive-health.js'
+      - '.github/workflows/historical-archive-health-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  provider-free-health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify archive health is diagnostic only
+        run: |
+          grep -Fq "readJson(ARCHIVE,null)" api/historical-archive-health.js
+          grep -Fq "readJson(STATE,null)" api/historical-archive-health.js
+          grep -Fq "providerCalls:false" api/historical-archive-health.js
+          grep -Fq "writes:false" api/historical-archive-health.js
+          grep -Fq "doesNotRelaxTrendIntegrity:true" api/historical-archive-health.js
+      - name: Verify recent contiguous coverage is measured explicitly
+        run: |
+          grep -Fq "recentCompleteDays" api/historical-archive-health.js
+          grep -Fq "firstRecentGaps" api/historical-archive-health.js
+          grep -Fq "NO_RECENT_CONTIGUOUS_COVERAGE" api/historical-archive-health.js
