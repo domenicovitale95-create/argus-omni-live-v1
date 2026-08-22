@@ -1,0 +1,35 @@
+name: Tracking Health Regression
+
+on:
+  push:
+    branches: [argus-payload-stability-hotfix]
+    paths:
+      - 'api/tracking-health.js'
+      - '.github/workflows/tracking-health-regression.yml'
+  pull_request:
+    paths:
+      - 'api/tracking-health.js'
+      - '.github/workflows/tracking-health-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  tracking-health-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify intentional zero-quota pause is recognized locally
+        run: |
+          grep -Fq "QUOTA_GUARD_PATH='argus/data/api-football-quota-guard.json'" api/tracking-health.js
+          grep -Fq "guard?.date===brusselsDate()&&guard?.exhausted&&guard?.temporary" api/tracking-health.js
+          grep -Fq "status='PAUSED_ZERO_QUOTA'" api/tracking-health.js
+          grep -Fq "intentionalZeroQuotaPauseIsNotAHealthFailure:true" api/tracking-health.js
+      - name: Verify genuine cron failures still dominate pause semantics
+        run: |
+          grep -Fq "if(cron&&cron.ok===false){status='DEGRADED'" api/tracking-health.js
+          grep -Fq "if(zeroQuota&&status!=='DEGRADED')" api/tracking-health.js
+      - name: Verify health remains provider-free
+        run: |
+          grep -Fq "providerCalls:false" api/tracking-health.js
+          grep -Fq "persistentWrites:false" api/tracking-health.js
