@@ -15,13 +15,18 @@ export default async function handler(req,res){
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!storageReady())return res.status(200).json({score:15,status:'INFRASTRUCTURE BLOCKED',trainingReadiness:{state:'TRAINING_WEAK',rootCause:['PERSISTENCE_UNAVAILABLE']},components:{storage:0},note:'Vercel Blob storage is not linked; learning cannot persist.'});
 
-  const [reportBlobs,shadowBlobs,plan]=await Promise.all([listJson('argus/reports/',180),listJson('argus/shadow/',180),readJson('argus/autopilot/decision-plan.json',{plan:[],generatedAt:null})]);
-  const [reports,shadows]=await Promise.all([readManyJson(reportBlobs),readManyJson(shadowBlobs)]);
+  const [reportBlobs,ledgerBlobs,shadowBlobs,plan]=await Promise.all([listJson('argus/reports/',180),listJson('argus/ledger/',180),listJson('argus/shadow/',180),readJson('argus/autopilot/decision-plan.json',{plan:[],generatedAt:null})]);
+  const [reports,ledgers,shadows]=await Promise.all([readManyJson(reportBlobs),readManyJson(ledgerBlobs),readManyJson(shadowBlobs)]);
 
-  let recordedSettled=0,recordedActionable=0,shadowSettled=0,shadowPriced=0,shadowPicks=0,clvN=0,clvSum=0,lateFreeze=0,missingFreeze=0,brierSum=0,calN=0,strongSettled=0,strongCandidates=0;
+  let recordedSettled=0,recordedActionable=0,reportSettled=0,shadowSettled=0,shadowPriced=0,shadowPicks=0,clvN=0,clvSum=0,lateFreeze=0,missingFreeze=0,brierSum=0,calN=0,strongSettled=0,strongCandidates=0;
   const marketKeys=new Set(),leagueKeys=new Set(),buckets={},cohorts={};
 
-  for(const report of reports)for(const row of report.matches||[]){if(['WIN','LOSS'].includes(row.outcome)){recordedSettled++;if(row.prediction&&String(row.prediction.classification||'').toUpperCase()!=='NO BET')recordedActionable++;if(row.competition)leagueKeys.add(row.competition)}}
+  for(const report of reports)for(const row of report.matches||[]){if(row.competition)leagueKeys.add(row.competition);if(['WIN','LOSS'].includes(row.outcome))reportSettled++}
+  for(const book of ledgers)for(const row of book.records||[]){
+    if(row.competition)leagueKeys.add(row.competition);
+    const settled=['WIN','LOSS'].includes(row.settlement?.status),immutablePrematch=row.integrity?.frozenBeforeKickoff===true&&row.integrity?.evidenceFrozenAtDecisionTime===true;
+    if(settled&&immutablePrematch){recordedSettled++;if(Number(row.recommendedStakePct)>0)recordedActionable++}
+  }
 
   for(const book of shadows)for(const f of Object.values(book.fixtures||{})){
     if(f.competition)leagueKeys.add(f.competition);
@@ -55,6 +60,7 @@ export default async function handler(req,res){
   const status=score>=85&&integrityScore>=95&&calibrationMaturity>=70?'AUTOPILOT READY FOR SUPERVISED USE':score>=70?'ADVANCED TRAINING':score>=50?'TRAINING IN PROGRESS':'EARLY TRAINING';
   const state=trustState({recordedSettled,shadowSettled,calN,strongSettled,validatedCohorts,integrityScore});
   const rootCause=[];
+  if(!shadows.length)rootCause.push('SHADOW_EVIDENCE_PIPELINE_EMPTY');
   if(strongSettled<60)rootCause.push('INSUFFICIENT_STRONG_SETTLED_EVIDENCE');
   if(recordedSettled<50)rootCause.push('INSUFFICIENT_VALID_RECORDED_SETTLEMENTS');
   if(calN<60)rootCause.push('CALIBRATION_SAMPLE_INSUFFICIENT');
@@ -64,7 +70,8 @@ export default async function handler(req,res){
   if(decisionAudit.critical)rootCause.push('DECISION_GOVERNANCE_CONTRADICTION');
   if(!rootCause.length&&state!=='VALIDATED')rootCause.push('EVIDENCE_GATES_NOT_YET_COMPLETE');
   const blockers=[];
-  if(recordedSettled<50)blockers.push(`Need ${50-recordedSettled} more settled recorded predictions for a stronger real track record`);
+  if(recordedSettled<50)blockers.push(`Need ${50-recordedSettled} more immutable settled ledger predictions for a stronger real track record`);
+  if(!shadows.length)blockers.push('Shadow evidence pipeline has no persisted books; verify shadow cron capture before waiting for sample growth');
   if(shadowSettled<100)blockers.push(`Need ${100-shadowSettled} more settled shadow predictions for broader validation`);
   if(components.realPriceCoverage<60)blockers.push('Real-price coverage across shadow markets is still limited');
   if(clvCoverage<60)blockers.push('Closing-line coverage is still too low for robust CLV validation');
@@ -78,5 +85,5 @@ export default async function handler(req,res){
   if(validatedCohorts<3)blockers.push('League × market cohort evidence is too sparse for cohort-level trust');
   if(auto.score<60&&!auto.scheduledIdle)blockers.push('Persisted Autopilot decision plan is missing or very stale; verify scheduler execution without disabling autonomy');
 
-  return res.status(200).json({version:'AUTOPILOT-READINESS-7',generatedAt:new Date().toISOString(),score,status,trainingReadiness:{state,strongData:{count:strongSettled,total:shadowSettled,candidatePrematchCount:strongCandidates,coveragePct:pct(strongSettled,shadowSettled)},validSettledCount:recordedSettled,leagueMarketCohortStatus:{total:Object.keys(cohorts).length,validated:validatedCohorts,learning:learningCohorts,sparse:sparseCohorts,top:cohortRows.slice(0,20)},calibrationSampleStatus:{samples:calN,status:calN>=60?'SUFFICIENT_FOR_GATE':calN>=20?'LEARNING':'INSUFFICIENT'},rootCause,trustTransitionRule:'TRAINING_WEAK -> LEARNING -> VALIDATED only from immutable prematch, valid settlement, calibration, cohort and integrity gates; no manual override.'},components,automationEvidence:auto,decisionIntegrity:decisionAudit,evidence:{reports:reports.length,recordedSettled,recordedActionable,shadowBooks:shadows.length,shadowPicks,shadowSettled,shadowPriced,strongSettled,strongCandidates,marketFamilies:marketKeys.size,leagues:leagueKeys.size,cohorts:Object.keys(cohorts).length,validatedCohorts,learningCohorts,sparseCohorts,clvSamples:clvN,clvCoveragePct:clvCoverage,avgCLV:avgCLV==null?null:Number(avgCLV.toFixed(2)),lateFreeze,missingFreeze,calibrationSamples:calN,brier:brier==null?null:Number(brier.toFixed(4)),ecePct:calN?Number((ece*100).toFixed(1)):null},blockers,methodology:'Readiness is evidence-only. Strong evidence requires a pre-kickoff freeze, valid probability, real price, and valid WIN/LOSS settlement. Historical replay is never counted as fresh OOS evidence. Cohort diagnostics are observational and do not lower validation thresholds or authorize autonomous wagering.'});
+  return res.status(200).json({version:'AUTOPILOT-READINESS-8',generatedAt:new Date().toISOString(),score,status,trainingReadiness:{state,strongData:{count:strongSettled,total:shadowSettled,candidatePrematchCount:strongCandidates,coveragePct:pct(strongSettled,shadowSettled)},validSettledCount:recordedSettled,leagueMarketCohortStatus:{total:Object.keys(cohorts).length,validated:validatedCohorts,learning:learningCohorts,sparse:sparseCohorts,top:cohortRows.slice(0,20)},calibrationSampleStatus:{samples:calN,status:calN>=60?'SUFFICIENT_FOR_GATE':calN>=20?'LEARNING':'INSUFFICIENT'},rootCause,trustTransitionRule:'TRAINING_WEAK -> LEARNING -> VALIDATED only from immutable prematch, valid settlement, calibration, cohort and integrity gates; no manual override.'},components,automationEvidence:auto,decisionIntegrity:decisionAudit,evidence:{reports:reports.length,reportSettled,ledgerBooks:ledgers.length,recordedSettled,recordedActionable,shadowBooks:shadows.length,shadowPicks,shadowSettled,shadowPriced,strongSettled,strongCandidates,marketFamilies:marketKeys.size,leagues:leagueKeys.size,cohorts:Object.keys(cohorts).length,validatedCohorts,learningCohorts,sparseCohorts,clvSamples:clvN,clvCoveragePct:clvCoverage,avgCLV:avgCLV==null?null:Number(avgCLV.toFixed(2)),lateFreeze,missingFreeze,calibrationSamples:calN,brier:brier==null?null:Number(brier.toFixed(4)),ecePct:calN?Number((ece*100).toFixed(1)):null},blockers,methodology:'Readiness is evidence-only. The official track record comes from immutable pre-kickoff Prediction Ledger records with valid WIN/LOSS settlement. Strong shadow evidence requires a pre-kickoff freeze, valid probability, real price, and valid WIN/LOSS settlement. Historical replay is never counted as fresh OOS evidence. Cohort diagnostics are observational and do not lower validation thresholds or authorize autonomous wagering.'});
 }
