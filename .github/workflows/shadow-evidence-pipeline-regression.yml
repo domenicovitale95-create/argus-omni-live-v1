@@ -2,8 +2,7 @@ name: Shadow Evidence Pipeline Regression
 
 on:
   push:
-    branches:
-      - argus-payload-stability-hotfix
+    branches: [main, argus-payload-stability-hotfix]
     paths:
       - 'api/shadow-cron.js'
       - 'api/shadow-mode.js'
