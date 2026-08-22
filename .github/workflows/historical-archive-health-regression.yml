@@ -31,3 +31,9 @@ jobs:
           grep -Fq "recentCompleteDays" api/historical-archive-health.js
           grep -Fq "firstRecentGaps" api/historical-archive-health.js
           grep -Fq "NO_RECENT_CONTIGUOUS_COVERAGE" api/historical-archive-health.js
+      - name: Verify backfill memory guard is observable
+        run: |
+          grep -Fq "MEMORY_GUARD_BYTES=24*1024*1024" api/historical-archive-health.js
+          grep -Fq "archiveSizeBytes" api/historical-archive-health.js
+          grep -Fq "BACKFILL_MEMORY_GUARD_TRIGGERED" api/historical-archive-health.js
+          grep -Fq "memoryGuardObserved:true" api/historical-archive-health.js
