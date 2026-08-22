@@ -16,17 +16,46 @@ OBSERVE → MODEL → PRICE → GOVERN → FREEZE → SETTLE → AUDIT → LEARN
 
 The Cognitive Core must reduce unnecessary LLM usage rather than put an LLM in every decision.
 
+## Current implementation — C0 Cognitive Shadow
+
+Implemented components:
+
+- `/api/cognitive-brief` — aggregates cross-system health/readiness/memory/scheduler evidence and ranks unresolved priorities.
+- `/api/cognitive-hypotheses` — converts priorities into explicitly labelled, falsifiable HYPOTHESIS objects with required evidence and next tests.
+- `/api/cognitive-evidence` — separates observed condition from inferred root cause and returns conservative evidence verdicts.
+- `/api/cognitive-cycle` — persists recurring cognitive issues, evidence verdicts, occurrence counts, attention scores and recently resolved items.
+- `/api/cognitive-memory` — exposes the latest protected cognitive memory snapshot.
+- Vercel cron — runs `/api/cognitive-cycle` after the self-improvement loop and before the policy-governance cycle every six hours.
+
+Current mode: `SHADOW_READ_ONLY`.
+
+Current authority: **NONE over production decisions.**
+
+Current LLM connection: **OFF**. GPT reasoning is the next governed layer, not a prerequisite for C0.
+
+### C0 invariant
+
+The system must distinguish:
+
+- OBSERVED CONDITION — a measurable state is present;
+- HYPOTHESIS — a possible explanation;
+- ROOT CAUSE — remains unresolved until sufficient evidence exists;
+- FALSIFIED CURRENT CYCLE — the condition supporting an active hypothesis is no longer observed;
+- SUPPORTED — evidence supports the narrow claim tested, not a broader narrative.
+
+No hypothesis becomes a production fact merely by recurring.
+
 ## Rollout
 
-### C0 — Cognitive Shadow (current first step)
+### C0 — Cognitive Shadow (implemented)
 
 - Aggregate health, readiness, calibration, drift, scheduler and memory signals into one compact cognitive packet.
 - Rank the system's most important unresolved questions.
+- Generate falsifiable hypotheses instead of narrative explanations.
+- Track recurring unresolved problems in cognitive memory.
 - Detect contradictions, missing evidence and degraded components.
 - Never alter a bet, stake, model weight, policy, classification or production gate.
 - Never bypass PRIME locking or any governance rule.
-
-Endpoint: `/api/cognitive-brief`.
 
 ### C1 — GPT Assisted Reasoning
 
