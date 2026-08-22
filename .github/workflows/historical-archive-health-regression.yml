@@ -23,14 +23,17 @@ jobs:
         run: |
           grep -Fq "readJson(ARCHIVE,null)" api/historical-archive-health.js
           grep -Fq "readJson(STATE,null)" api/historical-archive-health.js
+          grep -Fq "readJson(RECENT_INDEX" api/historical-archive-health.js
           grep -Fq "providerCalls:false" api/historical-archive-health.js
           grep -Fq "writes:false" api/historical-archive-health.js
           grep -Fq "doesNotRelaxTrendIntegrity:true" api/historical-archive-health.js
-      - name: Verify recent contiguous coverage is measured explicitly
+      - name: Verify combined certified continuity is measured explicitly
         run: |
-          grep -Fq "recentCompleteDays" api/historical-archive-health.js
-          grep -Fq "firstRecentGaps" api/historical-archive-health.js
-          grep -Fq "NO_RECENT_CONTIGUOUS_COVERAGE" api/historical-archive-health.js
+          grep -Fq "combinedRecentCompleteDays" api/historical-archive-health.js
+          grep -Fq "firstCombinedGaps" api/historical-archive-health.js
+          grep -Fq "RECENT_CONTINUITY_HEALTHY" api/historical-archive-health.js
+          grep -Fq "LEGACY_GUARD_OVERLAY_EMPTY" api/historical-archive-health.js
+          grep -Fq "combinedContinuityUsesCertifiedDatesOnly:true" api/historical-archive-health.js
       - name: Verify backfill memory guard is observable
         run: |
           grep -Fq "MEMORY_GUARD_BYTES=24*1024*1024" api/historical-archive-health.js
