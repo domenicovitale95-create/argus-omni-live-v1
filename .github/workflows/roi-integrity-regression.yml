@@ -1,0 +1,43 @@
+name: ROI Integrity Regression
+
+on:
+  push:
+    branches:
+      - argus-payload-stability-hotfix
+    paths:
+      - 'api/prediction-ledger.js'
+      - 'api/ledger-learning.js'
+      - 'api/error-attribution.js'
+      - '.github/workflows/roi-integrity-regression.yml'
+  pull_request:
+    paths:
+      - 'api/prediction-ledger.js'
+      - 'api/ledger-learning.js'
+      - 'api/error-attribution.js'
+      - '.github/workflows/roi-integrity-regression.yml'
+
+jobs:
+  roi-integrity-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify zero-stake predictions are non-actionable
+        run: |
+          grep -Fq "function actionable(rec){return n(rec?.recommendedStakePct,0)>0}" api/prediction-ledger.js
+          grep -Fq "function actionable(r){return n(r?.recommendedStakePct,0)>0}" api/ledger-learning.js
+          grep -Fq "function actionable(r){return n(r?.recommendedStakePct,0)>0}" api/error-attribution.js
+      - name: Verify settlement P&L requires actionable stake
+        run: |
+          grep -Fq "pl:isActionable&&o&&o>1?" api/prediction-ledger.js
+          grep -Fq "actionableSettled=settled.filter(actionable)" api/prediction-ledger.js
+          grep -Fq "roiExcludesZeroStakePredictions:true" api/prediction-ledger.js
+      - name: Verify learning separates calibration from economic ROI
+        run: |
+          grep -Fq "actionableSettled=settled.filter(actionable)" api/ledger-learning.js
+          grep -Fq "totalActionableSettled:actionableRows.length" api/ledger-learning.js
+          grep -Fq "ROI/P&L only use actionable predictions with stake > 0" api/ledger-learning.js
+      - name: Verify attribution separates all misses from actionable losses
+        run: |
+          grep -Fq "actionableSettled=s.filter(actionable)" api/error-attribution.js
+          grep -Fq "totalActionableLosses:actionableLosses.length" api/error-attribution.js
+          grep -Fq "suspectedActionableLossContributors" api/error-attribution.js
