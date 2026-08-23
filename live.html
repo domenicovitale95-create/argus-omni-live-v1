@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
   <meta name="theme-color" content="#090b0e"/>
-  <meta name="description" content="ARGUS OMNI LIVE — clear live football decisions from continuously re-evaluated evidence."/>
+  <meta name="description" content="ARGUS OMNI LIVE — state-conditioned live football probabilities with strict freshness and integrity gates."/>
   <title>ARGUS OMNI LIVE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,104 +16,33 @@
 <body>
   <div class="shell">
     <header class="topbar">
-      <a class="brand" href="/" aria-label="ARGUS OMNI home">
-        <div class="mark">A</div>
-        <div class="brand-copy"><h1>ARGUS <span>OMNI</span></h1></div>
-      </a>
+      <a class="brand" href="/" aria-label="ARGUS OMNI home"><div class="mark">A</div><div class="brand-copy"><h1>ARGUS <span>OMNI</span></h1></div></a>
       <nav class="top-status" aria-label="Primary navigation">
-        <a class="nav-link" href="/">Today</a>
-        <a class="nav-link live-link active" href="live.html">● Live</a>
-        <a class="nav-link" href="live-paper.html">Live Paper</a>
-        <a class="nav-link" href="prediction-results.html">Results</a>
-        <details class="nav-more">
-          <summary>More</summary>
-          <div class="nav-menu">
-            <a href="live-paper.html">Live Paper</a>
-            <a href="virtual-bankroll.html">Virtual Bankroll</a>
-            <a href="daily-slip.html">Daily Slip</a>
-            <a href="markets.html">Markets</a>
-            <a href="exact-scores.html">Exact Scores</a>
-            <a href="trends.html">Trends</a>
-            <a href="shield.html">Decision Shield</a>
-            <a href="historical-validation.html">Historical Lab</a>
-            <a href="system-health.html">System Health</a>
-          </div>
-        </details>
+        <a class="nav-link" href="/">Today</a><a class="nav-link live-link active" href="live.html">● Live</a><a class="nav-link" href="live-paper.html">Live Paper</a><a class="nav-link" href="prediction-results.html">Results</a>
+        <details class="nav-more"><summary>More</summary><div class="nav-menu"><a href="live-paper.html">Live Paper</a><a href="virtual-bankroll.html">Virtual Bankroll</a><a href="daily-slip.html">Daily Slip</a><a href="markets.html">Markets</a><a href="exact-scores.html">Exact Scores</a><a href="trends.html">Trends</a><a href="shield.html">Decision Shield</a><a href="historical-validation.html">Historical Lab</a><a href="system-health.html">System Health</a></div></details>
       </nav>
     </header>
-
     <main class="live-page">
       <section class="live-hero">
-        <div class="live-intro panel">
-          <div>
-            <p class="eyebrow">ARGUS LIVE</p>
-            <h2>Do I need to act right now?</h2>
-            <p class="lead">ARGUS continuously re-evaluates live matches and rejects weak or stale setups. If a real opportunity appears, you see the match, the play, the current price and the reason — nothing else needs your attention.</p>
-          </div>
-          <div class="live-state-row">
-            <span class="live-state-chip"><i></i><span id="liveRefreshState">Monitoring live matches</span></span>
-            <span class="live-state-copy">Evidence is re-evaluated every few seconds; external data refresh remains quota-aware.</span>
-          </div>
-        </div>
-
-        <div class="live-primary panel">
-          <div class="live-primary-head"><span>Best live decision</span><span>Right now</span></div>
-          <div id="livePrimaryDecision" class="live-primary-card">
-            <div class="live-empty">
-              <strong>No live decision yet.</strong>
-              <p>ARGUS is monitoring current matches. If nothing survives the live filters, waiting is the correct action.</p>
-            </div>
-          </div>
-        </div>
+        <div class="live-intro panel"><div><p class="eyebrow">ARGUS LIVE V2</p><h2>Do I need to act right now?</h2><p class="lead">ARGUS conditions every live probability on the current score and time remaining, anchors it to the current market, and rejects stale or mathematically inconsistent decisions. Until prospective calibration validates Live V2, live signals remain shadow-only.</p></div><div class="live-state-row"><span class="live-state-chip"><i></i><span id="liveRefreshState">Monitoring live matches</span></span><span class="live-state-copy">Late-match snapshots must be fresh. A stale feed automatically becomes NO PLAY.</span></div></div>
+        <div class="live-primary panel"><div class="live-primary-head"><span>Best official live decision</span><span>Right now</span></div><div id="livePrimaryDecision" class="live-primary-card"><div class="live-empty"><strong>No live decision yet.</strong><p>ARGUS is waiting for a fresh official server-side calculation.</p></div></div></div>
       </section>
-
-      <section class="live-summary" aria-label="ARGUS live summary">
-        <div><span>Live matches scanned</span><strong id="liveCount">0</strong><small>currently monitored</small></div>
-        <div><span>Worth attention</span><strong id="liveOpportunityCount">0</strong><small>WATCH or stronger</small></div>
-        <div><span>Rejected</span><strong id="liveRejectCount">0</strong><small>no valid live play</small></div>
-      </section>
-
+      <section class="live-summary" aria-label="ARGUS live summary"><div><span>Live matches scanned</span><strong id="liveCount">0</strong><small>currently monitored</small></div><div><span>Worth attention</span><strong id="liveOpportunityCount">0</strong><small>WATCH or stronger</small></div><div><span>Rejected</span><strong id="liveRejectCount">0</strong><small>no valid live play</small></div></section>
       <a class="os-crosslink" href="/live-paper.html"><strong>LIVE PAPER · €0 real money</strong><span>Open the live virtual bankroll →</span></a>
-
-      <section class="live-section" aria-labelledby="live-now-heading">
-        <div class="live-section-head">
-          <div>
-            <p class="eyebrow">LIVE NOW</p>
-            <h3 id="live-now-heading">Matches worth your attention</h3>
-            <p>Only live setups that pass ARGUS' evidence and pricing filters appear here. The rest are deliberately left out.</p>
-          </div>
-          <span id="liveUpdated" class="live-refresh">Waiting for live data</span>
-        </div>
-        <section id="liveCommandGrid" class="live-command-grid">
-          <div class="empty-state"><strong>Monitoring live matches</strong><span>No validated live opportunity yet.</span></div>
-        </section>
-        <div id="liveRejectedSummary" class="live-rejected">No live matches have been rejected yet.</div>
-      </section>
-
+      <section class="live-section" aria-labelledby="live-now-heading"><div class="live-section-head"><div><p class="eyebrow">LIVE NOW</p><h3 id="live-now-heading">Official state-conditioned decisions</h3><p>Only the canonical server model can create a live decision. Browser heuristics are not allowed to promote a bet.</p></div><span id="liveUpdated" class="live-refresh">Waiting for live data</span></div><section id="liveCommandGrid" class="live-command-grid"><div class="empty-state"><strong>Monitoring live matches</strong><span>No validated live opportunity yet.</span></div></section><div id="liveRejectedSummary" class="live-rejected">No live matches have been evaluated yet.</div></section>
       <section class="live-explain" aria-label="How ARGUS LIVE works">
-        <details>
-          <summary>How ARGUS decides whether to act live</summary>
-          <div class="live-explain-body">ARGUS combines current price, model probability, live pressure, momentum, data quality, market freshness and hard vetoes. A recommendation disappears as soon as the evidence becomes stale, contradictory or too weak. “Signal strength” is a combined decision score, not a guaranteed win probability.</div>
-        </details>
-        <details>
-          <summary>What the live labels mean</summary>
-          <div class="live-explain-body"><strong>LIVE PRIME</strong> is the highest live-conviction tier. <strong>STRONG</strong> means several independent signals align. <strong>WATCH</strong> means the setup deserves attention but still lacks enough confirmation for a stronger action. No valid setup means no play.</div>
-        </details>
+        <details><summary>How ARGUS calculates live probabilities</summary><div class="live-explain-body">Live V2 starts from team scoring intensity, scales it to the time remaining, conditions the final-score distribution on the current score, applies only bounded in-play event adjustments, and then shrinks the result toward margin-free live market probabilities. The same probability must reproduce fair odds, edge and expected value or the decision is blocked.</div></details>
+        <details><summary>Why a WATCH signal may still say NO PLAY</summary><div class="live-explain-body"><strong>Outcome probability</strong> is the model's probability of the selection. <strong>Decision confidence</strong> is an evidence score out of 100, not a probability. Live V2 remains shadow-only until prospective results demonstrate calibration, so WATCH can collect evidence without making an eligible bet.</div></details>
       </section>
     </main>
-
     <footer><span>ARGUS OMNI · CLEAR LIVE DECISIONS.</span><span>BET RESPONSIBLY</span></footer>
   </div>
-
   <script src="src/adaptive-weights-client.js"></script>
   <script src="src/engine.js"></script>
   <script src="src/live-regime.js"></script>
   <script src="src/governance.js"></script>
   <script src="src/providers.js"></script>
-  <script src="src/pressure-window.js"></script>
-  <script src="src/live-snapshot-guard.js"></script>
   <script src="src/live-command-center.js"></script>
   <script src="src/argus-os.js"></script>
-  <!-- deploy-refresh: live-paper-nav -->
 </body>
 </html>

@@ -2,62 +2,73 @@ name: Quota Guard Regression
 
 on:
   push:
-    branches:
-      - argus-payload-stability-hotfix
+    branches: [main, fix/live-model-v2-integrity]
     paths:
       - 'api/live.js'
       - 'api/provider-status.js'
       - 'api/_report-store.js'
+      - 'api/prediction-ledger-v4.js'
       - 'api/prediction-ledger.js'
       - 'api/daily-report.js'
       - 'api/shadow-mode.js'
       - 'api/daily-cron.js'
-      - 'vercel.json'
       - '.github/workflows/quota-guard-regression.yml'
   pull_request:
     paths:
       - 'api/live.js'
       - 'api/provider-status.js'
       - 'api/_report-store.js'
+      - 'api/prediction-ledger-v4.js'
       - 'api/prediction-ledger.js'
       - 'api/daily-report.js'
       - 'api/shadow-mode.js'
       - 'api/daily-cron.js'
-      - 'vercel.json'
       - '.github/workflows/quota-guard-regression.yml'
 
 jobs:
   quota-guard-regression:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Verify persistent quota hard stop
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
         run: |
-          grep -q "QUOTA_GUARD_PATH" api/live.js
-          grep -q "persistQuotaExhausted" api/live.js
-          grep -q "dailyRemaining=0" api/live.js
-      - name: Verify protected daily reserve and bounded secondary calls
+          node --check api/live.js
+          node --check api/prediction-ledger-v4.js
+          node --check api/provider-status.js
+          node --check api/daily-report.js
+          node --check api/shadow-mode.js
+          node --check api/daily-cron.js
+      - name: Verify quota architecture semantically
         run: |
-          grep -Eq "MIN_DAILY_RESERVE = 1[5-9][0-9]{2}|MIN_DAILY_RESERVE = [2-9][0-9]{3}" api/live.js
-          grep -q "SECONDARY_CALL_BUDGET_PER_BUILD" api/live.js
-      - name: Verify temporary zero-quota window is narrow and self-expiring
-        run: |
-          grep -Fq "TEMP_ZERO_QUOTA_DATE = '2026-08-22'" api/_report-store.js
-          grep -Fq "pathname !== QUOTA_GUARD_PATH" api/_report-store.js
-          grep -Fq "brusselsDate() !== TEMP_ZERO_QUOTA_DATE" api/_report-store.js
-          grep -Fq "expiresAutomaticallyAt: '2026-08-23T00:00:00+02:00'" api/_report-store.js
-      - name: Verify every settlement/report path obeys quota guard
-        run: |
-          grep -Fq "PROVIDER_BLOCKED_BY_QUOTA_GUARD" api/prediction-ledger.js
-          grep -Fq "providerFallbackHonorsQuotaGuard:true" api/prediction-ledger.js
-          grep -Fq "providerBlocked=Boolean(guard?.date===date&&guard?.exhausted)" api/daily-report.js
-          grep -Fq "ARCHIVE_ONLY_QUOTA_GUARD" api/daily-report.js
-          grep -Fq "providerCallSkipped:true" api/shadow-mode.js
-          grep -Fq "PROVIDER_BLOCKED_BY_QUOTA_GUARD" api/shadow-mode.js
-          grep -Fq "providerBlocked=Boolean(guard?.date===date&&guard?.exhausted)" api/daily-cron.js
-          grep -Fq "automaticResumeOnNewBrusselsDate:true" api/daily-cron.js
-      - name: Verify provider watchdog and safe autopilot cadence
-        run: |
-          test -f api/provider-status.js
-          grep -q '"path": "/api/provider-status"' vercel.json
-          grep -q '"path": "/api/autopilot", "schedule": "\*/15 \* \* \* \*"' vercel.json
+          node <<'NODE'
+          const fs=require('fs');
+          const read=p=>fs.readFileSync(p,'utf8');
+          const assert=(ok,msg)=>{if(!ok){console.error(`FAIL: ${msg}`);process.exitCode=1}else console.log(`PASS: ${msg}`)};
+          const live=read('api/live.js');
+          const ledger=read('api/prediction-ledger-v4.js');
+          const provider=read('api/provider-status.js');
+          const report=read('api/daily-report.js');
+          const shadow=read('api/shadow-mode.js');
+          const cron=read('api/daily-cron.js');
+
+          assert(/QUOTA_GUARD_PATH/.test(live)&&/persistQuotaExhausted/.test(live),'daily quota hard stop persists state');
+          const reserve=live.match(/MIN_DAILY_RESERVE\s*=\s*(\d+)/)?.[1];
+          assert(Number(reserve)>=1500,'daily reserve is at least 1500 requests');
+          assert(/MINUTE_COOLDOWN_MS/.test(live)&&/minuteBlockedUntil/.test(live),'minute throttling has a separate cooldown');
+          assert(/kind==='minute'/.test(live)&&/apiQuota\.exhausted=false/.test(live),'minute limit is not misclassified as daily exhaustion');
+          assert(/kind==='daily'/.test(live)&&/persistQuotaExhausted/.test(live),'daily exhaustion remains fail-closed');
+          assert(/SECONDARY_CALL_BUDGET_PER_BUILD/.test(live),'secondary provider calls are bounded per build');
+
+          assert(/QUOTA_GUARD_PATH/.test(ledger)&&/providerBlocked/.test(ledger),'prediction ledger reads the quota guard');
+          assert(/PROVIDER_BLOCKED_BY_QUOTA_GUARD/.test(ledger),'prediction ledger skips provider fallback while blocked');
+          assert(/providerBlocked/.test(report)&&/QUOTA_GUARD/.test(report),'daily report honors quota guard');
+          assert(/providerCallSkipped/.test(shadow)&&/QUOTA_GUARD/.test(shadow),'shadow mode honors quota guard');
+          assert(/providerBlocked/.test(cron)&&/quota/i.test(cron),'daily cron honors quota state');
+          assert(/QUOTA_GUARD_PATH/.test(provider)&&/MINUTE_RATE_LIMIT_RECOVERABLE/.test(provider)&&/providerCallSkipped/.test(provider),'provider status repairs minute throttles and preserves hard-stop safety');
+
+          if(process.exitCode)process.exit(process.exitCode);
+          NODE

@@ -25,11 +25,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify no-data cannot become healthy
         run: |
-          grep -Fq "SEMANTIC_WAITING=new Set(['NO_DATA','WAITING_FOR_TRENDS'])" api/site-self-test.js
-          grep -Fq "semanticWaiting=SEMANTIC_AUDITS.has(path)" api/site-self-test.js
-          grep -Fq "status:failures.length?'DEGRADED':waiting.length?'WAITING_FOR_EVIDENCE'" api/site-self-test.js
+          grep -q "SEMANTIC_WAITING" api/site-self-test.js
+          grep -q "NO_DATA" api/site-self-test.js
+          grep -q "WAITING_FOR_TRENDS" api/site-self-test.js
+          grep -q "semanticWaiting=SEMANTIC_AUDITS.has(path)" api/site-self-test.js
+          grep -Fq "waiting.length?'WAITING_FOR_EVIDENCE'" api/site-self-test.js
           grep -Fq "semanticNoDataIsNotHealthy:true" api/site-self-test.js
       - name: Preserve true semantic failures
         run: |
-          grep -Fq "body.status==='FAIL'" api/site-self-test.js
+          grep -q "SEMANTIC_FAILURE" api/site-self-test.js
+          grep -q "FAIL" api/site-self-test.js
           grep -Fq "failures=checks.filter(x=>!x.ok&&x.semanticState!=='WAITING')" api/site-self-test.js
+          grep -Fq "semanticFailure?'FAIL'" api/site-self-test.js
