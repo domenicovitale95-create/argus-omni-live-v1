@@ -1,1 +1,179 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><meta name="theme-color" content="#111318"/><title>Daily Slip — ARGUS OMNI</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"/><link rel="stylesheet" href="color-system.css"/><style>body{background:#111318;color:#f4f1ea}.page{width:min(1180px,92vw);margin:auto}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);gap:16px}.nav-links{display:flex;gap:8px;flex-wrap:wrap}.nav-links a{color:#b8b7b1;text-decoration:none;font-size:10px;font-weight:700;padding:9px 11px;border-radius:999px}.nav-links a.active{background:#f0eee8;color:#171913}.hero{margin:28px 0 18px;padding:34px;border:1px solid rgba(255,255,255,.08);border-radius:24px;background:linear-gradient(135deg,rgba(127,156,137,.15),rgba(26,29,35,.97))}.hero h2{font:700 clamp(38px,5vw,64px)/.98 "Space Grotesk";margin:8px 0 12px}.hero p{max-width:820px;color:#aaa69f;line-height:1.65}.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.chip{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.05);font-size:9px;color:#b8b7b1}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.slip{padding:22px;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:#191d22}.slip.safe{border-color:rgba(127,156,137,.3)}.slip.balanced{border-color:rgba(116,138,167,.3)}.slip.aggressive{border-color:rgba(198,151,93,.3)}.slip-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.slip h3{font:700 26px "Space Grotesk";margin:6px 0}.odds{font:700 26px "Space Grotesk"}.legs{display:grid;gap:8px;margin-top:16px}.leg{padding:14px;border-radius:13px;background:rgba(255,255,255,.035)}.leg strong{display:block;font:600 15px "Space Grotesk"}.leg small,.muted{display:block;margin-top:5px;color:#99948c;font-size:9px;line-height:1.5}.why{margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.06);color:#b7c8b9!important}.pill{display:inline-block;margin-top:8px;padding:5px 7px;border-radius:999px;background:rgba(255,255,255,.05);font-size:8px}.single{margin:18px 0;padding:22px;border-radius:20px;background:linear-gradient(120deg,rgba(127,156,137,.10),rgba(25,29,34,.97));border:1px solid rgba(127,156,137,.26)}.single strong{display:block;font:700 24px "Space Grotesk"}.single small{display:block;margin-top:6px;color:#aaa69f}.refresh{border:0;border-radius:13px;background:#f0eee8;color:#171913;padding:12px 16px;font-weight:800;cursor:pointer}.empty{padding:28px;border:1px dashed rgba(255,255,255,.1);border-radius:18px;color:#aaa69f}.guard{margin-top:14px;padding:10px 12px;border-radius:12px;background:rgba(127,156,137,.06);color:#9ca9a0;font-size:9px;line-height:1.5}.notice{margin:18px 0 30px;padding:16px 18px;border-radius:14px;background:rgba(255,255,255,.035);color:#aaa69f;font-size:10px;line-height:1.55}.trend-wrap{margin:22px 0;padding:22px;border:1px solid rgba(109,201,132,.28);border-radius:22px;background:linear-gradient(135deg,rgba(73,140,88,.10),rgba(25,29,34,.98))}.trend-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.trend-head h3{font:700 28px "Space Grotesk";margin:5px 0}.trend-head p{max-width:760px;color:#aaa69f;font-size:10px;line-height:1.55}.trend-count{padding:8px 10px;border-radius:999px;background:rgba(109,201,132,.12);font-size:9px;color:#aee3bc;font-weight:800;white-space:nowrap}.trend-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}.trend-card{padding:16px;border:1px solid rgba(109,201,132,.16);border-radius:15px;background:rgba(255,255,255,.025)}.trend-team{display:flex;align-items:center;gap:8px;font:700 17px "Space Grotesk"}.today-dot{width:8px;height:8px;border-radius:50%;background:#51d673;box-shadow:0 0 0 4px rgba(81,214,115,.10),0 0 14px rgba(81,214,115,.35);flex:none}.trend-label{margin-top:9px;font-weight:800}.trend-meta{margin-top:7px;color:#aaa69f;font-size:9px;line-height:1.5}.trend-perfect{display:inline-block;margin-top:10px;padding:6px 8px;border-radius:999px;background:rgba(240,195,109,.15);color:#f3d28c;font-size:8px;font-weight:900}.trend-warning{margin-top:14px;color:#9ea39d;font-size:9px;line-height:1.5}@media(max-width:850px){.grid,.trend-grid{grid-template-columns:1fr}.nav{align-items:flex-start;padding:14px 0}.nav-links{justify-content:flex-end}.trend-head{display:block}.trend-count{display:inline-block;margin-top:8px}}</style></head><body><div class="page"><header class="nav"><a class="brand" href="/"><div class="mark">A</div><div><h1>ARGUS <span>OMNI</span></h1></div></a><nav class="nav-links"><a href="/">Today</a><a class="active" href="daily-slip.html">Daily Slip</a><a href="markets.html">Markets</a><a href="exact-scores.html">Exact Scores</a><a href="trends.html">Trends</a><a href="training-dashboard.html">Training</a><a href="compte-rendu-des-predictions.html">Performance</a><a href="argus-lab.html">System</a></nav></header><main><section class="hero"><p class="eyebrow">ARGUS DAILY SLIP</p><h2>The best options.<br/>Already filtered.</h2><p>PRIME/VALUE betting decisions stay separate from Trend 10/10 evidence. If the evidence is weak, ARGUS returns WAIT.</p><button id="refresh" class="refresh">Refresh slip</button><div class="meta"><span class="chip" id="date">—</span><span class="chip" id="status">Loading…</span><span class="chip" id="updated">—</span><span class="chip" id="eligible">— eligible</span></div></section><section id="single" class="single"><small>BEST SINGLE</small><strong>Preparing…</strong></section><section id="grid" class="grid"></section><section class="trend-wrap"><div class="trend-head"><div><small class="eyebrow">TREND 10/10 · PLAYING TODAY</small><h3>Perfect recent streaks</h3><p>Only teams playing today whose same condition occurred in all 10 of their 10 most recent consecutive matches. No skipped match, no older substitute, no incomplete statistics.</p></div><span class="trend-count" id="trendCount">Loading…</span></div><div id="trendGrid" class="trend-grid"><div class="empty">Checking strict 10/10 trends…</div></div><div class="trend-warning">10/10 is strong descriptive evidence, not certainty. These signals are intentionally separate from PRIME/VALUE and are not automatic bets.</div></section><div class="notice">Combined odds use current prices stored by ARGUS and can change before kickoff. Correlation Guard prevents obvious concentration in the same fixture, team or league/time cluster. No bet is placed automatically.</div></main></div><script>const $=id=>document.getElementById(id);function pct(v){return v==null?'—':`${Number(v).toFixed(0)}%`}function odds(v){return v==null?'—':Number(v).toFixed(2)}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function tm(v){if(!v)return'—';const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'—'}function leg(x){return `<div class="leg"><strong>${esc(x.home)} vs ${esc(x.away)}</strong><small>${esc(x.competition||'')} · ${esc(x.selection)} @ ${odds(x.odds)}</small><span class="pill">${esc(x.verdict)} · confidence ${pct(x.confidence)}</span>${x.why?`<small class="why"><b>Why this pick?</b> ${esc(x.why)}</small>`:''}${x.risks?.length?`<small>Risk: ${x.risks.slice(0,2).map(esc).join(' · ')}</small>`:''}</div>`}function card(key,s){const cls=key.toLowerCase();if(!s?.available)return `<article class="slip ${cls}"><div class="slip-head"><div><small>${key}</small><h3>WAIT</h3></div><div class="odds">—</div></div><div class="empty">Not enough eligible low-correlation selections for this profile.</div></article>`;const rejected=s.correlationGuard?.rejected?.length||0;return `<article class="slip ${cls}"><div class="slip-head"><div><small>${key}</small><h3>${s.legs.length} selection${s.legs.length>1?'s':''}</h3></div><div class="odds">${odds(s.combinedOdds)}</div></div><div class="muted">Average confidence ${pct(s.averageConfidence)}</div><div class="legs">${s.legs.map(leg).join('')}</div><div class="guard">Correlation Guard active${rejected?` · ${rejected} correlated option${rejected>1?'s':''} excluded`:''}.</div></article>`}function trendCard(x){return `<article class="trend-card"><div class="trend-team"><span class="today-dot" title="Plays today"></span>${esc(x.team)}</div><div class="trend-label">${esc(x.label)}</div><div class="trend-meta">Today ${tm(x.kickoff)} · vs ${esc(x.opponent||'—')}<br/>Last 10: ${x.recentHits}/10 · ${pct(x.recentHitRate)} · coverage ${pct(x.dataCoveragePct)}</div><span class="trend-perfect">⚡ 10/10 PERFECT · LATEST 10</span></article>`}async function load(){try{const r=await fetch('/api/daily-slip',{cache:'no-store'}),d=await r.json();if(!r.ok)throw new Error(d.error||'Daily Slip unavailable');$('date').textContent=d.date;$('status').textContent=d.status;$('eligible').textContent=`${d.eligibleCount||0} eligible`;$('updated').textContent=`Updated ${new Date(d.generatedAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;if(d.bestSingle){const x=d.bestSingle;$('single').innerHTML=`<small>BEST SINGLE</small><strong>${esc(x.home)} vs ${esc(x.away)} · ${esc(x.selection)}</strong><small>${esc(x.verdict)} · @ ${odds(x.odds)} · confidence ${pct(x.confidence)}</small>${x.why?`<small class="why"><b>Why this pick?</b> ${esc(x.why)}</small>`:''}`}else $('single').innerHTML='<small>BEST SINGLE</small><strong>WAIT</strong><small>No eligible PRIME/VALUE selection right now.</small>';$('grid').innerHTML=['safe','balanced','aggressive'].map(k=>card(k.toUpperCase(),d.slips?.[k])).join('');const ts=d.trend10?.signals||[];$('trendCount').textContent=`${ts.length} verified`;$('trendGrid').innerHTML=ts.length?ts.map(trendCard).join(''):'<div class="empty">No team playing today has a verified 10/10 perfect trend right now.</div>'}catch(e){$('status').textContent='Unavailable';$('grid').innerHTML=`<div class="empty">${esc(e.message)}</div>`;$('trendCount').textContent='Unavailable';$('trendGrid').innerHTML=`<div class="empty">${esc(e.message)}</div>`}}$('refresh').onclick=load;load();</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0b0d10"/>
+  <meta name="description" content="ARGUS OMNI Daily Slip — only the few football bets that pass the full decision filter."/>
+  <title>ARGUS OMNI — Daily Slip</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="argus-human-v6.css"/>
+  <link rel="stylesheet" href="argus-slip-v9.css"/>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="ARGUS OMNI home">
+        <div class="mark">A</div>
+        <div class="brand-copy"><h1>ARGUS <span>OMNI</span></h1></div>
+      </a>
+      <nav class="top-status" aria-label="Primary navigation">
+        <a class="nav-link" href="/">Today</a>
+        <a class="nav-link live-link" href="live.html">● Live</a>
+        <a class="nav-link" href="prediction-results.html">Results</a>
+        <details class="nav-more">
+          <summary>More</summary>
+          <div class="nav-menu">
+            <a class="active" href="daily-slip.html">Daily Slip</a>
+            <a href="markets.html">Markets</a>
+            <a href="exact-scores.html">Exact Scores</a>
+            <a href="trends.html">Trends</a>
+            <a href="shield.html">Decision Shield</a>
+            <a href="historical-validation.html">Historical Lab</a>
+            <a href="system-health.html">System Health</a>
+          </div>
+        </details>
+      </nav>
+    </header>
+
+    <main class="slip-page">
+      <section class="slip-hero">
+        <div class="slip-intro">
+          <p class="eyebrow">ARGUS DAILY SLIP</p>
+          <h2>What would ARGUS actually play today?</h2>
+          <p class="lead">Only PRIME and VALUE decisions can enter the betting shortlist. WATCH and NO BET are excluded. If nothing survives the evidence, price and correlation filters, the correct daily slip is simply <strong>no bet</strong>.</p>
+        </div>
+        <aside class="slip-decision">
+          <div class="slip-decision-head"><span>Today's decision</span><span id="decisionDate">—</span></div>
+          <div id="dailyDecision" class="slip-decision-body">
+            <strong>Checking today's card…</strong>
+            <p>ARGUS is reading the current decision set.</p>
+          </div>
+          <span id="dailyState" class="slip-state">VERIFYING</span>
+        </aside>
+      </section>
+
+      <section class="slip-summary" aria-label="Daily Slip summary">
+        <div><span>Eligible picks</span><strong id="eligible">—</strong><small>PRIME / VALUE only</small></div>
+        <div><span>Best single</span><strong id="bestSingleSummary">—</strong><small>strongest eligible selection</small></div>
+        <div><span>Decision source</span><strong id="sourceAge">—</strong><small>freshness of prematch source</small></div>
+        <div><span>10/10 trends</span><strong id="trendCount">—</strong><small>informational, not automatic bets</small></div>
+      </section>
+
+      <section class="slip-section">
+        <div class="slip-section-head">
+          <div>
+            <p class="eyebrow">TODAY'S SHORTLIST</p>
+            <h3>Only what survives the full filter.</h3>
+            <p>ARGUS will not fill empty space with weak selections. The strongest single appears first; portfolio variants only appear when enough low-correlation picks qualify.</p>
+          </div>
+          <button id="refresh" class="slip-refresh" type="button">Refresh slip</button>
+        </div>
+        <div id="single" class="best-single wait">
+          <span class="best-single-label">BEST SINGLE</span>
+          <h4>Preparing…</h4>
+          <p>Reading current eligible decisions.</p>
+        </div>
+        <div id="portfolios" class="portfolio-grid"></div>
+        <div id="sourceWarning" class="source-warning" hidden></div>
+      </section>
+
+      <section class="trend-section">
+        <div class="trend-head">
+          <div>
+            <p class="eyebrow">SEPARATE EVIDENCE</p>
+            <h3>Verified 10/10 trends playing today</h3>
+            <p>A perfect recent streak can be useful context, but it cannot create PRIME or VALUE by itself. Trend evidence stays separate from the betting shortlist.</p>
+          </div>
+          <span id="trendSummary" class="trend-summary">Checking trends…</span>
+        </div>
+        <div id="trendGrid" class="trend-grid">
+          <div class="empty-state"><strong>Checking strict trends</strong><span>Only complete latest-10 sequences are accepted.</span></div>
+        </div>
+        <div class="trend-warning">10/10 describes the past; it does not guarantee the next result. No trend is converted into an automatic bet.</div>
+      </section>
+
+      <section class="slip-details">
+        <details>
+          <summary>How ARGUS builds the Daily Slip</summary>
+          <div>The betting shortlist accepts only decisions already classified PRIME or VALUE by the Decision Scheduler. A Correlation Guard then removes concentrated selections from the same fixture, team or tightly related league/time cluster. ARGUS never adds a weaker pick just to complete a multi-bet.</div>
+        </details>
+        <details>
+          <summary>Why WAIT is a valid result</summary>
+          <div>A betting system that always produces a bet is forced to lower its standards. In ARGUS, zero eligible selections is a complete decision: the current evidence does not justify exposure.</div>
+        </details>
+      </section>
+    </main>
+
+    <footer><span>ARGUS OMNI · NO EDGE, NO BET.</span><span>BET RESPONSIBLY</span></footer>
+  </div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const odds=v=>v==null?'—':Number(v).toFixed(2);
+const pct=v=>v==null?'—':`${Number(v).toFixed(0)}%`;
+const tm=v=>{if(!v)return'—';const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'—'};
+function ageLabel(v){if(!v)return'Unknown';const ms=Date.now()-new Date(v).getTime();if(!Number.isFinite(ms)||ms<0)return'Fresh';const h=ms/3600000;if(h<1)return'<1h';if(h<24)return`${Math.round(h)}h`;return`${Math.round(h/24)}d`}
+
+function renderDecision(d){
+  $('decisionDate').textContent=d.date||'—';
+  $('eligible').textContent=d.eligibleCount||0;
+  $('bestSingleSummary').textContent=d.bestSingle?'YES':'—';
+  $('sourceAge').textContent=ageLabel(d.sourceGeneratedAt);
+  $('trendCount').textContent=d.trend10?.count||0;
+  const state=$('dailyState'),body=$('dailyDecision');
+  if(d.bestSingle||d.eligibleCount>0){
+    body.innerHTML=`<strong>There are ${d.eligibleCount} eligible pick${d.eligibleCount===1?'':'s'} today.</strong><p>ARGUS found at least one PRIME/VALUE decision that survived the current filtering rules. Review the shortlist below before acting.</p>`;
+    state.textContent='OPPORTUNITY FOUND';state.classList.add('go');
+  }else{
+    body.innerHTML='<strong>NO BET TODAY.</strong><p>No current selection clears the PRIME/VALUE, pricing and correlation standards. ARGUS is choosing zero exposure rather than forcing a play.</p>';
+    state.textContent='WAIT';state.classList.remove('go');
+  }
+}
+
+function renderSingle(x){
+  const root=$('single');
+  if(!x){root.className='best-single wait';root.innerHTML='<span class="best-single-label">BEST SINGLE</span><h4>WAIT</h4><p>No eligible PRIME/VALUE single is available right now.</p>';return}
+  root.className='best-single';
+  root.innerHTML=`<span class="best-single-label">BEST SINGLE</span><h4>${esc(x.home)} vs ${esc(x.away)}</h4><p>${x.why?esc(x.why):'Highest-ranked eligible decision in the current daily set.'}</p><div class="single-play"><div><span>ARGUS play</span><strong>${esc(x.selection)}</strong></div><div><span>Price</span><strong>${odds(x.odds)}</strong></div><div><span>Confidence</span><strong>${pct(x.confidence)}</strong></div></div>`;
+}
+
+function portfolioLeg(x){return `<div class="portfolio-leg"><strong>${esc(x.home)} vs ${esc(x.away)} · ${esc(x.selection)}</strong><small>${esc(x.competition||'')} · @ ${odds(x.odds)} · ${esc(x.verdict||'')} · confidence ${pct(x.confidence)}</small>${x.why?`<small class="portfolio-why">${esc(x.why)}</small>`:''}</div>`}
+function portfolioCard(key,s){
+  const label=key==='SAFE'?'Lower concentration':key==='BALANCED'?'Balanced':'Higher variance';
+  if(!s?.available)return `<article class="portfolio"><div class="portfolio-head"><div><small>${label.toUpperCase()}</small><h4>Not available</h4></div><span class="portfolio-odds">—</span></div><div class="portfolio-empty">ARGUS does not have enough eligible low-correlation selections for this profile.</div></article>`;
+  const rejected=s.correlationGuard?.rejected?.length||0;
+  return `<article class="portfolio"><div class="portfolio-head"><div><small>${label.toUpperCase()}</small><h4>${s.legs.length} selection${s.legs.length===1?'':'s'}</h4></div><span class="portfolio-odds">${odds(s.combinedOdds)}</span></div><div class="portfolio-legs">${s.legs.map(portfolioLeg).join('')}</div><div class="portfolio-guard">Average confidence ${pct(s.averageConfidence)} · Correlation Guard active${rejected?` · ${rejected} option${rejected===1?'':'s'} removed`:''}.</div></article>`;
+}
+function renderPortfolios(d){
+  const slips=d.slips||{},available=['safe','balanced','aggressive'].filter(k=>slips[k]?.available);
+  if(!available.length){$('portfolios').innerHTML='<div class="empty-state" style="grid-column:1/-1"><strong>No portfolio should be built today</strong><span>There are not enough qualifying low-correlation selections. ARGUS leaves the slip empty.</span></div>';return}
+  $('portfolios').innerHTML=['safe','balanced','aggressive'].map(k=>portfolioCard(k.toUpperCase(),slips[k])).join('');
+}
+
+function trendCard(x){return `<article class="trend-card"><strong>${esc(x.team)}</strong><span>${esc(x.label)}</span><small>Today ${tm(x.kickoff)} · vs ${esc(x.opponent||'—')} · latest 10: ${x.recentHits}/10 · coverage ${pct(x.dataCoveragePct)}</small><span class="perfect">10/10 VERIFIED</span></article>`}
+function renderTrends(d){
+  const ts=d.trend10?.signals||[];$('trendSummary').textContent=ts.length?`${ts.length} verified today`:'No verified 10/10 today';
+  $('trendGrid').innerHTML=ts.length?ts.map(trendCard).join(''):'<div class="empty-state" style="grid-column:1/-1"><strong>No strict 10/10 trend qualifies today</strong><span>ARGUS found no team playing today with a complete verified perfect latest-10 sequence.</span></div>';
+}
+
+function renderFreshness(d){
+  const root=$('sourceWarning');if(!d.sourceGeneratedAt){root.hidden=true;return}const h=(Date.now()-new Date(d.sourceGeneratedAt).getTime())/3600000;
+  if(Number.isFinite(h)&&h>12){root.hidden=false;root.textContent=`Prematch decision source is ${ageLabel(d.sourceGeneratedAt)} old. The Daily Slip remains conservative and should not treat stale source data as fresh evidence.`}else root.hidden=true;
+}
+
+async function load(){
+  $('refresh').disabled=true;
+  try{
+    const r=await fetch('/api/daily-slip',{cache:'no-store'}),d=await r.json();if(!r.ok)throw new Error(d.error||'Daily Slip unavailable');
+    renderDecision(d);renderSingle(d.bestSingle);renderPortfolios(d);renderTrends(d);renderFreshness(d);
+  }catch(e){$('dailyDecision').innerHTML=`<strong>Daily Slip unavailable.</strong><p>${esc(e.message)}</p>`;$('dailyState').textContent='UNAVAILABLE';$('portfolios').innerHTML=`<div class="empty-state" style="grid-column:1/-1"><strong>Unable to load shortlist</strong><span>${esc(e.message)}</span></div>`;$('trendGrid').innerHTML=`<div class="empty-state"><strong>Trend data unavailable</strong><span>${esc(e.message)}</span></div>`}
+  finally{$('refresh').disabled=false}
+}
+$('refresh').onclick=load;load();
+</script>
+</body>
+</html>
