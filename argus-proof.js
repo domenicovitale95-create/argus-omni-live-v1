@@ -1,8 +1,9 @@
 (()=>{
   const $=id=>document.getElementById(id);
-  const pct=(v,max)=>Math.max(0,Math.min(100,max?Number(v||0)/max*100:0));
-  const num=(v,d=1)=>Number.isFinite(Number(v))?Number(v).toFixed(d):'—';
-  const signed=(v,d=1)=>Number.isFinite(Number(v))?`${Number(v)>0?'+':''}${Number(v).toFixed(d)}%`:'—';
+  const hasNum=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
+  const pct=(v,max)=>Math.max(0,Math.min(100,max&&hasNum(v)?Number(v)/max*100:0));
+  const num=(v,d=1)=>hasNum(v)?Number(v).toFixed(d):'—';
+  const signed=(v,d=1)=>hasNum(v)?`${Number(v)>0?'+':''}${Number(v).toFixed(d)}%`:'—';
   const statusMeta=s=>{
     const x=String(s||'BUILDING_EVIDENCE').toUpperCase();
     if(x==='STATISTICALLY_VALIDATED')return{label:'STATISTICALLY VALIDATED',state:'validated'};
@@ -18,9 +19,9 @@
     setText('proofSettled',`${f.sample??0}`);setText('proofSettledSub','of 1,000 settled');
     setText('proofDays',`${Math.floor(Number(period.elapsedDays)||0)}`);setText('proofDaysSub','of 90 days');
     setText('proofRoi',signed(f.flatStakeRoiPct,1));setText('proofRoiSub','flat-stake ROI');
-    const lower=Number.isFinite(Number(ci.lower95))?signed(ci.lower95,1):'—';
-    const upper=Number.isFinite(Number(ci.upper95))?signed(ci.upper95,1):'—';
-    setText('proofCi',lower==='—'?'—':`${lower} / ${upper}`);setText('proofCiSub','95% lower / upper');
+    const lower=hasNum(ci.lower95)?signed(ci.lower95,1):'—';
+    const upper=hasNum(ci.upper95)?signed(ci.upper95,1):'—';
+    setText('proofCi',lower==='—'||upper==='—'?'—':`${lower} / ${upper}`);setText('proofCiSub','95% lower / upper');
     setText('proofClv',signed(clv.meanPct,2));setText('proofClvSub',`${clv.sample??0} / 300 near-close`);
     setText('proofSampleProgress',`${f.sample??0} / 1000`);setWidth('proofSampleFill',pct(f.sample,1000));
     setText('proofDayProgress',`${Math.floor(Number(period.elapsedDays)||0)} / 90`);setWidth('proofDayFill',pct(period.elapsedDays,90));
