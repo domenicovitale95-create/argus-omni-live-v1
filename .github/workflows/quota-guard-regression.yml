@@ -38,7 +38,7 @@ jobs:
           grep -q "dailyRemaining=0" api/live.js
       - name: Verify protected daily reserve and bounded secondary calls
         run: |
-          grep -Eq "MIN_DAILY_RESERVE = 1[5-9][0-9]{2}|MIN_DAILY_RESERVE = [2-9][0-9]{3}" api/live.js
+          grep -Eq "MIN_DAILY_RESERVE[[:space:]]*=[[:space:]]*(1[5-9][0-9]{2}|[2-9][0-9]{3})" api/live.js
           grep -q "SECONDARY_CALL_BUDGET_PER_BUILD" api/live.js
       - name: Verify temporary zero-quota window is narrow and self-expiring
         run: |
