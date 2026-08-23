@@ -1,0 +1,43 @@
+/* ARGUS mobile-first refinements. Keep touch navigation readable and prevent fixed nav from hiding the final content. */
+@media (max-width:760px){
+  body.os-has-shell .os-more-page{
+    padding-top:14px;
+    padding-bottom:calc(var(--os-nav-h,72px) + env(safe-area-inset-bottom,0px) + 64px);
+  }
+  body.os-has-shell .os-more-hero{padding:0 0 22px}
+  body.os-has-shell .os-more-hero h2{
+    font-size:34px;
+    line-height:1.04;
+    letter-spacing:-.045em;
+    text-wrap:balance;
+  }
+  body.os-has-shell .os-more-hero p{
+    font-size:13px;
+    line-height:1.58;
+  }
+  body.os-has-shell .os-tool-group{margin-top:28px}
+  body.os-has-shell .os-tool-group-head h3{
+    font-size:20px;
+    line-height:1.15;
+  }
+  body.os-has-shell .os-tool-card{
+    min-height:124px;
+    padding:16px;
+  }
+  body.os-has-shell .os-tool-card p{font-size:11px;line-height:1.48}
+  body.os-has-shell .os-bottom-nav{
+    max-width:520px;
+    margin-inline:auto;
+  }
+}
+@media (max-width:390px){
+  body.os-has-shell .os-more-hero h2{font-size:32px}
+  body.os-has-shell .os-more-page{
+    padding-bottom:calc(var(--os-nav-h,72px) + env(safe-area-inset-bottom,0px) + 72px);
+  }
+}
+@media (max-width:360px){
+  body.os-has-shell .os-more-hero h2{font-size:30px}
+  body.os-has-shell .os-tool-group-head h3{font-size:19px}
+  body.os-has-shell .os-bottom-nav a{font-size:7.5px}
+}
