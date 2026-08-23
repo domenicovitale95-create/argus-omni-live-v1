@@ -1,2 +1,2 @@
 ARGUS production deployment refresh — 2026-08-23
-Purpose: activate Decision Integrity V2 after green regression checks: canonical state-conditioned LIVE V2 shadow model, fail-closed official decisions, explicit probability/edge/EV semantics, resilient provider cache, quota-safe refresh, and bounded historical replay.
+Purpose: deploy Decision Integrity V2 plus autonomy hardening: deconflicted GitHub scheduler cadence, redundant historical polling removed, late-vs-stale heartbeat semantics, visible ledger-heartbeat persistence failures, and improved semantic site health reporting.
