@@ -10,12 +10,11 @@ export default async function handler(req,res){
     footballData:flag(process.env.API_FOOTBALL_KEY),
     persistentStorage:storageReady(),
     cronAuth:flag(process.env.CRON_SECRET),
-    webPush:Boolean(flag(process.env.VAPID_PUBLIC_KEY)&&flag(process.env.VAPID_PRIVATE_KEY)),
-    emailAlerts:Boolean(flag(process.env.RESEND_API_KEY)&&flag(process.env.ARGUS_ALERT_FROM))
+    webPush:Boolean(flag(process.env.VAPID_PUBLIC_KEY)&&flag(process.env.VAPID_PRIVATE_KEY))
   };
 
   const critical=['footballData','persistentStorage'];
-  const optional=['webPush','emailAlerts'];
+  const optional=['webPush'];
   const missingCritical=critical.filter(k=>!checks[k]);
   const optionalMissing=optional.filter(k=>!checks[k]);
   const status=missingCritical.length?'DEGRADED':'HEALTHY';
@@ -32,14 +31,13 @@ export default async function handler(req,res){
   };
 
   return res.status(200).json({
-    version:'SITE-HEALTH-4',generatedAt:new Date().toISOString(),status,securityStatus,securityIssues,
+    version:'SITE-HEALTH-5',generatedAt:new Date().toISOString(),status,securityStatus,securityIssues,
     featureAvailability,checks,missingCritical,optionalMissing,deployment,
     notes:{
       footballData:'Required for live football ingestion.',
       persistentStorage:'Required for reports, training memory, alerts and self-improvement.',
       cronAuth:'Security-critical for autonomous scheduled and mutating endpoints. Missing configuration is reported without disabling Autopilot automatically.',
       webPush:'Optional notification channel.',
-      emailAlerts:'Optional notification channel.',
       deployment:'Safe metadata used to detect production/repository drift.'
     },
     secretValuesExposed:false
