@@ -1,6 +1,8 @@
 (function(){
   const SEEN_KEY='argus-alerts-seen-v1';
   const ENABLED_KEY='argus-alerts-enabled-v1';
+  const POLL_MS=120000;
+  const RECENT_MS=7*60*1000;
   function seen(){try{return new Set(JSON.parse(localStorage.getItem(SEEN_KEY)||'[]'))}catch(_){return new Set()}}
   function saveSeen(set){try{localStorage.setItem(SEEN_KEY,JSON.stringify([...set].slice(-200)))}catch(_){}}
   function enabled(){try{return localStorage.getItem(ENABLED_KEY)==='1'}catch(_){return false}}
@@ -8,9 +10,18 @@
   function label(){const btn=document.getElementById('argusAlertToggle');if(!btn)return;const on=enabled()&&'Notification'in window&&Notification.permission==='granted';btn.textContent=on?'Alerts on':'Alerts';btn.dataset.enabled=on?'1':'0';btn.setAttribute('aria-pressed',on?'true':'false')}
   function b64(s){const pad='='.repeat((4-s.length%4)%4),base=(s+pad).replace(/-/g,'+').replace(/_/g,'/'),raw=atob(base),out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out}
   async function subscribePush(){if(!('serviceWorker'in navigator)||!('PushManager'in window))return false;const cfg=await fetch('/api/push-subscriptions',{cache:'no-store'}).then(r=>r.json()).catch(()=>null);if(!cfg?.enabled||!cfg.publicKey)return false;const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64(cfg.publicKey)});const r=await fetch('/api/push-subscriptions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON()})});return r.ok}
-  async function requestPermission(){if(!('Notification'in window)){alert('Browser notifications are not supported on this device.');return}const p=await Notification.requestPermission();setEnabled(p==='granted');label();if(p==='granted'){await subscribePush().catch(()=>false);poll(true)}}
+  async function requestPermission(){if(!('Notification'in window)){alert('Browser notifications are not supported on this device.');return}const p=await Notification.requestPermission();setEnabled(p==='granted');label();if(p==='granted'){await subscribePush().catch(()=>false);poll()}}
   async function notify(a){const title=`ARGUS ${a.verdict}: ${a.home} vs ${a.away}`;const body=[a.selection,a.odds?`@ ${Number(a.odds).toFixed(2)}`:'',a.confidence!=null?`confidence ${a.confidence}%`:'',a.qualityScore!=null?`quality ${a.qualityScore}/100`:''].filter(Boolean).join(' · ');const options={body,tag:`argus-${a.fixtureId}-${a.selection||''}`,renotify:true,data:{url:'/daily-slip.html'}};try{if('serviceWorker'in navigator){const reg=await navigator.serviceWorker.ready;await reg.showNotification(title,options);return}const n=new Notification(title,options);n.onclick=()=>{window.focus();location.href='/daily-slip.html'}}catch(_){}}
-  async function poll(){if(!enabled()||!('Notification'in window)||Notification.permission!=='granted')return;try{const r=await fetch('/api/alert-engine',{cache:'no-store'}),j=await r.json();if(!r.ok)return;const s=seen();for(const a of j.newAlerts||[]){if(s.has(a.id))continue;s.add(a.id);await notify(a)}saveSeen(s)}catch(_){}}
+  async function poll(){
+    if(document.visibilityState!=='visible'||!enabled()||!('Notification'in window)||Notification.permission!=='granted')return;
+    try{
+      const r=await fetch('/api/alert-engine?mode=feed'),j=await r.json();if(!r.ok)return;
+      const s=seen(),cutoff=Date.now()-RECENT_MS;
+      for(const a of j.feed||[]){const created=Date.parse(a.createdAt||'');if(!Number.isFinite(created)||created<cutoff||a.siteOnly||s.has(a.id))continue;s.add(a.id);await notify(a)}
+      saveSeen(s);
+    }catch(_){}
+  }
   function mount(){if(document.getElementById('argusAlertToggle'))return;const host=document.querySelector('.top-status,.nav-links,.links');if(!host)return;const btn=document.createElement('button');btn.id='argusAlertToggle';btn.type='button';btn.className='nav-link alert-toggle';btn.style.cursor='pointer';btn.onclick=requestPermission;btn.setAttribute('aria-label','Enable ARGUS high-signal notifications');host.appendChild(btn);label()}
-  document.addEventListener('DOMContentLoaded',()=>{mount();label();if(enabled()){subscribePush().catch(()=>false);poll()}setInterval(poll,60000)});
+  document.addEventListener('DOMContentLoaded',()=>{mount();label();if(enabled()){subscribePush().catch(()=>false);poll()}setInterval(poll,POLL_MS)});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')poll()});
 })();
