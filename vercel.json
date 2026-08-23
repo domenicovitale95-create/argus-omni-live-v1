@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
-  "ignoreCommand": "node -e \"const ref=process.env.VERCEL_GIT_COMMIT_REF||'';const env=process.env.VERCEL_ENV||'';const msg=process.env.VERCEL_GIT_COMMIT_MESSAGE||'';const force=/(^deploy:|\\[deploy\\]|\\(deploy\\):)/i.test(msg);process.exit(env==='production'||ref==='main'||force?1:0)\"",
+  "ignoreCommand": "node -e \"process.exit(process.env.VERCEL_GIT_COMMIT_REF==='main'||/^(deploy:|\\[deploy\\]|\\(deploy\\):)/i.test(process.env.VERCEL_GIT_COMMIT_MESSAGE||'')?1:0)\"",
   "github": {
     "autoJobCancelation": true
   },
