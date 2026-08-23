@@ -1,0 +1,134 @@
+{
+  "dossierDate": "2026-08-23",
+  "pipeline": "OBSERVED -> DERIVED -> HYPOTHESIS -> SAFE_EXPERIMENT -> EVIDENCE_GATE",
+  "productionChanged": false,
+  "targetBranch": "argus-autonomous-learning-loop",
+  "runtimeSnapshot": {
+    "observedAt": "2026-08-23T06:17:00Z",
+    "source": "Vercel production observability",
+    "last6hStatusCounts": {"200": 1628, "503": 28, "401": 9, "500": 4, "207": 1},
+    "last6h503ByPath": {"/api/live": 21, "/api/cognitive-gpt-review": 6, "/api/cognitive-cycle": 1},
+    "last6h500ByPath": {"/api/live": 3, "/api/autopilot": 1},
+    "last24hErrorGroups": [
+      {"signal": "DEP0169 url.parse deprecation", "count": 143, "status": "WATCH"},
+      {"signal": "runtime out-of-memory on /api/live", "count": 1, "status": "WATCH"}
+    ],
+    "interpretation": "Production is mostly serving 200s but is not error-free. Live availability/control-plane truth currently outranks model-complexity work."
+  },
+  "findings": [
+    {
+      "id": "QUOTA-HEADER-TRUTH-001",
+      "status": "KEEP",
+      "evidenceType": "OBSERVED",
+      "sources": [
+        "https://www.api-football.com/news/post/how-ratelimit-works",
+        "https://www.api-football.com/news/post/how-to-optimize-api-sports-calls-and-quota-usage",
+        "https://www.api-football.com/news/post/how-to-get-started-with-api-football-the-complete-beginners-guide"
+      ],
+      "evidence": "API-SPORTS states that Dashboard API daily quota resets at 00:00 UTC, Pro is limited to 7,500 requests/day and 300/minute, and every response exposes daily and per-minute remaining-quota headers. The provider recommends backpressure, progressive backoff and adapting secondary work to remaining quota.",
+      "derived": "ARGUS should treat provider response headers as quota truth and its own counters as a reconciled local estimate, not as an independent source of truth. Recent UTC-day fixes are directionally correct but need runtime reconciliation evidence.",
+      "hypothesis": "Header-vs-ledger reconciliation will eliminate false quota halts and make /api/live 503s diagnosable without spending more quota.",
+      "module": ["resource-intelligence", "prediction-ledger", "shadow-mode", "live-engine", "control-plane"],
+      "experiment": "Instrumentation only on work branch: persist x-ratelimit-requests-limit/remaining and X-RateLimit-Limit/Remaining with request timestamp, endpoint and internal counter; classify each quota-related 503 by explicit reason. Do not increase polling.",
+      "requiredEvidence": "At least 3 UTC reset boundaries and >=1,000 API responses across live and non-live routes; header/internal discrepancy must be explainable by in-flight calls or concurrency.",
+      "successMetrics": ["no false quota halt across 00:00 UTC", "explicit cause on every quota-related 503", "stable header-ledger reconciliation", "no increase in requests/day"],
+      "failureCondition": "Persistent unexplained header-ledger divergence, increased 429/503 rate, or instrumentation changes request behavior.",
+      "rollback": "Remove reconciliation telemetry and retain current quota guard; no predictor or threshold change."
+    },
+    {
+      "id": "CRON-RUNTIME-TRUTH-001",
+      "status": "KEEP",
+      "evidenceType": "OBSERVED",
+      "sources": ["https://vercel.com/docs/cron-jobs/quickstart", "https://vercel.com/docs/cli/crons", "https://vercel.com/docs/observability/debug-production-errors"],
+      "evidence": "Vercel documentation states cron jobs become active on production deployments, can be manually triggered only when deployed, and runtime logs/request IDs are the evidence for what actually executed.",
+      "derived": "A cron being present in vercel.json or a preview deployment is configuration evidence, not execution evidence. Control Plane health should distinguish CONFIGURED, DEPLOYED, INVOKED, SUCCEEDED and PERSISTED.",
+      "hypothesis": "An execution-evidence ledger will prevent ARGUS from reporting healthy autonomous loops whose routes exist but have not successfully persisted fresh state.",
+      "module": ["watchtower", "deployment-verifier", "developer-health", "control-plane", "maximum-pilot"],
+      "experiment": "Reporting-only: for each critical cron, record last production invocation timestamp, HTTP status, request/deployment ID, persisted-artifact timestamp and freshness SLA. Mark UNKNOWN instead of HEALTHY when execution evidence is absent.",
+      "requiredEvidence": "At least 7 days of production invocations covering all critical crons and at least one manual replay for each failure class.",
+      "failureCondition": "Ledger cannot correlate invocation to persisted artifact reliably or creates noisy false alarms without actionable distinction.",
+      "rollback": "Remove execution-evidence fields; keep existing health checks unchanged."
+    },
+    {
+      "id": "NODE-URL-DEPRECATION-001",
+      "status": "WATCH",
+      "evidenceType": "OBSERVED",
+      "sources": ["https://nodejs.org/api/deprecations.html"],
+      "evidence": "Current Node.js documentation classifies url.parse() as deprecated because its non-standard behavior can have security implications and recommends the WHATWG URL API. Vercel production observability shows 143 DEP0169 warnings across multiple ARGUS routes in the last 24h, but repository code search did not identify a direct url.parse() call.",
+      "derived": "The warning should be traced to its dependency/runtime origin before any code mutation. Blind replacement is unsafe because the call may be transitive.",
+      "hypothesis": "A dependency or platform library shared across serverless routes is producing the warnings; identifying the stack origin will reveal whether a dependency upgrade or local migration is appropriate.",
+      "module": ["runtime-hygiene", "dependency-management", "observability"],
+      "experiment": "Capture one expanded warning stack/request ID in preview or controlled production logging; map it to direct code or package-lock dependency. No package upgrade until origin and compatibility are known.",
+      "requiredEvidence": "Reproducible stack origin on >=3 routes or a single shared dependency with version proof.",
+      "failureCondition": "Warning originates solely from managed platform internals or remediation requires high-risk dependency churn without functional benefit.",
+      "rollback": "No runtime mutation until origin is proven."
+    },
+    {
+      "id": "LIVE-MARKET-ANCHOR-001",
+      "status": "WATCH",
+      "evidenceType": "OBSERVED",
+      "sources": ["https://arxiv.org/abs/2605.16066"],
+      "evidence": "A May 2026 in-play football study calibrated continuous-time goal models to Betfair 1X2 and over/under prices at kick-off and found market calibration was the dominant driver of predictive accuracy; on 140 EPL matches its calibrated model nearly matched Betfair classification accuracy. The paper is recent and relevant but the sample is small and the reported betting simulation is not sufficient for deployment trust.",
+      "derived": "ARGUS should test market prices as a prior/anchor for live intensity rather than treating its pre-match team-strength estimates as fully independent truth.",
+      "hypothesis": "No-vig market anchoring of pre-match intensities will improve live Brier/log-loss and reduce early-match overconfidence without requiring a larger model.",
+      "module": ["live-engine", "market-truth", "calibration-watchdog", "exact-score-rnd"],
+      "experiment": "Shadow-only replay: fit/adjust simple goal-intensity parameters to frozen no-vig 1X2 + O/U snapshots at kick-off, then update with existing live state. Compare against current simple baseline using identical matches and timestamps.",
+      "requiredEvidence": "Prefer >=1,000 independent matches across multiple leagues/seasons, with >=3 walk-forward windows and market snapshots frozen before kickoff; compare Brier, log-loss, calibration and coverage, not ROI alone.",
+      "failureCondition": "Gain disappears out-of-time, is concentrated in one league, worsens calibration, or depends on post-kickoff leakage.",
+      "rollback": "Discard challenger; current live predictor remains champion."
+    },
+    {
+      "id": "EXACT-SCORE-DEPENDENCE-001",
+      "status": "KEEP",
+      "evidenceType": "OBSERVED",
+      "sources": ["https://arxiv.org/abs/2307.02139"],
+      "evidence": "Research extending Dixon-Coles shows independent double-Poisson assumptions can be improved by explicitly modeling low-score dependence and that alternative discrete distributions may fit competitions with different score characteristics.",
+      "derived": "ARGUS should not trust one universal independent-Poisson exact-score model across all leagues and competition types. Low-score dependence should be benchmarked as a challenger, not assumed.",
+      "hypothesis": "A Dixon-Coles/Sarmanov-style low-score dependence layer will improve held-out scoreline log-loss and probability calibration in some segments while being unnecessary in others.",
+      "module": ["exact-score-rnd", "market-specialists", "walk-forward-validation"],
+      "experiment": "Offline only: benchmark independent Poisson versus Dixon-Coles-style low-score correction per competition family using identical rolling training windows; evaluate full score-distribution log-loss plus 1X2/O-U marginal consistency.",
+      "requiredEvidence": "Multiple seasons with >=500 held-out matches per promoted segment where possible, minimum 3 walk-forward folds, and stability of the dependence parameter through time.",
+      "failureCondition": "No stable held-out log-loss/calibration gain, parameter instability, or marginal market probabilities become less coherent.",
+      "rollback": "Keep independent Poisson baseline; store negative result in Failure Memory."
+    },
+    {
+      "id": "PREGOAL-MARKET-SIGNAL-001",
+      "status": "REJECT",
+      "evidenceType": "OBSERVED",
+      "sources": ["https://arxiv.org/abs/2505.21275"],
+      "evidence": "A 2025 Bundesliga study using 1 Hz bookmaker odds and stakes found no significant evidence that bookmakers or bettors systematically anticipate the first goal immediately before it occurs.",
+      "derived": "A feature claiming that short-horizon odds/stake acceleration reliably predicts an imminent goal lacks enough transferable evidence to justify quota or complexity now.",
+      "hypothesis": "None promoted. Reconsider only if ARGUS later owns high-quality synchronized exchange/order-flow data and can falsify the null out-of-sample.",
+      "module": ["live-engine", "feature-rnd"],
+      "experiment": "None now.",
+      "requiredEvidence": "Would require independent high-frequency market microstructure data across multiple leagues and seasons with strict latency alignment.",
+      "failureCondition": "Already fails the current transferability/cost bar.",
+      "rollback": "No change made."
+    }
+  ],
+  "handoff": {
+    "DATE": "2026-08-23",
+    "EXECUTE_NEXT": "Add shadow-only provider-header quota reconciliation and explicit 503 reason classification before further live polling/model work.",
+    "WHY_NOW": "Production shows repeated /api/live 503s while API-Football exposes authoritative daily/minute quota headers and resets daily quota at 00:00 UTC. Data availability and Control Plane truth are prerequisites for trustworthy live learning.",
+    "EXPECTED_BENEFIT": "Fewer false halts, explainable quota failures, safer API use, higher evidence throughput without upgrading the subscription.",
+    "EVIDENCE_LEVEL": "HIGH for provider quota semantics; MEDIUM for ARGUS causal diagnosis until 503s are classified.",
+    "REQUIRED_DATA": ["provider quota headers", "endpoint/timestamp", "internal quota ledger", "503/429 reason", "deployment/request ID"],
+    "MINIMUM_TEST": "Instrumentation-only across 3 UTC reset boundaries with >=1,000 responses; no polling increase.",
+    "SUCCESS_METRICS": ["zero unexplained false daily halts", "every quota-related 503 has a reason", "header-ledger discrepancy explainable", "no increase in 429 rate or request volume"],
+    "FAILURE_CONDITION": "Reconciliation remains materially inconsistent or instrumentation changes provider consumption/latency.",
+    "PROOF_REQUIRED": "Timestamped header snapshots and internal ledger records demonstrating correct behavior before/after UTC reset and under near-limit conditions.",
+    "RISK_LEAKAGE_RISKS": ["concurrent in-flight calls can temporarily desync counters", "do not infer quota from local timezone", "do not retry 429/503 tightly"],
+    "ROLLBACK": "Remove reconciliation telemetry; retain existing quota guard and polling schedule.",
+    "WATCH": ["production cron execution-evidence ledger", "market-anchored live intensity challenger"],
+    "DO_NOT_DO": ["do not upgrade API-Football solely to hide quota-control bugs", "do not increase live polling until 503 causes are known", "do not deploy market-anchored live model from a 140-match paper", "do not auto-upgrade dependencies for url.parse warnings before stack origin is proven", "do not promote exact-score dependence without walk-forward evidence"],
+    "DATA_TO_ACQUIRE_NEXT": ["quota headers on every provider response", "structured 503/429 causes", "closing no-vig 1X2 and O/U snapshots", "independent held-out scoreline histories"],
+    "NEXT_RESEARCH_QUESTION": "After quota/control-plane truth is stable, does market anchoring improve live probability calibration out-of-time versus the current simple baseline?",
+    "BLOCKERS": ["503 causes not yet fully classified", "research branch is diverged from main and must not be mistaken for production"],
+    "STATUS": "READY_TO_EXECUTE"
+  },
+  "maximumPilotDirective": {
+    "mode": "research_shadow_only",
+    "allowed": ["instrumentation", "metrics", "audits", "reports", "offline challengers", "shadow evaluation"],
+    "forbidden": ["production prediction mutation", "confidence increase", "PRIME promotion", "automatic real-money betting", "paid-plan upgrade without evidence"]
+  }
+}
