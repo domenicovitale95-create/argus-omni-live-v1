@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0b0d10"/>
+  <meta name="description" content="ARGUS OMNI Virtual Bankroll — paper betting performance with zero real money and immutable prematch decisions."/>
+  <title>ARGUS OMNI — Virtual Bankroll</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="argus-human-v6.css"/>
+  <style>
+    .bank-page{padding:34px 0 70px}.bank-hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.75fr);gap:18px;margin-bottom:18px}.bank-hero>div,.bank-hero>aside,.bank-panel{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.08);border-radius:24px}.bank-intro{padding:34px}.bank-intro h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(34px,5vw,62px);line-height:.98;letter-spacing:-.045em;margin:10px 0 18px;max-width:760px}.bank-intro .lead{max-width:720px;color:#aab0bb;font-size:16px;line-height:1.65}.paper-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(139,240,170,.2);background:rgba(79,214,123,.08);border-radius:999px;color:#a8f0bf;font-size:12px;font-weight:800;letter-spacing:.08em}.paper-badge:before{content:'';width:7px;height:7px;border-radius:50%;background:#74e89a;box-shadow:0 0 16px rgba(116,232,154,.8)}.bank-status{padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:24px}.bank-status span{font-size:12px;color:#888f9c;text-transform:uppercase;letter-spacing:.08em}.bank-status strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:36px;margin-top:8px}.bank-status small{display:block;color:#858c98;line-height:1.5;margin-top:8px}.status-line{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,.07);padding-top:18px}.status-dot{width:9px;height:9px;border-radius:50%;background:#74e89a;box-shadow:0 0 18px rgba(116,232,154,.7)}.bank-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;background:rgba(255,255,255,.08);margin:18px 0}.bank-strip>div{background:#101216;padding:20px 22px}.bank-strip span,.profile-card span,.metric-box span{display:block;color:#7f8794;font-size:12px}.bank-strip strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:25px;margin:7px 0 3px}.bank-strip small{color:#6e7580;font-size:11px}.profile-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.profile-tab{border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025);color:#8d95a2;border-radius:999px;padding:10px 14px;font-size:12px;font-weight:750;cursor:pointer}.profile-tab.active{color:#f5f7fa;border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.08)}.main-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:18px}.bank-panel{padding:26px}.panel-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:20px}.panel-head h3{font-family:'Space Grotesk',sans-serif;font-size:24px;margin:5px 0}.panel-head p{color:#818895;font-size:13px;line-height:1.5;max-width:620px}.refresh-btn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#d9dde4;border-radius:12px;padding:10px 13px;font-size:12px;font-weight:750;cursor:pointer;white-space:nowrap}.profile-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}.metric-box{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.065);border-radius:16px;padding:16px}.metric-box strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:23px;margin-top:7px}.metric-box small{display:block;color:#6f7783;font-size:11px;margin-top:5px}.chart-wrap{height:220px;border-radius:18px;border:1px solid rgba(255,255,255,.06);background:radial-gradient(circle at 25% 15%,rgba(119,151,255,.06),transparent 40%),rgba(0,0,0,.12);padding:18px;position:relative;overflow:hidden}.chart-wrap svg{width:100%;height:100%;overflow:visible}.chart-label{position:absolute;top:16px;left:18px;color:#777f8c;font-size:11px}.chart-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:#717987;font-size:13px;padding:30px}.profile-list{display:grid;gap:10px}.profile-card{border:1px solid rgba(255,255,255,.065);border-radius:16px;padding:16px;background:rgba(255,255,255,.02);cursor:pointer}.profile-card.active{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.055)}.profile-card-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.profile-card strong{font-family:'Space Grotesk',sans-serif;font-size:19px}.profile-card b{font-size:12px;color:#aab2bf}.profile-card small{color:#727a86;display:block;margin-top:8px;line-height:1.45}.bets-panel{margin-top:18px}.bets-list{display:grid;gap:10px}.bet-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding:17px 18px;border:1px solid rgba(255,255,255,.065);border-radius:16px;background:rgba(255,255,255,.018)}.bet-match small{display:block;color:#707885;font-size:11px;margin-bottom:5px}.bet-match strong{font-size:14px}.bet-match p{color:#7e8692;font-size:12px;margin:6px 0 0}.bet-side{text-align:right}.bet-side b{display:block;font-size:12px}.bet-side span{display:block;font-family:'Space Grotesk',sans-serif;font-size:18px;margin-top:5px}.bet-side small{color:#757d88}.bet-status{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;background:rgba(255,255,255,.06);color:#aeb5c0}.bet-status.WIN{background:rgba(80,210,120,.1);color:#98e9af}.bet-status.LOSS{background:rgba(245,103,103,.1);color:#f1a1a1}.bet-status.OPEN{background:rgba(113,151,255,.1);color:#a9c0ff}.integrity{margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.integrity div{padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.018)}.integrity strong{display:block;font-size:12px}.integrity small{display:block;color:#707884;font-size:10px;margin-top:4px}.notice{margin-top:18px;border:1px solid rgba(255,255,255,.065);border-radius:16px;padding:17px 18px;color:#858d99;font-size:12px;line-height:1.55}.notice strong{color:#dbe0e7}.loading{color:#7b838f;padding:30px;text-align:center}.positive{color:#91e5aa!important}.negative{color:#f1a1a1!important}@media(max-width:900px){.bank-hero,.main-grid{grid-template-columns:1fr}.bank-strip{grid-template-columns:repeat(2,1fr)}.integrity{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.bank-page{padding-top:20px}.bank-intro,.bank-status,.bank-panel{padding:20px}.bank-strip{grid-template-columns:1fr}.profile-overview{grid-template-columns:1fr}.bet-row{grid-template-columns:1fr}.bet-side{text-align:left}.panel-head{flex-direction:column}.integrity{grid-template-columns:1fr}.bank-intro h2{font-size:39px}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ARGUS OMNI home"><div class="mark">A</div><div class="brand-copy"><h1>ARGUS <span>OMNI</span></h1></div></a>
+    <nav class="top-status" aria-label="Primary navigation">
+      <a class="nav-link" href="/">Today</a>
+      <a class="nav-link live-link" href="live.html">● Live</a>
+      <a class="nav-link" href="prediction-results.html">Results</a>
+      <details class="nav-more">
+        <summary>More</summary>
+        <div class="nav-menu">
+          <a href="virtual-bankroll.html">Virtual Bankroll</a>
+          <a href="daily-slip.html">Daily Slip</a>
+          <a href="historical-validation.html">Historical Lab</a>
+          <a href="system-health.html">System Health</a>
+        </div>
+      </details>
+    </nav>
+  </header>
+
+  <main class="bank-page">
+    <section class="bank-hero">
+      <div class="bank-intro">
+        <span class="paper-badge">PAPER MODE · €0 REAL MONEY</span>
+        <p class="eyebrow" style="margin-top:22px">ARGUS VIRTUAL BANKROLL</p>
+        <h2>Would ARGUS make money if every valid signal were played?</h2>
+        <p class="lead">This is the live experiment. ARGUS freezes a real prematch decision, assigns a virtual stake, waits for the result, then updates the paper bankroll. No retroactive picks. No real wagers. No extra provider calls.</p>
+      </div>
+      <aside class="bank-status">
+        <div><span>Standard bankroll</span><strong id="heroBankroll">€10,000.00</strong><small id="heroCopy">Waiting for the first eligible paper bet.</small></div>
+        <div class="status-line"><div><span>Shadow engine</span><b id="engineState">LOADING</b></div><i class="status-dot" id="engineDot"></i></div>
+      </aside>
+    </section>
+
+    <section class="bank-strip" aria-label="Virtual bankroll summary">
+      <div><span>Total paper bets</span><strong id="trackedBets">—</strong><small>immutable entries</small></div>
+      <div><span>Open positions</span><strong id="openBets">—</strong><small>waiting for settlement</small></div>
+      <div><span>Settled positions</span><strong id="settledBets">—</strong><small>verified outcomes</small></div>
+      <div><span>Real provider calls</span><strong id="providerCalls">0</strong><small>bankroll engine only</small></div>
+    </section>
+
+    <div class="profile-tabs" id="profileTabs"></div>
+
+    <section class="main-grid">
+      <article class="bank-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">PORTFOLIO</p><h3 id="profileTitle">Standard strategy</h3><p id="profileDescription">ARGUS recommended stake with a 1.5% bankroll cap.</p></div>
+          <button class="refresh-btn" id="refreshBtn" type="button">Refresh</button>
+        </div>
+        <div class="profile-overview">
+          <div class="metric-box"><span>Current bankroll</span><strong id="bankroll">—</strong><small>started at €10,000</small></div>
+          <div class="metric-box"><span>Net P&amp;L</span><strong id="pnl">—</strong><small id="returnPct">— return</small></div>
+          <div class="metric-box"><span>ROI</span><strong id="roi">—</strong><small>settled stake only</small></div>
+          <div class="metric-box"><span>Max drawdown</span><strong id="drawdown">—</strong><small>peak-to-trough</small></div>
+          <div class="metric-box"><span>Win rate</span><strong id="hitRate">—</strong><small id="record">0–0 record</small></div>
+          <div class="metric-box"><span>Total staked</span><strong id="staked">—</strong><small>virtual exposure</small></div>
+        </div>
+        <div class="chart-wrap">
+          <span class="chart-label">Bankroll progression</span>
+          <svg id="bankChart" viewBox="0 0 720 180" preserveAspectRatio="none" aria-label="Virtual bankroll progression"><path id="gridA" d="M0 45H720M0 90H720M0 135H720" fill="none" stroke="rgba(255,255,255,.055)" stroke-width="1"/><path id="bankPath" d="" fill="none" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
+          <div class="chart-empty" id="chartEmpty">The curve will appear after the first settled paper bets.</div>
+        </div>
+      </article>
+
+      <aside class="bank-panel">
+        <div class="panel-head"><div><p class="eyebrow">RISK PROFILES</p><h3>Same signals. Different staking.</h3><p>This separates model quality from money-management effects.</p></div></div>
+        <div class="profile-list" id="profileList"><div class="loading">Loading profiles…</div></div>
+      </aside>
+    </section>
+
+    <section class="bank-panel bets-panel">
+      <div class="panel-head"><div><p class="eyebrow">PAPER BET LEDGER</p><h3>Every position stays visible.</h3><p>Open and settled positions are copied from frozen prematch ledger records. Later model changes cannot rewrite the original virtual bet.</p></div></div>
+      <div class="bets-list" id="betsList"><div class="loading">Loading paper ledger…</div></div>
+      <div class="integrity">
+        <div><strong>IMMUTABLE SOURCE</strong><small>Prediction Ledger</small></div>
+        <div><strong>NO BACKFILL</strong><small>Only fresh prematch entries</small></div>
+        <div><strong>NO PROVIDER SPEND</strong><small>Reads existing ARGUS data</small></div>
+        <div><strong>SHADOW ONLY</strong><small>No automatic wagering</small></div>
+      </div>
+      <div class="notice"><strong>Important:</strong> this page is a paper-trading experiment, not proof that ARGUS has a profitable edge. Scientific trust still depends on a sufficiently large, genuine out-of-sample prematch record.</div>
+    </section>
+  </main>
+  <footer><span>ARGUS OMNI · TEST THE EDGE BEFORE RISKING CAPITAL.</span><span>VIRTUAL MONEY ONLY</span></footer>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const names={CONSERVATIVE:'Conservative',STANDARD:'Standard',AGGRESSIVE:'Aggressive',FLAT_1U:'Flat 1U'};
+const desc={CONSERVATIVE:'Half-size ARGUS staking, capped at 0.75% of bankroll.',STANDARD:'ARGUS recommended stake with a 1.5% bankroll cap.',AGGRESSIVE:'1.5× ARGUS staking, capped at 2.25% of bankroll.',FLAT_1U:'Fixed 1% stake benchmark to isolate money-management effects.'};
+let data=null,active='STANDARD';
+const euro=v=>new Intl.NumberFormat('en-IE',{style:'currency',currency:'EUR',minimumFractionDigits:2}).format(Number(v||0));
+const pct=v=>v==null?'—':`${Number(v).toFixed(2)}%`;
+const dt=v=>{try{return new Intl.DateTimeFormat('en-GB',{dateStyle:'medium',timeStyle:'short'}).format(new Date(v))}catch(_){return'—'}};
+function tone(el,v){el.classList.toggle('positive',Number(v)>0);el.classList.toggle('negative',Number(v)<0)}
+function drawChart(){
+ const settled=(data?.recent||[]).filter(b=>b.status!=='OPEN'&&b.positions?.[active]?.bankrollAfter!=null).slice().sort((a,b)=>new Date(a.capturedAt)-new Date(b.capturedAt));
+ const p=data?.profiles?.[active];if(!p)return;
+ const vals=[data.initialBankroll||10000,...settled.map(b=>Number(b.positions[active].bankrollAfter))];
+ if(vals.length<2){$('bankPath').setAttribute('d','');$('chartEmpty').style.display='flex';return}
+ $('chartEmpty').style.display='none';const lo=Math.min(...vals),hi=Math.max(...vals),pad=Math.max((hi-lo)*.18,20),min=lo-pad,max=hi+pad,span=max-min||1;
+ const pts=vals.map((v,i)=>{const x=i/(vals.length-1)*720,y=165-(v-min)/span*145;return[x,y]});
+ $('bankPath').setAttribute('d',pts.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' '));
+}
+function renderProfiles(){
+ const profiles=data?.profiles||{};
+ $('profileTabs').innerHTML=Object.keys(profiles).map(k=>`<button class="profile-tab ${k===active?'active':''}" data-profile="${k}">${names[k]||k}</button>`).join('');
+ $('profileList').innerHTML=Object.entries(profiles).map(([k,p])=>`<div class="profile-card ${k===active?'active':''}" data-profile="${k}"><div class="profile-card-top"><div><span>${names[k]||k}</span><strong>${euro(p.bankroll)}</strong></div><b class="${Number(p.pnl)>0?'positive':Number(p.pnl)<0?'negative':''}">${Number(p.pnl)>0?'+':''}${euro(p.pnl)}</b></div><small>${p.bets||0} bets · ROI ${pct(p.roiPct)} · drawdown ${pct(p.maxDrawdownPct)}</small></div>`).join('');
+}
+function renderMain(){
+ const p=data?.profiles?.[active];if(!p)return;
+ $('profileTitle').textContent=`${names[active]||active} strategy`;$('profileDescription').textContent=desc[active]||'';
+ $('bankroll').textContent=euro(p.bankroll);$('pnl').textContent=`${Number(p.pnl)>0?'+':''}${euro(p.pnl)}`;tone($('pnl'),p.pnl);
+ $('returnPct').textContent=`${Number(p.returnPct)>0?'+':''}${pct(p.returnPct)} return`;$('roi').textContent=p.roiPct==null?'—':pct(p.roiPct);tone($('roi'),p.roiPct);
+ $('drawdown').textContent=pct(p.maxDrawdownPct);$('hitRate').textContent=p.hitRatePct==null?'—':pct(p.hitRatePct);$('record').textContent=`${p.wins||0}–${p.losses||0} record`;$('staked').textContent=euro(p.totalStaked);
+ if(active==='STANDARD'){$('heroBankroll').textContent=euro(p.bankroll);$('heroCopy').textContent=p.bets?`${p.bets} paper bet${p.bets===1?'':'s'} tracked · ${p.settled||0} settled.`:'Waiting for the first eligible paper bet.'}
+ drawChart();
+}
+function renderBets(){
+ const bets=data?.recent||[];if(!bets.length){$('betsList').innerHTML='<div class="loading">No eligible paper bets yet. ARGUS will add the first one automatically when a fresh actionable prematch record qualifies.</div>';return}
+ $('betsList').innerHTML=bets.map(b=>{const pos=b.positions?.[active]||{},pnl=pos.pnl;return `<article class="bet-row"><div class="bet-match"><small>${b.competition||'MATCH'} · ${dt(b.kickoff)}</small><strong>${b.home||'—'} vs ${b.away||'—'}</strong><p>${b.selection||'—'} @ ${b.odds?Number(b.odds).toFixed(2):'—'} · ${b.verdict||'—'} · captured ${dt(b.capturedAt)}</p></div><div class="bet-side"><b class="bet-status ${b.status}">${b.status}</b><span class="${Number(pnl)>0?'positive':Number(pnl)<0?'negative':''}">${pnl==null?euro(pos.stakeAmount):`${Number(pnl)>0?'+':''}${euro(pnl)}`}</span><small>${pnl==null?'virtual stake':'P&L'}</small></div></article>`}).join('')
+}
+function render(){
+ const s=data?.summary||{},i=data?.integrity||{};$('trackedBets').textContent=s.trackedBets??0;$('openBets').textContent=s.openBets??0;$('settledBets').textContent=s.settledBets??0;$('providerCalls').textContent=i.lastRunProviderCalls??i.providerCalls??0;
+ const age=data?.lastRunAt?Math.max(0,Math.round((Date.now()-new Date(data.lastRunAt).getTime())/60000)):null;$('engineState').textContent=age==null?'WAITING':age<=12?'HEALTHY':age<=25?'AGING':'STALE';$('engineDot').style.opacity=age!=null&&age>25?.3:1;
+ renderProfiles();renderMain();renderBets();
+}
+async function load(){
+ $('refreshBtn').disabled=true;try{const r=await fetch('/api/virtual-bankroll',{cache:'no-store'}),j=await r.json();if(!r.ok)throw new Error(j.error||'Virtual bankroll unavailable');data=j;render()}catch(e){$('engineState').textContent='UNAVAILABLE';$('betsList').innerHTML=`<div class="loading">${e.message}</div>`}finally{$('refreshBtn').disabled=false}
+}
+document.addEventListener('click',e=>{const el=e.target.closest('[data-profile]');if(!el)return;active=el.dataset.profile;render()});$('refreshBtn').onclick=load;load();setInterval(load,60000);
+</script>
+</body>
+</html>
