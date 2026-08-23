@@ -12,7 +12,6 @@ on:
       - 'api/daily-report.js'
       - 'api/shadow-mode.js'
       - 'api/daily-cron.js'
-      - 'vercel.json'
       - '.github/workflows/quota-guard-regression.yml'
   pull_request:
     paths:
@@ -24,7 +23,6 @@ on:
       - 'api/daily-report.js'
       - 'api/shadow-mode.js'
       - 'api/daily-cron.js'
-      - 'vercel.json'
       - '.github/workflows/quota-guard-regression.yml'
 
 jobs:
@@ -56,7 +54,6 @@ jobs:
           const report=read('api/daily-report.js');
           const shadow=read('api/shadow-mode.js');
           const cron=read('api/daily-cron.js');
-          const vercel=read('vercel.json');
 
           assert(/QUOTA_GUARD_PATH/.test(live)&&/persistQuotaExhausted/.test(live),'daily quota hard stop persists state');
           const reserve=live.match(/MIN_DAILY_RESERVE\s*=\s*(\d+)/)?.[1];
@@ -71,7 +68,7 @@ jobs:
           assert(/providerBlocked/.test(report)&&/QUOTA_GUARD/.test(report),'daily report honors quota guard');
           assert(/providerCallSkipped/.test(shadow)&&/QUOTA_GUARD/.test(shadow),'shadow mode honors quota guard');
           assert(/providerBlocked/.test(cron)&&/quota/i.test(cron),'daily cron honors quota state');
-          assert(/provider-status/.test(vercel),'provider watchdog remains scheduled');
+          assert(/QUOTA_GUARD_PATH/.test(provider)&&/MINUTE_RATE_LIMIT_RECOVERABLE/.test(provider)&&/providerCallSkipped/.test(provider),'provider status repairs minute throttles and preserves hard-stop safety');
 
           if(process.exitCode)process.exit(process.exitCode);
           NODE
