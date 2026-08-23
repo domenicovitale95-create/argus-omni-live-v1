@@ -1,0 +1,111 @@
+const clamp=(v,min=0,max=1)=>Math.min(max,Math.max(min,v));
+const n=(v,f=null)=>{if(v===null||v===undefined||v==='')return f;const x=Number(v);return Number.isFinite(x)?x:f};
+const fact=k=>{let x=1;for(let i=2;i<=k;i++)x*=i;return x};
+const pois=(k,l)=>Math.exp(-l)*Math.pow(l,k)/fact(k);
+
+const PAIRS={
+  OVER_1_5:'UNDER_1_5',UNDER_1_5:'OVER_1_5',OVER_2_5:'UNDER_2_5',UNDER_2_5:'OVER_2_5',OVER_3_5:'UNDER_3_5',UNDER_3_5:'OVER_3_5',
+  BTTS_YES:'BTTS_NO',BTTS_NO:'BTTS_YES',HOME_OVER_0_5:'HOME_UNDER_0_5',HOME_UNDER_0_5:'HOME_OVER_0_5',AWAY_OVER_0_5:'AWAY_UNDER_0_5',AWAY_UNDER_0_5:'AWAY_OVER_0_5'
+};
+const ODDS_KEY={
+  HOME:['markets','home'],DRAW:['markets','draw'],AWAY:['markets','away'],
+  OVER_1_5:['marketOdds','over15'],UNDER_1_5:['marketOdds','under15'],OVER_2_5:['marketOdds','over25'],UNDER_2_5:['marketOdds','under25'],OVER_3_5:['marketOdds','over35'],UNDER_3_5:['marketOdds','under35'],
+  BTTS_YES:['marketOdds','bttsYes'],BTTS_NO:['marketOdds','bttsNo'],
+  HOME_OVER_0_5:['marketOdds','homeOver05'],HOME_UNDER_0_5:['marketOdds','homeUnder05'],AWAY_OVER_0_5:['marketOdds','awayOver05'],AWAY_UNDER_0_5:['marketOdds','awayUnder05'],
+  DOUBLE_CHANCE_1X:['marketOdds','doubleChance1X'],DOUBLE_CHANCE_12:['marketOdds','doubleChance12'],DOUBLE_CHANCE_X2:['marketOdds','doubleChanceX2']
+};
+const META={
+  HOME:{label:'HOME WIN',marketType:'1X2',category:'result',risk:1},DRAW:{label:'DRAW',marketType:'1X2',category:'result',risk:1.15},AWAY:{label:'AWAY WIN',marketType:'1X2',category:'result',risk:1},
+  OVER_1_5:{label:'OVER 1.5 GOALS',marketType:'TOTAL_GOALS',category:'goals',line:1.5,risk:.85},UNDER_1_5:{label:'UNDER 1.5 GOALS',marketType:'TOTAL_GOALS',category:'goals',line:1.5,risk:1},
+  OVER_2_5:{label:'OVER 2.5 GOALS',marketType:'TOTAL_GOALS',category:'goals',line:2.5,risk:.9},UNDER_2_5:{label:'UNDER 2.5 GOALS',marketType:'TOTAL_GOALS',category:'goals',line:2.5,risk:.9},
+  OVER_3_5:{label:'OVER 3.5 GOALS',marketType:'TOTAL_GOALS',category:'goals',line:3.5,risk:1},UNDER_3_5:{label:'UNDER 3.5 GOALS',marketType:'TOTAL_GOALS',category:'goals',line:3.5,risk:.85},
+  BTTS_YES:{label:'BOTH TEAMS TO SCORE · YES',marketType:'BTTS',category:'btts',risk:.9},BTTS_NO:{label:'BOTH TEAMS TO SCORE · NO',marketType:'BTTS',category:'btts',risk:.95},
+  HOME_OVER_0_5:{label:'HOME TEAM OVER 0.5 GOALS',marketType:'TEAM_TOTAL',category:'team_goals',team:'HOME',line:.5,risk:.85},HOME_UNDER_0_5:{label:'HOME TEAM UNDER 0.5 GOALS',marketType:'TEAM_TOTAL',category:'team_goals',team:'HOME',line:.5,risk:1.05},
+  AWAY_OVER_0_5:{label:'AWAY TEAM OVER 0.5 GOALS',marketType:'TEAM_TOTAL',category:'team_goals',team:'AWAY',line:.5,risk:.85},AWAY_UNDER_0_5:{label:'AWAY TEAM UNDER 0.5 GOALS',marketType:'TEAM_TOTAL',category:'team_goals',team:'AWAY',line:.5,risk:1.05},
+  DOUBLE_CHANCE_1X:{label:'DOUBLE CHANCE 1X',marketType:'DOUBLE_CHANCE',category:'double_chance',risk:.8},DOUBLE_CHANCE_12:{label:'DOUBLE CHANCE 12',marketType:'DOUBLE_CHANCE',category:'double_chance',risk:.8},DOUBLE_CHANCE_X2:{label:'DOUBLE CHANCE X2',marketType:'DOUBLE_CHANCE',category:'double_chance',risk:.8}
+};
+
+function normalizedModel1x2(match){
+  const p=match?.preMatchModel;if(!p)return null;
+  const h=Math.max(0,n(p.home,0)),d=Math.max(0,n(p.draw,0)),a=Math.max(0,n(p.away,0)),s=h+d+a;
+  return s?{HOME:h/s,DRAW:d/s,AWAY:a/s}:null;
+}
+function normalizedMarket1x2(match){
+  const h=odds(match,'HOME'),d=odds(match,'DRAW'),a=odds(match,'AWAY');if(!(h>1&&d>1&&a>1))return null;
+  const raw={HOME:1/h,DRAW:1/d,AWAY:1/a},s=raw.HOME+raw.DRAW+raw.AWAY;return{HOME:raw.HOME/s,DRAW:raw.DRAW/s,AWAY:raw.AWAY/s};
+}
+function historyLambdas(match){
+  const h=match?.history90d?.home,a=match?.history90d?.away;if(!h||!a||n(h.matches,0)<3||n(a.matches,0)<3)return null;
+  const formDelta=(n(h.last5PPG,0)-n(a.last5PPG,0))/3;
+  const venueDelta=((h.homePPG==null?n(h.pointsPerGame,1.4):n(h.homePPG,1.4))-(a.awayPPG==null?n(a.pointsPerGame,1.2):n(a.awayPPG,1.2)))/3;
+  let home=n(h.goalsForPerGame,1.2)*.54+n(a.goalsAgainstPerGame,1.2)*.46;
+  let away=n(a.goalsForPerGame,1.1)*.54+n(h.goalsAgainstPerGame,1.1)*.46;
+  home*=1.06+formDelta*.11+venueDelta*.08;away*=.98-formDelta*.07-venueDelta*.05;
+  return{home:clamp(home,.2,3.8),away:clamp(away,.2,3.8),quality:clamp(Math.min(n(h.matches,0),n(a.matches,0))/10,0,1)};
+}
+function matrix(match,max=7){
+  const l=historyLambdas(match);if(!l)return null;const rows=[];
+  for(let h=0;h<=max;h++)for(let a=0;a<=max;a++)rows.push({home:h,away:a,p:pois(h,l.home)*pois(a,l.away)});
+  const s=rows.reduce((sum,r)=>sum+r.p,0)||1;for(const r of rows)r.p/=s;return{rows,lambdas:l};
+}
+function odds(match,selection){
+  if(String(selection).startsWith('EXACT_SCORE:')){const score=String(selection).split(':')[1];const v=n(match?.marketOdds?.exactScores?.[score]);return v>1?v:null}
+  const path=ODDS_KEY[selection];if(!path)return null;const v=n(match?.[path[0]]?.[path[1]]);return v>1?v:null;
+}
+function impliedFor(match,selection,o){
+  if(!(o>1))return null;
+  if(['HOME','DRAW','AWAY'].includes(selection)){const q=normalizedMarket1x2(match);return q?.[selection]??1/o}
+  const pair=PAIRS[selection];if(pair){const other=odds(match,pair),raw=1/o;if(other>1){const s=raw+1/other;return s?raw/s:raw}return raw}
+  return 1/o;
+}
+function explicitQuality(match){const x=n(match?.dataQuality??match?.quality);return x==null?null:clamp(x,0,100)}
+function evidenceQuality(match,poisson){
+  const explicit=explicitQuality(match);if(explicit!=null)return explicit;
+  let q=0;if(normalizedModel1x2(match))q+=30;if(normalizedMarket1x2(match))q+=20;
+  const h=match?.history90d?.home,a=match?.history90d?.away;if(h&&n(h.matches,0)>=3)q+=18;if(a&&n(a.matches,0)>=3)q+=18;
+  if(poisson)q+=6;if(match?.kickoff&&match?.home&&match?.away)q+=4;if(match?.competition)q+=4;return Math.min(100,q);
+}
+function make(match,selection,probability,quality,source){
+  const meta=META[selection]||{};const o=odds(match,selection),marketProbability=impliedFor(match,selection,o);
+  const edgePct=marketProbability==null?null:(probability-marketProbability)*100,evPct=o>1?(probability*o-1)*100:null;
+  const fairOdds=probability>0?1/probability:null;
+  const risk=meta.risk||1,edgeForRank=edgePct==null?-999:edgePct,evForRank=evPct==null?-999:Math.max(-15,Math.min(30,evPct));
+  const decisionScore=edgeForRank*1.15+evForRank*.1+probability*8+quality*.025-(risk-0.8)*5;
+  return{selection,side:selection,label:meta.label||selection,marketType:meta.marketType||'UNKNOWN',category:meta.category||'other',line:meta.line??null,team:meta.team||null,probability:+probability.toFixed(6),probabilityPct:+(probability*100).toFixed(1),odds:o==null?null:+o.toFixed(3),marketProbability:marketProbability==null?null:+marketProbability.toFixed(6),marketProbabilityPct:marketProbability==null?null:+(marketProbability*100).toFixed(1),edgePct:edgePct==null?null:+edgePct.toFixed(2),evPct:evPct==null?null:+evPct.toFixed(2),fairOdds:fairOdds==null?null:+fairOdds.toFixed(3),dataQuality:+quality.toFixed(1),riskWeight:risk,decisionScore:+decisionScore.toFixed(3),source};
+}
+function marketCandidates(match){
+  const po=matrix(match),quality=evidenceQuality(match,po),rows=po?.rows||[],out=[];
+  const sum=fn=>rows.reduce((s,r)=>s+(fn(r)?r.p:0),0);
+  const model=normalizedModel1x2(match);
+  const pHome=model?.HOME??(po?sum(r=>r.home>r.away):null),pDraw=model?.DRAW??(po?sum(r=>r.home===r.away):null),pAway=model?.AWAY??(po?sum(r=>r.home<r.away):null);
+  if(pHome!=null&&pDraw!=null&&pAway!=null){out.push(make(match,'HOME',pHome,quality,model?'PREMATCH_MODEL':'POISSON_90D'));out.push(make(match,'DRAW',pDraw,quality,model?'PREMATCH_MODEL':'POISSON_90D'));out.push(make(match,'AWAY',pAway,quality,model?'PREMATCH_MODEL':'POISSON_90D'))}
+  if(po){
+    const total=x=>sum(r=>r.home+r.away>x),homeGoals=x=>sum(r=>r.home>x),awayGoals=x=>sum(r=>r.away>x),btts=sum(r=>r.home>0&&r.away>0);
+    const hWin=sum(r=>r.home>r.away),draw=sum(r=>r.home===r.away),aWin=sum(r=>r.home<r.away);
+    const probs={OVER_1_5:total(1.5),UNDER_1_5:1-total(1.5),OVER_2_5:total(2.5),UNDER_2_5:1-total(2.5),OVER_3_5:total(3.5),UNDER_3_5:1-total(3.5),BTTS_YES:btts,BTTS_NO:1-btts,HOME_OVER_0_5:homeGoals(.5),HOME_UNDER_0_5:1-homeGoals(.5),AWAY_OVER_0_5:awayGoals(.5),AWAY_UNDER_0_5:1-awayGoals(.5),DOUBLE_CHANCE_1X:hWin+draw,DOUBLE_CHANCE_12:hWin+aWin,DOUBLE_CHANCE_X2:draw+aWin};
+    for(const [selection,p] of Object.entries(probs))out.push(make(match,selection,p,quality,'POISSON_90D'));
+    const exact=match?.marketOdds?.exactScores||{};
+    for(const [score,price] of Object.entries(exact)){
+      if(!(n(price)>1)||!/^(\d+)-(\d+)$/.test(score))continue;const [h,a]=score.split('-').map(Number),row=rows.find(r=>r.home===h&&r.away===a);if(!row||row.p<.035)continue;
+      const selection=`EXACT_SCORE:${score}`,o=n(price),implied=1/o,edge=(row.p-implied)*100,ev=(row.p*o-1)*100,fair=1/row.p,decisionScore=edge*.85+Math.max(-15,Math.min(30,ev))*.06+row.p*5+quality*.02-7;
+      out.push({selection,side:selection,label:`EXACT SCORE ${score}`,marketType:'EXACT_SCORE',category:'exact_score',line:null,team:null,score,probability:+row.p.toFixed(6),probabilityPct:+(row.p*100).toFixed(1),odds:+o.toFixed(3),marketProbability:+implied.toFixed(6),marketProbabilityPct:+(implied*100).toFixed(1),edgePct:+edge.toFixed(2),evPct:+ev.toFixed(2),fairOdds:+fair.toFixed(3),dataQuality:+quality.toFixed(1),riskWeight:1.6,decisionScore:+decisionScore.toFixed(3),source:'POISSON_90D'});
+    }
+  }
+  return out;
+}
+function validForRanking(c){
+  if(!(c?.odds>1)||!Number.isFinite(c?.probability)||!Number.isFinite(c?.edgePct))return false;
+  if(c.marketType==='EXACT_SCORE')return c.probability>=.06&&c.dataQuality>=70;
+  if(c.marketType==='1X2')return c.probability>=.20;
+  return c.probability>=.30;
+}
+function bestMarketCandidate(match){
+  const all=marketCandidates(match),priced=all.filter(c=>c.odds>1),rankable=priced.filter(validForRanking);
+  rankable.sort((a,b)=>Number(b.edgePct>=2)-Number(a.edgePct>=2)||b.decisionScore-a.decisionScore||b.edgePct-a.edgePct||b.probability-a.probability);
+  const candidate=rankable[0]||null;
+  const unsupported=[];const mo=match?.marketOdds||{};
+  if(['cornersOver75','cornersUnder75','cornersOver85','cornersUnder85','cornersOver95','cornersUnder95'].some(k=>n(mo[k])>1))unsupported.push({marketType:'CORNERS',reason:'NO_VALIDATED_PROBABILITY_MODEL'});
+  return{candidate,topCandidates:rankable.slice(0,5),considered:all.length,priced:priced.length,rankable:rankable.length,unsupported,policy:{pricedMarketsOnly:true,unmodelledMarketsCannotBeActionable:true,exactScoreRiskPenalty:true,selectionIsRiskAdjustedNotRawEdgeOnly:true}};
+}
+
+export{bestMarketCandidate,marketCandidates,historyLambdas};
