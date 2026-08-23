@@ -2,6 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/live.js": {
+      "memory": 3009,
+      "maxDuration": 60
+    }
+  },
   "crons": [
     { "path": "/api/autopilot", "schedule": "*/15 * * * *" },
     { "path": "/api/provider-status", "schedule": "10 * * * *" },
