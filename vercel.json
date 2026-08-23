@@ -6,6 +6,12 @@
   "github": {
     "autoJobCancelation": true
   },
+  "crons": [
+    {
+      "path": "/api/autonomous-supervisor",
+      "schedule": "*/10 * * * *"
+    }
+  ],
   "functions": {
     "api/live.js": {
       "maxDuration": 60
