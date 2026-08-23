@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <meta name="theme-color" content="#0b0d10"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta name="theme-color" content="#090b0e"/>
   <meta name="description" content="ARGUS OMNI — football intelligence that turns complex analysis into clear decisions."/>
   <link rel="manifest" href="/manifest.webmanifest"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="argus-human-v6.css"/>
+  <link rel="stylesheet" href="argus-os-v1.css"/>
 </head>
 <body>
   <div class="shell">
@@ -181,6 +182,7 @@
   <script src="src/persistent-cache.js"></script>
   <script src="src/self-improvement.js"></script>
   <script src="app.js"></script>
+  <script src="src/argus-os.js"></script>
   <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}</script>
 </body>
 </html>
