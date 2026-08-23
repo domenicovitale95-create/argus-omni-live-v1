@@ -1,0 +1,2 @@
+ARGUS deployment refresh — 2026-08-23
+Purpose: force a clean Vercel production build from the current main branch after Live Paper integration.
