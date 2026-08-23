@@ -63,18 +63,12 @@
       return {matches:merged,meta:{...(meta||{}),availability:data.meta||null}};
     }catch(_){return {matches,meta};}
   }
-  async function persistPredictions(matches, meta = null) {
-    if (!Array.isArray(matches) || !matches.length || !window.ArgusEngine) return;
-    try {
-      const analyses = matches.map((match) => {
-        const base = window.ArgusEngine.analyze(match);
-        return window.ArgusGovernance ? window.ArgusGovernance.apply(base, match) : base;
-      });
-      await fetch('/api/predictions', {
-        method:'POST', headers:{'Content-Type':'application/json',Accept:'application/json'},
-        body:JSON.stringify({ matches, analyses, meta }), keepalive:true
-      });
-    } catch (_) {}
+  async function persistPredictions() {
+    // Intentionally disabled here. The provider owns data transport only.
+    // src/official-decisions.js is the sole browser writer after the official
+    // Scheduler multi-market decision has been applied. This prevents local
+    // 1X2 snapshots from alternating with official multi-market snapshots.
+    return { ok:true, skipped:true, reason:'OFFICIAL_DECISION_WRITER_ONLY' };
   }
   async function demo() {
     const response = await fetch('data/demo-matches.json',{cache:'no-store'});
@@ -83,19 +77,19 @@
   }
   async function live(options={}) {
     const force=Boolean(options.force), row=readCache(), status=cacheStatus();
-    if(!force && row && status.fresh){ const matches=cachedMatches(row); persistPredictions(matches,matches.meta); notifyDataUpdated({matches,meta:matches.meta,cached:true}); return matches; }
+    if(!force && row && status.fresh){ const matches=cachedMatches(row); notifyDataUpdated({matches,meta:matches.meta,cached:true}); return matches; }
     const endpoint=window.ARGUS_LIVE_ENDPOINT||'/api/live';
     const response=await fetch(endpoint,{headers:{Accept:'application/json'},cache:'no-store'});
     const payload=await response.json().catch(()=>({}));
     if(!response.ok) throw new Error(payload.error||`Live endpoint error ${response.status}`);
     const base={matches:Array.isArray(payload)?payload:payload.matches||[],meta:payload.meta||null};
     const normalized=await mergeAvailability(base.matches,base.meta);
-    writeCache(normalized); persistPredictions(normalized.matches,normalized.meta);
+    writeCache(normalized);
     const matches=normalized.matches.slice(); matches.meta=normalized.meta; return matches;
   }
   async function health() {
     const row=readCache(),status=cacheStatus();
-    if(row&&status.fresh){ persistPredictions(row.matches||[],row.meta||null); return {ready:true,cached:true,meta:{...(row.meta||{}),clientCache:true,clientCacheAgeMs:status.ageMs},matches:row.matches||[]}; }
+    if(row&&status.fresh){ return {ready:true,cached:true,meta:{...(row.meta||{}),clientCache:true,clientCacheAgeMs:status.ageMs},matches:row.matches||[]}; }
     return {ready:true,cached:false,meta:row?.meta||null,matches:row?.matches||[]};
   }
   window.ArgusProviders={demo,live,health,cacheStatus,readCache,persistPredictions};
