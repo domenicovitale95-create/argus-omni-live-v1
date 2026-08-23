@@ -1,2 +1,2 @@
-ARGUS deployment refresh — 2026-08-23
-Purpose: activate compact surviving-edge payloads on top of the profitability-validation release, reducing origin transfer without removing analysis.
+ARGUS production deployment refresh — 2026-08-23
+Purpose: activate Decision Integrity V2 after green regression checks: canonical state-conditioned LIVE V2 shadow model, fail-closed official decisions, explicit probability/edge/EV semantics, resilient provider cache, quota-safe refresh, and bounded historical replay.
