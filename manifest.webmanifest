@@ -1,10 +1,17 @@
 {
   "name": "ARGUS OMNI",
   "short_name": "ARGUS",
-  "description": "Football intelligence and high-signal alerts.",
+  "description": "Football intelligence that turns complex analysis into clear decisions.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#101419",
-  "theme_color": "#101419",
-  "icons": []
+  "background_color": "#090b0e",
+  "theme_color": "#090b0e",
+  "icons": [],
+  "shortcuts": [
+    {"name":"Today","short_name":"Today","description":"Open the ARGUS decision desk","url":"/"},
+    {"name":"Live","short_name":"Live","description":"Open live decision monitoring","url":"/live.html"},
+    {"name":"Results","short_name":"Results","description":"Open the verified prediction record","url":"/prediction-results.html"},
+    {"name":"Bankroll","short_name":"Bankroll","description":"Open the virtual paper portfolio","url":"/virtual-bankroll.html"}
+  ]
 }
