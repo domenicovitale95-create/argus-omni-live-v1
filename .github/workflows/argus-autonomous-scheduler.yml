@@ -2,15 +2,17 @@ name: ARGUS Autonomous Scheduler
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
-    - cron: '*/10 * * * *'
-    - cron: '*/15 * * * *'
-    - cron: '7 * * * *'
-    - cron: '30 */6 * * *'
-    - cron: '15 1 * * *'
-    - cron: '5 2 * * *'
-    - cron: '30 7 * * *'
-    - cron: '55 21,22 * * *'
+    # Offset recurring jobs so GitHub does not launch several ARGUS groups on the same minute.
+    # This reduces scheduler contention, duplicate Vercel invocations and heartbeat delays.
+    - cron: '2-57/5 * * * *'
+    - cron: '4-54/10 * * * *'
+    - cron: '6-51/15 * * * *'
+    - cron: '11 * * * *'
+    - cron: '17 0,6,12,18 * * *'
+    - cron: '23 1 * * *'
+    - cron: '37 2 * * *'
+    - cron: '43 7 * * *'
+    - cron: '53 21,22 * * *'
   workflow_dispatch:
     inputs:
       group:
@@ -86,8 +88,10 @@ jobs:
           }
 
           run_ten() {
+            # The supervisor already performs historical-migration recovery only when
+            # migration is actually incomplete/stalled. Calling the migration route
+            # unconditionally every 10 minutes wasted runtime and delayed heartbeats.
             call '/api/autonomous-supervisor' 'Autonomous supervisor'
-            call '/api/historical-shard-migrate?months=6' 'Historical shard migrate'
           }
 
           run_quarter() {
@@ -135,15 +139,15 @@ jobs:
             GROUP="${{ inputs.group }}"
           else
             case "${{ github.event.schedule }}" in
-              '*/5 * * * *') GROUP='fast' ;;
-              '*/10 * * * *') GROUP='ten' ;;
-              '*/15 * * * *') GROUP='quarter' ;;
-              '7 * * * *') GROUP='hourly' ;;
-              '30 */6 * * *') GROUP='sixhour' ;;
-              '15 1 * * *') GROUP='daily1' ;;
-              '5 2 * * *') GROUP='daily2' ;;
-              '30 7 * * *') GROUP='morning' ;;
-              '55 21,22 * * *') GROUP='evening' ;;
+              '2-57/5 * * * *') GROUP='fast' ;;
+              '4-54/10 * * * *') GROUP='ten' ;;
+              '6-51/15 * * * *') GROUP='quarter' ;;
+              '11 * * * *') GROUP='hourly' ;;
+              '17 0,6,12,18 * * *') GROUP='sixhour' ;;
+              '23 1 * * *') GROUP='daily1' ;;
+              '37 2 * * *') GROUP='daily2' ;;
+              '43 7 * * *') GROUP='morning' ;;
+              '53 21,22 * * *') GROUP='evening' ;;
               *) GROUP='all' ;;
             esac
           fi
