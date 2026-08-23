@@ -2,10 +2,10 @@ name: ARGUS Autonomous Scheduler
 
 on:
   schedule:
-    # Offset recurring jobs so GitHub does not launch several ARGUS groups on the same minute.
-    # This reduces scheduler contention, duplicate Vercel invocations and heartbeat delays.
+    # Vercel Cron is the primary 10-minute autonomy heartbeat.
+    # GitHub keeps a low-cost 30-minute watchdog and the remaining workload groups.
     - cron: '2-57/5 * * * *'
-    - cron: '4-54/10 * * * *'
+    - cron: '19,49 * * * *'
     - cron: '6-51/15 * * * *'
     - cron: '11 * * * *'
     - cron: '17 0,6,12,18 * * *'
@@ -23,7 +23,7 @@ on:
         options:
           - all
           - fast
-          - ten
+          - watchdog
           - quarter
           - hourly
           - sixhour
@@ -87,11 +87,36 @@ jobs:
             call '/api/push-dispatch' 'Push dispatch'
           }
 
-          run_ten() {
-            # The supervisor already performs historical-migration recovery only when
-            # migration is actually incomplete/stalled. Calling the migration route
-            # unconditionally every 10 minutes wasted runtime and delayed heartbeats.
-            call '/api/autonomous-supervisor' 'Autonomous supervisor'
+          run_watchdog() {
+            echo "::group::Autonomy watchdog"
+            local health age status
+            if ! health="$(curl --fail-with-body --silent --show-error --max-time 30 \
+              --retry 1 --retry-delay 2 --retry-all-errors \
+              "${BASE}/api/autonomy-health")"; then
+              echo "Health probe failed; invoking backup supervisor."
+              echo "::endgroup::"
+              call '/api/autonomous-supervisor' 'Autonomous supervisor backup recovery'
+              return
+            fi
+
+            echo "${health}"
+            age="$(printf '%s' "${health}" | jq -r '.heartbeatAgeMinutes // 999999')"
+            status="$(printf '%s' "${health}" | jq -r '.status // "UNKNOWN"')"
+
+            if ! [[ "${age}" =~ ^[0-9]+$ ]]; then
+              age=999999
+            fi
+
+            # Allow normal Vercel Cron jitter and one delayed heartbeat. GitHub only
+            # becomes active when the primary production scheduler appears unhealthy.
+            if [ "${age}" -gt 18 ] || [ "${status}" = "LATE" ] || [ "${status}" = "STALE" ] || [ "${status}" = "CRITICAL" ] || [ "${status}" = "WAITING" ]; then
+              echo "Backup required: status=${status}, heartbeatAgeMinutes=${age}."
+              echo "::endgroup::"
+              call '/api/autonomous-supervisor' 'Autonomous supervisor backup recovery'
+            else
+              echo "Primary Vercel heartbeat healthy: status=${status}, age=${age}m. No duplicate supervisor call."
+              echo "::endgroup::"
+            fi
           }
 
           run_quarter() {
@@ -140,7 +165,7 @@ jobs:
           else
             case "${{ github.event.schedule }}" in
               '2-57/5 * * * *') GROUP='fast' ;;
-              '4-54/10 * * * *') GROUP='ten' ;;
+              '19,49 * * * *') GROUP='watchdog' ;;
               '6-51/15 * * * *') GROUP='quarter' ;;
               '11 * * * *') GROUP='hourly' ;;
               '17 0,6,12,18 * * *') GROUP='sixhour' ;;
@@ -157,7 +182,7 @@ jobs:
 
           case "${GROUP}" in
             fast) run_fast ;;
-            ten) run_ten ;;
+            watchdog) run_watchdog ;;
             quarter) run_quarter ;;
             hourly) run_hourly ;;
             sixhour) run_sixhour ;;
@@ -167,7 +192,7 @@ jobs:
             evening) run_evening ;;
             all)
               run_fast
-              run_ten
+              run_watchdog
               run_quarter
               run_hourly
               run_sixhour
