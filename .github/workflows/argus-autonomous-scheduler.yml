@@ -1,0 +1,183 @@
+name: ARGUS Autonomous Scheduler
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+    - cron: '*/10 * * * *'
+    - cron: '*/15 * * * *'
+    - cron: '7 * * * *'
+    - cron: '30 */6 * * *'
+    - cron: '15 1 * * *'
+    - cron: '5 2 * * *'
+    - cron: '30 7 * * *'
+    - cron: '55 21,22 * * *'
+  workflow_dispatch:
+    inputs:
+      group:
+        description: Scheduler group to run
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - fast
+          - ten
+          - quarter
+          - hourly
+          - sixhour
+          - daily1
+          - daily2
+          - morning
+          - evening
+
+permissions:
+  contents: read
+
+concurrency:
+  group: argus-scheduler-${{ github.event.schedule }}-${{ inputs.group }}
+  cancel-in-progress: false
+
+jobs:
+  scheduler:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
+    steps:
+      - name: Run autonomous scheduler group
+        shell: bash
+        run: |
+          set -uo pipefail
+
+          BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
+          if [ -z "${CRON_SECRET:-}" ]; then
+            echo "::error::GitHub Actions secret CRON_SECRET is not configured."
+            exit 1
+          fi
+
+          failures=0
+          call() {
+            local path="$1"
+            local label="$2"
+            echo "::group::${label}"
+            if curl --fail-with-body --silent --show-error --max-time 240 \
+              --retry 2 --retry-delay 3 --retry-all-errors \
+              -H "Authorization: Bearer ${CRON_SECRET}" \
+              "${BASE}${path}"; then
+              echo
+              echo "OK: ${label}"
+            else
+              code=$?
+              echo
+              echo "::error::${label} failed with curl exit code ${code}"
+              failures=$((failures + 1))
+            fi
+            echo "::endgroup::"
+          }
+
+          run_fast() {
+            call '/api/prediction-ledger-cron' 'Prediction ledger cron'
+            call '/api/virtual-bankroll?mode=run' 'Virtual bankroll'
+            call '/api/operational-alert-bridge' 'Operational alert bridge'
+            call '/api/alert-engine' 'Alert engine'
+            call '/api/push-dispatch' 'Push dispatch'
+          }
+
+          run_ten() {
+            call '/api/autonomous-supervisor' 'Autonomous supervisor'
+            call '/api/historical-shard-migrate?months=6' 'Historical shard migrate'
+          }
+
+          run_quarter() {
+            call '/api/autopilot' 'Autopilot'
+            call '/api/paper-learning?mode=run' 'Paper learning'
+            call '/api/deployment-verifier' 'Deployment verifier'
+          }
+
+          run_hourly() {
+            call '/api/provider-status' 'Provider status'
+            call '/api/cognitive-gpt-review' 'Cognitive GPT review'
+            call '/api/shadow-cron' 'Shadow cron'
+            call '/api/site-self-test' 'Site self-test'
+          }
+
+          run_sixhour() {
+            call '/api/self-improvement-loop' 'Self-improvement loop'
+            call '/api/cognitive-cycle' 'Cognitive cycle'
+            call '/api/policy-governance-cycle' 'Policy governance cycle'
+          }
+
+          run_daily1() {
+            call '/api/historical-recent-backfill?dates=6' 'Historical recent backfill'
+            call '/api/historical-market-outcomes' 'Historical market outcomes'
+            call '/api/historical-recent-stats-enrichment?fixtures=4' 'Historical stats enrichment'
+            call '/api/streak-intelligence' 'Streak intelligence'
+          }
+
+          run_daily2() {
+            call '/api/historical-walk-forward' 'Historical walk-forward'
+            call '/api/historical-candidate-gate' 'Historical candidate gate'
+          }
+
+          run_morning() {
+            call '/api/daily-slip' 'Daily slip'
+          }
+
+          run_evening() {
+            call '/api/daily-cron' 'Daily cron'
+          }
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            GROUP="${{ inputs.group }}"
+          else
+            case "${{ github.event.schedule }}" in
+              '*/5 * * * *') GROUP='fast' ;;
+              '*/10 * * * *') GROUP='ten' ;;
+              '*/15 * * * *') GROUP='quarter' ;;
+              '7 * * * *') GROUP='hourly' ;;
+              '30 */6 * * *') GROUP='sixhour' ;;
+              '15 1 * * *') GROUP='daily1' ;;
+              '5 2 * * *') GROUP='daily2' ;;
+              '30 7 * * *') GROUP='morning' ;;
+              '55 21,22 * * *') GROUP='evening' ;;
+              *) GROUP='all' ;;
+            esac
+          fi
+
+          echo "ARGUS scheduler group: ${GROUP}"
+          echo "ARGUS base URL: ${BASE}"
+
+          case "${GROUP}" in
+            fast) run_fast ;;
+            ten) run_ten ;;
+            quarter) run_quarter ;;
+            hourly) run_hourly ;;
+            sixhour) run_sixhour ;;
+            daily1) run_daily1 ;;
+            daily2) run_daily2 ;;
+            morning) run_morning ;;
+            evening) run_evening ;;
+            all)
+              run_fast
+              run_ten
+              run_quarter
+              run_hourly
+              run_sixhour
+              run_daily1
+              run_daily2
+              run_morning
+              run_evening
+              ;;
+            *)
+              echo "::error::Unknown scheduler group: ${GROUP}"
+              exit 2
+              ;;
+          esac
+
+          if [ "${failures}" -gt 0 ]; then
+            echo "::error::ARGUS scheduler completed with ${failures} failed endpoint(s)."
+            exit 1
+          fi
+
+          echo "ARGUS scheduler completed successfully."
