@@ -15,6 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="argus-human-v6.css"/>
   <link rel="stylesheet" href="argus-os-v1.css"/>
+  <link rel="stylesheet" href="argus-proof.css"/>
 </head>
 <body>
   <div class="shell">
@@ -89,6 +90,39 @@
       <section class="today-verdict panel" aria-label="Today at a glance">
         <div class="today-main"><p class="eyebrow">TODAY AT A GLANCE</p><strong id="todayCounts">Ready when you are</strong></div>
         <div class="today-signal"><span class="status-orb"></span><p id="strongestSignal">No decision yet. Analyse today.</p></div>
+      </section>
+
+      <section class="argus-proof" aria-labelledby="argus-proof-heading">
+        <div class="argus-proof-head">
+          <div class="argus-proof-title">
+            <div class="argus-proof-mark">P</div>
+            <div>
+              <p class="eyebrow">ARGUS PROOF</p>
+              <h3 id="argus-proof-heading">Forward profitability validation</h3>
+              <p class="argus-proof-sub">Prospective paper track record · fixed validation epoch · no hindsight</p>
+            </div>
+          </div>
+          <span class="argus-proof-status" id="proofStatus" data-state="building">BUILDING EVIDENCE</span>
+        </div>
+
+        <div class="argus-proof-grid">
+          <div class="argus-proof-metric"><span>Settled bets</span><strong id="proofSettled">0</strong><small id="proofSettledSub">of 1,000 settled</small></div>
+          <div class="argus-proof-metric"><span>Validation age</span><strong id="proofDays">0</strong><small id="proofDaysSub">of 90 days</small></div>
+          <div class="argus-proof-metric"><span>Flat ROI</span><strong id="proofRoi">—</strong><small id="proofRoiSub">flat-stake ROI</small></div>
+          <div class="argus-proof-metric"><span>95% CI</span><strong id="proofCi">—</strong><small id="proofCiSub">lower / upper</small></div>
+          <div class="argus-proof-metric"><span>Mean CLV</span><strong id="proofClv">—</strong><small id="proofClvSub">0 / 300 near-close</small></div>
+        </div>
+
+        <div class="argus-proof-progress">
+          <div class="argus-proof-progress-row"><span>Official sample</span><b id="proofSampleProgress">0 / 1000</b><div class="argus-proof-track"><i class="argus-proof-fill" id="proofSampleFill"></i></div></div>
+          <div class="argus-proof-progress-row"><span>Time evidence</span><b id="proofDayProgress">0 / 90</b><div class="argus-proof-track"><i class="argus-proof-fill" id="proofDayFill"></i></div></div>
+          <div class="argus-proof-progress-row"><span>Near-close prices</span><b id="proofClvProgress">0 / 300</b><div class="argus-proof-track"><i class="argus-proof-fill" id="proofClvFill"></i></div></div>
+        </div>
+
+        <div class="argus-proof-foot">
+          <span id="proofNote">Prospective paper evidence only. ARGUS will not call itself validated until every threshold is passed.</span>
+          <span><span id="proofMeta">0 competitions · 0 market families · max drawdown 0.00u</span> · <a href="virtual-bankroll.html">Open track record →</a></span>
+        </div>
       </section>
 
       <section class="section" aria-labelledby="best-heading">
@@ -188,6 +222,7 @@
   <script src="app.js"></script>
   <script src="src/official-decisions.js"></script>
   <script src="src/argus-os.js"></script>
+  <script src="argus-proof.js"></script>
   <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}</script>
 </body>
 </html>
