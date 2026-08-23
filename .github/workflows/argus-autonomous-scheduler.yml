@@ -78,6 +78,7 @@ jobs:
 
           run_fast() {
             call '/api/prediction-ledger-cron' 'Prediction ledger cron'
+            call '/api/closing-odds-snapshot' 'Near-kickoff closing price evidence'
             call '/api/virtual-bankroll?mode=run' 'Virtual bankroll'
             call '/api/operational-alert-bridge' 'Operational alert bridge'
             call '/api/alert-engine?compact=1' 'Alert engine'
@@ -97,6 +98,7 @@ jobs:
 
           run_hourly() {
             call '/api/provider-status' 'Provider status'
+            call '/api/profitability-proof' 'Profitability proof'
             call '/api/cognitive-gpt-review' 'Cognitive GPT review'
             call '/api/shadow-cron' 'Shadow cron'
             call '/api/site-self-test' 'Site self-test'
@@ -116,8 +118,9 @@ jobs:
           }
 
           run_daily2() {
-            call '/api/historical-walk-forward' 'Historical walk-forward'
+            call '/api/historical-archive-health' 'Historical archive health'
             call '/api/historical-candidate-gate' 'Historical candidate gate'
+            call '/api/profitability-proof' 'Profitability proof'
           }
 
           run_morning() {
