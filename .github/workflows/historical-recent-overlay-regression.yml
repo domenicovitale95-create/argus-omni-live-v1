@@ -6,13 +6,13 @@ on:
     paths:
       - 'api/historical-recent-backfill.js'
       - 'api/streak-intelligence.js'
-      - 'vercel.json'
+      - '.github/workflows/argus-autonomous-scheduler.yml'
       - '.github/workflows/historical-recent-overlay-regression.yml'
   pull_request:
     paths:
       - 'api/historical-recent-backfill.js'
       - 'api/streak-intelligence.js'
-      - 'vercel.json'
+      - '.github/workflows/argus-autonomous-scheduler.yml'
       - '.github/workflows/historical-recent-overlay-regression.yml'
 
 permissions:
@@ -28,7 +28,8 @@ jobs:
           grep -Fq "PREFIX='argus/research/historical-recent/'" api/historical-recent-backfill.js
           grep -Fq "monthPath(date)" api/historical-recent-backfill.js
           grep -Fq "MIGRATION_FLOOR='2026-08-19'" api/historical-recent-backfill.js
-          grep -Fq "guard?.date===today&&guard?.exhausted" api/historical-recent-backfill.js
+          grep -Fq "function guardCurrent(guard)" api/historical-recent-backfill.js
+          grep -Fq "providerHalted=guardCurrent(guard)" api/historical-recent-backfill.js
           grep -Fq "status:'PAUSED_QUOTA_GUARD'" api/historical-recent-backfill.js
           grep -Fq "providerCalls:0" api/historical-recent-backfill.js
           grep -Fq "status:'DRY_RUN'" api/historical-recent-backfill.js
@@ -46,7 +47,7 @@ jobs:
           grep -Fq "noGapFilling:true" api/streak-intelligence.js
           grep -Fq "olderMatchesNeverSubstitute:true" api/streak-intelligence.js
           grep -Fq "continuityMayUseLegacyOrCertifiedRecentOverlay:true" api/streak-intelligence.js
-      - name: Verify cron no longer targets oversized legacy monolith
+      - name: Verify scheduler no longer targets oversized legacy monolith
         run: |
-          grep -Fq '"path": "/api/historical-recent-backfill?dates=6", "schedule": "15 1 * * *"' vercel.json
-          ! grep -Fq '"path": "/api/historical-decade-backfill?dates=6"' vercel.json
+          grep -Fq "call '/api/historical-recent-backfill?dates=6' 'Historical recent backfill'" .github/workflows/argus-autonomous-scheduler.yml
+          ! grep -Fq "call '/api/historical-decade-backfill?dates=6'" .github/workflows/argus-autonomous-scheduler.yml
