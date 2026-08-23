@@ -1,0 +1,48 @@
+name: Autonomy Scheduler Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'vercel.json'
+      - 'api/autonomy-health.js'
+      - '.github/workflows/argus-autonomous-scheduler.yml'
+      - '.github/workflows/autonomy-scheduler-regression.yml'
+  pull_request:
+    paths:
+      - 'vercel.json'
+      - 'api/autonomy-health.js'
+      - '.github/workflows/argus-autonomous-scheduler.yml'
+      - '.github/workflows/autonomy-scheduler-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  scheduler-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Verify production heartbeat and backup contract
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const vercel = JSON.parse(fs.readFileSync('vercel.json','utf8'));
+          const supervisorCron = (vercel.crons || []).find(x => x.path === '/api/autonomous-supervisor');
+          if (!supervisorCron) throw new Error('Missing Vercel autonomous supervisor cron');
+          if (supervisorCron.schedule !== '*/10 * * * *') throw new Error(`Unexpected supervisor schedule: ${supervisorCron.schedule}`);
+
+          const scheduler = fs.readFileSync('.github/workflows/argus-autonomous-scheduler.yml','utf8');
+          if (!scheduler.includes("- cron: '19,49 * * * *'")) throw new Error('Missing GitHub watchdog schedule');
+          if (!scheduler.includes('run_watchdog()')) throw new Error('Missing health-gated watchdog');
+          if (!scheduler.includes("'/api/autonomous-supervisor' 'Autonomous supervisor backup recovery'")) throw new Error('Missing backup supervisor recovery');
+          if (scheduler.includes("- cron: '4-54/10 * * * *'")) throw new Error('Old duplicate GitHub 10-minute supervisor schedule still present');
+
+          const health = fs.readFileSync('api/autonomy-health.js','utf8');
+          if (!health.includes("primaryScheduler:'VERCEL_CRON'")) throw new Error('Health endpoint does not expose Vercel as primary scheduler');
+          if (!health.includes("backupScheduler:'GITHUB_WATCHDOG'")) throw new Error('Health endpoint does not expose GitHub watchdog backup');
+          if (!health.includes('automaticWagering:false')) throw new Error('Automatic real-money wagering safety flag missing');
+          NODE
