@@ -16,32 +16,5 @@
     "api/autonomous-supervisor.js": {
       "maxDuration": 60
     }
-  },
-  "crons": [
-    { "path": "/api/autopilot", "schedule": "*/15 * * * *" },
-    { "path": "/api/provider-status", "schedule": "10 * * * *" },
-    { "path": "/api/cognitive-gpt-review", "schedule": "25 * * * *" },
-    { "path": "/api/prediction-ledger-cron", "schedule": "1-56/5 * * * *" },
-    { "path": "/api/virtual-bankroll?mode=run", "schedule": "5-55/5 * * * *" },
-    { "path": "/api/paper-learning?mode=run", "schedule": "13,28,43,58 * * * *" },
-    { "path": "/api/operational-alert-bridge", "schedule": "0-55/5 * * * *" },
-    { "path": "/api/alert-engine", "schedule": "2-57/5 * * * *" },
-    { "path": "/api/push-dispatch", "schedule": "3-58/5 * * * *" },
-    { "path": "/api/autonomous-supervisor", "schedule": "9-59/10 * * * *" },
-    { "path": "/api/shadow-cron", "schedule": "7 * * * *" },
-    { "path": "/api/deployment-verifier", "schedule": "12,27,42,57 * * * *" },
-    { "path": "/api/site-self-test", "schedule": "17 * * * *" },
-    { "path": "/api/historical-shard-migrate?months=6", "schedule": "6-56/10 * * * *" },
-    { "path": "/api/historical-recent-backfill?dates=6", "schedule": "15 1 * * *" },
-    { "path": "/api/historical-market-outcomes", "schedule": "20 1 * * * *" },
-    { "path": "/api/historical-recent-stats-enrichment?fixtures=4", "schedule": "35 1 * * * *" },
-    { "path": "/api/streak-intelligence", "schedule": "50 1 * * * *" },
-    { "path": "/api/historical-walk-forward", "schedule": "5 2 * * *" },
-    { "path": "/api/historical-candidate-gate", "schedule": "20 2 * * *" },
-    { "path": "/api/self-improvement-loop", "schedule": "30 */6 * * *" },
-    { "path": "/api/cognitive-cycle", "schedule": "40 */6 * * *" },
-    { "path": "/api/policy-governance-cycle", "schedule": "45 */6 * * *" },
-    { "path": "/api/daily-slip", "schedule": "30 7 * * *" },
-    { "path": "/api/daily-cron", "schedule": "55 21,22 * * *" }
-  ]
+  }
 }
