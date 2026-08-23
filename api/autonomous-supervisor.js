@@ -14,6 +14,7 @@ const PLAN_CRITICAL_MINUTES = 180;
 const LEDGER_STALE_MINUTES = 20;
 const HIST_STALL_MINUTES = 35;
 const HIST_RECOVERY_COOLDOWN_MINUTES = 30;
+const AUTOPILOT_NO_FIXTURES_COOLDOWN_MINUTES = 30;
 const OPERATIONAL_RESERVE_RATIO = .20;
 const LEARNING_RESERVE_RATIO = .25;
 
@@ -68,6 +69,7 @@ function quotaBudget(guard){
 function event(name, result, extra={}){
   return { name, attempted:true, ok:Boolean(result?.ok), status:result?.status ?? null, ms:result?.ms ?? null, error:result?.error || result?.data?.error || null, ...extra };
 }
+function effectiveRemediation(result){ return Boolean(result?.ok && !result?.data?.skipped); }
 async function recordIncident(kind, state){
   const feed=await readJson(INCIDENTS_PATH,{version:'ARGUS-INCIDENT-FEED-1',incidents:[]});
   const incidents=Array.isArray(feed?.incidents)?feed.incidents:[];
@@ -84,7 +86,7 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method !== 'GET') return res.status(405).json({ error:'Method not allowed' });
   if(!authorized(req)) return res.status(401).json({ error:'Unauthorized' });
-  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-4', status:'CRITICAL', error:'Storage unavailable' });
+  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-5', status:'CRITICAL', error:'Storage unavailable' });
 
   const startedAt = new Date().toISOString();
   const clock = brusselsClock();
@@ -104,21 +106,28 @@ export default async function handler(req,res){
   const planAgeBefore = ageMinutes(planBefore?.generatedAt);
   const ledgerAgeBefore = ageMinutes(ledgerBefore?.completedAt || ledgerBefore?.startedAt);
   const histAgeBefore = ageMinutes(histBefore?.updatedAt);
+  const previousNoFixturesAge = ageMinutes(previous?.lastAutopilotNoFixturesAt);
+  const noFixturesCooldownBefore = previousNoFixturesAge != null && previousNoFixturesAge < AUTOPILOT_NO_FIXTURES_COOLDOWN_MINUTES;
   const actions = [];
   let heavyRemediationTaken = false;
+  let lastAutopilotNoFixturesAt = previous?.lastAutopilotNoFixturesAt || null;
 
-  const shouldRecoverPlan = activeWindow(clock) && !quotaHalt && (planAgeBefore == null || planAgeBefore > PLAN_STALE_MINUTES);
+  const shouldRecoverPlan = activeWindow(clock) && !quotaHalt && !noFixturesCooldownBefore && (planAgeBefore == null || planAgeBefore > PLAN_STALE_MINUTES);
   if(shouldRecoverPlan){
     const result = await call(base, '/api/autopilot', 54000);
-    actions.push(event('AUTOPILOT_RECOVERY', result, { reason:'STALE_DECISION_PLAN', beforeAgeMinutes:planAgeBefore }));
-    heavyRemediationTaken = true;
+    const skipped = Boolean(result?.data?.skipped);
+    const skipReason = skipped ? (result?.data?.reason || 'SKIPPED') : null;
+    actions.push(event('AUTOPILOT_RECOVERY', result, { reason:'STALE_DECISION_PLAN', beforeAgeMinutes:planAgeBefore, skipped, skipReason, effective:effectiveRemediation(result) }));
+    if(result?.ok && skipReason === 'NO_FIXTURES') lastAutopilotNoFixturesAt = new Date().toISOString();
+    else if(effectiveRemediation(result)) lastAutopilotNoFixturesAt = null;
+    heavyRemediationTaken = effectiveRemediation(result);
   }
 
   const shouldRecoverLedger = ledgerAgeBefore == null || ledgerAgeBefore > LEDGER_STALE_MINUTES;
   if(shouldRecoverLedger && !heavyRemediationTaken){
     const result = await call(base, '/api/prediction-ledger-cron', 54000);
-    actions.push(event('LEDGER_RECOVERY', result, { reason:'STALE_LEDGER_HEARTBEAT', beforeAgeMinutes:ledgerAgeBefore }));
-    heavyRemediationTaken = true;
+    actions.push(event('LEDGER_RECOVERY', result, { reason:'STALE_LEDGER_HEARTBEAT', beforeAgeMinutes:ledgerAgeBefore, effective:effectiveRemediation(result) }));
+    heavyRemediationTaken = effectiveRemediation(result);
   }
 
   const histIncomplete = !histBefore || histBefore.migrationComplete !== true;
@@ -126,8 +135,8 @@ export default async function handler(req,res){
   const histStalled = histIncomplete && (histAgeBefore == null || histAgeBefore > HIST_STALL_MINUTES);
   if(histStalled && !heavyRemediationTaken && (previousHistAttemptAge == null || previousHistAttemptAge > HIST_RECOVERY_COOLDOWN_MINUTES)){
     const result = await call(base, '/api/historical-shard-migrate?months=6', 54000);
-    actions.push(event('HISTORICAL_MIGRATION_RECOVERY', result, { reason:'MIGRATION_STALLED', beforeAgeMinutes:histAgeBefore }));
-    heavyRemediationTaken = true;
+    actions.push(event('HISTORICAL_MIGRATION_RECOVERY', result, { reason:'MIGRATION_STALLED', beforeAgeMinutes:histAgeBefore, effective:effectiveRemediation(result) }));
+    heavyRemediationTaken = effectiveRemediation(result);
   }
 
   const [planAfter, ledgerAfter, histAfter] = await Promise.all([
@@ -138,9 +147,11 @@ export default async function handler(req,res){
   const planAge = ageMinutes(planAfter?.generatedAt);
   const ledgerAge = ageMinutes(ledgerAfter?.completedAt || ledgerAfter?.startedAt);
   const histAge = ageMinutes(histAfter?.updatedAt);
+  const noFixturesAge = ageMinutes(lastAutopilotNoFixturesAt);
+  const noFixturesCooldownActive = noFixturesAge != null && noFixturesAge < AUTOPILOT_NO_FIXTURES_COOLDOWN_MINUTES;
 
   const issues = [];
-  if(activeWindow(clock) && !quotaHalt && (planAge == null || planAge > PLAN_STALE_MINUTES)) issues.push({ code:'DECISION_PLAN_STALE', severity:planAge == null || planAge > PLAN_CRITICAL_MINUTES ? 'CRITICAL' : 'DEGRADED', ageMinutes:planAge });
+  if(activeWindow(clock) && !quotaHalt && !noFixturesCooldownActive && (planAge == null || planAge > PLAN_STALE_MINUTES)) issues.push({ code:'DECISION_PLAN_STALE', severity:planAge == null || planAge > PLAN_CRITICAL_MINUTES ? 'CRITICAL' : 'DEGRADED', ageMinutes:planAge });
   if(ledgerAge == null || ledgerAge > LEDGER_STALE_MINUTES) issues.push({ code:'LEDGER_HEARTBEAT_STALE', severity:'DEGRADED', ageMinutes:ledgerAge });
   if((!histAfter || histAfter.migrationComplete !== true) && (histAge == null || histAge > HIST_STALL_MINUTES)) issues.push({ code:'HISTORICAL_MIGRATION_STALLED', severity:'DEGRADED', ageMinutes:histAge });
 
@@ -154,7 +165,7 @@ export default async function handler(req,res){
   const consecutiveUnhealthyRuns = failureLike ? Number(previous?.consecutiveUnhealthyRuns || 0) + 1 : 0;
   const lastHistoricalRecoveryAttemptAt = actions.some(x => x.name === 'HISTORICAL_MIGRATION_RECOVERY') ? new Date().toISOString() : (previous?.lastHistoricalRecoveryAttemptAt || null);
   const state = {
-    version:'AUTONOMOUS-SUPERVISOR-4',
+    version:'AUTONOMOUS-SUPERVISOR-5',
     startedAt,
     completedAt:new Date().toISOString(),
     status,
@@ -164,8 +175,9 @@ export default async function handler(req,res){
     issues,
     actions,
     lastHistoricalRecoveryAttemptAt,
+    lastAutopilotNoFixturesAt,
     components:{
-      autopilot:{ generatedAt:planAfter?.generatedAt || null, ageMinutes:planAge, rows:Array.isArray(planAfter?.plan) ? planAfter.plan.length : 0, activeWindow:activeWindow(clock) },
+      autopilot:{ generatedAt:planAfter?.generatedAt || null, ageMinutes:planAge, rows:Array.isArray(planAfter?.plan) ? planAfter.plan.length : 0, activeWindow:activeWindow(clock), noFixturesCooldownActive, noFixturesAgeMinutes:noFixturesAge },
       predictionLedger:{ completedAt:ledgerAfter?.completedAt || null, ageMinutes:ledgerAge, ok:ledgerAfter?.ok ?? null },
       historicalMigration:{ exists:Boolean(histAfter), migrationComplete:histAfter?.migrationComplete === true, updatedAt:histAfter?.updatedAt || null, ageMinutes:histAge, months:Object.keys(histAfter?.months || {}).length, fixtureCount:Number(histAfter?.fixtureCount || 0) },
       providerQuota:{ halted:quotaHalt, guardDay:guardDay(guard), mode:guard?.mode || null, observedAt:guard?.observedAt || null, observedAgeMinutes:ageMinutes(guard?.observedAt), ...budget }
@@ -174,7 +186,10 @@ export default async function handler(req,res){
       runsWithoutChat:true,
       cronDriven:true,
       selfHealing:true,
-      oneHeavyRemediationPerRun:true,
+      oneEffectiveHeavyRemediationPerRun:true,
+      skippedRecoveryDoesNotBlockNextRemediation:true,
+      autopilotNoFixturesCooldownMinutes:AUTOPILOT_NO_FIXTURES_COOLDOWN_MINUTES,
+      noFixturesDoesNotCreateFalsePlanStaleIncident:true,
       remediationPriority:['AUTOPILOT','PREDICTION_LEDGER','HISTORICAL_MIGRATION'],
       directProviderCalls:false,
       providerDayClock:'UTC',
