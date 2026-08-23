@@ -8,14 +8,12 @@
   },
   "functions": {
     "api/live.js": {
-      "memory": 3009,
       "maxDuration": 60
     },
     "api/historical-shard-migrate.js": {
       "maxDuration": 300
     },
     "api/historical-walk-forward.js": {
-      "memory": 3009,
       "maxDuration": 300
     },
     "api/autonomous-supervisor.js": {
