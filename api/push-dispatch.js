@@ -9,6 +9,22 @@ function authorized(req){
   const secret=process.env.CRON_SECRET;
   return !secret||req.headers.authorization===`Bearer ${secret}`;
 }
+function payloadFor(a){
+  if(a?.operationalAlert){
+    return JSON.stringify({
+      title:a.systemTitle||`ARGUS SYSTEM · ${a.verdict||'ATTENTION'}`,
+      body:a.systemBody||a.reason||'ARGUS detected an operational condition that needs attention.',
+      tag:`argus-system-${a.type||'incident'}`,
+      url:a.systemUrl||'/system-health.html'
+    });
+  }
+  return JSON.stringify({
+    title:`ARGUS ${a.verdict} · ${a.qualityTier||'HIGH'}`,
+    body:`${a.home} vs ${a.away} · ${a.selection||'pick'}${a.odds?` @ ${Number(a.odds).toFixed(2)}`:''}${a.confidence!=null?` · ${a.confidence}% confidence`:''}`,
+    tag:`argus-${a.fixtureId}-${a.selection||''}`,
+    url:'/daily-slip.html'
+  });
+}
 
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
@@ -34,7 +50,6 @@ export default async function handler(req,res){
   const deliveries=[];
   let sent=0,failed=0;
 
-  // Do not consume alerts before at least one device has subscribed.
   if(!activeSubs.length){
     return res.status(200).json({
       ok:true,
@@ -50,18 +65,12 @@ export default async function handler(req,res){
 
   state.sent=state.sent||{};
   for(const a of candidates){
-    const payload=JSON.stringify({
-      title:`ARGUS ${a.verdict} · ${a.qualityTier||'HIGH'}`,
-      body:`${a.home} vs ${a.away} · ${a.selection||'pick'}${a.odds?` @ ${Number(a.odds).toFixed(2)}`:''}${a.confidence!=null?` · ${a.confidence}% confidence`:''}`,
-      tag:`argus-${a.fixtureId}-${a.selection||''}`,
-      url:'/daily-slip.html'
-    });
-
+    const payload=payloadFor(a);
     let alertSent=0;
     let alertFailed=0;
     for(const row of activeSubs){
       try{
-        await webpush.sendNotification(row.subscription,payload,{TTL:900,urgency:a.qualityTier==='CRITICAL'?'high':'normal'});
+        await webpush.sendNotification(row.subscription,payload,{TTL:a.operationalAlert?1800:900,urgency:a.qualityTier==='CRITICAL'?'high':'normal'});
         sent++;
         alertSent++;
       }catch(e){
@@ -70,17 +79,14 @@ export default async function handler(req,res){
         if([404,410].includes(Number(e.statusCode)))dead.add(row.id);
       }
     }
-
-    // Mark consumed only when at least one device actually received it.
     if(alertSent>0)state.sent[a.id]=new Date().toISOString();
-    deliveries.push({alertId:a.id,sent:alertSent,failed:alertFailed,retryPending:alertSent===0});
+    deliveries.push({alertId:a.id,type:a.type||null,operationalAlert:Boolean(a.operationalAlert),sent:alertSent,failed:alertFailed,retryPending:alertSent===0});
   }
 
   if(dead.size){
     subs.subscriptions=activeSubs.filter(x=>!dead.has(x.id));
     await writeJson(SUBS,subs);
   }
-
   if(Object.keys(state.sent).length){
     const entries=Object.entries(state.sent).slice(-500);
     state.sent=Object.fromEntries(entries);
@@ -89,6 +95,7 @@ export default async function handler(req,res){
   }
 
   return res.status(200).json({
+    version:'PUSH-DISPATCH-2',
     ok:true,
     configured:true,
     alerts:candidates.length,
@@ -96,6 +103,7 @@ export default async function handler(req,res){
     sent,
     failed,
     removedSubscriptions:dead.size,
-    deliveries
+    deliveries,
+    policy:{operationalIncidentsSupported:true,automaticWagering:false}
   });
 }
