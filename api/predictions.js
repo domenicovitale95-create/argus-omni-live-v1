@@ -22,23 +22,26 @@ function dateInBrussels(value) {
 }
 
 function finiteOrNull(v) { const n=Number(v); return Number.isFinite(n)?n:null; }
+function clean(v,max=120){return v==null?null:String(v).slice(0,max)}
 function validMatch(match) {
   const id=Number(match?.id), k=new Date(match?.kickoff||0).getTime();
   return Number.isFinite(id)&&id>0&&Number.isFinite(k)&&typeof match?.home==='string'&&match.home.length<=120&&typeof match?.away==='string'&&match.away.length<=120;
 }
 
 function snapshotFrom(match, analysis) {
+  const selectionKey=clean(analysis?.selectionKey||analysis?.bestMarket,80);
   return {
     recordedAt: new Date().toISOString(), phase: analysis?.phase || (match?.isLive ? 'LIVE' : 'PREMATCH'), status: match?.status || null,
-    minute: finiteOrNull(match?.minute), score: match?.score || null, classification: String(analysis?.classification || 'NO BET').slice(0,40),
-    selection: analysis?.bestMarket ? String(analysis.bestMarket).slice(0,80) : null, odds: finiteOrNull(analysis?.marketOdds), confidence: finiteOrNull(analysis?.confidence),
-    edge: finiteOrNull(analysis?.edge), dataQuality: finiteOrNull(analysis?.quality), rawProbability: finiteOrNull(analysis?.rawProbability),
+    minute: finiteOrNull(match?.minute), score: match?.score || null, classification: clean(analysis?.classification || 'NO BET',40),
+    selection: analysis?.bestMarket ? clean(analysis.bestMarket,120) : null, selectionKey, marketType:clean(analysis?.marketType,40), marketLine:finiteOrNull(analysis?.marketLine),
+    odds: finiteOrNull(analysis?.marketOdds), fairOdds:finiteOrNull(analysis?.fairOdds), confidence: finiteOrNull(analysis?.confidence),
+    edge: finiteOrNull(analysis?.edge), expectedValue:finiteOrNull(analysis?.conservativeEV), dataQuality: finiteOrNull(analysis?.quality), rawProbability: finiteOrNull(analysis?.rawProbability),
     shrunkProbability: finiteOrNull(analysis?.shrunkProbability), conservativeProbability: finiteOrNull(analysis?.conservativeProbability), conservativeEV: finiteOrNull(analysis?.conservativeEV),
-    model: analysis?.model || null, market: analysis?.market || null, marketAvailable: Boolean(analysis?.marketAvailable), engineStatus: analysis?.engineStatus || null,
-    shrinkageStatus: analysis?.shrinkageStatus || null, governanceReason: analysis?.governanceReason ? String(analysis.governanceReason).slice(0,500) : null
+    decisionSource:clean(analysis?.decisionSource,80), model: analysis?.model || null, market: analysis?.market || null, marketAvailable: Boolean(analysis?.marketAvailable), engineStatus: clean(analysis?.engineStatus,240),
+    shrinkageStatus: analysis?.shrinkageStatus || null, governanceReason: analysis?.governanceReason ? clean(analysis.governanceReason,500) : null
   };
 }
-function signature(s) {return [s.phase,s.status,s.minute,s.classification,s.selection,s.odds,s.confidence,s.edge,s.score?.home,s.score?.away].join('|')}
+function signature(s) {return [s.phase,s.status,s.minute,s.classification,s.marketType,s.selectionKey||s.selection,s.marketLine,s.odds,s.confidence,s.edge,s.score?.home,s.score?.away].join('|')}
 
 export default async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');
@@ -55,5 +58,5 @@ export default async function handler(req,res) {
     for(const {match,analysis} of rows){const id=String(Number(match.id)),fixture=store.fixtures[id]||{fixtureId:Number(match.id),competition:match.competition||null,country:match.country||null,home:match.home,away:match.away,kickoff:match.kickoff||null,snapshots:[]};const snap=snapshotFrom(match,analysis),last=fixture.snapshots[fixture.snapshots.length-1];if(!last||signature(last)!==signature(snap)){fixture.snapshots.push(snap);if(fixture.snapshots.length>MAX_SNAPSHOTS_PER_FIXTURE)fixture.snapshots=fixture.snapshots.slice(-MAX_SNAPSHOTS_PER_FIXTURE);saved++;savedThisDate++}store.fixtures[id]=fixture}
     if(savedThisDate>0){store.updatedAt=new Date().toISOString();await writeJson(path,store)}
   }
-  return res.status(200).json({ok:true,saved,maxSnapshotsPerFixture:MAX_SNAPSHOTS_PER_FIXTURE,maxRowsPerPost:MAX_ROWS_PER_POST,dates:[...grouped.keys()],policy:{trustedWriters:['same-origin-browser','cron-secret-server'],automaticWagering:false}})
+  return res.status(200).json({ok:true,saved,maxSnapshotsPerFixture:MAX_SNAPSHOTS_PER_FIXTURE,maxRowsPerPost:MAX_ROWS_PER_POST,dates:[...grouped.keys()],policy:{trustedWriters:['same-origin-browser','cron-secret-server'],multiMarketMetadataFrozen:true,automaticWagering:false}})
 }
