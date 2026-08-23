@@ -1,0 +1,50 @@
+name: Today Analysis Regression
+
+on:
+  push:
+    paths:
+      - 'app.js'
+      - 'src/providers.js'
+      - '.github/workflows/today-analysis-regression.yml'
+  pull_request:
+    paths:
+      - 'app.js'
+      - 'src/providers.js'
+      - '.github/workflows/today-analysis-regression.yml'
+
+jobs:
+  today-analysis-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check JavaScript syntax
+        run: |
+          node --check app.js
+          node --check src/providers.js
+      - name: Verify manual scan cannot look stuck
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const app=fs.readFileSync('app.js','utf8');
+          const providers=fs.readFileSync('src/providers.js','utf8');
+          const requiredApp=[
+            'MANUAL_SCAN_TIMEOUT_MS=42000',
+            "$('liveStatus').textContent='ANALYSING'",
+            "Analysis complete · ${reviewed} match",
+            "if(!signals&&reviewed&&state.filter==='signals')setFilter('all')",
+            "btn.textContent='Retry today\\'s analysis'",
+            "TODAY_ANALYSIS_TIMEOUT"
+          ];
+          for(const token of requiredApp)if(!app.includes(token))throw new Error(`Missing today-analysis UX contract: ${token}`);
+          const requiredProviders=[
+            'LIVE_REQUEST_TIMEOUT_MS=32000',
+            'AVAILABILITY_REQUEST_TIMEOUT_MS=8000',
+            'function fetchWithTimeout',
+            'new AbortController()',
+            "error?.name==='AbortError'?'LIVE_REQUEST_TIMEOUT'"
+          ];
+          for(const token of requiredProviders)if(!providers.includes(token))throw new Error(`Missing provider timeout contract: ${token}`);
+          NODE
