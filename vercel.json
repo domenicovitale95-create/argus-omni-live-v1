@@ -2,6 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "ignoreCommand": "node -e \"process.exit(/(^deploy:|\\[deploy\\]|\\(deploy\\):)/i.test(process.env.VERCEL_GIT_COMMIT_MESSAGE||'')?1:0)\"",
+  "github": {
+    "autoJobCancelation": true
+  },
   "functions": {
     "api/live.js": {
       "memory": 3009,
