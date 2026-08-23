@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <meta name="theme-color" content="#0b0d10"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta name="theme-color" content="#090b0e"/>
   <meta name="description" content="ARGUS OMNI Results — transparent prediction history, actionable betting performance and learning progress."/>
   <title>ARGUS OMNI — Results</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="argus-human-v6.css"/>
   <link rel="stylesheet" href="argus-results-v8.css"/>
+  <link rel="stylesheet" href="argus-os-v1.css"/>
 </head>
 <body>
   <div class="shell">
@@ -191,7 +192,7 @@ function recordRow(r){
 
 function filteredRows(){
   return (data?.records||[]).filter(r=>{
-    const st=r.settlement?.status||'PENDING',actionable=isActionable(r),noBet=String(r.verdict||'').toUpperCase()==='NO BET'||!actionable;
+    const st=r.settlement?.status||'PENDING',actionable=isActionable(r),noBet=String(r.verdict||'').toUpperCase()==='NO_BET'||!actionable;
     if(status==='ALL')return true;
     if(status==='ACTIONABLE')return actionable;
     if(status==='NO_BET')return noBet;
@@ -221,5 +222,6 @@ $('filters').onclick=e=>{const b=e.target.closest('.result-filter');if(!b)return
 $('refresh').onclick=load;
 load();
 </script>
+<script src="src/argus-os.js"></script>
 </body>
 </html>
