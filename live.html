@@ -1,1 +1,111 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><meta name="theme-color" content="#0f1317"/><title>LIVE — ARGUS OMNI</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"/><link rel="stylesheet" href="color-system.css"/><style>body{margin:0;background:#0f1317;color:#f3efe7;font-family:Inter,sans-serif}.page{width:min(1220px,92vw);margin:auto}.nav{min-height:74px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);gap:12px}.navlinks{display:flex;gap:7px;overflow:auto}.nav a{color:#c8c4bc;text-decoration:none;font-size:9px;font-weight:800;padding:9px 11px;border-radius:999px;white-space:nowrap}.nav a.active{color:#ffe18a;border:1px solid rgba(235,195,76,.45);animation:liveTab 1s infinite}@keyframes liveTab{0%,100%{background:rgba(235,195,76,.12)}50%{background:rgba(235,195,76,.42)}}.hero{margin:28px 0 18px;padding:34px;border:1px solid rgba(235,195,76,.22);border-radius:24px;background:linear-gradient(130deg,rgba(235,195,76,.09),rgba(25,31,36,.97))}.hero h1{font:700 clamp(40px,6vw,70px)/.95 "Space Grotesk";margin:8px 0 12px}.hero p{max-width:850px;color:#aaa69f;line-height:1.65}.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}.rule{border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;background:rgba(255,255,255,.025)}.rule b{font-size:10px}.rule small{display:block;color:#aaa69f;margin-top:5px;line-height:1.4}.rule.interesting{border-color:rgba(216,166,94,.45)}.rule.interesting b{color:#e7bc84}.rule.very{border-color:rgba(94,149,220,.48)}.rule.very b{color:#a9c9ef}.rule.super{border-color:rgba(235,195,76,.58)}.rule.super b{color:#ffe18a}.rule.prime{border-color:rgba(104,190,126,.58)}.rule.prime b{color:#b9e4c2}.statusbar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.chip{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.05);font-size:9px;color:#bcb7ae}.note{margin:22px 0 34px;padding:15px;border-radius:14px;background:rgba(255,255,255,.035);color:#aaa69f;font-size:10px;line-height:1.55}@media(max-width:800px){.nav{display:block;padding:14px 0}.navlinks{margin-top:10px}.rules{grid-template-columns:1fr 1fr}}@media(max-width:520px){.rules{grid-template-columns:1fr}.hero{padding:24px}}</style></head><body><div class="page"><header class="nav"><a href="/" style="font:700 19px 'Space Grotesk'">ARGUS OMNI</a><nav class="navlinks"><a href="/">Today</a><a class="active" href="live.html">● LIVE</a><a href="daily-slip.html">Daily Slip</a><a href="trends.html">Trends</a><a href="shield.html">Shield</a><a href="prediction-results.html">Results</a></nav></header><main><section class="hero"><div style="font-size:9px;font-weight:900;letter-spacing:.14em;color:#ffe18a">ARGUS LIVE COMMAND CENTER</div><h1>LIVE.</h1><p>ARGUS re-evaluates every live match every 5 seconds using the latest available snapshot: pressure, momentum, data quality, real odds, edge, live regime, vetoes and timing. Every qualifying card explicitly shows <b>WHAT TO PLAY</b>. Provider refresh remains quota-aware, so a 5-second analysis cycle does not mean one external API call every 5 seconds.</p><div class="statusbar"><span class="chip">5s RE-EVALUATION</span><span class="chip">WHAT TO PLAY</span><span class="chip">REAL ODDS ONLY</span><span class="chip">VETO FIRST</span><span class="chip">NO AUTOMATIC BETTING</span></div><div class="rules"><div class="rule interesting"><b>INTERESTING</b><small>Amber. Worth monitoring, but not strong enough for a firm recommendation.</small></div><div class="rule very"><b>VERY INTERESTING</b><small>Blue. Several independent elements agree and price/evidence alignment is strong.</small></div><div class="rule super"><b>SUPER INTERESTING</b><small>Yellow. Rare high-conviction setup; it also flashes on the homepage.</small></div><div class="rule prime"><b>LIVE PRIME</b><small>Green. Highest available ARGUS live-conviction tier, still never a guaranteed win.</small></div></div></section><section id="liveCommandGrid" class="live-command-grid"><div style="color:#aaa69f">Loading LIVE analysis…</div></section><div class="note">“ARGUS recommendation %” measures combined signal strength, not guaranteed win probability. A suspended/stale market, regime reversal or any hard veto immediately downgrades or removes the recommendation.</div></main></div><script src="src/adaptive-weights-client.js"></script><script src="src/engine.js"></script><script src="src/live-regime.js"></script><script src="src/governance.js"></script><script src="src/providers.js"></script><script src="src/pressure-window.js"></script><script src="src/live-snapshot-guard.js"></script><script src="src/live-command-center.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#0b0d10"/>
+  <meta name="description" content="ARGUS OMNI LIVE — clear live football decisions from continuously re-evaluated evidence."/>
+  <title>ARGUS OMNI LIVE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="argus-human-v6.css"/>
+  <link rel="stylesheet" href="argus-live-v7.css"/>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="ARGUS OMNI home">
+        <div class="mark">A</div>
+        <div class="brand-copy"><h1>ARGUS <span>OMNI</span></h1></div>
+      </a>
+      <nav class="top-status" aria-label="Primary navigation">
+        <a class="nav-link" href="/">Today</a>
+        <a class="nav-link live-link active" href="live.html">● Live</a>
+        <a class="nav-link" href="prediction-results.html">Results</a>
+        <details class="nav-more">
+          <summary>More</summary>
+          <div class="nav-menu">
+            <a href="daily-slip.html">Daily Slip</a>
+            <a href="markets.html">Markets</a>
+            <a href="exact-scores.html">Exact Scores</a>
+            <a href="trends.html">Trends</a>
+            <a href="shield.html">Decision Shield</a>
+            <a href="historical-validation.html">Historical Lab</a>
+            <a href="system-health.html">System Health</a>
+          </div>
+        </details>
+      </nav>
+    </header>
+
+    <main class="live-page">
+      <section class="live-hero">
+        <div class="live-intro panel">
+          <div>
+            <p class="eyebrow">ARGUS LIVE</p>
+            <h2>Do I need to act right now?</h2>
+            <p class="lead">ARGUS continuously re-evaluates live matches and rejects weak or stale setups. If a real opportunity appears, you see the match, the play, the current price and the reason — nothing else needs your attention.</p>
+          </div>
+          <div class="live-state-row">
+            <span class="live-state-chip"><i></i><span id="liveRefreshState">Monitoring live matches</span></span>
+            <span class="live-state-copy">Evidence is re-evaluated every few seconds; external data refresh remains quota-aware.</span>
+          </div>
+        </div>
+
+        <div class="live-primary panel">
+          <div class="live-primary-head"><span>Best live decision</span><span>Right now</span></div>
+          <div id="livePrimaryDecision" class="live-primary-card">
+            <div class="live-empty">
+              <strong>No live decision yet.</strong>
+              <p>ARGUS is monitoring current matches. If nothing survives the live filters, waiting is the correct action.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="live-summary" aria-label="ARGUS live summary">
+        <div><span>Live matches scanned</span><strong id="liveCount">0</strong><small>currently monitored</small></div>
+        <div><span>Worth attention</span><strong id="liveOpportunityCount">0</strong><small>WATCH or stronger</small></div>
+        <div><span>Rejected</span><strong id="liveRejectCount">0</strong><small>no valid live play</small></div>
+      </section>
+
+      <section class="live-section" aria-labelledby="live-now-heading">
+        <div class="live-section-head">
+          <div>
+            <p class="eyebrow">LIVE NOW</p>
+            <h3 id="live-now-heading">Matches worth your attention</h3>
+            <p>Only live setups that pass ARGUS' evidence and pricing filters appear here. The rest are deliberately left out.</p>
+          </div>
+          <span id="liveUpdated" class="live-refresh">Waiting for live data</span>
+        </div>
+        <section id="liveCommandGrid" class="live-command-grid">
+          <div class="empty-state"><strong>Monitoring live matches</strong><span>No validated live opportunity yet.</span></div>
+        </section>
+        <div id="liveRejectedSummary" class="live-rejected">No live matches have been rejected yet.</div>
+      </section>
+
+      <section class="live-explain" aria-label="How ARGUS LIVE works">
+        <details>
+          <summary>How ARGUS decides whether to act live</summary>
+          <div class="live-explain-body">ARGUS combines current price, model probability, live pressure, momentum, data quality, market freshness and hard vetoes. A recommendation disappears as soon as the evidence becomes stale, contradictory or too weak. “Signal strength” is a combined decision score, not a guaranteed win probability.</div>
+        </details>
+        <details>
+          <summary>What the live labels mean</summary>
+          <div class="live-explain-body"><strong>LIVE PRIME</strong> is the highest live-conviction tier. <strong>STRONG</strong> means several independent signals align. <strong>WATCH</strong> means the setup deserves attention but still lacks enough confirmation for a stronger action. No valid setup means no play.</div>
+        </details>
+      </section>
+    </main>
+
+    <footer><span>ARGUS OMNI · CLEAR LIVE DECISIONS.</span><span>BET RESPONSIBLY</span></footer>
+  </div>
+
+  <script src="src/adaptive-weights-client.js"></script>
+  <script src="src/engine.js"></script>
+  <script src="src/live-regime.js"></script>
+  <script src="src/governance.js"></script>
+  <script src="src/providers.js"></script>
+  <script src="src/pressure-window.js"></script>
+  <script src="src/live-snapshot-guard.js"></script>
+  <script src="src/live-command-center.js"></script>
+</body>
+</html>
