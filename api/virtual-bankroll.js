@@ -1,1 +1,1 @@
-export { default } from './virtual-bankroll-v2.js';
+export { default } from './virtual-bankroll-v3.js';
