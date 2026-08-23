@@ -45,13 +45,16 @@ function dynamicDailyReserve(){
   return Math.max(MIN_DAILY_RESERVE,Math.min(MAX_DAILY_RESERVE,Math.ceil(limit*0.2)));
 }
 function isQuotaError(data){const text=JSON.stringify(data?.errors||{}).toLowerCase();return text.includes('request limit')||text.includes('rate limit')||text.includes('too many requests')}
+function providerDayUtc(date=new Date()){return date.toISOString().slice(0,10)}
+function quotaGuardDay(state){if(!state)return null;const recorded=state.providerDayUtc||null;const observed=state.observedAt?String(state.observedAt).slice(0,10):null;return recorded||observed||state.date||null}
 async function persistQuotaExhausted(data){
   apiQuota.dailyLimit=Number(apiQuota.dailyLimit)||7500;apiQuota.dailyRemaining=0;apiQuota.exhausted=true;apiQuota.providerError=JSON.stringify(data?.errors||data||{});apiQuota.observedAt=new Date().toISOString();
-  if(storageReady())try{await writeJson(QUOTA_GUARD_PATH,{date:todayInTimezone(),exhausted:true,dailyLimit:apiQuota.dailyLimit,dailyRemaining:0,providerError:apiQuota.providerError,observedAt:apiQuota.observedAt})}catch(_){}
+  const day=providerDayUtc();
+  if(storageReady())try{await writeJson(QUOTA_GUARD_PATH,{date:day,providerDayUtc:day,exhausted:true,dailyLimit:apiQuota.dailyLimit,dailyRemaining:0,providerError:apiQuota.providerError,observedAt:apiQuota.observedAt})}catch(_){}
 }
 async function loadQuotaGuard(){
   if(!storageReady())return;
-  try{const state=await readJson(QUOTA_GUARD_PATH,null);if(state?.date===todayInTimezone()&&state?.exhausted){apiQuota={...apiQuota,dailyLimit:Number(state.dailyLimit)||7500,dailyRemaining:0,exhausted:true,providerError:state.providerError||'DAILY_QUOTA_EXHAUSTED',observedAt:state.observedAt||new Date().toISOString()}}else if(state?.date&&state.date!==todayInTimezone()){apiQuota.exhausted=false;apiQuota.providerError=null;apiQuota.dailyRemaining=null}}catch(_){}
+  try{const state=await readJson(QUOTA_GUARD_PATH,null),currentDay=providerDayUtc(),guardDay=quotaGuardDay(state);if(state?.exhausted&&guardDay===currentDay){apiQuota={...apiQuota,dailyLimit:Number(state.dailyLimit)||7500,dailyRemaining:0,exhausted:true,providerError:state.providerError||'DAILY_QUOTA_EXHAUSTED',observedAt:state.observedAt||new Date().toISOString()}}else if(state?.exhausted&&guardDay&&guardDay!==currentDay){apiQuota.exhausted=false;apiQuota.providerError=null;apiQuota.dailyRemaining=null}}catch(_){}
 }
 function canSpend(priority='secondary'){
   if(apiQuota.exhausted) return false;
@@ -71,7 +74,7 @@ async function apiGet(path,{priority='secondary'}={}){
   if(!response.ok) throw new Error(`API-Football HTTP ${response.status}`);
   return data;
 }
-function quotaMeta(){return {...apiQuota,plan:providerPlanMeta(),dynamicReserve:dynamicDailyReserve(),liveReserve:LIVE_DAILY_RESERVE,secondaryCallBudgetPerBuild:SECONDARY_CALL_BUDGET_PER_BUILD,buildExternalCalls}}
+function quotaMeta(){return {...apiQuota,providerDayUtc:providerDayUtc(),plan:providerPlanMeta(),dynamicReserve:dynamicDailyReserve(),liveReserve:LIVE_DAILY_RESERVE,secondaryCallBudgetPerBuild:SECONDARY_CALL_BUDGET_PER_BUILD,buildExternalCalls}}
 function dateInTimezone(date,timeZone=DISPLAY_TIMEZONE){const parts=new Intl.DateTimeFormat('en-GB',{timeZone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);const map=Object.fromEntries(parts.map(p=>[p.type,p.value]));return `${map.year}-${map.month}-${map.day}`}
 function todayInTimezone(){return dateInTimezone(new Date())}
 function daysAgoInTimezone(days){return dateInTimezone(new Date(Date.now()-days*86400000))}
