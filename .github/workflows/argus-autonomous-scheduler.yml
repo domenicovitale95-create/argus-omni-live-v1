@@ -80,7 +80,7 @@ jobs:
             call '/api/prediction-ledger-cron' 'Prediction ledger cron'
             call '/api/virtual-bankroll?mode=run' 'Virtual bankroll'
             call '/api/operational-alert-bridge' 'Operational alert bridge'
-            call '/api/alert-engine' 'Alert engine'
+            call '/api/alert-engine?compact=1' 'Alert engine'
             call '/api/push-dispatch' 'Push dispatch'
           }
 
