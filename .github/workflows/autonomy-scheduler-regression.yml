@@ -30,10 +30,16 @@ jobs:
         run: |
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
+          import { spawnSync } from 'node:child_process';
           const vercel = JSON.parse(fs.readFileSync('vercel.json','utf8'));
           const supervisorCron = (vercel.crons || []).find(x => x.path === '/api/autonomous-supervisor');
           if (!supervisorCron) throw new Error('Missing Vercel autonomous supervisor cron');
           if (supervisorCron.schedule !== '*/10 * * * *') throw new Error(`Unexpected supervisor schedule: ${supervisorCron.schedule}`);
+
+          const runIgnore = (env) => spawnSync('bash', ['-lc', vercel.ignoreCommand], { env:{...process.env,...env} }).status;
+          if (runIgnore({VERCEL_ENV:'production',VERCEL_GIT_COMMIT_REF:'main',VERCEL_GIT_COMMIT_MESSAGE:'normal fix'}) !== 1) throw new Error('Production deployment would be ignored');
+          if (runIgnore({VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'feature/test',VERCEL_GIT_COMMIT_MESSAGE:'normal fix'}) !== 0) throw new Error('Normal preview deployment would not be suppressed');
+          if (runIgnore({VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'feature/test',VERCEL_GIT_COMMIT_MESSAGE:'deploy: explicit preview'}) !== 1) throw new Error('Explicit preview deployment cannot be forced');
 
           const scheduler = fs.readFileSync('.github/workflows/argus-autonomous-scheduler.yml','utf8');
           if (!scheduler.includes("- cron: '19,49 * * * *'")) throw new Error('Missing GitHub watchdog schedule');
