@@ -9,46 +9,65 @@ on:
 jobs:
   historical-learning:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    env:
+      ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
     steps:
+      - name: Validate scheduler credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${CRON_SECRET:-}" ]; then
+            echo "::error::GitHub Actions secret CRON_SECRET is not configured."
+            exit 1
+          fi
+
       - name: Backfill recent-first historical archive
-        env:
-          ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        shell: bash
         run: |
           set -euo pipefail
           BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
-          curl --fail --silent --show-error --max-time 300 \
+          curl --fail-with-body --silent --show-error --max-time 360 --retry 2 --retry-delay 5 --retry-all-errors \
             -H "Authorization: Bearer ${CRON_SECRET}" \
             "$BASE/api/historical-decade-backfill?dates=48"
 
       - name: Recompute walk-forward research
-        env:
-          ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        id: walkforward
+        continue-on-error: true
+        shell: bash
         run: |
           set -euo pipefail
           BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
-          curl --fail --silent --show-error --max-time 300 \
+          curl --fail-with-body --silent --show-error --max-time 360 --retry 1 --retry-delay 5 --retry-all-errors \
             -H "Authorization: Bearer ${CRON_SECRET}" \
             "$BASE/api/historical-walk-forward"
 
       - name: Refresh learned source reliability
-        env:
-          ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+        if: always()
+        shell: bash
         run: |
           set -euo pipefail
           BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
-          curl --fail --silent --show-error --max-time 300 \
+          curl --fail-with-body --silent --show-error --max-time 180 --retry 2 --retry-delay 3 --retry-all-errors \
             -X POST "$BASE/api/source-reliability-learning"
 
       - name: Refresh governed self-improvement snapshot
-        env:
-          ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        if: always()
+        shell: bash
         run: |
           set -euo pipefail
           BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
-          curl --fail --silent --show-error --max-time 300 \
+          curl --fail-with-body --silent --show-error --max-time 300 --retry 2 --retry-delay 5 --retry-all-errors \
             -H "Authorization: Bearer ${CRON_SECRET}" \
             "$BASE/api/self-improvement-loop"
+
+      - name: Historical learning verdict
+        if: always()
+        shell: bash
+        run: |
+          if [ "${{ steps.walkforward.outcome }}" != "success" ]; then
+            echo "::error::Walk-forward research failed, while downstream learning refreshes were still attempted."
+            exit 1
+          fi
+          echo "Historical learning pipeline completed successfully."
