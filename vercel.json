@@ -6,6 +6,12 @@
     "api/live.js": {
       "memory": 3009,
       "maxDuration": 60
+    },
+    "api/historical-shard-migrate.js": {
+      "maxDuration": 60
+    },
+    "api/historical-walk-forward.js": {
+      "maxDuration": 60
     }
   },
   "crons": [
@@ -20,6 +26,7 @@
     { "path": "/api/shadow-cron", "schedule": "7 * * * *" },
     { "path": "/api/deployment-verifier", "schedule": "12,27,42,57 * * * *" },
     { "path": "/api/site-self-test", "schedule": "17 * * * *" },
+    { "path": "/api/historical-shard-migrate?months=36", "schedule": "*/10 * * * *" },
     { "path": "/api/historical-recent-backfill?dates=6", "schedule": "15 1 * * *" },
     { "path": "/api/historical-market-outcomes", "schedule": "20 1 * * *" },
     { "path": "/api/historical-recent-stats-enrichment?fixtures=4", "schedule": "35 1 * * *" },
