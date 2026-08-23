@@ -1,0 +1,70 @@
+/* ARGUS OMNI — human-first LIVE experience */
+.live-page{padding-top:36px}
+.live-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:18px;align-items:stretch}
+.live-intro{padding:40px;min-height:360px;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(circle at 5% 0%,rgba(126,226,168,.09),transparent 34%),var(--surface)}
+.live-intro h2{font:650 clamp(40px,5.7vw,68px)/.98 "Space Grotesk",Inter,sans-serif;letter-spacing:-.055em;margin:0;max-width:690px}
+.live-intro .lead{max-width:610px;margin:18px 0 0;color:var(--soft);font-size:15px;line-height:1.65}
+.live-state-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:28px}
+.live-state-chip{display:inline-flex;align-items:center;gap:8px;padding:9px 11px;border:1px solid var(--line);border-radius:999px;color:var(--soft);font-size:11px;font-weight:700;background:rgba(255,255,255,.025)}
+.live-state-chip i{width:7px;height:7px;border-radius:50%;background:var(--prime);box-shadow:0 0 0 4px rgba(126,226,168,.08)}
+.live-state-copy{color:var(--muted);font-size:11px}
+.live-primary{padding:20px;display:flex;flex-direction:column}
+.live-primary-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:3px 4px 14px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.live-primary-head span:last-child{letter-spacing:0;text-transform:none;font-weight:600}
+.live-primary-card{flex:1;min-height:292px;border-radius:18px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;border:1px dashed var(--line-strong);overflow:hidden}
+.live-primary-card.has-signal{display:block;border-style:solid}
+.live-empty{padding:34px;text-align:center;max-width:430px}
+.live-empty strong{display:block;font:650 25px/1.15 "Space Grotesk",Inter,sans-serif;letter-spacing:-.03em}
+.live-empty p{margin:11px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+.live-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:18px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.live-summary>div{background:var(--surface);padding:17px 18px}
+.live-summary span{display:block;color:var(--muted);font-size:11px}
+.live-summary strong{display:block;margin-top:6px;font:650 20px/1 "Space Grotesk",Inter,sans-serif}
+.live-summary small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+.live-section{margin-top:46px}
+.live-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:15px}
+.live-section-head h3{font:650 27px/1.1 "Space Grotesk",Inter,sans-serif;letter-spacing:-.035em;margin:0}
+.live-section-head p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.5;max-width:650px}
+.live-refresh{color:var(--muted);font-size:11px;white-space:nowrap}
+.live-command-grid{display:grid;gap:10px}
+.live-signal-card{display:grid;grid-template-columns:minmax(220px,1.25fr) minmax(190px,.95fr) minmax(135px,.65fr);gap:20px;align-items:center;padding:20px 22px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.live-signal-card:hover{border-color:var(--line-strong)}
+.live-signal-card.prime{border-color:rgba(126,226,168,.3);background:linear-gradient(110deg,rgba(126,226,168,.055),var(--surface) 42%)}
+.live-signal-card.strong{border-color:rgba(125,183,255,.24)}
+.live-signal-card.watch{border-color:rgba(242,198,109,.22)}
+.live-match-top{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--danger)}
+.live-match h4{margin:8px 0 0;font:620 19px/1.2 "Space Grotesk",Inter,sans-serif;letter-spacing:-.025em}
+.live-score{color:var(--soft);font-size:.78em;margin-left:5px}
+.live-selection span,.live-strength span{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+.live-selection strong{display:block;margin-top:5px;font-size:14px}
+.live-selection small{display:block;margin-top:7px;color:var(--muted);font-size:10px;line-height:1.45}
+.live-strength{justify-self:end;text-align:right}
+.live-tier-pill{display:inline-flex;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.045);font-size:9px;font-weight:900;letter-spacing:.06em}
+.live-tier-pill.prime{color:var(--prime);background:rgba(126,226,168,.08)}
+.live-tier-pill.strong{color:var(--value);background:rgba(125,183,255,.08)}
+.live-tier-pill.watch{color:var(--watch);background:rgba(242,198,109,.08)}
+.live-strength strong{display:block;margin-top:8px;font:650 17px/1 "Space Grotesk",Inter,sans-serif}
+.live-strength small{display:block;margin-top:6px;color:var(--muted);font-size:10px}
+.live-action{display:block;margin-top:8px;font-size:9px;font-weight:900;letter-spacing:.07em;color:var(--soft)}
+.live-primary-signal{height:100%;padding:28px;display:flex;flex-direction:column;justify-content:center}
+.live-primary-signal .live-match-top{margin-bottom:11px}
+.live-primary-signal h3{margin:0;font:650 29px/1.08 "Space Grotesk",Inter,sans-serif;letter-spacing:-.04em}
+.live-primary-signal .primary-play{margin-top:24px;padding:16px;border-radius:13px;background:rgba(255,255,255,.035)}
+.live-primary-signal .primary-play span{display:block;color:var(--muted);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.live-primary-signal .primary-play strong{display:block;margin-top:6px;font:700 18px/1.2 "Space Grotesk",Inter,sans-serif}
+.live-primary-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:18px}
+.live-primary-metrics div{padding:11px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.018)}
+.live-primary-metrics span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.06em}
+.live-primary-metrics strong{display:block;margin-top:5px;font-size:13px}
+.live-primary-reason{margin:17px 0 0;color:var(--muted);font-size:12px;line-height:1.55}
+.live-rejected{margin-top:13px;padding:13px 15px;border:1px solid var(--line);border-radius:13px;color:var(--muted);font-size:11px;background:rgba(255,255,255,.018)}
+.live-explain{margin-top:32px;border-top:1px solid var(--line)}
+.live-explain details{border-bottom:1px solid var(--line)}
+.live-explain summary{list-style:none;cursor:pointer;padding:17px 2px;display:flex;justify-content:space-between;color:var(--soft);font-size:13px;font-weight:700}
+.live-explain summary::-webkit-details-marker{display:none}.live-explain summary::after{content:"+";color:var(--muted);font-size:18px;font-weight:400}.live-explain details[open] summary::after{content:"–"}
+.live-explain-body{padding:0 0 20px;color:var(--muted);font-size:12px;line-height:1.6;max-width:760px}
+#argus-pressure-window,.live-yellow-banner,.live-alert-box{display:none!important}
+@media(max-width:900px){.live-hero{grid-template-columns:1fr}.live-intro{min-height:320px}.live-primary{min-height:330px}.live-signal-card{grid-template-columns:1.1fr .9fr}.live-strength{grid-column:2;grid-row:1 / span 2}}
+@media(max-width:700px){.live-page{padding-top:24px}.live-hero{gap:10px}.live-intro{padding:30px 24px;min-height:340px;border-radius:18px}.live-intro h2{font-size:46px}.live-primary{padding:10px;border-radius:18px}.live-summary{grid-template-columns:repeat(3,1fr)}.live-summary>div{padding:14px}.live-section{margin-top:38px}.live-section-head{align-items:flex-start;flex-direction:column}.live-signal-card{grid-template-columns:1fr;gap:14px;padding:18px}.live-strength{grid-column:auto;grid-row:auto;justify-self:start;text-align:left;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.live-strength strong,.live-strength small,.live-action{margin:0}.live-primary-metrics{grid-template-columns:1fr 1fr}.live-primary-metrics div:last-child{grid-column:1/-1}.live-refresh{white-space:normal}}
+@media(max-width:440px){.live-intro h2{font-size:41px}.live-summary strong{font-size:18px}.live-summary span{font-size:10px}.live-primary-signal{padding:22px}.live-primary-signal h3{font-size:25px}.live-primary-metrics{grid-template-columns:1fr}.live-primary-metrics div:last-child{grid-column:auto}}
