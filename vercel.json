@@ -12,13 +12,14 @@
       "maxDuration": 60
     },
     "api/historical-shard-migrate.js": {
-      "maxDuration": 60
+      "maxDuration": 300
     },
     "api/historical-walk-forward.js": {
-      "maxDuration": 60
+      "memory": 3009,
+      "maxDuration": 300
     },
     "api/autonomous-supervisor.js": {
-      "maxDuration": 60
+      "maxDuration": 120
     }
   }
 }
