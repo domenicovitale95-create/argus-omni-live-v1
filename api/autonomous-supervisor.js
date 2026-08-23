@@ -1,4 +1,5 @@
 import { readJson, writeJson, storageReady } from './_report-store.js';
+import { providerPlanMeta } from './_provider-plan.js';
 
 export const config = { maxDuration: 60 };
 
@@ -13,6 +14,8 @@ const PLAN_CRITICAL_MINUTES = 180;
 const LEDGER_STALE_MINUTES = 20;
 const HIST_STALL_MINUTES = 35;
 const HIST_RECOVERY_COOLDOWN_MINUTES = 30;
+const OPERATIONAL_RESERVE_RATIO = .20;
+const LEARNING_RESERVE_RATIO = .25;
 
 function secret(){ return String(process.env.CRON_SECRET || '').trim(); }
 function authorized(req){ const s = secret(); return !s || req.headers.authorization === `Bearer ${s}`; }
@@ -20,6 +23,7 @@ function ageMinutes(value){
   const t = value ? new Date(value).getTime() : 0;
   return t && Number.isFinite(t) ? Math.max(0, Math.round((Date.now() - t) / 60000)) : null;
 }
+function providerDayUtc(){ return new Date().toISOString().slice(0,10); }
 function brusselsClock(){
   const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
     timeZone:'Europe/Brussels', year:'numeric', month:'2-digit', day:'2-digit',
@@ -48,10 +52,18 @@ async function call(base, path, timeoutMs = 52000){
     return { ok:false, status:0, ms:Date.now()-started, error:error.name === 'AbortError' ? 'TIMEOUT' : error.message };
   }finally{ clearTimeout(timer); }
 }
-function currentQuotaHalt(guard, clock){
-  if(!guard?.exhausted) return false;
-  const day = guard.providerDayUtc || guard.date || String(guard.observedAt || '').slice(0,10);
-  return day === clock.date;
+function guardDay(guard){ return guard?.providerDayUtc || guard?.date || String(guard?.observedAt || '').slice(0,10) || null; }
+function currentQuotaHalt(guard){ return Boolean(guard?.exhausted && guardDay(guard) === providerDayUtc()); }
+function quotaBudget(guard){
+  const configured=Number(providerPlanMeta()?.dailyLimit)||7500;
+  const observed=Number(guard?.dailyLimit);
+  const dailyLimit=Number.isFinite(observed)&&observed>0?observed:configured;
+  const remainingRaw=Number(guard?.dailyRemaining);
+  const dailyRemaining=Number.isFinite(remainingRaw)?Math.max(0,remainingRaw):null;
+  const operationalReserve=Math.max(1,Math.ceil(dailyLimit*OPERATIONAL_RESERVE_RATIO));
+  const learningReserve=Math.max(operationalReserve,Math.ceil(dailyLimit*LEARNING_RESERVE_RATIO));
+  const learningSpendable=dailyRemaining==null?null:Math.max(0,dailyRemaining-learningReserve);
+  return{dailyLimit,dailyRemaining,operationalReserve,learningReserve,learningSpendable,learningAllowed:dailyRemaining==null?null:dailyRemaining>learningReserve};
 }
 function event(name, result, extra={}){
   return { name, attempted:true, ok:Boolean(result?.ok), status:result?.status ?? null, ms:result?.ms ?? null, error:result?.error || result?.data?.error || null, ...extra };
@@ -72,7 +84,7 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method !== 'GET') return res.status(405).json({ error:'Method not allowed' });
   if(!authorized(req)) return res.status(401).json({ error:'Unauthorized' });
-  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-3', status:'CRITICAL', error:'Storage unavailable' });
+  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-4', status:'CRITICAL', error:'Storage unavailable' });
 
   const startedAt = new Date().toISOString();
   const clock = brusselsClock();
@@ -87,7 +99,8 @@ export default async function handler(req,res){
     readJson(QUOTA_GUARD_PATH, null)
   ]);
 
-  const quotaHalt = currentQuotaHalt(guard, clock);
+  const quotaHalt = currentQuotaHalt(guard);
+  const budget = quotaBudget(guard);
   const planAgeBefore = ageMinutes(planBefore?.generatedAt);
   const ledgerAgeBefore = ageMinutes(ledgerBefore?.completedAt || ledgerBefore?.startedAt);
   const histAgeBefore = ageMinutes(histBefore?.updatedAt);
@@ -112,7 +125,7 @@ export default async function handler(req,res){
   const previousHistAttemptAge = ageMinutes(previous?.lastHistoricalRecoveryAttemptAt);
   const histStalled = histIncomplete && (histAgeBefore == null || histAgeBefore > HIST_STALL_MINUTES);
   if(histStalled && !heavyRemediationTaken && (previousHistAttemptAge == null || previousHistAttemptAge > HIST_RECOVERY_COOLDOWN_MINUTES)){
-    const result = await call(base, '/api/historical-shard-migrate?months=12', 54000);
+    const result = await call(base, '/api/historical-shard-migrate?months=6', 54000);
     actions.push(event('HISTORICAL_MIGRATION_RECOVERY', result, { reason:'MIGRATION_STALLED', beforeAgeMinutes:histAgeBefore }));
     heavyRemediationTaken = true;
   }
@@ -141,11 +154,12 @@ export default async function handler(req,res){
   const consecutiveUnhealthyRuns = failureLike ? Number(previous?.consecutiveUnhealthyRuns || 0) + 1 : 0;
   const lastHistoricalRecoveryAttemptAt = actions.some(x => x.name === 'HISTORICAL_MIGRATION_RECOVERY') ? new Date().toISOString() : (previous?.lastHistoricalRecoveryAttemptAt || null);
   const state = {
-    version:'AUTONOMOUS-SUPERVISOR-3',
+    version:'AUTONOMOUS-SUPERVISOR-4',
     startedAt,
     completedAt:new Date().toISOString(),
     status,
     clock,
+    providerDayUtc:providerDayUtc(),
     consecutiveUnhealthyRuns,
     issues,
     actions,
@@ -154,7 +168,7 @@ export default async function handler(req,res){
       autopilot:{ generatedAt:planAfter?.generatedAt || null, ageMinutes:planAge, rows:Array.isArray(planAfter?.plan) ? planAfter.plan.length : 0, activeWindow:activeWindow(clock) },
       predictionLedger:{ completedAt:ledgerAfter?.completedAt || null, ageMinutes:ledgerAge, ok:ledgerAfter?.ok ?? null },
       historicalMigration:{ exists:Boolean(histAfter), migrationComplete:histAfter?.migrationComplete === true, updatedAt:histAfter?.updatedAt || null, ageMinutes:histAge, months:Object.keys(histAfter?.months || {}).length, fixtureCount:Number(histAfter?.fixtureCount || 0) },
-      providerQuota:{ halted:quotaHalt, mode:guard?.mode || null, remaining:guard?.dailyRemaining ?? null, observedAt:guard?.observedAt || null }
+      providerQuota:{ halted:quotaHalt, guardDay:guardDay(guard), mode:guard?.mode || null, observedAt:guard?.observedAt || null, observedAgeMinutes:ageMinutes(guard?.observedAt), ...budget }
     },
     policy:{
       runsWithoutChat:true,
@@ -163,7 +177,11 @@ export default async function handler(req,res){
       oneHeavyRemediationPerRun:true,
       remediationPriority:['AUTOPILOT','PREDICTION_LEDGER','HISTORICAL_MIGRATION'],
       directProviderCalls:false,
+      providerDayClock:'UTC',
       quotaGuardRespected:true,
+      operationalReserveRatio:OPERATIONAL_RESERVE_RATIO,
+      learningReserveRatio:LEARNING_RESERVE_RATIO,
+      learningYieldToOperationalTraffic:true,
       automaticWagering:false,
       historicalRecoveryProviderCalls:0,
       operationalIncidentLedger:true,
