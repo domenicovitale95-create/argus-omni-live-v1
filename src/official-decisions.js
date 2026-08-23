@@ -16,6 +16,14 @@
   }
   async function planMap(){try{const r=await fetch('/api/decision-scheduler',{cache:'no-store',headers:{Accept:'application/json'}});if(!r.ok)return new Map();const j=await r.json(),rows=Array.isArray(j?.plan)?j.plan:[],generatedAt=j?.generatedAt||null;return new Map(rows.map(x=>[String(x.fixtureId),{...x,_schedulerGeneratedAt:generatedAt}]))}catch(_){return new Map()}}
   async function archive(matches,analyses,meta){try{await fetch('/api/predictions',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({matches,analyses,meta}),keepalive:true})}catch(_){}}
+  function enforceMetricSemantics(){
+    const conf=document.getElementById('osV2Confidence');if(conf&&/%\s*$/.test(conf.textContent||''))conf.textContent=(conf.textContent||'').replace(/%\s*$/,'/100');
+    const edge=document.getElementById('osV2Edge');if(edge)edge.textContent=(edge.textContent||'').replace(/value advantage/gi,'model edge').replace(/ pts\b/gi,' pp');
+    const fair=document.getElementById('osV2Fair');if(fair){const text=fair.textContent||'',m=text.match(/fair odds\s+([0-9]+(?:\.[0-9]+)?)/i),o=m?Number(m[1]):null;if(o&&o>1&&!/outcome p/i.test(text))fair.textContent=`ARGUS fair odds ${o.toFixed(2)} · outcome p ${(100/o).toFixed(1)}%`}
+    document.querySelectorAll('.os-v2-metric > span').forEach(el=>{const t=(el.textContent||'').trim().toLowerCase();if(t==='confidence')el.textContent='Decision confidence';if(t==='data reliability')el.textContent='Evidence quality'});
+  }
+  let semanticQueued=false;function queueSemantics(){if(semanticQueued)return;semanticQueued=true;requestAnimationFrame(()=>{semanticQueued=false;enforceMetricSemantics()})}
   const originalAnalyze=typeof analyzeMatches==='function'?analyzeMatches:null;if(!originalAnalyze)return;
-  analyzeMatches=async function(matches,meta=null){state.matches=matches;state.meta=meta;const map=await planMap();state.analyses=matches.map(m=>{const raw=window.ArgusEngine.analyze(m),base=window.ArgusGovernance?window.ArgusGovernance.apply(raw,m):raw;return officialFromRow(m,base,map.get(String(m.id)))});render();archive(matches,state.analyses,meta)};
+  analyzeMatches=async function(matches,meta=null){state.matches=matches;state.meta=meta;const map=await planMap();state.analyses=matches.map(m=>{const raw=window.ArgusEngine.analyze(m),base=window.ArgusGovernance?window.ArgusGovernance.apply(raw,m):raw;return officialFromRow(m,base,map.get(String(m.id)))});render();queueSemantics();archive(matches,state.analyses,meta)};
+  window.addEventListener('load',queueSemantics);const obs=new MutationObserver(queueSemantics);if(document.body)obs.observe(document.body,{childList:true,subtree:true,characterData:true});
 })();
