@@ -5,12 +5,14 @@ on:
     branches: [main]
     paths:
       - 'api/site-self-test.js'
+      - 'api/autonomy-health.js'
       - 'api/trend-integrity-audit.js'
       - 'api/decision-integrity-audit.js'
       - '.github/workflows/site-self-test-semantic-regression.yml'
   pull_request:
     paths:
       - 'api/site-self-test.js'
+      - 'api/autonomy-health.js'
       - 'api/trend-integrity-audit.js'
       - 'api/decision-integrity-audit.js'
       - '.github/workflows/site-self-test-semantic-regression.yml'
@@ -23,6 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/site-self-test.js
+          node --check api/autonomy-health.js
       - name: Verify no-data cannot become healthy
         run: |
           grep -q "SEMANTIC_WAITING" api/site-self-test.js
@@ -37,3 +46,10 @@ jobs:
           grep -q "FAIL" api/site-self-test.js
           grep -Fq "failures=checks.filter(x=>!x.ok&&x.semanticState!=='WAITING')" api/site-self-test.js
           grep -Fq "semanticFailure?'FAIL'" api/site-self-test.js
+      - name: Treat scheduler jitter as warning before stale failure
+        run: |
+          grep -q "SEMANTIC_WARNING" api/site-self-test.js
+          grep -q "LATE" api/site-self-test.js
+          grep -q "STALE_AFTER_MINUTES=45" api/autonomy-health.js
+          grep -q "LATE_AFTER_MINUTES=25" api/autonomy-health.js
+          grep -Fq "warnings.length?'CAUTION'" api/site-self-test.js
