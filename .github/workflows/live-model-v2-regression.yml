@@ -1,0 +1,33 @@
+name: Live Model V2 Regression
+
+on:
+  push:
+    branches: [main, fix/live-model-v2-integrity]
+  pull_request:
+
+jobs:
+  live-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax checks
+        run: |
+          node --check api/_live-model-v2.js
+          node --check api/_market-candidate.js
+          node --check api/live.js
+          node --check api/bet-eligibility.js
+          node --check api/bet-eligibility-v2.js
+          node --check api/autopilot-v2.js
+          node --check api/decision-integrity-audit.js
+          node --check api/live-paper-bankroll.js
+          node --check api/live-model-validation.js
+          node --check src/engine.js
+          node --check src/official-decisions.js
+          node --check src/providers.js
+          node --check src/live-command-center.js
+      - name: Live probability regression suite
+        run: node tests/live-model-v2-regression.mjs
