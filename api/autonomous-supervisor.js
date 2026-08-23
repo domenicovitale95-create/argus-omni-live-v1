@@ -3,6 +3,7 @@ import { readJson, writeJson, storageReady } from './_report-store.js';
 export const config = { maxDuration: 60 };
 
 const STATE_PATH = 'argus/health/autonomous-supervisor.json';
+const INCIDENTS_PATH = 'argus/health/incidents.json';
 const PLAN_PATH = 'argus/autopilot/decision-plan.json';
 const LEDGER_HEALTH_PATH = 'argus/health/prediction-ledger-cron.json';
 const HIST_INDEX_PATH = 'argus/research/historical-shards-index.json';
@@ -55,12 +56,23 @@ function currentQuotaHalt(guard, clock){
 function event(name, result, extra={}){
   return { name, attempted:true, ok:Boolean(result?.ok), status:result?.status ?? null, ms:result?.ms ?? null, error:result?.error || result?.data?.error || null, ...extra };
 }
+async function recordIncident(kind, state){
+  const feed=await readJson(INCIDENTS_PATH,{version:'ARGUS-INCIDENT-FEED-1',incidents:[]});
+  const incidents=Array.isArray(feed?.incidents)?feed.incidents:[];
+  const signature=`${kind}|${state.status}|${(state.issues||[]).map(x=>x.code).sort().join(',')}`;
+  const recent=incidents.find(x=>x.signature===signature&&ageMinutes(x.createdAt)!=null&&ageMinutes(x.createdAt)<60);
+  if(recent)return{recorded:false,deduplicated:true,id:recent.id};
+  const row={id:`incident-${Date.now()}`,signature,kind,severity:kind==='SYSTEM_RECOVERED'?'INFO':state.status,createdAt:new Date().toISOString(),status:state.status,consecutiveUnhealthyRuns:state.consecutiveUnhealthyRuns,issues:state.issues||[],actions:state.actions||[],components:state.components||{}};
+  feed.version='ARGUS-INCIDENT-FEED-1';feed.updatedAt=row.createdAt;feed.incidents=[row,...incidents].slice(0,100);
+  await writeJson(INCIDENTS_PATH,feed);
+  return{recorded:true,deduplicated:false,id:row.id};
+}
 
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method !== 'GET') return res.status(405).json({ error:'Method not allowed' });
   if(!authorized(req)) return res.status(401).json({ error:'Unauthorized' });
-  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-1', status:'CRITICAL', error:'Storage unavailable' });
+  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-2', status:'CRITICAL', error:'Storage unavailable' });
 
   const startedAt = new Date().toISOString();
   const clock = brusselsClock();
@@ -121,10 +133,11 @@ export default async function handler(req,res){
   else if(issues.length) status = 'DEGRADED';
 
   const failureLike = status === 'CRITICAL' || status === 'DEGRADED';
+  const previousFailureLike = previous?.status === 'CRITICAL' || previous?.status === 'DEGRADED';
   const consecutiveUnhealthyRuns = failureLike ? Number(previous?.consecutiveUnhealthyRuns || 0) + 1 : 0;
   const lastHistoricalRecoveryAttemptAt = actions.some(x => x.name === 'HISTORICAL_MIGRATION_RECOVERY') ? new Date().toISOString() : (previous?.lastHistoricalRecoveryAttemptAt || null);
   const state = {
-    version:'AUTONOMOUS-SUPERVISOR-1',
+    version:'AUTONOMOUS-SUPERVISOR-2',
     startedAt,
     completedAt:new Date().toISOString(),
     status,
@@ -147,16 +160,13 @@ export default async function handler(req,res){
       quotaGuardRespected:true,
       automaticWagering:false,
       historicalRecoveryProviderCalls:0,
+      operationalIncidentLedger:true,
       failClosedOnUnhealthyState:true
     }
   };
+
+  if(consecutiveUnhealthyRuns >= 3) state.incident=await recordIncident('SYSTEM_UNHEALTHY',state);
+  else if(!failureLike&&previousFailureLike) state.incident=await recordIncident('SYSTEM_RECOVERED',state);
   await writeJson(STATE_PATH, state);
-
-  if(consecutiveUnhealthyRuns >= 3){
-    const alert = await call(base, '/api/alert-engine', 15000);
-    state.persistentFailureAlert = event('ALERT_ENGINE', alert, { reason:'THREE_CONSECUTIVE_UNHEALTHY_SUPERVISOR_RUNS' });
-    await writeJson(STATE_PATH, state);
-  }
-
   return res.status(200).json(state);
 }
