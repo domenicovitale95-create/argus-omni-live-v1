@@ -72,7 +72,7 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method !== 'GET') return res.status(405).json({ error:'Method not allowed' });
   if(!authorized(req)) return res.status(401).json({ error:'Unauthorized' });
-  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-2', status:'CRITICAL', error:'Storage unavailable' });
+  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-3', status:'CRITICAL', error:'Storage unavailable' });
 
   const startedAt = new Date().toISOString();
   const clock = brusselsClock();
@@ -92,25 +92,29 @@ export default async function handler(req,res){
   const ledgerAgeBefore = ageMinutes(ledgerBefore?.completedAt || ledgerBefore?.startedAt);
   const histAgeBefore = ageMinutes(histBefore?.updatedAt);
   const actions = [];
+  let heavyRemediationTaken = false;
 
   const shouldRecoverPlan = activeWindow(clock) && !quotaHalt && (planAgeBefore == null || planAgeBefore > PLAN_STALE_MINUTES);
   if(shouldRecoverPlan){
-    const result = await call(base, '/api/autopilot', 55000);
+    const result = await call(base, '/api/autopilot', 54000);
     actions.push(event('AUTOPILOT_RECOVERY', result, { reason:'STALE_DECISION_PLAN', beforeAgeMinutes:planAgeBefore }));
+    heavyRemediationTaken = true;
   }
 
   const shouldRecoverLedger = ledgerAgeBefore == null || ledgerAgeBefore > LEDGER_STALE_MINUTES;
-  if(shouldRecoverLedger){
-    const result = await call(base, '/api/prediction-ledger-cron', 55000);
+  if(shouldRecoverLedger && !heavyRemediationTaken){
+    const result = await call(base, '/api/prediction-ledger-cron', 54000);
     actions.push(event('LEDGER_RECOVERY', result, { reason:'STALE_LEDGER_HEARTBEAT', beforeAgeMinutes:ledgerAgeBefore }));
+    heavyRemediationTaken = true;
   }
 
-  const histIncomplete = Boolean(histBefore && histBefore.migrationComplete !== true);
+  const histIncomplete = !histBefore || histBefore.migrationComplete !== true;
   const previousHistAttemptAge = ageMinutes(previous?.lastHistoricalRecoveryAttemptAt);
   const histStalled = histIncomplete && (histAgeBefore == null || histAgeBefore > HIST_STALL_MINUTES);
-  if(histStalled && (previousHistAttemptAge == null || previousHistAttemptAge > HIST_RECOVERY_COOLDOWN_MINUTES)){
-    const result = await call(base, '/api/historical-shard-migrate?months=12', 55000);
+  if(histStalled && !heavyRemediationTaken && (previousHistAttemptAge == null || previousHistAttemptAge > HIST_RECOVERY_COOLDOWN_MINUTES)){
+    const result = await call(base, '/api/historical-shard-migrate?months=12', 54000);
     actions.push(event('HISTORICAL_MIGRATION_RECOVERY', result, { reason:'MIGRATION_STALLED', beforeAgeMinutes:histAgeBefore }));
+    heavyRemediationTaken = true;
   }
 
   const [planAfter, ledgerAfter, histAfter] = await Promise.all([
@@ -125,7 +129,7 @@ export default async function handler(req,res){
   const issues = [];
   if(activeWindow(clock) && !quotaHalt && (planAge == null || planAge > PLAN_STALE_MINUTES)) issues.push({ code:'DECISION_PLAN_STALE', severity:planAge == null || planAge > PLAN_CRITICAL_MINUTES ? 'CRITICAL' : 'DEGRADED', ageMinutes:planAge });
   if(ledgerAge == null || ledgerAge > LEDGER_STALE_MINUTES) issues.push({ code:'LEDGER_HEARTBEAT_STALE', severity:'DEGRADED', ageMinutes:ledgerAge });
-  if(histAfter && histAfter.migrationComplete !== true && (histAge == null || histAge > HIST_STALL_MINUTES)) issues.push({ code:'HISTORICAL_MIGRATION_STALLED', severity:'DEGRADED', ageMinutes:histAge });
+  if((!histAfter || histAfter.migrationComplete !== true) && (histAge == null || histAge > HIST_STALL_MINUTES)) issues.push({ code:'HISTORICAL_MIGRATION_STALLED', severity:'DEGRADED', ageMinutes:histAge });
 
   let status = 'HEALTHY';
   if(quotaHalt) status = 'PAUSED_QUOTA';
@@ -137,7 +141,7 @@ export default async function handler(req,res){
   const consecutiveUnhealthyRuns = failureLike ? Number(previous?.consecutiveUnhealthyRuns || 0) + 1 : 0;
   const lastHistoricalRecoveryAttemptAt = actions.some(x => x.name === 'HISTORICAL_MIGRATION_RECOVERY') ? new Date().toISOString() : (previous?.lastHistoricalRecoveryAttemptAt || null);
   const state = {
-    version:'AUTONOMOUS-SUPERVISOR-2',
+    version:'AUTONOMOUS-SUPERVISOR-3',
     startedAt,
     completedAt:new Date().toISOString(),
     status,
@@ -156,6 +160,8 @@ export default async function handler(req,res){
       runsWithoutChat:true,
       cronDriven:true,
       selfHealing:true,
+      oneHeavyRemediationPerRun:true,
+      remediationPriority:['AUTOPILOT','PREDICTION_LEDGER','HISTORICAL_MIGRATION'],
       directProviderCalls:false,
       quotaGuardRespected:true,
       automaticWagering:false,
