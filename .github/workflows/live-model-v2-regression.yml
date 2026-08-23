@@ -18,6 +18,7 @@ jobs:
         run: npm install --ignore-scripts --no-audit --no-fund
       - name: Syntax checks
         run: |
+          node --check app.js
           node --check api/_live-model-v2.js
           node --check api/_market-candidate.js
           node --check api/live.js
@@ -25,6 +26,7 @@ jobs:
           node --check api/bet-eligibility-v2.js
           node --check api/autopilot-v2.js
           node --check api/decision-integrity-audit.js
+          node --check api/historical-walk-forward.js
           node --check api/live-paper-bankroll.js
           node --check api/live-model-validation.js
           node --check src/engine.js
