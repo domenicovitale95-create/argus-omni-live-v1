@@ -38,6 +38,15 @@ jobs:
           if (!supervisorCron) throw new Error('Missing Vercel autonomous supervisor cron');
           if (supervisorCron.schedule !== '*/10 * * * *') throw new Error(`Unexpected supervisor schedule: ${supervisorCron.schedule}`);
 
+          const recentBackfillCron = (vercel.crons || []).find(x => x.path === '/api/historical-recent-backfill');
+          if (!recentBackfillCron) throw new Error('Missing Vercel historical recent backfill fallback');
+          if (recentBackfillCron.schedule !== '31 2 * * *') throw new Error(`Unexpected recent backfill fallback schedule: ${recentBackfillCron.schedule}`);
+          const streakCron = (vercel.crons || []).find(x => x.path === '/api/streak-intelligence');
+          if (!streakCron) throw new Error('Missing Vercel streak intelligence freshness fallback');
+          if (streakCron.schedule !== '47 2 * * *') throw new Error(`Unexpected streak intelligence fallback schedule: ${streakCron.schedule}`);
+          if ((vercel.functions?.['api/historical-recent-backfill.js']?.maxDuration || 0) < 120) throw new Error('Recent backfill fallback is not given enough runtime');
+          if ((vercel.functions?.['api/streak-intelligence.js']?.maxDuration || 0) < 120) throw new Error('Streak refresh fallback is not given enough runtime');
+
           const runIgnore = (env) => spawnSync('bash', ['-lc', vercel.ignoreCommand], { env:{...process.env,...env} }).status;
           if (runIgnore({VERCEL_GIT_COMMIT_REF:'main',VERCEL_GIT_COMMIT_MESSAGE:'normal fix'}) !== 1) throw new Error('Production deployment would be ignored');
           if (runIgnore({VERCEL_GIT_COMMIT_REF:'feature/test',VERCEL_GIT_COMMIT_MESSAGE:'normal fix'}) !== 0) throw new Error('Normal preview deployment would not be suppressed');
