@@ -86,7 +86,7 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method !== 'GET') return res.status(405).json({ error:'Method not allowed' });
   if(!authorized(req)) return res.status(401).json({ error:'Unauthorized' });
-  if(!storageReady()) return res.status(503).json({ version:'AUTONOMY-SUPERVISOR-5', status:'CRITICAL', error:'Storage unavailable' });
+  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-5', status:'CRITICAL', error:'Storage unavailable' });
 
   const startedAt = new Date().toISOString();
   const clock = brusselsClock();
