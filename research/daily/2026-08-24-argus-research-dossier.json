@@ -1,0 +1,114 @@
+{
+  "date": "2026-08-24",
+  "version": "ARGUS-RD-2026-08-24",
+  "safety": {
+    "production_changed": false,
+    "mode": "research_shadow_only",
+    "principle": "stability_first"
+  },
+  "execute_next": [
+    "cron_execution_truth_and_idempotency",
+    "selected_case_calibration",
+    "risk_coverage_abstention_curve",
+    "market_anchored_live_shadow_challenger",
+    "append_only_point_in_time_decision_ledger"
+  ],
+  "findings": [
+    {
+      "id": "cron-truth-idempotency",
+      "status": "KEEP",
+      "evidence_type": "OBSERVED",
+      "source": "Vercel official Cron Jobs documentation, updated 2026-01-28",
+      "evidence": "Cron jobs run only on production deployments, Vercel does not retry failed cron invocations, duplicate delivery can occur, overlapping jobs can race, and Vercel recommends locks plus idempotency.",
+      "why_it_matters": "ARGUS must not equate configured cron state with successful persisted execution, and duplicate/overlapping runs could corrupt learning ledgers or double-consume API quota.",
+      "workstream": ["Control Plane", "observability", "data integrity", "API efficiency"],
+      "smallest_safe_experiment": "Add run_id, scheduled_at, started_at, finished_at, persisted_at, response_status, lock_acquired, duplicate_detected and output_digest to one non-critical research cron only.",
+      "required_evidence": "At least 7 days of scheduled runs with zero unexplained duplicates, zero overlapping writes, and complete CONFIGURED->DEPLOYED->INVOKED->SUCCEEDED->PERSISTED lineage.",
+      "failure_condition": "Any duplicate mutation, missing persistence acknowledgement, overlapping writer, unexplained gap, or cron path returning non-2xx.",
+      "rollback": "Remove instrumentation/lock wrapper and restore prior cron handler behavior; no model-state mutation involved."
+    },
+    {
+      "id": "selected-case-calibration",
+      "status": "KEEP",
+      "evidence_type": "DERIVED",
+      "source": "Probability calibration literature and ARGUS decision architecture",
+      "evidence": "Global calibration metrics can hide poor reliability on selectively accepted PRIME/VALUE cases; decision quality must be evaluated on the actual accepted subset with temporally separated calibration/test data.",
+      "why_it_matters": "ARGUS acts selectively, so trust must be earned where it chooses to act rather than on the full match universe.",
+      "workstream": ["calibration", "paper betting", "operator trust", "NO BET"],
+      "smallest_safe_experiment": "Compute reliability bins, Brier, log-loss, calibration error and sample count separately for all predictions, accepted predictions, and each PRIME/VALUE/NO BET cohort without changing thresholds.",
+      "required_evidence": "Minimum 200 settled accepted selections for trend reading; prefer 500+ and multiple walk-forward windows before strong conclusions.",
+      "failure_condition": "Accepted subset is materially worse calibrated than full population, confidence intervals remain too wide, or results reverse across windows/leagues.",
+      "rollback": "Reporting-only experiment; remove cohort report with zero effect on production decisions."
+    },
+    {
+      "id": "risk-coverage-abstention",
+      "status": "WATCH",
+      "evidence_type": "OBSERVED",
+      "source": "Bai & Jin, Conformal Selective Prediction with General Risk Control, 2026-03-25",
+      "evidence": "Selective prediction can explicitly abstain and control risk on trusted cases; recent work extends this with finite-sample risk control under assumptions such as exchangeability and studies shift-aware variants.",
+      "why_it_matters": "This maps directly to ARGUS NO BET: the scientific objective should be error/risk versus coverage, not simply maximizing the number of recommendations.",
+      "workstream": ["selective prediction", "NO BET Optimizer", "uncertainty"],
+      "smallest_safe_experiment": "In shadow mode only, generate empirical risk-vs-coverage curves using existing confidence/readiness scores and compare monotonicity across rolling time windows; do not implement conformal thresholds yet.",
+      "required_evidence": "Several hundred settled independent matches per broad market and stable risk reduction as coverage falls across multiple temporal windows.",
+      "failure_condition": "Lower coverage does not reliably reduce error/risk, group behavior is unstable, or exchangeability/shift assumptions are visibly violated.",
+      "rollback": "Discard conformal candidate layer; keep existing NO BET logic unchanged."
+    },
+    {
+      "id": "market-anchored-live-model",
+      "status": "WATCH",
+      "evidence_type": "OBSERVED",
+      "source": "Clegg, Song & Cartlidge, A market-calibrated accelerated failure time model for in-play football forecasting, 2026-05-15",
+      "evidence": "On 140 EPL matches, calibrating team strength to Betfair kick-off 1X2 and over/under prices was reported as the dominant driver of in-play predictive accuracy, with post-shot xG added as a time-varying covariate.",
+      "why_it_matters": "Before building a much larger live model, ARGUS should test whether market anchoring plus a simple interpretable state model captures most of the available signal.",
+      "workstream": ["live modelling", "odds interpretation", "model complexity control"],
+      "smallest_safe_experiment": "Build a shadow challenger that initializes pre-match team/goal intensity from de-vigged 1X2 + O/U market probabilities and updates only with already timestamp-safe live features.",
+      "required_evidence": "At least 1,000 independent matches across multiple leagues/windows, evaluated by time-clustered Brier/log-loss and calibration against both current ARGUS and market-only baselines.",
+      "failure_condition": "No reproducible OOS improvement, gains disappear outside EPL, or the challenger simply mirrors market prices without additive information.",
+      "rollback": "Delete challenger outputs; production live model remains untouched."
+    },
+    {
+      "id": "point-in-time-ledger",
+      "status": "KEEP",
+      "evidence_type": "OBSERVED_PLUS_DERIVED",
+      "source": "Recent football prediction-market production-system research (Xu, 2026) plus established temporal-integrity principles",
+      "evidence": "The paper emphasizes an append-only frozen decision ledger and warns that recalibrating historical decisions with a current calibrator creates non-point-in-time records; the reported empirical sample is small and its profitability claims are not transferable.",
+      "why_it_matters": "ARGUS needs auditable frozen predictions and calibrator/model versions so post-hoc improvements cannot silently rewrite historical performance.",
+      "workstream": ["temporal integrity", "settlement", "failure memory", "paper betting"],
+      "smallest_safe_experiment": "For research decisions, persist immutable decision_timestamp, model_version, calibrator_version, feature_cutoff, odds_snapshot_id, market_snapshot_time, prediction_hash and settlement linkage.",
+      "required_evidence": "100% reproducibility of sampled historical decisions from stored artifacts and zero records whose features/odds occur after the decision cutoff.",
+      "failure_condition": "Any historical record changes when current calibration/model code changes, or any post-decision information is discovered in the feature lineage.",
+      "rollback": "No rollback of immutable historical records; disable new ledger writer if schema errors appear and retain raw source snapshots."
+    },
+    {
+      "id": "event-gated-inplay-profit-claim",
+      "status": "REJECT",
+      "evidence_type": "OBSERVED",
+      "source": "Xu, AI-driven Forecasting and Execution in Soccer Prediction Markets, SSRN 2026-07-28",
+      "evidence": "The work reports strong event-gated in-play outcomes but only around 100 settled matches and slightly negative closing-line value; these are author-reported production results and not independent validation.",
+      "why_it_matters": "The temporal-ledger concepts are useful, but copying betting-entry rules or profitability assumptions would be overfitting to a small, non-transferable sample.",
+      "workstream": ["live betting", "failure analysis", "research governance"],
+      "smallest_safe_experiment": "None for real-money logic. If studied, replicate only as a shadow research benchmark after independent event-state data is available.",
+      "required_evidence": "Large independent multi-league OOS sample with pre-registered event gates, realistic latency/friction and clustered uncertainty.",
+      "failure_condition": "Any dependence on post-event leakage, unstable profit after costs, negative CLV without a separately verified timing edge, or failure outside the original competition/sample.",
+      "rollback": "Do not integrate."
+    }
+  ],
+  "do_not_do": [
+    "Do not increase PRIME confidence from small samples.",
+    "Do not add a large live model before market-anchored simple baselines are beaten OOS.",
+    "Do not treat cron configuration as proof of execution.",
+    "Do not restate historical predictions using current calibrators.",
+    "Do not infer edge from short-term ROI alone.",
+    "Do not change production in this dossier."
+  ],
+  "proof_required": [
+    "Point-in-time immutable predictions and feature cutoffs",
+    "Independent walk-forward test windows",
+    "Selected-case calibration",
+    "Risk-vs-coverage evidence for abstention",
+    "Market/no-vig baseline comparison",
+    "Clustered evaluation by independent match for live states",
+    "Cron invocation and persistence lineage",
+    "Rollback path for every experimental module"
+  ]
+}
