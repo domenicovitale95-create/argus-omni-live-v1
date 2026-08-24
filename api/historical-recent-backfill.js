@@ -22,7 +22,8 @@ function providerDayUtc(){return new Date().toISOString().slice(0,10)}
 function addDays(s,d){const x=new Date(`${s}T12:00:00Z`);x.setUTCDate(x.getUTCDate()+d);return ymd(x)}
 function datesToYesterday(){const end=addDays(brusselsDate(),-1),out=[];for(let d=end;d>=MIGRATION_FLOOR;d=addDays(d,-1))out.push(d);return out}
 function monthPath(date){return`${PREFIX}${date.slice(0,7)}.json`}
-function quota(headers){const remaining=Number(headers.get('x-ratelimit-requests-remaining')),limit=Number(headers.get('x-ratelimit-requests-limit')),minute=Number(headers.get('x-ratelimit-remaining'));return{dailyRemaining:Number.isFinite(remaining)?remaining:null,dailyLimit:Number.isFinite(limit)?limit:null,minuteRemaining:Number.isFinite(minute)?minute:null}}
+function hn(headers,name){const raw=headers.get(name);if(raw==null||raw==='')return null;const n=Number(raw);return Number.isFinite(n)?n:null}
+function quota(headers){return{dailyRemaining:hn(headers,'x-ratelimit-requests-remaining'),dailyLimit:hn(headers,'x-ratelimit-requests-limit'),minuteRemaining:hn(headers,'x-ratelimit-remaining')}}
 function budget(q={}){
   const configured=Number(providerPlanMeta()?.dailyLimit)||7500;
   const observedLimit=Number(q?.dailyLimit);
