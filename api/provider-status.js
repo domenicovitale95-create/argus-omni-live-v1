@@ -5,6 +5,7 @@ const API_BASE='https://v3.football.api-sports.io';
 const QUOTA_GUARD_PATH='argus/data/api-football-quota-guard.json';
 const SOFT_DAILY_CAP=6000;
 
+function authorized(req){const s=String(process.env.CRON_SECRET||'').trim();return !s||req.headers.authorization===`Bearer ${s}`}
 function apiHeaders(){
   const key=String(process.env.API_FOOTBALL_KEY||'').trim();
   if(!key) throw new Error('API_FOOTBALL_KEY is not configured');
@@ -23,18 +24,23 @@ function guardBelongsToCurrentProviderDay(guard){
   const recordedDay=guard?.providerDayUtc||null;
   return (observedDay||recordedDay)===providerDayUtc();
 }
+function publicSnapshot(guard,plan,planLimit){
+  const current=guardBelongsToCurrentProviderDay(guard),limit=Number(guard?.dailyLimit)||planLimit,remaining=current&&guard?.dailyRemaining!=null?Number(guard.dailyRemaining):null,used=current&&guard?.used!=null?Number(guard.used):(remaining!=null?Math.max(0,limit-remaining):null);
+  return{ok:true,provider:'API-FOOTBALL',plan,mode:current?(guard?.mode||'UNKNOWN'):'UNKNOWN',providerCallSkipped:true,reason:'AUTH_REQUIRED_FOR_PROVIDER_REFRESH',usage:{used:Number.isFinite(used)?used:null,limit,remaining:Number.isFinite(remaining)?remaining:null,softCap:Math.min(SOFT_DAILY_CAP,limit)},providerDayUtc:current?(guard?.providerDayUtc||guard?.date||null):providerDayUtc(),fetchedAt:current?guard?.observedAt||null:null,snapshotAgeSeconds:current&&guard?.observedAt?Math.max(0,Math.round((Date.now()-new Date(guard.observedAt).getTime())/1000)):null,publicSnapshot:true,consistentGuardRead:true};
+}
 
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET') return res.status(405).json({error:'Method not allowed'});
   const plan=providerPlanMeta(),planLimit=Number(plan.dailyLimit)||7500;
   let guard=await readGuard();
+  if(!authorized(req))return res.status(200).json(publicSnapshot(guard,plan,planLimit));
   if(guard?.exhausted&&guardBelongsToCurrentProviderDay(guard)&&guardIsMinuteThrottle(guard)){
     guard={date:providerDayUtc(),providerDayUtc:providerDayUtc(),exhausted:false,mode:'THROTTLED',reason:'MINUTE_RATE_LIMIT_RECOVERABLE',dailyLimit:guard.dailyLimit||planLimit,dailyRemaining:null,used:guard.used??null,observedAt:new Date().toISOString(),source:'QUOTA_GUARD_REPAIR',providerError:null,repair:'MINUTE_LIMIT_WAS_NOT_DAILY_EXHAUSTION'};
     await writeGuard(guard);
   }
   if(guard?.exhausted&&guardBelongsToCurrentProviderDay(guard)){
-    return res.status(200).json({ok:true,provider:'API-FOOTBALL',plan,mode:'HALT',providerCallSkipped:true,reason:guard.reason||'QUOTA_GUARD_ACTIVE',usage:{used:guard.used??null,limit:guard.dailyLimit||planLimit,remaining:0,softCap:SOFT_DAILY_CAP},guard});
+    return res.status(200).json({ok:true,provider:'API-FOOTBALL',plan,mode:'HALT',providerCallSkipped:true,reason:guard.reason||'QUOTA_GUARD_ACTIVE',usage:{used:guard.used??null,limit:guard.dailyLimit||planLimit,remaining:0,softCap:SOFT_DAILY_CAP},guard,authenticatedRefresh:true});
   }
   try{
     const response=await fetch(`${API_BASE}/status`,{headers:apiHeaders()});
@@ -52,8 +58,8 @@ export default async function handler(req,res){
     const softCapReached=used!=null&&used>=Math.min(SOFT_DAILY_CAP,limit);
     const mode=providerExhausted||softCapReached?'HALT':minuteThrottled?'THROTTLED':(remaining!=null&&remaining<=1800?'CRITICAL':remaining!=null&&remaining<=3000?'THROTTLED':'NORMAL');
     const observedAt=new Date().toISOString();
-    const state={date:providerDayUtc(),providerDayUtc:providerDayUtc(),exhausted:mode==='HALT',mode,reason:providerExhausted?'PROVIDER_QUOTA_EXHAUSTED':softCapReached?'SOFT_DAILY_CAP_REACHED':minuteThrottled?'MINUTE_RATE_LIMIT_RECOVERABLE':null,dailyLimit:limit,dailyRemaining:mode==='HALT'?0:remaining,used,softCap:Math.min(SOFT_DAILY_CAP,limit),observedAt,source:'API_FOOTBALL_STATUS',providerError:minuteThrottled?null:(data?.errors||null)};
+    const state={date:providerDayUtc(),providerDayUtc:providerDayUtc(),exhausted:mode==='HALT',mode,reason:providerExhausted?'PROVIDER_QUOTA_EXHAUSTED':softCapReached?'SOFT_DAILY_CAP_REACHED':minuteThrottled?'MINUTE_RATE_LIMIT_RECOVERABLE':null,dailyLimit:limit,dailyRemaining:mode==='HALT'?0:remaining,used,softCap:Math.min(SOFT_DAILY_CAP,limit),minuteRemaining:headers.minuteRemaining,observedAt,source:'API_FOOTBALL_STATUS',providerError:minuteThrottled?null:(data?.errors||null)};
     await writeGuard(state);
-    return res.status(response.ok||providerExhausted||minuteThrottled?200:503).json({ok:response.ok&&!providerExhausted,provider:'API-FOOTBALL',plan,subscription:{active:account?.subscription?.active??null,end:account?.subscription?.end??null},mode,providerCallSkipped:false,usage:{used,limit,remaining:state.dailyRemaining,softCap:state.softCap},headers:{minuteLimit:headers.minuteLimit,minuteRemaining:headers.minuteRemaining},providerErrors:data?.errors||null,guardPersisted:storageReady(),providerDayUtc:state.providerDayUtc,fetchedAt:state.observedAt,consistentGuardRead:true});
-  }catch(error){return res.status(503).json({ok:false,provider:'API-FOOTBALL',plan,error:error.message,fetchedAt:new Date().toISOString()});}
+    return res.status(response.ok||providerExhausted||minuteThrottled?200:503).json({ok:response.ok&&!providerExhausted,provider:'API-FOOTBALL',plan,subscription:{active:account?.subscription?.active??null,end:account?.subscription?.end??null},mode,providerCallSkipped:false,usage:{used,limit,remaining:state.dailyRemaining,softCap:state.softCap},headers:{minuteLimit:headers.minuteLimit,minuteRemaining:headers.minuteRemaining},providerErrors:data?.errors||null,guardPersisted:storageReady(),providerDayUtc:state.providerDayUtc,fetchedAt:state.observedAt,consistentGuardRead:true,authenticatedRefresh:true});
+  }catch(error){return res.status(503).json({ok:false,provider:'API-FOOTBALL',plan,error:error.message,fetchedAt:new Date().toISOString(),authenticatedRefresh:true});}
 }
