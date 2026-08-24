@@ -4,12 +4,12 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
   <meta name="theme-color" content="#090b0e"/>
-  <meta name="description" content="ARGUS OMNI — football intelligence that turns complex analysis into clear decisions."/>
+  <meta name="description" content="ARGUS OMNI — clear football choices, virtual bets and real results."/>
   <link rel="manifest" href="/manifest.webmanifest"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="ARGUS"/>
-  <title>ARGUS OMNI — Football Intelligence</title>
+  <title>ARGUS OMNI — Football</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -20,35 +20,23 @@
 <body>
   <div class="shell">
     <header class="topbar">
-      <a class="brand" href="/" aria-label="ARGUS OMNI home">
-        <div class="mark">A</div>
-        <div class="brand-copy"><h1>ARGUS <span>OMNI</span></h1></div>
-      </a>
-
-      <nav class="top-status" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="ARGUS OMNI home"><div class="mark">A</div><div class="brand-copy"><h1>ARGUS <span>OMNI</span></h1></div></a>
+      <nav class="top-status" aria-label="Main menu">
         <a class="nav-link active" href="#today">Today</a>
         <a class="nav-link live-link" href="live.html">● Live</a>
-        <a class="nav-link" href="live-paper.html">Live Paper</a>
+        <a class="nav-link" href="virtual-bankroll.html">Bets</a>
         <a class="nav-link" href="prediction-results.html">Results</a>
-        <details class="nav-more">
-          <summary>More</summary>
-          <div class="nav-menu">
-            <a href="live-paper.html">Live Paper</a>
-            <a href="virtual-bankroll.html">Virtual Bankroll</a>
-            <a href="daily-slip.html">Daily Slip</a>
-            <a href="markets.html">Markets</a>
-            <a href="exact-scores.html">Exact Scores</a>
-            <a href="trends.html">Trends</a>
-            <a href="shield.html">Decision Shield</a>
-            <a href="historical-validation.html">Historical Lab</a>
-            <a href="system-health.html">System Health</a>
-          </div>
-        </details>
-        <div class="safe-chip" id="safeModeChip">API SAFE MODE</div>
-        <div class="system-status">
-          <span class="pulse"></span>
-          <div><strong id="liveStatus">Ready</strong><small id="clock">--:--:--</small></div>
-        </div>
+        <details class="nav-more"><summary>More</summary><div class="nav-menu">
+          <a href="daily-slip.html">Today's picks</a>
+          <a href="markets.html">Bet types</a>
+          <a href="exact-scores.html">Scores</a>
+          <a href="trends.html">Trends</a>
+          <a href="shield.html">Safety</a>
+          <a href="historical-validation.html">Past tests</a>
+          <a href="system-health.html">System</a>
+        </div></details>
+        <div class="safe-chip" id="safeModeChip">DATA SAVING MODE</div>
+        <div class="system-status"><span class="pulse"></span><div><strong id="liveStatus">Ready</strong><small id="clock">--:--:--</small></div></div>
       </nav>
     </header>
 
@@ -56,173 +44,85 @@
       <section class="hero">
         <div class="hero-intro panel">
           <div>
-            <p class="eyebrow">ARGUS TODAY</p>
+            <p class="eyebrow">TODAY</p>
             <h2>What should I bet today?</h2>
-            <p class="lead">ARGUS reviews the matches, rejects weak setups and shows only what deserves your attention. No clear edge means no bet.</p>
+            <p class="lead">ARGUS checks the matches and keeps only the choices it likes. If nothing looks good, ARGUS does not bet.</p>
           </div>
-          <div class="hero-actions">
-            <button id="scanBtn" class="primary">Analyse today's matches</button>
-            <span class="hero-note">Last analysis: <strong id="heroUpdate">—</strong></span>
-          </div>
+          <div class="hero-actions"><button id="scanBtn" class="primary">Check today's matches</button><span class="hero-note">Last check: <strong id="heroUpdate">—</strong></span></div>
         </div>
-
         <div class="hero-decision panel">
-          <div class="hero-decision-label"><span>ARGUS verdict</span><span>Best opportunity right now</span></div>
-          <div id="topPick" class="top-pick empty-pick">
-            <div class="pick-copy">
-              <span class="pick-kicker">READY</span>
-              <strong>One answer, not twenty dashboards.</strong>
-              <small>Run today's analysis and ARGUS will tell you clearly whether there is something worth playing or whether the right move is to wait.</small>
-            </div>
-          </div>
+          <div class="hero-decision-label"><span>ARGUS says</span><span>Best choice now</span></div>
+          <div id="topPick" class="top-pick empty-pick"><div class="pick-copy"><span class="pick-kicker">READY</span><strong>One simple answer.</strong><small>Check today and ARGUS will tell you: play, wait, or skip.</small></div></div>
         </div>
       </section>
 
-      <a class="os-crosslink" href="/live-paper.html"><strong>LIVE PAPER · €0 real money</strong><span>Open live virtual bankroll →</span></a>
+      <a class="os-crosslink" href="/virtual-bankroll.html"><strong>VIRTUAL BETS · €0 real money</strong><span>See all bets →</span></a>
 
-      <section class="day-strip" aria-label="Today's ARGUS summary">
-        <div><span>Matches reviewed</span><strong id="heroAnalysed">0</strong><small>today</small></div>
-        <div><span>Best opportunities</span><strong id="heroPrime">0</strong><small>PRIME</small></div>
-        <div><span>Worth monitoring</span><strong id="heroWatch">0</strong><small>WATCH</small></div>
-        <div class="quiet-stat"><span>Data budget</span><strong id="heroQuota">—</strong><small>available</small></div>
+      <section class="day-strip" aria-label="Today summary">
+        <div><span>Matches checked</span><strong id="heroAnalysed">0</strong><small>today</small></div>
+        <div><span>Top bets</span><strong id="heroPrime">0</strong><small>best choices</small></div>
+        <div><span>Wait and watch</span><strong id="heroWatch">0</strong><small>not ready yet</small></div>
+        <div class="quiet-stat"><span>Data left</span><strong id="heroQuota">—</strong><small>today</small></div>
       </section>
 
-      <section class="today-verdict panel" aria-label="Today at a glance">
-        <div class="today-main"><p class="eyebrow">TODAY AT A GLANCE</p><strong id="todayCounts">Ready when you are</strong></div>
-        <div class="today-signal"><span class="status-orb"></span><p id="strongestSignal">No decision yet. Analyse today.</p></div>
+      <section class="today-verdict panel" aria-label="Today now">
+        <div class="today-main"><p class="eyebrow">RIGHT NOW</p><strong id="todayCounts">Ready when you are</strong></div>
+        <div class="today-signal"><span class="status-orb"></span><p id="strongestSignal">No choice yet. Check today.</p></div>
       </section>
 
       <section class="argus-proof" aria-labelledby="argus-proof-heading">
         <div class="argus-proof-head">
-          <div class="argus-proof-title">
-            <div class="argus-proof-mark">P</div>
-            <div>
-              <p class="eyebrow">ARGUS PROOF</p>
-              <h3 id="argus-proof-heading">Forward profitability validation</h3>
-              <p class="argus-proof-sub">Prospective paper track record · fixed validation epoch · no hindsight</p>
-            </div>
-          </div>
-          <span class="argus-proof-status" id="proofStatus" data-state="building">BUILDING EVIDENCE</span>
+          <div class="argus-proof-title"><div class="argus-proof-mark">A</div><div><p class="eyebrow">ARGUS LEARNING</p><h3 id="argus-proof-heading">Is ARGUS getting better?</h3><p class="argus-proof-sub">Virtual bets are saved before matches. Results cannot be changed later.</p></div></div>
+          <span class="argus-proof-status" id="proofStatus" data-state="building">STILL LEARNING</span>
         </div>
-
         <div class="argus-proof-grid">
-          <div class="argus-proof-metric"><span>Settled bets</span><strong id="proofSettled">0</strong><small id="proofSettledSub">of 1,000 settled</small></div>
-          <div class="argus-proof-metric"><span>Validation age</span><strong id="proofDays">0</strong><small id="proofDaysSub">of 90 days</small></div>
-          <div class="argus-proof-metric"><span>Flat ROI</span><strong id="proofRoi">—</strong><small id="proofRoiSub">flat-stake ROI</small></div>
-          <div class="argus-proof-metric"><span>95% CI</span><strong id="proofCi">—</strong><small id="proofCiSub">lower / upper</small></div>
-          <div class="argus-proof-metric"><span>Mean CLV</span><strong id="proofClv">—</strong><small id="proofClvSub">0 / 300 near-close</small></div>
+          <div class="argus-proof-metric"><span>Finished bets</span><strong id="proofSettled">0</strong><small id="proofSettledSub">of 1,000 finished bets</small></div>
+          <div class="argus-proof-metric"><span>Days tested</span><strong id="proofDays">0</strong><small id="proofDaysSub">of 90 days</small></div>
+          <div class="argus-proof-metric"><span>Profit / loss</span><strong id="proofRoi">—</strong><small id="proofRoiSub">same virtual stake each time</small></div>
+          <div class="argus-proof-metric" style="display:none"><span>Result range</span><strong id="proofCi">—</strong><small id="proofCiSub">possible low / high</small></div>
+          <div class="argus-proof-metric" style="display:none"><span>Odds check</span><strong id="proofClv">—</strong><small id="proofClvSub">0 / 300 final odds</small></div>
         </div>
-
         <div class="argus-proof-progress">
-          <div class="argus-proof-progress-row"><span>Official sample</span><b id="proofSampleProgress">0 / 1000</b><div class="argus-proof-track"><i class="argus-proof-fill" id="proofSampleFill"></i></div></div>
-          <div class="argus-proof-progress-row"><span>Time evidence</span><b id="proofDayProgress">0 / 90</b><div class="argus-proof-track"><i class="argus-proof-fill" id="proofDayFill"></i></div></div>
-          <div class="argus-proof-progress-row"><span>Near-close prices</span><b id="proofClvProgress">0 / 300</b><div class="argus-proof-track"><i class="argus-proof-fill" id="proofClvFill"></i></div></div>
+          <div class="argus-proof-progress-row"><span>Bets checked</span><b id="proofSampleProgress">0 / 1000</b><div class="argus-proof-track"><i class="argus-proof-fill" id="proofSampleFill"></i></div></div>
+          <div class="argus-proof-progress-row"><span>Days checked</span><b id="proofDayProgress">0 / 90</b><div class="argus-proof-track"><i class="argus-proof-fill" id="proofDayFill"></i></div></div>
+          <div class="argus-proof-progress-row" style="display:none"><span>Final odds checked</span><b id="proofClvProgress">0 / 300</b><div class="argus-proof-track"><i class="argus-proof-fill" id="proofClvFill"></i></div></div>
         </div>
-
-        <div class="argus-proof-foot">
-          <span id="proofNote">Prospective paper evidence only. ARGUS will not call itself validated until every threshold is passed.</span>
-          <span><span id="proofMeta">0 competitions · 0 market families · max drawdown 0.00u</span> · <a href="virtual-bankroll.html">Open track record →</a></span>
-        </div>
+        <div class="argus-proof-foot"><span id="proofNote">ARGUS is still learning from new virtual bets.</span><span><span id="proofMeta">0 leagues · 0 bet types · biggest loss 0</span> · <a href="virtual-bankroll.html">Open Bets →</a></span></div>
       </section>
 
       <section class="section" aria-labelledby="best-heading">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">THE SHORTLIST</p>
-            <h3 id="best-heading">The next best opportunities</h3>
-            <p>Only the strongest secondary signals appear here. If this area is empty, ARGUS is choosing discipline over noise.</p>
-          </div>
-        </div>
+        <div class="section-heading"><div><p class="eyebrow">NEXT CHOICES</p><h3 id="best-heading">Other matches worth a look</h3><p>If this area is empty, ARGUS prefers to wait instead of forcing a bet.</p></div></div>
         <div id="topOpportunities" class="opportunity-grid"></div>
       </section>
 
       <section class="section" id="matches" aria-labelledby="matches-heading">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">TODAY'S MATCHES</p>
-            <h3 id="matches-heading">ARGUS recommendations</h3>
-            <p id="lastUpdate">Ready to analyse</p>
-          </div>
-          <details class="advanced-filters">
-            <summary>More filters</summary>
-            <div class="advanced-menu">
-              <div class="signal-filters">
-                <button class="filter-btn quiet" data-filter="all">All <span id="allFilterCount">0</span></button>
-                <button class="filter-btn quiet" data-filter="no-bet">Skip <span id="noBetFilterCount">0</span></button>
-                <button class="filter-btn quiet" data-filter="past">Finished <span id="pastFilterCount">0</span></button>
-              </div>
-              <label class="sort-control">Sort
-                <select id="sortSelect">
-                  <option value="rank">Best first</option>
-                  <option value="confidence">Most confident</option>
-                  <option value="edge">Best value</option>
-                  <option value="kickoff">Kickoff time</option>
-                  <option value="live">Live first</option>
-                </select>
-              </label>
-            </div>
-          </details>
+        <div class="section-heading"><div><p class="eyebrow">TODAY'S MATCHES</p><h3 id="matches-heading">What ARGUS thinks</h3><p id="lastUpdate">Ready to check</p></div>
+          <details class="advanced-filters"><summary>More</summary><div class="advanced-menu"><div class="signal-filters"><button class="filter-btn quiet" data-filter="all">All <span id="allFilterCount">0</span></button><button class="filter-btn quiet" data-filter="no-bet">Skip <span id="noBetFilterCount">0</span></button><button class="filter-btn quiet" data-filter="past">Finished <span id="pastFilterCount">0</span></button></div><label class="sort-control">Sort<select id="sortSelect"><option value="rank">Best first</option><option value="confidence">ARGUS likes most</option><option value="edge">Best odds first</option><option value="kickoff">Start time</option><option value="live">Live first</option></select></label></div></details>
         </div>
-
-        <div class="board-toolbar">
-          <div class="signal-filters" aria-label="Recommendation filters">
-            <button class="filter-btn active" data-filter="signals">Recommended <span id="signalCount">0</span></button>
-            <button class="filter-btn prime-filter" data-filter="prime">Prime <span id="primeFilterCount">0</span></button>
-            <button class="filter-btn" data-filter="value">Value <span id="valueFilterCount">0</span></button>
-            <button class="filter-btn" data-filter="watch">Watch <span id="watchFilterCount">0</span></button>
-          </div>
-        </div>
-
-        <div id="matchGrid" class="match-grid">
-          <div class="empty-state"><strong>Ready when you are</strong><span>Analyse today and ARGUS will surface only the matches worth your attention.</span></div>
-        </div>
+        <div class="board-toolbar"><div class="signal-filters" aria-label="Match filters"><button class="filter-btn active" data-filter="signals">Best <span id="signalCount">0</span></button><button class="filter-btn prime-filter" data-filter="prime">Top <span id="primeFilterCount">0</span></button><button class="filter-btn" data-filter="value">Good <span id="valueFilterCount">0</span></button><button class="filter-btn" data-filter="watch">Wait <span id="watchFilterCount">0</span></button></div></div>
+        <div id="matchGrid" class="match-grid"><div class="empty-state"><strong>Ready when you are</strong><span>Check today and ARGUS will show the matches it likes.</span></div></div>
       </section>
 
-      <section class="info-drawer" aria-label="ARGUS information">
-        <details>
-          <summary>How to read an ARGUS verdict</summary>
-          <div class="drawer-body verdict-cards">
-            <div class="verdict-card prime"><b>PRIME</b><strong>Best opportunity</strong><small>The strongest validated setup ARGUS sees right now.</small></div>
-            <div class="verdict-card value"><b>VALUE</b><strong>Interesting price</strong><small>Positive value, but below the PRIME standard.</small></div>
-            <div class="verdict-card watch"><b>WATCH</b><strong>Wait for confirmation</strong><small>Interesting setup, but ARGUS wants more information or a better price.</small></div>
-            <div class="verdict-card nobet"><b>NO BET</b><strong>Skip it</strong><small>No defensible edge at the current price.</small></div>
-          </div>
-        </details>
-
-        <details>
-          <summary>System & data quality</summary>
-          <div class="drawer-body health-grid">
-            <div class="provider-row"><span>Data budget</span><b id="requestQuota">—</b></div>
-            <div class="provider-row"><span>History coverage</span><b id="historyCoverage">—</b></div>
-            <div class="provider-row"><span>Calibration</span><b id="calibrationStatus">—</b></div>
-            <div class="provider-row"><span>PRIME validation</span><b id="primeGateStatus">—</b></div>
-            <div class="provider-row"><span>Recorded picks</span><b id="trackRecordCount">0</b></div>
-          </div>
-        </details>
+      <section class="info-drawer" aria-label="About ARGUS">
+        <details><summary>What do the colours mean?</summary><div class="drawer-body verdict-cards">
+          <div class="verdict-card prime"><b>TOP</b><strong>Best bet</strong><small>ARGUS likes this one the most.</small></div>
+          <div class="verdict-card value"><b>GOOD</b><strong>Worth a look</strong><small>ARGUS likes it, but it is not a top bet.</small></div>
+          <div class="verdict-card watch"><b>WAIT</b><strong>Not ready</strong><small>ARGUS wants better odds or better information.</small></div>
+          <div class="verdict-card nobet"><b>SKIP</b><strong>Do not bet</strong><small>ARGUS does not like it enough.</small></div>
+        </div></details>
+        <details><summary>About the system</summary><div class="drawer-body health-grid">
+          <div class="provider-row"><span>Data left</span><b id="requestQuota">—</b></div>
+          <div class="provider-row"><span>Past matches</span><b id="historyCoverage">—</b></div>
+          <div class="provider-row"><span>Accuracy check</span><b id="calibrationStatus">—</b></div>
+          <div class="provider-row"><span>Top-bet check</span><b id="primeGateStatus">—</b></div>
+          <div class="provider-row"><span>Saved picks</span><b id="trackRecordCount">0</b></div>
+        </div></details>
       </section>
     </main>
 
-    <footer><span>ARGUS OMNI · CLEAR FOOTBALL DECISIONS.</span><span>BET RESPONSIBLY</span></footer>
+    <footer><span>ARGUS OMNI · RESULTS FIRST.</span><span>VIRTUAL MONEY FOR TRAINING</span></footer>
   </div>
-
-  <script src="src/adaptive-weights-client.js"></script>
-  <script src="src/training-memory.js"></script>
-  <script src="src/engine.js"></script>
-  <script src="src/market-engine.js"></script>
-  <script src="src/reliability.js"></script>
-  <script src="src/outcome-learning.js"></script>
-  <script src="src/live-regime.js"></script>
-  <script src="src/governance.js"></script>
-  <script src="src/track-record.js"></script>
-  <script src="src/autopilot.js"></script>
-  <script src="src/providers.js"></script>
-  <script src="src/market-memory-client.js"></script>
-  <script src="src/persistent-cache.js"></script>
-  <script src="src/self-improvement.js"></script>
-  <script src="app.js"></script>
-  <script src="src/official-decisions.js"></script>
-  <script src="src/argus-os.js"></script>
-  <script src="argus-proof.js"></script>
+  <script src="src/adaptive-weights-client.js"></script><script src="src/training-memory.js"></script><script src="src/engine.js"></script><script src="src/market-engine.js"></script><script src="src/reliability.js"></script><script src="src/outcome-learning.js"></script><script src="src/live-regime.js"></script><script src="src/governance.js"></script><script src="src/track-record.js"></script><script src="src/autopilot.js"></script><script src="src/providers.js"></script><script src="src/market-memory-client.js"></script><script src="src/persistent-cache.js"></script><script src="src/self-improvement.js"></script><script src="app.js"></script><script src="src/official-decisions.js"></script><script src="src/argus-os.js"></script><script src="argus-proof.js"></script>
   <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}</script>
 </body>
 </html>
