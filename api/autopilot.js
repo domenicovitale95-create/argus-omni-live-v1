@@ -50,6 +50,13 @@ export default async function handler(req,res){
     return res.status(base.statusCode).json(body);
   }
 
+  // A skipped autopilot run did not create a new decision plan. Re-applying the
+  // central brain here would refresh appliedAt on an older generatedAt and make
+  // downstream cycle attestation falsely look like a new cycle.
+  if(body?.skipped===true){
+    return res.status(base.statusCode).json({...body,centralBrain:{applied:false,skipped:true,reason:'NO_NEW_DECISION_CYCLE'}});
+  }
+
   try{
     if(!storageReady())throw new Error('STORAGE_UNAVAILABLE');
     const scheduler=await readJson(DECISION_PLAN_PATH,null);
