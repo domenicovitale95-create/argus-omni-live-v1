@@ -2,9 +2,9 @@ name: ARGUS Autonomous Scheduler
 
 on:
   schedule:
-    # Vercel Cron is the primary 10-minute autonomy heartbeat.
-    # GitHub keeps a low-cost 30-minute watchdog and the remaining workload groups.
-    - cron: '2-57/5 * * * *'
+    # Vercel Cron is primary for both the 10-minute autonomy heartbeat and 5-minute fast cycle.
+    # GitHub checks fast-cycle health every 10 minutes and only executes a backup when Vercel is late/stale/degraded.
+    - cron: '8,18,28,38,48,58 * * * *'
     - cron: '19,49 * * * *'
     - cron: '6-51/15 * * * *'
     - cron: '11 * * * *'
@@ -79,12 +79,36 @@ jobs:
           }
 
           run_fast() {
-            call '/api/prediction-ledger-cron' 'Prediction ledger cron'
-            call '/api/closing-odds-snapshot' 'Near-kickoff closing price evidence'
-            call '/api/virtual-bankroll?mode=run' 'Virtual bankroll'
-            call '/api/operational-alert-bridge' 'Operational alert bridge'
-            call '/api/alert-engine?compact=1' 'Alert engine'
-            call '/api/push-dispatch' 'Push dispatch'
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              call '/api/fast-cycle?source=github-manual' 'Fast cycle manual run'
+              return
+            fi
+
+            echo "::group::Fast-cycle backup guard"
+            local health status age backup
+            if ! health="$(curl --fail-with-body --silent --show-error --max-time 30 \
+              --retry 1 --retry-delay 2 --retry-all-errors \
+              "${BASE}/api/fast-cycle-health")"; then
+              echo "Fast-cycle health probe failed; invoking GitHub backup."
+              echo "::endgroup::"
+              call '/api/fast-cycle?source=github-backup' 'Fast cycle backup recovery'
+              return
+            fi
+
+            echo "${health}"
+            status="$(printf '%s' "${health}" | jq -r '.status // "UNKNOWN"')"
+            age="$(printf '%s' "${health}" | jq -r '.ageMinutes // 999999')"
+            backup="$(printf '%s' "${health}" | jq -r '.backupRequired // true')"
+            if ! [[ "${age}" =~ ^[0-9]+$ ]]; then age=999999; fi
+
+            if [ "${backup}" = "true" ]; then
+              echo "Backup required: status=${status}, ageMinutes=${age}."
+              echo "::endgroup::"
+              call '/api/fast-cycle?source=github-backup' 'Fast cycle backup recovery'
+            else
+              echo "Primary Vercel fast cycle healthy: status=${status}, age=${age}m. No duplicate work."
+              echo "::endgroup::"
+            fi
           }
 
           run_watchdog() {
@@ -164,7 +188,7 @@ jobs:
             GROUP="${{ inputs.group }}"
           else
             case "${{ github.event.schedule }}" in
-              '2-57/5 * * * *') GROUP='fast' ;;
+              '8,18,28,38,48,58 * * * *') GROUP='fast' ;;
               '19,49 * * * *') GROUP='watchdog' ;;
               '6-51/15 * * * *') GROUP='quarter' ;;
               '11 * * * *') GROUP='hourly' ;;
