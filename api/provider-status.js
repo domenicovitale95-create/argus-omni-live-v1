@@ -1,4 +1,4 @@
-import { readJson, writeJson, storageReady } from './_report-store.js';
+import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
 import { providerPlanMeta } from './_provider-plan.js';
 
 const API_BASE='https://v3.football.api-sports.io';
@@ -15,7 +15,7 @@ function numberValue(v){const n=Number(v);return Number.isFinite(n)?n:null}
 function providerDayUtc(date=new Date()){return date.toISOString().slice(0,10)}
 function quotaErrorKind(data){const text=JSON.stringify(data?.errors||data||{}).toLowerCase();if(text.includes('per minute')||text.includes('requests per minute'))return 'minute';if(text.includes('daily')||text.includes('per day')||text.includes('request limit')||text.includes('rate limit')||text.includes('too many requests'))return 'daily';return null}
 function guardIsMinuteThrottle(guard){const text=JSON.stringify(guard?.providerError||guard?.reason||'').toLowerCase();return text.includes('per minute')||text.includes('requests per minute')}
-async function readGuard(){if(!storageReady())return null;try{return await readJson(QUOTA_GUARD_PATH,null)}catch(_){return null}}
+async function readGuard(){if(!storageReady())return null;try{return await readJsonFresh(QUOTA_GUARD_PATH,null)}catch(_){return null}}
 async function writeGuard(value){if(!storageReady())return;try{await writeJson(QUOTA_GUARD_PATH,value)}catch(_){} }
 function guardBelongsToCurrentProviderDay(guard){
   if(!guard)return false;
@@ -54,6 +54,6 @@ export default async function handler(req,res){
     const observedAt=new Date().toISOString();
     const state={date:providerDayUtc(),providerDayUtc:providerDayUtc(),exhausted:mode==='HALT',mode,reason:providerExhausted?'PROVIDER_QUOTA_EXHAUSTED':softCapReached?'SOFT_DAILY_CAP_REACHED':minuteThrottled?'MINUTE_RATE_LIMIT_RECOVERABLE':null,dailyLimit:limit,dailyRemaining:mode==='HALT'?0:remaining,used,softCap:Math.min(SOFT_DAILY_CAP,limit),observedAt,source:'API_FOOTBALL_STATUS',providerError:minuteThrottled?null:(data?.errors||null)};
     await writeGuard(state);
-    return res.status(response.ok||providerExhausted||minuteThrottled?200:503).json({ok:response.ok&&!providerExhausted,provider:'API-FOOTBALL',plan,subscription:{active:account?.subscription?.active??null,end:account?.subscription?.end??null},mode,providerCallSkipped:false,usage:{used,limit,remaining:state.dailyRemaining,softCap:state.softCap},headers:{minuteLimit:headers.minuteLimit,minuteRemaining:headers.minuteRemaining},providerErrors:data?.errors||null,guardPersisted:storageReady(),providerDayUtc:state.providerDayUtc,fetchedAt:state.observedAt});
+    return res.status(response.ok||providerExhausted||minuteThrottled?200:503).json({ok:response.ok&&!providerExhausted,provider:'API-FOOTBALL',plan,subscription:{active:account?.subscription?.active??null,end:account?.subscription?.end??null},mode,providerCallSkipped:false,usage:{used,limit,remaining:state.dailyRemaining,softCap:state.softCap},headers:{minuteLimit:headers.minuteLimit,minuteRemaining:headers.minuteRemaining},providerErrors:data?.errors||null,guardPersisted:storageReady(),providerDayUtc:state.providerDayUtc,fetchedAt:state.observedAt,consistentGuardRead:true});
   }catch(error){return res.status(503).json({ok:false,provider:'API-FOOTBALL',plan,error:error.message,fetchedAt:new Date().toISOString()});}
 }
