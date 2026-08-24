@@ -34,14 +34,25 @@ export function storageReady() {
   return Boolean(process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN);
 }
 
-export async function readJson(pathname, fallback = null) {
+async function readJsonInternal(pathname, fallback, useCache) {
   const forced = temporaryQuotaGuard(pathname);
   if (forced) return forced;
   if (!storageReady()) return fallback;
-  const result = await get(pathname, { access: ACCESS });
+  const result = await get(pathname, { access: ACCESS, useCache });
   if (!result || result.statusCode !== 200 || !result.stream) return fallback;
   const text = await new Response(result.stream).text();
   try { return JSON.parse(text); } catch (_) { return fallback; }
+}
+
+export async function readJson(pathname, fallback = null) {
+  return readJsonInternal(pathname, fallback, true);
+}
+
+// Safety-critical mutable state (heartbeats, quota guards, recovery state) must
+// observe the latest Blob version instead of the CDN copy. Keep ordinary reads
+// cached so ARGUS does not pay the latency/cost penalty everywhere.
+export async function readJsonFresh(pathname, fallback = null) {
+  return readJsonInternal(pathname, fallback, false);
 }
 
 export async function writeJson(pathname, value) {
