@@ -1,4 +1,4 @@
-import { readJson, writeJson, storageReady } from './_report-store.js';
+import { readJson, readJsonFresh, writeJson, storageReady } from './_report-store.js';
 import { providerPlanMeta } from './_provider-plan.js';
 
 export const config = { maxDuration: 60 };
@@ -59,8 +59,9 @@ function quotaBudget(guard){
   const configured=Number(providerPlanMeta()?.dailyLimit)||7500;
   const observed=Number(guard?.dailyLimit);
   const dailyLimit=Number.isFinite(observed)&&observed>0?observed:configured;
-  const remainingRaw=Number(guard?.dailyRemaining);
-  const dailyRemaining=Number.isFinite(remainingRaw)?Math.max(0,remainingRaw):null;
+  const raw=guard?.dailyRemaining;
+  const remainingNumber=raw==null||raw===''?null:Number(raw);
+  const dailyRemaining=Number.isFinite(remainingNumber)?Math.max(0,remainingNumber):null;
   const operationalReserve=Math.max(1,Math.ceil(dailyLimit*OPERATIONAL_RESERVE_RATIO));
   const learningReserve=Math.max(operationalReserve,Math.ceil(dailyLimit*LEARNING_RESERVE_RATIO));
   const learningSpendable=dailyRemaining==null?null:Math.max(0,dailyRemaining-learningReserve);
@@ -98,7 +99,7 @@ export default async function handler(req,res){
     readJson(PLAN_PATH, {generatedAt:null, plan:[]}),
     readJson(LEDGER_HEALTH_PATH, null),
     readJson(HIST_INDEX_PATH, null),
-    readJson(QUOTA_GUARD_PATH, null)
+    readJsonFresh(QUOTA_GUARD_PATH, null)
   ]);
 
   const quotaHalt = currentQuotaHalt(guard);
@@ -110,7 +111,9 @@ export default async function handler(req,res){
   const noFixturesCooldownBefore = previousNoFixturesAge != null && previousNoFixturesAge < AUTOPILOT_NO_FIXTURES_COOLDOWN_MINUTES;
   const actions = [];
   let heavyRemediationTaken = false;
+  let planRecoveryEffective = false;
   let ledgerRecoveryState = null;
+  let historicalRecoveryEffective = false;
   let lastAutopilotNoFixturesAt = previous?.lastAutopilotNoFixturesAt || null;
 
   const shouldRecoverPlan = activeWindow(clock) && !quotaHalt && !noFixturesCooldownBefore && (planAgeBefore == null || planAgeBefore > PLAN_STALE_MINUTES);
@@ -118,10 +121,11 @@ export default async function handler(req,res){
     const result = await call(base, '/api/autopilot', 54000);
     const skipped = Boolean(result?.data?.skipped);
     const skipReason = skipped ? (result?.data?.reason || 'SKIPPED') : null;
-    actions.push(event('AUTOPILOT_RECOVERY', result, { reason:'STALE_DECISION_PLAN', beforeAgeMinutes:planAgeBefore, skipped, skipReason, effective:effectiveRemediation(result) }));
+    planRecoveryEffective = effectiveRemediation(result);
+    actions.push(event('AUTOPILOT_RECOVERY', result, { reason:'STALE_DECISION_PLAN', beforeAgeMinutes:planAgeBefore, skipped, skipReason, effective:planRecoveryEffective }));
     if(result?.ok && skipReason === 'NO_FIXTURES') lastAutopilotNoFixturesAt = new Date().toISOString();
-    else if(effectiveRemediation(result)) lastAutopilotNoFixturesAt = null;
-    heavyRemediationTaken = effectiveRemediation(result);
+    else if(planRecoveryEffective) lastAutopilotNoFixturesAt = null;
+    heavyRemediationTaken = planRecoveryEffective;
   }
 
   const shouldRecoverLedger = ledgerAgeBefore == null || ledgerAgeBefore > LEDGER_STALE_MINUTES;
@@ -137,14 +141,15 @@ export default async function handler(req,res){
   const histStalled = histIncomplete && (histAgeBefore == null || histAgeBefore > HIST_STALL_MINUTES);
   if(histStalled && !heavyRemediationTaken && (previousHistAttemptAge == null || previousHistAttemptAge > HIST_RECOVERY_COOLDOWN_MINUTES)){
     const result = await call(base, '/api/historical-shard-migrate?months=6', 54000);
-    actions.push(event('HISTORICAL_MIGRATION_RECOVERY', result, { reason:'MIGRATION_STALLED', beforeAgeMinutes:histAgeBefore, effective:effectiveRemediation(result) }));
-    heavyRemediationTaken = effectiveRemediation(result);
+    historicalRecoveryEffective = effectiveRemediation(result);
+    actions.push(event('HISTORICAL_MIGRATION_RECOVERY', result, { reason:'MIGRATION_STALLED', beforeAgeMinutes:histAgeBefore, effective:historicalRecoveryEffective }));
+    heavyRemediationTaken = historicalRecoveryEffective;
   }
 
   const [planAfter, ledgerAfter, histAfter] = await Promise.all([
-    readJson(PLAN_PATH, {generatedAt:null, plan:[]}),
+    planRecoveryEffective ? readJsonFresh(PLAN_PATH, {generatedAt:null, plan:[]}) : readJson(PLAN_PATH, {generatedAt:null, plan:[]}),
     readJson(LEDGER_HEALTH_PATH, null),
-    readJson(HIST_INDEX_PATH, null)
+    historicalRecoveryEffective ? readJsonFresh(HIST_INDEX_PATH, null) : readJson(HIST_INDEX_PATH, null)
   ]);
   const effectiveLedgerAfter = ledgerRecoveryState?.completedAt ? ledgerRecoveryState : ledgerAfter;
   const planAge = ageMinutes(planAfter?.generatedAt);
@@ -197,6 +202,8 @@ export default async function handler(req,res){
       directProviderCalls:false,
       providerDayClock:'UTC',
       quotaGuardRespected:true,
+      quotaGuardConsistentRead:true,
+      postRecoveryConsistentReads:true,
       operationalReserveRatio:OPERATIONAL_RESERVE_RATIO,
       learningReserveRatio:LEARNING_RESERVE_RATIO,
       learningYieldToOperationalTraffic:true,
