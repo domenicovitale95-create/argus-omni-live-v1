@@ -1,5 +1,5 @@
 import legacyHandler from './prediction-ledger-v4.js';
-import { readJson, storageReady } from './_report-store.js';
+import { readJsonFresh, storageReady } from './_report-store.js';
 
 const PLAN_PATH='argus/autopilot/decision-plan.json';
 const MAX_ATTESTATION_AGE_MIN=12;
@@ -26,13 +26,16 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(modeOf(req)!=='capture'||req.method!=='POST')return legacyHandler(req,res);
   if(!storageReady())return res.status(503).json({version:'PREDICTION-LEDGER-5',ok:false,status:'BLOCKED',reason:'STORAGE_UNAVAILABLE'});
-  const plan=await readJson(PLAN_PATH,{generatedAt:null,plan:[],centralBrain:null});
+  // Capture is cycle-attested against a plan that was just written by the
+  // autopilot/central-brain path. A cached Blob read can return the previous
+  // cycle for up to the store cache TTL and create a false fail-closed block.
+  const plan=await readJsonFresh(PLAN_PATH,{generatedAt:null,plan:[],centralBrain:null});
   const proof=attestation(plan,String(req.query?.cycleAfter||req.body?.cycleAfter||'').trim()||null);
-  if(!proof.ok)return res.status(200).json({version:'PREDICTION-LEDGER-5',ok:false,status:'BLOCKED',reason:'CURRENT_CYCLE_ATTESTATION_FAILED',attestation:proof,considered:0,captured:0,deduplicated:0,rejectedLate:0,rejectedInvalid:0,policy:{failClosed:true,currentCentralBrainCycleRequired:true,automaticWagering:false}});
+  if(!proof.ok)return res.status(200).json({version:'PREDICTION-LEDGER-5',ok:false,status:'BLOCKED',reason:'CURRENT_CYCLE_ATTESTATION_FAILED',attestation:proof,considered:0,captured:0,deduplicated:0,rejectedLate:0,rejectedInvalid:0,policy:{failClosed:true,currentCentralBrainCycleRequired:true,freshPlanReadRequired:true,automaticWagering:false}});
   const captureRes={statusCode:200,headers:{},body:null};
   const proxy={setHeader:(k,v)=>{captureRes.headers[String(k).toLowerCase()]=v;return proxy},status:c=>{captureRes.statusCode=Number(c)||200;return proxy},json:b=>{captureRes.body=b;return b},send:b=>{captureRes.body=b;return b},end:b=>{if(b!==undefined)captureRes.body=b;return b}};
   await legacyHandler(req,proxy);
   const body=captureRes.body&&typeof captureRes.body==='object'?captureRes.body:{};
   const ok=captureRes.statusCode>=200&&captureRes.statusCode<300&&!body.error;
-  return res.status(captureRes.statusCode).json({...body,version:'PREDICTION-LEDGER-5',ok,attestation:proof,decisionCycleId:proof.cycleId,policy:{...(body.policy||{}),failClosed:true,currentCentralBrainCycleRequired:true,cycleBoundToCronStart:Boolean(proof.cycleAfter),automaticWagering:false}});
+  return res.status(captureRes.statusCode).json({...body,version:'PREDICTION-LEDGER-5',ok,attestation:proof,decisionCycleId:proof.cycleId,policy:{...(body.policy||{}),failClosed:true,currentCentralBrainCycleRequired:true,freshPlanReadRequired:true,cycleBoundToCronStart:Boolean(proof.cycleAfter),automaticWagering:false}});
 }
