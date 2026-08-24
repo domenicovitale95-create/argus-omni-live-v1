@@ -50,6 +50,7 @@ jobs:
           set -euo pipefail
           BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
           curl --fail-with-body --silent --show-error --max-time 180 --retry 2 --retry-delay 3 --retry-all-errors \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
             -X POST "$BASE/api/source-reliability-learning"
 
       - name: Refresh governed self-improvement snapshot
