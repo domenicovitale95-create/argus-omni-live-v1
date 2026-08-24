@@ -45,9 +45,10 @@
   async function fetchLive(force){
     const row=readCache(),status=cacheStatus();
     if(!force&&row&&status.fresh){const matches=cachedMatches(row);notifyDataUpdated({matches,meta:matches.meta,cached:true});return matches}
-    const endpoint=window.ARGUS_LIVE_ENDPOINT||'/api/live';
+    const baseEndpoint=window.ARGUS_LIVE_ENDPOINT||'/api/live';
+    const endpoint=force?`${baseEndpoint}${baseEndpoint.includes('?')?'&':'?'}manualRefresh=${Date.now()}`:baseEndpoint;
     try{
-      const response=await fetchWithTimeout(endpoint,{headers:{Accept:'application/json'},cache:'no-store'},LIVE_REQUEST_TIMEOUT_MS),payload=await response.json().catch(()=>({}));
+      const response=await fetchWithTimeout(endpoint,{headers:{Accept:'application/json','Cache-Control':'no-cache'},cache:'no-store'},LIVE_REQUEST_TIMEOUT_MS),payload=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(payload.error||`Live endpoint error ${response.status}`);
       const base={matches:Array.isArray(payload)?payload:payload.matches||[],meta:payload.meta||{}},pStatus=providerStatus(base.meta),normalized=await mergeAvailability(base.matches,base.meta),degraded=pStatus!=='HEALTHY'||Boolean(normalized.meta?.degraded),empty=normalized.matches.length===0;
       if(degraded&&row?.matches?.length){const fallback=cachedMatches(row,{stale:true,reason:normalized.meta?.degradedReason||pStatus});notifyDataUpdated({matches:fallback,meta:fallback.meta,cached:true,degraded:true});return fallback}
@@ -60,7 +61,16 @@
       throw new Error(reason);
     }
   }
-  async function live(options={}){const force=Boolean(options.force);if(liveInFlight)return liveInFlight;liveInFlight=fetchLive(force).finally(()=>{liveInFlight=null});return liveInFlight}
+  async function live(options={}){
+    const force=Boolean(options.force);
+    if(liveInFlight){
+      if(!force)return liveInFlight;
+      try{await liveInFlight}catch(_){}
+    }
+    const request=fetchLive(force);
+    liveInFlight=request;
+    try{return await request}finally{if(liveInFlight===request)liveInFlight=null}
+  }
   async function health(){const row=readCache(),status=cacheStatus();if(!row)return{ready:true,cached:false,meta:null,matches:[]};if(status.fresh){const matches=cachedMatches(row);return{ready:true,cached:true,meta:matches.meta,matches:[...matches]}}const matches=cachedMatches(row,{stale:true,reason:'CLIENT_CACHE_EXPIRED'});return{ready:true,cached:true,stale:true,meta:matches.meta,matches:[...matches]}}
   window.ArgusProviders={demo,live,health,cacheStatus,readCache,persistPredictions,providerStatus};
 })();
