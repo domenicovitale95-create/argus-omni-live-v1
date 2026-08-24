@@ -46,7 +46,7 @@ export default async function handler(req,res){
     return res.status(500).json({ok:false,error:`AUTOPILOT_V2_EXCEPTION: ${error?.message||error}`,centralBrain:{applied:false}});
   }
   const base=primary.snapshot(),body=base.body&&typeof base.body==='object'?base.body:{};
-  if(base.statusCode<200||base.statusCode>=300||body?.skipped||body?.ok===false){
+  if(base.statusCode<200||base.statusCode>=300||body?.ok===false){
     return res.status(base.statusCode).json(body);
   }
 
