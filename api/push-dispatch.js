@@ -1,4 +1,4 @@
-import { readJson, writeJson, storageReady } from './_report-store.js';
+import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
 
 const SUBS='argus/push/subscriptions.json';
 const STATE='argus/push/state.json';
@@ -40,9 +40,9 @@ export default async function handler(req,res){
   const webpush=mod.default||mod;
   webpush.setVapidDetails(subject,pub,priv);
   const [subs,feed,state]=await Promise.all([
-    readJson(SUBS,{subscriptions:[]}),
-    readJson(FEED,{alerts:[]}),
-    readJson(STATE,{sent:{}})
+    readJsonFresh(SUBS,{subscriptions:[]}),
+    readJsonFresh(FEED,{alerts:[]}),
+    readJsonFresh(STATE,{sent:{}})
   ]);
 
   const activeSubs=subs.subscriptions||[];
@@ -96,7 +96,7 @@ export default async function handler(req,res){
   }
 
   return res.status(200).json({
-    version:'PUSH-DISPATCH-3',
+    version:'PUSH-DISPATCH-4',
     ok:true,
     configured:true,
     alerts:candidates.length,
@@ -105,6 +105,6 @@ export default async function handler(req,res){
     failed,
     removedSubscriptions:dead.size,
     deliveries,
-    policy:{operationalIncidentsSupported:true,lazyWebPushImport:true,automaticWagering:false}
+    policy:{operationalIncidentsSupported:true,lazyWebPushImport:true,consistentMutableReads:true,automaticWagering:false}
   });
 }

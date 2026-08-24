@@ -1,4 +1,4 @@
-import { readJson, writeJson, storageReady } from './_report-store.js';
+import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
 
 const INCIDENTS='argus/health/incidents.json';
 const FEED='argus/alerts/feed.json';
@@ -44,9 +44,9 @@ export default async function handler(req,res){
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
   if(!storageReady())return res.status(503).json({error:'Operational alert storage unavailable'});
   const [incidents,feed,state]=await Promise.all([
-    readJson(INCIDENTS,{incidents:[]}),
-    readJson(FEED,{alerts:[]}),
-    readJson(STATE,{seen:{},openIncidentId:null,openSeverity:null})
+    readJsonFresh(INCIDENTS,{incidents:[]}),
+    readJsonFresh(FEED,{alerts:[]}),
+    readJsonFresh(STATE,{seen:{},openIncidentId:null,openSeverity:null})
   ]);
   state.seen=state.seen||{};
   const rows=(incidents?.incidents||[]).filter(x=>['SYSTEM_UNHEALTHY','SYSTEM_RECOVERED'].includes(x?.kind)&&!state.seen[x.id]).slice().reverse();
@@ -78,5 +78,5 @@ export default async function handler(req,res){
   state.updatedAt=now();
   const ids=Object.keys(state.seen);if(ids.length>300){for(const id of ids.slice(0,ids.length-300))delete state.seen[id]}
   if(generated.length||rows.length)await Promise.all([writeJson(FEED,feed),writeJson(STATE,state)]);
-  return res.status(200).json({version:'OPERATIONAL-ALERT-BRIDGE-2',generatedAt:now(),status:'OK',incidentCount:(incidents?.incidents||[]).length,processed:rows.length,newAlerts:generated.length,suppressed,openIncidentId:state.openIncidentId,openSeverity:state.openSeverity,alerts:generated,policy:{cronAuthenticatedWhenConfigured:true,persistentFailuresOnly:true,oneOpenIncidentAtATime:true,criticalEscalationAllowed:true,recoveryRequiresOpenIncident:true,transientRecoverySuppressed:true,bettingAlertLogicUntouched:true,providerCalls:false,automaticWagering:false}});
+  return res.status(200).json({version:'OPERATIONAL-ALERT-BRIDGE-3',generatedAt:now(),status:'OK',incidentCount:(incidents?.incidents||[]).length,processed:rows.length,newAlerts:generated.length,suppressed,openIncidentId:state.openIncidentId,openSeverity:state.openSeverity,alerts:generated,policy:{cronAuthenticatedWhenConfigured:true,persistentFailuresOnly:true,oneOpenIncidentAtATime:true,criticalEscalationAllowed:true,recoveryRequiresOpenIncident:true,transientRecoverySuppressed:true,consistentMutableReads:true,bettingAlertLogicUntouched:true,providerCalls:false,automaticWagering:false}});
 }

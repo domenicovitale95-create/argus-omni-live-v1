@@ -1,4 +1,4 @@
-import { readJson, writeJson, storageReady } from './_report-store.js';
+import { readJson, readJsonFresh, writeJson, storageReady } from './_report-store.js';
 
 const ALERT_STATE='argus/alerts/state.json';
 const ALERT_FEED='argus/alerts/feed.json';
@@ -24,7 +24,7 @@ export default async function handler(req,res){
   if(feedOnly){
     res.setHeader('Cache-Control','public, s-maxage=60, stale-while-revalidate=120');
     const feed=await readJson(ALERT_FEED,{alerts:[]});
-    return res.status(200).json({version:'ALERT-ENGINE-7',generatedAt:now(),mode:'FEED_ONLY',newAlerts:[],feed:(feed.alerts||[]).slice(0,60),policy:{feedOnly:true,cacheSeconds:60,automaticWagering:false}});
+    return res.status(200).json({version:'ALERT-ENGINE-8',generatedAt:now(),mode:'FEED_ONLY',newAlerts:[],feed:(feed.alerts||[]).slice(0,60),policy:{feedOnly:true,cacheSeconds:60,automaticWagering:false}});
   }
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
   res.setHeader('Cache-Control','no-store');
@@ -32,8 +32,8 @@ export default async function handler(req,res){
   const [plan,memory,state,feed]=await Promise.all([
     readJson('argus/autopilot/decision-plan.json',{plan:[],generatedAt:null}),
     readJson(`argus/market-memory/${dateTZ()}.json`,{fixtures:{}}),
-    readJson(ALERT_STATE,{seen:{}}),
-    readJson(ALERT_FEED,{alerts:[]})
+    readJsonFresh(ALERT_STATE,{seen:{}}),
+    readJsonFresh(ALERT_FEED,{alerts:[]})
   ]);
   const ts=Date.now(),cooldownMs=90*60*1000,liveCooldownMs=12*60*1000,newAlerts=[];
   for(const row of plan.plan||[]){
@@ -45,6 +45,6 @@ export default async function handler(req,res){
     newAlerts.push(alert);state.seen[k]={sentAt:ts,score:sc,odds:odds||null,lineupsConfirmed:Boolean(row.lineupsConfirmed),movementPct:movement?.changePct??null,minute:row.minute??null};
   }
   if(newAlerts.length){feed.alerts=[...newAlerts,...(feed.alerts||[])].slice(0,120);await Promise.all([writeJson(ALERT_FEED,feed),writeJson(ALERT_STATE,state)])}
-  if(compact)return res.status(200).json({version:'ALERT-ENGINE-7',generatedAt:now(),mode:'GENERATE_COMPACT',newAlertCount:newAlerts.length,feedCount:(feed.alerts||[]).length,livePrimeCount:newAlerts.filter(a=>a.type==='LIVE_PRIME').length,pushEligibleCount:newAlerts.filter(a=>a.pushEligible).length,automaticWagering:false});
-  return res.status(200).json({version:'ALERT-ENGINE-7',generatedAt:now(),mode:'GENERATE',newAlerts,feed:feed.alerts||[],policy:{primeThreshold:88,valueThreshold:84,pushThreshold:88,livePrimeThreshold:90,livePrimeConfidenceMin:70,livePrimeEdgeMinPct:4,liveRegimeRiskBlock:55,materialOddsMovementPct:3,cooldownMinutes:90,liveCooldownMinutes:12,liveAlerts:true,liveAlertsSiteOnly:true,regimeRiskBlock:65,automaticWagering:false,rule:'Alerts use the canonical eligibility edgePct, CONFIRMED pre-kickoff gates, and all terminal fixture statuses. LIVE PRIME remains on-site review only.',authenticatedGeneration:true}});
+  if(compact)return res.status(200).json({version:'ALERT-ENGINE-8',generatedAt:now(),mode:'GENERATE_COMPACT',newAlertCount:newAlerts.length,feedCount:(feed.alerts||[]).length,livePrimeCount:newAlerts.filter(a=>a.type==='LIVE_PRIME').length,pushEligibleCount:newAlerts.filter(a=>a.pushEligible).length,consistentMutableReads:true,automaticWagering:false});
+  return res.status(200).json({version:'ALERT-ENGINE-8',generatedAt:now(),mode:'GENERATE',newAlerts,feed:feed.alerts||[],policy:{primeThreshold:88,valueThreshold:84,pushThreshold:88,livePrimeThreshold:90,livePrimeConfidenceMin:70,livePrimeEdgeMinPct:4,liveRegimeRiskBlock:55,materialOddsMovementPct:3,cooldownMinutes:90,liveCooldownMinutes:12,liveAlerts:true,liveAlertsSiteOnly:true,regimeRiskBlock:65,automaticWagering:false,rule:'Alerts use the canonical eligibility edgePct, CONFIRMED pre-kickoff gates, and all terminal fixture statuses. LIVE PRIME remains on-site review only.',authenticatedGeneration:true,consistentMutableReads:true}});
 }
