@@ -10,6 +10,14 @@
     {
       "path": "/api/autonomous-supervisor",
       "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/historical-recent-backfill",
+      "schedule": "31 2 * * *"
+    },
+    {
+      "path": "/api/streak-intelligence",
+      "schedule": "47 2 * * *"
     }
   ],
   "functions": {
@@ -21,6 +29,12 @@
     },
     "api/historical-walk-forward.js": {
       "maxDuration": 300
+    },
+    "api/historical-recent-backfill.js": {
+      "maxDuration": 120
+    },
+    "api/streak-intelligence.js": {
+      "maxDuration": 120
     },
     "api/autonomous-supervisor.js": {
       "maxDuration": 120
