@@ -1,6 +1,6 @@
 import autopilotV2, { config } from './autopilot-v2.js';
 import centralBrain from './central-brain.js';
-import { readJson, writeJson, storageReady } from './_report-store.js';
+import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
 
 export { config };
 
@@ -30,7 +30,7 @@ function failClosedRow(row,reason){
 
 async function persistFailClosed(reason){
   if(!storageReady())return false;
-  const scheduler=await readJson(DECISION_PLAN_PATH,null);
+  const scheduler=await readJsonFresh(DECISION_PLAN_PATH,null);
   if(!scheduler||!Array.isArray(scheduler.plan))return false;
   const plan=scheduler.plan.map(row=>failClosedRow(row,reason));
   const summary={...(scheduler.summary||{}),total:plan.length,prime:0,value:0,watch:0,noBet:plan.length,eligible:0,centralBrainChanged:plan.length,centralBrainBlocked:plan.length,centralBrainPenalized:0};
@@ -59,7 +59,10 @@ export default async function handler(req,res){
 
   try{
     if(!storageReady())throw new Error('STORAGE_UNAVAILABLE');
-    const scheduler=await readJson(DECISION_PLAN_PATH,null);
+    // autopilot-v2 persists the scheduler through a separate network request.
+    // Bypass Blob cache here or we can re-apply the central brain to the previous
+    // decision plan and overwrite the newly generated cycle with stale generatedAt.
+    const scheduler=await readJsonFresh(DECISION_PLAN_PATH,null);
     if(!scheduler||!Array.isArray(scheduler.plan))throw new Error('DECISION_PLAN_UNAVAILABLE');
     const brainCapture=captureRes();
     await centralBrain(internalReq(req,{scheduler}),brainCapture.res);
