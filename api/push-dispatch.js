@@ -1,4 +1,3 @@
-import webpush from 'web-push';
 import { readJson, writeJson, storageReady } from './_report-store.js';
 
 const SUBS='argus/push/subscriptions.json';
@@ -30,13 +29,15 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
-  if(!storageReady())return res.status(503).json({error:'Push storage unavailable'});
 
   const pub=process.env.VAPID_PUBLIC_KEY;
   const priv=process.env.VAPID_PRIVATE_KEY;
   const subject=process.env.VAPID_SUBJECT||'mailto:argus@example.com';
-  if(!pub||!priv)return res.status(200).json({ok:false,configured:false,reason:'VAPID_NOT_CONFIGURED'});
+  if(!pub||!priv)return res.status(200).json({ok:false,configured:false,reason:'VAPID_NOT_CONFIGURED',lazyLoad:true});
+  if(!storageReady())return res.status(503).json({error:'Push storage unavailable'});
 
+  const mod=await import('web-push');
+  const webpush=mod.default||mod;
   webpush.setVapidDetails(subject,pub,priv);
   const [subs,feed,state]=await Promise.all([
     readJson(SUBS,{subscriptions:[]}),
@@ -95,7 +96,7 @@ export default async function handler(req,res){
   }
 
   return res.status(200).json({
-    version:'PUSH-DISPATCH-2',
+    version:'PUSH-DISPATCH-3',
     ok:true,
     configured:true,
     alerts:candidates.length,
@@ -104,6 +105,6 @@ export default async function handler(req,res){
     failed,
     removedSubscriptions:dead.size,
     deliveries,
-    policy:{operationalIncidentsSupported:true,automaticWagering:false}
+    policy:{operationalIncidentsSupported:true,lazyWebPushImport:true,automaticWagering:false}
   });
 }
