@@ -1,5 +1,5 @@
 const clamp=(v,min=0,max=1)=>Math.min(max,Math.max(min,Number(v)));
-const finite=v=>Number.isFinite(Number(v));
+const finite=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
 const EPS=1e-6;
 const logit=p=>Math.log(clamp(p,EPS,1-EPS)/(1-clamp(p,EPS,1-EPS)));
 const sigmoid=x=>1/(1+Math.exp(-x));
