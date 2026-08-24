@@ -1,7 +1,7 @@
 (()=>{
   const KEY='argus-followed-live-matches-v1';
   const SEEN='argus-live-prime-seen-v1';
-  const POLL_MS=30000;
+  const POLL_MS=60000;
   const norm=s=>String(s||'').trim().toLowerCase().replace(/\s+/g,' ');
   const matchKey=(home,away)=>`${norm(home)}|${norm(away)}`;
   const load=(k,fallback)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(fallback))}catch(_){return fallback}};
