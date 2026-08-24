@@ -6,6 +6,7 @@ const COGNITIVE_PATH='argus/cognitive/latest.json';
 const GPT_PATH='argus/cognitive/gpt/latest.json';
 const SELF_IMPROVEMENT_PATH='argus/self-improvement/latest.json';
 
+function authorized(req){const secret=String(process.env.CRON_SECRET||'').trim();return !secret||req.headers?.authorization===`Bearer ${secret}`}
 function n(v,f=0){const x=Number(v);return Number.isFinite(x)?x:f}
 function upper(v){return String(v||'').trim().toUpperCase()}
 function ageHours(v){const t=new Date(v||0).getTime();return Number.isFinite(t)&&t>0?Math.max(0,(Date.now()-t)/36e5):Infinity}
@@ -111,6 +112,7 @@ function planSummary(plan,prior={}){
 
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
+  if(!authorized(req))return res.status(401).json({ok:false,error:'Unauthorized'});
   if(!storageReady())return res.status(503).json({ok:false,version:'CENTRAL-BRAIN-1',status:'CRITICAL',error:'Storage unavailable'});
   if(req.method==='GET')return res.status(200).json(await readJson(STATE_PATH,{ok:true,version:'CENTRAL-BRAIN-1',generatedAt:null,status:'UNINITIALIZED',summary:{}}));
   if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
