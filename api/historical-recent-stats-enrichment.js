@@ -8,7 +8,8 @@ const TZ='Europe/Brussels';
 const DEFAULT_BATCH=4,MAX_BATCH=8;
 function authorized(req){const s=process.env.CRON_SECRET;return !s||req.headers.authorization===`Bearer ${s}`}
 function brusselsDate(){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return`${p.year}-${p.month}-${p.day}`}
-function qh(h){const d=Number(h.get('x-ratelimit-requests-remaining')),l=Number(h.get('x-ratelimit-requests-limit')),m=Number(h.get('x-ratelimit-remaining'));return{dailyRemaining:Number.isFinite(d)?d:null,dailyLimit:Number.isFinite(l)?l:null,minuteRemaining:Number.isFinite(m)?m:null}}
+function hn(h,name){const raw=h.get(name);if(raw==null||raw==='')return null;const n=Number(raw);return Number.isFinite(n)?n:null}
+function qh(h){return{dailyRemaining:hn(h,'x-ratelimit-requests-remaining'),dailyLimit:hn(h,'x-ratelimit-requests-limit'),minuteRemaining:hn(h,'x-ratelimit-remaining')}}
 function reserve(q){return Number.isFinite(q?.dailyLimit)?Math.max(250,Math.ceil(q.dailyLimit*.15)):500}
 function shouldStop(q){return(q?.dailyRemaining!=null&&q.dailyRemaining<=reserve(q))||(q?.minuteRemaining!=null&&q.minuteRemaining<=3)}
 function val(stats,name){const x=(stats||[]).find(s=>String(s.type||'').toLowerCase()===String(name).toLowerCase())?.value;if(x==null)return null;const n=Number(String(x).replace('%',''));return Number.isFinite(n)?n:null}
