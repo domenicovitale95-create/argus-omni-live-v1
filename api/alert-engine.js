@@ -4,6 +4,7 @@ const ALERT_STATE='argus/alerts/state.json';
 const ALERT_FEED='argus/alerts/feed.json';
 const FINISHED=new Set(['FT','AET','PEN','CANC','ABD','AWD','WO']);
 const now=()=>new Date().toISOString();
+function authorized(req){const secret=String(process.env.CRON_SECRET||'').trim();return !secret||req.headers.authorization===`Bearer ${secret}`}
 function n(v,f=0){if(v===null||v===undefined||v==='')return f;const x=Number(v);return Number.isFinite(x)?x:f}
 function dateTZ(v=new Date()){const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Brussels',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(v);const m=Object.fromEntries(p.map(x=>[x.type,x.value]));return `${m.year}-${m.month}-${m.day}`}
 function keyOf(x){return `${x.fixtureId}|${x.selection||x.eligibilityCandidate?.side||''}|${x.finalVerdict||''}|${x.isLive?'LIVE':'PRE'}`}
@@ -21,10 +22,11 @@ export default async function handler(req,res){
   if(!storageReady())return res.status(503).json({error:'Alert storage unavailable'});
   const feedOnly=req.method==='GET'&&String(req.query?.mode||'').toLowerCase()==='feed';
   if(feedOnly){
-    res.setHeader('Cache-Control','public, s-maxage=20, stale-while-revalidate=40');
+    res.setHeader('Cache-Control','public, s-maxage=60, stale-while-revalidate=120');
     const feed=await readJson(ALERT_FEED,{alerts:[]});
-    return res.status(200).json({version:'ALERT-ENGINE-6',generatedAt:now(),mode:'FEED_ONLY',newAlerts:[],feed:(feed.alerts||[]).slice(0,60),policy:{feedOnly:true,cacheSeconds:20,automaticWagering:false}});
+    return res.status(200).json({version:'ALERT-ENGINE-7',generatedAt:now(),mode:'FEED_ONLY',newAlerts:[],feed:(feed.alerts||[]).slice(0,60),policy:{feedOnly:true,cacheSeconds:60,automaticWagering:false}});
   }
+  if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
   res.setHeader('Cache-Control','no-store');
   const compact=String(req.query?.compact||'')==='1';
   const [plan,memory,state,feed]=await Promise.all([
@@ -43,6 +45,6 @@ export default async function handler(req,res){
     newAlerts.push(alert);state.seen[k]={sentAt:ts,score:sc,odds:odds||null,lineupsConfirmed:Boolean(row.lineupsConfirmed),movementPct:movement?.changePct??null,minute:row.minute??null};
   }
   if(newAlerts.length){feed.alerts=[...newAlerts,...(feed.alerts||[])].slice(0,120);await Promise.all([writeJson(ALERT_FEED,feed),writeJson(ALERT_STATE,state)])}
-  if(compact)return res.status(200).json({version:'ALERT-ENGINE-6',generatedAt:now(),mode:'GENERATE_COMPACT',newAlertCount:newAlerts.length,feedCount:(feed.alerts||[]).length,livePrimeCount:newAlerts.filter(a=>a.type==='LIVE_PRIME').length,pushEligibleCount:newAlerts.filter(a=>a.pushEligible).length,automaticWagering:false});
-  return res.status(200).json({version:'ALERT-ENGINE-6',generatedAt:now(),mode:'GENERATE',newAlerts,feed:feed.alerts||[],policy:{primeThreshold:88,valueThreshold:84,pushThreshold:88,livePrimeThreshold:90,livePrimeConfidenceMin:70,livePrimeEdgeMinPct:4,liveRegimeRiskBlock:55,materialOddsMovementPct:3,cooldownMinutes:90,liveCooldownMinutes:12,liveAlerts:true,liveAlertsSiteOnly:true,regimeRiskBlock:65,automaticWagering:false,rule:'Alerts use the canonical eligibility edgePct, CONFIRMED pre-kickoff gates, and all terminal fixture statuses. LIVE PRIME remains on-site review only.'}});
+  if(compact)return res.status(200).json({version:'ALERT-ENGINE-7',generatedAt:now(),mode:'GENERATE_COMPACT',newAlertCount:newAlerts.length,feedCount:(feed.alerts||[]).length,livePrimeCount:newAlerts.filter(a=>a.type==='LIVE_PRIME').length,pushEligibleCount:newAlerts.filter(a=>a.pushEligible).length,automaticWagering:false});
+  return res.status(200).json({version:'ALERT-ENGINE-7',generatedAt:now(),mode:'GENERATE',newAlerts,feed:feed.alerts||[],policy:{primeThreshold:88,valueThreshold:84,pushThreshold:88,livePrimeThreshold:90,livePrimeConfidenceMin:70,livePrimeEdgeMinPct:4,liveRegimeRiskBlock:55,materialOddsMovementPct:3,cooldownMinutes:90,liveCooldownMinutes:12,liveAlerts:true,liveAlertsSiteOnly:true,regimeRiskBlock:65,automaticWagering:false,rule:'Alerts use the canonical eligibility edgePct, CONFIRMED pre-kickoff gates, and all terminal fixture statuses. LIVE PRIME remains on-site review only.',authenticatedGeneration:true}});
 }
