@@ -86,7 +86,7 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method !== 'GET') return res.status(405).json({ error:'Method not allowed' });
   if(!authorized(req)) return res.status(401).json({ error:'Unauthorized' });
-  if(!storageReady()) return res.status(503).json({ version:'AUTONOMOUS-SUPERVISOR-5', status:'CRITICAL', error:'Storage unavailable' });
+  if(!storageReady()) return res.status(503).json({ version:'AUTONOMY-SUPERVISOR-5', status:'CRITICAL', error:'Storage unavailable' });
 
   const startedAt = new Date().toISOString();
   const clock = brusselsClock();
@@ -110,6 +110,7 @@ export default async function handler(req,res){
   const noFixturesCooldownBefore = previousNoFixturesAge != null && previousNoFixturesAge < AUTOPILOT_NO_FIXTURES_COOLDOWN_MINUTES;
   const actions = [];
   let heavyRemediationTaken = false;
+  let ledgerRecoveryState = null;
   let lastAutopilotNoFixturesAt = previous?.lastAutopilotNoFixturesAt || null;
 
   const shouldRecoverPlan = activeWindow(clock) && !quotaHalt && !noFixturesCooldownBefore && (planAgeBefore == null || planAgeBefore > PLAN_STALE_MINUTES);
@@ -127,6 +128,7 @@ export default async function handler(req,res){
   if(shouldRecoverLedger && !heavyRemediationTaken){
     const result = await call(base, '/api/prediction-ledger-cron', 54000);
     actions.push(event('LEDGER_RECOVERY', result, { reason:'STALE_LEDGER_HEARTBEAT', beforeAgeMinutes:ledgerAgeBefore, effective:effectiveRemediation(result) }));
+    if(result?.ok && result?.data?.healthPersisted !== false && result?.data?.completedAt) ledgerRecoveryState = result.data;
     heavyRemediationTaken = effectiveRemediation(result);
   }
 
@@ -144,8 +146,9 @@ export default async function handler(req,res){
     readJson(LEDGER_HEALTH_PATH, null),
     readJson(HIST_INDEX_PATH, null)
   ]);
+  const effectiveLedgerAfter = ledgerRecoveryState?.completedAt ? ledgerRecoveryState : ledgerAfter;
   const planAge = ageMinutes(planAfter?.generatedAt);
-  const ledgerAge = ageMinutes(ledgerAfter?.completedAt || ledgerAfter?.startedAt);
+  const ledgerAge = ageMinutes(effectiveLedgerAfter?.completedAt || effectiveLedgerAfter?.startedAt);
   const histAge = ageMinutes(histAfter?.updatedAt);
   const noFixturesAge = ageMinutes(lastAutopilotNoFixturesAt);
   const noFixturesCooldownActive = noFixturesAge != null && noFixturesAge < AUTOPILOT_NO_FIXTURES_COOLDOWN_MINUTES;
@@ -178,7 +181,7 @@ export default async function handler(req,res){
     lastAutopilotNoFixturesAt,
     components:{
       autopilot:{ generatedAt:planAfter?.generatedAt || null, ageMinutes:planAge, rows:Array.isArray(planAfter?.plan) ? planAfter.plan.length : 0, activeWindow:activeWindow(clock), noFixturesCooldownActive, noFixturesAgeMinutes:noFixturesAge },
-      predictionLedger:{ completedAt:ledgerAfter?.completedAt || null, ageMinutes:ledgerAge, ok:ledgerAfter?.ok ?? null },
+      predictionLedger:{ completedAt:effectiveLedgerAfter?.completedAt || null, ageMinutes:ledgerAge, ok:effectiveLedgerAfter?.ok ?? null },
       historicalMigration:{ exists:Boolean(histAfter), migrationComplete:histAfter?.migrationComplete === true, updatedAt:histAfter?.updatedAt || null, ageMinutes:histAge, months:Object.keys(histAfter?.months || {}).length, fixtureCount:Number(histAfter?.fixtureCount || 0) },
       providerQuota:{ halted:quotaHalt, guardDay:guardDay(guard), mode:guard?.mode || null, observedAt:guard?.observedAt || null, observedAgeMinutes:ageMinutes(guard?.observedAt), ...budget }
     },
