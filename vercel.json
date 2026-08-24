@@ -16,6 +16,10 @@
       "schedule": "2-57/5 * * * *"
     },
     {
+      "path": "/api/autopilot",
+      "schedule": "3-58/5 * * * *"
+    },
+    {
       "path": "/api/training-bets-cron",
       "schedule": "4-59/5 * * * *"
     }
