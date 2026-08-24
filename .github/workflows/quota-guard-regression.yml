@@ -5,6 +5,7 @@ on:
     branches: [main, fix/live-model-v2-integrity]
     paths:
       - 'api/live.js'
+      - 'api/availability.js'
       - 'api/provider-status.js'
       - 'api/_report-store.js'
       - 'api/prediction-ledger-v4.js'
@@ -16,6 +17,7 @@ on:
   pull_request:
     paths:
       - 'api/live.js'
+      - 'api/availability.js'
       - 'api/provider-status.js'
       - 'api/_report-store.js'
       - 'api/prediction-ledger-v4.js'
@@ -37,6 +39,7 @@ jobs:
       - name: Syntax checks
         run: |
           node --check api/live.js
+          node --check api/availability.js
           node --check api/prediction-ledger-v4.js
           node --check api/provider-status.js
           node --check api/daily-report.js
@@ -49,6 +52,7 @@ jobs:
           const read=p=>fs.readFileSync(p,'utf8');
           const assert=(ok,msg)=>{if(!ok){console.error(`FAIL: ${msg}`);process.exitCode=1}else console.log(`PASS: ${msg}`)};
           const live=read('api/live.js');
+          const availability=read('api/availability.js');
           const ledger=read('api/prediction-ledger-v4.js');
           const provider=read('api/provider-status.js');
           const report=read('api/daily-report.js');
@@ -62,6 +66,12 @@ jobs:
           assert(/kind==='minute'/.test(live)&&/apiQuota\.exhausted=false/.test(live),'minute limit is not misclassified as daily exhaustion');
           assert(/kind==='daily'/.test(live)&&/persistQuotaExhausted/.test(live),'daily exhaustion remains fail-closed');
           assert(/SECONDARY_CALL_BUDGET_PER_BUILD/.test(live),'secondary provider calls are bounded per build');
+
+          assert(/QUOTA_GUARD_PATH/.test(availability)&&/quotaBlocked/.test(availability),'availability reads and enforces the shared quota guard');
+          assert(/MIN_AVAILABILITY_RESERVE\s*=\s*300/.test(availability),'availability protects the final 300 operational requests');
+          assert(/providerCalls/.test(availability)&&/persistQuota/.test(availability),'availability accounts for provider calls and persists observed quota');
+          assert(/raw==null\|\|raw===''/g.test(availability),'availability never interprets a missing quota header as zero');
+          assert(/BLOCKED_QUOTA|STALE_QUOTA/.test(availability),'availability fails closed to cached data when provider spend is blocked');
 
           assert(/QUOTA_GUARD_PATH/.test(ledger)&&/providerBlocked/.test(ledger),'prediction ledger reads the quota guard');
           assert(/PROVIDER_BLOCKED_BY_QUOTA_GUARD/.test(ledger),'prediction ledger skips provider fallback while blocked');
