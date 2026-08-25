@@ -67,3 +67,5 @@ jobs:
             echo "::error::Trend integrity recovery did not reach PASS."
             exit 1
           fi
+
+          echo "Trend integrity recovery complete."
