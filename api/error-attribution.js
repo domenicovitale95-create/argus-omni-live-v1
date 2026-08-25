@@ -1,7 +1,6 @@
-import { listJson, readManyJson, writeJson, storageReady } from './_report-store.js';
+import { listJson, readManyJson, storageReady } from './_report-store.js';
 
 const PREFIX='argus/ledger/';
-const OUT='argus/learning/error-attribution.json';
 const n=(v,f=null)=>Number.isFinite(Number(v))?Number(v):f;
 function confBucket(v){const x=n(v);if(x==null)return'UNKNOWN';const lo=Math.floor(x/10)*10;return`${lo}-${lo+9}`}
 function oddsBucket(v){const x=n(v);if(x==null)return'NO_PRICE';if(x<1.5)return'<1.50';if(x<1.8)return'1.50-1.79';if(x<2.2)return'1.80-2.19';if(x<3)return'2.20-2.99';return'3.00+'}
@@ -15,9 +14,9 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
-  const blobs=await listJson(PREFIX,180),books=await readManyJson(blobs),rows=books.flatMap(b=>b?.records||[]).filter(r=>['WIN','LOSS'].includes(r.settlement?.status)),losses=rows.filter(r=>r.settlement.status==='LOSS'),actionableRows=rows.filter(actionable),actionableLosses=actionableRows.filter(r=>r.settlement.status==='LOSS');
+  const blobs=await listJson(PREFIX,900),books=await readManyJson(blobs),rows=books.flatMap(b=>b?.records||[]).filter(r=>['WIN','LOSS'].includes(r.settlement?.status)),losses=rows.filter(r=>r.settlement.status==='LOSS'),actionableRows=rows.filter(actionable),actionableLosses=actionableRows.filter(r=>r.settlement.status==='LOSS');
   const reasonCounts={};for(const r of losses)for(const x of suspectedLossReasons(r))reasonCounts[x]=(reasonCounts[x]||0)+1;
   const actionableReasonCounts={};for(const r of actionableLosses)for(const x of suspectedLossReasons(r))actionableReasonCounts[x]=(actionableReasonCounts[x]||0)+1;
   const matrix={version:'ERROR-ATTRIBUTION-1',generatedAt:new Date().toISOString(),totalSettled:rows.length,totalLosses:losses.length,totalActionableSettled:actionableRows.length,totalActionableLosses:actionableLosses.length,policy:{principle:'Attribution is statistical evidence, not proof of causality. Forecast error may use all frozen predictions; ROI and actionable loss attribution use only predictions with stake > 0.',minSampleForPenalty:20,maxTargetedConfidencePenalty:8,negativeOnly:true,positiveEvidenceCannotCreatePrime:true},global:{...stats(rows),...severity(stats(rows))},byLeague:group(rows,r=>r.competition||'UNKNOWN'),bySelection:group(rows,r=>String(r.selection||'UNKNOWN').toUpperCase()),byVerdict:group(rows,r=>String(r.verdict||'UNKNOWN').toUpperCase()),byConfidence:group(rows,r=>confBucket(r.confidence)),byOdds:group(rows,r=>oddsBucket(r.odds)),byRegime:group(rows,r=>regime(r)),suspectedLossContributors:Object.entries(reasonCounts).sort((a,b)=>b[1]-a[1]).map(([reason,count])=>({reason,count,shareOfLosses:losses.length?Number((count/losses.length*100).toFixed(1)):0})).slice(0,20),suspectedActionableLossContributors:Object.entries(actionableReasonCounts).sort((a,b)=>b[1]-a[1]).map(([reason,count])=>({reason,count,shareOfActionableLosses:actionableLosses.length?Number((count/actionableLosses.length*100).toFixed(1)):0})).slice(0,20)};
-  await writeJson(OUT,matrix);return res.status(200).json(matrix)
+  return res.status(200).json(matrix)
 }
