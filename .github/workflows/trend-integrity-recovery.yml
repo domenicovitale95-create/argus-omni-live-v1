@@ -1,0 +1,69 @@
+name: ARGUS Trend Integrity Recovery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/trend-integrity-recovery.yml'
+  schedule:
+    - cron: '5 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: argus-trend-integrity-recovery
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
+    steps:
+      - name: Repair trend evidence only when needed
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
+          if [ -z "${CRON_SECRET:-}" ]; then
+            echo "::error::CRON_SECRET is not configured."
+            exit 1
+          fi
+
+          audit="$(curl --fail-with-body --silent --show-error --max-time 45 "$BASE/api/trend-integrity-audit")"
+          status="$(printf '%s' "$audit" | jq -r '.status // "UNKNOWN"')"
+          evidence="$(printf '%s' "$audit" | jq -r '.evidenceState // "UNKNOWN"')"
+          echo "Initial trend audit: status=${status}, evidence=${evidence}"
+          if [ "$status" = "PASS" ]; then
+            echo "Trend integrity already healthy; no provider calls required."
+            exit 0
+          fi
+
+          dry="$(curl --fail-with-body --silent --show-error --max-time 45 "$BASE/api/historical-recent-backfill?dryRun=1&dates=12")"
+          pending="$(printf '%s' "$dry" | jq -r '.pendingCount // 0')"
+          spendable="$(printf '%s' "$dry" | jq -r '.budget.spendable // 0')"
+          echo "Recent-history pending=${pending}, learning spendable=${spendable}"
+
+          if [ "$pending" -gt 0 ]; then
+            curl --fail-with-body --silent --show-error --max-time 180 --retry 1 --retry-delay 4 --retry-all-errors \
+              -H "Authorization: Bearer ${CRON_SECRET}" \
+              "$BASE/api/historical-recent-backfill?dates=12"
+            echo
+          fi
+
+          curl --fail-with-body --silent --show-error --max-time 180 --retry 1 --retry-delay 4 --retry-all-errors \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "$BASE/api/streak-intelligence" >/tmp/streak.json
+          jq '{version,requiredContinuityThrough,teamsWithVerifiedRecent10,activeTrends}' /tmp/streak.json
+
+          final="$(curl --fail-with-body --silent --show-error --max-time 45 "$BASE/api/trend-integrity-audit")"
+          printf '%s\n' "$final" | jq '{status,evidenceState,checked,expectedContinuityThrough,violations}'
+          final_status="$(printf '%s' "$final" | jq -r '.status // "UNKNOWN"')"
+          if [ "$final_status" != "PASS" ]; then
+            echo "::error::Trend integrity recovery did not reach PASS."
+            exit 1
+          fi
