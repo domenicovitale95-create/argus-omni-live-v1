@@ -16,6 +16,10 @@
       "schedule": "*/15 * * * *"
     },
     {
+      "path": "/api/deployment-verifier",
+      "schedule": "6,21,36,51 * * * *"
+    },
+    {
       "path": "/api/historical-recent-backfill",
       "schedule": "31 2 * * *"
     },
@@ -57,6 +61,9 @@
     },
     "api/fast-cycle.js": {
       "maxDuration": 120
+    },
+    "api/deployment-verifier.js": {
+      "maxDuration": 60
     }
   }
 }
