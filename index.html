@@ -48,7 +48,7 @@
             <h2>What should I bet today?</h2>
             <p class="lead">ARGUS checks the matches and keeps only the choices it likes. If nothing looks good, ARGUS does not bet.</p>
           </div>
-          <div class="hero-actions"><button id="scanBtn" class="primary">Check today's matches</button><span class="hero-note">Last check: <strong id="heroUpdate">—</strong></span></div>
+          <div class="hero-actions"><button id="scanBtn" class="primary" type="button">Check today's matches</button><span class="hero-note">Last check: <strong id="heroUpdate">—</strong></span></div>
         </div>
         <div class="hero-decision panel">
           <div class="hero-decision-label"><span>ARGUS says</span><span>Best choice now</span></div>
@@ -122,7 +122,7 @@
 
     <footer><span>ARGUS OMNI · RESULTS FIRST.</span><span>VIRTUAL MONEY FOR TRAINING</span></footer>
   </div>
-  <script src="src/adaptive-weights-client.js"></script><script src="src/training-memory.js"></script><script src="src/engine.js"></script><script src="src/market-engine.js"></script><script src="src/reliability.js"></script><script src="src/outcome-learning.js"></script><script src="src/live-regime.js"></script><script src="src/governance.js"></script><script src="src/track-record.js"></script><script src="src/autopilot.js"></script><script src="src/providers.js"></script><script src="src/market-memory-client.js"></script><script src="src/persistent-cache.js"></script><script src="src/self-improvement.js"></script><script src="app.js"></script><script src="src/official-decisions.js"></script><script src="src/argus-os.js"></script><script src="argus-proof.js"></script>
-  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}</script>
+  <script src="src/adaptive-weights-client.js"></script><script src="src/training-memory.js"></script><script src="src/engine.js"></script><script src="src/market-engine.js"></script><script src="src/reliability.js"></script><script src="src/outcome-learning.js"></script><script src="src/live-regime.js"></script><script src="src/governance.js"></script><script src="src/track-record.js"></script><script src="src/autopilot.js"></script><script src="src/providers.js"></script><script src="src/market-memory-client.js"></script><script src="src/persistent-cache.js"></script><script src="src/self-improvement.js"></script><script src="app.js"></script><script src="mobile-scan-fix.js?v=20260825-1"></script><script src="src/official-decisions.js"></script><script src="src/argus-os.js"></script><script src="argus-proof.js"></script>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('/sw.js?v=6',{updateViaCache:'none'});await reg.update()}catch(_){}})}</script>
 </body>
 </html>
