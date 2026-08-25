@@ -1,5 +1,6 @@
 import legacyHandler from './prediction-ledger-v4.js';
 import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
+import { readCanonicalLedger } from './_prediction-ledger-store.js';
 
 const TZ='Europe/Brussels';
 const PLAN_PATH='argus/autopilot/decision-plan.json';
@@ -63,13 +64,27 @@ async function bindTouchedRows(capturedAt,cycleId,plan){
   return{cycleTaggedRecords,modelTaggedRecords};
 }
 
+async function canonicalGet(req,res){
+  if(!storageReady())return res.status(503).json({version:'PREDICTION-LEDGER-5',error:'Storage unavailable',storageReady:false});
+  const ledger=await readCanonicalLedger();
+  const summaryOnly=['1','true','yes'].includes(String(req.query?.summaryOnly||'').toLowerCase());
+  const requested=Number(req.query?.recordsLimit ?? req.query?.limit ?? 500);
+  const recordsLimit=Math.max(0,Math.min(500,Number.isFinite(requested)?requested:500));
+  return res.status(200).json({
+    version:'PREDICTION-LEDGER-5',
+    generatedAt:new Date().toISOString(),
+    summary:ledger.summary,
+    sourceIntegrity:ledger.sourceIntegrity,
+    ...(summaryOnly?{}:{records:ledger.rows.slice(0,recordsLimit)}),
+    policy:{canonicalSource:'argus/ledger/',singleReaderForLedgerLearningAndAttribution:true,sourceCompletenessRequiredForAdaptation:true,automaticWagering:false}
+  });
+}
+
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
+  if(req.method==='GET')return canonicalGet(req,res);
   if(modeOf(req)!=='capture'||req.method!=='POST')return legacyHandler(req,res);
   if(!storageReady())return res.status(503).json({version:'PREDICTION-LEDGER-5',ok:false,status:'BLOCKED',reason:'STORAGE_UNAVAILABLE'});
-  // Capture is cycle-attested against a plan that was just written by the
-  // autopilot/central-brain path. A cached Blob read can return the previous
-  // cycle for up to the store cache TTL and create a false fail-closed block.
   const plan=await readJsonFresh(PLAN_PATH,{generatedAt:null,plan:[],centralBrain:null});
   const proof=attestation(plan,String(req.query?.cycleAfter||req.body?.cycleAfter||'').trim()||null);
   if(!proof.ok)return res.status(200).json({version:'PREDICTION-LEDGER-5',ok:false,status:'BLOCKED',reason:'CURRENT_CYCLE_ATTESTATION_FAILED',attestation:proof,considered:0,captured:0,deduplicated:0,rejectedLate:0,rejectedInvalid:0,policy:{failClosed:true,currentCentralBrainCycleRequired:true,freshPlanReadRequired:true,automaticWagering:false}});

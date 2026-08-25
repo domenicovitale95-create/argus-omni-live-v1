@@ -11,9 +11,6 @@ function brusselsDate() {
   return `${parts.year}-${parts.month}-${parts.day}`;
 }
 
-// Operator-requested temporary safety window. It is active only on 2026-08-22
-// in Europe/Brussels and therefore self-expires automatically at local midnight.
-// Only reads of the provider quota guard are overridden; all other Blob reads are unchanged.
 function temporaryQuotaGuard(pathname) {
   if (pathname !== QUOTA_GUARD_PATH || brusselsDate() !== TEMP_ZERO_QUOTA_DATE) return null;
   return {
@@ -27,8 +24,6 @@ function temporaryQuotaGuard(pathname) {
   };
 }
 
-// A linked Vercel Blob store exposes BLOB_STORE_ID and the SDK obtains the
-// deployment-scoped credential internally. Keep legacy-token compatibility too.
 export function storageReady() {
   return Boolean(process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN);
 }
@@ -53,16 +48,10 @@ async function readJsonInternal(pathname, fallback, useCache) {
 }
 
 export async function readJson(pathname, fallback = null) {
-  // Prediction-ledger rows are mutable safety-critical coordination state until
-  // kickoff/settlement. Never serve a stale CDN copy to bankroll or settlement
-  // consumers; other report reads keep the normal cached path.
   const useCache = !String(pathname || '').startsWith('argus/ledger/');
   return readJsonInternal(pathname, fallback, useCache);
 }
 
-// Safety-critical mutable state (heartbeats, quota guards, recovery state) must
-// observe the latest Blob version instead of the CDN copy. Keep ordinary reads
-// cached so ARGUS does not pay the latency/cost penalty everywhere.
 export async function readJsonFresh(pathname, fallback = null) {
   return readJsonInternal(pathname, fallback, false);
 }
@@ -78,15 +67,52 @@ export async function writeJson(pathname, value) {
   });
 }
 
-export async function listJson(prefix, limit = 100) {
-  if (!storageReady()) return [];
+// Cursor-safe listing for integrity-sensitive consumers. The previous helper made
+// one list() call and could silently expose a partial prefix when Blob pagination
+// kicked in. Callers now get explicit completeness metadata and can fail closed.
+export async function listJsonComplete(prefix, options = {}) {
+  const maxBlobs = Math.max(1, Math.min(10000, Number(options.maxBlobs) || 5000));
+  const pageSize = Math.max(1, Math.min(1000, Number(options.pageSize) || 1000));
+  if (!storageReady()) return { blobs: [], complete: false, hasMore: false, pages: 0, scanned: 0, error: 'STORAGE_UNAVAILABLE' };
+
+  const blobs = [];
+  let cursor;
+  let hasMore = false;
+  let pages = 0;
+  let scanned = 0;
   try {
-    const { blobs } = await list({ prefix, limit });
-    return (blobs || []).filter((b) => b.pathname.endsWith('.json'));
+    while (scanned < maxBlobs) {
+      const limit = Math.min(pageSize, maxBlobs - scanned);
+      const page = await list({ prefix, limit, ...(cursor ? { cursor } : {}) });
+      pages += 1;
+      const pageBlobs = Array.isArray(page?.blobs) ? page.blobs : [];
+      scanned += pageBlobs.length;
+      for (const blob of pageBlobs) if (String(blob?.pathname || '').endsWith('.json')) blobs.push(blob);
+      hasMore = Boolean(page?.hasMore);
+      if (!hasMore) break;
+      if (!page?.cursor || pageBlobs.length === 0) {
+        return { blobs, complete: false, hasMore: true, pages, scanned, error: 'PAGINATION_CURSOR_MISSING' };
+      }
+      cursor = page.cursor;
+    }
+    return {
+      blobs,
+      complete: !hasMore,
+      hasMore,
+      pages,
+      scanned,
+      capped: hasMore && scanned >= maxBlobs,
+      error: hasMore && scanned >= maxBlobs ? 'MAX_BLOBS_REACHED' : null
+    };
   } catch (error) {
     warnBlob('LIST_FAILED', prefix, error);
-    return [];
+    return { blobs, complete: false, hasMore, pages, scanned, error: String(error?.message || error || 'LIST_FAILED') };
   }
+}
+
+export async function listJson(prefix, limit = 100) {
+  const result = await listJsonComplete(prefix, { maxBlobs: Math.max(1, Number(limit) || 100) });
+  return result.blobs;
 }
 
 export async function readManyJson(blobs) {
