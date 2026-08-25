@@ -68,4 +68,4 @@ jobs:
             exit 1
           fi
 
-          echo "Trend integrity recovery complete."
+          echo "Trend integrity recovery complete on backfill v4."
