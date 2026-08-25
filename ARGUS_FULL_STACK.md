@@ -1,132 +1,127 @@
-# ARGUS OMNI — FULL STACK INTEGRATION
+# ARGUS OMNI — FULL STACK DOCTRINE
 
-Integrated operational stack for the ARGUS OMNI LIVE web application.
+ARGUS OMNI is an autonomous football intelligence and paper-betting research system.
 
 ## Priority hierarchy
 
 1. Data integrity and temporal integrity.
-2. ARGUS OMNI Master Knowledge.
-3. V5 Ensemble / residual market protocol.
-4. V7 Calibration & Governance.
-5. V8 Track Record & Self-Audit.
-6. V9 Command Center / routing.
-7. V10 Live Betting Intelligence.
+2. Canonical prediction ledger integrity.
+3. Market-aware probability estimation.
+4. Calibration and uncertainty governance.
+5. Decision quality and edge survival.
+6. Virtual bankroll execution.
+7. Settlement, error attribution and learning.
+8. User-facing simplicity and observability.
 
-If a lower layer conflicts with governance: **GOVERNANCE WINS**.
+If a lower layer conflicts with governance or integrity: **GOVERNANCE WINS**.
 
-## Master Knowledge
+## Core mission
 
-Mission: estimate calibrated probabilities, price markets, identify probability-price discrepancies, quantify uncertainty, reject fragile edges and measure performance from frozen forecasts.
+Estimate calibrated probabilities, price markets, identify probability-price discrepancies, quantify uncertainty, reject fragile edges, execute only eligible virtual bets, freeze every decision before settlement, measure outcomes and learn from real results.
 
 Core chain:
 
-OBSERVED DATA → MODEL → DECISION.
+**OBSERVED DATA → MARKET PRIOR → MODEL → DECISION → PAPER EXECUTION → SETTLEMENT → LEARNING**
 
-Decision pipeline:
+Detailed decision pipeline:
 
-MARKET PRIOR → SUPPORTED MODEL → RAW → SHRUNK → CONSERVATIVE → FAIR PRICE → EV → EDGE SURVIVAL → PRICE DISCIPLINE → ADVERSARIAL TEST → ACTION.
+**MARKET PRIOR → SUPPORTED MODEL → RAW → SHRUNK → CONSERVATIVE → FAIR PRICE → EV → EDGE SURVIVAL → PRICE DISCIPLINE → ADVERSARIAL TEST → GOVERNANCE → ACTION**
 
-## V5 — Ensemble / residual protocol
+## Market-first doctrine
 
-Current research constraint:
+For liquid markets, the no-vig market probability is the default prior. Historical and form models do not automatically override the market. Residual corrections require incremental evidence.
 
-- 1X2: MARKET-DOMINANT.
-- Main goals: MARKET-DOMINANT / RESEARCH.
-- Corners: RESEARCH.
-- Cards: RESEARCH-PROMISING only.
+Every actionable candidate must expose RAW, SHRUNK and CONSERVATIVE probability. Conservative EV must survive integrity and governance gates before ARGUS may classify a decision as actionable.
 
-The market no-vig price is the default prior for liquid markets. Historical/form models do not automatically override the market. Residual corrections require incremental evidence.
-
-Every candidate uses RAW, SHRUNK and CONSERVATIVE probability. Conservative EV must survive for an actionable VALUE classification.
-
-## V7 — Calibration & Governance
+## Calibration and governance
 
 Adjustments are classified as VALIDATED, HEURISTIC or UNAVAILABLE.
 
-The current website deployment uses fixed, global, market-dominant heuristic shrinkage because no deployment-specific replicated out-of-sample calibration registry is yet available.
+ARGUS must not manufacture confidence match by match. Calibration status and uncertainty status are explicit and may block stronger labels.
 
-Therefore:
+A high-confidence label is earned by evidence, not by UI demand.
 
-- Shrinkage Status: HEURISTIC / MARKET-DOMINANT.
-- Uncertainty Status: HEURISTIC / UNCALIBRATED.
-- VALUE may be labelled VALUE — UNCALIBRATED when conservative EV remains positive.
-- STRONG VALUE is blocked without validated/strongly supported engines.
-- PRIME is locked while calibration remains materially heuristic.
+## Canonical ledger
 
-No parameter is changed match-by-match to manufacture a signal.
+The Prediction Ledger is the source of truth for frozen forecasts and settled results.
 
-## V8 — Track Record & Self-Audit
-
-The web application includes a frozen local V8 record mechanism.
-
-A user may freeze a current actionable forecast before settlement. Frozen fields include:
-
-- version information;
-- timestamp;
-- match and competition;
-- market/selection/odds;
-- no-vig market probability;
-- RAW / SHRUNK / CONSERVATIVE probabilities;
-- fair odds;
-- minimum acceptable odds;
-- edge and EV;
-- confidence/data quality;
-- engine/shrinkage/uncertainty status;
-- classification;
-- models executed;
-- main risks.
+Learning, calibration, error attribution, reporting and proof dashboards must derive from the same canonical settled universe. Separate diagnostic stores must never silently replace the canonical ledger.
 
 Frozen forecast fields are never rewritten after the result.
 
-Audit philosophy:
+Audit doctrine:
 
-FREEZE FIRST. MEASURE SECOND. CALIBRATE THIRD. PROMOTE LAST.
+**FREEZE FIRST. MEASURE SECOND. CALIBRATE THIRD. PROMOTE LAST.**
 
-## V9 — Command Center
+## Autonomous paper betting
 
-The dashboard implements the V9 daily-scan philosophy:
+ARGUS may automatically execute a bet only inside the virtual bankroll after all required gates pass.
 
-- broad fixture discovery;
-- quota-aware pre-screening;
-- detailed analysis only when inputs exist;
-- market-first pricing;
-- supported engine gating;
-- RAW → SHRUNK → CONSERVATIVE;
-- Edge Survival;
-- price discipline;
-- governed shortlist.
+Real-money bet placement remains disabled.
 
-The website filters SIGNALS / PRIME / VALUE / WATCH / NO BET / ALL.
+A valid operational cycle is:
 
-## V10 — Live intelligence
+**DISCOVER → VALIDATE → PRICE → DECIDE → PAPER BET / NO BET → FREEZE → SETTLE → LEARN**
 
-When a match is in play, ARGUS switches to live match-state analysis. Live data can include current score, minute, process statistics and current odds. Historical/pre-match information becomes a prior rather than being reused unchanged.
+ARGUS is allowed to analyse everything and place zero virtual bets. **NO BET is a first-class action, not a failure.**
+
+Skipped, missed, voided, won and lost decisions remain visible for auditability.
+
+## Live intelligence
+
+When a match is in play, ARGUS switches to live match-state analysis. Historical and pre-match information become priors rather than static truth.
 
 Live doctrine:
 
-FRESH DATA FIRST.
-MARKET FIRST.
-INFORMATION SECOND.
-MODEL THIRD.
-PRICE FOURTH.
-ACTION LAST.
+**FRESH DATA FIRST. MARKET FIRST. INFORMATION SECOND. MODEL THIRD. PRICE FOURTH. ACTION LAST.**
 
-A material live state or price change requires recalculation.
+A material score, minute, red-card, process-statistic or price change requires recalculation. Stale LIVE flags must never survive beyond their plausible temporal window.
+
+## Learning and error attribution
+
+Learning must be evidence-based and ledger-aligned.
+
+A learning component may modify future decisions only when:
+
+- its input universe is canonical and complete enough;
+- the adjustment is traceable;
+- calibration evidence supports the direction and magnitude;
+- the change does not bypass governance;
+- the effect can be audited and reversed.
+
+Diagnostic GET endpoints are read-only. Observability must never mutate betting, bankroll or canonical prediction state.
+
+## User experience
+
+The internal system can be complex; the user interface should not be.
+
+The product should answer simple questions:
+
+- What should I bet today?
+- Is anything good enough?
+- Should ARGUS wait?
+- What virtual bets were actually played?
+- What happened afterward?
+- Is ARGUS learning?
+
+The interface must clearly distinguish PAPER / VIRTUAL activity from real-money wagering.
+
+## Cache and deployment integrity
+
+Production code, service-worker shell and visible UI must represent the same deployed philosophy.
+
+The PWA cache must be explicitly versioned and old ARGUS shell caches removed on activation so mobile devices do not remain on obsolete UI or behavior after a deployment.
 
 ## Current validation state
 
-The present deployment is an operational research system, not a validated profit engine.
+ARGUS is an operational research system, not a guaranteed-profit engine.
 
-Current PRIME Gate: **LOCKED**.
-
-Reason: the deployment does not yet possess replicated out-of-sample calibration evidence for its current 90-day historical layer, API-Football provider blend, live process model and current heuristic shrinkage policy across the competitions being scanned.
-
-This is intentional compliance with V5/V7/V8/V10 governance, not a missing feature.
+Validation, calibration, source freshness and temporal integrity take priority over signal quantity. Strong labels remain blocked whenever the required evidence is insufficient.
 
 ## Final doctrine
 
-**ANALYZE EVERYTHING. BET ALMOST NOTHING.**
-
 **SEE EVERYTHING. PRICE EVERYTHING. BET ONLY THE EDGE.**
 
-**CALIBRATION BEFORE CONFIDENCE. VALIDATION BEFORE PRIME.**
+**NO EDGE, NO BET.**
+
+**VIRTUAL MONEY. REAL RESULTS. LEARN FROM EVERYTHING.**
