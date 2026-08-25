@@ -27,13 +27,10 @@ function temporaryQuotaGuard(pathname) {
   };
 }
 
-// Vercel Blob accepts either the legacy long-lived token or the OIDC pair that
-// Vercel injects for a connected private store. Requiring the complete OIDC pair
-// prevents false-positive "ready" states that would otherwise fail inside the SDK.
+// A linked Vercel Blob store exposes BLOB_STORE_ID and the SDK obtains the
+// deployment-scoped credential internally. Keep legacy-token compatibility too.
 export function storageReady() {
-  const legacyReady = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
-  const oidcReady = Boolean(process.env.BLOB_STORE_ID && process.env.VERCEL_OIDC_TOKEN);
-  return legacyReady || oidcReady;
+  return Boolean(process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN);
 }
 
 function warnBlob(operation, pathname, error) {
