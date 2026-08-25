@@ -1,0 +1,241 @@
+{
+  "date": "2026-08-25",
+  "version": "ARGUS-RD-2026-08-25",
+  "safety": {
+    "production_changed": false,
+    "mode": "research_shadow_only",
+    "principle": "stability_first",
+    "real_money_automation": false
+  },
+  "current_argus_context": {
+    "observed_at": "2026-08-25",
+    "production_runtime_24h": {
+      "http_200": 10968,
+      "http_401": 140,
+      "http_207": 45,
+      "http_500": 2,
+      "http_503_observed": 0,
+      "runtime_error_groups": 3,
+      "notable_observations": [
+        "278 Node DEP0169 url.parse() deprecation/security warnings across many API routes",
+        "1 Vercel Blob credential error on /api/autonomous-supervisor",
+        "1 undefined authorization access error on /api/training-bets-cron"
+      ]
+    },
+    "interpretation": "These observations prioritize Control Plane failure truth and failure memory. They do not establish model-quality failure."
+  },
+  "execute_next": {
+    "id": "control-plane-failure-ledger",
+    "action": "Add a shadow/work-branch Control Plane failure ledger and reason taxonomy that records every cron/provider/storage/auth failure with request or run identity, persistence state, severity, recurrence count and recovery state before any further model-complexity work.",
+    "why_now": "Current production telemetry contains storage/auth failures and a broad recurring runtime warning, while Vercel provides requestId/invocationId/traceId and API-Football exposes authoritative quota headers. ARGUS needs one auditable truth surface so infrastructure failures cannot be mistaken for prediction failures or silently forgotten.",
+    "expected_benefit": "Faster root-cause isolation, fewer silent failures, explicit recurrence memory, safer cron learning, clearer operator UX, and better protection against corrupted or incomplete evidence.",
+    "evidence_level": "HIGH for observability primitives; MEDIUM for the exact ARGUS taxonomy until exercised prospectively.",
+    "required_data": [
+      "requestId/invocationId/traceId or cron run_id",
+      "deployment/environment/route",
+      "started_at/finished_at/persisted_at",
+      "HTTP status and structured reason_code",
+      "storage/auth/provider/quota state",
+      "provider quota headers when applicable",
+      "output digest/persistence acknowledgement",
+      "first_seen/last_seen/recurrence_count/recovery_state"
+    ],
+    "minimum_test": "Instrument one non-critical research cron plus read-only aggregation of existing runtime failures for 7 days; make no model, threshold, polling-frequency or production-state changes.",
+    "success_metrics": [
+      "100% of observed 5xx and cron execution failures receive a non-UNKNOWN reason code",
+      "100% of instrumented cron runs have CONFIGURED->DEPLOYED->INVOKED->SUCCEEDED/FAILED->PERSISTED/NOT_PERSISTED lineage",
+      "recurrences link to the same failure family rather than creating isolated anonymous events",
+      "instrumentation adds zero provider calls and no measurable decision mutation",
+      "operator can distinguish DATA/MODEL/PROVIDER/STORAGE/AUTH/CRON/UNKNOWN failure classes"
+    ],
+    "failure_condition": "Instrumentation changes runtime behavior materially, loses run identity, produces ambiguous reason codes on repeated failures, creates duplicate writes, or increases provider consumption.",
+    "proof_required": "Seven-day prospective ledger with sampled request/log cross-checks, persistence acknowledgements, duplicate detection and zero unexplained gaps.",
+    "rollback": "Disable the research ledger writer/aggregator and retain existing Watchtower/runtime logs; no model or prediction state is changed.",
+    "status": "READY_TO_EXECUTE"
+  },
+  "findings": [
+    {
+      "id": "structured-control-plane-truth",
+      "status": "KEEP",
+      "evidence_type": "OBSERVED_PLUS_DERIVED",
+      "source": [
+        "Vercel Runtime Logs documentation, updated 2026-02-05",
+        "Vercel structured application logging guidance, updated 2026-05-28",
+        "ARGUS production runtime observations on 2026-08-25"
+      ],
+      "evidence": "Vercel exposes requestId, traceId, invocationId, route, environment, deployment and status metadata; structured application logs are recommended for application-specific error IDs and causal fields. ARGUS currently has recurring and isolated runtime failures that are not yet centralized into durable failure memory.",
+      "why_it_matters": "A forecasting system cannot be professionally audited if data/model failures and infrastructure failures share the same vague unhealthy state or disappear after logs expire.",
+      "workstream": ["Control Plane", "observability", "failure memory", "operator clarity", "MLOps"],
+      "smallest_safe_experiment": "Create a read-only failure aggregator plus append-only research ledger for one non-critical cron and existing 5xx events.",
+      "required_evidence": "7 prospective days, 100% reason classification for instrumented failures, sampled one-to-one correlation with Vercel request/run identifiers.",
+      "failure_condition": "Unknown reasons remain common, duplicate records proliferate, or instrumentation changes execution semantics.",
+      "rollback": "Remove research ledger instrumentation and fall back to existing runtime logs/Watchtower."
+    },
+    {
+      "id": "provider-header-quota-control",
+      "status": "KEEP",
+      "evidence_type": "OBSERVED",
+      "source": [
+        "API-FOOTBALL HOW RATELIMIT WORKS, 2026-06-12",
+        "API-SPORTS quota optimization guidance, 2026"
+      ],
+      "evidence": "API-FOOTBALL Pro is limited to 7,500 requests/day and 300/minute (5/sec). Each response reports daily and minute limit/remaining headers. The provider recommends smoothing, caching, avoiding duplicate calls and progressive backoff after 429 responses.",
+      "why_it_matters": "ARGUS should manage live data from provider truth rather than estimates, preventing false quota halts, bursts, wasted calls and unnecessary subscription upgrades.",
+      "workstream": ["API efficiency", "live data", "Control Plane", "data availability"],
+      "smallest_safe_experiment": "Persist quota headers and internal-ledger values on existing provider responses only; add no calls and do not increase polling.",
+      "required_evidence": "At least 1,000 responses across 3 daily reset boundaries, with reconciled header/internal counters and no increased 429 rate.",
+      "failure_condition": "Counters cannot be reconciled beyond explainable in-flight concurrency, or logging adds provider calls/latency that changes behavior.",
+      "rollback": "Remove quota telemetry while retaining current guardrails and polling schedule."
+    },
+    {
+      "id": "selected-case-calibration",
+      "status": "KEEP",
+      "evidence_type": "OBSERVED_PLUS_DERIVED",
+      "source": [
+        "scikit-learn Probability Calibration documentation 1.9",
+        "scikit-learn model evaluation documentation 1.9"
+      ],
+      "evidence": "Reliability diagrams directly compare predicted probabilities with observed frequencies. Proper scores such as Brier and log-loss mix calibration/reliability with resolution and uncertainty, so a lower Brier score alone does not prove better calibration. Calibration must use data independent of model fitting.",
+      "why_it_matters": "ARGUS is selective. Global calibration can hide overconfidence specifically among PRIME/VALUE decisions, which is the subset operators actually care about.",
+      "workstream": ["calibration", "paper betting", "decision readiness", "operator trust"],
+      "smallest_safe_experiment": "Without changing thresholds, report reliability bins, Brier, log-loss, calibration error and sample count for ALL, ACCEPTED, PRIME, VALUE and NO_BET cohorts on temporally held-out data.",
+      "required_evidence": "Start trend reading at >=200 settled accepted selections; prefer >=500 with multiple walk-forward windows and league/market stability before strong conclusions.",
+      "failure_condition": "Accepted cohorts are materially less reliable than the universe, bins are too sparse, or conclusions reverse across temporal windows.",
+      "rollback": "Reporting-only; remove cohort report with no decision-state effect."
+    },
+    {
+      "id": "empirical-risk-coverage",
+      "status": "KEEP",
+      "evidence_type": "OBSERVED_PLUS_DERIVED",
+      "source": [
+        "Bai & Jin, Conformal Selective Prediction with General Risk Control, arXiv 2026-03-25",
+        "Bao et al., CAP: Calibration after Adaptive Pick, JMLR 2025"
+      ],
+      "evidence": "Modern selective-prediction work evaluates risk on the subset a model chooses to trust and highlights post-selection calibration/coverage issues. Online adaptive selection requires special care because selection changes the inferential target.",
+      "why_it_matters": "ARGUS NO BET should be judged by whether risk actually falls as coverage decreases, not by the intuitive appeal of a confidence threshold.",
+      "workstream": ["NO BET Optimizer", "selective prediction", "uncertainty", "paper betting"],
+      "smallest_safe_experiment": "Generate empirical risk-versus-coverage curves from frozen historical decisions using current readiness/confidence ranking; do not introduce conformal thresholds yet.",
+      "required_evidence": "Several hundred settled independent matches per broad market, repeated across multiple forward temporal windows; confidence intervals clustered by match where live states repeat.",
+      "failure_condition": "Risk does not decrease consistently as coverage falls, or apparent gains vanish under forward splits/clustered uncertainty.",
+      "rollback": "Discard the candidate ranking interpretation; existing NO BET logic stays unchanged."
+    },
+    {
+      "id": "conformal-threshold-transfer",
+      "status": "WATCH",
+      "evidence_type": "CANDIDATE_HYPOTHESIS",
+      "source": [
+        "Bai & Jin 2026 selective conformal risk control",
+        "Xu, Guo & Wei 2025/2026 Selective Conformal Risk Control"
+      ],
+      "evidence": "Recent methods offer finite-sample or PAC-style risk/coverage guarantees under specific assumptions, but the published demonstrations are not football-betting validations and exchangeability/shift assumptions are nontrivial in evolving leagues and markets.",
+      "why_it_matters": "A formal abstention layer could eventually make ARGUS trust gates more principled, but importing guarantees without verifying assumptions would create false certainty.",
+      "workstream": ["NO BET Optimizer", "uncertainty", "research governance"],
+      "smallest_safe_experiment": "Shadow-only retrospective replication after empirical risk/coverage is stable; compare conformal selection with simple confidence quantiles on forward windows.",
+      "required_evidence": "Stable empirical risk/coverage first, then multiple temporally separated calibration/test windows with explicit shift diagnostics and sufficient independent matches.",
+      "failure_condition": "Coverage/risk guarantees break materially out-of-time, selection becomes unstable, or simple baselines perform equally well with less complexity.",
+      "rollback": "Do not integrate conformal thresholds; retain empirical abstention diagnostics only."
+    },
+    {
+      "id": "market-anchored-live-shadow",
+      "status": "WATCH",
+      "evidence_type": "OBSERVED",
+      "source": "Clegg, Song & Cartlidge, A market-calibrated accelerated failure time model for in-play football forecasting, arXiv 2026-05-15",
+      "evidence": "Across 140 EPL matches, calibrating pre-match strength to Betfair 1X2 and over/under prices was reported as the dominant accuracy driver; adding time-varying post-shot xG supported in-play updates. The study is small and league-specific, and its reported betting returns are not independent validation.",
+      "why_it_matters": "ARGUS should test a simple market-anchored live challenger before investing in a much larger live architecture. The market is a powerful baseline that any claimed edge must beat or complement.",
+      "workstream": ["live modelling", "odds interpretation", "baseline discipline"],
+      "smallest_safe_experiment": "Shadow challenger initialized from frozen, de-vigged kickoff 1X2 + O/U probabilities, updated only by already timestamp-safe live features; compare with market-only and current ARGUS.",
+      "required_evidence": ">=1,000 independent matches across several leagues and forward windows, evaluated by clustered Brier/log-loss, calibration and additive improvement over market-only.",
+      "failure_condition": "Gain disappears outside EPL, model only mirrors market, or no reproducible OOS improvement remains after clustering by match.",
+      "rollback": "Delete challenger outputs; production live logic remains untouched."
+    },
+    {
+      "id": "exact-score-dependence-benchmark",
+      "status": "WATCH",
+      "evidence_type": "OBSERVED",
+      "source": [
+        "Dixon & Coles, JRSS C 1997",
+        "Petretta, Schiavon & Diquigiovanni, Statistical Modelling 2025"
+      ],
+      "evidence": "Dixon-Coles modifies low-score probabilities where independent Poisson assumptions are weak. More recent peer-reviewed work across five European leagues argues that standard dependence assumptions are not universally justified and reports gains from richer conditional dependence structures.",
+      "why_it_matters": "Exact-score probabilities are sensitive to dependence assumptions. ARGUS should benchmark simple independent Poisson, Dixon-Coles and one richer dependence challenger rather than assume a single score model is universally correct.",
+      "workstream": ["exact score", "score distribution", "model validation"],
+      "smallest_safe_experiment": "Replay-only three-model comparison on frozen historical data; score the entire probability matrix, not just the modal exact score.",
+      "required_evidence": ">=2,000 held-out matches across multiple leagues/seasons and several rolling-origin windows; evaluate full-distribution log-loss, ranked probability/Brier-style scores, calibration and 1X2/O-U coherence.",
+      "failure_condition": "Richer dependence does not improve OOS probabilistic scores consistently, adds unstable parameters, or violates coherence with derived markets.",
+      "rollback": "Keep the simplest validated score model; discard challenger parameters/results."
+    },
+    {
+      "id": "dynamic-event-process-live",
+      "status": "WATCH",
+      "evidence_type": "OBSERVED",
+      "source": "Maia et al., Stochastic modelling of football matches using dynamic regressors, International Journal of Forecasting 2026",
+      "evidence": "Peer-reviewed work models goals and other football events as Cox processes with dynamic regressors and explicitly models stoppage-time lengths, illustrated on eight seasons of Brazilian Serie A data.",
+      "why_it_matters": "This supports the hypothesis that event timing and stoppage time can matter in live probability updates, but ARGUS should not adopt the framework until event feeds are complete and point-in-time safe.",
+      "workstream": ["live modelling", "event state", "temporal integrity"],
+      "smallest_safe_experiment": "Do not build the model yet. First audit whether ARGUS has sufficiently complete, timestamped event and stoppage-time data to reproduce a simple hazard baseline.",
+      "required_evidence": "Documented coverage/latency audit plus a large replay set with event timestamps known to precede each decision state.",
+      "failure_condition": "Event timestamps are incomplete/late, coverage differs materially by league, or a simpler elapsed-time/score-state baseline performs equally well.",
+      "rollback": "No model integration; retain as research candidate only."
+    },
+    {
+      "id": "copy-small-sample-profit-or-guarantees",
+      "status": "REJECT",
+      "evidence_type": "DERIVED",
+      "source": "Cross-source transferability assessment",
+      "evidence": "Reported ROI from small live-football studies and formal guarantees from non-football selective-prediction settings do not establish deployable ARGUS edge. Different markets, latency, selection, dependence and temporal shift can invalidate direct transfer.",
+      "why_it_matters": "Copying attractive claims is a direct route to overconfidence and overfitting.",
+      "workstream": ["research governance", "failure analysis", "operator trust"],
+      "smallest_safe_experiment": "None in production. Claims may only seed pre-registered shadow replications.",
+      "required_evidence": "Independent ARGUS-specific multi-window OOS replication with realistic timing, costs, market baseline and sufficient independent matches.",
+      "failure_condition": "Any proposal relies mainly on published ROI, classification accuracy, or nominal coverage without ARGUS-specific forward validation.",
+      "rollback": "Do not integrate."
+    }
+  ],
+  "watch": [
+    "Formal conformal/selective thresholds only after empirical risk-coverage stability is demonstrated.",
+    "Dynamic event-process live modelling only after timestamp/coverage audit proves event data is point-in-time safe."
+  ],
+  "do_not_do": [
+    "Do not increase PRIME confidence or loosen NO BET from this research dossier.",
+    "Do not treat Brier/log-loss alone as proof of calibration; inspect reliability directly.",
+    "Do not increase API polling or upgrade API-Football to hide quota/control defects.",
+    "Do not treat configured cron state as proof of successful persisted execution.",
+    "Do not auto-fix the widespread url.parse() warning until its dependency/origin is identified and a replacement is regression-tested.",
+    "Do not copy reported live ROI or formal conformal guarantees without ARGUS-specific OOS replication.",
+    "Do not add a complex exact-score or live model before simple baselines are beaten consistently.",
+    "Do not modify production from this dossier."
+  ],
+  "proof_required": [
+    "Point-in-time immutable predictions and feature/odds cutoffs",
+    "Independent rolling/walk-forward test windows",
+    "Selected-case reliability diagrams plus proper scoring rules",
+    "Risk-versus-coverage evidence for abstention",
+    "No-vig market baseline comparison",
+    "Clustered evaluation by independent match for repeated live states",
+    "Settlement completeness and reproducibility",
+    "Control Plane execution/persistence lineage and durable failure memory",
+    "Rollback path for every experimental module"
+  ],
+  "data_to_acquire_next": [
+    "Structured Control Plane failure events with run/request identity",
+    "Provider quota headers on existing API responses",
+    "Frozen kickoff and closing 1X2/O-U odds with timestamp and bookmaker/exchange source",
+    "Settled accepted-selection cohorts for selected-case calibration",
+    "Complete point-in-time event/stoppage timestamps before any richer live model"
+  ],
+  "next_research_question": "After Control Plane failure truth is durable, does ARGUS confidence/readiness ranking produce a stable monotonic risk-coverage curve on independent forward match windows, and where does that curve break by market or league?",
+  "source_urls": [
+    "https://vercel.com/docs/logs/runtime",
+    "https://vercel.com/kb/guide/add-structured-application-logs-to-vercel-functions",
+    "https://www.api-football.com/news/post/how-ratelimit-works",
+    "https://www.api-football.com/news/post/how-to-optimize-api-sports-calls-and-quota-usage",
+    "https://scikit-learn.org/stable/modules/calibration.html",
+    "https://scikit-learn.org/stable/modules/model_evaluation.html",
+    "https://arxiv.org/abs/2603.24704",
+    "https://www.jmlr.org/papers/v26/24-0452.html",
+    "https://arxiv.org/abs/2605.16066",
+    "https://doi.org/10.1111/1467-9876.00065",
+    "https://doi.org/10.1177/1471082X241238802",
+    "https://doi.org/10.1016/j.ijforecast.2025.10.006"
+  ]
+}
