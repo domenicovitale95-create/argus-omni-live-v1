@@ -27,21 +27,32 @@ function temporaryQuotaGuard(pathname) {
   };
 }
 
-// New Vercel Blob stores use OIDC/system credentials rather than a
-// long-lived BLOB_READ_WRITE_TOKEN. BLOB_STORE_ID is injected when the
-// private store is linked to the project. Keep legacy-token compatibility.
+// Vercel Blob accepts either the legacy long-lived token or the OIDC pair that
+// Vercel injects for a connected private store. Requiring the complete OIDC pair
+// prevents false-positive "ready" states that would otherwise fail inside the SDK.
 export function storageReady() {
-  return Boolean(process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN);
+  const legacyReady = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  const oidcReady = Boolean(process.env.BLOB_STORE_ID && process.env.VERCEL_OIDC_TOKEN);
+  return legacyReady || oidcReady;
+}
+
+function warnBlob(operation, pathname, error) {
+  console.warn('[ARGUS_BLOB]', operation, pathname || '-', String(error?.message || error || 'unknown error'));
 }
 
 async function readJsonInternal(pathname, fallback, useCache) {
   const forced = temporaryQuotaGuard(pathname);
   if (forced) return forced;
   if (!storageReady()) return fallback;
-  const result = await get(pathname, { access: ACCESS, useCache });
-  if (!result || result.statusCode !== 200 || !result.stream) return fallback;
-  const text = await new Response(result.stream).text();
-  try { return JSON.parse(text); } catch (_) { return fallback; }
+  try {
+    const result = await get(pathname, { access: ACCESS, useCache });
+    if (!result || result.statusCode !== 200 || !result.stream) return fallback;
+    const text = await new Response(result.stream).text();
+    try { return JSON.parse(text); } catch (_) { return fallback; }
+  } catch (error) {
+    warnBlob('READ_FAILED', pathname, error);
+    return fallback;
+  }
 }
 
 export async function readJson(pathname, fallback = null) {
@@ -60,7 +71,7 @@ export async function readJsonFresh(pathname, fallback = null) {
 }
 
 export async function writeJson(pathname, value) {
-  if (!storageReady()) throw new Error('Vercel Blob storage is not linked to this project');
+  if (!storageReady()) throw new Error('Vercel Blob storage credentials are unavailable');
   return put(pathname, JSON.stringify(value, null, 2), {
     access: ACCESS,
     addRandomSuffix: false,
@@ -72,8 +83,13 @@ export async function writeJson(pathname, value) {
 
 export async function listJson(prefix, limit = 100) {
   if (!storageReady()) return [];
-  const { blobs } = await list({ prefix, limit });
-  return (blobs || []).filter((b) => b.pathname.endsWith('.json'));
+  try {
+    const { blobs } = await list({ prefix, limit });
+    return (blobs || []).filter((b) => b.pathname.endsWith('.json'));
+  } catch (error) {
+    warnBlob('LIST_FAILED', prefix, error);
+    return [];
+  }
 }
 
 export async function readManyJson(blobs) {
