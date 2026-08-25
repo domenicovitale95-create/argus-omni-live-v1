@@ -1,11 +1,15 @@
 import legacyHandler from './prediction-ledger-v4.js';
-import { readJsonFresh, storageReady } from './_report-store.js';
+import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
 
+const TZ='Europe/Brussels';
 const PLAN_PATH='argus/autopilot/decision-plan.json';
 const MAX_ATTESTATION_AGE_MIN=12;
 
 function modeOf(req){return String(req.query?.mode||req.body?.mode||'capture').toLowerCase()}
 function ms(v){const t=new Date(v||0).getTime();return Number.isFinite(t)&&t>0?t:null}
+function brusselsDate(value=new Date()){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(value).map(x=>[x.type,x.value]));return`${p.year}-${p.month}-${p.day}`}
+function addDays(s,d){const x=new Date(`${s}T12:00:00Z`);x.setUTCDate(x.getUTCDate()+d);return x.toISOString().slice(0,10)}
+const ledgerPath=d=>`argus/ledger/${d}.json`;
 function attestation(plan,cycleAfter){
   const generatedAt=plan?.generatedAt||null,brain=plan?.centralBrain||{},appliedAt=brain?.appliedAt||null;
   const g=ms(generatedAt),a=ms(appliedAt),after=cycleAfter?ms(cycleAfter):null,now=Date.now();
@@ -20,6 +24,18 @@ function attestation(plan,cycleAfter){
   if(a&&((now-a)/60000)>MAX_ATTESTATION_AGE_MIN)reasons.push('CENTRAL_BRAIN_ATTESTATION_STALE');
   if(String(brain?.systemMode||'').toUpperCase()==='FAIL_CLOSED')reasons.push('CENTRAL_BRAIN_FAIL_CLOSED');
   return{ok:reasons.length===0,cycleId,generatedAt,appliedAt,cycleAfter:cycleAfter||null,ageMinutes:a?Number(((now-a)/60000).toFixed(2)):null,finalAuthority:brain?.finalAuthority===true,systemMode:brain?.systemMode||null,reasons};
+}
+async function bindTouchedRowsToCycle(capturedAt,cycleId){
+  if(!capturedAt||!cycleId)return 0;
+  const today=brusselsDate(),target=String(capturedAt),cycle=String(cycleId);let tagged=0;
+  for(let d=-2;d<=4;d++){
+    const date=addDays(today,d),path=ledgerPath(date),book=await readJsonFresh(path,null);
+    if(!book?.records?.length)continue;
+    let changed=false;
+    for(const rec of book.records){if(String(rec?.lastSeenAt||'')!==target)continue;if(String(rec?.decisionCycleId||'')!==cycle){rec.decisionCycleId=cycle;changed=true}tagged++}
+    if(changed){book.updatedAt=new Date().toISOString();await writeJson(path,book)}
+  }
+  return tagged;
 }
 
 export default async function handler(req,res){
@@ -37,5 +53,6 @@ export default async function handler(req,res){
   await legacyHandler(req,proxy);
   const body=captureRes.body&&typeof captureRes.body==='object'?captureRes.body:{};
   const ok=captureRes.statusCode>=200&&captureRes.statusCode<300&&!body.error;
-  return res.status(captureRes.statusCode).json({...body,version:'PREDICTION-LEDGER-5',ok,attestation:proof,decisionCycleId:proof.cycleId,policy:{...(body.policy||{}),failClosed:true,currentCentralBrainCycleRequired:true,freshPlanReadRequired:true,cycleBoundToCronStart:Boolean(proof.cycleAfter),automaticWagering:false}});
+  const cycleTaggedRecords=ok?await bindTouchedRowsToCycle(body.generatedAt,proof.cycleId):0;
+  return res.status(captureRes.statusCode).json({...body,version:'PREDICTION-LEDGER-5',ok,attestation:proof,decisionCycleId:proof.cycleId,cycleTaggedRecords,policy:{...(body.policy||{}),failClosed:true,currentCentralBrainCycleRequired:true,freshPlanReadRequired:true,explicitDecisionCycleMembership:true,cycleBoundToCronStart:Boolean(proof.cycleAfter),automaticWagering:false}});
 }

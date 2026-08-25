@@ -45,7 +45,11 @@ async function readJsonInternal(pathname, fallback, useCache) {
 }
 
 export async function readJson(pathname, fallback = null) {
-  return readJsonInternal(pathname, fallback, true);
+  // Prediction-ledger rows are mutable safety-critical coordination state until
+  // kickoff/settlement. Never serve a stale CDN copy to bankroll or settlement
+  // consumers; other report reads keep the normal cached path.
+  const useCache = !String(pathname || '').startsWith('argus/ledger/');
+  return readJsonInternal(pathname, fallback, useCache);
 }
 
 // Safety-critical mutable state (heartbeats, quota guards, recovery state) must
