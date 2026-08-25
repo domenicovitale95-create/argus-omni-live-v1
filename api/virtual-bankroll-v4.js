@@ -1,5 +1,5 @@
 import legacyHandler from './virtual-bankroll-v3.js';
-import { readJson, storageReady } from './_report-store.js';
+import { readJson, readJsonFresh, storageReady } from './_report-store.js';
 
 const TZ='Europe/Brussels';
 const PLAN_PATH='argus/autopilot/decision-plan.json';
@@ -33,11 +33,11 @@ export default async function handler(req,res){
   if(req.method!=='GET'&&req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
   if(!storageReady())return res.status(503).json({version:'VIRTUAL-BANKROLL-4',ok:false,status:'BLOCKED',reason:'STORAGE_UNAVAILABLE'});
-  const now=Date.now(),plan=await readJson(PLAN_PATH,{generatedAt:null,plan:[],centralBrain:null}),proof=planProof(plan,now),fresh=await freshLedgerRows(now);
-  if(fresh.length&&!proof.ok)return res.status(200).json({version:'VIRTUAL-BANKROLL-4',ok:false,status:'BLOCKED',reason:'CURRENT_CYCLE_ATTESTATION_FAILED',capturedOfficial:0,capturedLearning:0,settled:0,providerCalls:0,attestation:proof,freshLedgerRecords:fresh.length,policy:{failClosed:true,currentDecisionCycleRequired:true,automaticRealBetPlacement:false,noRealMoney:true}});
+  const now=Date.now(),plan=await readJsonFresh(PLAN_PATH,{generatedAt:null,plan:[],centralBrain:null}),proof=planProof(plan,now),fresh=await freshLedgerRows(now);
+  if(fresh.length&&!proof.ok)return res.status(200).json({version:'VIRTUAL-BANKROLL-4',ok:false,status:'BLOCKED',reason:'CURRENT_CYCLE_ATTESTATION_FAILED',capturedOfficial:0,capturedLearning:0,settled:0,providerCalls:0,attestation:proof,freshLedgerRecords:fresh.length,policy:{failClosed:true,currentDecisionCycleRequired:true,freshPlanReadRequired:true,automaticRealBetPlacement:false,noRealMoney:true}});
   const current=fresh.filter(rec=>String(rec?.decisionCycleId||'')===String(proof.decisionCycleId||''));
   const conflicting=fresh.filter(rec=>rec?.decisionCycleId&&proof.decisionCycleId&&String(rec.decisionCycleId)!==String(proof.decisionCycleId)&&observedMs(rec)>=proof.appliedAtMs);
-  if(conflicting.length)return res.status(200).json({version:'VIRTUAL-BANKROLL-4',ok:false,status:'BLOCKED',reason:'CONFLICTING_LEDGER_CYCLE_MEMBERSHIP',capturedOfficial:0,capturedLearning:0,settled:0,providerCalls:0,attestation:proof,freshLedgerRecords:fresh.length,currentCycleLedgerRecords:current.length,conflictingRecords:conflicting.map(x=>({id:x.id,fixtureId:x.fixtureId,publishedAt:x.publishedAt,lastSeenAt:x.lastSeenAt||null,decisionCycleId:x.decisionCycleId||null})).slice(0,20),policy:{failClosed:true,explicitDecisionCycleMembership:true,noNewVirtualPositionOnCycleConflict:true,automaticRealBetPlacement:false,noRealMoney:true}});
+  if(conflicting.length)return res.status(200).json({version:'VIRTUAL-BANKROLL-4',ok:false,status:'BLOCKED',reason:'CONFLICTING_LEDGER_CYCLE_MEMBERSHIP',capturedOfficial:0,capturedLearning:0,settled:0,providerCalls:0,attestation:proof,freshLedgerRecords:fresh.length,currentCycleLedgerRecords:current.length,conflictingRecords:conflicting.map(x=>({id:x.id,fixtureId:x.fixtureId,publishedAt:x.publishedAt,lastSeenAt:x.lastSeenAt||null,decisionCycleId:x.decisionCycleId||null})).slice(0,20),policy:{failClosed:true,explicitDecisionCycleMembership:true,noNewVirtualPositionOnCycleConflict:true,freshPlanReadRequired:true,automaticRealBetPlacement:false,noRealMoney:true}});
   const captureRes={statusCode:200,headers:{},body:null};
   const proxy={setHeader:(k,v)=>{captureRes.headers[String(k).toLowerCase()]=v;return proxy},status:c=>{captureRes.statusCode=Number(c)||200;return proxy},json:b=>{captureRes.body=b;return b},send:b=>{captureRes.body=b;return b},end:b=>{if(b!==undefined)captureRes.body=b;return b}};
   const cycleReq={...req,method:req.method,headers:req.headers,query:{...(req.query||{}),decisionCycleId:proof.ok?proof.decisionCycleId:'__NO_ATTESTED_CYCLE__'}};
@@ -45,5 +45,5 @@ export default async function handler(req,res){
   const body=captureRes.body&&typeof captureRes.body==='object'?captureRes.body:{};
   const previous=fresh.filter(rec=>rec?.decisionCycleId&&proof.decisionCycleId&&String(rec.decisionCycleId)!==String(proof.decisionCycleId)&&observedMs(rec)<proof.appliedAtMs);
   const untagged=fresh.filter(rec=>!rec?.decisionCycleId);
-  return res.status(captureRes.statusCode).json({...body,version:'VIRTUAL-BANKROLL-4',attestation:proof,freshLedgerRecords:fresh.length,currentCycleLedgerRecords:current.length,ignoredPreviousCycleRecords:previous.length,ignoredUntaggedLegacyRecords:untagged.length,cycleAmbiguity:false,decisionCycleId:proof.decisionCycleId,policy:{...(body.policy||{}),failClosedOnCycleConflict:true,currentCentralBrainCycleRequiredForNewEntries:true,explicitDecisionCycleMembership:true,previousCycleRowsIgnoredNotBlocked:true,legacyUntaggedRowsCannotCreateNewPositions:true,settlementRemainsIndependentOfEntryCycle:true,automaticRealBetPlacement:false,noRealMoney:true}});
+  return res.status(captureRes.statusCode).json({...body,version:'VIRTUAL-BANKROLL-4',attestation:proof,freshLedgerRecords:fresh.length,currentCycleLedgerRecords:current.length,ignoredPreviousCycleRecords:previous.length,ignoredUntaggedLegacyRecords:untagged.length,cycleAmbiguity:false,decisionCycleId:proof.decisionCycleId,policy:{...(body.policy||{}),failClosedOnCycleConflict:true,currentCentralBrainCycleRequiredForNewEntries:true,explicitDecisionCycleMembership:true,freshPlanReadRequired:true,previousCycleRowsIgnoredNotBlocked:true,legacyUntaggedRowsCannotCreateNewPositions:true,settlementRemainsIndependentOfEntryCycle:true,automaticRealBetPlacement:false,noRealMoney:true}});
 }
