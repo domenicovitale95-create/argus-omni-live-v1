@@ -1,64 +1,74 @@
 # ARGUS LATEST RESEARCH HANDOFF
 
-DATE: 2026-08-23
+DATE: 2026-08-25
 
-EXECUTE NEXT: Add shadow-only provider-header quota reconciliation and explicit 503 reason classification before further live polling/model work.
+EXECUTE NEXT: Build a shadow/work-branch Control Plane failure ledger and reason taxonomy that records every cron/provider/storage/auth failure with run/request identity, persistence state, severity, recurrence count and recovery state.
 
-WHY NOW: Production observability shows repeated `/api/live` 503s, while API-Football documents authoritative daily/minute quota headers and a 00:00 UTC daily reset. Data availability and Control Plane truth are prerequisites for trustworthy live learning.
+WHY NOW: Production telemetry currently shows a Vercel Blob credential failure, a cron authorization failure and 278 recurring `url.parse()` warnings across many routes. Vercel exposes requestId/invocationId/traceId/deployment metadata and recommends structured application logs; API-Football exposes authoritative quota headers. ARGUS needs one durable truth surface before more model complexity.
 
-EXPECTED BENEFIT: Fewer false halts, explainable quota failures, safer API use, and higher evidence throughput without upgrading the subscription.
+EXPECTED BENEFIT: Faster root-cause isolation, durable failure memory, safer cron learning, fewer silent failures, clearer operator UX and better separation of infrastructure failure from model failure.
 
-EVIDENCE LEVEL: HIGH for provider quota semantics; MEDIUM for ARGUS causal diagnosis until the 503s are classified.
+EVIDENCE LEVEL: HIGH for the observability primitives; MEDIUM for the exact ARGUS taxonomy until prospectively exercised.
 
 REQUIRED DATA:
-- provider quota headers on each call
-- endpoint and request timestamp
-- internal quota ledger value
-- structured 503/429 reason
-- Vercel request/deployment ID
+- requestId / invocationId / traceId or cron run_id
+- environment / deployment / route
+- started_at / finished_at / persisted_at
+- HTTP status + structured reason_code
+- storage/auth/provider/quota state
+- provider quota headers when applicable
+- persistence acknowledgement/output digest
+- first_seen / last_seen / recurrence_count / recovery_state
 
-MINIMUM TEST: Instrumentation only across 3 UTC reset boundaries and at least 1,000 provider responses, with no increase in polling.
+MINIMUM TEST: Instrument one non-critical research cron plus read-only aggregation of existing runtime failures for 7 days. No model, threshold, polling-frequency or production-state change.
 
 SUCCESS METRICS:
-- zero unexplained false daily quota halts
-- every quota-related 503 receives an explicit reason
-- header-versus-ledger differences are explainable by concurrency/in-flight requests
-- no increase in 429 rate or requests/day
+- 100% of observed 5xx and instrumented cron failures receive a non-UNKNOWN reason code
+- complete CONFIGURED -> DEPLOYED -> INVOKED -> SUCCEEDED/FAILED -> PERSISTED/NOT_PERSISTED lineage
+- recurring failures are linked to stable failure families
+- zero additional provider calls
+- operator can separate DATA / MODEL / PROVIDER / STORAGE / AUTH / CRON / UNKNOWN failure classes
 
-FAILURE CONDITION: Reconciliation remains materially inconsistent or instrumentation changes provider consumption/latency.
+FAILURE CONDITION: Instrumentation changes runtime behavior, loses run identity, creates duplicate writes, keeps producing ambiguous reason codes, or increases provider consumption.
 
-PROOF REQUIRED: Timestamped header snapshots plus internal ledger records proving correct behavior before and after UTC reset and near quota limits.
+PROOF REQUIRED: Seven prospective days with sampled request/log cross-checks, persistence acknowledgements, duplicate detection and zero unexplained gaps.
 
 RISK / LEAKAGE RISKS:
-- concurrent requests can temporarily desynchronize counters
-- never infer provider quota day from local Brussels time
-- do not retry 429/503 in tight loops
+- do not let failure instrumentation mutate prediction/model state
+- do not infer provider quota from local time or internal estimates when response headers exist
+- do not treat recurring warnings as root cause before dependency/origin is identified
+- live states from the same match are not independent samples
 
-ROLLBACK: Remove reconciliation telemetry and retain the current quota guard and polling schedule.
+ROLLBACK: Disable the research failure-ledger writer/aggregator and retain existing Watchtower/runtime logs. No model or prediction state changes.
 
 WATCH:
-1. Production cron execution-evidence ledger: CONFIGURED -> DEPLOYED -> INVOKED -> SUCCEEDED -> PERSISTED.
-2. Market-anchored live intensity challenger using frozen no-vig 1X2 + O/U kickoff prices.
+1. Formal conformal/selective thresholds only after empirical ARGUS risk-vs-coverage is stable on forward windows.
+2. Dynamic event-process live modelling only after point-in-time event/stoppage coverage is proven adequate.
 
 DO NOT DO:
-- do not upgrade API-Football merely to hide quota-control defects
-- do not increase live polling until 503 causes are known
-- do not deploy market-anchored live modelling from a 140-match research result
-- do not auto-upgrade dependencies for `url.parse()` warnings before origin is proven
-- do not promote exact-score dependence without walk-forward evidence
+- do not increase PRIME confidence or loosen NO BET
+- do not treat Brier/log-loss alone as proof of calibration
+- do not increase polling or upgrade API-Football to hide Control Plane defects
+- do not treat cron configuration as execution proof
+- do not auto-fix `url.parse()` warnings before identifying their origin and regression-testing the replacement
+- do not copy published live ROI or conformal guarantees into ARGUS without independent OOS replication
+- do not add a larger exact-score/live model before simple baselines are beaten consistently
+- do not modify production from this dossier
 
 DATA TO ACQUIRE NEXT:
-- quota headers on every provider response
-- structured 503/429 causes
-- closing/no-vig 1X2 and O/U snapshots
-- independent held-out scoreline histories
+- structured failure events with run/request identity
+- provider quota headers on existing responses
+- frozen kickoff + closing 1X2/O-U odds with timestamps/source
+- settled accepted-selection cohorts for selected-case calibration
+- complete point-in-time event/stoppage timestamps before richer live models
 
-NEXT RESEARCH QUESTION: Once quota and Control Plane truth are stable, does market anchoring improve live probability calibration out-of-time versus the current simple baseline?
+NEXT RESEARCH QUESTION: Once Control Plane failure truth is durable, does ARGUS confidence/readiness ranking produce a stable monotonic risk-coverage curve on independent forward match windows, and where does it break by market or league?
 
 BLOCKERS:
-- 503 causes not yet fully classified
-- research branch is diverged from main and must not be mistaken for production
+- failure taxonomy not yet prospectively validated
+- `url.parse()` origin is not yet identified
+- richer live-event modelling remains blocked by point-in-time event-data proof
 
 STATUS: READY_TO_EXECUTE
 
-Machine-readable dossier: `research/daily/2026-08-23.argus-evidence.json`
+Machine-readable dossier: `research/daily/2026-08-25-argus-research-dossier.json`
