@@ -7,6 +7,7 @@ const MAX_ATTESTATION_AGE_MIN=12;
 
 function modeOf(req){return String(req.query?.mode||req.body?.mode||'capture').toLowerCase()}
 function ms(v){const t=new Date(v||0).getTime();return Number.isFinite(t)&&t>0?t:null}
+function n(v){if(v===null||v===undefined||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null}
 function brusselsDate(value=new Date()){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(value).map(x=>[x.type,x.value]));return`${p.year}-${p.month}-${p.day}`}
 function addDays(s,d){const x=new Date(`${s}T12:00:00Z`);x.setUTCDate(x.getUTCDate()+d);return x.toISOString().slice(0,10)}
 const ledgerPath=d=>`argus/ledger/${d}.json`;
@@ -25,17 +26,41 @@ function attestation(plan,cycleAfter){
   if(String(brain?.systemMode||'').toUpperCase()==='FAIL_CLOSED')reasons.push('CENTRAL_BRAIN_FAIL_CLOSED');
   return{ok:reasons.length===0,cycleId,generatedAt,appliedAt,cycleAfter:cycleAfter||null,ageMinutes:a?Number(((now-a)/60000).toFixed(2)):null,finalAuthority:brain?.finalAuthority===true,systemMode:brain?.systemMode||null,reasons};
 }
-async function bindTouchedRowsToCycle(capturedAt,cycleId){
-  if(!capturedAt||!cycleId)return 0;
-  const today=brusselsDate(),target=String(capturedAt),cycle=String(cycleId);let tagged=0;
+function modelEvidence(row){
+  const c=row?.eligibilityCandidate||{},version=String(c.modelVersion||'').trim();
+  if(!version)return null;
+  return{
+    version,
+    decisionProbability:n(c.probability),
+    decisionProbabilityPct:n(c.probabilityPct),
+    marketProbability:n(c.marketProbability),
+    marketProbabilityPct:n(c.marketProbabilityPct),
+    validationStatus:c.validationStatus||null,
+    dataQuality:n(c.dataQuality),
+    mathIntegrity:c.mathIntegrity&&typeof c.mathIntegrity==='object'?c.mathIntegrity:null,
+    frozenAtDecisionTime:true
+  };
+}
+async function bindTouchedRows(capturedAt,cycleId,plan){
+  if(!capturedAt||!cycleId)return{cycleTaggedRecords:0,modelTaggedRecords:0};
+  const today=brusselsDate(),target=String(capturedAt),cycle=String(cycleId),rows=new Map((plan?.plan||[]).map(x=>[String(x?.fixtureId??x?.id??''),x]));
+  let cycleTaggedRecords=0,modelTaggedRecords=0;
   for(let d=-2;d<=4;d++){
     const date=addDays(today,d),path=ledgerPath(date),book=await readJsonFresh(path,null);
     if(!book?.records?.length)continue;
     let changed=false;
-    for(const rec of book.records){if(String(rec?.lastSeenAt||'')!==target)continue;if(String(rec?.decisionCycleId||'')!==cycle){rec.decisionCycleId=cycle;changed=true}tagged++}
+    for(const rec of book.records){
+      if(String(rec?.lastSeenAt||'')!==target)continue;
+      if(String(rec?.decisionCycleId||'')!==cycle){rec.decisionCycleId=cycle;changed=true}
+      cycleTaggedRecords++;
+      const isNewRecord=String(rec?.publishedAt||'')===target;
+      if(!isNewRecord||rec?.model)continue;
+      const sourceRow=rows.get(String(rec?.fixtureId??'')),evidence=modelEvidence(sourceRow);
+      if(evidence){rec.model=evidence;modelTaggedRecords++;changed=true}
+    }
     if(changed){book.updatedAt=new Date().toISOString();await writeJson(path,book)}
   }
-  return tagged;
+  return{cycleTaggedRecords,modelTaggedRecords};
 }
 
 export default async function handler(req,res){
@@ -53,6 +78,6 @@ export default async function handler(req,res){
   await legacyHandler(req,proxy);
   const body=captureRes.body&&typeof captureRes.body==='object'?captureRes.body:{};
   const ok=captureRes.statusCode>=200&&captureRes.statusCode<300&&!body.error;
-  const cycleTaggedRecords=ok?await bindTouchedRowsToCycle(body.generatedAt,proof.cycleId):0;
-  return res.status(captureRes.statusCode).json({...body,version:'PREDICTION-LEDGER-5',ok,attestation:proof,decisionCycleId:proof.cycleId,cycleTaggedRecords,policy:{...(body.policy||{}),failClosed:true,currentCentralBrainCycleRequired:true,freshPlanReadRequired:true,explicitDecisionCycleMembership:true,cycleBoundToCronStart:Boolean(proof.cycleAfter),automaticWagering:false}});
+  const tagging=ok?await bindTouchedRows(body.generatedAt,proof.cycleId,plan):{cycleTaggedRecords:0,modelTaggedRecords:0};
+  return res.status(captureRes.statusCode).json({...body,version:'PREDICTION-LEDGER-5',ok,attestation:proof,decisionCycleId:proof.cycleId,...tagging,policy:{...(body.policy||{}),failClosed:true,currentCentralBrainCycleRequired:true,freshPlanReadRequired:true,explicitDecisionCycleMembership:true,modelProvenanceFrozenAtCapture:true,historicalModelBackfillAllowed:false,cycleBoundToCronStart:Boolean(proof.cycleAfter),automaticWagering:false}});
 }
