@@ -12,6 +12,14 @@
       "schedule": "*/10 * * * *"
     },
     {
+      "path": "/api/historical-recent-backfill",
+      "schedule": "31 2 * * *"
+    },
+    {
+      "path": "/api/streak-intelligence",
+      "schedule": "47 2 * * *"
+    },
+    {
       "path": "/api/fast-cycle",
       "schedule": "2-57/5 * * * *"
     },
