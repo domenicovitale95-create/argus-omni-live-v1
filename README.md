@@ -1,60 +1,103 @@
-# ARGUS OMNI LIVE V2
+# ARGUS OMNI
 
-ARGUS OMNI LIVE is a live / in-play football intelligence dashboard. V2 adds a secure server-side API-Football integration so ARGUS can retrieve matches in progress automatically instead of requiring manual match data.
+ARGUS OMNI is an autonomous football intelligence and paper-betting research system.
 
-## V2 architecture
+Its job is not to produce as many bets as possible. Its job is to observe the available matches, estimate and price outcomes, reject weak or fragile edges, record every eligible virtual decision before settlement, learn from real results and keep the user interface simple.
 
-- Live fixtures from API-SPORTS / API-Football
-- Batched fixture-detail retrieval (up to 20 fixture IDs per request)
-- Live match statistics normalization
-- Live 1X2 odds ingestion when available
-- 60-second server cache to protect API quota
-- API key kept server-side via `API_FOOTBALL_KEY`
-- PRIME / WATCH / NO BET governance
-- Mandatory real-market check: no PRIME or WATCH without complete live 1X2 odds
-- Demo feed retained as a safe fallback
+## Product philosophy
 
-## Secure deployment
+**RESULTS FIRST. VIRTUAL MONEY ONLY. NO FORCED BETS.**
 
-GitHub Pages can serve the static dashboard but cannot securely hold a private API key. Deploy V2 on Vercel (or another serverless host) so `/api/live` runs server-side.
+ARGUS follows these rules:
 
-Required environment variable:
+1. Fresh and temporally coherent data come first.
+2. The market is a prior, not something to ignore.
+3. A model signal is not a bet until it survives governance and integrity gates.
+4. If nothing is good enough, ARGUS chooses **NO BET**.
+5. Eligible bets may be executed automatically only inside the virtual/paper bankroll.
+6. Real-money bet placement is disabled.
+7. Forecasts are frozen before settlement and are never rewritten afterward.
+8. Results, misses, skips and failures remain visible instead of being hidden.
+9. Learning and calibration must use the same canonical prediction ledger as the track record.
+10. The user-facing experience should stay simple even when the internal system is complex.
 
-```text
-API_FOOTBALL_KEY=your_api_sports_key
-```
+## Operational loop
 
-Never commit the real key to this repository.
+DISCOVER → VALIDATE DATA → PRICE → MODEL → GOVERNANCE → DECIDE → PAPER BET / NO BET → FREEZE → SETTLE → ATTRIBUTE ERROR → LEARN → RECALIBRATE
 
-## Live flow
+ARGUS may analyse many matches and still place zero virtual bets. That is a valid outcome.
 
-1. Browser calls `/api/live`.
-2. Server requests `/fixtures?live=all` from API-Football.
-3. Live fixture IDs are grouped in batches of 20 and enriched through `/fixtures?ids=...`.
-4. Server requests `/odds/live` and extracts usable 1X2 prices when coverage exists.
-5. Responses are normalized into the ARGUS match schema.
-6. The ARGUS engine calculates pressure, data quality, uncertainty, model probabilities, fair odds, market edge and classification.
+## Decision doctrine
 
-## Quota strategy
+For liquid markets, ARGUS starts from a no-vig market prior and applies only supported model corrections.
 
-The live backend caches results for 60 seconds and reuses grouped API calls. This is intentional: a free API-Football account has a limited daily request allowance, so V2 prioritizes disciplined retrieval over excessive polling.
+The decision chain is:
 
-## Files
+**OBSERVED DATA → MARKET PRIOR → MODEL → RAW → SHRUNK → CONSERVATIVE → FAIR PRICE → EV → EDGE SURVIVAL → GOVERNANCE → ACTION**
 
-- `index.html` — command-center UI
-- `styles.css` — interface styling
-- `app.js` — dashboard behavior
-- `src/engine.js` — ARGUS decision engine
-- `src/providers.js` — live/demo provider adapter
-- `api/live.js` — secure serverless API-Football proxy
-- `data/demo-matches.json` — deterministic fallback feed
-- `vercel.json` — Vercel function configuration
-- `.env.example` — required secret name
+Missing odds, stale match state, incomplete coverage, weak evidence, calibration uncertainty or integrity failures can all force a candidate back to WATCH or NO BET.
 
-## Local development
+## Virtual betting
 
-For the static demo, serve the repository with any static server. For real V2 live mode, use a Vercel-compatible local runtime and configure `API_FOOTBALL_KEY` in the local environment.
+ARGUS uses virtual money for training and evaluation.
+
+- No real bookmaker account is connected for automatic wagering.
+- `automaticBetPlacement=false` for real-money placement.
+- Eligible decisions can be recorded and staked in the virtual bankroll.
+- Open virtual bets are settled against real match results.
+- WIN, LOSS, VOID, SKIPPED and MISSED states remain auditable.
+
+The purpose is to measure whether ARGUS improves over time without risking real money.
+
+## Prediction ledger and learning
+
+The canonical Prediction Ledger is the source of truth for frozen forecasts and settled outcomes.
+
+Learning, calibration and error attribution must derive from that same canonical universe. Diagnostic GET endpoints should remain read-only and must not mutate betting, bankroll or prediction state.
+
+Core audit rule:
+
+**FREEZE FIRST. MEASURE SECOND. CALIBRATE THIRD. PROMOTE LAST.**
+
+## Live intelligence
+
+When a match is live, ARGUS must use a fresh live match state rather than carrying forward stale pre-match assumptions.
+
+Live doctrine:
+
+**FRESH DATA FIRST. MARKET FIRST. INFORMATION SECOND. MODEL THIRD. PRICE FOURTH. ACTION LAST.**
+
+A material score, minute, red-card, process-statistic or price change requires recalculation.
+
+## User experience
+
+The interface intentionally translates the internal system into simple questions:
+
+- What should I bet today?
+- Is there a good pick?
+- Should ARGUS wait?
+- What virtual bets were actually played?
+- What won or lost?
+- Is ARGUS getting better?
+
+The UI should never imply that a bet must exist. **NO BET is a first-class decision.**
+
+## Data and deployment
+
+ARGUS uses server-side football data integrations and quota-aware caching. API secrets remain server-side and must never be committed to the repository.
+
+The production application is deployed on Vercel. The PWA/service-worker cache is versioned so new philosophy, UI and runtime changes replace older mobile shells instead of leaving users on stale versions.
 
 ## Governance
 
-ARGUS outputs are probabilistic decision-support signals. Missing statistics, incomplete market coverage, stale data or missing odds reduce data quality. V2 refuses PRIME/WATCH classifications when a valid complete 1X2 live market is unavailable. No output guarantees profit.
+ARGUS is an operational research system, not a guaranteed-profit engine.
+
+Calibration status, uncertainty, provider freshness and integrity gates take priority over signal quantity. PRIME or other high-confidence labels must not be promoted unless the required validation evidence exists.
+
+## Final doctrine
+
+**SEE EVERYTHING. PRICE EVERYTHING. BET ONLY THE EDGE.**
+
+**NO EDGE, NO BET.**
+
+**VIRTUAL MONEY. REAL RESULTS. LEARN FROM EVERYTHING.**
