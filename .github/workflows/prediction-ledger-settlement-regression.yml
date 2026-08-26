@@ -56,3 +56,5 @@ jobs:
           assert(cron.includes('automaticWagering:false'),'real wagering safety flag missing from ledger cron');
           assert(fast.includes('automaticRealWagering:false'),'real wagering safety flag missing from fast cycle');
           NODE
+
+# Preview deployment intentionally forced to validate the complete Vercel build before merge.
