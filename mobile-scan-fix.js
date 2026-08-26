@@ -14,8 +14,9 @@
       window.scanToday();
       return;
     }
-    const fallback=btn.__argusNativeClick;
-    if(typeof fallback==='function')fallback();
+    // Do not synthesize another click here: that re-enters this touch/pointer
+    // bridge on iOS and can leave the visible button doing nothing.
+    btn.click();
   };
 
   const harden=()=>{
@@ -30,7 +31,6 @@
     btn.style.zIndex='5';
     if(!btn.__argusMobileBound){
       btn.__argusMobileBound=true;
-      btn.__argusNativeClick=()=>btn.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
       btn.addEventListener('touchend',runScan,{passive:false});
       btn.addEventListener('pointerup',event=>{
         if(event.pointerType==='touch'||event.pointerType==='pen')runScan(event);
