@@ -1,0 +1,52 @@
+name: Prediction Ledger Settlement Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/prediction-ledger-v4.js'
+      - 'api/prediction-ledger-cron.js'
+      - 'api/fast-cycle.js'
+      - '.github/workflows/prediction-ledger-settlement-regression.yml'
+  pull_request:
+    paths:
+      - 'api/prediction-ledger-v4.js'
+      - 'api/prediction-ledger-cron.js'
+      - 'api/fast-cycle.js'
+      - '.github/workflows/prediction-ledger-settlement-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  settlement-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax checks
+        run: |
+          node --check api/prediction-ledger-v4.js
+          node --check api/prediction-ledger-cron.js
+          node --check api/fast-cycle.js
+      - name: Verify bounded daytime settlement invariants
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const assert=require('assert');
+          const ledger=fs.readFileSync('api/prediction-ledger-v4.js','utf8');
+          const cron=fs.readFileSync('api/prediction-ledger-cron.js','utf8');
+          const fast=fs.readFileSync('api/fast-cycle.js','utf8');
+          assert(ledger.includes("const SETTLEMENT_DUE_AFTER_MS=150*60*1000;"),'missing 150-minute maturity threshold');
+          assert(ledger.includes("dueRecords=unsettled.filter(r=>settlementDue(r,nowMs))"),'provider eligibility must be derived from mature pending records');
+          assert(ledger.includes("pendingIds=[...new Set(dueRecords.map(r=>String(r.fixtureId)))]"),'provider fixture IDs must be unique and mature-only');
+          assert(ledger.includes("providerFallbackOnlyForMatureFixtures:true"),'public policy must expose mature-only provider fallback');
+          assert(cron.includes('function daytimeSettlementDue(c)'),'daytime settlement cadence guard missing');
+          assert(cron.includes("reason:'DAYTIME_PERIODIC'"),'daytime settlement invocation missing');
+          assert(cron.includes('daytimeSettlementCadenceMinutes:30'),'daytime settlement cadence must remain bounded at 30 minutes');
+          const ledgerJob=fast.indexOf("{path:'/api/prediction-ledger-cron'");
+          const bankrollJob=fast.indexOf("{path:'/api/virtual-bankroll?mode=run'");
+          assert(ledgerJob>=0&&bankrollJob>ledgerJob,'Prediction Ledger must run before Virtual Bankroll');
+          assert(ledger.includes('automaticWagering:false'),'real wagering safety flag missing from ledger');
+          assert(cron.includes('automaticWagering:false'),'real wagering safety flag missing from ledger cron');
+          assert(fast.includes('automaticRealWagering:false'),'real wagering safety flag missing from fast cycle');
+          NODE
