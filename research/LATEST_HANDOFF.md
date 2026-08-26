@@ -1,74 +1,73 @@
 # ARGUS LATEST RESEARCH HANDOFF
 
-DATE: 2026-08-25
+DATE: 2026-08-26
 
-EXECUTE NEXT: Build a shadow/work-branch Control Plane failure ledger and reason taxonomy that records every cron/provider/storage/auth failure with run/request identity, persistence state, severity, recurrence count and recovery state.
+EXECUTE NEXT: Instrument one non-critical research cron with idempotent run identity, overlap protection and durable failure lineage, then verify CONFIGURED -> DEPLOYED -> INVOKED -> SUCCEEDED/FAILED -> PERSISTED/NOT_PERSISTED prospectively.
 
-WHY NOW: Production telemetry currently shows a Vercel Blob credential failure, a cron authorization failure and 278 recurring `url.parse()` warnings across many routes. Vercel exposes requestId/invocationId/traceId/deployment metadata and recommends structured application logs; API-Football exposes authoritative quota headers. ARGUS needs one durable truth surface before more model complexity.
+WHY NOW: Control Plane truth is prerequisite evidence for every downstream learning, calibration, settlement and data-acquisition claim. Vercel documents that failed cron invocations are not automatically retried and that overlapping scheduled invocations can occur; idempotence and locking are therefore correctness requirements, not optional polish.
 
-EXPECTED BENEFIT: Faster root-cause isolation, durable failure memory, safer cron learning, fewer silent failures, clearer operator UX and better separation of infrastructure failure from model failure.
+EXPECTED BENEFIT: Eliminate silent/duplicate cron ambiguity, strengthen failure memory, make future research evidence trustworthy, and improve operator clarity without touching model logic.
 
-EVIDENCE LEVEL: HIGH for the observability primitives; MEDIUM for the exact ARGUS taxonomy until prospectively exercised.
+EVIDENCE LEVEL: HIGH for Vercel platform behavior; MEDIUM for ARGUS-specific implementation until prospectively validated.
 
 REQUIRED DATA:
-- requestId / invocationId / traceId or cron run_id
-- environment / deployment / route
-- started_at / finished_at / persisted_at
-- HTTP status + structured reason_code
-- storage/auth/provider/quota state
-- provider quota headers when applicable
-- persistence acknowledgement/output digest
+- job_id / deterministic run_key / intended schedule window
+- requestId or invocation identity when available
+- deployment / environment / route
+- started_at / finished_at
+- HTTP or execution status + structured reason_code
+- persisted_at + output_digest
+- duplicate_detected / overlap_detected
 - first_seen / last_seen / recurrence_count / recovery_state
 
-MINIMUM TEST: Instrument one non-critical research cron plus read-only aggregation of existing runtime failures for 7 days. No model, threshold, polling-frequency or production-state change.
+MINIMUM TEST: One non-critical research cron for 7 days and at least 50 intended invocations, including a synthetic duplicate/overlap test. No model, threshold, provider polling or production-state change.
 
 SUCCESS METRICS:
-- 100% of observed 5xx and instrumented cron failures receive a non-UNKNOWN reason code
 - complete CONFIGURED -> DEPLOYED -> INVOKED -> SUCCEEDED/FAILED -> PERSISTED/NOT_PERSISTED lineage
-- recurring failures are linked to stable failure families
-- zero additional provider calls
-- operator can separate DATA / MODEL / PROVIDER / STORAGE / AUTH / CRON / UNKNOWN failure classes
+- zero duplicate writes during injected duplicate/overlap tests
+- 100% of instrumented failures receive a non-UNKNOWN reason code
+- zero additional provider calls caused by instrumentation
 
-FAILURE CONDITION: Instrumentation changes runtime behavior, loses run identity, creates duplicate writes, keeps producing ambiguous reason codes, or increases provider consumption.
+FAILURE CONDITION: Locking suppresses legitimate runs, instrumentation materially changes runtime behavior, duplicate writes remain possible, or run lineage contains unexplained gaps.
 
-PROOF REQUIRED: Seven prospective days with sampled request/log cross-checks, persistence acknowledgements, duplicate detection and zero unexplained gaps.
+PROOF REQUIRED: Seven prospective days plus sampled cross-check against Vercel runtime logs and persistence acknowledgements.
 
 RISK / LEAKAGE RISKS:
-- do not let failure instrumentation mutate prediction/model state
-- do not infer provider quota from local time or internal estimates when response headers exist
-- do not treat recurring warnings as root cause before dependency/origin is identified
-- live states from the same match are not independent samples
+- instrumentation must not mutate prediction/model state
+- do not infer execution success from cron configuration alone
+- do not rewrite historical run state
+- do not count repeated live states from one match as independent evidence
+- do not use new observability as justification to increase confidence
 
-ROLLBACK: Disable the research failure-ledger writer/aggregator and retain existing Watchtower/runtime logs. No model or prediction state changes.
+ROLLBACK: Remove the research-only wrapper/lock and retain existing Watchtower/runtime logs. No model or prediction state is touched.
 
 WATCH:
-1. Formal conformal/selective thresholds only after empirical ARGUS risk-vs-coverage is stable on forward windows.
-2. Dynamic event-process live modelling only after point-in-time event/stoppage coverage is proven adequate.
+1. Selected-case risk-vs-coverage evaluation before any formal conformal thresholding.
+2. Market-anchored live challenger only after point-in-time event completeness is proven.
 
 DO NOT DO:
+- do not modify production from this dossier
 - do not increase PRIME confidence or loosen NO BET
 - do not treat Brier/log-loss alone as proof of calibration
-- do not increase polling or upgrade API-Football to hide Control Plane defects
-- do not treat cron configuration as execution proof
-- do not auto-fix `url.parse()` warnings before identifying their origin and regression-testing the replacement
-- do not copy published live ROI or conformal guarantees into ARGUS without independent OOS replication
-- do not add a larger exact-score/live model before simple baselines are beaten consistently
-- do not modify production from this dossier
+- do not add a larger live transformer or LLM exact-score reranker now
+- do not copy published ROI into ARGUS rules
+- do not upgrade API-Football merely to accelerate learning
+- do not treat formal conformal guarantees as automatically valid under football drift
 
 DATA TO ACQUIRE NEXT:
-- structured failure events with run/request identity
-- provider quota headers on existing responses
-- frozen kickoff + closing 1X2/O-U odds with timestamps/source
-- settled accepted-selection cohorts for selected-case calibration
-- complete point-in-time event/stoppage timestamps before richer live models
+- prospective cron run lineage and failure families
+- frozen settled predictions split ALL / ACCEPTED / PRIME / VALUE / NO BET
+- timestamped kickoff and closing 1X2 + O/U odds with bookmaker/source
+- provider quota truth from existing responses
+- point-in-time event availability audit for live modelling
 
-NEXT RESEARCH QUESTION: Once Control Plane failure truth is durable, does ARGUS confidence/readiness ranking produce a stable monotonic risk-coverage curve on independent forward match windows, and where does it break by market or league?
+NEXT RESEARCH QUESTION: After Control Plane truth is proven, does existing ARGUS readiness/confidence produce stable monotonic risk reduction as accepted coverage decreases across independent forward windows, markets and leagues?
 
 BLOCKERS:
-- failure taxonomy not yet prospectively validated
-- `url.parse()` origin is not yet identified
-- richer live-event modelling remains blocked by point-in-time event-data proof
+- cron lineage not yet prospectively validated
+- selected-cohort calibration sample may still be sparse
+- point-in-time completeness for richer live-state features remains unproven
 
 STATUS: READY_TO_EXECUTE
 
-Machine-readable dossier: `research/daily/2026-08-25-argus-research-dossier.json`
+Machine-readable dossier: `research/daily/2026-08-26-argus-research-dossier.json`
