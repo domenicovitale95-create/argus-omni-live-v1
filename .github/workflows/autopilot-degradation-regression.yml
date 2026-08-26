@@ -42,5 +42,5 @@ jobs:
       - name: Verify Central Brain gates the fresh scheduler cycle
         run: |
           grep -Fq "const DECISION_SCHEDULER_PATH='argus:intel:decision_scheduler:v1'" api/autopilot.js
-          grep -Fq 'readJsonFresh(DECISION_SCHEDULER_PATH,null)' api/autopilot.js
-          ! grep -Fq 'const scheduler=await readJsonFresh(DECISION_PLAN_PATH,null)' api/autopilot.js
+          grep -Fq 'const scheduler=await readJsonFresh(DECISION_SCHEDULER_PATH,null)' api/autopilot.js
+          grep -Fq 'await centralBrain(internalReq(req,{scheduler}),brainCapture.res)' api/autopilot.js
