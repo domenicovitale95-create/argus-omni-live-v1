@@ -5,6 +5,7 @@ import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
 export { config };
 
 const DECISION_PLAN_PATH='argus/autopilot/decision-plan.json';
+const DECISION_SCHEDULER_PATH='argus:intel:decision_scheduler:v1';
 
 function captureRes(){
   let statusCode=200,body=null;
@@ -59,16 +60,18 @@ export default async function handler(req,res){
 
   try{
     if(!storageReady())throw new Error('STORAGE_UNAVAILABLE');
-    // autopilot-v2 persists the scheduler through a separate network request.
-    // Bypass Blob cache here or we can re-apply the central brain to the previous
-    // decision plan and overwrite the newly generated cycle with stale generatedAt.
-    const scheduler=await readJsonFresh(DECISION_PLAN_PATH,null);
-    if(!scheduler||!Array.isArray(scheduler.plan))throw new Error('DECISION_PLAN_UNAVAILABLE');
+    // autopilot-v2 persists the newly generated scheduler through
+    // /api/decision-scheduler. The canonical scheduler store is distinct from
+    // the final Central Brain-gated decision plan. Always read that fresh
+    // scheduler cycle here; reading DECISION_PLAN_PATH would re-gate the prior
+    // final plan and preserve a stale generatedAt, breaking cycle attestation.
+    const scheduler=await readJsonFresh(DECISION_SCHEDULER_PATH,null);
+    if(!scheduler||!Array.isArray(scheduler.plan))throw new Error('DECISION_SCHEDULER_UNAVAILABLE');
     const brainCapture=captureRes();
     await centralBrain(internalReq(req,{scheduler}),brainCapture.res);
     const brain=brainCapture.snapshot(),brainBody=brain.body&&typeof brain.body==='object'?brain.body:{};
     if(brain.statusCode<200||brain.statusCode>=300||brainBody?.ok===false)throw new Error(brainBody?.error||`CENTRAL_BRAIN_HTTP_${brain.statusCode}`);
-    return res.status(base.statusCode).json({...body,centralBrain:{applied:true,status:brainBody.status||null,summary:brainBody.summary||null,posture:brainBody.posture||null,policy:brainBody.policy||null}});
+    return res.status(base.statusCode).json({...body,centralBrain:{applied:true,status:brainBody.status||null,summary:brainBody.summary||null,posture:brainBody.posture||null,policy:brainBody.policy||null,schedulerGeneratedAt:scheduler.generatedAt||null}});
   }catch(error){
     const reason=String(error?.message||error||'UNKNOWN_CENTRAL_BRAIN_FAILURE');
     let failClosedPersisted=false;
