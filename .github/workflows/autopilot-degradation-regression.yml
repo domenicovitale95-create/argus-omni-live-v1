@@ -5,10 +5,12 @@ on:
     branches: [main, argus-payload-stability-hotfix]
     paths:
       - 'api/autopilot.js'
+      - 'api/autopilot-v2.js'
       - '.github/workflows/autopilot-degradation-regression.yml'
   pull_request:
     paths:
       - 'api/autopilot.js'
+      - 'api/autopilot-v2.js'
       - '.github/workflows/autopilot-degradation-regression.yml'
 
 permissions:
@@ -21,19 +23,24 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify upstream status is preserved
         run: |
-          grep -Fq 'error.status=r.status' api/autopilot.js
+          grep -Fq 'error.status=r.status' api/autopilot-v2.js
       - name: Verify quota/provider unavailability does not become Autopilot 500
         run: |
-          grep -Fq "[429,503].includes(Number(error?.status))" api/autopilot.js
-          grep -Fq "reason:'LIVE_TEMPORARILY_UNAVAILABLE'" api/autopilot.js
-          grep -Fq 'retryable:true' api/autopilot.js
+          grep -Fq "[429,503].includes(Number(error?.status))" api/autopilot-v2.js
+          grep -Fq "reason:'LIVE_TEMPORARILY_UNAVAILABLE'" api/autopilot-v2.js
+          grep -Fq 'retryable:true' api/autopilot-v2.js
       - name: Verify preview cannot self-route through production
         run: |
-          grep -Fq "isProduction=vercelEnv==='production'" api/autopilot.js
-          grep -Fq 'base=isProduction&&productionHost' api/autopilot.js
+          grep -Fq "isProduction=vercelEnv==='production'" api/autopilot-v2.js
+          grep -Fq 'base=isProduction&&productionHost' api/autopilot-v2.js
       - name: Verify large internal payloads remain compacted
         run: |
-          grep -Fq "path==='/api/bet-eligibility'" api/autopilot.js
-          grep -Fq "path==='/api/decision-robustness'" api/autopilot.js
-          grep -Fq "path==='/api/portfolio-risk'" api/autopilot.js
-          grep -Fq 'const projected=projectBody(path,body)' api/autopilot.js
+          grep -Fq "path==='/api/bet-eligibility'" api/autopilot-v2.js
+          grep -Fq "path==='/api/decision-robustness'" api/autopilot-v2.js
+          grep -Fq "path==='/api/portfolio-risk'" api/autopilot-v2.js
+          grep -Fq 'const projected=projectBody(path,body)' api/autopilot-v2.js
+      - name: Verify Central Brain gates the fresh scheduler cycle
+        run: |
+          grep -Fq "const DECISION_SCHEDULER_PATH='argus:intel:decision_scheduler:v1'" api/autopilot.js
+          grep -Fq 'readJsonFresh(DECISION_SCHEDULER_PATH,null)' api/autopilot.js
+          ! grep -Fq 'const scheduler=await readJsonFresh(DECISION_PLAN_PATH,null)' api/autopilot.js
