@@ -5,6 +5,7 @@ function secret(){return String(process.env.CRON_SECRET||'').trim()}
 function authorized(req){const s=secret();return !s||req.headers.authorization===`Bearer ${s}`}
 function brussels(){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Brussels',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return{date:`${p.year}-${p.month}-${p.day}`,hour:Number(p.hour),minute:Number(p.minute)}}
 function scheduledActive(c){return c.hour>=6||(c.hour===0&&c.minute<=30)}
+function daytimeSettlementDue(c){return c.hour>=6&&c.hour<=23&&(c.minute<5||(c.minute>=30&&c.minute<35))}
 function addDays(s,d){const x=new Date(`${s}T12:00:00Z`);x.setUTCDate(x.getUTCDate()+d);return x.toISOString().slice(0,10)}
 function baseUrl(req){const production=String(process.env.VERCEL_PROJECT_PRODUCTION_URL||'').trim().replace(/^https?:\/\//,'').replace(/\/$/,'');if(production)return`https://${production}`;const proto=String(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host;return host?`${proto}://${host}`:null}
 function authHeaders(extra={}){const s=secret();return{Accept:'application/json',...(s?{Authorization:`Bearer ${s}`}:{ }),...extra}}
@@ -17,7 +18,7 @@ export default async function handler(req,res){
  res.setHeader('Cache-Control','no-store');
  if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
  if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
- if(!storageReady())return res.status(503).json({version:'PREDICTION-LEDGER-CRON-7',ok:false,error:'Storage unavailable'});
+ if(!storageReady())return res.status(503).json({version:'PREDICTION-LEDGER-CRON-8',ok:false,error:'Storage unavailable'});
  const base=baseUrl(req);if(!base)return res.status(500).json({error:'Host unavailable'});
  const clock=brussels(),startedAt=new Date().toISOString(),before=await planState(),active=scheduledActive(clock);
  let cycle={required:active,attempted:false,ok:true,captureRequired:false,reason:active?'CURRENT_CYCLE_REQUIRED':'OUTSIDE_AUTOPILOT_WINDOW',before,after:before,autopilot:null};
@@ -31,10 +32,11 @@ export default async function handler(req,res){
  }else if(!cycle.ok){
    capture={status:null,ok:false,blocked:true,skipped:true,reason:cycle.reason};
  }
+ if(daytimeSettlementDue(clock))settlements.push({reason:'DAYTIME_PERIODIC',date:clock.date,...await call(base,'settle',clock.date,null)});
  if(clock.hour===23&&clock.minute>=55)settlements.push({reason:'END_OF_DAY',date:clock.date,...await call(base,'settle',clock.date,null)});
  if([0,2].includes(clock.hour)&&clock.minute>=55){const previous=addDays(clock.date,-1);settlements.push({reason:clock.hour===0?'LATE_MATCH_RETRY_1':'LATE_MATCH_RETRY_2',date:previous,...await call(base,'settle',previous,null)})}
  const ok=cycle.ok&&capture.ok&&settlements.every(x=>x.ok);
- const state={version:'PREDICTION-LEDGER-CRON-7',startedAt,completedAt:new Date().toISOString(),baseHost:new URL(base).host,ok,cycle,capture,settlements:settlements.map(x=>({reason:x.reason,date:x.date,status:x.status,result:x.data})),policy:{captureRequiresCurrentCentralBrainCycle:true,currentCycleMustBeGeneratedThisCron:true,centralBrainFinalAuthorityRequired:true,benignNoCycleSkip:true,captureOnlyOnNewDecisionCycle:true,failClosedOnAutopilotFailure:true,failClosedOnCycleMismatch:true,freshPlanReadsRequired:true,endOfDaySettlement:true,lateMatchRetriesBrusselsHours:[0,2],productionDomainPreferred:true,automaticWagering:false}};
+ const state={version:'PREDICTION-LEDGER-CRON-8',startedAt,completedAt:new Date().toISOString(),baseHost:new URL(base).host,ok,cycle,capture,settlements:settlements.map(x=>({reason:x.reason,date:x.date,status:x.status,result:x.data})),policy:{captureRequiresCurrentCentralBrainCycle:true,currentCycleMustBeGeneratedThisCron:true,centralBrainFinalAuthorityRequired:true,benignNoCycleSkip:true,captureOnlyOnNewDecisionCycle:true,failClosedOnAutopilotFailure:true,failClosedOnCycleMismatch:true,freshPlanReadsRequired:true,daytimeSettlement:true,daytimeSettlementCadenceMinutes:30,settlementProviderEligibilityAfterKickoffMinutes:150,endOfDaySettlement:true,lateMatchRetriesBrusselsHours:[0,2],productionDomainPreferred:true,automaticWagering:false}};
  try{await writeJson('argus/health/prediction-ledger-cron.json',state)}catch(error){return res.status(503).json({...state,ok:false,healthPersisted:false,error:`HEALTH_PERSIST_FAILED: ${error?.message||'unknown'}`})}
  return res.status(ok?200:207).json({...state,healthPersisted:true,clock});
 }
