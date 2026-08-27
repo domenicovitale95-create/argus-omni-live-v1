@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, writeJson, storageReady } from './_report-store.js';
 
 const API_BASE='https://v3.football.api-sports.io';
@@ -18,7 +19,7 @@ async function fetchDate(date){const key=process.env.API_FOOTBALL_KEY;if(!key)th
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!authorized(req))return res.status(401).json({error:'Unauthorized'});if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
   const dates=dateList(),archive=await readJson(ARCHIVE,{version:'HISTORICAL-ARCHIVE-2',fixtures:{},dates:{}}),state=await readJson(STATE,{cursor:0,complete:false,lastRun:null});archive.fixtures||={};archive.dates||={};let cursor=Math.max(0,Number(state.cursor)||0),processed=0,newFixtures=0,lastQuota=null,errors=[];
-  const maxDates=Math.max(1,Math.min(24,Number(req.query?.dates)||DATES_PER_RUN));
+  const maxDates=Math.max(1,Math.min(24,Number(requestQuery(req)?.dates)||DATES_PER_RUN));
   while(cursor<dates.length&&processed<maxDates){const date=dates[cursor];if(archive.dates[date]?.complete){cursor++;continue}try{const out=await fetchDate(date);lastQuota=out.quota;for(const row of out.rows){const k=String(row.fixtureId);if(!archive.fixtures[k])newFixtures++;archive.fixtures[k]=row}archive.dates[date]={complete:true,fixtures:out.rows.length,savedAt:new Date().toISOString()};processed++;cursor++;if(lastQuota?.dailyRemaining!=null&&lastQuota.dailyRemaining<=MIN_DAILY_RESERVE)break;if(lastQuota?.minuteRemaining!=null&&lastQuota.minuteRemaining<=3)break}catch(e){errors.push({date,error:e.message});break}}
   state.cursor=cursor;state.complete=cursor>=dates.length;state.lastRun=new Date().toISOString();state.lastQuota=lastQuota;archive.version='HISTORICAL-ARCHIVE-2';archive.windowDays=DAYS;archive.windowStart=dates[0];archive.windowEnd=dates[dates.length-1];archive.fixtureCount=Object.keys(archive.fixtures).length;archive.completedDates=Object.values(archive.dates).filter(x=>x?.complete).length;archive.updatedAt=state.lastRun;await writeJson(ARCHIVE,archive);await writeJson(STATE,state);
   return res.status(errors.length?207:200).json({ok:errors.length===0,version:'HISTORICAL-YEAR-BACKFILL-1',windowDays:DAYS,windowStart:archive.windowStart,windowEnd:archive.windowEnd,processedDates:processed,completedDates:archive.completedDates,totalDates:dates.length,newFixtures,totalFixtures:archive.fixtureCount,cursor,complete:state.complete,quota:lastQuota,reserve:MIN_DAILY_RESERVE,errors,policy:{globalByDate:true,exactScoresStored:true,persistentArchive:true,quotaAware:true,noRepeatedFetchForCompletedDates:true}})

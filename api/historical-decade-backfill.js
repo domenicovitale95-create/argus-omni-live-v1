@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, readJsonFresh, writeJson, listJson, storageReady } from './_report-store.js';
 import { providerPlanMeta } from './_provider-plan.js';
 
@@ -45,7 +46,7 @@ export default async function handler(req,res){
   }
 
   const dates=dateList(),archive=await readJson(ARCHIVE,{version:'HISTORICAL-DECADE-ARCHIVE-2',fixtures:{},dates:{}}),state=await readJson(STATE,{complete:false});archive.fixtures||={};archive.dates||={};let processed=0,newFixtures=0,errors=[];
-  const requested=Math.max(1,Math.min(MAX_BATCH,Number(req.query?.dates)||DEFAULT_BATCH));
+  const requested=Math.max(1,Math.min(MAX_BATCH,Number(requestQuery(req)?.dates)||DEFAULT_BATCH));
   const pending=dates.filter(date=>!archive.dates[date]?.complete);
   for(const date of pending){if(processed>=requested||quotaBlocked(q))break;try{const rows=await fetchDate(date,q);for(const row of rows){const k=String(row.fixtureId);if(!archive.fixtures[k])newFixtures++;archive.fixtures[k]=row}archive.dates[date]={complete:true,fixtures:rows.length,savedAt:new Date().toISOString()};processed++}catch(e){errors.push({date,error:e.message});break}}
   const completedDates=dates.filter(date=>archive.dates[date]?.complete).length;const recentCompletePrefix=(()=>{let c=0;for(const date of dates){if(archive.dates[date]?.complete)c++;else break}return c})();

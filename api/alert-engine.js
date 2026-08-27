@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, readJsonFresh, writeJson, storageReady } from './_report-store.js';
 
 const ALERT_STATE='argus/alerts/state.json';
@@ -20,7 +21,7 @@ function movementFor(row,memory){const side=String(row.stakeSelection||row.eligi
 export default async function handler(req,res){
   if(req.method!=='GET'&&req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
   if(!storageReady())return res.status(503).json({error:'Alert storage unavailable'});
-  const feedOnly=req.method==='GET'&&String(req.query?.mode||'').toLowerCase()==='feed';
+  const feedOnly=req.method==='GET'&&String(requestQuery(req)?.mode||'').toLowerCase()==='feed';
   if(feedOnly){
     res.setHeader('Cache-Control','public, s-maxage=60, stale-while-revalidate=120');
     const feed=await readJson(ALERT_FEED,{alerts:[]});
@@ -28,7 +29,7 @@ export default async function handler(req,res){
   }
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
   res.setHeader('Cache-Control','no-store');
-  const compact=String(req.query?.compact||'')==='1';
+  const compact=String(requestQuery(req)?.compact||'')==='1';
   const [plan,memory,state,feed]=await Promise.all([
     readJson('argus/autopilot/decision-plan.json',{plan:[],generatedAt:null}),
     readJson(`argus/market-memory/${dateTZ()}.json`,{fixtures:{}}),

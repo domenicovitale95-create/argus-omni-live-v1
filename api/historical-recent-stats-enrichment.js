@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, writeJson, listJson, readManyJson, storageReady } from './_report-store.js';
 
 const API='https://v3.football.api-sports.io';
@@ -18,12 +19,12 @@ function derive(s){const h=s.home||{},a=s.away||{},sum=(x,y)=>Number.isFinite(x)
 function monthPath(month){return`${STATS_PREFIX}${month}.json`}
 
 export default async function handler(req,res){
-  res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!authorized(req)&&String(req.query?.dryRun||'')!=='1')return res.status(401).json({error:'Unauthorized'});if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
+  res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!authorized(req)&&String(requestQuery(req)?.dryRun||'')!=='1')return res.status(401).json({error:'Unauthorized'});if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
   const [guard,fixtureBlobs,statsBlobs]=await Promise.all([readJson(QUOTA_GUARD,null),listJson(FIXTURE_PREFIX,240),listJson(STATS_PREFIX,240)]),today=brusselsDate();
   const [fixtureShards,statsShards]=await Promise.all([readManyJson(fixtureBlobs),readManyJson(statsBlobs)]);if(!fixtureShards.length)return res.status(200).json({ok:true,version:'HISTORICAL-RECENT-STATS-1',status:'WAITING_RECENT_FIXTURES',providerCalls:0});
   const existing=new Set();for(const s of statsShards)for(const id of Object.keys(s?.fixtures||{}))existing.add(id);
-  const rows=[];for(const s of fixtureShards)for(const f of Object.values(s?.fixtures||{}))rows.push(f);rows.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));const pending=rows.filter(f=>!existing.has(String(f.fixtureId))),batch=Math.max(1,Math.min(MAX_BATCH,Number(req.query?.fixtures)||DEFAULT_BATCH));
-  if(String(req.query?.dryRun||'')==='1')return res.status(200).json({ok:true,version:'HISTORICAL-RECENT-STATS-1',status:'DRY_RUN',recentFixtures:rows.length,enriched:existing.size,pending:pending.length,nextFixtureIds:pending.slice(0,batch).map(f=>f.fixtureId),providerCalls:0,writes:0,policy:{dryRun:true,providerQuotaSpend:false,persistentWrites:false,monthlyShards:true,noLegacyRewrite:true}});
+  const rows=[];for(const s of fixtureShards)for(const f of Object.values(s?.fixtures||{}))rows.push(f);rows.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));const pending=rows.filter(f=>!existing.has(String(f.fixtureId))),batch=Math.max(1,Math.min(MAX_BATCH,Number(requestQuery(req)?.fixtures)||DEFAULT_BATCH));
+  if(String(requestQuery(req)?.dryRun||'')==='1')return res.status(200).json({ok:true,version:'HISTORICAL-RECENT-STATS-1',status:'DRY_RUN',recentFixtures:rows.length,enriched:existing.size,pending:pending.length,nextFixtureIds:pending.slice(0,batch).map(f=>f.fixtureId),providerCalls:0,writes:0,policy:{dryRun:true,providerQuotaSpend:false,persistentWrites:false,monthlyShards:true,noLegacyRewrite:true}});
   if(guard?.date===today&&guard?.exhausted)return res.status(200).json({ok:true,version:'HISTORICAL-RECENT-STATS-1',status:'PAUSED_QUOTA_GUARD',processed:0,providerCalls:0,guardDate:guard.date,policy:{failClosed:true,noProviderQuotaSpend:true,automaticResumeOnNewBrusselsDate:true}});
   const cache=new Map(),dirty=new Set();async function shard(month){const p=monthPath(month);if(cache.has(p))return cache.get(p);const s=await readJson(p,{version:'HISTORICAL-RECENT-STATS-SHARD-1',month,fixtures:{}});s.fixtures||={};cache.set(p,s);return s}
   let processed=0,saved=0,providerCalls=0,lastQuota=null;const errors=[];

@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, writeJson, storageReady } from './_report-store.js';
 
 const ENV=String(process.env.VERCEL_ENV||'local').toLowerCase().replace(/[^a-z0-9_-]/g,'_');
@@ -11,7 +12,7 @@ async function latestSnapshot(){const scoped=await readJson(OUT,null);if(scoped)
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(!storageReady())return res.status(503).json({error:'Deployment verifier storage unavailable'});
-  if(req.method==='GET'&&String(req.query?.latest||'')==='1')return res.status(200).json(await latestSnapshot());
+  if(req.method==='GET'&&String(requestQuery(req)?.latest||'')==='1')return res.status(200).json(await latestSnapshot());
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
 

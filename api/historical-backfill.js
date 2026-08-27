@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, writeJson, storageReady } from './_report-store.js';
 
 const API_BASE='https://v3.football.api-sports.io';
@@ -24,7 +25,7 @@ async function fetchTeam(teamId,from,to){
 }
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});if(!authorized(req))return res.status(401).json({error:'Unauthorized'});if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
-  const days=Math.max(180,Math.min(1460,Number(req.query?.days)||DEFAULT_DAYS));const maxTeams=Math.max(1,Math.min(12,Number(req.query?.teams)||DEFAULT_TEAMS_PER_RUN));
+  const days=Math.max(180,Math.min(1460,Number(requestQuery(req)?.days)||DEFAULT_DAYS));const maxTeams=Math.max(1,Math.min(12,Number(requestQuery(req)?.teams)||DEFAULT_TEAMS_PER_RUN));
   const source=await readJson(SOURCE,{teams:{}}),archive=await readJson(ARCHIVE,{version:'HISTORICAL-ARCHIVE-1',fixtures:{},teams:{},updatedAt:null}),state=await readJson(STATE,{cursor:0,completedCycles:0,lastRun:null});
   const teamIds=Object.keys(source.teams||{}).map(Number).filter(Boolean).sort((a,b)=>a-b);if(!teamIds.length)return res.status(200).json({ok:true,skipped:true,reason:'NO_TEAM_HISTORY_SOURCE'});
   const now=Date.now(),from=ymd(now-days*86400000),to=ymd(now-86400000);let cursor=Number(state.cursor)||0,processed=0,saved=0,quota=null,errors=[];

@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, writeJson, listJson, storageReady } from './_report-store.js';
 
 const LEGACY='argus/research/historical-decade-fixtures.json';
@@ -65,7 +66,7 @@ export default async function handler(req,res){
   const src=await source();if(src.kind==='PAUSED_MEMORY_GUARD')return res.status(200).json({ok:true,version:'HISTORICAL-WALK-FORWARD-8-CHUNKED',status:'PAUSED_MEMORY_GUARD',generatedAt:new Date().toISOString(),archiveSizeBytes:src.legacySize,yearArchiveSizeBytes:src.yearSize,maxMonolithBytes:MAX_MONOLITH_BYTES,providerCalls:0,migrationRequired:true,untrustedShardIndex:src.untrustedShardIndex||null,recommendation:'Order-independent shard migration must certify complete source scans before decade replay can resume.',policy:{pastOnly:true,noHindsight:true,failClosed:true,noOOMRiskAccepted:true,researchOnly:true,legacyPartialShardsRejected:true,boundedRuntime:true}});
   if(src.total<80)return res.status(200).json({version:'HISTORICAL-WALK-FORWARD-8-CHUNKED',status:'INSUFFICIENT_HISTORY',fixtureCount:src.total,minimum:80,source:src.kind});
   const cached=await readJson(OUT,null);if(cached?.sourceFingerprint===src.fingerprint&&cached?.results)return res.status(200).json({...cached,cached:true});
-  let progress=await readJson(PROGRESS,null);if(req.query?.reset==='1'||progress?.sourceFingerprint!==src.fingerprint||progress?.complete)progress=freshProgress(src);
+  let progress=await readJson(PROGRESS,null);if(requestQuery(req)?.reset==='1'||progress?.sourceFingerprint!==src.fingerprint||progress?.complete)progress=freshProgress(src);
   const chunk=await runChunk(src,progress);
   if(!chunk.done){const next={version:'HISTORICAL-WALK-FORWARD-PROGRESS-8',sourceFingerprint:src.fingerprint,source:src.kind,ordinal:chunk.ordinal,monthIndex:chunk.monthIndex,rowOffset:chunk.rowOffset,contexts:chunk.contexts,updatedAt:new Date().toISOString(),complete:false};await writeJson(PROGRESS,next);return res.status(200).json(progressResponse(src,chunk))}
   const results=finalizedResults(chunk.contexts),base=results.BASELINE.holdout,ranking=VARIANTS.map(v=>{const m=results[v].holdout,improvement=base.logLoss&&m.logLoss?((base.logLoss-m.logLoss)/base.logLoss)*100:0;return{variant:v,holdout:m,logLossImprovementPct:Number(improvement.toFixed(2))}}).sort((a,b)=>(a.holdout.logLoss??Infinity)-(b.holdout.logLoss??Infinity));

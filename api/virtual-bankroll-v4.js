@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import legacyHandler from './virtual-bankroll-v3.js';
 import { readJson, readJsonFresh, storageReady } from './_report-store.js';
 
@@ -28,7 +29,7 @@ async function freshLedgerRows(now){const today=brusselsDate(),rows=[];for(let d
 
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
-  const mode=String(req.query?.mode||'summary').toLowerCase();
+  const mode=String(requestQuery(req)?.mode||'summary').toLowerCase();
   if(mode!=='run')return legacyHandler(req,res);
   if(req.method!=='GET'&&req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
@@ -40,7 +41,7 @@ export default async function handler(req,res){
   if(conflicting.length)return res.status(200).json({version:'VIRTUAL-BANKROLL-4',ok:false,status:'BLOCKED',reason:'CONFLICTING_LEDGER_CYCLE_MEMBERSHIP',capturedOfficial:0,capturedLearning:0,settled:0,providerCalls:0,attestation:proof,freshLedgerRecords:fresh.length,currentCycleLedgerRecords:current.length,conflictingRecords:conflicting.map(x=>({id:x.id,fixtureId:x.fixtureId,publishedAt:x.publishedAt,lastSeenAt:x.lastSeenAt||null,decisionCycleId:x.decisionCycleId||null})).slice(0,20),policy:{failClosed:true,explicitDecisionCycleMembership:true,noNewVirtualPositionOnCycleConflict:true,freshPlanReadRequired:true,automaticRealBetPlacement:false,noRealMoney:true}});
   const captureRes={statusCode:200,headers:{},body:null};
   const proxy={setHeader:(k,v)=>{captureRes.headers[String(k).toLowerCase()]=v;return proxy},status:c=>{captureRes.statusCode=Number(c)||200;return proxy},json:b=>{captureRes.body=b;return b},send:b=>{captureRes.body=b;return b},end:b=>{if(b!==undefined)captureRes.body=b;return b}};
-  const cycleReq={...req,method:req.method,headers:req.headers,query:{...(req.query||{}),decisionCycleId:proof.ok?proof.decisionCycleId:'__NO_ATTESTED_CYCLE__'}};
+  const cycleReq={...req,method:req.method,headers:req.headers,query:{...(requestQuery(req)||{}),decisionCycleId:proof.ok?proof.decisionCycleId:'__NO_ATTESTED_CYCLE__'}};
   await legacyHandler(cycleReq,proxy);
   const body=captureRes.body&&typeof captureRes.body==='object'?captureRes.body:{};
   const previous=fresh.filter(rec=>rec?.decisionCycleId&&proof.decisionCycleId&&String(rec.decisionCycleId)!==String(proof.decisionCycleId)&&observedMs(rec)<proof.appliedAtMs);

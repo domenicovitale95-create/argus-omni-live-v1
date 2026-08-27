@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
 import predictionLedgerCron from './prediction-ledger-cron.js';
 import virtualBankroll from './virtual-bankroll-v4.js';
@@ -21,7 +22,7 @@ function baseUrl(req){
 }
 function sourceOf(req){
   if(req.headers['x-vercel-cron-schedule'])return'VERCEL_CRON';
-  const q=String(req.query?.source||'').trim().toLowerCase();
+  const q=String(requestQuery(req)?.source||'').trim().toLowerCase();
   if(q==='github-backup')return'GITHUB_BACKUP';
   if(q==='github-manual')return'GITHUB_MANUAL';
   return'MANUAL_OR_INTERNAL';
