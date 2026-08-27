@@ -1,10 +1,9 @@
 const hasOwn=(obj,key)=>Boolean(obj)&&Object.prototype.hasOwnProperty.call(obj,key);
 
 export function requestQuery(req){
-  if(hasOwn(req,'query')){
-    const q=req.query;
-    return q&&typeof q==='object'?q:{};
-  }
+  // Vercel's IncomingMessage exposes `query` through a prototype getter that
+  // currently calls Node's deprecated url.parse(). Never touch req.query here.
+  // Parse the raw request URL directly with URLSearchParams instead.
   const raw=typeof req?.url==='string'?req.url:'';
   const i=raw.indexOf('?');
   if(i<0)return{};
