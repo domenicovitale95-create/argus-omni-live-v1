@@ -1,8 +1,9 @@
 import { readJsonFresh, storageReady } from './_report-store.js';
 
 const STATE='argus/health/fast-cycle.json';
-const LATE_AFTER_MINUTES=8;
-const STALE_AFTER_MINUTES=12;
+const PRIMARY_CADENCE_MINUTES=15;
+const LATE_AFTER_MINUTES=22;
+const STALE_AFTER_MINUTES=35;
 
 function ageMinutes(value){const t=new Date(value||0).getTime();return Number.isFinite(t)&&t>0?Math.max(0,Math.floor((Date.now()-t)/60000)):null}
 function failedJobs(results){
@@ -38,11 +39,12 @@ function failedJobs(results){
 function policy(){return{
   scope:'FAST_CYCLE',
   primaryScheduler:'VERCEL_CRON',
-  primaryCadenceMinutes:5,
+  primaryCadenceMinutes:PRIMARY_CADENCE_MINUTES,
   backupScheduler:'GITHUB_CONDITIONAL',
-  backupHealthCheckMinutes:10,
+  backupHealthCheckMinutes:30,
   lateAfterMinutes:LATE_AFTER_MINUTES,
   staleAfterMinutes:STALE_AFTER_MINUTES,
+  schedulerJitterTolerated:true,
   lateTriggersBackup:true,
   readOnly:true,
   providerCalls:false,
@@ -57,9 +59,9 @@ function policy(){return{
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
-  if(!storageReady())return res.status(503).json({version:'FAST-CYCLE-HEALTH-5',status:'CRITICAL',backupRequired:true,error:'Storage unavailable'});
+  if(!storageReady())return res.status(503).json({version:'FAST-CYCLE-HEALTH-6',status:'CRITICAL',backupRequired:true,error:'Storage unavailable'});
   const state=await readJsonFresh(STATE,null);
-  if(!state)return res.status(200).json({version:'FAST-CYCLE-HEALTH-5',generatedAt:new Date().toISOString(),status:'WAITING',backupRequired:true,ageMinutes:null,lastCycle:null,failedJobs:[],policy:policy()});
+  if(!state)return res.status(200).json({version:'FAST-CYCLE-HEALTH-6',generatedAt:new Date().toISOString(),status:'WAITING',backupRequired:true,ageMinutes:null,lastCycle:null,failedJobs:[],policy:policy()});
   const running=state.status==='RUNNING',age=ageMinutes(running?state.startedAt:state.completedAt),runTooLong=running&&age!=null&&age>=STALE_AFTER_MINUTES;
   let status='HEALTHY';
   if(runTooLong)status='STALE';
@@ -69,7 +71,7 @@ export default async function handler(req,res){
   else if(age>=LATE_AFTER_MINUTES)status='LATE';
   const backupRequired=['WAITING','LATE','STALE','DEGRADED','CRITICAL'].includes(status);
   return res.status(200).json({
-    version:'FAST-CYCLE-HEALTH-5',generatedAt:new Date().toISOString(),status,backupRequired,ageMinutes:age,
+    version:'FAST-CYCLE-HEALTH-6',generatedAt:new Date().toISOString(),status,backupRequired,ageMinutes:age,
     lastCycle:{runId:state.runId||null,source:state.source||null,status:state.status||null,startedAt:state.startedAt||null,completedAt:state.completedAt||null,durationMs:state.durationMs??null,jobs:state.jobs??null,failures:state.failures??null,networkFallbacks:state.networkFallbacks??null,pushSkipped:state.pushSkipped??null},
     failedJobs:failedJobs(state.results),
     policy:policy()

@@ -2,12 +2,10 @@ name: ARGUS Autonomous Scheduler
 
 on:
   schedule:
-    # Vercel Cron is primary for both the 10-minute autonomy heartbeat and 5-minute fast cycle.
-    # GitHub checks fast-cycle health every 10 minutes and only executes a backup when Vercel is late/stale/degraded.
-    - cron: '8,18,28,38,48,58 * * * *'
-    - cron: '19,49 * * * *'
-    - cron: '6-51/15 * * * *'
-    - cron: '11 * * * *'
+    # Vercel is primary. GitHub is backup-only for fast-cycle/supervisor recovery
+    # plus low-frequency maintenance; it must not duplicate normal primary work.
+    - cron: '13,43 * * * *'
+    - cron: '23 * * * *'
     - cron: '17 0,6,12,18 * * *'
     - cron: '23 1 * * *'
     - cron: '37 2 * * *'
@@ -131,9 +129,9 @@ jobs:
               age=999999
             fi
 
-            # Allow normal Vercel Cron jitter and one delayed heartbeat. GitHub only
-            # becomes active when the primary production scheduler appears unhealthy.
-            if [ "${age}" -gt 18 ] || [ "${status}" = "LATE" ] || [ "${status}" = "STALE" ] || [ "${status}" = "CRITICAL" ] || [ "${status}" = "WAITING" ]; then
+            # Primary supervisor cadence is 30m. Recovery starts only after a
+            # genuinely missed heartbeat, not during normal scheduler jitter.
+            if [ "${age}" -gt 50 ] || [ "${status}" = "LATE" ] || [ "${status}" = "STALE" ] || [ "${status}" = "CRITICAL" ] || [ "${status}" = "WAITING" ]; then
               echo "Backup required: status=${status}, heartbeatAgeMinutes=${age}."
               echo "::endgroup::"
               call '/api/autonomous-supervisor' 'Autonomous supervisor backup recovery'
@@ -143,6 +141,8 @@ jobs:
             fi
           }
 
+          # The following groups are manual-only unless explicitly scheduled below.
+          # They are kept for recovery/maintenance without creating duplicate normal work.
           run_quarter() {
             call '/api/autopilot' 'Autopilot'
             call '/api/paper-learning?mode=run' 'Paper learning'
@@ -188,10 +188,8 @@ jobs:
             GROUP="${{ inputs.group }}"
           else
             case "${{ github.event.schedule }}" in
-              '8,18,28,38,48,58 * * * *') GROUP='fast' ;;
-              '19,49 * * * *') GROUP='watchdog' ;;
-              '6-51/15 * * * *') GROUP='quarter' ;;
-              '11 * * * *') GROUP='hourly' ;;
+              '13,43 * * * *') GROUP='fast' ;;
+              '23 * * * *') GROUP='watchdog' ;;
               '17 0,6,12,18 * * *') GROUP='sixhour' ;;
               '23 1 * * *') GROUP='daily1' ;;
               '37 2 * * *') GROUP='daily2' ;;
