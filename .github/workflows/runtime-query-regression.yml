@@ -1,0 +1,48 @@
+name: Runtime Query Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/**'
+      - '.github/workflows/runtime-query-regression.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/**'
+      - '.github/workflows/runtime-query-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  query-getter-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Reject direct Vercel req.query getter usage
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RIn --include='*.js' --exclude='_request-query.js' -E 'req\??\.query' api; then
+            echo '::error::Direct req.query access can re-trigger Vercel DEP0169.' >&2
+            exit 1
+          fi
+      - name: Validate getter-free query helper
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { requestQuery } from './api/_request-query.js';
+          const own={query:{mode:'run',ids:'1-2'}};
+          const a=requestQuery(own);
+          if(a.mode!=='run'||a.ids!=='1-2')throw new Error('Own query object compatibility failed');
+          const b=requestQuery({url:'/api/test?mode=run&x=1&x=2'});
+          if(b.mode!=='run'||!Array.isArray(b.x)||b.x.join(',')!=='1,2')throw new Error('Raw URL query parsing failed');
+          console.log('Getter-free query helper passed.');
+          NODE
