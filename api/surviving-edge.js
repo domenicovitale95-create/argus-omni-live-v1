@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, storageReady } from './_report-store.js';
 
 const PLAN='argus/autopilot/decision-plan.json';
@@ -13,7 +14,7 @@ export default async function handler(req,res){
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
   res.setHeader('Cache-Control','public, s-maxage=60, stale-while-revalidate=120');
-  const today=String(req.query?.date||dateTZ()),summaryOnly=String(req.query?.mode||'').toLowerCase()==='summary';
+  const today=String(requestQuery(req)?.date||dateTZ()),summaryOnly=String(requestQuery(req)?.mode||'').toLowerCase()==='summary';
   const [plan,tr]=await Promise.all([readJson(PLAN,{generatedAt:null,plan:[]}),readJson(TRENDS,{generatedAt:null,trends:[]})]);
   const tm=trendMap(tr.trends||[]),evaluated=(plan.plan||[]).filter(r=>activeToday(r,today)).map(r=>evaluate(r,tm)).sort((a,b)=>b.survivalScore-a.survivalScore),survivors=evaluated.filter(x=>x.status==='SURVIVING_EDGE'),near=evaluated.filter(x=>x.status==='NEAR_SURVIVAL');
   const report={version:'SURVIVING-EDGE-4',generatedAt:new Date().toISOString(),mode:summaryOnly?'SUMMARY':'FULL',date:today,sourceGeneratedAt:plan.generatedAt||null,trendSourceGeneratedAt:tr.generatedAt||null,summary:{evaluated:evaluated.length,surviving:survivors.length,near:near.length,rejected:evaluated.filter(x=>x.status==='REJECTED').length},survivors,near,policy:{contradictionFirst:true,eligiblePrimeRequired:true,minimumPreferredConfidence:72,minimumPreferredEdgePct:5,hardContradictionsReject:true,trendMaySupportOrVeto:true,trendCannotCreatePrime:true,noGuarantee:true,automaticWagering:false,cacheSeconds:60,persistOnRead:false,rule:'ARGUS tries to falsify a candidate before surfacing it. A SURVIVING EDGE is a highly selective intersection of independent evidence, not a guaranteed win.'}};

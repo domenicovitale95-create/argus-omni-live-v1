@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import legacyHandler from './prediction-ledger-v4.js';
 import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
 import { readCanonicalLedger } from './_prediction-ledger-store.js';
@@ -6,7 +7,7 @@ const TZ='Europe/Brussels';
 const PLAN_PATH='argus/autopilot/decision-plan.json';
 const MAX_ATTESTATION_AGE_MIN=12;
 
-function modeOf(req){return String(req.query?.mode||req.body?.mode||'capture').toLowerCase()}
+function modeOf(req){return String(requestQuery(req)?.mode||req.body?.mode||'capture').toLowerCase()}
 function ms(v){const t=new Date(v||0).getTime();return Number.isFinite(t)&&t>0?t:null}
 function n(v){if(v===null||v===undefined||v==='')return null;const x=Number(v);return Number.isFinite(x)?x:null}
 function brusselsDate(value=new Date()){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(value).map(x=>[x.type,x.value]));return`${p.year}-${p.month}-${p.day}`}
@@ -67,8 +68,8 @@ async function bindTouchedRows(capturedAt,cycleId,plan){
 async function canonicalGet(req,res){
   if(!storageReady())return res.status(503).json({version:'PREDICTION-LEDGER-5',error:'Storage unavailable',storageReady:false});
   const ledger=await readCanonicalLedger();
-  const summaryOnly=['1','true','yes'].includes(String(req.query?.summaryOnly||'').toLowerCase());
-  const requested=Number(req.query?.recordsLimit ?? req.query?.limit ?? 500);
+  const summaryOnly=['1','true','yes'].includes(String(requestQuery(req)?.summaryOnly||'').toLowerCase());
+  const requested=Number(requestQuery(req)?.recordsLimit ?? requestQuery(req)?.limit ?? 500);
   const recordsLimit=Math.max(0,Math.min(500,Number.isFinite(requested)?requested:500));
   return res.status(200).json({
     version:'PREDICTION-LEDGER-5',
@@ -86,7 +87,7 @@ export default async function handler(req,res){
   if(modeOf(req)!=='capture'||req.method!=='POST')return legacyHandler(req,res);
   if(!storageReady())return res.status(503).json({version:'PREDICTION-LEDGER-5',ok:false,status:'BLOCKED',reason:'STORAGE_UNAVAILABLE'});
   const plan=await readJsonFresh(PLAN_PATH,{generatedAt:null,plan:[],centralBrain:null});
-  const proof=attestation(plan,String(req.query?.cycleAfter||req.body?.cycleAfter||'').trim()||null);
+  const proof=attestation(plan,String(requestQuery(req)?.cycleAfter||req.body?.cycleAfter||'').trim()||null);
   if(!proof.ok)return res.status(200).json({version:'PREDICTION-LEDGER-5',ok:false,status:'BLOCKED',reason:'CURRENT_CYCLE_ATTESTATION_FAILED',attestation:proof,considered:0,captured:0,deduplicated:0,rejectedLate:0,rejectedInvalid:0,policy:{failClosed:true,currentCentralBrainCycleRequired:true,freshPlanReadRequired:true,automaticWagering:false}});
   const captureRes={statusCode:200,headers:{},body:null};
   const proxy={setHeader:(k,v)=>{captureRes.headers[String(k).toLowerCase()]=v;return proxy},status:c=>{captureRes.statusCode=Number(c)||200;return proxy},json:b=>{captureRes.body=b;return b},send:b=>{captureRes.body=b;return b},end:b=>{if(b!==undefined)captureRes.body=b;return b}};

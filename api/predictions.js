@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, storageReady, writeJson } from './_report-store.js';
 
 const FINISHED = new Set(['FT','AET','PEN','CANC','ABD','AWD','WO']);
@@ -46,7 +47,7 @@ function signature(s) {return [s.phase,s.status,s.minute,s.classification,s.mark
 export default async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');
   if (!storageReady()) return res.status(503).json({ error:'Prediction archive storage is not configured', storageReady:false });
-  if (req.method === 'GET') {const date=String(req.query?.date||dateInBrussels());return res.status(200).json(await readJson(`argus/predictions/${date}.json`,{date,fixtures:{}}))}
+  if (req.method === 'GET') {const date=String(requestQuery(req)?.date||dateInBrussels());return res.status(200).json(await readJson(`argus/predictions/${date}.json`,{date,fixtures:{}}))}
   if (req.method !== 'POST') return res.status(405).json({ error:'Method not allowed' });
   if (!canWrite(req)) return res.status(403).json({ error:'Trusted writer required' });
   const body=req.body||{},matches=Array.isArray(body.matches)?body.matches:[],analyses=Array.isArray(body.analyses)?body.analyses:[];

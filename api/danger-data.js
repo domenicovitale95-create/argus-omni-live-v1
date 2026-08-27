@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, writeJson, storageReady } from './_report-store.js';
 
 const API_BASE = 'https://v3.football.api-sports.io';
@@ -40,7 +41,7 @@ function normalizeFixture(f,cache){const hId=Number(f.teams?.home?.id),aId=Numbe
 
 export default async function handler(req,res){
   try{
-    const date=String(req.query?.date||dateInTZ(new Date())),from=daysAgo(HISTORY_DAYS),to=date;
+    const date=String(requestQuery(req)?.date||dateInTZ(new Date())),from=daysAgo(HISTORY_DAYS),to=date;
     const fixturesPayload=await apiGet(`/fixtures?date=${date}&timezone=${encodeURIComponent(TZ)}`),fixtures=fixturesPayload.response||[];
     const active=fixtures.filter(f=>!FINISHED.has(f.fixture?.status?.short)),teamIds=[],seen=new Set();
     for(const f of active)for(const id of [f.teams?.home?.id,f.teams?.away?.id]){const n=Number(id);if(n&&!seen.has(n)){seen.add(n);teamIds.push(n)}}

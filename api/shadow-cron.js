@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 function authorized(req){const secret=process.env.CRON_SECRET;return !secret||req.headers.authorization===`Bearer ${secret}`}
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function internalBase(req){const env=String(process.env.VERCEL_ENV||'local').toLowerCase(),productionHost=String(process.env.VERCEL_PROJECT_PRODUCTION_URL||'').trim().replace(/^https?:\/\//,'').replace(/\/$/,'');if(env==='production'&&productionHost)return{base:`https://${productionHost}`,mode:'CANONICAL_PRODUCTION_HOST',env};const proto=(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app';return{base:`${proto}://${host}`,mode:'CURRENT_DEPLOYMENT_HOST',env}}
@@ -6,7 +7,7 @@ async function retryJson(url,options={},attempts=3){let lastError=null;for(let a
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
-  const dryRun=String(req.query?.dryRun||'')==='1';
+  const dryRun=String(requestQuery(req)?.dryRun||'')==='1';
   if(!authorized(req)&&!dryRun)return res.status(401).json({error:'Unauthorized'});
   const route=internalBase(req),base=route.base,internalHost=new URL(base).host;
   if(dryRun)return res.status(200).json({ok:true,status:'DRY_RUN',providerCalls:0,shadowCapture:false,internalHost,selfCallMode:route.mode,vercelEnv:route.env,policy:{readOnly:true,noProviderQuotaSpend:true,noWrites:true,testsRealRoutingFunction:true}});

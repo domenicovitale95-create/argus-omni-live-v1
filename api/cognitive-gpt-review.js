@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, writeJson, storageReady } from './_report-store.js';
 
 export const config={maxDuration:90};
@@ -34,7 +35,7 @@ export default async function handler(req,res){
  const proto=(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app',base=`${proto}://${host}`,auth=req.headers.authorization||'',started=Date.now();
  try{
   const [brief,evidence,memory]=await Promise.all([getJson(base,'/api/cognitive-brief',auth),getJson(base,'/api/cognitive-evidence',auth),getJson(base,'/api/cognitive-memory',auth)]);
-  const packet=compact(brief,evidence,memory),esc=escalation(packet),prompt=buildPrompt(packet,esc),dryRun=String(req.query?.dryRun||'')==='1';
+  const packet=compact(brief,evidence,memory),esc=escalation(packet),prompt=buildPrompt(packet,esc),dryRun=String(requestQuery(req)?.dryRun||'')==='1';
   if(dryRun||!enabled)return res.status(200).json({ok:true,version:'COGNITIVE-GPT-REVIEW-1',mode:'SHADOW_ADVISORY',enabled,called:false,dryRun,model,escalation:esc,reason:dryRun?'DRY_RUN':!enabled?'LLM_KILL_SWITCH_OFF':'NO_CALL',promptChars:prompt.length,productionAuthority:false,costGuard:{dailyMax:num(process.env.COGNITIVE_LLM_DAILY_MAX,4),cooldownHours:num(process.env.COGNITIVE_LLM_COOLDOWN_HOURS,6)}});
   if(!esc.required)return res.status(200).json({ok:true,version:'COGNITIVE-GPT-REVIEW-1',mode:'SHADOW_ADVISORY',enabled:true,called:false,model,escalation:esc,reason:'NO_ESCALATION',productionAuthority:false});
   if(!storageReady())return res.status(503).json({ok:false,error:'Storage unavailable; refusing unmetered cognitive call'});

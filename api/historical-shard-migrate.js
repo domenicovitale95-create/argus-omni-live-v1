@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { get } from '@vercel/blob';
 import { readJson, writeJson, storageReady } from './_report-store.js';
 
@@ -117,7 +118,7 @@ export default async function handler(req,res){
     return res.status(200).json({ok:true,version:'HISTORICAL-SHARD-MIGRATE-2',status:'DISCOVERY_COMPLETE',providerCalls:0,writes:1,scannedFixtures,undatedFixtures,discoveredMonths:index.discoveredMonths.length,monthsMigrated:index.completedMonths.length,migrationComplete:false,policy:{orderIndependent:true,discoveryPass:true,noShardTrustedBeforeFullSourceScan:true,providerQuotaSpend:false,boundedMemory:true,legacyArchiveReadOnly:true}});
   }
 
-  const limit=Math.max(1,Math.min(MAX_MONTHS,Number(req.query?.months)||DEFAULT_MONTHS));
+  const limit=Math.max(1,Math.min(MAX_MONTHS,Number(requestQuery(req)?.months)||DEFAULT_MONTHS));
   const completed=new Set(index.completedMonths);
   const targets=index.discoveredMonths.filter(m=>!completed.has(m)).slice(0,limit);
   if(!targets.length){

@@ -1,14 +1,15 @@
 import trainingBets from './training-bets-v1.js';
+import { requestQuery } from './_request-query.js';
 
 export default async function handler(req,res){
-  // Normalize the Vercel cron request before delegating so downstream auth never sees missing request bags.
+  // Avoid Vercel's legacy requestQuery(req) getter; parse the raw URL unless an internal caller supplied an own query object.
   const headers=req?.headers&&typeof req.headers==='object'?req.headers:{};
-  const query=req?.query&&typeof req.query==='object'?req.query:{};
+  const query=requestQuery(req);
   const nextReq={
-    ...(req||{}),
     method:'GET',
     headers,
-    query:{...query,mode:'run'}
+    query:{...query,mode:'run'},
+    body:req?.body&&typeof req.body==='object'?req.body:{}
   };
   return trainingBets(nextReq,res);
 }

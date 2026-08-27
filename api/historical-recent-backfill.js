@@ -1,3 +1,4 @@
+import { requestQuery } from './_request-query.js';
 import { readJson, writeJson, storageReady } from './_report-store.js';
 import { providerPlanMeta } from './_provider-plan.js';
 
@@ -59,19 +60,19 @@ async function fetchDate(date){
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
-  if(!authorized(req)&&String(req.query?.dryRun||'')!=='1')return res.status(401).json({error:'Unauthorized'});
+  if(!authorized(req)&&String(requestQuery(req)?.dryRun||'')!=='1')return res.status(401).json({error:'Unauthorized'});
   if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
 
   const [guard,indexRaw]=await Promise.all([readJson(QUOTA_GUARD,null),readJson(INDEX,null)]),today=brusselsDate();
   const index=indexRaw||{version:'HISTORICAL-RECENT-INDEX-1',migrationFloor:MIGRATION_FLOOR,dates:{},months:{}};index.dates||={};index.months||={};
-  const allDates=datesToYesterday(),pending=allDates.filter(d=>!index.dates[d]?.complete),requested=Math.max(1,Math.min(MAX_BATCH,Number(req.query?.dates)||DEFAULT_BATCH));
+  const allDates=datesToYesterday(),pending=allDates.filter(d=>!index.dates[d]?.complete),requested=Math.max(1,Math.min(MAX_BATCH,Number(requestQuery(req)?.dates)||DEFAULT_BATCH));
   const guardQuota=guardCurrent(guard)?{dailyLimit:Number(guard?.dailyLimit)||null,dailyRemaining:Number.isFinite(Number(guard?.dailyRemaining))?Number(guard.dailyRemaining):null}:{};
   const beforeBudget=budget(guardQuota);
   const providerHalted=guardCurrent(guard)&&Boolean(guard?.exhausted||guard?.mode==='HALT');
   const reserveBlocked=beforeBudget.dailyRemaining!=null&&beforeBudget.dailyRemaining<=beforeBudget.learningReserve;
   const maxCallsByBudget=beforeBudget.spendable==null?requested:Math.max(0,Math.min(requested,Math.floor(beforeBudget.spendable)));
 
-  if(String(req.query?.dryRun||'')==='1')return res.status(200).json({ok:true,version:'HISTORICAL-RECENT-BACKFILL-4',status:'DRY_RUN',today,migrationFloor:MIGRATION_FLOOR,requiredThrough:allDates[0]||null,pendingDates:pending.slice(0,requested),pendingCount:pending.length,providerCalls:0,writes:0,budget:beforeBudget,maxCallsByBudget,policy:{dryRun:true,providerQuotaSpend:false,persistentWrites:false,monthlyShards:true,noLegacyRewrite:true,operationalTrafficPriority:true,staleNeverStartedGraceHours:NEVER_STARTED_GRACE_MS/3600000}});
+  if(String(requestQuery(req)?.dryRun||'')==='1')return res.status(200).json({ok:true,version:'HISTORICAL-RECENT-BACKFILL-4',status:'DRY_RUN',today,migrationFloor:MIGRATION_FLOOR,requiredThrough:allDates[0]||null,pendingDates:pending.slice(0,requested),pendingCount:pending.length,providerCalls:0,writes:0,budget:beforeBudget,maxCallsByBudget,policy:{dryRun:true,providerQuotaSpend:false,persistentWrites:false,monthlyShards:true,noLegacyRewrite:true,operationalTrafficPriority:true,staleNeverStartedGraceHours:NEVER_STARTED_GRACE_MS/3600000}});
   if(providerHalted)return res.status(200).json({ok:true,version:'HISTORICAL-RECENT-BACKFILL-4',status:'PAUSED_QUOTA_GUARD',today,processedDates:0,providerCalls:0,guardDate:guard?.date||guard?.providerDayUtc||null,budget:beforeBudget,stopReason:'PROVIDER_GUARD_HALTED',policy:{failClosed:true,noProviderQuotaSpend:true,automaticResumeOnNewProviderDay:true,operationalTrafficPriority:true}});
   if(reserveBlocked||maxCallsByBudget===0)return res.status(200).json({ok:true,version:'HISTORICAL-RECENT-BACKFILL-4',status:'PAUSED_OPERATIONAL_RESERVE',today,processedDates:0,providerCalls:0,budget:beforeBudget,stopReason:'LEARNING_BUDGET_EXHAUSTED',policy:{failClosed:true,noProviderQuotaSpend:true,automaticResumeWhenBudgetReturns:true,operationalTrafficPriority:true}});
 
