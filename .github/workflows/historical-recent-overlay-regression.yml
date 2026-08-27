@@ -7,12 +7,14 @@ on:
       - 'api/historical-recent-backfill.js'
       - 'api/streak-intelligence.js'
       - '.github/workflows/argus-autonomous-scheduler.yml'
+      - 'scripts/historical-recent-overlay-regression.mjs'
       - '.github/workflows/historical-recent-overlay-regression.yml'
   pull_request:
     paths:
       - 'api/historical-recent-backfill.js'
       - 'api/streak-intelligence.js'
       - '.github/workflows/argus-autonomous-scheduler.yml'
+      - 'scripts/historical-recent-overlay-regression.mjs'
       - '.github/workflows/historical-recent-overlay-regression.yml'
 
 permissions:
@@ -23,31 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify recent backfill is sharded and quota-aware
-        run: |
-          grep -Fq "PREFIX='argus/research/historical-recent/'" api/historical-recent-backfill.js
-          grep -Fq "monthPath(date)" api/historical-recent-backfill.js
-          grep -Fq "MIGRATION_FLOOR='2026-08-19'" api/historical-recent-backfill.js
-          grep -Fq "function guardCurrent(guard)" api/historical-recent-backfill.js
-          grep -Fq "providerHalted=guardCurrent(guard)" api/historical-recent-backfill.js
-          grep -Fq "status:'PAUSED_QUOTA_GUARD'" api/historical-recent-backfill.js
-          grep -Fq "providerCalls:0" api/historical-recent-backfill.js
-          grep -Fq "status:'DRY_RUN'" api/historical-recent-backfill.js
-          grep -Fq "noLegacyRewrite:true" api/historical-recent-backfill.js
-      - name: Verify incomplete dates are deferred rather than certified
-        run: |
-          grep -Fq "ACTIVE_OR_SCHEDULED" api/historical-recent-backfill.js
-          grep -Fq "settlementReady:active.length===0" api/historical-recent-backfill.js
-          grep -Fq "DEFERRED_UNSETTLED" api/historical-recent-backfill.js
-          grep -Fq "activeOrScheduledDatesDeferred:true" api/historical-recent-backfill.js
-      - name: Verify streak continuity can use only certified sources
-        run: |
-          grep -Fq "archive?.dates?.[date]?.complete||recentIndex?.dates?.[date]?.complete" api/streak-intelligence.js
-          grep -Fq "archiveContinuous(archive,recentIndex" api/streak-intelligence.js
-          grep -Fq "noGapFilling:true" api/streak-intelligence.js
-          grep -Fq "olderMatchesNeverSubstitute:true" api/streak-intelligence.js
-          grep -Fq "continuityMayUseLegacyOrCertifiedRecentOverlay:true" api/streak-intelligence.js
-      - name: Verify scheduler no longer targets oversized legacy monolith
-        run: |
-          grep -Fq "call '/api/historical-recent-backfill?dates=6' 'Historical recent backfill'" .github/workflows/argus-autonomous-scheduler.yml
-          ! grep -Fq "call '/api/historical-decade-backfill?dates=6'" .github/workflows/argus-autonomous-scheduler.yml
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify historical recent overlay invariants
+        run: node scripts/historical-recent-overlay-regression.mjs
