@@ -47,7 +47,7 @@ export default async function handler(req,res){
   const selfImprovementStatus=selfImprovementDiagnostics.protectedPreviewNoise?'OBSERVABILITY_NOISE':selfImprovement?.ok===false||selfImprovementDiagnostics.count>0?'DEGRADED':selfImprovement?'HEALTHY':'UNKNOWN';
   const virtualBets=Object.values(virtualBankroll?.bets||{}),virtualOpen=virtualBets.filter(x=>x?.status==='OPEN').length,virtualSettled=virtualBets.filter(x=>['WIN','LOSS','VOID'].includes(String(x?.status||'').toUpperCase())).length;
   const components={
-    deployment:{status:deploymentMismatch?'DEGRADED':deployment?.status||'UNKNOWN',ageMinutes:depAge,freshness:freshness(depAge,20),commit:snapshotCommit,runtimeCommit:runtime.gitCommitSha,snapshotEnvironment,runtimeEnvironment:runtime.environment,snapshotMatchesRuntime:deployment?!deploymentMismatch:null,failures:deployment?.critical?.failed??null},
+    deployment:{status:deploymentMismatch?'DEGRADED':deployment?.status||'UNKNOWN',ageMinutes:depAge,freshness:freshness(depAge,390),commit:snapshotCommit,runtimeCommit:runtime.gitCommitSha,snapshotEnvironment,runtimeEnvironment:runtime.environment,snapshotMatchesRuntime:deployment?!deploymentMismatch:null,failures:deployment?.critical?.failed??null},
     autopilot:autopilotSnapshot,
     scheduler:{status:scheduler?.generatedAt?'AVAILABLE':'UNKNOWN',ageMinutes:schedAge,freshness:freshness(schedAge,30),prime:scheduler?.summary?.prime??null,value:scheduler?.summary?.value??null,eligible:scheduler?.summary?.eligible??null},
     ledger:{status:ledgerCron?.ok===false?'DEGRADED':ledgerCron?'HEALTHY':'UNKNOWN',ageMinutes:ledgerAge,freshness:freshness(ledgerAge,15),capture:ledgerCron?.capture?.status??null},
