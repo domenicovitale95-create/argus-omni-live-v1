@@ -1,0 +1,211 @@
+{
+  "date": "2026-08-27",
+  "version": "ARGUS-RESEARCH-DOSSIER-2026-08-27-1",
+  "mode": "R&D_ONLY",
+  "productionMutation": false,
+  "summary": {
+    "executeNext": "Resolve the Control Plane experiment's deployment-scope blocker, then collect prospective run lineage before generalizing instrumentation. In parallel, continue read-only selected-case calibration, empirical risk-coverage, market-baseline and exact-score challenger evaluation.",
+    "primaryRisk": "Cron configuration on a preview branch is not evidence of scheduled execution because Vercel cron invocations target production deployments.",
+    "stabilityFirst": true
+  },
+  "observedArgus": {
+    "researchBranchHead": "21b6f6920aac28642a04a9f1ec1497887931e3ab",
+    "productionRuntime24h": {
+      "http200": 16731,
+      "http401": 112,
+      "http207": 16,
+      "fiveXXVisibleInStatusSummary": 0,
+      "note": "The runtime status aggregation exposed no 5xx bucket in the current 24h query; this is not proof that every invocation was healthy."
+    },
+    "runtimeWarning": {
+      "code": "DEP0169",
+      "count24h": 157,
+      "lastSeenUtc": "2026-08-27T06:18:43.000Z",
+      "interpretation": "Transversal url.parse() deprecation warning remains unresolved; no direct ARGUS source call has yet been attributed, so do not patch blindly."
+    }
+  },
+  "findings": [
+    {
+      "id": "CONTROL_PLANE_DEPLOYMENT_SCOPE",
+      "status": "KEEP",
+      "evidenceType": "OBSERVED+OFFICIAL_DOCS",
+      "source": [
+        "https://vercel.com/docs/cron-jobs",
+        "https://vercel.com/docs/cron-jobs/manage-cron-jobs"
+      ],
+      "observed": "Vercel cron jobs invoke the production deployment URL. The research Control Plane cron is currently configured on a preview branch, so the planned 7-day/50+ scheduled-run experiment has not been proven to have started.",
+      "derived": "The current blocker is deployment scope, not model logic and not a cron failure.",
+      "module": ["Control Plane", "failure memory", "observability"],
+      "smallestSafeExperiment": "Promote only the already-built zero-provider-call, zero-model-mutation Control Plane probe through the Maximum Pilot production safety gate after an authenticated manual endpoint/read-back validation; then observe one non-critical route prospectively.",
+      "requiredEvidence": "At least 7 prospective days and >=50 intended invocations; 100% lineage CONFIGURED->DEPLOYED->INVOKED->SUCCEEDED/FAILED->PERSISTED/NOT_PERSISTED; synthetic duplicate and overlap test; sampled cross-check against Vercel RequestId/invocation logs.",
+      "failureCondition": "Missing lineage, duplicate writes, lock suppresses legitimate runs, persistence read-back mismatch, or instrumentation changes provider/model behavior.",
+      "rollback": "Remove only the research cron/probe from production configuration; retain Watchtower and historical evidence.",
+      "productionDecision": "DO_NOT_DEPLOY_TODAY_WITHOUT_RUNTIME_VALIDATION"
+    },
+    {
+      "id": "SELECTED_CASE_CALIBRATION",
+      "status": "KEEP",
+      "evidenceType": "OFFICIAL_DOCS",
+      "source": ["https://scikit-learn.org/stable/modules/calibration.html"],
+      "observed": "Proper scores such as Brier and log-loss combine reliability/calibration, resolution and uncertainty; lower Brier alone does not prove better calibration. Reliability diagrams directly assess calibration.",
+      "derived": "ARGUS must evaluate ALL, ACCEPTED, PRIME, VALUE and NO_BET cohorts separately and pair proper scores with reliability bins/ECE and sample counts.",
+      "module": ["calibration", "PRIME/VALUE governance", "paper betting"],
+      "smallestSafeExperiment": "Keep selected-case-calibration read-only and report Brier, log-loss, ECE, reliability bins and sample size by decision cohort on frozen settled cases.",
+      "requiredEvidence": ">=200 settled accepted cases for directional reading, preference for >=500 for stronger conclusions, multiple forward temporal windows and no post-hoc recalibration of old decisions.",
+      "failureCondition": "Apparent improvement exists only globally, disappears in accepted cohorts, reliability worsens, or results reverse across forward windows.",
+      "rollback": "No production rollback required; endpoint is read-only/shadow."
+    },
+    {
+      "id": "RISK_COVERAGE_ABSTENTION",
+      "status": "KEEP",
+      "evidenceType": "PEER_REVIEWED_TRANSFER_PRINCIPLE",
+      "source": [
+        "https://www.nature.com/articles/s41598-026-40637-w",
+        "https://link.springer.com/article/10.1007/s10994-026-07096-w"
+      ],
+      "observed": "Selective prediction literature formalizes coverage as the fraction accepted and selective risk as error on accepted predictions; stronger selectivity can reduce risk but does not guarantee monotonic improvement in every domain.",
+      "derived": "ARGUS should prove empirical risk-vs-coverage behavior before changing NO BET thresholds or importing conformal guarantees.",
+      "module": ["NO BET", "uncertainty", "operator clarity"],
+      "smallestSafeExperiment": "Continue the existing shadow risk-coverage curve across confidence/readiness thresholds and stratify later by league/market/window once sample size permits.",
+      "requiredEvidence": "Stable risk reduction as coverage falls across multiple independent forward windows, with confidence intervals/bootstrap by match and adequate samples per operating region.",
+      "failureCondition": "Risk curve is non-monotonic/unstable, selective gains vanish out-of-window, or coverage collapses without material risk improvement.",
+      "rollback": "Retain current NO BET policy; discard proposed threshold changes.",
+      "candidateHypothesis": "Formal conformal thresholding remains WATCH until football-specific exchangeability/drift assumptions are tested."
+    },
+    {
+      "id": "MARKET_PROBABILITY_BASELINE",
+      "status": "WATCH",
+      "evidenceType": "CURRENT_PREPRINT+EXISTING_R&D",
+      "source": ["https://arxiv.org/abs/2604.17194"],
+      "observed": "A 2026 preprint reports differences among multiplicative, Shin, Power and alternative odds-to-probability conversions on 90,014 football matches across five bookmakers, including favourite-longshot effects.",
+      "derived": "Simple proportional no-vig should not automatically be treated as market truth; ARGUS should compare de-margin methods on the same point-in-time settled cases.",
+      "module": ["market truth", "odds interpretation", "calibration baseline"],
+      "smallestSafeExperiment": "Extend the existing proportional-vs-power audit offline only; add Shin/one-parameter favourite-longshot challenger only after odds provenance and bookmaker identity are complete.",
+      "requiredEvidence": ">=500 eligible point-in-time cases preferred, several bookmakers/leagues/windows, Brier/log-loss/reliability comparisons on identical cases.",
+      "failureCondition": "More complex conversion fails to improve proper scores consistently or gains depend on one bookmaker/window.",
+      "rollback": "Keep proportional no-vig as transparent baseline.",
+      "reasonNotKeepYet": "Primary 2026 result is a preprint and transfer to ARGUS data provenance is unvalidated."
+    },
+    {
+      "id": "EXACT_SCORE_DEPENDENCE_BENCHMARK",
+      "status": "KEEP",
+      "evidenceType": "PEER_REVIEWED",
+      "source": [
+        "https://academic.oup.com/jrsssc/article/74/1/167/7818323",
+        "https://journals.sagepub.com/doi/10.1177/1471082X241238802"
+      ],
+      "observed": "Recent peer-reviewed football modelling work shows that independent Poisson assumptions can be too restrictive and that Dixon-Coles is one member of a broader dependence family; alternative dependence structures can fit leagues differently.",
+      "derived": "Exact-score R&D should benchmark simple models before any neural/LLM reranker: independent Poisson -> Dixon-Coles -> one dependence challenger.",
+      "module": ["exact score", "score distribution", "walk-forward validation"],
+      "smallestSafeExperiment": "Offline replay comparison using identical features and temporal splits; score the full scoreline distribution, not only top-1 exact-score accuracy.",
+      "requiredEvidence": "Several seasons/leagues with forward splits; full-distribution log-loss or ranked probability score, calibration/coherence with 1X2 and O/U, plus stability by league.",
+      "failureCondition": "Dependence challenger wins only in-sample, degrades 1X2/O-U coherence, or improvement is league-specific and unstable.",
+      "rollback": "Keep independent Poisson/Dixon-Coles baseline; no production effect."
+    },
+    {
+      "id": "LIVE_MARKET_ANCHORED_CHALLENGER",
+      "status": "WATCH",
+      "evidenceType": "CURRENT_PREPRINT",
+      "source": ["https://arxiv.org/abs/2605.16066"],
+      "observed": "A May 2026 preprint on 140 EPL matches reports that calibrating pre-match team strength to Betfair 1X2 and O/U prices was the dominant driver of in-play accuracy, with post-shot xG as a time-varying covariate.",
+      "derived": "Market anchoring is more plausible as a small shadow challenger than adding a large live architecture, but the published sample is too small for promotion.",
+      "module": ["live/in-play", "market anchoring", "xG/event state"],
+      "smallestSafeExperiment": "Shadow-only replay using frozen pre-kickoff market probabilities plus only point-in-time event features proven available before each state.",
+      "requiredEvidence": ">=1000 independent matches preferred, multi-league, multiple forward windows, compare against both current ARGUS and market-only baseline; cluster uncertainty by match rather than live state.",
+      "failureCondition": "No gain over market-only baseline, gain disappears outside EPL/window, or event timestamps are incomplete/leaky.",
+      "rollback": "Discard challenger; preserve current live model."
+    },
+    {
+      "id": "API_QUOTA_HEADER_TRUTH",
+      "status": "KEEP",
+      "evidenceType": "OFFICIAL_PROVIDER_DOCS",
+      "source": [
+        "https://www.api-football.com/news/post/how-to-optimize-api-sports-calls-and-quota-usage",
+        "https://www.api-football.com/news/post/how-ratelimit-works"
+      ],
+      "observed": "API-SPORTS exposes daily and per-minute quota/remaining values in every response header. Pro is 7,500/day, 300/minute and 5/second; official guidance favors smoothing, cache and backoff.",
+      "derived": "ARGUS resource policy should treat provider headers as source-of-truth and increase data acquisition only when quota headroom and value-of-information justify it.",
+      "module": ["API efficiency", "resource intelligence", "provider failure analysis"],
+      "smallestSafeExperiment": "Capture quota headers from existing provider calls without adding requests, persist daily min/median remaining and tag 429/provider failures with current quota state.",
+      "requiredEvidence": "At least 3 UTC quota reset cycles and >=1000 existing provider responses; reconcile local counters to provider headers.",
+      "failureCondition": "Header capture materially alters request path, counters diverge persistently, or quota state cannot explain 429/provider failures.",
+      "rollback": "Disable instrumentation only; keep existing caching/polling policy."
+    },
+    {
+      "id": "POINT_IN_TIME_WALK_FORWARD_GAP",
+      "status": "KEEP",
+      "evidenceType": "OFFICIAL_DOCS",
+      "source": ["https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html"],
+      "observed": "Time-ordered validation is required to avoid training on future observations; TimeSeriesSplit explicitly supports a gap between train and test windows.",
+      "derived": "ARGUS walk-forward evaluation should document a temporal embargo/gap where feature availability or settlement latency could leak future information, rather than relying on chronology alone.",
+      "module": ["walk-forward", "temporal integrity", "calibration validation"],
+      "smallestSafeExperiment": "Audit existing walk-forward splits for feature cutoff and introduce a research-only configurable embargo in replay where same-day/near-kickoff feature availability is ambiguous.",
+      "requiredEvidence": "Zero feature timestamps after decision cutoff in sampled folds; results reported with and without embargo to reveal leakage sensitivity.",
+      "failureCondition": "Performance collapses under a realistic gap or any future-timestamp feature appears in training/decision state.",
+      "rollback": "No production mutation; retain stricter evaluation as truth source."
+    },
+    {
+      "id": "STATSBOMB_OPEN_EVENT_REPLAY",
+      "status": "WATCH",
+      "evidenceType": "OFFICIAL_OPEN_DATA",
+      "source": ["https://github.com/statsbomb/open-data"],
+      "observed": "StatsBomb maintains official open football data with match, event, lineup and selected 360 files; repository data was updated in May 2026 and is intended for research use under stated attribution/terms.",
+      "derived": "It can support free offline experiments for event-state/xG-style feature engineering, but coverage does not match ARGUS production universe and must not be mixed with live evidence as if identical.",
+      "module": ["data R&D", "live replay", "feature research"],
+      "smallestSafeExperiment": "Use a small documented subset offline to test event-timestamp handling and feature definitions, keeping a separate source/provenance namespace.",
+      "requiredEvidence": "License/attribution compliance, explicit competition coverage map, reproducible event ordering, no claim of production availability.",
+      "failureCondition": "Coverage mismatch creates non-transferable gains or feature cannot be reproduced from ARGUS production feeds.",
+      "rollback": "Remove the experimental dataset/challenger; no production dependency."
+    },
+    {
+      "id": "LLM_AS_PRIMARY_FORECASTER",
+      "status": "REJECT",
+      "evidenceType": "CURRENT_BENCHMARK_PREPRINT",
+      "source": ["https://arxiv.org/abs/2607.17765"],
+      "observed": "A July 2026 World Cup benchmark reports that four frontier LLM forecasting agents did not beat the betting market on Brier score across 104 matches, despite rich search/reflection loops.",
+      "derived": "ARGUS should not add an LLM exact-score/probability reranker merely for novelty. LLMs may remain useful for explanation, research synthesis or anomaly triage, not as an unvalidated probability engine.",
+      "module": ["human decision UX", "exact score", "forecasting architecture"],
+      "smallestSafeExperiment": "None for primary forecasting. If used, restrict to read-only explanation/error taxonomy and never let text output overwrite calibrated probabilities.",
+      "requiredEvidence": "Would require independent, contamination-free, proper-score superiority over market/model baselines across large forward samples before reconsideration.",
+      "failureCondition": "Any probability degradation, calibration loss, non-reproducibility or narrative-driven confidence inflation.",
+      "rollback": "Keep LLM outside probability generation."
+    }
+  ],
+  "rejectedWeakIdeas": [
+    "Upgrade API-Football solely to accelerate learning without demonstrated quota bottleneck.",
+    "Promote conformal thresholds directly from non-football domains without drift/exchangeability validation.",
+    "Adopt published betting ROI as evidence of transferable edge.",
+    "Add a large live transformer before point-in-time event completeness and market-only baselines are proven.",
+    "Patch DEP0169 by guessing at application source before dependency attribution."
+  ],
+  "maximumPilotHandoff": {
+    "executeNext": [
+      "Treat Control Plane test as BLOCKED_BY_DEPLOYMENT_SCOPE until production-safe runtime validation exists.",
+      "Keep selected-case calibration, risk-coverage, market-baseline and exact-score benchmarks read-only/shadow.",
+      "Instrument provider quota headers only on existing calls when code path is identified and validated.",
+      "Audit walk-forward feature cutoffs and add research embargo sensitivity test."
+    ],
+    "watch": [
+      "market-anchored live challenger",
+      "formal conformal thresholds",
+      "StatsBomb event replay transferability",
+      "alternative odds de-margin methods"
+    ],
+    "doNotDo": [
+      "Do not increase PRIME confidence or loosen NO BET.",
+      "Do not merge the whole research branch to main.",
+      "Do not add provider requests just for observability.",
+      "Do not interpret configuration as execution proof.",
+      "Do not use ROI alone as promotion criterion."
+    ],
+    "proofRequired": [
+      "prospective Control Plane lineage",
+      "frozen point-in-time decisions",
+      "forward selected-cohort calibration",
+      "risk-coverage stability",
+      "market baseline on identical cases",
+      "temporal leakage audit with realistic gap",
+      "provider quota reconciliation"
+    ]
+  }
+}
