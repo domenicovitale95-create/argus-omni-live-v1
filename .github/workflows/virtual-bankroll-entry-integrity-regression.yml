@@ -1,0 +1,51 @@
+name: Virtual Bankroll Entry Integrity Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/virtual-bankroll-v3.js'
+      - 'api/_virtual-bankroll-entry-policy.js'
+      - '.github/workflows/virtual-bankroll-entry-integrity-regression.yml'
+  pull_request:
+    paths:
+      - 'api/virtual-bankroll-v3.js'
+      - 'api/_virtual-bankroll-entry-policy.js'
+
+permissions:
+  contents: read
+
+jobs:
+  invariant-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify fail-closed entry policy
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { officialDecisionEligibility, learningDecisionEligibility, storedBetEntryViolation } from './api/_virtual-bankroll-entry-policy.js';
+
+          const base={odds:2.1,probability:.51,fairOdds:1.96,edge:4.2,evPct:7.1,confidence:62,recommendedStakePct:0,risks:[],portfolioBlocked:false};
+          assert.equal(learningDecisionEligibility({...base,verdict:'NO BET'}).ok,false,'NO BET must never create learning stake');
+          assert.equal(learningDecisionEligibility({...base,verdict:'WATCH',portfolioBlocked:true}).ok,false,'portfolio-blocked WATCH must not stake');
+          assert.equal(learningDecisionEligibility({...base,verdict:'WATCH',risks:['NOT_ELIGIBLE_UPSTREAM']}).ok,false,'upstream-ineligible WATCH must not stake');
+          assert.equal(learningDecisionEligibility({...base,verdict:'WATCH'}).ok,true,'clean WATCH may remain a learning-only candidate');
+
+          assert.equal(officialDecisionEligibility({...base,verdict:'NO BET',recommendedStakePct:1}).ok,false,'NO BET cannot enter official paper bankroll even with contradictory positive stake');
+          assert.equal(officialDecisionEligibility({...base,verdict:'WATCH',recommendedStakePct:1}).ok,false,'WATCH cannot enter official paper bankroll');
+          assert.equal(officialDecisionEligibility({...base,verdict:'VALUE',recommendedStakePct:1}).ok,true,'eligible VALUE may enter official paper bankroll');
+          assert.equal(officialDecisionEligibility({...base,verdict:'PRIME',recommendedStakePct:1,portfolioBlocked:true}).ok,false,'portfolio veto is final');
+
+          assert.equal(storedBetEntryViolation({cohort:'LEARNING_SHADOW',verdict:'NO BET',recommendedStakePct:0,decisionAudit:{risks:['NOT_ELIGIBLE_UPSTREAM'],portfolioBlocked:true}}),'LEARNING_NON_WATCH_VERDICT');
+          assert.equal(storedBetEntryViolation({cohort:'OFFICIAL_PAPER',verdict:'NO BET',recommendedStakePct:1,decisionAudit:{risks:[],portfolioBlocked:false}}),'OFFICIAL_VERDICT_NOT_ACTIONABLE');
+          console.log('virtual bankroll entry invariants PASS');
+          NODE
+      - name: Verify self-healing architecture is present
+        run: |
+          grep -q 'quarantineInvalid' api/virtual-bankroll-v3.js
+          grep -q 'rebuildProfilesFromBets' api/virtual-bankroll-v3.js
+          grep -q 'learningNoBetForbidden:true' api/virtual-bankroll-v3.js
