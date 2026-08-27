@@ -1,4 +1,4 @@
-const NON_ACTIONABLE=new Set(['NO BET','NO_BET','WATCH','WAIT','SKIP','BLOCKED','INELIGIBLE']);
+const ACTIONABLE=new Set(['PRIME','VALUE','STRONG VALUE','STRONG_VALUE']);
 const LEARNING_DENY_RISKS=['NOT_ELIGIBLE_UPSTREAM','NO_PRICED_MODELLED_MARKET','ODDS_MISSING','MATCH_FINISHED','EVIDENCE_STALE_OR_WEAK','LOW_DATA_QUALITY','PORTFOLIO_BLOCKED'];
 
 const n=(v,f=null)=>{if(v===null||v===undefined||v==='')return f;const x=Number(v);return Number.isFinite(x)?x:f};
@@ -7,7 +7,7 @@ const risksOf=rec=>[...(rec?.risks||[])].map(upper);
 
 export function officialDecisionEligibility(rec){
   const verdict=upper(rec?.verdict);
-  if(NON_ACTIONABLE.has(verdict))return{ok:false,reason:'NON_ACTIONABLE_VERDICT'};
+  if(!ACTIONABLE.has(verdict))return{ok:false,reason:'VERDICT_NOT_ACTIONABLE'};
   if(rec?.portfolioBlocked===true)return{ok:false,reason:'PORTFOLIO_BLOCKED'};
   if(upper(rec?.preKickoffGate)==='BLOCKED')return{ok:false,reason:'PREKICKOFF_BLOCKED'};
   if(!(n(rec?.recommendedStakePct,0)>0))return{ok:false,reason:'NON_POSITIVE_RECOMMENDED_STAKE'};
@@ -42,7 +42,7 @@ export function storedBetEntryViolation(bet){
     if(risks.some(r=>r.includes('NOT_ELIGIBLE_UPSTREAM')))return'LEARNING_NOT_ELIGIBLE_UPSTREAM';
   }
   if(cohort==='OFFICIAL_PAPER'){
-    if(NON_ACTIONABLE.has(verdict))return'OFFICIAL_NON_ACTIONABLE_VERDICT';
+    if(!ACTIONABLE.has(verdict))return'OFFICIAL_VERDICT_NOT_ACTIONABLE';
     if(!(n(bet?.recommendedStakePct,0)>0))return'OFFICIAL_NON_POSITIVE_STAKE';
     if(portfolioBlocked)return'OFFICIAL_PORTFOLIO_BLOCKED';
   }
