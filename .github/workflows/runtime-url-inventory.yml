@@ -1,0 +1,25 @@
+name: Runtime Legacy URL Inventory
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/inventory-legacy-url.mjs'
+      - '.github/workflows/runtime-url-inventory.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install exact ARGUS dependencies
+        run: npm install --no-audit --no-fund
+      - name: Inventory legacy URL callers
+        run: node scripts/inventory-legacy-url.mjs
