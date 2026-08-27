@@ -36,31 +36,34 @@ jobs:
           const vercel = JSON.parse(fs.readFileSync('vercel.json','utf8'));
           const supervisorCron = (vercel.crons || []).find(x => x.path === '/api/autonomous-supervisor');
           if (!supervisorCron) throw new Error('Missing Vercel autonomous supervisor cron');
-          if (supervisorCron.schedule !== '*/10 * * * *') throw new Error(`Unexpected supervisor schedule: ${supervisorCron.schedule}`);
+          if (supervisorCron.schedule !== '*/30 * * * *') throw new Error(`Unexpected supervisor schedule: ${supervisorCron.schedule}`);
+          const fastCron = (vercel.crons || []).find(x => x.path === '/api/fast-cycle');
+          if (!fastCron || fastCron.schedule !== '2-57/15 * * * *') throw new Error(`Unexpected fast-cycle schedule: ${fastCron?.schedule}`);
 
           const recentBackfillCron = (vercel.crons || []).find(x => x.path === '/api/historical-recent-backfill');
-          if (!recentBackfillCron) throw new Error('Missing Vercel historical recent backfill fallback');
-          if (recentBackfillCron.schedule !== '31 2 * * *') throw new Error(`Unexpected recent backfill fallback schedule: ${recentBackfillCron.schedule}`);
+          if (!recentBackfillCron || recentBackfillCron.schedule !== '31 2 * * *') throw new Error(`Unexpected recent backfill fallback schedule: ${recentBackfillCron?.schedule}`);
           const streakCron = (vercel.crons || []).find(x => x.path === '/api/streak-intelligence');
-          if (!streakCron) throw new Error('Missing Vercel streak intelligence freshness fallback');
-          if (streakCron.schedule !== '47 2 * * *') throw new Error(`Unexpected streak intelligence fallback schedule: ${streakCron.schedule}`);
+          if (!streakCron || streakCron.schedule !== '47 2 * * *') throw new Error(`Unexpected streak intelligence fallback schedule: ${streakCron?.schedule}`);
           if ((vercel.functions?.['api/historical-recent-backfill.js']?.maxDuration || 0) < 120) throw new Error('Recent backfill fallback is not given enough runtime');
           if ((vercel.functions?.['api/streak-intelligence.js']?.maxDuration || 0) < 120) throw new Error('Streak refresh fallback is not given enough runtime');
 
           const runIgnore = (env) => spawnSync('bash', ['-lc', vercel.ignoreCommand], { env:{...process.env,...env} }).status;
           if (runIgnore({VERCEL_GIT_COMMIT_REF:'main',VERCEL_GIT_COMMIT_MESSAGE:'normal fix'}) !== 1) throw new Error('Production deployment would be ignored');
           if (runIgnore({VERCEL_GIT_COMMIT_REF:'feature/test',VERCEL_GIT_COMMIT_MESSAGE:'normal fix'}) !== 0) throw new Error('Normal preview deployment would not be suppressed');
-          if (runIgnore({VERCEL_GIT_COMMIT_REF:'feature/test',VERCEL_GIT_COMMIT_MESSAGE:'deploy: explicit preview'}) !== 1) throw new Error('Explicit preview deployment cannot be forced');
+          if (runIgnore({VERCEL_GIT_COMMIT_REF:'feature/test',VERCEL_GIT_COMMIT_MESSAGE:'deploy: explicit preview'}) !== 0) throw new Error('Preview deployment bypass would reintroduce build-cost amplification');
 
           const scheduler = fs.readFileSync('.github/workflows/argus-autonomous-scheduler.yml','utf8');
-          if (!scheduler.includes("- cron: '19,49 * * * *'")) throw new Error('Missing GitHub watchdog schedule');
+          if (!scheduler.includes("- cron: '13,43 * * * *'")) throw new Error('Missing 30-minute GitHub fast-cycle backup health check');
+          if (!scheduler.includes("- cron: '23 * * * *'")) throw new Error('Missing hourly GitHub autonomy watchdog');
           if (!scheduler.includes('run_watchdog()')) throw new Error('Missing health-gated watchdog');
           if (!scheduler.includes("'/api/autonomous-supervisor' 'Autonomous supervisor backup recovery'")) throw new Error('Missing backup supervisor recovery');
           if (scheduler.includes("- cron: '4-54/10 * * * *'")) throw new Error('Old duplicate GitHub 10-minute supervisor schedule still present');
+          if (scheduler.includes("- cron: '19,49 * * * *'")) throw new Error('Obsolete 30-minute autonomy watchdog still present');
 
           const health = fs.readFileSync('api/autonomy-health.js','utf8');
           if (!health.includes("primaryScheduler:'VERCEL_CRON'")) throw new Error('Health endpoint does not expose Vercel as primary scheduler');
           if (!health.includes("backupScheduler:'GITHUB_WATCHDOG'")) throw new Error('Health endpoint does not expose GitHub watchdog backup');
+          if (!health.includes('cronExpectedEveryMinutes:EXPECTED_MINUTES')) throw new Error('Health endpoint does not expose expected cadence');
           if (!health.includes('automaticWagering:false')) throw new Error('Automatic real-money wagering safety flag missing');
 
           const supervisor = fs.readFileSync('api/autonomous-supervisor.js','utf8');

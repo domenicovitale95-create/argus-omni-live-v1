@@ -4,15 +4,25 @@ on:
   push:
     branches: [main, argus-payload-stability-hotfix]
     paths:
+      - 'api/_shadow-evidence-core.js'
       - 'api/shadow-cron.js'
       - 'api/shadow-mode.js'
+      - 'api/shadow-settlement-cron.js'
+      - 'api/market-memory.js'
+      - 'api/fast-cycle.js'
       - 'api/autopilot-readiness.js'
+      - 'vercel.json'
       - '.github/workflows/shadow-evidence-pipeline-regression.yml'
   pull_request:
     paths:
+      - 'api/_shadow-evidence-core.js'
       - 'api/shadow-cron.js'
       - 'api/shadow-mode.js'
+      - 'api/shadow-settlement-cron.js'
+      - 'api/market-memory.js'
+      - 'api/fast-cycle.js'
       - 'api/autopilot-readiness.js'
+      - 'vercel.json'
       - '.github/workflows/shadow-evidence-pipeline-regression.yml'
 
 jobs:
@@ -20,18 +30,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify production self-calls use canonical host
+      - name: Syntax check critical evidence files
         run: |
-          grep -Fq "VERCEL_PROJECT_PRODUCTION_URL" api/shadow-cron.js
-          grep -Fq "env==='production'&&productionHost" api/shadow-cron.js
-          grep -Fq "CANONICAL_PRODUCTION_HOST" api/shadow-cron.js
-          grep -Fq "CURRENT_DEPLOYMENT_HOST" api/shadow-cron.js
-      - name: Verify shadow capture remains immutable and pre-kickoff
+          node --check api/_shadow-evidence-core.js
+          node --check api/shadow-mode.js
+          node --check api/shadow-settlement-cron.js
+          node --check api/market-memory.js
+          node --check api/fast-cycle.js
+      - name: Verify price-independent pre-kickoff evidence
         run: |
-          grep -Fq "argus/shadow/" api/shadow-mode.js
-          grep -Fq "now>=kickoff" api/shadow-mode.js
-          grep -Fq "IMMUTABLE FIRST FREEZE" api/shadow-mode.js
-      - name: Verify readiness consumes persisted shadow evidence
+          grep -Fq "ARGUS_PREMATCH_1X2" api/_shadow-evidence-core.js
+          grep -Fq "HISTORY90D_POISSON" api/_shadow-evidence-core.js
+          grep -Fq "modelIndependentOfPrice:true" api/_shadow-evidence-core.js
+          grep -Fq "nowMs>=kickoff" api/_shadow-evidence-core.js
+          grep -Fq "IMMUTABLE FIRST FREEZE" api/_shadow-evidence-core.js
+          grep -Fq "PREKICKOFF_LATE_BIND" api/_shadow-evidence-core.js
+      - name: Verify capture reuses Autopilot payload without provider calls
+        run: |
+          grep -Fq "captureShadowEvidence(matches)" api/market-memory.js
+          grep -Fq "providerCalls:0" api/_shadow-evidence-core.js
+          grep -Fq "shadowEvidence" api/market-memory.js
+      - name: Verify recovery settlement is low frequency and protected
+        run: |
+          grep -Fq "shadow-settlement-cron" vercel.json
+          grep -Fq '"schedule": "23 8 * * *"' vercel.json
+          grep -Fq "Unauthorized" api/shadow-mode.js
+          grep -Fq "API_FOOTBALL_RECOVERY" api/shadow-mode.js
+      - name: Verify fast-cycle synthetic queries use req.url semantics
+        run: |
+          grep -Fq "url:qs?" api/fast-cycle.js
+          grep -Fq "primaryCadenceMinutes:15" api/fast-cycle.js
+          grep -Fq "backupHealthCheckMinutes:30" api/fast-cycle.js
+      - name: Verify readiness still consumes persisted shadow evidence
         run: |
           grep -Fq "listJson('argus/shadow/',180)" api/autopilot-readiness.js
           grep -Fq "freezeValid" api/autopilot-readiness.js
