@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vercel dev"
+    "dev": "vercel dev",
+    "postinstall": "node scripts/patch-web-push-url.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",
-    "web-push": "github:web-push-libs/web-push#658a8889aa06cb7292d16ae7f95773a9e97ded04"
+    "web-push": "3.6.7"
   }
 }
