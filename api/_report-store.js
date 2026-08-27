@@ -1,5 +1,15 @@
 import { get, list, put } from '@vercel/blob';
 
+const WARNING_TRACE_KEY = Symbol.for('argus.dep0169.trace.listener');
+if (!globalThis[WARNING_TRACE_KEY]) {
+  globalThis[WARNING_TRACE_KEY] = true;
+  process.on('warning', (warning) => {
+    if (warning?.code === 'DEP0169') {
+      console.warn('[ARGUS_DEP0169_TRACE]', warning.stack || String(warning));
+    }
+  });
+}
+
 const ACCESS = 'private';
 const QUOTA_GUARD_PATH = 'argus/data/api-football-quota-guard.json';
 const TEMP_ZERO_QUOTA_DATE = '2026-08-22';
