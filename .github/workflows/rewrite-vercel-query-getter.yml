@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if grep -RIn --include='*.js' -E 'req\??\.query' api; then
+          if grep -RIn --include='*.js' --exclude='_request-query.js' -E 'req\??\.query' api; then
             echo '::error::Direct req.query access remains in api/' >&2
             exit 1
           fi
