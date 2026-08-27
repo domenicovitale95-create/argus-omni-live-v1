@@ -59,8 +59,13 @@ function semanticOk(httpStatus,body={}){
   return httpStatus>=200&&httpStatus<300&&body?.ok!==false&&!['DEGRADED','CRITICAL','FAIL','BLOCKED'].includes(semantic);
 }
 function localReq(base,query={}){
-  const u=new URL(base),s=secret();
-  return{method:'GET',query,body:{},headers:{host:u.host,'x-forwarded-host':u.host,'x-forwarded-proto':u.protocol.replace(':',''),...(s?{authorization:`Bearer ${s}`}:{})}};
+  const u=new URL(base),s=secret(),params=new URLSearchParams();
+  for(const[key,value]of Object.entries(query||{})){
+    if(Array.isArray(value)){for(const item of value)params.append(key,String(item));continue}
+    if(value!==undefined&&value!==null)params.set(key,String(value));
+  }
+  const qs=params.toString();
+  return{method:'GET',url:qs?`/?${qs}`:'/',body:{},headers:{host:u.host,'x-forwarded-host':u.host,'x-forwarded-proto':u.protocol.replace(':',''),...(s?{authorization:`Bearer ${s}`}:{})}};
 }
 function localRes(){
   let statusCode=200,body=null;
@@ -131,7 +136,7 @@ export default async function handler(req,res){
     status:failures.length?'DEGRADED':'HEALTHY',jobs:results.length,failures:failures.length,networkFallbacks:fallbacks.length,results,
     pushSkipped:!(process.env.VAPID_PUBLIC_KEY&&process.env.VAPID_PRIVATE_KEY),
     livePaperSettlementDue:dueLivePaperSettlement,
-    policy:{primaryScheduler:'VERCEL_CRON',primaryCadenceMinutes:5,backupScheduler:'GITHUB_CONDITIONAL',backupHealthCheckMinutes:10,inProcessSubjobs:true,networkFallbackOnLocalException:true,currentCycleAttestationRequired:true,bankrollFailClosedOnCycleAmbiguity:true,livePaperSettlementInProcess:true,livePaperSettlementCadenceMinutes:15,livePaperProviderPolicy:'ZERO_WHEN_IDLE; DUE_OPEN_FIXTURES_ONLY; MAX_2_PER_RUN; 30_MIN_RECHECK',providerCallsAddedByOrchestrator:0,subjobsPreserveOwnProviderPolicies:true,automaticRealWagering:false}
+    policy:{primaryScheduler:'VERCEL_CRON',primaryCadenceMinutes:15,backupScheduler:'GITHUB_CONDITIONAL',backupHealthCheckMinutes:30,inProcessSubjobs:true,networkFallbackOnLocalException:true,currentCycleAttestationRequired:true,bankrollFailClosedOnCycleAmbiguity:true,livePaperSettlementInProcess:true,livePaperSettlementCadenceMinutes:15,livePaperProviderPolicy:'ZERO_WHEN_IDLE; DUE_OPEN_FIXTURES_ONLY; MAX_2_PER_RUN; 30_MIN_RECHECK',providerCallsAddedByOrchestrator:0,subjobsPreserveOwnProviderPolicies:true,automaticRealWagering:false}
   };
   try{await writeJson(STATE,state)}catch(error){return res.status(503).json({...state,status:'CRITICAL',error:`FAST_CYCLE_HEALTH_PERSIST_FAILED: ${error?.message||'unknown'}`})}
   return res.status(failures.length?207:200).json(state);
