@@ -28,6 +28,10 @@
       "schedule": "47 2 * * *"
     },
     {
+      "path": "/api/shadow-settlement-cron",
+      "schedule": "23 8 * * *"
+    },
+    {
       "path": "/api/fast-cycle",
       "schedule": "2-57/15 * * * *"
     },
@@ -63,6 +67,9 @@
       "maxDuration": 120
     },
     "api/deployment-verifier.js": {
+      "maxDuration": 60
+    },
+    "api/shadow-settlement-cron.js": {
       "maxDuration": 60
     }
   }
