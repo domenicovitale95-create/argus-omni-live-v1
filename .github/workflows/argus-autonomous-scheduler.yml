@@ -4,6 +4,7 @@ on:
   schedule:
     # Vercel is primary. GitHub is backup-only for fast-cycle/supervisor recovery
     # plus low-frequency maintenance; it must not duplicate normal primary work.
+    # Scheduler registration heartbeat: 2026-08-28 (no cadence or policy change).
     - cron: '13,43 * * * *'
     - cron: '23 * * * *'
     - cron: '17 0,6,12,18 * * *'
