@@ -7,6 +7,9 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
-  const date=previousBrusselsDate(),proxy={...req,method:'GET',url:`/api/shadow-mode?mode=settle&date=${encodeURIComponent(date)}`};
+  const date=previousBrusselsDate();
+  // Keep the internal settlement request minimal. Spreading Vercel's request
+  // object can evaluate framework getters (including the legacy query parser).
+  const proxy={method:'GET',headers:req.headers,url:`/api/shadow-mode?mode=settle&date=${encodeURIComponent(date)}`,query:{mode:'settle',date}};
   return shadowMode(proxy,res);
 }
