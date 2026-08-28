@@ -1,0 +1,158 @@
+{
+  "dossier_date": "2026-08-28",
+  "system": "ARGUS OMNI",
+  "mode": "evidence_pipeline",
+  "production_change": false,
+  "doctrine_alignment": [
+    "data_integrity_first",
+    "temporal_integrity_first",
+    "canonical_ledger_first",
+    "market_prior_default",
+    "calibration_before_promotion",
+    "no_bet_first_class_action",
+    "paper_only_experiments"
+  ],
+  "findings": [
+    {
+      "id": "CAL-001",
+      "status": "KEEP",
+      "evidence_class": "OBSERVED",
+      "source": "https://scikit-learn.org/stable/modules/calibration.html",
+      "evidence": "Current scikit-learn documentation states that probability calibration must be evaluated on data independent from model fitting and that isotonic calibration is more prone to overfitting on small samples; it notes isotonic is generally preferable only when enough calibration data exists, approximately >1000 samples.",
+      "derived_interpretation": "ARGUS should never fit a post-hoc calibrator on the same frozen predictions used to train the base model. Small football market slices should default to simpler monotonic calibration or remain UNAVAILABLE rather than force isotonic fitting.",
+      "module": ["calibration", "walk_forward_validation", "governance"],
+      "smallest_safe_experiment": "Offline only: on canonical frozen settled predictions, perform expanding-window walk-forward calibration. Compare RAW vs sigmoid/temperature vs isotonic only where calibration sample >=1000 for the exact target family. Never update production probabilities during the test.",
+      "required_sample": "Minimum 500 settled predictions for an initial WATCH diagnostic; >=1000 target-specific calibration observations before isotonic can be considered for promotion. Preserve chronological splits and league/market labels.",
+      "success_metrics": ["log_loss_not_worse", "brier_score_improves", "reliability_error_improves", "no_material_edge_rank_degradation"],
+      "failure_condition": "Any calibrator improves in-sample metrics but degrades next-window Brier/log loss, creates extreme probabilities, or reduces calibration only through sparse bins.",
+      "rollback": "Discard calibrator artifact and continue using RAW/SHRUNK/CONSERVATIVE probabilities with calibration_status=UNAVAILABLE or prior validated calibrator.",
+      "maximum_pilot_gate": "offline_shadow_only"
+    },
+    {
+      "id": "UNC-001",
+      "status": "WATCH",
+      "evidence_class": "OBSERVED",
+      "source": "https://mapie.readthedocs.io/en/stable/content/getting-started/choosing-algorithm/",
+      "evidence": "MAPIE 2026 documentation separates probability calibration from conformal prediction/risk control and explicitly recommends checking exchangeability assumptions before applying conformal methods.",
+      "derived_interpretation": "Conformal prediction is not a drop-in confidence generator for ARGUS because football data are time-dependent and distribution-shifting. Its best first use is an abstention diagnostic, not a production probability modifier.",
+      "module": ["uncertainty", "selective_prediction", "abstention"],
+      "smallest_safe_experiment": "Paper-shadow only: build rolling conformal prediction sets for 1X2 using strictly chronological conformalization windows. Record prediction-set size and empirical coverage; do not alter bet eligibility yet.",
+      "required_sample": "At least 1000 chronological settled 1X2 forecasts spanning multiple windows; enough observations per league/regime to test coverage drift.",
+      "success_metrics": ["target_coverage_met_out_of_sample", "prediction_set_size_stable", "abstention_subset_has_lower_error_than_full_universe"],
+      "failure_condition": "Coverage collapses across time/league regimes, prediction sets are almost always all classes, or exchangeability diagnostics repeatedly fail.",
+      "rollback": "Remove conformal output from decision experiments; retain only diagnostic telemetry.",
+      "maximum_pilot_gate": "paper_shadow_only"
+    },
+    {
+      "id": "LIVE-001",
+      "status": "KEEP",
+      "evidence_class": "OBSERVED",
+      "source": "https://arxiv.org/abs/2312.04338",
+      "evidence": "A stochastic football match model using dynamic regressors found materially different goal intensities after red cards and by score state, and showed dynamic regressors improve in-game predictive power. The paper also models stoppage time rather than treating minute 90 as a fixed horizon.",
+      "derived_interpretation": "ARGUS live-state handling should explicitly invalidate/recompute after score changes, red cards and late-game horizon changes. Static pre-match rates should remain priors only.",
+      "module": ["live_engine", "temporal_integrity", "state_invalidation"],
+      "smallest_safe_experiment": "No model replacement. Add a shadow audit that flags any live forecast whose score/red-card state differs from the latest source snapshot or whose event timestamp is older than the allowed TTL. Measure how many current decisions would have been stale.",
+      "required_sample": "At least 200 live match snapshots including >=30 material state-change events before using results to tighten hard gates.",
+      "success_metrics": ["zero_actionable_stale_state_after_gate", "state_change_recompute_latency_reduced", "no_false_live_flags_past_ttl"],
+      "failure_condition": "Source event ordering is inconsistent enough that the gate blocks correct fresh states or increases false invalidation materially.",
+      "rollback": "Return to existing live gate thresholds while keeping audit logs and stale-state counters.",
+      "maximum_pilot_gate": "diagnostic_first_then_reversible_gate"
+    },
+    {
+      "id": "DQ-001",
+      "status": "KEEP",
+      "evidence_class": "OBSERVED",
+      "source": "https://docs.greatexpectations.io/docs/core/run_validations/",
+      "evidence": "Great Expectations 1.21 documents explicit validation definitions, expectation suites, persisted validation results and retrieval of unexpected rows.",
+      "derived_interpretation": "ARGUS can formalize provider and ledger invariants as executable data contracts instead of relying on silent assumptions. This directly strengthens Control Plane truth without changing forecasting logic.",
+      "module": ["data_quality_gate", "ledger_integrity", "control_plane"],
+      "smallest_safe_experiment": "Implement read-only validation specifications for a copied/offline batch first: unique canonical match id, non-null kickoff UTC, odds >1 where applicable, monotonically ordered source timestamps per entity, immutable frozen prediction fields after decision_at, and settled result consistency.",
+      "required_sample": "Run against at least 7 consecutive daily historical batches and every canonical settled record touched by the validator; manually inspect all unexpected rows before any blocking action.",
+      "success_metrics": ["unexpected_rows_are_actionable", "zero_false_blockers_on_clean_records", "validator_detects_seeded_corruption"],
+      "failure_condition": "Validators generate noisy false positives, cannot distinguish provider latency from corruption, or require mutation of canonical data.",
+      "rollback": "Keep validators report-only and disable any blocking hook.",
+      "maximum_pilot_gate": "report_only"
+    },
+    {
+      "id": "OBS-001",
+      "status": "KEEP",
+      "evidence_class": "OBSERVED",
+      "source": "https://prometheus.io/docs/practices/the_zen/",
+      "evidence": "Prometheus guidance says alerts should be urgent, important, actionable and real; symptom-based alerts should drive paging while cause-based signals belong in dashboards/tickets to reduce alert fatigue.",
+      "derived_interpretation": "ARGUS should separate operator-facing health truth from noisy internal causes. The Control Plane should prioritize betting-impact symptoms such as stale live state, ledger settlement lag, provider freshness breach, failed paper execution and calibration evidence insufficiency.",
+      "module": ["observability", "control_plane", "operator_ux"],
+      "smallest_safe_experiment": "Reclassify existing diagnostics in a non-mutating health schema: CRITICAL only for user-facing pipeline breakage; WARNING for degraded inputs; INFO for root-cause/debug metrics. Add duration/debounce before raising transient freshness alarms.",
+      "required_sample": "At least 14 days of health events to compare alert volume, missed incidents and operator actionability.",
+      "success_metrics": ["critical_alert_precision_improves", "alert_volume_reduces", "no_missed_pipeline_breaks"],
+      "failure_condition": "A real betting/ledger failure is downgraded or hidden, or debounce delays detection beyond safe latency.",
+      "rollback": "Restore previous severity mapping; retain event history for postmortem comparison.",
+      "maximum_pilot_gate": "ux_and_telemetry_only"
+    },
+    {
+      "id": "MODEL-001",
+      "status": "WATCH",
+      "evidence_class": "OBSERVED",
+      "source": "https://arxiv.org/abs/2512.00203",
+      "evidence": "A 2025 football paper proposes possession-level modeling of both shot occurrence and shot quality, addressing the limitation that standard xG conditions only on observed shots; it reports improved team-level predictive accuracy and more persistent player skill signal.",
+      "derived_interpretation": "If ARGUS later gains reliable event/possession data, attacking-process features may add information beyond shot-only xG. This is not currently a justification to expand API spend or rewrite the model.",
+      "module": ["feature_research", "prematch_model", "live_model"],
+      "smallest_safe_experiment": "Dataset feasibility study only: determine whether current free/low-cost providers expose timestamped possessions or sufficiently dense event proxies with stable identifiers. No production feature addition.",
+      "required_sample": "At least one full season with consistent event schema and no material missingness before any predictive ablation test.",
+      "success_metrics": ["data_availability_confirmed", "schema_stable", "incremental_walk_forward_gain_over_market_prior_baseline"],
+      "failure_condition": "Data are incomplete, expensive, provider-unstable, or predictive gains vanish against market-prior baseline.",
+      "rollback": "Reject feature family and keep current provider footprint.",
+      "maximum_pilot_gate": "research_only"
+    },
+    {
+      "id": "REJECT-001",
+      "status": "REJECT",
+      "evidence_class": "DERIVED",
+      "source": "https://arxiv.org/abs/2607.00164",
+      "evidence": "A 2026 probabilistic forecasting paper using NFL in-game win probability shows that optimizing directly against single realized outcomes can degrade calibration because the target is noisy; their proposed training method is domain- and architecture-specific.",
+      "derived_interpretation": "Do not add online reinforcement-style self-training from each won/lost football bet. A single settlement is evidence for scoring, not a stable supervised target for immediate model mutation.",
+      "module": ["learning", "failure_memory", "calibration"],
+      "smallest_safe_experiment": "None in production. Continue accumulating frozen settled forecasts and evaluate learning changes only on aggregated chronological evidence.",
+      "required_sample": "N/A",
+      "failure_condition": "Immediate outcome-driven weight updates would create high variance and feedback loops.",
+      "rollback": "N/A because proposal is rejected.",
+      "maximum_pilot_gate": "blocked"
+    },
+    {
+      "id": "REJECT-002",
+      "status": "REJECT",
+      "evidence_class": "DERIVED",
+      "source": "https://arxiv.org/abs/2603.11016",
+      "evidence": "A 2026 player-contribution paper introduces xGA and restricted Shapley values for shot-action contribution/scouting, using detailed passing interactions.",
+      "derived_interpretation": "Interesting for player valuation, but not sufficiently direct or low-cost for ARGUS match pricing now. It would add feature complexity and data requirements without a demonstrated incremental edge over market priors.",
+      "module": ["feature_research"],
+      "smallest_safe_experiment": "None until possession/passing data already exist for another validated reason.",
+      "required_sample": "N/A",
+      "failure_condition": "Non-transferable objective and high data cost relative to current priorities.",
+      "rollback": "N/A because proposal is rejected.",
+      "maximum_pilot_gate": "blocked"
+    }
+  ],
+  "priority_queue": [
+    {"rank": 1, "id": "DQ-001", "reason": "Highest safety/ROI: improves truth and catches corruption without changing model outputs."},
+    {"rank": 2, "id": "LIVE-001", "reason": "Direct protection against stale in-play decisions and temporal leakage."},
+    {"rank": 3, "id": "CAL-001", "reason": "Necessary before any stronger confidence labels; can be tested entirely offline."},
+    {"rank": 4, "id": "OBS-001", "reason": "Improves operator clarity and reduces noisy health reporting without prediction risk."},
+    {"rank": 5, "id": "UNC-001", "reason": "Promising for abstention but assumptions require careful chronological testing."},
+    {"rank": 6, "id": "MODEL-001", "reason": "Potential future feature family but not worth new cost or production complexity yet."}
+  ],
+  "maximum_pilot_recommendation": {
+    "deploy_to_production_now": false,
+    "safe_next_actions": [
+      "report-only canonical data validations",
+      "shadow live-state freshness audit",
+      "offline chronological calibration benchmark",
+      "non-mutating observability severity taxonomy"
+    ],
+    "explicitly_blocked": [
+      "online self-training from individual bet outcomes",
+      "forced isotonic calibration on small samples",
+      "conformal confidence used without exchangeability checks",
+      "new expensive event-data dependency without walk-forward incremental-value evidence"
+    ]
+  }
+}
