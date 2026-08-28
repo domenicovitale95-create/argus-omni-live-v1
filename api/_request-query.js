@@ -2,8 +2,13 @@ const hasOwn=(obj,key)=>Boolean(obj)&&Object.prototype.hasOwnProperty.call(obj,k
 
 export function requestQuery(req){
   // Vercel's IncomingMessage exposes `query` through a prototype getter that
-  // currently calls Node's deprecated url.parse(). Never touch req.query here.
-  // Parse the raw request URL directly with URLSearchParams instead.
+  // currently calls Node's deprecated url.parse(). Never invoke that getter.
+  // A plain own `query` value is safe and keeps local/tests compatibility.
+  if(hasOwn(req,'query')){
+    const own=Object.getOwnPropertyDescriptor(req,'query')?.value;
+    if(own&&typeof own==='object')return own;
+  }
+  // Otherwise parse the raw request URL directly with URLSearchParams.
   const raw=typeof req?.url==='string'?req.url:'';
   const i=raw.indexOf('?');
   if(i<0)return{};
