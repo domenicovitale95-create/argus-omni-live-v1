@@ -25,9 +25,9 @@ export default async function handler(req,res){
   let selfTest=null;
   try{const r=await fetch(`${base}/api/site-self-test`,{headers:{Accept:'application/json'},cache:'no-store'});selfTest=await r.json().catch(()=>null)}catch(_){}
   const checks=await Promise.all(CRITICAL.map(p=>get(base,p,auth))),failed=checks.filter(x=>!x.ok),semanticFails=checks.filter(x=>SEMANTIC_BLOCK.has(String(x.semanticStatus||'').toUpperCase()));
-  const selfStatus=String(selfTest?.status||'UNKNOWN').toUpperCase(),selfFail=['DEGRADED','FAIL'].includes(selfStatus);
+  const selfStatus=String(selfTest?.status||'UNKNOWN').toUpperCase(),selfAdvisory=['DEGRADED','FAIL','SLOW'].includes(selfStatus);
   let status='READY';
-  if(failed.length||semanticFails.length||selfFail)status='BLOCKED';else if(checks.some(x=>x.ms>2500)||selfStatus==='SLOW')status='DEGRADED';
+  if(failed.length||semanticFails.length)status='BLOCKED';else if(checks.some(x=>x.ms>2500)||selfAdvisory)status='DEGRADED';
   const state={version:'DEPLOYMENT-VERIFIER-5',generatedAt:new Date().toISOString(),status,snapshotScope:ENV,checkedBase:new URL(base).host,vercel:{environment:process.env.VERCEL_ENV||null,gitCommitSha:process.env.VERCEL_GIT_COMMIT_SHA||null,gitBranch:process.env.VERCEL_GIT_COMMIT_REF||null,deploymentId:process.env.VERCEL_DEPLOYMENT_ID||null},selfTest:{status:selfTest?.status||'UNAVAILABLE',checked:selfTest?.checked??null,failures:selfTest?.failures?.length??null,waiting:selfTest?.waiting?.length??null,slow:selfTest?.slow?.length??null,snapshotAgeMinutes:selfTest?.snapshotAgeMinutes??null,servedFromSnapshot:Boolean(selfTest?.servedFromSnapshot),supportingOnly:true},critical:{checked:checks.length,failed:failed.length,semanticFails:semanticFails.length,checks},policy:{readOnlyChecks:true,persistentSnapshot:true,environmentScopedSnapshot:true,previewCannotOverwriteProductionSnapshot:true,providerQuotaSpendAllowed:false,mutatingEndpointsExcluded:true,automaticRollback:false,automaticPromotion:false,autonomyIsCritical:true,readyRequiresCriticalHealth:true,broadSelfTestSnapshotSupportingOnly:true,criticalEndpointsRemainLive:true,waitingBroadSnapshotDoesNotBlockDeployment:true}};
   await writeJson(OUT,state);
   if(ENV==='production')await writeJson(LEGACY_OUT,state);
