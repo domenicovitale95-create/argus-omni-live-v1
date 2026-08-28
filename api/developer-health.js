@@ -14,6 +14,8 @@ const PATHS={
 
 function ageMinutes(ts){const t=new Date(ts||0).getTime();return Number.isFinite(t)&&t>0?Math.max(0,Math.round((Date.now()-t)/60000)):null}
 function freshness(age,limit){if(age==null)return'UNKNOWN';return age<=limit?'FRESH':age<=limit*2?'AGING':'STALE'}
+function brusselsClock(){const p=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Brussels',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return{hour:Number(p.hour),minute:Number(p.minute)}}
+function scheduledActive(c){return c.hour>=6||(c.hour===0&&c.minute<=30)}
 function errorDiagnostics(errors){
   const rows=Array.isArray(errors)?errors.map(x=>String(x||'').trim()).filter(Boolean):[];
   const groups={};
@@ -39,17 +41,22 @@ export default async function handler(req,res){
   ]);
   const depAge=ageMinutes(deployment?.generatedAt),siAge=ageMinutes(selfImprovement?.generatedAt),govAge=ageMinutes(governance?.generatedAt),schedAge=ageMinutes(scheduler?.generatedAt),autoAge=ageMinutes(autopilot?.completedAt||autopilot?.generatedAt),ledgerAge=ageMinutes(ledgerCron?.completedAt||ledgerCron?.generatedAt),virtualBankrollAge=ageMinutes(virtualBankroll?.lastRunAt||virtualBankroll?.updatedAt);
   const runtime={environment:process.env.VERCEL_ENV||null,gitCommitSha:process.env.VERCEL_GIT_COMMIT_SHA||null,gitBranch:process.env.VERCEL_GIT_COMMIT_REF||null,deploymentId:process.env.VERCEL_DEPLOYMENT_ID||null};
+  const clock=brusselsClock(),autopilotScheduledActive=scheduledActive(clock);
   const snapshotCommit=deployment?.vercel?.gitCommitSha||null;
   const snapshotEnvironment=deployment?.vercel?.environment||deployment?.snapshotScope||null;
   const deploymentMismatch=Boolean(deployment&&((runtime.gitCommitSha&&snapshotCommit&&runtime.gitCommitSha!==snapshotCommit)||(runtime.environment&&snapshotEnvironment&&runtime.environment!==snapshotEnvironment)));
-  const autopilotSnapshot=autopilot?{status:autopilot?.ok===false?'DEGRADED':'HEALTHY',ageMinutes:autoAge,freshness:freshness(autoAge,15),source:'AUTOPILOT_SNAPSHOT'}:scheduler?.generatedAt?{status:'AVAILABLE',ageMinutes:schedAge,freshness:freshness(schedAge,35),source:'DECISION_PLAN_FALLBACK'}:{status:'UNKNOWN',ageMinutes:null,freshness:'UNKNOWN',source:'NONE'};
+  const autopilotSnapshot=!autopilotScheduledActive
+    ?{status:'SCHEDULED_IDLE',ageMinutes:autoAge??schedAge,freshness:'FRESH',source:autopilot?'AUTOPILOT_SNAPSHOT':'DECISION_PLAN_FALLBACK'}
+    :autopilot?{status:autopilot?.ok===false?'DEGRADED':'HEALTHY',ageMinutes:autoAge,freshness:freshness(autoAge,15),source:'AUTOPILOT_SNAPSHOT'}
+    :scheduler?.generatedAt?{status:'AVAILABLE',ageMinutes:schedAge,freshness:freshness(schedAge,35),source:'DECISION_PLAN_FALLBACK'}
+    :{status:'UNKNOWN',ageMinutes:null,freshness:'UNKNOWN',source:'NONE'};
   const selfImprovementDiagnostics=errorDiagnostics(selfImprovement?.errors),governanceDiagnostics=errorDiagnostics(governance?.errors);
   const selfImprovementStatus=selfImprovementDiagnostics.protectedPreviewNoise?'OBSERVABILITY_NOISE':selfImprovement?.ok===false||selfImprovementDiagnostics.count>0?'DEGRADED':selfImprovement?'HEALTHY':'UNKNOWN';
   const virtualBets=Object.values(virtualBankroll?.bets||{}),virtualOpen=virtualBets.filter(x=>x?.status==='OPEN').length,virtualSettled=virtualBets.filter(x=>['WIN','LOSS','VOID'].includes(String(x?.status||'').toUpperCase())).length;
   const components={
     deployment:{status:deploymentMismatch?'DEGRADED':deployment?.status||'UNKNOWN',ageMinutes:depAge,freshness:freshness(depAge,390),commit:snapshotCommit,runtimeCommit:runtime.gitCommitSha,snapshotEnvironment,runtimeEnvironment:runtime.environment,snapshotMatchesRuntime:deployment?!deploymentMismatch:null,failures:deployment?.critical?.failed??null},
     autopilot:autopilotSnapshot,
-    scheduler:{status:scheduler?.generatedAt?'AVAILABLE':'UNKNOWN',ageMinutes:schedAge,freshness:freshness(schedAge,30),prime:scheduler?.summary?.prime??null,value:scheduler?.summary?.value??null,eligible:scheduler?.summary?.eligible??null},
+    scheduler:{status:!autopilotScheduledActive?'SCHEDULED_IDLE':scheduler?.generatedAt?'AVAILABLE':'UNKNOWN',ageMinutes:schedAge,freshness:!autopilotScheduledActive?'FRESH':freshness(schedAge,30),prime:scheduler?.summary?.prime??null,value:scheduler?.summary?.value??null,eligible:scheduler?.summary?.eligible??null},
     ledger:{status:ledgerCron?.ok===false?'DEGRADED':ledgerCron?'HEALTHY':'UNKNOWN',ageMinutes:ledgerAge,freshness:freshness(ledgerAge,15),capture:ledgerCron?.capture?.status??null},
     virtualBankroll:{status:virtualBankroll?.lastRunAt?'HEALTHY':virtualBankroll?'PENDING_FIRST_RUN':'UNKNOWN',ageMinutes:virtualBankrollAge,freshness:virtualBankroll?.lastRunAt?freshness(virtualBankrollAge,15):'UNKNOWN',trackedBets:virtualBets.length,openBets:virtualOpen,settledBets:virtualSettled,providerCalls:virtualBankroll?.integrity?.lastRunProviderCalls??virtualBankroll?.integrity?.providerCalls??null,shadowOnly:Boolean(virtualBankroll?.integrity?.paperOnly)},
     selfImprovement:{status:selfImprovementStatus,ageMinutes:siAge,freshness:freshness(siAge,390),promotionFreeze:Boolean(selfImprovement?.promotionFreeze),errors:selfImprovementDiagnostics.count,protectedPreviewNoise:selfImprovementDiagnostics.protectedPreviewNoise},
@@ -62,7 +69,7 @@ export default async function handler(req,res){
   const status=criticalBad?'ACTION_REQUIRED':unknown>=3?'INCOMPLETE':supportingBad?'DEGRADED':stale?'ATTENTION':'HEALTHY';
   const priorities=[];
   if(components.deployment.status!=='READY')priorities.push(deploymentMismatch?'DEPLOYMENT_SNAPSHOT_MISMATCH':'VERIFY_DEPLOYMENT');
-  if(components.autopilot.freshness==='STALE')priorities.push('AUTOPILOT_STALE');
+  if(autopilotScheduledActive&&components.autopilot.freshness==='STALE')priorities.push('AUTOPILOT_STALE');
   if(components.ledger.freshness==='STALE')priorities.push('LEDGER_CRON_STALE');
   if(components.virtualBankroll.freshness==='STALE')priorities.push('VIRTUAL_BANKROLL_STALE');
   if(components.virtualBankroll.status==='PENDING_FIRST_RUN')priorities.push('VIRTUAL_BANKROLL_AWAIT_FIRST_CRON');
@@ -73,7 +80,7 @@ export default async function handler(req,res){
 
   return res.status(200).json({
     ok:status==='HEALTHY',
-    version:'DEVELOPER-HEALTH-6',
+    version:'DEVELOPER-HEALTH-7',
     generatedAt:new Date().toISOString(),
     status,
     summary:{unknown,stale,priority:priorities[0]},
@@ -81,6 +88,6 @@ export default async function handler(req,res){
     runtime,
     components,
     diagnostics:{selfImprovement:selfImprovementDiagnostics,governance:governanceDiagnostics},
-    policy:{readOnly:true,noProviderQuotaSpend:true,snapshotsOnly:true,strictGreen:true,environmentScopedDeploymentSnapshot:true,previewCannotMasqueradeAsProduction:true,designedForFastDeveloperTriage:true,errorSamplesAreStoredSnapshotData:true,protectedPreview401sDoNotImplyModelDegradation:true,virtualBankrollIsNonCriticalShadowObservability:true}
+    policy:{readOnly:true,noProviderQuotaSpend:true,snapshotsOnly:true,strictGreen:true,environmentScopedDeploymentSnapshot:true,previewCannotMasqueradeAsProduction:true,designedForFastDeveloperTriage:true,errorSamplesAreStoredSnapshotData:true,protectedPreview401sDoNotImplyModelDegradation:true,virtualBankrollIsNonCriticalShadowObservability:true,scheduledIdleIsNotFailure:true}
   });
 }
