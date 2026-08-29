@@ -1,0 +1,45 @@
+name: Trend Continuity Clock Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/_trend-continuity-clock.js'
+      - 'api/trend-integrity-audit.js'
+      - '.github/workflows/trend-continuity-clock-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/_trend-continuity-clock.js'
+      - 'api/trend-integrity-audit.js'
+      - '.github/workflows/trend-continuity-clock-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  refresh-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify refresh-boundary clock
+        run: |
+          node --input-type=module <<'NODE'
+          import { expectedContinuityThrough, trendRefreshPolicy } from './api/_trend-continuity-clock.js';
+          const cases = [
+            ['2026-08-29T22:44:00Z','2026-08-28'],
+            ['2026-08-30T02:46:00Z','2026-08-28'],
+            ['2026-08-30T02:47:00Z','2026-08-28'],
+            ['2026-08-30T03:01:00Z','2026-08-28'],
+            ['2026-08-30T03:02:00Z','2026-08-29'],
+            ['2026-12-30T03:02:00Z','2026-12-29']
+          ];
+          for (const [iso, expected] of cases) {
+            const actual = expectedContinuityThrough(new Date(iso));
+            if (actual !== expected) throw new Error(`${iso}: expected ${expected}, got ${actual}`);
+          }
+          if (trendRefreshPolicy.refreshUtcHour !== 2 || trendRefreshPolicy.refreshUtcMinute !== 47 || trendRefreshPolicy.refreshGraceMinutes !== 15) throw new Error('Unexpected trend refresh policy');
+          console.log('Trend continuity refresh-boundary regression passed.');
+          NODE
