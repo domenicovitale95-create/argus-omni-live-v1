@@ -50,6 +50,6 @@ jobs:
         run: |
           grep -q "SEMANTIC_WARNING" api/site-self-test.js
           grep -q "LATE" api/site-self-test.js
-          grep -q "STALE_AFTER_MINUTES=45" api/autonomy-health.js
-          grep -q "LATE_AFTER_MINUTES=25" api/autonomy-health.js
+          grep -q "STALE_AFTER_MINUTES=75" api/autonomy-health.js
+          grep -q "LATE_AFTER_MINUTES=45" api/autonomy-health.js
           grep -Fq "warnings.length?'CAUTION'" api/site-self-test.js
