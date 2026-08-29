@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
-  "ignoreCommand": "node -e \"process.exit(process.env.VERCEL_GIT_COMMIT_REF==='main'?1:0)\"",
+  "ignoreCommand": "node -e \"const{execFileSync}=require('node:child_process');const e=process.env;if(e.VERCEL_GIT_COMMIT_REF!=='main')process.exit(0);if(!e.VERCEL_GIT_PREVIOUS_SHA||!e.VERCEL_GIT_COMMIT_SHA)process.exit(1);try{const files=execFileSync('git',['diff','--name-only',e.VERCEL_GIT_PREVIOUS_SHA,e.VERCEL_GIT_COMMIT_SHA],{encoding:'utf8'}).trim().split(/\\r?\\n/).filter(Boolean);process.exit(files.length>0&&files.every(f=>f.startsWith('research/daily/'))?0:1)}catch(_){process.exit(1)}\"",
   "github": {
     "autoJobCancelation": true
   },
