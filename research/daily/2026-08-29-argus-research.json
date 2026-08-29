@@ -1,0 +1,198 @@
+{
+  "schema_version": "argus.research.v1",
+  "date": "2026-08-29",
+  "mode": "EVIDENCE_ONLY_NO_PRODUCTION_MUTATION",
+  "maximum_pilot": {
+    "production_changes_authorized": false,
+    "reason": "Findings justify shadow/offline experiments only; no independently validated low-risk forecasting mutation clears promotion gates."
+  },
+  "findings": [
+    {
+      "id": "R20260829-01",
+      "status": "KEEP",
+      "evidence_class": "OBSERVED",
+      "source": {
+        "title": "A market-calibrated accelerated failure time model for in-play football forecasting",
+        "date": "2026-05-15",
+        "url": "https://arxiv.org/abs/2605.16066"
+      },
+      "observed": "Across 140 EPL matches evaluated at minute intervals, calibrating continuous-time goal models to kick-off 1X2 and over/under exchange prices was the dominant driver of predictive accuracy; adding time-varying post-shot xG supplied in-play information.",
+      "derived": "ARGUS should treat pre-match market probabilities as a strong prior carried into LIVE, then update only with timestamp-valid in-play evidence. This supports market-anchored residual modelling rather than trying to relearn all team strength independently in LIVE.",
+      "hypothesis": "A market-anchored LIVE residual model will improve Brier/log-loss and abstention quality over the current LIVE baseline without increasing stale-state failures.",
+      "affected_workstream": ["LIVE_MODEL", "MARKET_PRIOR", "TEMPORAL_INTEGRITY", "ABSTENTION"],
+      "smallest_safe_experiment": "Shadow-only replay: at each historical minute snapshot, compare current LIVE probability to a version anchored to de-vigged kick-off market probabilities and updated only from state events with event_time <= decision_time. No staking or production classification changes.",
+      "required_evidence": "At least 500 matches and 5,000 timestamped LIVE decision snapshots across multiple leagues, with separate evaluation for score changes/red cards and provider-lag periods.",
+      "failure_condition": "No out-of-sample Brier/log-loss gain, degraded calibration, worse selective-risk curve, or gains disappear when evaluated by league/time block rather than pooled.",
+      "rollback": "Delete/disable shadow challenger; retain only market-prior diagnostics.",
+      "promotion_gate": "Maximum Pilot required after independent walk-forward replication."
+    },
+    {
+      "id": "R20260829-02",
+      "status": "WATCH",
+      "evidence_class": "OBSERVED",
+      "source": {
+        "title": "A Bayesian bivariate conditional Poisson regression for goal dependence in the English Premier League",
+        "date": "2026-08-07",
+        "url": "https://arxiv.org/abs/2608.07168"
+      },
+      "observed": "A three-season EPL study models home and away goals jointly and reports evidence of negative dependence, using posterior predictive checks for validation.",
+      "derived": "Independent Poisson scoreline assumptions can be misspecified for exact-score tails and joint outcomes. ARGUS should test dependence-aware scoreline models, but the paper's regressors (attendance, fouls) may not transfer cleanly across leagues or pre-match settings.",
+      "hypothesis": "A parsimonious dependence-aware score model improves exact-score log score/RPS and 1X2 aggregation versus independent Poisson without harming calibration.",
+      "affected_workstream": ["EXACT_SCORE", "GOAL_MODEL", "UNCERTAINTY"],
+      "smallest_safe_experiment": "Offline challenger using only features already available before decision time; compare independent Poisson, Dixon-Coles-style adjustment if already present, and a bivariate/dependence-aware alternative on the same folds.",
+      "required_evidence": "At least 3 full seasons per tested competition or >=2,000 matches total, with league-specific and season-forward evaluation.",
+      "failure_condition": "Improvement appears only in-sample, requires unavailable/post-event features, worsens 1X2 calibration, or posterior/parameter instability is high.",
+      "rollback": "Keep existing exact-score model; archive experiment results in failure memory.",
+      "promotion_gate": "WATCH until multi-league walk-forward evidence exists."
+    },
+    {
+      "id": "R20260829-03",
+      "status": "KEEP",
+      "evidence_class": "OBSERVED",
+      "source": {
+        "title": "scikit-learn 1.9 Probability calibration documentation",
+        "date": "current documentation checked 2026-08-29",
+        "url": "https://scikit-learn.org/stable/modules/calibration.html"
+      },
+      "observed": "Calibration data should be independent from model-fitting data; isotonic calibration is more prone to overfitting on small datasets and is generally favored only with sufficient sample size (documentation notes roughly >1000 samples).",
+      "derived": "ARGUS calibration must be fitted strictly out-of-sample and chronologically. Sparse league/market segments should return UNAVAILABLE/SHRUNK rather than force a high-variance calibrator.",
+      "hypothesis": "Chronologically separated sigmoid/temperature calibration with minimum-sample gates will reduce overconfidence and improve Brier/log-loss without damaging ranking materially.",
+      "affected_workstream": ["CALIBRATION", "SELECTIVE_PREDICTION", "CONTROL_PLANE_TRUTH"],
+      "smallest_safe_experiment": "Offline rolling-origin calibration benchmark: RAW vs sigmoid vs temperature; permit isotonic only in folds meeting minimum sample requirements. Store reliability bins and sample counts alongside metrics.",
+      "required_evidence": ">=1,000 settled predictions for any isotonic candidate segment; otherwise use simpler calibrators or abstain from segment-specific calibration. Evaluate at least 3 forward folds.",
+      "failure_condition": "Calibration gain does not persist to next fold, probabilities become more extreme, or selective-risk/CLV worsens despite lower in-sample ECE.",
+      "rollback": "Restore RAW/previous calibrated probabilities and preserve fold diagnostics.",
+      "promotion_gate": "No production promotion without forward-fold stability and rollback artifact."
+    },
+    {
+      "id": "R20260829-04",
+      "status": "KEEP",
+      "evidence_class": "OBSERVED",
+      "source": {
+        "title": "Forecasting: Principles and Practice — Time series cross-validation",
+        "date": "current online edition checked 2026-08-29",
+        "url": "https://otexts.com/fpp3/tscv.html"
+      },
+      "observed": "Rolling forecasting origin evaluation restricts each training set to observations available before the forecast origin, preventing future information from entering model construction.",
+      "derived": "ARGUS model, calibration, abstention, threshold and policy experiments must share one temporal split service keyed by decision_time, not ad-hoc random cross-validation.",
+      "hypothesis": "A single enforced walk-forward evaluator will surface hidden leakage and reduce false-positive model promotions.",
+      "affected_workstream": ["WALK_FORWARD", "TEMPORAL_INTEGRITY", "MODEL_GOVERNANCE", "FAILURE_ANALYSIS"],
+      "smallest_safe_experiment": "Build/read-only validation manifest that asserts train_max_event_time < evaluation_decision_time for every fold and reports violations without blocking production.",
+      "required_evidence": "Replay all existing champion/challenger evaluation datasets plus at least one intentionally contaminated fixture to prove the validator catches leakage.",
+      "failure_condition": "Validator cannot distinguish event_time, ingest_time and decision_time or creates false leakage alarms from legitimate late-arriving settlement data.",
+      "rollback": "Keep validator report-only; no gating until false-positive rate is acceptably low.",
+      "promotion_gate": "Low-risk candidate for later Maximum Pilot gating after shadow validation."
+    },
+    {
+      "id": "R20260829-05",
+      "status": "WATCH",
+      "evidence_class": "OBSERVED",
+      "source": {
+        "title": "Bounded-Abstention Multi-horizon Time-series Forecasting",
+        "date": "2026-02-04",
+        "url": "https://arxiv.org/abs/2602.04714"
+      },
+      "observed": "The 2026 study formalizes abstention for correlated multi-horizon forecasts and reports improvements over existing abstention baselines across 24 datasets.",
+      "derived": "ARGUS LIVE should not necessarily use one confidence threshold for every minute/horizon; abstention can be horizon/state-aware. Transfer to football classification is not yet proven.",
+      "hypothesis": "Minute/horizon-specific abstention thresholds reduce error conditional on action while preserving adequate coverage better than one global threshold.",
+      "affected_workstream": ["ABSTENTION", "LIVE_MODEL", "OPERATOR_UX"],
+      "smallest_safe_experiment": "Paper-shadow risk-coverage curves by horizon bucket (e.g. pre-match, 0-30, 31-60, 61-75, 76+) using existing calibrated probabilities; no new model required initially.",
+      "required_evidence": ">=5,000 settled decision snapshots with adequate sample in every horizon bucket; report coverage, Brier/log-loss on accepted predictions and missed-opportunity rate.",
+      "failure_condition": "Coverage collapses, thresholds are unstable across folds/leagues, or gains vanish after accounting for repeated snapshots from the same match.",
+      "rollback": "Retain global abstention policy and store bucket analysis only.",
+      "promotion_gate": "WATCH; require match-clustered forward validation."
+    },
+    {
+      "id": "R20260829-06",
+      "status": "KEEP",
+      "evidence_class": "OBSERVED",
+      "source": {
+        "title": "Prometheus Zen + OpenTelemetry semantic conventions",
+        "date": "current documentation checked 2026-08-29",
+        "url": "https://prometheus.io/docs/practices/the_zen/"
+      },
+      "observed": "Prometheus recommends symptom-based paging, actionable alerts, tolerance against transient failures, and instrumentation tied to user-visible outcomes. OpenTelemetry defines common semantic conventions for consistent traces, metrics and logs.",
+      "derived": "ARGUS Control Plane should distinguish operator-impact symptoms (stale actionable state, broken settlement, unavailable ledger truth) from diagnostic causes, and telemetry fields should use stable names across scheduler/provider/model/settlement paths.",
+      "hypothesis": "A stable event schema plus symptom-first severity mapping reduces alert noise and shortens root-cause identification without hiding real failures.",
+      "affected_workstream": ["OBSERVABILITY", "CONTROL_PLANE", "FAILURE_MEMORY", "OPERATOR_UX"],
+      "smallest_safe_experiment": "Add shadow-normalized telemetry records with fields such as component, operation, match_id, decision_id, event_time, ingest_time, decision_time, freshness_ms, outcome, error_type and severity; do not replace existing alerts initially.",
+      "required_evidence": "At least 14 days of parallel telemetry and review of all true incidents/false alarms.",
+      "failure_condition": "New schema loses provenance, creates cardinality/cost problems, or symptom mapping delays a genuine operator-impact incident.",
+      "rollback": "Stop emitting normalized shadow events; existing alerts remain untouched.",
+      "promotion_gate": "Maximum Pilot only for changing alert severity/routing, not for shadow telemetry emission."
+    },
+    {
+      "id": "R20260829-07",
+      "status": "REJECT",
+      "evidence_class": "OBSERVED",
+      "source": {
+        "title": "FIFA World Cup 2026 contamination-free benchmark for LLM forecasting agents",
+        "date": "2026-07-20",
+        "url": "https://arxiv.org/abs/2607.17765"
+      },
+      "observed": "Across the 2026 World Cup benchmark, none of four frontier LLM forecasting agents beat the pre-match market on Brier score; agents often converged on the same top pick and fading the market was unprofitable for all four.",
+      "derived": "Free-form LLM match forecasting should not become an ARGUS production probability source or override calibrated market/model probabilities. LLM value is better allocated to failure analysis, hypothesis generation and evidence triage under deterministic governance.",
+      "hypothesis": "No production forecasting experiment is warranted from this evidence.",
+      "affected_workstream": ["COGNITIVE_CORE", "FORECASTING_GOVERNANCE", "API_EFFICIENCY"],
+      "smallest_safe_experiment": "None for production probabilities. If used, restrict LLM to advisory root-cause/hypothesis tasks already permitted by Cognitive Core C1.",
+      "required_evidence": "Future independently replicated evidence of calibrated incremental value over market/model baseline would be required to revisit.",
+      "failure_condition": "N/A — rejected due insufficient evidence of transfer/value and governance risk.",
+      "rollback": "No change made.",
+      "promotion_gate": "REJECT."
+    },
+    {
+      "id": "R20260829-08",
+      "status": "REJECT",
+      "evidence_class": "OBSERVED",
+      "source": {
+        "title": "Evidently calibration feature status/issues",
+        "date": "2026-07",
+        "url": "https://github.com/evidentlyai/evidently/issues/1895"
+      },
+      "observed": "As of July 2026, dedicated Brier/ECE calibration metrics were still being proposed/added through open issues, while other open issues report edge-case drift problems and performance concerns at scale.",
+      "derived": "ARGUS should not introduce Evidently as a new critical dependency merely to compute simple calibration/drift diagnostics that can be implemented deterministically with existing libraries and tests.",
+      "hypothesis": "A small native metrics layer is lower-risk and cheaper for current ARGUS needs.",
+      "affected_workstream": ["MLOPS", "API_EFFICIENCY", "OBSERVABILITY"],
+      "smallest_safe_experiment": "None required before dependency adoption; retain as optional research tooling only.",
+      "required_evidence": "Revisit only if a concrete missing capability appears and benchmarked operational benefit exceeds dependency/runtime cost.",
+      "failure_condition": "N/A — dependency expansion rejected for now.",
+      "rollback": "No change made.",
+      "promotion_gate": "REJECT for production dependency at this time."
+    }
+  ],
+  "maximum_pilot_queue": [
+    {
+      "priority": 1,
+      "finding_id": "R20260829-04",
+      "action": "Temporal split/leakage validator in report-only mode"
+    },
+    {
+      "priority": 2,
+      "finding_id": "R20260829-01",
+      "action": "Market-anchored LIVE challenger replay"
+    },
+    {
+      "priority": 3,
+      "finding_id": "R20260829-03",
+      "action": "Walk-forward calibration benchmark with minimum-sample gates"
+    },
+    {
+      "priority": 4,
+      "finding_id": "R20260829-06",
+      "action": "Shadow normalized Control Plane telemetry schema"
+    },
+    {
+      "priority": 5,
+      "finding_id": "R20260829-05",
+      "action": "Horizon-specific abstention risk-coverage analysis"
+    }
+  ],
+  "explicit_non_actions": [
+    "No production model weights changed",
+    "No staking or bet-selection rules changed",
+    "No PRIME/VALUE thresholds changed",
+    "No settlement records modified",
+    "No new paid data/API dependency authorized",
+    "No LLM introduced as a production probability source"
+  ]
+}
