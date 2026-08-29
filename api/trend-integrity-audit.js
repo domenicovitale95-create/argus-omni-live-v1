@@ -1,17 +1,7 @@
 import { readJson, storageReady } from './_report-store.js';
+import { expectedContinuityThrough, trendRefreshPolicy } from './_trend-continuity-clock.js';
 
 const IN='argus/research/streak-intelligence.json';
-const REFRESH_UTC_HOUR=2;
-const REFRESH_UTC_MINUTE=47;
-const REFRESH_GRACE_MINUTES=15;
-function dateTZ(v=new Date()){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Brussels',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(v).map(x=>[x.type,x.value]));return `${p.year}-${p.month}-${p.day}`}
-function addDays(s,d){const x=new Date(`${s}T12:00:00Z`);x.setUTCDate(x.getUTCDate()+d);return x.toISOString().slice(0,10)}
-export function expectedContinuityThrough(now=new Date()){
-  const utcMinutes=now.getUTCHours()*60+now.getUTCMinutes();
-  const refreshReadyMinutes=REFRESH_UTC_HOUR*60+REFRESH_UTC_MINUTE+REFRESH_GRACE_MINUTES;
-  const latestRefreshDate=utcMinutes>=refreshReadyMinutes?now.toISOString().slice(0,10):addDays(now.toISOString().slice(0,10),-1);
-  return addDays(latestRefreshDate,-1);
-}
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
@@ -38,5 +28,5 @@ export default async function handler(req,res){
   if(policy.missingStatsSuppressTrend!==true)violations.push({id:'POLICY',type:'MISSING_STATS_NOT_SUPPRESSED'});
   if(policy.calendarContinuityRequiredThroughYesterday!==true)violations.push({id:'POLICY',type:'YESTERDAY_CONTINUITY_POLICY_DISABLED'});
   const checked=trends.length,status=violations.length?'FAIL':checked>0?'PASS':'NO_DATA',evidenceState=checked>0?'OBSERVED_TRENDS':'ZERO_TRENDS';
-  return res.status(200).json({version:'TREND-INTEGRITY-AUDIT-4',generatedAt:new Date().toISOString(),sourceVersion:report.version||null,expectedContinuityThrough:expectedThrough,status,evidenceState,checked,violations:violations.slice(0,200),policy:{requireExactly10:true,requireCoverage100:true,requireCalendarContinuity:true,requireContinuityThroughScheduledRefreshBoundary:true,refreshScheduleUtc:`${String(REFRESH_UTC_HOUR).padStart(2,'0')}:${String(REFRESH_UTC_MINUTE).padStart(2,'0')}`,refreshGraceMinutes:REFRESH_GRACE_MINUTES,requireNoGapFilling:true,passRequiresCheckedData:true,zeroDataIsNotPass:true}})
+  return res.status(200).json({version:'TREND-INTEGRITY-AUDIT-4',generatedAt:new Date().toISOString(),sourceVersion:report.version||null,expectedContinuityThrough:expectedThrough,status,evidenceState,checked,violations:violations.slice(0,200),policy:{requireExactly10:true,requireCoverage100:true,requireCalendarContinuity:true,requireContinuityThroughScheduledRefreshBoundary:true,refreshScheduleUtc:`${String(trendRefreshPolicy.refreshUtcHour).padStart(2,'0')}:${String(trendRefreshPolicy.refreshUtcMinute).padStart(2,'0')}`,refreshGraceMinutes:trendRefreshPolicy.refreshGraceMinutes,requireNoGapFilling:true,passRequiresCheckedData:true,zeroDataIsNotPass:true}})
 }
