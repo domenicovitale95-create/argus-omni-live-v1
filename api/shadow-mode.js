@@ -64,7 +64,7 @@ async function summary(req,res){
       settled++;sources[source].settled++;market[p.key].settled++;if(p.modelIndependentOfPrice===true)independentSettled++;
       if(p.outcome==='WIN'){wins++;market[p.key].wins++}
       if(Number.isFinite(Number(p.pl))){pl+=Number(p.pl);market[p.key].pl+=Number(p.pl)}
-      if(Number.isFinite(Number(p.clv))){clvN++;clvSum+=Number(p.clv);market[p.key].clvN++;market[p.key].clvSum+=Number(p.clv)}
+      if(p.clv!=null&&Number.isFinite(Number(p.clv))){clvN++;clvSum+=Number(p.clv);market[p.key].clvN++;market[p.key].clvSum+=Number(p.clv)}
     }
   }
   const prof=Object.fromEntries(Object.entries(market).map(([k,v])=>[k,{sample:v.sample,settled:v.settled,wins:v.wins,hitRate:v.settled?Number((v.wins/v.settled*100).toFixed(1)):null,roi:v.settled?Number((v.pl/v.settled*100).toFixed(1)):null,avgCLV:v.clvN?Number((v.clvSum/v.clvN).toFixed(2)):null,clvSamples:v.clvN}]));
