@@ -1,5 +1,6 @@
 (()=>{
   let lastManualAt=0;
+  let suppressClickUntil=0;
   const getButton=target=>target?.closest?.('#scanBtn')||document.getElementById('scanBtn');
 
   const runScan=event=>{
@@ -8,6 +9,7 @@
     const now=Date.now();
     if(now-lastManualAt<700)return;
     lastManualAt=now;
+    suppressClickUntil=now+700;
     event?.preventDefault?.();
     event?.stopPropagation?.();
     if(typeof window.scanToday==='function'){
@@ -31,6 +33,13 @@
     btn.style.zIndex='5';
     if(!btn.__argusMobileBound){
       btn.__argusMobileBound=true;
+      // Suppress only the synthetic click emitted after a touch/pen activation.
+      // Ordinary mouse/keyboard clicks continue to the app.js click listener once.
+      btn.addEventListener('click',event=>{
+        if(Date.now()>=suppressClickUntil)return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      },true);
       btn.addEventListener('touchend',runScan,{passive:false});
       btn.addEventListener('pointerup',event=>{
         if(event.pointerType==='touch'||event.pointerType==='pen')runScan(event);
