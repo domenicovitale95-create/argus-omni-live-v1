@@ -64,7 +64,9 @@ jobs:
           if (!health.includes("primaryScheduler:'VERCEL_CRON'")) throw new Error('Health endpoint does not expose Vercel as primary scheduler');
           if (!health.includes("backupScheduler:'GITHUB_WATCHDOG'")) throw new Error('Health endpoint does not expose GitHub watchdog backup');
           if (!health.includes('cronExpectedEveryMinutes:EXPECTED_MINUTES')) throw new Error('Health endpoint does not expose expected cadence');
-          if (!health.includes('automaticWagering:false')) throw new Error('Automatic real-money wagering safety flag missing');
+          if (!health.includes('placesRealWagers:false')) throw new Error('Health endpoint must explicitly state it places no real wagers');
+          if (!health.includes('wageringCapabilityOwnedByThisEndpoint:false')) throw new Error('Health endpoint ownership boundary for wagering is missing');
+          if (!health.includes("globalWageringStatus:'UNVERIFIED'")) throw new Error('Health endpoint must not claim global wagering state it cannot observe');
 
           const supervisor = fs.readFileSync('api/autonomous-supervisor.js','utf8');
           if (!supervisor.includes('function effectiveRemediation(result)')) throw new Error('Missing effective-remediation classifier');
