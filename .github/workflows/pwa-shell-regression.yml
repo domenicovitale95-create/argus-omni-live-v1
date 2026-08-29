@@ -1,0 +1,44 @@
+name: PWA Shell Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'sw.js'
+      - 'vercel.json'
+      - 'app.js'
+      - 'mobile-scan-fix.js'
+      - 'src/providers.js'
+      - 'scripts/pwa-shell-regression.mjs'
+      - '.github/workflows/pwa-shell-regression.yml'
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'sw.js'
+      - 'vercel.json'
+      - 'app.js'
+      - 'mobile-scan-fix.js'
+      - 'src/providers.js'
+      - 'scripts/pwa-shell-regression.mjs'
+      - '.github/workflows/pwa-shell-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  stale-shell-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check sw.js
+          node --check app.js
+          node --check mobile-scan-fix.js
+          node --check scripts/pwa-shell-regression.mjs
+      - name: Enforce anti-stale PWA invariants
+        run: node scripts/pwa-shell-regression.mjs
