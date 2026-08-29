@@ -17,19 +17,27 @@ const POLICY={
   backupScheduler:'GITHUB_WATCHDOG'
 };
 function ageMinutes(value){const t=value?new Date(value).getTime():0;return t&&Number.isFinite(t)?Math.max(0,Math.round((Date.now()-t)/60000)):null}
+function refreshComponentAges(components={}){
+  const next={...components};
+  if(next.autopilot)next.autopilot={...next.autopilot,ageMinutes:ageMinutes(next.autopilot.generatedAt)};
+  if(next.predictionLedger)next.predictionLedger={...next.predictionLedger,ageMinutes:ageMinutes(next.predictionLedger.completedAt||next.predictionLedger.generatedAt)};
+  if(next.historicalMigration)next.historicalMigration={...next.historicalMigration,ageMinutes:ageMinutes(next.historicalMigration.updatedAt)};
+  if(next.providerQuota)next.providerQuota={...next.providerQuota,observedAgeMinutes:ageMinutes(next.providerQuota.observedAt)};
+  return next;
+}
 
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
-  if(!storageReady())return res.status(503).json({version:'AUTONOMY-HEALTH-5',status:'CRITICAL',error:'Storage unavailable'});
+  if(!storageReady())return res.status(503).json({version:'AUTONOMY-HEALTH-6',status:'CRITICAL',error:'Storage unavailable'});
   const state=await readJsonFresh(STATE_PATH,null);
-  if(!state)return res.status(200).json({version:'AUTONOMY-HEALTH-5',status:'WAITING',heartbeatAgeMinutes:null,reason:'SUPERVISOR_HAS_NOT_RUN_YET',policy:POLICY});
+  if(!state)return res.status(200).json({version:'AUTONOMY-HEALTH-6',status:'WAITING',heartbeatAgeMinutes:null,reason:'SUPERVISOR_HAS_NOT_RUN_YET',policy:POLICY});
   const heartbeatAgeMinutes=ageMinutes(state.completedAt||state.startedAt);
   const heartbeatStale=heartbeatAgeMinutes==null||heartbeatAgeMinutes>STALE_AFTER_MINUTES;
   const heartbeatLate=!heartbeatStale&&heartbeatAgeMinutes!=null&&heartbeatAgeMinutes>LATE_AFTER_MINUTES;
   const status=heartbeatStale?'STALE':heartbeatLate?'LATE':state.status||'UNKNOWN';
   return res.status(200).json({
-    version:'AUTONOMY-HEALTH-5',
+    version:'AUTONOMY-HEALTH-6',
     generatedAt:new Date().toISOString(),
     status,
     supervisorStatus:state.status||null,
@@ -39,7 +47,7 @@ export default async function handler(req,res){
     consecutiveUnhealthyRuns:Number(state.consecutiveUnhealthyRuns||0),
     issues:Array.isArray(state.issues)?state.issues:[],
     lastActions:Array.isArray(state.actions)?state.actions:[],
-    components:state.components||{},
+    components:refreshComponentAges(state.components||{}),
     policy:{...POLICY,cronExpectedEveryMinutes:EXPECTED_MINUTES,githubWatchdogEveryMinutes:60,githubRecoveryAfterMinutes:50,lateAfterMinutes:LATE_AFTER_MINUTES,staleAfterMinutes:STALE_AFTER_MINUTES,schedulerJitterTolerated:true,runsWithoutChat:true,consistentStateRead:true}
   });
 }
