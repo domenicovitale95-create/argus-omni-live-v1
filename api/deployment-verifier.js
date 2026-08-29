@@ -8,7 +8,17 @@ const CRITICAL=['/api/site-health','/api/autopilot-health','/api/autonomy-health
 const SEMANTIC_BLOCK=new Set(['FAIL','BLOCKED','ACTION_REQUIRED','CRITICAL','DEGRADED','STALE']);
 function authorized(req){const s=String(process.env.CRON_SECRET||'').trim();return !s||req.headers.authorization===`Bearer ${s}`}
 async function get(base,path,auth){const started=Date.now();try{const r=await fetch(`${base}${path}`,{headers:{Accept:'application/json',...(auth?{Authorization:auth}:{}),'x-argus-deployment-verifier':'1'},cache:'no-store'}),body=await r.json().catch(()=>null);return{path,ok:r.ok,status:r.status,ms:Date.now()-started,semanticStatus:body?.status||body?.summary?.status||null,error:body?.error||null}}catch(e){return{path,ok:false,status:0,ms:Date.now()-started,error:e.message}}}
-async function latestSnapshot(){const scoped=await readJson(OUT,null);if(scoped)return scoped;if(ENV==='production')return readJson(LEGACY_OUT,{version:'DEPLOYMENT-VERIFIER-5',status:'UNKNOWN',generatedAt:null,snapshotScope:ENV});return{version:'DEPLOYMENT-VERIFIER-5',status:'UNKNOWN',generatedAt:null,snapshotScope:ENV}}
+async function latestSnapshot(){
+  let snapshot=await readJson(OUT,null);
+  if(!snapshot&&ENV==='production')snapshot=await readJson(LEGACY_OUT,null);
+  if(!snapshot)snapshot={version:'DEPLOYMENT-VERIFIER-5',status:'UNKNOWN',generatedAt:null,snapshotScope:ENV};
+  const currentSha=String(process.env.VERCEL_GIT_COMMIT_SHA||'').trim();
+  const snapshotSha=String(snapshot?.vercel?.gitCommitSha||'').trim();
+  if(currentSha&&snapshotSha&&currentSha!==snapshotSha){
+    return {...snapshot,status:'STALE',freshness:{stale:true,reason:'DEPLOYMENT_COMMIT_MISMATCH',snapshotGitCommitSha:snapshotSha,currentGitCommitSha:currentSha},vercel:{...(snapshot.vercel||{}),currentGitCommitSha:currentSha,currentDeploymentId:process.env.VERCEL_DEPLOYMENT_ID||null}};
+  }
+  return {...snapshot,freshness:{stale:false,reason:null,snapshotGitCommitSha:snapshotSha||null,currentGitCommitSha:currentSha||null}};
+}
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(!storageReady())return res.status(503).json({error:'Deployment verifier storage unavailable'});
