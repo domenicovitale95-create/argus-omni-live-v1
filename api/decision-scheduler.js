@@ -58,12 +58,14 @@ function decisionFields(decision={},portfolio={},stake={},gate={}){
 }
 async function loadPrevious(){if(!storageReady())return null;try{return await readJson(KEY)}catch{return null}}
 async function save(payload){if(!storageReady())return{stored:false};try{const r=await writeJson(KEY,payload,STORE_TTL);return{stored:Boolean(r?.stored),ttlSeconds:r?.ttlSeconds||STORE_TTL}}catch(e){return{stored:false,error:e?.message||'write failed'}}}
+function emptySnapshot(extra={}){return{version:VERSION,status:'EMPTY',plan:[],summary:{A:0,B:0,C:0,runNow:0,eligibility:{},verdicts:{PRIME:0,VALUE:0,WATCH:0,NO_BET:0},funnel:{discovered:0,priced:0,dataQualityPass:0,eligibilityResolved:0,candidates:0,portfolioPassed:0,staked:0,actionable:0}},generatedAt:null,storage:{ready:storageReady()},...extra}}
 
 export default async function handler(req,res){
  noStore(res);
  if(req.method==='GET'){
   const previous=await loadPrevious();
-  return res.status(200).json(previous||{version:VERSION,status:'EMPTY',plan:[],summary:{A:0,B:0,C:0},generatedAt:null,storage:{ready:storageReady()}});
+  if(previous&&previous.version!==VERSION)return res.status(200).json(emptySnapshot({status:'MIGRATION_REQUIRED',previousVersion:previous.version||null,previousGeneratedAt:previous.generatedAt||null,migrationReason:'SCHEDULER_SCHEMA_VERSION_CHANGED'}));
+  return res.status(200).json(previous||emptySnapshot());
  }
  if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
  const body=req.body||{},matches=Array.isArray(body.matches)?body.matches:[];
