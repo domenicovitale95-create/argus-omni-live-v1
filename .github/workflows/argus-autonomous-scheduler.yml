@@ -97,7 +97,7 @@ jobs:
             echo "${health}"
             status="$(printf '%s' "${health}" | jq -r '.status // "UNKNOWN"')"
             age="$(printf '%s' "${health}" | jq -r '.ageMinutes // 999999')"
-            backup="$(printf '%s' "${health}" | jq -r '.backupRequired // true')"
+            backup="$(printf '%s' "${health}" | jq -r 'if has("backupRequired") then .backupRequired else true end')"
             if ! [[ "${age}" =~ ^[0-9]+$ ]]; then age=999999; fi
 
             if [ "${backup}" = "true" ]; then
