@@ -74,4 +74,9 @@ const eligibilityBoundary=fs.readFileSync(new URL('../api/bet-eligibility.js',im
 assert.match(eligibilityBoundary,/x>=0&&x<=1\?x\*100:x/,'Eligibility boundary must normalize fractional quality to percent');
 assert.match(eligibilityBoundary,/dataQualityScale:'PERCENT_0_100'/,'Eligibility boundary must declare normalized quality contract');
 
+const schedulerSource=fs.readFileSync(new URL('../api/decision-scheduler.js',import.meta.url),'utf8');
+assert.match(schedulerSource,/previous&&previous\.version!==VERSION/,'Scheduler GET must detect an obsolete persisted schema');
+assert.match(schedulerSource,/MIGRATION_REQUIRED/,'Scheduler GET must expose a migration-required empty snapshot instead of preserving stale cadence');
+assert.match(schedulerSource,/SCHEDULER_SCHEMA_VERSION_CHANGED/,'Scheduler migration guard must explain why the old snapshot was invalidated');
+
 console.log('ARGUS flow-recovery regression: OK');
