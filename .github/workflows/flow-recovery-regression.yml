@@ -1,0 +1,35 @@
+name: Flow Recovery Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/decision-scheduler.js'
+      - 'api/bet-eligibility.js'
+      - 'tests/flow-recovery-regression.mjs'
+      - '.github/workflows/flow-recovery-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/decision-scheduler.js'
+      - 'api/bet-eligibility.js'
+      - 'tests/flow-recovery-regression.mjs'
+      - '.github/workflows/flow-recovery-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  flow-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Syntax check
+        run: |
+          node --check api/decision-scheduler.js
+          node --check api/bet-eligibility.js
+          node --check tests/flow-recovery-regression.mjs
+      - name: Verify scheduler-to-ledger contract
+        run: node tests/flow-recovery-regression.mjs
