@@ -1,0 +1,140 @@
+{
+  "schema_version": "argus-research-dossier-v1",
+  "date": "2026-08-30",
+  "production_mutation": false,
+  "maximum_pilot": {
+    "verdict": "NO_PRODUCTION_MODEL_CHANGE",
+    "reason": "Evidence supports offline/shadow experiments only. Stability and temporal integrity take priority.",
+    "priority_queue": [
+      "market_probability_conversion_benchmark",
+      "point_in_time_feature_audit",
+      "api_cache_staleness_audit",
+      "model_complexity_challenger_test",
+      "selective_abstention_shadow_test",
+      "telemetry_truth_schema"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F20260830-01",
+      "status": "KEEP",
+      "title": "Treat market probability conversion as a model component, not a trivial normalization",
+      "observed": "Goto, Takeishi and Yairi (2026) evaluate 90,014 football matches across five bookmakers and report that their odds-only OO-EPC conversion outperforms existing odds-only methods for the majority of bookmakers; their one-parameter favourite-longshot-bias GLM also outperforms multinomial and ordered logistic alternatives in their experiments.",
+      "source": "https://arxiv.org/abs/2604.17194",
+      "derived": "ARGUS should benchmark its current no-vig transformation instead of assuming normalized inverse odds are unbiased market probabilities. Market anchoring remains useful, but the transformation layer itself requires calibration evidence.",
+      "hypothesis": "A better de-vig/favourite-longshot correction will improve market-prior Brier/log-loss and reduce false edge near longshots/draws.",
+      "module": ["market_pricing", "calibration", "prematch", "live_prior"],
+      "smallest_safe_experiment": "Offline replay only: compare current conversion vs multiplicative, power, Shin and OO-EPC/FL-bias correction using identical frozen odds snapshots and chronological folds.",
+      "required_evidence": ">=20,000 settled 1X2 observations across multiple bookmakers/leagues when available; report Brier, log-loss, RPS, reliability by probability bucket and bookmaker.",
+      "failure_condition": "No out-of-sample proper-score improvement, unstable gain across bookmakers/leagues, or apparent gain caused by timestamp/closing-price leakage.",
+      "rollback": "Retain current conversion; challenger remains offline only."
+    },
+    {
+      "id": "F20260830-02",
+      "status": "KEEP",
+      "title": "Point-in-time feature construction must be a hard invariant",
+      "observed": "Sallis, Georgoulas and Tsoulos (Computation, 24 Aug 2026) benchmark 225,474 matches with a strictly chronological split. Their rolling features, Elo state and imputation use only earlier matches; static full-period means are explicitly avoided because they leak future information.",
+      "source": "https://doi.org/10.3390/computation14090195",
+      "derived": "ARGUS should verify not only train/test chronology but every fallback statistic, rolling average, rating state, enrichment and imputation at decision_time.",
+      "hypothesis": "A point-in-time audit will expose silent leakage or optimistic historical evaluation that ordinary split checks miss.",
+      "module": ["data_quality", "temporal_integrity", "feature_engineering", "walk_forward_validation"],
+      "smallest_safe_experiment": "Report-only invariant checker: for sampled predictions reconstruct every decision-critical feature with source_event_time <= decision_time; inject deliberately leaked fixtures as positive controls.",
+      "required_evidence": ">=1,000 reconstructed predictions spanning PREMATCH and LIVE plus synthetic leakage tests with 100% expected detection.",
+      "failure_condition": "Checker cannot distinguish event_time, ingest_time and settlement_time, or produces material false positives.",
+      "rollback": "Keep checker diagnostic-only; no blocking gate until validated."
+    },
+    {
+      "id": "F20260830-03",
+      "status": "KEEP",
+      "title": "Do not increase model complexity without new information",
+      "observed": "The 24 Aug 2026 benchmark compares six materially different classifiers on the same 225,474-match feature space. Their performance is nearly identical; with market inputs they match but do not improve bookmaker log-loss, Brier or RPS. The authors conclude the information set matters more than model capacity in this setup.",
+      "source": "https://doi.org/10.3390/computation14090195",
+      "derived": "ARGUS should require evidence that a new model adds information or stable residual signal, not promote it because it is more sophisticated.",
+      "hypothesis": "Simple residual/challenger models against the market prior will be as useful as heavier architectures unless ARGUS adds genuinely new sequential/live information.",
+      "module": ["forecasting", "ensemble", "mlops", "failure_analysis"],
+      "smallest_safe_experiment": "Offline champion/challenger comparison using identical frozen features and folds: logistic/additive baseline vs current complex challenger, evaluated on proper scores and risk-coverage rather than hit rate alone.",
+      "required_evidence": ">=3 chronological test windows and paired bootstrap confidence intervals; improvement must repeat in at least 2 windows without worsening calibration.",
+      "failure_condition": "Only accuracy improves while proper scoring/calibration does not, or gains vanish under chronological resampling.",
+      "rollback": "Keep existing champion and record challenger as non-promoted."
+    },
+    {
+      "id": "F20260830-04",
+      "status": "KEEP",
+      "title": "Bound API savings by explicit staleness rather than aggressive caching",
+      "observed": "Current Redis cache-aside documentation recommends TTL-bounded staleness, explicit invalidation on writes and protection against cache stampedes; it frames TTL as an upper bound on how stale a value may be served.",
+      "source": "https://redis.io/docs/latest/develop/use-cases/cache-aside/",
+      "derived": "ARGUS can reduce duplicate provider calls safely only when cache TTL is tied to football-state sensitivity: long for static metadata, shorter pre-match, very short or invalidated on material LIVE state changes.",
+      "hypothesis": "State-aware TTL plus single-flight request coalescing can cut provider calls materially without increasing stale actionable decisions.",
+      "module": ["api_efficiency", "live_state", "data_engineering", "control_plane"],
+      "smallest_safe_experiment": "Shadow instrumentation only: calculate hypothetical cache hits and avoided calls while still fetching authoritative data; log freshness delta and whether a material event would have been missed.",
+      "required_evidence": ">=7 match-days, >=10,000 provider-read opportunities, including goals/cards/status transitions.",
+      "failure_condition": "Any hypothetical cache policy would have served stale score/red-card/status to an actionable decision, or savings are negligible.",
+      "rollback": "No cache-policy change; retain current fetch behavior."
+    },
+    {
+      "id": "F20260830-05",
+      "status": "WATCH",
+      "title": "Selective forecasting should learn hard-to-predict states, but transferability is unproven for football",
+      "observed": "Inácio et al. (2026) propose selective time-series forecasting that predicts empirical error percentile from structural characteristics and reports improved forecast accuracy as difficult samples are rejected across heterogeneous time-series datasets.",
+      "source": "https://arxiv.org/abs/2606.23448",
+      "derived": "ARGUS abstention could eventually use learned difficulty independent of raw model confidence, which may help when confidence itself is miscalibrated.",
+      "hypothesis": "A difficulty score based on data freshness, model disagreement, market dispersion, horizon and state volatility can improve loss at fixed coverage.",
+      "module": ["selective_prediction", "abstention", "uncertainty", "live"],
+      "smallest_safe_experiment": "Paper-only meta-model predicting next-fold error/difficulty; compare risk-coverage against existing confidence/edge abstention. No change to PRIME/VALUE thresholds.",
+      "required_evidence": ">=5,000 settled predictions clustered by match and >=3 chronological folds; evaluate transfer across leagues and PREMATCH/LIVE separately.",
+      "failure_condition": "Coverage collapses, difficulty score fails cross-league transfer, or no improvement over simple abstention baselines.",
+      "rollback": "Discard meta-model; preserve current abstention logic."
+    },
+    {
+      "id": "F20260830-06",
+      "status": "KEEP",
+      "title": "Control Plane truth should correlate decision IDs across logs, metrics and traces",
+      "observed": "OpenTelemetry defines common semantic conventions across traces, metrics, logs and resources, while Prometheus recommends urgent/actionable symptom-based alerts and grouping/deduplication rather than paging on every underlying cause.",
+      "sources": ["https://opentelemetry.io/docs/specs/otel/", "https://prometheus.io/docs/practices/the_zen/", "https://prometheus.io/docs/alerting/latest/alertmanager/"],
+      "derived": "ARGUS should make a single decision trace reconstructable end-to-end and reserve critical status for symptoms that can invalidate operator trust or decisions.",
+      "hypothesis": "A normalized telemetry envelope will shorten failure diagnosis and reduce duplicate/noisy alerts without hiding real incidents.",
+      "module": ["observability", "control_plane", "failure_memory", "operator_ux"],
+      "smallest_safe_experiment": "Emit shadow telemetry with decision_id, match_id, phase, provider, event_time, ingest_time, decision_time, freshness_ms, model_version, data_quality_state, settlement_state and error_type; no alert-routing changes initially.",
+      "required_evidence": ">=14 days of parallel telemetry and replay of at least 5 known failure classes.",
+      "failure_condition": "High-cardinality costs, missing provenance, trace correlation gaps or a previously visible critical symptom becomes less visible.",
+      "rollback": "Disable shadow emitter only; production health semantics unchanged."
+    },
+    {
+      "id": "F20260830-07",
+      "status": "WATCH",
+      "title": "Formal champion/challenger aliases are useful, but a new registry dependency is not yet justified",
+      "observed": "MLflow Model Registry supports immutable model versions plus mutable aliases such as champion and tags for lifecycle metadata.",
+      "source": "https://mlflow.org/docs/latest/ml/model-registry/",
+      "derived": "The governance pattern is useful for ARGUS, but installing MLflow solely for aliases would add operational surface. ARGUS can first reproduce the minimal semantics in its existing ledger/config layer.",
+      "hypothesis": "Explicit champion/challenger/version metadata will reduce accidental model drift and improve rollback clarity.",
+      "module": ["mlops", "governance", "rollback", "control_plane"],
+      "smallest_safe_experiment": "Add documentation/schema only for champion_version, challenger_version, evaluation_window, promotion_gate and rollback_target; do not add MLflow dependency.",
+      "required_evidence": "Demonstrate two complete offline challenger cycles and one simulated rollback using existing infrastructure.",
+      "failure_condition": "Existing versioning already provides equivalent traceability or schema creates conflicting sources of truth.",
+      "rollback": "Remove proposed metadata schema; no runtime dependency added."
+    },
+    {
+      "id": "F20260830-08",
+      "status": "REJECT",
+      "title": "Reject algorithm novelty as a promotion criterion",
+      "observed": "The latest large football benchmark finds six distinct classifiers converge under a common chronological protocol, while proper scoring rules do not beat the bookmaker once market information is included.",
+      "source": "https://doi.org/10.3390/computation14090195",
+      "derived": "Adding deeper neural, recurrent or attention architectures to the same static inputs has no current evidence basis for ARGUS.",
+      "hypothesis": null,
+      "module": ["forecasting", "mlops", "cost_control"],
+      "smallest_safe_experiment": "None required until a genuinely new sequential/event information source or strong residual hypothesis exists.",
+      "required_evidence": "Future proposal must show incremental information and repeated walk-forward proper-score improvement.",
+      "failure_condition": "Not applicable; rejected for insufficient evidence.",
+      "rollback": "No deployment or dependency introduced."
+    }
+  ],
+  "explicit_non_actions": [
+    "No production model weights changed",
+    "No betting thresholds changed",
+    "No staking logic changed",
+    "No live refresh cadence changed",
+    "No settlement logic changed",
+    "No new runtime dependency installed",
+    "No research result is represented as deployed"
+  ]
+}
