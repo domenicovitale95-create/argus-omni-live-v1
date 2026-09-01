@@ -1,0 +1,37 @@
+name: Storage Auth Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/_report-store.js'
+      - 'api/site-health.js'
+      - 'api/training-bets-v1.js'
+      - 'tests/storage-auth-regression.mjs'
+      - 'package.json'
+      - '.github/workflows/storage-auth-regression.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/_report-store.js'
+      - 'api/site-health.js'
+      - 'api/training-bets-v1.js'
+      - 'tests/storage-auth-regression.mjs'
+      - 'package.json'
+      - '.github/workflows/storage-auth-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  storage-auth-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run test:storage
