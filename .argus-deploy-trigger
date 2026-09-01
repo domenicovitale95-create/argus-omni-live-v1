@@ -1,2 +1,2 @@
-ARGUS preview deployment refresh — 2026-09-01
-Purpose: verify Blob authentication health probing, controlled training-state persistence failures, and storage regression coverage before production merge.
+ARGUS production deployment refresh — 2026-09-01T09:54:00Z
+Purpose: activate the existing Vercel Blob OIDC connection for Production and Preview after storage recovery.
