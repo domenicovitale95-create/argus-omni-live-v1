@@ -1,0 +1,62 @@
+name: Source calibration and training audit regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/calibration-impact.js'
+      - 'api/decision-scheduler.js'
+      - 'api/training-bias.js'
+      - '.github/workflows/source-calibration-regression.yml'
+  pull_request:
+    paths:
+      - 'api/calibration-impact.js'
+      - 'api/decision-scheduler.js'
+      - 'api/training-bias.js'
+      - '.github/workflows/source-calibration-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-calibration-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax check
+        run: |
+          node --check api/calibration-impact.js
+          node --check api/decision-scheduler.js
+          node --check api/training-bias.js
+      - name: Assert conservative OOS calibration gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          f='api/calibration-impact.js'
+          grep -Fq "SOURCE_ROLLOUT_SCALE=.50" "$f"
+          grep -Fq "SOURCE_MIN_SAMPLE=100" "$f"
+          grep -Fq "Number(probCal?.settled)<600" "$f"
+          grep -Fq "API-FOOTBALL-PREDICTIONS" "$f"
+          grep -Fq "p.status==='VALIDATED'" "$f"
+          grep -Fq "maxAbsoluteSideAdjustmentPct" "$f"
+          grep -Fq "mayBypassGate:false" "$f"
+          grep -Fq "primeRequiresNormalDownstreamGates:true" "$f"
+      - name: Assert model-market audit fields survive scheduler
+        shell: bash
+        run: |
+          set -euo pipefail
+          f='api/decision-scheduler.js'
+          grep -Fq "modelProbability:c.modelProbability" "$f"
+          grep -Fq "rawEdgePct:c.rawEdgePct" "$f"
+          grep -Fq "source:c.source" "$f"
+          grep -Fq "marketFusion:c.marketFusion" "$f"
+      - name: Assert bias diagnostic never forces selection balance
+        shell: bash
+        run: |
+          set -euo pipefail
+          f='api/training-bias.js'
+          grep -Fq "forceSelectionBalance:false" "$f"
+          grep -Fq "HOME_MISSING_1X2" "$f"
+          grep -Fq "OOS_CALIBRATION_WARNING" "$f"
+          echo 'PASS: source calibration is conservative, auditable, and selection-neutral.'
