@@ -1,2 +1,2 @@
-ARGUS production deployment refresh — 2026-08-23
-Purpose: deploy Decision Integrity V2 plus autonomy hardening: deconflicted GitHub scheduler cadence, redundant historical polling removed, late-vs-stale heartbeat semantics, visible ledger-heartbeat persistence failures, and improved semantic site health reporting.
+ARGUS preview deployment refresh — 2026-09-01
+Purpose: verify Blob authentication health probing, controlled training-state persistence failures, and storage regression coverage before production merge.
