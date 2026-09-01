@@ -1,0 +1,71 @@
+name: Candidate audit trail regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/_market-candidate.js'
+      - 'api/autopilot-v2.js'
+      - 'api/decision-scheduler.js'
+      - 'api/training-bets-v1.js'
+      - '.github/workflows/candidate-audit-trail-regression.yml'
+  pull_request:
+    paths:
+      - 'api/_market-candidate.js'
+      - 'api/autopilot-v2.js'
+      - 'api/decision-scheduler.js'
+      - 'api/training-bets-v1.js'
+      - '.github/workflows/candidate-audit-trail-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Syntax check
+        run: |
+          node --check api/_market-candidate.js
+          node --check api/autopilot-v2.js
+          node --check api/decision-scheduler.js
+          node --check api/training-bets-v1.js
+      - name: Assert candidate audit fields survive end to end
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Candidate creation must keep the independent model probability,
+          # market baseline, pre-fusion edge and fusion diagnostics.
+          grep -Fq 'modelProbability:' api/_market-candidate.js
+          grep -Fq 'marketProbability:' api/_market-candidate.js
+          grep -Fq 'rawEdgePct:' api/_market-candidate.js
+          grep -Fq 'marketFusion:' api/_market-candidate.js
+          grep -Fq 'source,' api/_market-candidate.js
+
+          # Autopilot projection must not strip those fields before the scheduler.
+          grep -Fq 'modelProbability:d.candidate.modelProbability??null' api/autopilot-v2.js
+          grep -Fq 'rawEdgePct:d.candidate.rawEdgePct??null' api/autopilot-v2.js
+          grep -Fq 'source:d.candidate.source||null' api/autopilot-v2.js
+          grep -Fq 'marketFusion:d.candidate.marketFusion?' api/autopilot-v2.js
+
+          # Scheduler must persist them into the canonical decision plan.
+          grep -Fq 'modelProbability:c.modelProbability??null' api/decision-scheduler.js
+          grep -Fq 'rawEdgePct:c.rawEdgePct??null' api/decision-scheduler.js
+          grep -Fq 'source:c.source||null' api/decision-scheduler.js
+          grep -Fq 'marketFusion:c.marketFusion?' api/decision-scheduler.js
+
+          # Prospective training records must freeze the same evidence. Historical
+          # rows are never backfilled from current model state.
+          grep -Fq 'modelProbability:n(c.modelProbability)' api/training-bets-v1.js
+          grep -Fq 'marketProbability:n(c.marketProbability)' api/training-bets-v1.js
+          grep -Fq 'rawEdgePct:n(c.rawEdgePct)' api/training-bets-v1.js
+          grep -Fq 'marketFusion:c.marketFusion||null' api/training-bets-v1.js
+          grep -Fq 'noHistoricalBackfill:true' api/training-bets-v1.js
+
+          echo 'PASS: candidate audit trail is preserved prospectively end to end.'
