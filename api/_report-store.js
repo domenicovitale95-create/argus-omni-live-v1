@@ -43,7 +43,12 @@ export function storageConfiguration(env = process.env) {
   const hasStoreId = Boolean(String(env.BLOB_STORE_ID || '').trim());
   const hasOidcToken = Boolean(String(env.VERCEL_OIDC_TOKEN || '').trim());
   const legacyReady = hasReadWriteToken;
-  const oidcReady = hasStoreId && hasOidcToken;
+  // On Vercel, @vercel/blob resolves OIDC from the per-request
+  // x-vercel-oidc-token header before falling back to VERCEL_OIDC_TOKEN.
+  // The header is intentionally not exposed through process.env, so a linked
+  // store ID is enough to attempt OIDC auth; probeStorage() remains the
+  // authoritative reachability check.
+  const oidcReady = hasStoreId;
   return {
     ready: legacyReady || oidcReady,
     mode: legacyReady ? 'READ_WRITE_TOKEN' : oidcReady ? 'OIDC' : 'UNAVAILABLE',
@@ -52,9 +57,7 @@ export function storageConfiguration(env = process.env) {
     hasReadWriteToken,
     missing: legacyReady || oidcReady
       ? []
-      : hasStoreId
-        ? ['VERCEL_OIDC_TOKEN_OR_BLOB_READ_WRITE_TOKEN']
-        : ['BLOB_STORE_ID_AND_VERCEL_OIDC_TOKEN_OR_BLOB_READ_WRITE_TOKEN']
+      : ['BLOB_STORE_ID_OR_BLOB_READ_WRITE_TOKEN']
   };
 }
 
