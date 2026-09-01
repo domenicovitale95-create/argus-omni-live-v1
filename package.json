@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vercel dev",
     "postinstall": "node scripts/patch-web-push-url.mjs",
-    "test:storage": "node tests/storage-auth-regression.mjs"
+    "test:storage": "node tests/storage-auth-regression.mjs",
+    "test:market-readiness": "node tests/market-readiness-regression.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",

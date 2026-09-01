@@ -1,0 +1,31 @@
+name: Market Readiness Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/paper-learning.js'
+      - 'tests/market-readiness-regression.mjs'
+      - 'package.json'
+      - '.github/workflows/market-readiness-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/paper-learning.js'
+      - 'tests/market-readiness-regression.mjs'
+      - 'package.json'
+      - '.github/workflows/market-readiness-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  market-readiness-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --ignore-scripts
+      - run: npm run test:market-readiness
