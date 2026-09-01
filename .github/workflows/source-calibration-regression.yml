@@ -24,6 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
       - name: Syntax check
         run: |
           node --check api/calibration-impact.js
@@ -34,11 +37,18 @@ jobs:
         run: |
           set -euo pipefail
           f='api/calibration-impact.js'
+
+          # Calibration may only roll out after a substantial, source-matched
+          # out-of-sample evidence base. Keep these assertions tied to the
+          # governed constants instead of brittle inlined magic numbers.
+          grep -Fq "MAX_SIDE_ADJ=.025" "$f"
           grep -Fq "SOURCE_ROLLOUT_SCALE=.50" "$f"
           grep -Fq "SOURCE_MIN_SAMPLE=100" "$f"
-          grep -Fq "Number(probCal?.settled)<600" "$f"
-          grep -Fq "API-FOOTBALL-PREDICTIONS" "$f"
+          grep -Fq "SOURCE_MIN_TOTAL=600" "$f"
+          grep -Fq "Number(probCal?.settled)<SOURCE_MIN_TOTAL" "$f"
           grep -Fq "p.status==='VALIDATED'" "$f"
+          grep -Fq "sourceMarket" "$f"
+          grep -Fq "API-FOOTBALL-PREDICTIONS" "$f"
           grep -Fq "maxAbsoluteSideAdjustmentPct" "$f"
           grep -Fq "mayBypassGate:false" "$f"
           grep -Fq "primeRequiresNormalDownstreamGates:true" "$f"
@@ -48,6 +58,7 @@ jobs:
           set -euo pipefail
           f='api/decision-scheduler.js'
           grep -Fq "modelProbability:c.modelProbability" "$f"
+          grep -Fq "marketProbability:c.marketProbability" "$f"
           grep -Fq "rawEdgePct:c.rawEdgePct" "$f"
           grep -Fq "source:c.source" "$f"
           grep -Fq "marketFusion:c.marketFusion" "$f"
@@ -58,5 +69,8 @@ jobs:
           f='api/training-bias.js'
           grep -Fq "forceSelectionBalance:false" "$f"
           grep -Fq "HOME_MISSING_1X2" "$f"
+          grep -Fq "SELECTION_CONCENTRATION_HIGH" "$f"
           grep -Fq "OOS_CALIBRATION_WARNING" "$f"
-          echo 'PASS: source calibration is conservative, auditable, and selection-neutral.'
+          grep -Fq "PROSPECTIVE_AUDITED" "$f"
+          grep -Fq "LEGACY_INCOMPLETE" "$f"
+          echo 'PASS: source calibration is conservative, source-segmented, auditable, and selection-neutral.'
