@@ -1,0 +1,29 @@
+name: vNext Shadow Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/_vnext-shadow-policy.js'
+      - 'api/vnext-shadow.js'
+      - 'tests/vnext-shadow-regression.mjs'
+      - '.github/workflows/vnext-shadow-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/_vnext-shadow-policy.js'
+      - 'api/vnext-shadow.js'
+      - 'tests/vnext-shadow-regression.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  shadow-invariants:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/vnext-shadow-regression.mjs
