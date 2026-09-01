@@ -1,4 +1,4 @@
-import { storageReady } from './_report-store.js';
+import { probeStorage, storageConfiguration } from './_report-store.js';
 
 function flag(v){return Boolean(String(v||'').trim())}
 
@@ -6,9 +6,10 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
 
+  const storage=await probeStorage();
   const checks={
     footballData:flag(process.env.API_FOOTBALL_KEY),
-    persistentStorage:storageReady(),
+    persistentStorage:storage.ok,
     cronAuth:flag(process.env.CRON_SECRET),
     webPush:Boolean(flag(process.env.VAPID_PUBLIC_KEY)&&flag(process.env.VAPID_PRIVATE_KEY))
   };
@@ -31,8 +32,15 @@ export default async function handler(req,res){
   };
 
   return res.status(200).json({
-    version:'SITE-HEALTH-5',generatedAt:new Date().toISOString(),status,securityStatus,securityIssues,
+    version:'SITE-HEALTH-6',generatedAt:new Date().toISOString(),status,securityStatus,securityIssues,
     featureAvailability,checks,missingCritical,optionalMissing,deployment,
+    storage:{
+      reachable:storage.ok,
+      authMode:storage.configuration?.mode||storageConfiguration().mode,
+      latencyMs:storage.latencyMs??null,
+      error:storage.error||null,
+      secretValuesExposed:false
+    },
     notes:{
       footballData:'Required for live football ingestion.',
       persistentStorage:'Required for reports, training memory, alerts and self-improvement.',

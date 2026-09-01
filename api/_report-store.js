@@ -35,7 +35,45 @@ function temporaryQuotaGuard(pathname) {
 }
 
 export function storageReady() {
-  return Boolean(process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN);
+  return storageConfiguration().ready;
+}
+
+export function storageConfiguration(env = process.env) {
+  const hasReadWriteToken = Boolean(String(env.BLOB_READ_WRITE_TOKEN || '').trim());
+  const hasStoreId = Boolean(String(env.BLOB_STORE_ID || '').trim());
+  const hasOidcToken = Boolean(String(env.VERCEL_OIDC_TOKEN || '').trim());
+  const legacyReady = hasReadWriteToken;
+  const oidcReady = hasStoreId && hasOidcToken;
+  return {
+    ready: legacyReady || oidcReady,
+    mode: legacyReady ? 'READ_WRITE_TOKEN' : oidcReady ? 'OIDC' : 'UNAVAILABLE',
+    hasStoreId,
+    hasOidcToken,
+    hasReadWriteToken,
+    missing: legacyReady || oidcReady
+      ? []
+      : hasStoreId
+        ? ['VERCEL_OIDC_TOKEN_OR_BLOB_READ_WRITE_TOKEN']
+        : ['BLOB_STORE_ID_AND_VERCEL_OIDC_TOKEN_OR_BLOB_READ_WRITE_TOKEN']
+  };
+}
+
+export async function probeStorage() {
+  const configuration = storageConfiguration();
+  if (!configuration.ready) return { ok: false, configuration, error: 'BLOB_AUTH_INCOMPLETE' };
+  const startedAt = Date.now();
+  try {
+    await list({ prefix: 'argus/', limit: 1 });
+    return { ok: true, configuration, latencyMs: Date.now() - startedAt, error: null };
+  } catch (error) {
+    warnBlob('PROBE_FAILED', 'argus/', error);
+    return {
+      ok: false,
+      configuration,
+      latencyMs: Date.now() - startedAt,
+      error: String(error?.message || error || 'BLOB_PROBE_FAILED')
+    };
+  }
 }
 
 function warnBlob(operation, pathname, error) {
