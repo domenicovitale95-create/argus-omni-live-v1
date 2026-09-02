@@ -1,0 +1,26 @@
+name: Shadow Market Devig Regression
+
+on:
+  push:
+    branches: [main, hardening/shadow-market-devig]
+  pull_request:
+
+jobs:
+  shadow-market-devig:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/_market-devig.js
+          node --check api/_challenger-validation.js
+          node --check api/_shadow-evidence-core.js
+          node --check tests/shadow-market-devig-regression.mjs
+      - name: De-vig regression suite
+        run: node tests/shadow-market-devig-regression.mjs
+      - name: Existing challenger regression suite
+        run: node tests/challenger-temporal-holdout-regression.mjs
