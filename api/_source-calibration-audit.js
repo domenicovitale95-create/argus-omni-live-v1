@@ -35,18 +35,17 @@ function eceBinary(rows,bins=10){
   }
   let ece=0;
   const detail=groups.map((g,i)=>{
-    if(!g.n)return{bin:i,n:0,range:[i/bins,(i+1)/bins],avgProbability:null,observedRate:null,gap:null};
+    if(!g.n)return{bin:i,n:0,range:[round(i/bins,3),round((i+1)/bins,3)],avgProbability:null,observedRate:null,gap:null};
     const avg=g.sumP/g.n,obs=g.sumY/g.n,gap=Math.abs(avg-obs);ece+=g.n/Math.max(1,rows.length)*gap;
     return{bin:i,n:g.n,range:[round(i/bins,3),round((i+1)/bins,3)],avgProbability:round(avg,4),observedRate:round(obs,4),gap:round(gap,4)};
   });
-  return{ece:round(ece,5),bins:detail};
+  return{ece:rows.length?round(ece,5):null,bins:detail};
 }
 
-function topLabelEce(rows,bins=10){
-  return eceBinary(rows.map(r=>({p:r.confidence,y:r.correct?1:0})),bins);
-}
+function topLabelEce(rows,bins=10){return eceBinary(rows.map(r=>({p:r.confidence,y:r.correct?1:0})),bins)}
 
 function classCalibration(rows,key,bins=10){
+  if(!rows.length)return{sample:0,averagePredicted:null,observedRate:null,calibrationGapPct:null,absoluteGapPct:null,ece:eceBinary([],bins)};
   const binary=rows.map(r=>({p:r.probabilities[key],y:r.truth===key?1:0})),mP=mean(binary.map(r=>r.p)),obs=mean(binary.map(r=>r.y)),gap=obs-mP;
   return{sample:binary.length,averagePredicted:round(mP,4),observedRate:round(obs,4),calibrationGapPct:pct(gap),absoluteGapPct:pct(Math.abs(gap)),ece:eceBinary(binary,bins)};
 }
@@ -64,30 +63,27 @@ function monotonicityWarnings(rows,key,bins=10,minBinSample=12,tolerance=.05){
 
 function metrics(rows,probField='probabilities'){
   if(!rows.length)return{sample:0,brier:null,brierUnscaled:null,logLoss:null,accuracy:null,topLabelEce:null};
-  let brier=0,logLoss=0,correct=0;
-  const top=[];
+  let brier=0,logLoss=0,correct=0;const top=[];
   for(const r of rows){
-    const p=r[probField],truth=r.truth;
-    let sumSq=0,best=ONE_X_TWO[0];
+    const p=r[probField],truth=r.truth;let sumSq=0,best=ONE_X_TWO[0];
     for(const k of ONE_X_TWO){const y=truth===k?1:0;sumSq+=(p[k]-y)**2;if(p[k]>p[best])best=k}
-    brier+=sumSq/3;logLoss+=-Math.log(clamp(p[truth]));if(best===truth)correct++;
-    top.push({confidence:p[best],correct:best===truth});
+    brier+=sumSq/3;logLoss+=-Math.log(clamp(p[truth]));if(best===truth)correct++;top.push({confidence:p[best],correct:best===truth});
   }
   return{sample:rows.length,brier:round(brier/rows.length,6),brierUnscaled:round(brier*3/rows.length,6),logLoss:round(logLoss/rows.length,6),accuracy:round(correct/rows.length,4),topLabelEce:topLabelEce(top,10).ece};
 }
 
 function baseRateMetrics(rows){
-  if(!rows.length)return{sample:0,frequencies:null,brier:null,logLoss:null};
+  if(!rows.length)return{sample:0,frequencies:null,brier:null,brierUnscaled:null,logLoss:null,accuracy:null,topLabelEce:null};
   const counts={home:0,draw:0,away:0};for(const r of rows)counts[r.truth]++;
   const p=Object.fromEntries(ONE_X_TWO.map(k=>[k,counts[k]/rows.length]));
-  return{sample:rows.length,frequencies:Object.fromEntries(ONE_X_TWO.map(k=>[k,round(p[k],4)])),...metrics(rows.map(r=>({...r,base:p})),'base')};
+  return{frequencies:Object.fromEntries(ONE_X_TWO.map(k=>[k,round(p[k],4)])),...metrics(rows.map(r=>({...r,base:p})),'base')};
 }
 
 function marketMetrics(rows){
   const covered=rows.filter(r=>r.marketProbabilities&&ONE_X_TWO.every(k=>finite(r.marketProbabilities[k])));
   if(!covered.length)return{sample:0,coveragePct:0,brier:null,logLoss:null,accuracy:null,brierDeltaVsModel:null,logLossDeltaVsModel:null};
   const model=metrics(covered),market=metrics(covered,'marketProbabilities');
-  return{sample:covered.length,coveragePct:pct(covered.length/rows.length),brier:market.brier,logLoss:market.logLoss,accuracy:market.accuracy,brierDeltaVsModel:round(market.brier-model.brier,6),logLossDeltaVsModel:round(market.logLoss-model.logLoss,6),interpretation:{negativeDeltaMeansMarketBetter:false,rule:'Delta is market minus model; negative means market has lower loss and is better on covered rows.'}};
+  return{sample:covered.length,coveragePct:pct(covered.length/rows.length),brier:market.brier,logLoss:market.logLoss,accuracy:market.accuracy,brierDeltaVsModel:round(market.brier-model.brier,6),logLossDeltaVsModel:round(market.logLoss-model.logLoss,6),interpretation:{deltaDefinition:'MARKET_LOSS_MINUS_MODEL_LOSS',negativeDeltaMeansMarketBetter:true}};
 }
 
 export function auditSourceCalibration(books,{source='ARGUS_PREMATCH_1X2',simplexTolerance=.005}={}){
