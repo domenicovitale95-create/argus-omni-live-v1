@@ -6,6 +6,7 @@ function brusselsParts(){
   return Object.fromEntries(parts.map(p=>[p.type,p.value]));
 }
 function authorized(req){const secret=process.env.CRON_SECRET;return !secret||req.headers.authorization===`Bearer ${secret}`}
+export function reportAuthorization(req,env=process.env){const secret=String(env?.REPORT_CRON_SECRET||'').trim();return secret?`Bearer ${secret}`:(req?.headers?.authorization||'')}
 async function getJson(url,authorization){const r=await fetch(url,{headers:{Accept:'application/json',Authorization:authorization||''}});const data=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,data}}
 async function postJson(url,authorization){const r=await fetch(url,{method:'POST',headers:{Accept:'application/json',Authorization:authorization||''}});const data=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,data}}
 export default async function handler(req,res){
@@ -14,8 +15,8 @@ export default async function handler(req,res){
   if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
   const p=brusselsParts();
   if(Number(p.hour)!==23)return res.status(200).json({ok:true,skipped:true,reason:'NOT_23H_BRUSSELS',localHour:p.hour});
-  const date=`${p.year}-${p.month}-${p.day}`,proto=(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app',base=`${proto}://${host}`,auth=req.headers.authorization||'',guard=await readJson(QUOTA_GUARD_PATH,null),providerBlocked=Boolean(guard?.date===date&&guard?.exhausted);
-  const report=providerBlocked?{ok:true,status:200,data:{summary:null,skipped:true,reason:'PROVIDER_BLOCKED_BY_QUOTA_GUARD'}}:await getJson(`${base}/api/daily-report?date=${date}&force=1`,auth);
+  const date=`${p.year}-${p.month}-${p.day}`,proto=(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app',base=`${proto}://${host}`,auth=req.headers.authorization||'',reportAuth=reportAuthorization(req),guard=await readJson(QUOTA_GUARD_PATH,null),providerBlocked=Boolean(guard?.date===date&&guard?.exhausted);
+  const report=providerBlocked?{ok:true,status:200,data:{summary:null,skipped:true,reason:'PROVIDER_BLOCKED_BY_QUOTA_GUARD'}}:await getJson(`${base}/api/daily-report?date=${date}&force=1`,reportAuth);
   if(!report.ok)return res.status(report.status).json({ok:false,error:report.data.error||'Daily report failed'});
   const ledger=await postJson(`${base}/api/prediction-ledger?mode=settle&date=${date}`,auth);
   const shadow=providerBlocked?{ok:true,status:200,data:{ok:true,date,settled:0,skipped:true,reason:'PROVIDER_BLOCKED_BY_QUOTA_GUARD'}}:await getJson(`${base}/api/shadow-mode?mode=settle&date=${date}`,auth);
