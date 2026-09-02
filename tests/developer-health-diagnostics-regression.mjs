@@ -3,6 +3,7 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 
 const source=fs.readFileSync(new URL('../api/developer-health.js',import.meta.url),'utf8');
+const vercel=JSON.parse(fs.readFileSync(new URL('../vercel.json',import.meta.url),'utf8'));
 const errorTextSource=source.match(/function errorText\(value\)\{[\s\S]*?\n\}/)?.[0]||'';
 
 assert.ok(errorTextSource,'structured error serializer must exist');
