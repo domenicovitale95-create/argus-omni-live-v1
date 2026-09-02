@@ -1,0 +1,25 @@
+name: Shadow Duplicate Inspector Regression
+
+on:
+  push:
+    branches: [main, audit/shadow-duplicate-root-cause]
+  pull_request:
+
+jobs:
+  shadow-duplicate-inspector:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/_shadow-duplicate-inspector.js
+          node --check api/shadow-duplicate-integrity.js
+          node --check tests/shadow-duplicate-inspector-regression.mjs
+      - name: Inspector regression suite
+        run: node tests/shadow-duplicate-inspector-regression.mjs
+      - name: Dedupe regression suite
+        run: node tests/shadow-fixture-dedup-regression.mjs
