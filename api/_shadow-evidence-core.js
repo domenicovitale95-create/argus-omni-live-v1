@@ -1,12 +1,11 @@
 import { readJson, writeJson, storageReady } from './_report-store.js';
+import { marketFairForKey, priceForKey } from './_market-devig.js';
+
+export { marketFairForKey, priceForKey } from './_market-devig.js';
 
 const TZ='Europe/Brussels';
 const FINAL=new Set(['FT','AET','PEN']);
 const VOID=new Set(['CANC','ABD','AWD','WO']);
-const PAIRS=Object.freeze({
-  over15:'under15',under15:'over15',over25:'under25',under25:'over25',over35:'under35',under35:'over35',
-  bttsYes:'bttsNo',bttsNo:'bttsYes',homeOver05:'homeUnder05',homeUnder05:'homeOver05',awayOver05:'awayUnder05',awayUnder05:'awayOver05'
-});
 const clamp=(v,min=0,max=1)=>Math.min(max,Math.max(min,v));
 const safe=(v,f=0)=>Number.isFinite(Number(v))?Number(v):f;
 const fact=n=>{let x=1;for(let i=2;i<=n;i++)x*=i;return x};
@@ -19,19 +18,7 @@ function model1x2(m){const p=m?.preMatchModel||{},nested=p?.probabilities||p?.pr
 function lambdas(m){const h=m?.history90d?.home,a=m?.history90d?.away;if(!h||!a||safe(h.matches)<3||safe(a.matches)<3)return null;const fd=(safe(h.last5PPG)-safe(a.last5PPG))/3,vd=((h.homePPG==null?safe(h.pointsPerGame,1.4):safe(h.homePPG,1.4))-(a.awayPPG==null?safe(a.pointsPerGame,1.2):safe(a.awayPPG,1.2)))/3;let lh=safe(h.goalsForPerGame,1.2)*.54+safe(a.goalsAgainstPerGame,1.2)*.46,la=safe(a.goalsForPerGame,1.1)*.54+safe(h.goalsAgainstPerGame,1.1)*.46;lh*=1.06+fd*.11+vd*.08;la*=.98-fd*.07-vd*.05;return{home:clamp(lh,.2,3.8),away:clamp(la,.2,3.8),quality:clamp(Math.min(safe(h.matches),safe(a.matches))/10,0,1)}}
 function matrix(m){const l=lambdas(m);if(!l)return null;const rows=[];for(let h=0;h<=7;h++)for(let a=0;a<=7;a++)rows.push({h,a,p:pois(h,l.home)*pois(a,l.away)});const s=rows.reduce((x,r)=>x+r.p,0)||1;rows.forEach(r=>r.p/=s);return{rows,l}}
 function sum(rows,fn){return rows.reduce((s,r)=>s+(fn(r)?r.p:0),0)}
-export function priceForKey(m,key){let raw;if(String(key).startsWith('score:'))raw=m?.marketOdds?.exactScores?.[String(key).slice(6)];else raw=m?.marketOdds?.[key]??m?.markets?.[key];const n=Number(raw?.odds??raw);return Number.isFinite(n)&&n>1?n:null}
 function qualityPct(m,fallback=55){const q=Number(m?.dataQuality??m?.quality);if(Number.isFinite(q))return Math.max(0,Math.min(100,q<=1?q*100:q));return fallback}
-function fair1x2(m){const odds={home:priceForKey(m,'home'),draw:priceForKey(m,'draw'),away:priceForKey(m,'away')};if(!Object.values(odds).every(x=>Number.isFinite(x)&&x>1))return null;const raw=Object.fromEntries(Object.entries(odds).map(([k,o])=>[k,1/o])),s=raw.home+raw.draw+raw.away;return{home:raw.home/s,draw:raw.draw/s,away:raw.away/s,overround:s-1}}
-export function marketFairForKey(m,key){
-  const odds=priceForKey(m,key),rawImplied=odds?1/odds:null,one=fair1x2(m);
-  if(['home','draw','away'].includes(key)&&one)return{odds,rawImplied,fair:one[key],overround:one.overround,method:'DEVIG_1X2_NORMALIZED'};
-  if(key==='doubleChance1X'&&one)return{odds,rawImplied,fair:one.home+one.draw,overround:one.overround,method:'DERIVED_FROM_DEVIG_1X2'};
-  if(key==='doubleChance12'&&one)return{odds,rawImplied,fair:one.home+one.away,overround:one.overround,method:'DERIVED_FROM_DEVIG_1X2'};
-  if(key==='doubleChanceX2'&&one)return{odds,rawImplied,fair:one.draw+one.away,overround:one.overround,method:'DERIVED_FROM_DEVIG_1X2'};
-  const pair=PAIRS[key];
-  if(pair&&odds){const other=priceForKey(m,pair);if(other){const rawOther=1/other,s=rawImplied+rawOther;if(s>0)return{odds,rawImplied,fair:rawImplied/s,overround:s-1,method:'DEVIG_BINARY_PAIR_NORMALIZED'}}}
-  return{odds,rawImplied,fair:null,overround:null,method:rawImplied==null?'NO_MARKET_PRICE':'UNPAIRED_RAW_BREAK_EVEN'};
-}
 function pick(m,key,label,probability,meta={}){const market=marketFairForKey(m,key),edgeBase=Number.isFinite(market.fair)?market.fair:market.rawImplied;return{key,label,probability:Number(probability.toFixed(5)),odds:market.odds,edge:edgeBase==null?null:Number(((probability-edgeBase)*100).toFixed(2)),edgeBasis:Number.isFinite(market.fair)?'DEVIGGED_FAIR':'RAW_BREAK_EVEN',quality:Math.round(meta.quality??qualityPct(m)),probabilitySource:meta.probabilitySource||'UNKNOWN',modelIndependentOfPrice:meta.modelIndependentOfPrice===true,sourceClass:meta.sourceClass||null,rawImpliedProbability:Number.isFinite(market.rawImplied)?Number(market.rawImplied.toFixed(5)):null,marketImpliedProbability:Number.isFinite(market.fair)?Number(market.fair.toFixed(5)):null,marketOverround:Number.isFinite(market.overround)?Number(market.overround.toFixed(5)):null,marketProbabilityMethod:market.method}}
 function resultModelPicks(m){const p=model1x2(m);if(!p)return[];const meta={probabilitySource:'ARGUS_PREMATCH_1X2',modelIndependentOfPrice:true,sourceClass:'PREMATCH_MODEL',quality:qualityPct(m)};return[pick(m,'home','Home',p.home,meta),pick(m,'draw','Draw',p.draw,meta),pick(m,'away','Away',p.away,meta),pick(m,'doubleChance1X','Double Chance 1X',p.home+p.draw,meta),pick(m,'doubleChance12','Double Chance 12',p.home+p.away,meta),pick(m,'doubleChanceX2','Double Chance X2',p.draw+p.away,meta)]}
 function historyPicks(m){const x=matrix(m);if(!x)return[];const r=x.rows,q=Math.round(x.l.quality*100),meta={probabilitySource:'HISTORY90D_POISSON',modelIndependentOfPrice:true,sourceClass:'STRUCTURAL_MODEL',quality:q},total=t=>sum(r,z=>z.h+z.a>t),btts=sum(r,z=>z.h>0&&z.a>0),out=[pick(m,'over15','Over 1.5',total(1.5),meta),pick(m,'over25','Over 2.5',total(2.5),meta),pick(m,'over35','Over 3.5',total(3.5),meta),pick(m,'under25','Under 2.5',1-total(2.5),meta),pick(m,'bttsYes','BTTS Yes',btts,meta),pick(m,'bttsNo','BTTS No',1-btts,meta),pick(m,'homeOver05','Home O0.5',sum(r,z=>z.h>.5),meta),pick(m,'awayOver05','Away O0.5',sum(r,z=>z.a>.5),meta)];for(const z of r.slice().sort((a,b)=>b.p-a.p).slice(0,3))out.push(pick(m,`score:${z.h}-${z.a}`,`Exact ${z.h}-${z.a}`,z.p,meta));return out}
