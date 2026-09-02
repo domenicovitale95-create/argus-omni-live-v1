@@ -1,27 +1,26 @@
-const CORE_PICK_FIELDS=['key','probabilitySource','sourceClass','probability','outcome','modelIndependentOfPrice'];
-
 function finite(v){return v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v))}
 function numeric(v){return finite(v)?Number(v):null}
 function text(v){return v===null||v===undefined?null:String(v)}
+function canonical(v){return String(v||'UNKNOWN').trim().toUpperCase().replace(/[^A-Z0-9]+/g,'_').replace(/^_|_$/g,'')||'UNKNOWN'}
 function isoMs(v){const t=new Date(v||0).getTime();return Number.isFinite(t)&&t>0?t:null}
 
 function normalizedPick(p={}){
-  const out={};
-  for(const key of CORE_PICK_FIELDS){
-    if(key==='probability')out[key]=numeric(p[key]);
-    else if(key==='modelIndependentOfPrice')out[key]=p[key]===true;
-    else out[key]=text(p[key]);
-  }
-  return out;
+  return{
+    key:text(p?.key),
+    source:canonical(p?.probabilitySource||p?.sourceClass||'UNKNOWN'),
+    probability:numeric(p?.probability),
+    outcome:text(p?.outcome)?.toUpperCase()||null,
+    modelIndependentOfPrice:p?.modelIndependentOfPrice===true
+  };
 }
 
 export function researchFixtureCore(fixture={}){
   const picks=(Array.isArray(fixture?.picks)?fixture.picks:[]).map(normalizedPick).sort((a,b)=>{
-    const ka=`${a.probabilitySource||a.sourceClass||''}|${a.key||''}`,kb=`${b.probabilitySource||b.sourceClass||''}|${b.key||''}`;
+    const ka=`${a.source}|${a.key||''}`,kb=`${b.source}|${b.key||''}`;
     return ka.localeCompare(kb)||JSON.stringify(a).localeCompare(JSON.stringify(b));
   });
   return{
-    kickoff:text(fixture?.kickoff),
+    kickoff:isoMs(fixture?.kickoff),
     finalScore:{home:numeric(fixture?.finalScore?.home),away:numeric(fixture?.finalScore?.away)},
     picks
   };
@@ -68,5 +67,5 @@ export function dedupeShadowFixtures(books,{sampleLimit=12}={}){
     }
   }
   diagnostics.outputFixtures=fixtures.length;
-  return{fixtures,diagnostics,policy:{duplicateIdentity:'fixtureId',identicalDuplicateAction:'COUNT_ONCE_EARLIEST_FREEZE',conflictingDuplicateAction:'EXCLUDE_ALL_COPIES',missingFixtureIdAction:'EXCLUDE',historicalBlobMutation:false}};
+  return{fixtures,diagnostics,policy:{duplicateIdentity:'fixtureId',fingerprintScope:'KICKOFF_FINAL_SCORE_FROZEN_PREDICTION_CORE',identicalDuplicateAction:'COUNT_ONCE_EARLIEST_FREEZE',conflictingDuplicateAction:'EXCLUDE_ALL_COPIES',missingFixtureIdAction:'EXCLUDE',historicalBlobMutation:false}};
 }
