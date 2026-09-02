@@ -18,16 +18,16 @@
     };
     providers.__backgroundRefreshCostGuard=true;
   };
-  const refreshServiceWorker=async()=>{
+  const refreshServiceWorker=()=>{
     if(!('serviceWorker'in navigator)||!navigator.serviceWorker.getRegistration)return;
-    try{
+    Promise.resolve().then(async()=>{
       const registration=await navigator.serviceWorker.getRegistration();
       if(!registration)return;
       await Promise.race([
         registration.update(),
-        new Promise(resolve=>setTimeout(resolve,3000))
+        new Promise(resolve=>setTimeout(resolve,2000))
       ]);
-    }catch(_){}
+    }).catch(()=>{});
   };
   const installRefreshButton=()=>{
     const actions=document.querySelector('.hero-actions');
@@ -47,14 +47,14 @@
     const applyMobileLayout=()=>{btn.style.width=window.matchMedia('(max-width:700px)').matches?'100%':''};
     applyMobileLayout();
     window.addEventListener('resize',applyMobileLayout,{passive:true});
-    btn.addEventListener('click',async()=>{
+    btn.addEventListener('click',()=>{
       if(btn.disabled)return;
       btn.disabled=true;
       btn.textContent='Refreshing…';
-      await refreshServiceWorker();
       const url=new URL(window.location.href);
       url.searchParams.set('_argusRefresh',Date.now().toString());
-      window.location.replace(url.toString());
+      refreshServiceWorker();
+      window.location.assign(url.toString());
     });
     const note=actions.querySelector('.hero-note');
     if(note)actions.insertBefore(btn,note);else actions.appendChild(btn);
