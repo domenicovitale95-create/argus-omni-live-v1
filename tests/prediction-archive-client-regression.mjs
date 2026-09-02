@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 
 const source=fs.readFileSync(new URL('../src/official-decisions.js',import.meta.url),'utf8');
-const archive=source.match(/async function archive\([\s\S]*?\n  }\n  function enforceMetricSemantics/)?.[0]||'';
+const archiveStart=source.indexOf('async function archive(');
+const archiveEnd=source.indexOf('function enforceMetricSemantics',archiveStart);
+const archive=archiveStart>=0&&archiveEnd>archiveStart?source.slice(archiveStart,archiveEnd):'';
 
 assert.ok(archive,'prediction archive client must exist');
 assert.match(archive,/fetch\('\/api\/predictions'/,'archive must use the same-origin prediction endpoint');
