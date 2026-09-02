@@ -120,6 +120,7 @@ export function evaluateChallengers(rows){
     const full=scoreChallenger(rows,c),train=scoreChallenger(split.train,c),holdout=scoreChallenger(split.holdout,c),holdoutBrierCI=pairedFixtureBrier(split.holdout,c),x={...c,full,train,holdout,trainImprovementPct:improvementPct(trainBaseline,train),holdoutImprovementPct:improvementPct(holdoutBaseline,holdout),holdoutBrierCI};
     const blockers=blockersFor(x);return{...x,status:blockers.length?'HOLD':'VALIDATED_HOLDOUT',blockers};
   }).sort((a,b)=>(a.train.brier??9)-(b.train.brier??9));
-  const approved=evaluations.filter(x=>x.status==='VALIDATED_HOLDOUT').sort((a,b)=>(b.holdoutImprovementPct??-Infinity)-(a.holdoutImprovementPct??-Infinity)).slice(0,CHALLENGER_VALIDATION_POLICY.maxApproved);
+  // The holdout is a pass/fail exam only. Never re-rank candidates on holdout metrics.
+  const approved=evaluations.filter(x=>x.status==='VALIDATED_HOLDOUT').slice(0,CHALLENGER_VALIDATION_POLICY.maxApproved);
   return{baseline,trainBaseline,holdoutBaseline,split:{trainRows:split.train.length,holdoutRows:split.holdout.length,trainFixtures:split.trainFixtures,holdoutFixtures:split.holdoutFixtures,invalidTemporalRows:split.invalidTemporalRows,splitAt:split.splitAt},evaluations,approved};
 }
