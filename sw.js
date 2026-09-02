@@ -1,4 +1,4 @@
-const CACHE='argus-shell-v14';
+const CACHE='argus-shell-v15';
 const PRECACHE=['/','/live.html','/prediction-results.html','/virtual-bankroll.html','/more.html','/daily-slip.html','/app.js','/mobile-scan-fix.js','/src/providers.js','/argus-human-v6.css','/argus-os-v1.css','/argus-os-v2.css','/src/argus-os.js'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(PRECACHE.map(url=>new Request(url,{cache:'reload'})))).catch(()=>{}));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{await caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('argus-shell-')&&k!==CACHE).map(k=>caches.delete(k))));await self.clients.claim()})())});

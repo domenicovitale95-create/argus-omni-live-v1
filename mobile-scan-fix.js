@@ -47,14 +47,31 @@
     const applyMobileLayout=()=>{btn.style.width=window.matchMedia('(max-width:700px)').matches?'100%':''};
     applyMobileLayout();
     window.addEventListener('resize',applyMobileLayout,{passive:true});
-    btn.addEventListener('click',()=>{
+    btn.addEventListener('click',async()=>{
       if(btn.disabled)return;
       btn.disabled=true;
-      btn.textContent='Refreshing…';
-      const url=new URL(window.location.href);
-      url.searchParams.set('_argusRefresh',Date.now().toString());
+      btn.setAttribute('aria-busy','true');
+      btn.textContent='Refreshing data…';
       refreshServiceWorker();
-      window.location.assign(url.toString());
+      try{
+        if(typeof window.scanToday!=='function')throw new Error('SCAN_UNAVAILABLE');
+        await window.scanToday();
+        const failed=document.getElementById('liveStatus')?.textContent==='ERROR';
+        if(failed)throw new Error('SCAN_FAILED');
+        btn.textContent='Updated';
+      }catch(_){
+        btn.textContent='Reloading…';
+        const url=new URL(window.location.href);
+        url.searchParams.set('_argusRefresh',Date.now().toString());
+        window.location.assign(url.toString());
+        return;
+      }finally{
+        btn.removeAttribute('aria-busy');
+      }
+      window.setTimeout(()=>{
+        btn.disabled=false;
+        btn.textContent='Refresh';
+      },1200);
     });
     const note=actions.querySelector('.hero-note');
     if(note)actions.insertBefore(btn,note);else actions.appendChild(btn);
