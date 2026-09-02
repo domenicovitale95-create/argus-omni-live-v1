@@ -1,6 +1,6 @@
 import { requestQuery } from './_request-query.js';
 import { readJson, writeJson, listJson, listJsonComplete, readManyJson, storageReady } from './_report-store.js';
-import { captureShadowEvidence, settlePick, lastClosingSnapshot } from './_shadow-evidence-core.js';
+import { captureShadowEvidence, lastClosingSnapshot, reconcileSettlementScore } from './_shadow-evidence-core.js';
 import {
   SHADOW_FIXTURE_REGISTRY_PATH,
   buildShadowFixtureRegistry,
@@ -103,7 +103,7 @@ async function settle(req,res){
       const store=await readJson(`argus/shadow/${bookDate}.json`,null),entry={date:bookDate,store,dirty:false};
       books.set(bookDate,entry);return entry;
     };
-    let settled=0,voided=0,wins=0,losses=0,clvN=0,clvSum=0,crossBookFixtures=0,registryMisses=0,reschedulesDetected=0;
+    let settled=0,correctedOutcomes=0,scoreCorrections=0,voided=0,wins=0,losses=0,clvN=0,clvSum=0,crossBookFixtures=0,registryMisses=0,reschedulesDetected=0;
     const nowIso=new Date().toISOString();
     for(const r of rows){
       const id=String(r?.fixture?.id||'').trim();
@@ -122,18 +122,11 @@ async function settle(req,res){
       }
       if(!FINAL.has(st))continue;
       const h=Number(r?.goals?.home),a=Number(r?.goals?.away);if(!Number.isFinite(h)||!Number.isFinite(a))continue;
-      const close=lastClosingSnapshot(f);f.finalScore={home:h,away:a};f.settledAt=f.settledAt||nowIso;f.closingSnapshot=close||f.closingSnapshot||null;f.settlementSource=f.settlementSource||'API_FOOTBALL_RECOVERY';entry.dirty=true;
-      for(const p of f.picks||[]){
-        if(['WIN','LOSS','VOID'].includes(p.outcome))continue;
-        const ok=settlePick(p,h,a);if(ok==null)continue;
-        p.outcome=ok?'WIN':'LOSS';p.pl=p.odds?Number((ok?(p.odds-1):-1).toFixed(2)):null;
-        const closingOdds=Number(close?.odds?.[p.key]);p.closingOdds=Number.isFinite(closingOdds)&&closingOdds>1?closingOdds:null;p.clv=p.odds&&p.closingOdds?Number(((p.odds/p.closingOdds-1)*100).toFixed(2)):null;
-        if(p.clv!=null){clvN++;clvSum+=p.clv}settled++;ok?wins++:losses++;
-      }
+      const close=lastClosingSnapshot(f),result=reconcileSettlementScore(f,h,a,{nowIso,source:'API_FOOTBALL_RECOVERY',closingSnapshot:close});if(result.changed)entry.dirty=true;settled+=result.settled;correctedOutcomes+=result.correctedOutcomes;scoreCorrections+=result.scoreCorrected?1:0;wins+=result.wins;losses+=result.losses;for(const clv of result.clvValues){clvN++;clvSum+=clv}
     }
     let booksWritten=0;
     for(const entry of books.values())if(entry.store&&entry.dirty){entry.store.lastSettlement=nowIso;await writeJson(`argus/shadow/${entry.date}.json`,entry.store);booksWritten++}
-    return res.status(200).json({ok:true,date,settled,voided,wins,losses,clvSamples:clvN,avgCLV:clvN?Number((clvSum/clvN).toFixed(2)):null,providerCalls:1,automaticRealWagering:false,globalFixtureIdentity:{version:registry.version,registrySeeded:seeded,crossBookFixtures,registryMisses,reschedulesDetected,booksWritten,policy:'SETTLE PROVIDER DATE INTO CANONICAL FIRST-FREEZE BOOK BY FIXTURE ID'}});
+    return res.status(200).json({ok:true,date,settled,correctedOutcomes,scoreCorrections,voided,wins,losses,clvSamples:clvN,avgCLV:clvN?Number((clvSum/clvN).toFixed(2)):null,providerCalls:1,automaticRealWagering:false,globalFixtureIdentity:{version:registry.version,registrySeeded:seeded,crossBookFixtures,registryMisses,reschedulesDetected,booksWritten,policy:'SETTLE PROVIDER DATE INTO CANONICAL FIRST-FREEZE BOOK BY FIXTURE ID'}});
   }catch(error){return res.status(503).json({ok:false,date,error:String(error?.message||error),providerCalls:0,automaticRealWagering:false})}
 }
 

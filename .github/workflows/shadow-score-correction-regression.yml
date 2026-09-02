@@ -1,0 +1,20 @@
+name: Shadow Score Correction Regression
+on:
+  pull_request:
+    paths:
+      - 'api/_shadow-evidence-core.js'
+      - 'api/shadow-mode.js'
+      - 'tests/shadow-score-correction-regression.mjs'
+      - '.github/workflows/shadow-score-correction-regression.yml'
+  workflow_dispatch:
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/shadow-score-correction-regression.mjs
+      - run: node tests/source-calibration-integrity-regression.mjs
