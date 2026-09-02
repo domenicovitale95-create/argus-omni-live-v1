@@ -1,4 +1,5 @@
 import { readJson } from './_report-store.js';
+import { reportAuthorization } from './_cron-auth.js';
 
 const QUOTA_GUARD_PATH='argus/data/api-football-quota-guard.json';
 function brusselsParts(){
@@ -6,7 +7,6 @@ function brusselsParts(){
   return Object.fromEntries(parts.map(p=>[p.type,p.value]));
 }
 function authorized(req){const secret=process.env.CRON_SECRET;return !secret||req.headers.authorization===`Bearer ${secret}`}
-export function reportAuthorization(req,env=process.env){const secret=String(env?.REPORT_CRON_SECRET||'').trim();return secret?`Bearer ${secret}`:(req?.headers?.authorization||'')}
 async function getJson(url,authorization){const r=await fetch(url,{headers:{Accept:'application/json',Authorization:authorization||''}});const data=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,data}}
 async function postJson(url,authorization){const r=await fetch(url,{method:'POST',headers:{Accept:'application/json',Authorization:authorization||''}});const data=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,data}}
 export default async function handler(req,res){
