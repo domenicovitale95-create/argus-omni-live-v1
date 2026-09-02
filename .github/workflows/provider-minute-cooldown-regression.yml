@@ -1,0 +1,27 @@
+name: Provider Minute Cooldown Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/live.js'
+      - 'tests/provider-minute-cooldown-regression.mjs'
+      - '.github/workflows/provider-minute-cooldown-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/live.js'
+      - 'tests/provider-minute-cooldown-regression.mjs'
+      - '.github/workflows/provider-minute-cooldown-regression.yml'
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check live API
+        run: node --check api/live.js
+      - name: Provider minute cooldown regression
+        run: node tests/provider-minute-cooldown-regression.mjs
