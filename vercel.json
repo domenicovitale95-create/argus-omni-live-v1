@@ -67,7 +67,7 @@
     },
     {
       "path": "/api/deployment-verifier",
-      "schedule": "17 */6 * * *"
+      "schedule": "17 * * * *"
     },
     {
       "path": "/api/historical-recent-backfill",
