@@ -5,13 +5,13 @@ on:
     paths:
       - 'api/developer-health.js'
       - 'vercel.json'
-      - 'vercel.json'
       - 'tests/developer-health-diagnostics-regression.mjs'
       - '.github/workflows/developer-health-diagnostics-regression.yml'
   push:
     branches: [main]
     paths:
       - 'api/developer-health.js'
+      - 'vercel.json'
       - 'tests/developer-health-diagnostics-regression.mjs'
       - '.github/workflows/developer-health-diagnostics-regression.yml'
 
