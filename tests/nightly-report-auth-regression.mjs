@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { reportAuthorization } from '../api/daily-cron.js';
+import { reportAuthorization } from '../api/_cron-auth.js';
 
 const cronRequest={headers:{authorization:'Bearer scheduler-secret'}};
 
