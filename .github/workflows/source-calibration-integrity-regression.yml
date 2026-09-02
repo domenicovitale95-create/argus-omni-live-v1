@@ -1,0 +1,23 @@
+name: Source Calibration Integrity Regression
+
+on:
+  push:
+    branches: [main, audit/source-calibration-integrity]
+  pull_request:
+
+jobs:
+  source-calibration-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/_source-calibration-audit.js
+          node --check api/source-calibration-integrity.js
+          node --check tests/source-calibration-integrity-regression.mjs
+      - name: Source calibration integrity regression suite
+        run: node tests/source-calibration-integrity-regression.mjs
