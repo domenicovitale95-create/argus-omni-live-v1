@@ -3,12 +3,14 @@ const finite=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
 const n=(v,f=null)=>finite(v)?Number(v):f;
 
 export const CHALLENGER_VALIDATION_POLICY=Object.freeze({
-  version:'CHALLENGER-VALIDATION-2',
+  version:'CHALLENGER-VALIDATION-3',
   trainFraction:.70,
   minimumTrainSample:150,
   minimumHoldoutSample:100,
   minimumTrainFixtures:40,
   minimumHoldoutFixtures:20,
+  minimumTrainMarketFairSamples:100,
+  minimumHoldoutMarketFairSamples:50,
   minimumHoldoutSimulatedBets:20,
   minimumHoldoutClvSamples:20,
   minimumBrierImprovementPct:3,
@@ -32,23 +34,24 @@ export function applyChallenger(c,p,marketProbability){
 
 function rowMarketProbability(r){
   const fair=n(r?.marketImpliedProbability);
-  if(fair>0&&fair<1)return fair;
-  const odds=n(r?.odds);
-  return odds>1?1/odds:null;
+  return fair>0&&fair<1?fair:null;
 }
 function rowFixtureKey(r,index=0){return String(r?._fixtureKey??r?.fixtureId??`ROW-${index}`)}
 function validScoringRow(r){const p=n(r?.probability);return p>0&&p<1&&['WIN','LOSS'].includes(String(r?.outcome||'').toUpperCase())}
 function improvementPct(base,candidate){return base?.brier>0&&candidate?.brier!=null?Number(((base.brier-candidate.brier)/base.brier*100).toFixed(3)):null}
 
 export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
-  let sample=0,bs=0,pnl=0,simulatedBets=0,clv=0,clvSamples=0;
-  const fixtures=new Set();
+  let sample=0,bs=0,pnl=0,simulatedBets=0,clv=0,clvSamples=0,marketFairSamples=0;
+  const fixtures=new Set(),marketFairFixtures=new Set();
   for(let i=0;i<(rows||[]).length;i++){
     const r=rows[i];if(!validScoringRow(r))continue;
-    const p0=n(r.probability),marketProbability=rowMarketProbability(r),p=applyChallenger(c,p0,marketProbability),y=String(r.outcome).toUpperCase()==='WIN'?1:0;
-    sample++;fixtures.add(rowFixtureKey(r,i));bs+=(p-y)**2;
-    const odds=n(r.odds),rawImplied=odds>1?1/odds:null;
-    if(rawImplied!=null&&p-rawImplied>=CHALLENGER_VALIDATION_POLICY.betEdgeFloor){
+    const p0=n(r.probability),marketProbability=rowMarketProbability(r),p=applyChallenger(c,p0,marketProbability),y=String(r.outcome).toUpperCase()==='WIN'?1:0,key=rowFixtureKey(r,i);
+    sample++;fixtures.add(key);bs+=(p-y)**2;
+    if(marketProbability!=null){marketFairSamples++;marketFairFixtures.add(key)}
+    const odds=n(r.odds),rawBreakEven=odds>1?1/odds:null;
+    // Positive-EV simulation legitimately uses the offered price break-even threshold.
+    // Market-blend calibration, by contrast, may use only explicitly de-vigged fair probabilities.
+    if(rawBreakEven!=null&&p-rawBreakEven>=CHALLENGER_VALIDATION_POLICY.betEdgeFloor){
       simulatedBets++;pnl+=y?(odds-1):-1;
       if(finite(r.clv)){clv+=Number(r.clv);clvSamples++}
     }
@@ -57,6 +60,8 @@ export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
     ...c,
     sample,
     fixtures:fixtures.size,
+    marketFairSamples,
+    marketFairFixtures:marketFairFixtures.size,
     brier:sample?Number((bs/sample).toFixed(5)):null,
     simulatedBets,
     flatStakePL:Number(pnl.toFixed(2)),
@@ -105,6 +110,8 @@ function blockersFor(x){
   if(x.holdout.sample<p.minimumHoldoutSample)b.push('HOLDOUT_SAMPLE_INSUFFICIENT');
   if(x.train.fixtures<p.minimumTrainFixtures)b.push('TRAIN_FIXTURES_INSUFFICIENT');
   if(x.holdout.fixtures<p.minimumHoldoutFixtures)b.push('HOLDOUT_FIXTURES_INSUFFICIENT');
+  if(x.type==='MARKET_BLEND'&&x.train.marketFairSamples<p.minimumTrainMarketFairSamples)b.push('TRAIN_FAIR_MARKET_SAMPLE_INSUFFICIENT');
+  if(x.type==='MARKET_BLEND'&&x.holdout.marketFairSamples<p.minimumHoldoutMarketFairSamples)b.push('HOLDOUT_FAIR_MARKET_SAMPLE_INSUFFICIENT');
   if(!(x.trainImprovementPct>=p.minimumBrierImprovementPct))b.push('TRAIN_BRIER_GAIN_BELOW_FLOOR');
   if(!(x.holdoutImprovementPct>=p.minimumBrierImprovementPct))b.push('HOLDOUT_BRIER_GAIN_BELOW_FLOOR');
   if(!(x.holdoutBrierCI?.upper95<0))b.push('HOLDOUT_BRIER_GAIN_NOT_STATISTICALLY_SEPARATED');
