@@ -15,6 +15,10 @@ assert.match(archive,/analyses\.slice\(start,start\+ARCHIVE_BATCH_SIZE\)/,'analy
 assert.match(archive,/body:JSON\.stringify\(\{matches:batchMatches,analyses:batchAnalyses,meta\}\)/,'archive must send aligned batch payloads');
 assert.match(archive,/await r\.json\(\)\.catch\(\(\)=>null\)/,'HTTP failures must capture the server reason safely');
 assert.match(archive,/PREDICTION_ARCHIVE_CLIENT_PAYLOAD_INVALID/,'mismatched client arrays must be rejected before transport');
+assert.match(source,/let archiveRunning=false,archivePending=null,lastArchiveKey=null/,'archive transport must be single-flight and snapshot-aware');
+assert.match(archive,/while\(archivePending\)/,'new snapshots must be coalesced behind the active archive');
+assert.match(source,/queueArchive\(matches,state\.analyses,meta\)/,'analysis updates must use the coalescing queue');
+assert.doesNotMatch(source,/queueSemantics\(\);archive\(matches,state\.analyses,meta\)/,'analysis updates must not start overlapping archive loops');
 assert.doesNotMatch(archive,/keepalive\s*:/,'large snapshots must not use keepalive because browsers reject payloads beyond the keepalive quota');
 assert.match(archive,/telemetry\('PREDICTION_ARCHIVE_HTTP_FAILURE'/,'HTTP failures must remain observable');
 assert.match(archive,/catch\(error\)\{telemetry\('PREDICTION_ARCHIVE_FAILURE'/,'transport failures must remain observable');

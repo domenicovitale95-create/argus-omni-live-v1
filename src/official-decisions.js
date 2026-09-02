@@ -19,19 +19,40 @@
   }
   async function planMap(){try{const r=await fetch('/api/decision-scheduler',{cache:'no-store',headers:{Accept:'application/json'}});if(!r.ok){telemetry('SCHEDULER_HTTP_FAILURE',{status:r.status});return new Map()}const j=await r.json(),rows=Array.isArray(j?.plan)?j.plan:[],generatedAt=j?.generatedAt||null;return new Map(rows.map(x=>[String(x.fixtureId),{...x,_schedulerGeneratedAt:generatedAt}]))}catch(error){telemetry('SCHEDULER_FETCH_FAILURE',{message:error?.message});return new Map()}}
   const ARCHIVE_BATCH_SIZE=20;
+  let archiveRunning=false,archivePending=null,lastArchiveKey=null;
+  function archiveKey(matches,analyses,meta){return JSON.stringify([meta?.fetchedAt||null,matches.map(m=>[m?.id,m?.status,m?.minute,m?.score?.home,m?.score?.away]),analyses.map(a=>[a?.classification,a?.selectionKey,a?.marketOdds,a?.confidence,a?.edge])])}
   async function archive(matches,analyses,meta){
-    if(!Array.isArray(matches)||!Array.isArray(analyses)||!matches.length||matches.length!==analyses.length){telemetry('PREDICTION_ARCHIVE_CLIENT_PAYLOAD_INVALID',{matches:Array.isArray(matches)?matches.length:null,analyses:Array.isArray(analyses)?analyses.length:null});return}
+    if(!Array.isArray(matches)||!Array.isArray(analyses)||!matches.length||matches.length!==analyses.length){telemetry('PREDICTION_ARCHIVE_CLIENT_PAYLOAD_INVALID',{matches:Array.isArray(matches)?matches.length:null,analyses:Array.isArray(analyses)?analyses.length:null});return false}
     for(let start=0;start<matches.length;start+=ARCHIVE_BATCH_SIZE){
       const batchMatches=matches.slice(start,start+ARCHIVE_BATCH_SIZE),batchAnalyses=analyses.slice(start,start+ARCHIVE_BATCH_SIZE);
       try{
         const r=await fetch('/api/predictions',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({matches:batchMatches,analyses:batchAnalyses,meta})});
-        if(!r.ok){const detail=await r.json().catch(()=>null);telemetry('PREDICTION_ARCHIVE_HTTP_FAILURE',{status:r.status,batchStart:start,batchSize:batchMatches.length,serverError:detail?.error||null});return}
-      }catch(error){telemetry('PREDICTION_ARCHIVE_FAILURE',{message:error?.message,batchStart:start,batchSize:batchMatches.length});return}
+        if(!r.ok){const detail=await r.json().catch(()=>null);telemetry('PREDICTION_ARCHIVE_HTTP_FAILURE',{status:r.status,batchStart:start,batchSize:batchMatches.length,serverError:detail?.error||null});return false}
+      }catch(error){telemetry('PREDICTION_ARCHIVE_FAILURE',{message:error?.message,batchStart:start,batchSize:batchMatches.length});return false}
     }
+    return true;
+  }
+  async function drainArchiveQueue(){
+    if(archiveRunning)return;
+    archiveRunning=true;
+    try{
+      while(archivePending){
+        const job=archivePending;archivePending=null;
+        if(job.key===lastArchiveKey)continue;
+        if(await archive(job.matches,job.analyses,job.meta))lastArchiveKey=job.key;
+      }
+    }finally{archiveRunning=false;if(archivePending)void drainArchiveQueue()}
+  }
+  function queueArchive(matches,analyses,meta){
+    if(!Array.isArray(matches)||!Array.isArray(analyses))return;
+    const key=archiveKey(matches,analyses,meta);
+    if(key===lastArchiveKey||key===archivePending?.key)return;
+    archivePending={matches,analyses,meta,key};
+    void drainArchiveQueue();
   }
   function enforceMetricSemantics(){const conf=document.getElementById('osV2Confidence');if(conf&&/%\s*$/.test(conf.textContent||''))conf.textContent=(conf.textContent||'').replace(/%\s*$/,'/100');const edge=document.getElementById('osV2Edge');if(edge)edge.textContent=(edge.textContent||'').replace(/value advantage/gi,'model edge').replace(/ pts\b/gi,' pp');const fair=document.getElementById('osV2Fair');if(fair){const text=fair.textContent||'',m=text.match(/fair odds\s+([0-9]+(?:\.[0-9]+)?)/i),o=m?Number(m[1]):null;if(o&&o>1&&!/outcome p/i.test(text))fair.textContent=`ARGUS fair odds ${o.toFixed(2)} · outcome p ${(100/o).toFixed(1)}%`}document.querySelectorAll('.os-v2-metric > span').forEach(el=>{const t=(el.textContent||'').trim().toLowerCase();if(t==='confidence')el.textContent='Decision confidence';if(t==='data reliability')el.textContent='Evidence quality'});}
   let semanticQueued=false;function queueSemantics(){if(semanticQueued)return;semanticQueued=true;requestAnimationFrame(()=>{semanticQueued=false;enforceMetricSemantics()})}
   const originalAnalyze=typeof analyzeMatches==='function'?analyzeMatches:null;if(!originalAnalyze)return;
-  analyzeMatches=async function(matches,meta=null){state.matches=matches;state.meta=meta;const map=await planMap();state.analyses=matches.map(m=>{const raw=window.ArgusEngine.analyze(m),base=window.ArgusGovernance?window.ArgusGovernance.apply(raw,m):raw;return officialFromRow(m,base,map.get(String(m.id)))});render();queueSemantics();archive(matches,state.analyses,meta)};
+  analyzeMatches=async function(matches,meta=null){state.matches=matches;state.meta=meta;const map=await planMap();state.analyses=matches.map(m=>{const raw=window.ArgusEngine.analyze(m),base=window.ArgusGovernance?window.ArgusGovernance.apply(raw,m):raw;return officialFromRow(m,base,map.get(String(m.id)))});render();queueSemantics();queueArchive(matches,state.analyses,meta)};
   window.addEventListener('load',queueSemantics);const obs=new MutationObserver(queueSemantics);if(document.body)obs.observe(document.body,{childList:true,subtree:true,characterData:true});
 })();
