@@ -99,7 +99,7 @@ export function auditSourceCalibration(books,{source='ARGUS_PREMATCH_1X2',simple
     if(!ONE_X_TWO.every(k=>map[k])){issues.missingTriplet++;continue}
     const truth=truthFromScore(fixture);if(!truth){issues.missingFinalScore++;continue}
     const outcomes=ONE_X_TWO.map(k=>String(map[k]?.outcome||'').toUpperCase()),wins=outcomes.filter(x=>x==='WIN').length;
-    if(wins!==1||String(map[truth]?.outcome||'').toUpperCase()!=='WIN'){issues.outcomeContradiction++;if(issueSamples.outcomeContradiction.length<sampleLimit)issueSamples.outcomeContradiction.push({fixtureId:String(fixture?.fixtureId),truth,finalScore:{home:num(fixture?.finalScore?.home),away:num(fixture?.finalScore?.away)},outcomes:Object.fromEntries(ONE_X_TWO.map((k,i)=>[k,outcomes[i]||null])),freezeVersion:String(fixture?.freezeVersion||'LEGACY_OR_UNKNOWN')});continue}
+    if(wins!==1||String(map[truth]?.outcome||'').toUpperCase()!=='WIN'){issues.outcomeContradiction++;if(issueSamples.outcomeContradiction.length<sampleLimit)issueSamples.outcomeContradiction.push({truth,outcomes:Object.fromEntries(ONE_X_TWO.map((k,i)=>[k,outcomes[i]||null]))});continue}
     const probabilities={};let invalid=false;
     for(const k of ONE_X_TWO){const p=num(map[k]?.probability);if(!(p>0&&p<1)){invalid=true;break}probabilities[k]=p}
     if(invalid){issues.invalidProbability++;continue}

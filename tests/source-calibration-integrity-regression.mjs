@@ -87,11 +87,8 @@ function book(fixtures){return{fixtures:Object.fromEntries(fixtures.map(f=>[Stri
   assert.equal(a.integrity.issues.outcomeContradiction,1);
   assert.equal(a.integrity.issueSamples.limitPerIssue,10);
   assert.deepEqual(a.integrity.issueSamples.outcomeContradiction,[{
-    fixtureId:String(f.fixtureId),
     truth:'home',
-    finalScore:{home:2,away:1},
-    outcomes:{home:'LOSS',draw:'WIN',away:'LOSS'},
-    freezeVersion:'SHADOW-FREEZE-4'
+    outcomes:{home:'LOSS',draw:'WIN',away:'LOSS'}
   }]);
   assert.equal(a.validFixtures,0);
   assert.equal(a.status,'CRITICAL');
