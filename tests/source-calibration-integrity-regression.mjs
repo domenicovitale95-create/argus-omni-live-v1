@@ -55,4 +55,27 @@ function book(fixtures){return{fixtures:Object.fromEntries(fixtures.map(f=>[Stri
   assert.equal(a.status,'CRITICAL');
 }
 
+{
+  // Safe provider reschedule: the audit must evaluate the earliest forecast against
+  // the consistent later final score without treating the historical double-booking
+  // itself as a current integrity failure.
+  const first=fixture(200,'home',{home:.10,draw:.45,away:.45});
+  first.home='Team A';first.away='Team B';first.competition='League';first.freezeVersion='SHADOW-FREEZE-3';
+  first.finalScore=null;first.picks.forEach(p=>{p.outcome=null});
+  const second=fixture(200,'home',{home:.11,draw:.44,away:.45});
+  second.home='Team A';second.away='Team B';second.competition='League';second.freezeVersion='SHADOW-FREEZE-3';
+  second.kickoff=new Date(new Date(first.kickoff).getTime()+86400000).toISOString();
+  second.frozenAt=new Date(new Date(first.frozenAt).getTime()+86400000).toISOString();
+  second.picks.forEach(p=>{p.probabilityFrozenAt=second.frozenAt});
+  const a=auditSourceCalibration([book([second]),book([first])]);
+  assert.equal(a.dedupe.rawConflictingDuplicateFixtureIds,1);
+  assert.equal(a.dedupe.rescheduleReconciledFixtureIds,1);
+  assert.equal(a.dedupe.conflictingDuplicateFixtureIds,0);
+  assert.equal(a.integrity.failures,0);
+  assert.equal(a.validFixtures,1);
+  assert.equal(a.reconciledFixtures,1);
+  assert.ok(a.riskFlags.includes('RESCHEDULE_DUPLICATES_RECONCILED_CANONICALLY'));
+  assert.ok(!a.riskFlags.includes('DATA_INTEGRITY_FAILURES_PRESENT'));
+}
+
 console.log('source calibration integrity regression: OK');
