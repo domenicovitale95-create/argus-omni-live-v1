@@ -115,7 +115,7 @@ export function auditSourceCalibration(books,{source='ARGUS_PREMATCH_1X2',simple
     if(marketComplete){const ms=ONE_X_TWO.reduce((s,k)=>s+marketProbabilities[k],0);if(ms>.95&&ms<1.05)for(const k of ONE_X_TWO)marketProbabilities[k]/=ms;else marketComplete=false}
     const version=String(fixture?.freezeVersion||'LEGACY_OR_UNKNOWN');freezeVersions[version]=(freezeVersions[version]||0)+1;
     const best=ONE_X_TWO.reduce((a,k)=>probabilities[k]>probabilities[a]?k:a,'home');
-    rows.push({fixtureKey:String(fixture?.fixtureId),truth,probabilities,marketProbabilities:marketComplete?marketProbabilities:null,confidence:probabilities[best],correct:best===truth,kickoff,frozen,freezeVersion:version});
+    rows.push({fixtureKey:String(fixture?.fixtureId),truth,probabilities,marketProbabilities:marketComplete?marketProbabilities:null,confidence:probabilities[best],correct:best===truth,kickoff,frozen,freezeVersion:version,rescheduleReconciled:Boolean(fixture?.rescheduleReconciliation)});
   }
   const model=metrics(rows),baseRate=baseRateMetrics(rows),market=marketMetrics(rows),calibration=Object.fromEntries(ONE_X_TWO.map(k=>[k,classCalibration(rows,k,10)])),monotonicity=Object.fromEntries(ONE_X_TWO.map(k=>[k,monotonicityWarnings(rows,k,10)]));
   const dedupeFailures=dedupe.diagnostics.conflictingDuplicateFixtureIds+dedupe.diagnostics.missingFixtureId;
@@ -124,10 +124,11 @@ export function auditSourceCalibration(books,{source='ARGUS_PREMATCH_1X2',simple
   const riskFlags=[];
   if(integrityFailures)riskFlags.push('DATA_INTEGRITY_FAILURES_PRESENT');
   if(dedupe.diagnostics.identicalDuplicateFixtureIds)riskFlags.push('IDENTICAL_DUPLICATES_DEDUPED');
-  if(dedupe.diagnostics.conflictingDuplicateFixtureIds)riskFlags.push('CONFLICTING_DUPLICATES_EXCLUDED');
+  if(dedupe.diagnostics.rescheduleReconciledFixtureIds)riskFlags.push('RESCHEDULE_DUPLICATES_RECONCILED_CANONICALLY');
+  if(dedupe.diagnostics.conflictingDuplicateFixtureIds)riskFlags.push('UNRESOLVED_CONFLICTING_DUPLICATES_EXCLUDED');
   if(maxGap>=10)riskFlags.push('SEVERE_SOURCE_MISCALIBRATION');else if(maxGap>=5)riskFlags.push('SOURCE_MISCALIBRATION');
   if(baseRate?.brier!=null&&model?.brier!=null&&model.brier>baseRate.brier)riskFlags.push('MODEL_BRIER_WORSE_THAN_IN_SAMPLE_BASE_RATE');
   const monotonicWarnings=ONE_X_TWO.reduce((s,k)=>s+(monotonicity[k]?.warnings?.length||0),0);if(monotonicWarnings)riskFlags.push('CALIBRATION_BUCKET_ORDER_WARNINGS');
   const status=integrityFailures?'CRITICAL':maxGap>=10?'MODEL_RISK':maxGap>=5||monotonicWarnings?'CAUTION':'HEALTHY';
-  return{version:'SOURCE-CALIBRATION-INTEGRITY-2',source:sourceName,status,fixtureCandidates,validFixtures:rows.length,dedupe:dedupe.diagnostics,integrity:{simplexTolerance,failures:integrityFailures,issues,freezeVersions},model,baseRateDescriptive:baseRate,marketFairComparison:market,calibration,monotonicity,riskFlags,policy:{readOnly:true,providerCalls:0,persistentWrites:0,mayChangePredictions:false,mayChangeStake:false,mayPromoteModel:false,baseRateIsInSampleDescriptiveOnly:true,marketComparisonRequiresCompleteDevigged1X2:true,performanceRiskIsNotDataCorruption:true,duplicatePolicy:dedupe.policy}};
+  return{version:'SOURCE-CALIBRATION-INTEGRITY-3',source:sourceName,status,fixtureCandidates,validFixtures:rows.length,reconciledFixtures:rows.filter(r=>r.rescheduleReconciled).length,dedupe:dedupe.diagnostics,integrity:{simplexTolerance,failures:integrityFailures,issues,freezeVersions},model,baseRateDescriptive:baseRate,marketFairComparison:market,calibration,monotonicity,riskFlags,policy:{readOnly:true,providerCalls:0,persistentWrites:0,mayChangePredictions:false,mayChangeStake:false,mayPromoteModel:false,baseRateIsInSampleDescriptiveOnly:true,marketComparisonRequiresCompleteDevigged1X2:true,performanceRiskIsNotDataCorruption:true,duplicatePolicy:dedupe.policy}};
 }
