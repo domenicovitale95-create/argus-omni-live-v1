@@ -89,7 +89,7 @@ function marketMetrics(rows){
 }
 
 export function auditSourceCalibration(books,{source='ARGUS_PREMATCH_1X2',simplexTolerance=.005}={}){
-  const dedupe=dedupeShadowFixtures(books),rows=[],issues={missingTriplet:0,duplicatePick:0,invalidProbability:0,simplexFailure:0,missingFinalScore:0,outcomeContradiction:0,lateFreeze:0,missingFreezeTime:0,missingKickoff:0},freezeVersions={},sourceName=canonical(source);
+  const dedupe=dedupeShadowFixtures(books),rows=[],issues={missingTriplet:0,duplicatePick:0,invalidProbability:0,simplexFailure:0,missingFinalScore:0,outcomeContradiction:0,lateFreeze:0,missingFreezeTime:0,missingKickoff:0},issueSamples={outcomeContradiction:[]},sampleLimit=10,freezeVersions={},sourceName=canonical(source);
   let fixtureCandidates=0;
   for(const fixture of dedupe.fixtures){
     const picked=oneXTwoPicks(fixture,sourceName),map=picked.map||{};
@@ -99,7 +99,7 @@ export function auditSourceCalibration(books,{source='ARGUS_PREMATCH_1X2',simple
     if(!ONE_X_TWO.every(k=>map[k])){issues.missingTriplet++;continue}
     const truth=truthFromScore(fixture);if(!truth){issues.missingFinalScore++;continue}
     const outcomes=ONE_X_TWO.map(k=>String(map[k]?.outcome||'').toUpperCase()),wins=outcomes.filter(x=>x==='WIN').length;
-    if(wins!==1||String(map[truth]?.outcome||'').toUpperCase()!=='WIN'){issues.outcomeContradiction++;continue}
+    if(wins!==1||String(map[truth]?.outcome||'').toUpperCase()!=='WIN'){issues.outcomeContradiction++;if(issueSamples.outcomeContradiction.length<sampleLimit)issueSamples.outcomeContradiction.push({truth,outcomes:Object.fromEntries(ONE_X_TWO.map((k,i)=>[k,outcomes[i]||null]))});continue}
     const probabilities={};let invalid=false;
     for(const k of ONE_X_TWO){const p=num(map[k]?.probability);if(!(p>0&&p<1)){invalid=true;break}probabilities[k]=p}
     if(invalid){issues.invalidProbability++;continue}
@@ -130,5 +130,5 @@ export function auditSourceCalibration(books,{source='ARGUS_PREMATCH_1X2',simple
   if(baseRate?.brier!=null&&model?.brier!=null&&model.brier>baseRate.brier)riskFlags.push('MODEL_BRIER_WORSE_THAN_IN_SAMPLE_BASE_RATE');
   const monotonicWarnings=ONE_X_TWO.reduce((s,k)=>s+(monotonicity[k]?.warnings?.length||0),0);if(monotonicWarnings)riskFlags.push('CALIBRATION_BUCKET_ORDER_WARNINGS');
   const status=integrityFailures?'CRITICAL':maxGap>=10?'MODEL_RISK':maxGap>=5||monotonicWarnings?'CAUTION':'HEALTHY';
-  return{version:'SOURCE-CALIBRATION-INTEGRITY-3',source:sourceName,status,fixtureCandidates,validFixtures:rows.length,reconciledFixtures:rows.filter(r=>r.rescheduleReconciled).length,dedupe:dedupe.diagnostics,integrity:{simplexTolerance,failures:integrityFailures,issues,freezeVersions},model,baseRateDescriptive:baseRate,marketFairComparison:market,calibration,monotonicity,riskFlags,policy:{readOnly:true,providerCalls:0,persistentWrites:0,mayChangePredictions:false,mayChangeStake:false,mayPromoteModel:false,baseRateIsInSampleDescriptiveOnly:true,marketComparisonRequiresCompleteDevigged1X2:true,performanceRiskIsNotDataCorruption:true,duplicatePolicy:dedupe.policy}};
+  return{version:'SOURCE-CALIBRATION-INTEGRITY-4',source:sourceName,status,fixtureCandidates,validFixtures:rows.length,reconciledFixtures:rows.filter(r=>r.rescheduleReconciled).length,dedupe:dedupe.diagnostics,integrity:{simplexTolerance,failures:integrityFailures,issues,issueSamples:{limitPerIssue:sampleLimit,...issueSamples},freezeVersions},model,baseRateDescriptive:baseRate,marketFairComparison:market,calibration,monotonicity,riskFlags,policy:{readOnly:true,providerCalls:0,persistentWrites:0,mayChangePredictions:false,mayChangeStake:false,mayPromoteModel:false,baseRateIsInSampleDescriptiveOnly:true,marketComparisonRequiresCompleteDevigged1X2:true,performanceRiskIsNotDataCorruption:true,duplicatePolicy:dedupe.policy}};
 }
