@@ -1,10 +1,11 @@
 import { requestQuery } from './_request-query.js';
-import { readJson, writeJson, listJson, readManyJson, storageReady } from './_report-store.js';
+import { readJson, writeJson, listJson, listJsonComplete, readManyJson, storageReady } from './_report-store.js';
 import { captureShadowEvidence, settlePick, lastClosingSnapshot } from './_shadow-evidence-core.js';
 import {
+  SHADOW_FIXTURE_REGISTRY_PATH,
+  buildShadowFixtureRegistry,
   canonicalShadowFixture,
-  loadShadowFixtureRegistry,
-  persistShadowFixtureRegistry,
+  isShadowFixtureRegistry,
   registerShadowBook,
   shadowBookDateForMatch
 } from './_shadow-fixture-registry.js';
@@ -20,6 +21,25 @@ function providerDayUtc(value=new Date()){return value.toISOString().slice(0,10)
 function quotaGuardDay(state){if(!state)return null;const recorded=state.providerDayUtc||null,observed=state.observedAt?String(state.observedAt).slice(0,10):null;return recorded||observed||state.date||null}
 function authorized(req){const secret=String(process.env.CRON_SECRET||'').trim();return !secret||req.headers.authorization===`Bearer ${secret}`}
 async function fetchFixtures(date){const key=process.env.API_FOOTBALL_KEY;if(!key)throw new Error('API_FOOTBALL_KEY is not configured');const r=await fetch(`${API_BASE}/fixtures?date=${date}&timezone=${encodeURIComponent(TZ)}`,{headers:{'x-apisports-key':key,Accept:'application/json'}});if(!r.ok)throw new Error(`API-Football HTTP ${r.status}`);const j=await r.json();return j.response||[]}
+
+async function loadShadowFixtureRegistry({seedIfMissing=true,now=new Date()}={}){
+  const existing=await readJson(SHADOW_FIXTURE_REGISTRY_PATH,null);
+  if(isShadowFixtureRegistry(existing))return{registry:existing,seeded:false};
+  if(!seedIfMissing)throw new Error('SHADOW_FIXTURE_REGISTRY_MISSING');
+  const listing=await listJsonComplete('argus/shadow/',{maxBlobs:5000,pageSize:500});
+  if(!listing.complete)throw new Error(`SHADOW_FIXTURE_REGISTRY_SEED_INCOMPLETE:${listing.error||'UNKNOWN'}`);
+  const books=await readManyJson(listing.blobs),registry=buildShadowFixtureRegistry(books,{nowIso:now.toISOString()});
+  registry.seedDiagnostics={...registry.seedDiagnostics,pages:listing.pages,scanned:listing.scanned,complete:true};
+  await writeJson(SHADOW_FIXTURE_REGISTRY_PATH,registry);
+  return{registry,seeded:true};
+}
+
+async function persistShadowFixtureRegistry(registry,{now=new Date()}={}){
+  if(!isShadowFixtureRegistry(registry))throw new Error('INVALID_SHADOW_FIXTURE_REGISTRY');
+  registry.updatedAt=now.toISOString();
+  await writeJson(SHADOW_FIXTURE_REGISTRY_PATH,registry);
+  return registry;
+}
 
 async function capture(req,res){
   if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
