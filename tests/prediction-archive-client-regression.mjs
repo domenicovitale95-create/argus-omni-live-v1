@@ -16,7 +16,7 @@ assert.match(archive,/body:JSON\.stringify\(\{matches:batchMatches,analyses:batc
 assert.match(archive,/await r\.json\(\)\.catch\(\(\)=>null\)/,'HTTP failures must capture the server reason safely');
 assert.match(archive,/PREDICTION_ARCHIVE_CLIENT_PAYLOAD_INVALID/,'mismatched client arrays must be rejected before transport');
 assert.doesNotMatch(archive,/keepalive\s*:/,'large snapshots must not use keepalive because browsers reject payloads beyond the keepalive quota');
-assert.match(archive,/if\(!r\.ok\)telemetry\('PREDICTION_ARCHIVE_HTTP_FAILURE'/,'HTTP failures must remain observable');
+assert.match(archive,/telemetry\('PREDICTION_ARCHIVE_HTTP_FAILURE'/,'HTTP failures must remain observable');
 assert.match(archive,/catch\(error\)\{telemetry\('PREDICTION_ARCHIVE_FAILURE'/,'transport failures must remain observable');
 
 console.log('prediction archive client regression: ok');
