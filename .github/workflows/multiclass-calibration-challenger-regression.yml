@@ -1,0 +1,23 @@
+name: Multiclass Calibration Challenger Regression
+
+on:
+  push:
+    branches: [main, research/multiclass-calibration-challenger]
+  pull_request:
+
+jobs:
+  multiclass-calibration-challenger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/_multiclass-calibration-challenger.js
+          node --check api/multiclass-calibration-challenger.js
+          node --check tests/multiclass-calibration-challenger-regression.mjs
+      - name: Multiclass calibration challenger regression suite
+        run: node tests/multiclass-calibration-challenger-regression.mjs
