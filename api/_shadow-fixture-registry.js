@@ -1,5 +1,3 @@
-import { listJsonComplete, readJson, readManyJson, writeJson } from './_report-store.js';
-
 const TZ='Europe/Brussels';
 export const SHADOW_FIXTURE_REGISTRY_PATH='argus/data/shadow-fixture-registry-v1.json';
 export const SHADOW_FIXTURE_REGISTRY_VERSION='SHADOW-FIXTURE-REGISTRY-1';
@@ -83,24 +81,4 @@ export function registerShadowBook(registry,book){
     if(earlier(candidate,existing)){registry.fixtures[candidate.fixtureId]=candidate;changed++}
   }
   return changed;
-}
-
-export async function loadShadowFixtureRegistry({seedIfMissing=true,now=new Date()}={}){
-  const existing=await readJson(SHADOW_FIXTURE_REGISTRY_PATH,null);
-  if(isShadowFixtureRegistry(existing))return{registry:existing,seeded:false};
-  if(!seedIfMissing)throw new Error('SHADOW_FIXTURE_REGISTRY_MISSING');
-  const listing=await listJsonComplete('argus/shadow/',{maxBlobs:5000,pageSize:500});
-  if(!listing.complete)throw new Error(`SHADOW_FIXTURE_REGISTRY_SEED_INCOMPLETE:${listing.error||'UNKNOWN'}`);
-  const books=await readManyJson(listing.blobs);
-  const registry=buildShadowFixtureRegistry(books,{nowIso:now.toISOString()});
-  registry.seedDiagnostics={...registry.seedDiagnostics,pages:listing.pages,scanned:listing.scanned,complete:true};
-  await writeJson(SHADOW_FIXTURE_REGISTRY_PATH,registry);
-  return{registry,seeded:true};
-}
-
-export async function persistShadowFixtureRegistry(registry,{now=new Date()}={}){
-  if(!isShadowFixtureRegistry(registry))throw new Error('INVALID_SHADOW_FIXTURE_REGISTRY');
-  registry.updatedAt=now.toISOString();
-  await writeJson(SHADOW_FIXTURE_REGISTRY_PATH,registry);
-  return registry;
 }
