@@ -7,6 +7,8 @@ on:
       - 'vercel.json'
       - 'api/autonomy-health.js'
       - 'api/autonomous-supervisor.js'
+      - 'api/daily-cron.js'
+      - 'tests/nightly-report-auth-regression.mjs'
       - '.github/workflows/argus-autonomous-scheduler.yml'
       - '.github/workflows/autonomy-scheduler-regression.yml'
   pull_request:
@@ -14,6 +16,8 @@ on:
       - 'vercel.json'
       - 'api/autonomy-health.js'
       - 'api/autonomous-supervisor.js'
+      - 'api/daily-cron.js'
+      - 'tests/nightly-report-auth-regression.mjs'
       - '.github/workflows/argus-autonomous-scheduler.yml'
       - '.github/workflows/autonomy-scheduler-regression.yml'
 
@@ -39,6 +43,9 @@ jobs:
           if (supervisorCron.schedule !== '*/30 * * * *') throw new Error(`Unexpected supervisor schedule: ${supervisorCron.schedule}`);
           const fastCron = (vercel.crons || []).find(x => x.path === '/api/fast-cycle');
           if (!fastCron || fastCron.schedule !== '2-57/15 * * * *') throw new Error(`Unexpected fast-cycle schedule: ${fastCron?.schedule}`);
+          const nightlyCron = (vercel.crons || []).find(x => x.path === '/api/daily-cron');
+          if (!nightlyCron || nightlyCron.schedule !== '53 21,22 * * *') throw new Error(`Unexpected nightly settlement schedule: ${nightlyCron?.schedule}`);
+          if ((vercel.functions?.['api/daily-cron.js']?.maxDuration || 0) < 120) throw new Error('Nightly settlement is not given enough runtime');
 
           const recentBackfillCron = (vercel.crons || []).find(x => x.path === '/api/historical-recent-backfill');
           if (!recentBackfillCron || recentBackfillCron.schedule !== '31 2 * * *') throw new Error(`Unexpected recent backfill fallback schedule: ${recentBackfillCron?.schedule}`);
@@ -59,6 +66,8 @@ jobs:
           if (!scheduler.includes("'/api/autonomous-supervisor' 'Autonomous supervisor backup recovery'")) throw new Error('Missing backup supervisor recovery');
           if (scheduler.includes("- cron: '4-54/10 * * * *'")) throw new Error('Old duplicate GitHub 10-minute supervisor schedule still present');
           if (scheduler.includes("- cron: '19,49 * * * *'")) throw new Error('Obsolete 30-minute autonomy watchdog still present');
+          if (scheduler.includes("- cron: '53 21,22 * * *'")) throw new Error('GitHub must not duplicate Vercel nightly settlement scheduling');
+          if (scheduler.includes("call '/api/daily-cron'")) throw new Error('GitHub must not mutate nightly settlement through a second secret boundary');
 
           const health = fs.readFileSync('api/autonomy-health.js','utf8');
           if (!health.includes("primaryScheduler:'VERCEL_CRON'")) throw new Error('Health endpoint does not expose Vercel as primary scheduler');
@@ -77,3 +86,4 @@ jobs:
           if (!supervisor.includes('skippedRecoveryDoesNotBlockNextRemediation:true')) throw new Error('Recovery policy contract missing');
           if (!supervisor.includes('automaticWagering:false')) throw new Error('Supervisor safety flag missing');
           NODE
+          node tests/nightly-report-auth-regression.mjs

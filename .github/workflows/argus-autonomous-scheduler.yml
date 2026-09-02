@@ -4,14 +4,13 @@ on:
   schedule:
     # Vercel is primary. GitHub is backup-only for fast-cycle/supervisor recovery
     # plus low-frequency maintenance; it must not duplicate normal primary work.
-    # Scheduler registration heartbeat: 2026-08-28 (no cadence or policy change).
+    # Nightly settlement is owned by Vercel to avoid cross-platform secret drift.
     - cron: '13,43 * * * *'
     - cron: '23 * * * *'
     - cron: '17 0,6,12,18 * * *'
     - cron: '23 1 * * *'
     - cron: '37 2 * * *'
     - cron: '43 7 * * *'
-    - cron: '53 21,22 * * *'
   workflow_dispatch:
     inputs:
       group:
@@ -29,7 +28,6 @@ on:
           - daily1
           - daily2
           - morning
-          - evening
 
 permissions:
   contents: read
@@ -181,10 +179,6 @@ jobs:
             call '/api/daily-slip' 'Daily slip'
           }
 
-          run_evening() {
-            call '/api/daily-cron' 'Daily cron'
-          }
-
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             GROUP="${{ inputs.group }}"
           else
@@ -195,7 +189,6 @@ jobs:
               '23 1 * * *') GROUP='daily1' ;;
               '37 2 * * *') GROUP='daily2' ;;
               '43 7 * * *') GROUP='morning' ;;
-              '53 21,22 * * *') GROUP='evening' ;;
               *) GROUP='all' ;;
             esac
           fi
@@ -212,7 +205,6 @@ jobs:
             daily1) run_daily1 ;;
             daily2) run_daily2 ;;
             morning) run_morning ;;
-            evening) run_evening ;;
             all)
               run_fast
               run_watchdog
@@ -222,7 +214,6 @@ jobs:
               run_daily1
               run_daily2
               run_morning
-              run_evening
               ;;
             *)
               echo "::error::Unknown scheduler group: ${GROUP}"
