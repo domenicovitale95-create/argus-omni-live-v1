@@ -1,0 +1,28 @@
+name: Shadow Fixture Dedupe Regression
+
+on:
+  push:
+    branches: [main, hardening/shadow-fixture-dedup]
+  pull_request:
+
+jobs:
+  shadow-fixture-dedup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/_shadow-fixture-dedupe.js
+          node --check api/_source-calibration-audit.js
+          node --check api/_multiclass-calibration-challenger.js
+          node --check tests/shadow-fixture-dedup-regression.mjs
+      - name: Dedupe regression suite
+        run: node tests/shadow-fixture-dedup-regression.mjs
+      - name: Source calibration integrity suite
+        run: node tests/source-calibration-integrity-regression.mjs
+      - name: Multiclass calibration challenger suite
+        run: node tests/multiclass-calibration-challenger-regression.mjs

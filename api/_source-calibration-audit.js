@@ -1,3 +1,5 @@
+import { dedupeShadowFixtures } from './_shadow-fixture-dedupe.js';
+
 const EPS=1e-12;
 const ONE_X_TWO=['home','draw','away'];
 
@@ -87,9 +89,9 @@ function marketMetrics(rows){
 }
 
 export function auditSourceCalibration(books,{source='ARGUS_PREMATCH_1X2',simplexTolerance=.005}={}){
-  const rows=[],issues={missingTriplet:0,duplicatePick:0,invalidProbability:0,simplexFailure:0,missingFinalScore:0,outcomeContradiction:0,lateFreeze:0,missingFreezeTime:0,missingKickoff:0},freezeVersions={},sourceName=canonical(source);
+  const dedupe=dedupeShadowFixtures(books),rows=[],issues={missingTriplet:0,duplicatePick:0,invalidProbability:0,simplexFailure:0,missingFinalScore:0,outcomeContradiction:0,lateFreeze:0,missingFreezeTime:0,missingKickoff:0},freezeVersions={},sourceName=canonical(source);
   let fixtureCandidates=0;
-  for(const book of books||[])for(const [fixtureKey,fixture] of Object.entries(book?.fixtures||{})){
+  for(const fixture of dedupe.fixtures){
     const picked=oneXTwoPicks(fixture,sourceName),map=picked.map||{};
     if(!ONE_X_TWO.some(k=>map[k]))continue;
     fixtureCandidates++;
@@ -113,16 +115,19 @@ export function auditSourceCalibration(books,{source='ARGUS_PREMATCH_1X2',simple
     if(marketComplete){const ms=ONE_X_TWO.reduce((s,k)=>s+marketProbabilities[k],0);if(ms>.95&&ms<1.05)for(const k of ONE_X_TWO)marketProbabilities[k]/=ms;else marketComplete=false}
     const version=String(fixture?.freezeVersion||'LEGACY_OR_UNKNOWN');freezeVersions[version]=(freezeVersions[version]||0)+1;
     const best=ONE_X_TWO.reduce((a,k)=>probabilities[k]>probabilities[a]?k:a,'home');
-    rows.push({fixtureKey:String(fixture?.fixtureId??fixtureKey),truth,probabilities,marketProbabilities:marketComplete?marketProbabilities:null,confidence:probabilities[best],correct:best===truth,kickoff,frozen,freezeVersion:version});
+    rows.push({fixtureKey:String(fixture?.fixtureId),truth,probabilities,marketProbabilities:marketComplete?marketProbabilities:null,confidence:probabilities[best],correct:best===truth,kickoff,frozen,freezeVersion:version});
   }
   const model=metrics(rows),baseRate=baseRateMetrics(rows),market=marketMetrics(rows),calibration=Object.fromEntries(ONE_X_TWO.map(k=>[k,classCalibration(rows,k,10)])),monotonicity=Object.fromEntries(ONE_X_TWO.map(k=>[k,monotonicityWarnings(rows,k,10)]));
-  const integrityFailures=issues.duplicatePick+issues.invalidProbability+issues.simplexFailure+issues.outcomeContradiction+issues.lateFreeze;
+  const dedupeFailures=dedupe.diagnostics.conflictingDuplicateFixtureIds+dedupe.diagnostics.missingFixtureId;
+  const integrityFailures=issues.duplicatePick+issues.invalidProbability+issues.simplexFailure+issues.outcomeContradiction+issues.lateFreeze+dedupeFailures;
   const maxGap=Math.max(0,...ONE_X_TWO.map(k=>Math.abs(calibration[k]?.calibrationGapPct||0)));
   const riskFlags=[];
   if(integrityFailures)riskFlags.push('DATA_INTEGRITY_FAILURES_PRESENT');
+  if(dedupe.diagnostics.identicalDuplicateFixtureIds)riskFlags.push('IDENTICAL_DUPLICATES_DEDUPED');
+  if(dedupe.diagnostics.conflictingDuplicateFixtureIds)riskFlags.push('CONFLICTING_DUPLICATES_EXCLUDED');
   if(maxGap>=10)riskFlags.push('SEVERE_SOURCE_MISCALIBRATION');else if(maxGap>=5)riskFlags.push('SOURCE_MISCALIBRATION');
   if(baseRate?.brier!=null&&model?.brier!=null&&model.brier>baseRate.brier)riskFlags.push('MODEL_BRIER_WORSE_THAN_IN_SAMPLE_BASE_RATE');
   const monotonicWarnings=ONE_X_TWO.reduce((s,k)=>s+(monotonicity[k]?.warnings?.length||0),0);if(monotonicWarnings)riskFlags.push('CALIBRATION_BUCKET_ORDER_WARNINGS');
   const status=integrityFailures?'CRITICAL':maxGap>=10?'MODEL_RISK':maxGap>=5||monotonicWarnings?'CAUTION':'HEALTHY';
-  return{version:'SOURCE-CALIBRATION-INTEGRITY-1',source:sourceName,status,fixtureCandidates,validFixtures:rows.length,integrity:{simplexTolerance,failures:integrityFailures,issues,freezeVersions},model,baseRateDescriptive:baseRate,marketFairComparison:market,calibration,monotonicity,riskFlags,policy:{readOnly:true,providerCalls:0,persistentWrites:0,mayChangePredictions:false,mayChangeStake:false,mayPromoteModel:false,baseRateIsInSampleDescriptiveOnly:true,marketComparisonRequiresCompleteDevigged1X2:true,performanceRiskIsNotDataCorruption:true}};
+  return{version:'SOURCE-CALIBRATION-INTEGRITY-2',source:sourceName,status,fixtureCandidates,validFixtures:rows.length,dedupe:dedupe.diagnostics,integrity:{simplexTolerance,failures:integrityFailures,issues,freezeVersions},model,baseRateDescriptive:baseRate,marketFairComparison:market,calibration,monotonicity,riskFlags,policy:{readOnly:true,providerCalls:0,persistentWrites:0,mayChangePredictions:false,mayChangeStake:false,mayPromoteModel:false,baseRateIsInSampleDescriptiveOnly:true,marketComparisonRequiresCompleteDevigged1X2:true,performanceRiskIsNotDataCorruption:true,duplicatePolicy:dedupe.policy}};
 }

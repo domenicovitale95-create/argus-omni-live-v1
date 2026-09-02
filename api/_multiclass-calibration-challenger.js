@@ -1,8 +1,10 @@
+import { dedupeShadowFixtures } from './_shadow-fixture-dedupe.js';
+
 const CLASSES=['home','draw','away'];
 const EPS=1e-9;
 
 export const MULTICLASS_CALIBRATION_POLICY=Object.freeze({
-  version:'MULTICLASS-CALIBRATION-CHALLENGER-1',
+  version:'MULTICLASS-CALIBRATION-CHALLENGER-2',
   outerTrainFraction:.70,
   innerFitFraction:.75,
   minimumTotalFixtures:300,
@@ -41,11 +43,10 @@ function sourceTriplet(fixture,source){
 }
 
 export function extractCalibrationRows(books,{source='ARGUS_PREMATCH_1X2'}={}){
-  const rows=[],seen=new Set(),issues={duplicateFixture:0,lateFreeze:0,invalidOrMissingTriplet:0,missingFinalScore:0};
-  for(const book of books||[])for(const [fallbackKey,fixture] of Object.entries(book?.fixtures||{})){
-    const id=String(fixture?.fixtureId??fallbackKey);if(seen.has(id)){issues.duplicateFixture++;continue}
+  const dedupe=dedupeShadowFixtures(books),rows=[],issues={lateFreeze:0,invalidOrMissingTriplet:0,missingFinalScore:0};
+  for(const fixture of dedupe.fixtures){
+    const id=String(fixture?.fixtureId);
     const hasSource=(fixture?.picks||[]).some(p=>CLASSES.includes(String(p?.key||''))&&canonical(p?.probabilitySource||p?.sourceClass)===canonical(source));if(!hasSource)continue;
-    seen.add(id);
     const p=sourceTriplet(fixture,source);if(!p){issues.invalidOrMissingTriplet++;continue}
     const truth=truthFromScore(fixture);if(!truth){issues.missingFinalScore++;continue}
     const kickoff=isoMs(fixture?.kickoff),frozen=isoMs(fixture?.frozenAt||fixture?.picks?.[0]?.probabilityFrozenAt);if(kickoff!=null&&frozen!=null&&frozen>=kickoff){issues.lateFreeze++;continue}
@@ -53,7 +54,7 @@ export function extractCalibrationRows(books,{source='ARGUS_PREMATCH_1X2'}={}){
     rows.push({fixtureId:id,eventTime,truth,p});
   }
   rows.sort((a,b)=>a.eventTime-b.eventTime||a.fixtureId.localeCompare(b.fixtureId));
-  return{rows,issues};
+  return{rows,issues,dedupe:dedupe.diagnostics,dedupePolicy:dedupe.policy};
 }
 
 function splitTemporal(rows,fraction){
@@ -111,15 +112,17 @@ function pairedBootstrap(base,candidate,reps=MULTICLASS_CALIBRATION_POLICY.boots
 
 export function evaluateMulticlassCalibration(books,{source='ARGUS_PREMATCH_1X2'}={}){
   const extracted=extractCalibrationRows(books,{source}),rows=extracted.rows,p=MULTICLASS_CALIBRATION_POLICY,blockers=[];
+  if(extracted.dedupe.conflictingDuplicateFixtureIds>0)blockers.push('CONFLICTING_DUPLICATE_FIXTURES_PRESENT');
+  if(extracted.dedupe.missingFixtureId>0)blockers.push('FIXTURES_MISSING_ID');
   if(rows.length<p.minimumTotalFixtures)blockers.push('TOTAL_FIXTURES_INSUFFICIENT');
   const outer=splitTemporal(rows,p.outerTrainFraction);if(outer.left.length<p.minimumOuterTrainFixtures)blockers.push('OUTER_TRAIN_INSUFFICIENT');if(outer.right.length<p.minimumOuterHoldoutFixtures)blockers.push('OUTER_HOLDOUT_INSUFFICIENT');
   const inner=splitTemporal(outer.left,p.innerFitFraction);if(inner.left.length<p.minimumInnerFitFixtures)blockers.push('INNER_FIT_INSUFFICIENT');if(inner.right.length<p.minimumInnerValidationFixtures)blockers.push('INNER_VALIDATION_INSUFFICIENT');
-  if(blockers.length)return{version:p.version,status:'INSUFFICIENT_EVIDENCE',source:canonical(source),sample:rows.length,issues:extracted.issues,split:{outerTrain:outer.left.length,outerHoldout:outer.right.length,outerSplitAt:outer.splitAt,innerFit:inner.left.length,innerValidation:inner.right.length,innerSplitAt:inner.splitAt},blockers,policy:{shadowOnly:true,automaticPromotion:false,holdoutUsedForSelection:false}};
+  if(blockers.length)return{version:p.version,status:'INSUFFICIENT_EVIDENCE',source:canonical(source),sample:rows.length,issues:extracted.issues,dedupe:extracted.dedupe,split:{outerTrain:outer.left.length,outerHoldout:outer.right.length,outerSplitAt:outer.splitAt,innerFit:inner.left.length,innerValidation:inner.right.length,innerSplitAt:inner.splitAt},blockers,policy:{shadowOnly:true,automaticPromotion:false,holdoutUsedForSelection:false,duplicatePolicy:extracted.dedupePolicy}};
   const selection=selectOnInnerValidation(inner.left,inner.right),finalPrior=fitPriorShift(outer.left),config={...selection.champion.config,priorRatio:finalPrior.ratio},baseline=losses(outer.right,r=>r.p),challenger=evaluate(outer.right,config),ci=pairedBootstrap(baseline,challenger),brierGain=improvementPct(baseline,challenger,'brier'),logGain=improvementPct(baseline,challenger,'logLoss'),eceRegression=(challenger.topLabelEce??Infinity)-(baseline.topLabelEce??Infinity),validationBlockers=[];
   if(!(brierGain>=p.minimumHoldoutBrierImprovementPct))validationBlockers.push('HOLDOUT_BRIER_GAIN_BELOW_FLOOR');
   if(!(logGain>=p.minimumHoldoutLogLossImprovementPct))validationBlockers.push('HOLDOUT_LOGLOSS_GAIN_BELOW_FLOOR');
   if(!(ci.upper95<0))validationBlockers.push('HOLDOUT_BRIER_GAIN_NOT_STATISTICALLY_SEPARATED');
   if(!(eceRegression<=p.maximumHoldoutTopLabelEceRegression))validationBlockers.push('HOLDOUT_ECE_REGRESSION');
   const status=validationBlockers.length?'HOLD':'RESEARCH_VALIDATED';
-  return{version:p.version,status,source:canonical(source),sample:rows.length,issues:extracted.issues,split:{outerTrain:outer.left.length,outerHoldout:outer.right.length,outerSplitAt:outer.splitAt,innerFit:inner.left.length,innerValidation:inner.right.length,innerSplitAt:inner.splitAt},selection:{rule:'HYPERPARAMETERS_SELECTED_ON_INNER_TEMPORAL_VALIDATION_ONLY',priorFit:selection.priorFit,innerBaseline:publicMetrics(selection.baseline),champion:{id:selection.champion.config.id,temperature:selection.champion.config.temperature,priorShiftPower:selection.champion.config.priorShiftPower,...publicMetrics(selection.champion.metrics)},leaderboard:selection.leaderboard},refit:{rule:'PRIOR_SHIFT_REFIT_ON_FULL_OUTER_TRAIN_AFTER_HYPERPARAMETER_SELECTION',priorFit:finalPrior,temperature:config.temperature,priorShiftPower:config.priorShiftPower},holdout:{baseline:publicMetrics(baseline),challenger:publicMetrics(challenger),brierImprovementPct:round(brierGain,3),logLossImprovementPct:round(logGain,3),topLabelEceDelta:round(eceRegression,5),pairedBrierBootstrap:ci},blockers:validationBlockers,policy:{shadowOnly:true,readOnly:true,providerCalls:0,persistentWrites:0,automaticPromotion:false,holdoutUsedForSelection:false,wholeFixtureTemporalOrder:true,marketDataUsedForTraining:false,productionProbabilityMutation:false,productionStakeMutation:false}};
+  return{version:p.version,status,source:canonical(source),sample:rows.length,issues:extracted.issues,dedupe:extracted.dedupe,split:{outerTrain:outer.left.length,outerHoldout:outer.right.length,outerSplitAt:outer.splitAt,innerFit:inner.left.length,innerValidation:inner.right.length,innerSplitAt:inner.splitAt},selection:{rule:'HYPERPARAMETERS_SELECTED_ON_INNER_TEMPORAL_VALIDATION_ONLY',priorFit:selection.priorFit,innerBaseline:publicMetrics(selection.baseline),champion:{id:selection.champion.config.id,temperature:selection.champion.config.temperature,priorShiftPower:selection.champion.config.priorShiftPower,...publicMetrics(selection.champion.metrics)},leaderboard:selection.leaderboard},refit:{rule:'PRIOR_SHIFT_REFIT_ON_FULL_OUTER_TRAIN_AFTER_HYPERPARAMETER_SELECTION',priorFit:finalPrior,temperature:config.temperature,priorShiftPower:config.priorShiftPower},holdout:{baseline:publicMetrics(baseline),challenger:publicMetrics(challenger),brierImprovementPct:round(brierGain,3),logLossImprovementPct:round(logGain,3),topLabelEceDelta:round(eceRegression,5),pairedBrierBootstrap:ci},blockers:validationBlockers,policy:{shadowOnly:true,readOnly:true,providerCalls:0,persistentWrites:0,automaticPromotion:false,holdoutUsedForSelection:false,wholeFixtureTemporalOrder:true,marketDataUsedForTraining:false,productionProbabilityMutation:false,productionStakeMutation:false,duplicatePolicy:extracted.dedupePolicy}};
 }
