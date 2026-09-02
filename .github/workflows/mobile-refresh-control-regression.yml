@@ -1,0 +1,31 @@
+name: Mobile Refresh Control Regression
+
+on:
+  pull_request:
+    paths:
+      - 'mobile-scan-fix.js'
+      - 'sw.js'
+      - 'tests/mobile-refresh-control-regression.mjs'
+      - '.github/workflows/mobile-refresh-control-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'mobile-scan-fix.js'
+      - 'sw.js'
+      - 'tests/mobile-refresh-control-regression.mjs'
+      - '.github/workflows/mobile-refresh-control-regression.yml'
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check mobile control
+        run: node --check mobile-scan-fix.js
+      - name: Syntax check service worker
+        run: node --check sw.js
+      - name: Mobile refresh regression
+        run: node tests/mobile-refresh-control-regression.mjs
