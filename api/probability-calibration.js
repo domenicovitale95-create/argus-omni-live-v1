@@ -1,4 +1,5 @@
 import { listJson, readManyJson, storageReady } from './_report-store.js';
+import { dedupeShadowFixtures } from './_shadow-fixture-dedupe.js';
 
 function num(v){const x=Number(v);return Number.isFinite(x)?x:null}
 function bucket(p){const n=num(p);if(n==null)return'UNKNOWN';const pc=Math.max(0,Math.min(99.999,n*100));const lo=Math.floor(pc/5)*5;return `${lo}-${lo+5}`}
@@ -10,13 +11,13 @@ export default async function handler(req,res){
  res.setHeader('Cache-Control','s-maxage=300, stale-while-revalidate=900');
  if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
  if(!storageReady())return res.status(503).json({error:'Calibration storage unavailable'});
- const blobs=await listJson('argus/shadow/',240),books=await readManyJson(blobs),marketBucket={},market={},globalBucket={},sourceMarket={},sourceMarketBucket={},sourceTotals={};let settled=0;
- for(const book of books)for(const fixture of Object.values(book.fixtures||{}))for(const pick of fixture.picks||[]){
+ const blobs=await listJson('argus/shadow/',240),books=await readManyJson(blobs),canonicalView=dedupeShadowFixtures(books),marketBucket={},market={},globalBucket={},sourceMarket={},sourceMarketBucket={},sourceTotals={};let settled=0;
+ for(const fixture of canonicalView.fixtures)for(const pick of fixture.picks||[]){
   if(!['WIN','LOSS'].includes(pick.outcome))continue;
   const p=num(pick.probability);if(p==null||p<=0||p>=1)continue;
   const mk=canonical(pick.key),b=bucket(p),source=canonical(pick.probabilitySource||pick.sourceClass||'UNKNOWN');
   add(marketBucket,`${mk}|||${b}`,p,pick.outcome);add(market,mk,p,pick.outcome);add(globalBucket,b,p,pick.outcome);
   add(sourceMarket,`${source}|||${mk}`,p,pick.outcome);add(sourceMarketBucket,`${source}|||${mk}|||${b}`,p,pick.outcome);sourceTotals[source]=(sourceTotals[source]||0)+1;settled++;
  }
- return res.status(200).json({version:'PROBABILITY-CALIBRATION-3-SOURCE',generatedAt:new Date().toISOString(),settled,policy:{bucketWidthPct:5,minimumSample:20,validatedSample:60,positiveAdjustmentRequires:60,strongPositiveRequires:100,maxPositiveAdjustment:.02,maxNegativeAdjustment:.04,sourceSegmentation:true,prospectiveFrozenEvidenceOnly:true,rule:'Calibration may correct probability modestly; source-specific evidence is preferred for model correction. Negative corrections are allowed earlier than positive corrections. It never bypasses PRIME governance.'},sourceTotals,sourceMarket:finish(sourceMarket),sourceMarketBucket:finish(sourceMarketBucket),marketBucket:finish(marketBucket),market:finish(market),globalBucket:finish(globalBucket)})
+ return res.status(200).json({version:'PROBABILITY-CALIBRATION-3-SOURCE',generatedAt:new Date().toISOString(),settled,canonicalShadowEvidence:canonicalView.diagnostics,policy:{bucketWidthPct:5,minimumSample:20,validatedSample:60,positiveAdjustmentRequires:60,strongPositiveRequires:100,maxPositiveAdjustment:.02,maxNegativeAdjustment:.04,sourceSegmentation:true,prospectiveFrozenEvidenceOnly:true,fixtureIdentityCanonicalized:true,duplicatePolicy:canonicalView.policy,rule:'Calibration may correct probability modestly; source-specific evidence is preferred for model correction. Negative corrections are allowed earlier than positive corrections. It never bypasses PRIME governance.'},sourceTotals,sourceMarket:finish(sourceMarket),sourceMarketBucket:finish(sourceMarketBucket),marketBucket:finish(marketBucket),market:finish(market),globalBucket:finish(globalBucket)})
 }

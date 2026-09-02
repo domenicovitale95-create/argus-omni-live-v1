@@ -1,0 +1,25 @@
+name: Operational Shadow Dedupe Regression
+
+on:
+  push:
+    branches: [main, hardening/operational-shadow-dedupe]
+  pull_request:
+
+jobs:
+  operational-shadow-dedupe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/probability-calibration.js
+          node --check api/challenger-factory.js
+          node --check tests/operational-shadow-dedupe-regression.mjs
+      - name: Operational consumer regression
+        run: node tests/operational-shadow-dedupe-regression.mjs
+      - name: Canonical dedupe regression
+        run: node tests/shadow-fixture-dedup-regression.mjs

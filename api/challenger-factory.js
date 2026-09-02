@@ -1,5 +1,6 @@
 import { listJson, readManyJson, readJson, writeJson, storageReady } from './_report-store.js';
 import { CHALLENGER_VALIDATION_POLICY, evaluateChallengers } from './_challenger-validation.js';
+import { dedupeShadowFixtures } from './_shadow-fixture-dedupe.js';
 
 const PATH='argus/model-evolution/challenger-factory.json';
 
@@ -21,8 +22,8 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','s-maxage=900, stale-while-revalidate=1800');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
-  const blobs=await listJson('argus/shadow/',300),books=await readManyJson(blobs),rows=[];
-  for(const b of books)for(const f of Object.values(b.fixtures||{})){
+  const blobs=await listJson('argus/shadow/',300),books=await readManyJson(blobs),canonicalView=dedupeShadowFixtures(books),rows=[];
+  for(const f of canonicalView.fixtures){
     const t=eventTime(f),fixtureKey=f?.fixtureId;
     for(const p of f.picks||[])if(['WIN','LOSS'].includes(String(p?.outcome||'').toUpperCase()))rows.push({...p,_fixtureKey:fixtureKey,_eventTime:t});
   }
@@ -38,6 +39,6 @@ export default async function handler(req,res){
   return res.status(200).json({
     version:'CHALLENGER-FACTORY-2',generatedAt:new Date().toISOString(),baseline:validation.baseline,
     trainBaseline:validation.trainBaseline,holdoutBaseline:validation.holdoutBaseline,split:validation.split,
-    candidates,approved,state:{updatedAt:state.updatedAt,history:state.history||[]},policy:{...CHALLENGER_VALIDATION_POLICY,selection:'Candidates are ranked on the earlier chronological fixture block and must independently clear every gate on the later holdout block.',fixtureIsolation:true,noSameFixtureAcrossTrainAndHoldout:true,productionMutation:false,automaticPromotion:false,rule:'The factory may propose bounded challengers only. Approval requires independent temporal holdout evidence and still cannot alter production or bypass Champion/Challenger governance.'}
+    canonicalShadowEvidence:canonicalView.diagnostics,candidates,approved,state:{updatedAt:state.updatedAt,history:state.history||[]},policy:{...CHALLENGER_VALIDATION_POLICY,selection:'Candidates are ranked on the earlier chronological fixture block and must independently clear every gate on the later holdout block.',fixtureIsolation:true,noSameFixtureAcrossTrainAndHoldout:true,fixtureIdentityCanonicalized:true,duplicatePolicy:canonicalView.policy,productionMutation:false,automaticPromotion:false,rule:'The factory may propose bounded challengers only. Approval requires independent temporal holdout evidence and still cannot alter production or bypass Champion/Challenger governance.'}
   });
 }
