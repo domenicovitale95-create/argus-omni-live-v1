@@ -1,0 +1,27 @@
+name: Shadow Reschedule Freeze Identity Regression
+
+on:
+  push:
+    branches: [main, hardening/shadow-reschedule-freeze-identity]
+  pull_request:
+
+jobs:
+  shadow-reschedule-freeze-identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/_shadow-fixture-registry.js
+          node --check api/shadow-mode.js
+          node --check tests/shadow-reschedule-freeze-identity-regression.mjs
+      - name: Reschedule identity regression
+        run: node tests/shadow-reschedule-freeze-identity-regression.mjs
+      - name: Existing duplicate regressions
+        run: |
+          node tests/shadow-fixture-dedup-regression.mjs
+          node tests/shadow-duplicate-inspector-regression.mjs
