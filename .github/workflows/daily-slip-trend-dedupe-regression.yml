@@ -1,0 +1,20 @@
+name: Daily Slip Trend Dedupe Regression
+on:
+  pull_request:
+    paths:
+      - 'api/daily-slip.js'
+      - 'api/_daily-slip-trend-dedupe.js'
+      - 'tests/daily-slip-trend-dedupe-regression.mjs'
+      - '.github/workflows/daily-slip-trend-dedupe-regression.yml'
+  workflow_dispatch:
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/daily-slip-status-regression.mjs
+      - run: node tests/daily-slip-trend-dedupe-regression.mjs
