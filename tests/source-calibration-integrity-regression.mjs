@@ -78,4 +78,23 @@ function book(fixtures){return{fixtures:Object.fromEntries(fixtures.map(f=>[Stri
   assert.ok(!a.riskFlags.includes('DATA_INTEGRITY_FAILURES_PRESENT'));
 }
 
+
+{
+  const f=fixture(7,'home',{home:.4,draw:.3,away:.3});
+  f.picks.find(p=>p.key==='home').outcome='LOSS';
+  f.picks.find(p=>p.key==='draw').outcome='WIN';
+  const a=auditSourceCalibration([book([f])]);
+  assert.equal(a.integrity.issues.outcomeContradiction,1);
+  assert.equal(a.integrity.issueSamples.limitPerIssue,10);
+  assert.deepEqual(a.integrity.issueSamples.outcomeContradiction,[{
+    fixtureId:String(f.fixtureId),
+    truth:'home',
+    finalScore:{home:2,away:1},
+    outcomes:{home:'LOSS',draw:'WIN',away:'LOSS'},
+    freezeVersion:'SHADOW-FREEZE-4'
+  }]);
+  assert.equal(a.validFixtures,0);
+  assert.equal(a.status,'CRITICAL');
+}
+
 console.log('source calibration integrity regression: OK');
