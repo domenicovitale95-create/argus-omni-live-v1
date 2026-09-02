@@ -18,8 +18,18 @@ function decisionPlanCadenceMinutes(scheduler){const rows=Array.isArray(schedule
 function decisionPlanFreshnessLimit(scheduler){return Math.max(35,decisionPlanCadenceMinutes(scheduler)+15)}
 function brusselsClock(){const p=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Brussels',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return{hour:Number(p.hour),minute:Number(p.minute)}}
 function scheduledActive(c){return c.hour>=6||(c.hour===0&&c.minute<=30)}
+function errorText(value){
+  if(value==null)return'';
+  if(typeof value==='string')return value.trim();
+  if(value instanceof Error)return(value.stack||value.message||value.name||'Error').trim();
+  if(typeof value==='object'){
+    try{return JSON.stringify(value,(_,v)=>typeof v==='bigint'?String(v):v)}
+    catch{return Object.prototype.toString.call(value)}
+  }
+  return String(value).trim();
+}
 function errorDiagnostics(errors){
-  const rows=Array.isArray(errors)?errors.map(x=>String(x||'').trim()).filter(Boolean):[];
+  const rows=Array.isArray(errors)?errors.map(errorText).filter(Boolean):[];
   const groups={};
   for(const row of rows){const key=(row.split(':')[0]||'UNKNOWN').trim().toUpperCase().replace(/[^A-Z0-9]+/g,'_')||'UNKNOWN';groups[key]=(groups[key]||0)+1}
   const protectedPreviewNoise=rows.length>0&&rows.every(row=>/Protected deployment/i.test(row)&&/(?:code[^0-9]*401|\b401\b)/i.test(row));

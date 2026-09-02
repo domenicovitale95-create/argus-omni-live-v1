@@ -1,0 +1,30 @@
+name: Developer Health Diagnostics Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/developer-health.js'
+      - 'vercel.json'
+      - 'tests/developer-health-diagnostics-regression.mjs'
+      - '.github/workflows/developer-health-diagnostics-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/developer-health.js'
+      - 'vercel.json'
+      - 'tests/developer-health-diagnostics-regression.mjs'
+      - '.github/workflows/developer-health-diagnostics-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  developer-health-diagnostics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tests/developer-health-diagnostics-regression.mjs
