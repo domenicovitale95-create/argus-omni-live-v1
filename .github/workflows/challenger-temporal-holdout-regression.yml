@@ -1,0 +1,23 @@
+name: Challenger Temporal Holdout Regression
+
+on:
+  push:
+    branches: [main, hardening/challenger-temporal-holdout]
+  pull_request:
+
+jobs:
+  challenger-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/_challenger-validation.js
+          node --check api/challenger-factory.js
+          node --check tests/challenger-temporal-holdout-regression.mjs
+      - name: Temporal holdout regression suite
+        run: node tests/challenger-temporal-holdout-regression.mjs
