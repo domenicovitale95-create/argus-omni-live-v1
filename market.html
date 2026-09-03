@@ -32,6 +32,32 @@
       <div class="status"><span class="dot"></span>Données marché automatiques</div>
     </header>
 
+    <section class="section" style="margin-top:4px">
+      <div class="section-head"><h2>ETF LIVE</h2><small>Prix & variation</small></div>
+      <div class="ticker">
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+          {
+            "symbols": [
+              {"proName":"XETR:VWCE","title":"VWCE · All-World"},
+              {"proName":"EURONEXT:IWDA","title":"IWDA · MSCI World"},
+              {"proName":"XETR:SXR8","title":"SXR8 · S&P 500"},
+              {"proName":"XETR:VVSM","title":"VVSM · Semiconductors"},
+              {"proName":"EURONEXT:WTAI","title":"WTAI · AI"},
+              {"proName":"LSE:ISPY","title":"ISPY · Cybersecurity"}
+            ],
+            "showSymbolLogo": true,
+            "isTransparent": true,
+            "displayMode": "adaptive",
+            "colorTheme": "dark",
+            "locale": "fr"
+          }
+          </script>
+        </div>
+      </div>
+    </section>
+
     <div class="ticker">
       <div class="tradingview-widget-container">
         <div class="tradingview-widget-container__widget"></div>
