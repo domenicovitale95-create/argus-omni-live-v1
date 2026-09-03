@@ -39,6 +39,19 @@
     }[String(v||'').toUpperCase()]||v||'—');
   }
 
+
+  function translateEvidence(v){
+    let s=String(v??'');
+    return s.replace('3-month momentum:','Momentum a 3 mesi:')
+      .replace('Distance vs 200-day average:','Distanza dalla media a 200 giorni:')
+      .replace('20-day annualised volatility:','Volatilità annualizzata a 20 giorni:')
+      .replace('Entry is extended versus the 200-day trend.','Il prezzo è molto esteso rispetto al trend a 200 giorni.')
+      .replace('Earnings, rates or risk-premium shocks can cause material drawdowns.','Utili, tassi o premio per il rischio possono causare forti ribassi.')
+      .replace('Higher real yields and a stronger USD can pressure gold.','Tassi reali più alti e un dollaro forte possono penalizzare l’oro.')
+      .replace('Duration losses remain possible if yields rise further.','Le obbligazioni possono perdere se i rendimenti salgono ancora.')
+      .replace('Market conditions can change faster than historical indicators.','Il mercato può cambiare più velocemente degli indicatori storici.');
+  }
+
   function marketKeyForEtf(etf){return PROXY_TO_MARKET[etf.proxy_id]||null}
   function scoreForEtf(etf,data){
     const key=marketKeyForEtf(etf);
@@ -203,8 +216,8 @@
     const d=debate(data);
 
     const asset=$('#debateAsset'); if(asset) asset.textContent=d.asset;
-    const bull=$('#bullCase'); if(bull) bull.innerHTML=d.bull.map(x=>'<li>'+esc(x)+'</li>').join('');
-    const bear=$('#bearCase'); if(bear) bear.innerHTML=d.bear.map(x=>'<li>'+esc(x)+'</li>').join('');
+    const bull=$('#bullCase'); if(bull) bull.innerHTML=d.bull.map(x=>'<li>'+esc(translateEvidence(x))+'</li>').join('');
+    const bear=$('#bearCase'); if(bear) bear.innerHTML=d.bear.map(x=>'<li>'+esc(translateEvidence(x))+'</li>').join('');
     const verdict=$('#debateVerdict'); if(verdict) verdict.textContent=statusIt(d.action)+(d.score!=null?' · '+d.score+'/100':'');
 
     const gstate=$('#governorState'); if(gstate) gstate.textContent=gov.shadow;
