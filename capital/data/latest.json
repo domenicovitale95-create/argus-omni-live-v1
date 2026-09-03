@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-09-03T22:32:30Z",
+  "data_quality": {
+    "fresh_series": 0,
+    "total_series": 18,
+    "coverage_pct": 0,
+    "state": "WEAK",
+    "errors": [
+      {
+        "series": "bootstrap",
+        "error": "First scheduled verified market snapshot has not completed yet."
+      }
+    ],
+    "rules": [
+      "No synthetic price fabrication",
+      "Stale fallback explicitly labelled",
+      "Scores suppressed when core data coverage is insufficient",
+      "Valuation omitted until a verified valuation feed is connected"
+    ]
+  },
+  "global_market": {
+    "status": "DATA INSUFFICIENT",
+    "score": null,
+    "trend": "Stable →",
+    "regime": "DATA INSUFFICIENT",
+    "regime_confidence": "Low",
+    "components": {},
+    "methodology": "Waiting for first verified dataset."
+  },
+  "today": {
+    "best_opportunity": {
+      "type": "NO CLEAR OPPORTUNITY",
+      "asset": "Data engine warming up",
+      "score": null,
+      "status": "WAIT"
+    },
+    "biggest_risk": {
+      "title": "Data quality gate active",
+      "detail": "ARGUS will not publish a market recommendation until the first verified data snapshot passes validation.",
+      "severity": "MEDIUM"
+    },
+    "action": "WAIT / REVIEW",
+    "what_changed": [],
+    "top_ideas": [],
+    "no_forced_recommendation": true
+  },
+  "ranking": [],
+  "market": {},
+  "macro": {},
+  "scores": {},
+  "sources": {
+    "market": "Stooq daily market data (proxy instruments)",
+    "macro": "FRED public CSV series; underlying source varies by series",
+    "etf_metadata": "Issuer pages / verified static config"
+  },
+  "states": {
+    "prices": "DATA UNAVAILABLE",
+    "macro": "DATA UNAVAILABLE",
+    "scores": "MODELLED",
+    "simulations": "SCENARIO"
+  }
+}
