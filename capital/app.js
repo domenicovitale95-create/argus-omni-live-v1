@@ -159,9 +159,12 @@ function renderSimpleAdvice(){
   if(!root) return;
   const cap=Math.max(1000,Number($('#adviceCap')?.value)||10000);
   const coverage=Number(DATA?.data_quality?.coverage_pct||0);
-  const globalScore=Number(DATA?.global_market?.score);
-  const europeScore=Number(DATA?.scores?.europe?.score);
-  const semisScore=Number(DATA?.scores?.semis?.score);
+  const rawGlobal=DATA?.global_market?.score;
+  const rawEurope=DATA?.scores?.europe?.score;
+  const rawSemis=DATA?.scores?.semis?.score;
+  const globalScore=rawGlobal==null?null:Number(rawGlobal);
+  const europeScore=rawEurope==null?null:Number(rawEurope);
+  const semisScore=rawSemis==null?null:Number(rawSemis);
   const best=DATA?.today?.best_opportunity||{};
   const products={
     core:(CONFIG?.etfs||[]).find(x=>x.id==='vwce'),
