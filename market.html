@@ -3,223 +3,325 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#090b0f" />
-  <title>ARGUS MARKET — Daily Finance Dashboard</title>
-  <meta name="description" content="Dashboard financier personnel: ETF, indices, actions, or, Bitcoin, actualités et calendrier économique." />
+  <meta name="theme-color" content="#080a0e" />
+  <title>ARGUS MARKET — Investment Cockpit</title>
+  <meta name="description" content="Cockpit d'investissement mobile: ETF UCITS, macro, risque, calendrier économique, heatmap, actions et checklist de décision." />
   <style>
-    :root{--bg:#090b0f;--panel:#10131a;--panel2:#0d1016;--line:#202532;--text:#f5f7fb;--muted:#8f98aa;--accent:#d8ff52;--good:#69e6a6;--warn:#ffd166}
-    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Arial,sans-serif}
-    a{color:inherit;text-decoration:none}.wrap{max-width:1100px;margin:auto;padding:0 14px 40px}
-    header{padding:22px 2px 14px}.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:800}.title{font-size:29px;line-height:1.02;margin:7px 0 5px;letter-spacing:-.04em}.sub{color:var(--muted);font-size:13px;max-width:650px}
-    .status{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#0c0f14;color:#cbd2df;font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 12px var(--good)}
+    :root{
+      --bg:#080a0e;--panel:#10141b;--panel2:#0c0f15;--line:#202632;--text:#f5f7fb;
+      --muted:#8d97a8;--accent:#d8ff52;--good:#69e6a6;--warn:#ffd166;--bad:#ff7b7b;--blue:#80aaff
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Arial,sans-serif}
+    a{color:inherit;text-decoration:none} button,input{font:inherit}
+    .wrap{max-width:1120px;margin:auto;padding:0 14px 50px}
+    header{padding:22px 2px 12px}
+    .eyebrow{font-size:11px;letter-spacing:.17em;color:var(--accent);font-weight:850}
+    .title{font-size:30px;line-height:1.02;margin:7px 0 6px;letter-spacing:-.045em}
+    .sub{color:var(--muted);font-size:13px;max-width:720px}
+    .statusrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+    .status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#0c0f14;color:#cbd2df;font-size:11px}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 12px var(--good)}
+    .nav{position:sticky;top:0;z-index:20;margin:0 -14px 14px;padding:9px 14px;background:rgba(8,10,14,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(32,38,50,.75);overflow:auto;white-space:nowrap}
+    .nav a{display:inline-block;padding:7px 10px;margin-right:5px;border:1px solid var(--line);border-radius:999px;background:var(--panel2);font-size:11px;color:#dce2ec}
     .ticker{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);margin:4px 0 16px}
-    .section{margin-top:20px}.section-head{display:flex;justify-content:space-between;align-items:end;margin:0 2px 9px}.section h2{font-size:15px;margin:0;letter-spacing:.02em}.section small{color:var(--muted)}
-    .core-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.card{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel2));border-radius:14px;padding:14px;min-height:112px;position:relative}
-    .rank{position:absolute;top:12px;right:12px;color:var(--muted);font-size:11px}.tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--accent);margin-bottom:8px}.ticker-name{font-size:19px;font-weight:800;letter-spacing:-.02em}.fund{font-size:12px;color:#d6dce7;margin-top:2px}.meta{font-size:11px;color:var(--muted);margin-top:9px}.card strong{color:#fff}
-    .sat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.sat{padding:12px;min-height:86px}.sat .ticker-name{font-size:16px}
-    .widget-shell{border:1px solid var(--line);background:var(--panel);border-radius:14px;overflow:hidden;min-height:420px}.two{display:grid;grid-template-columns:1.45fr .85fr;gap:10px}
-    .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.quick a{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--panel2)}.quick b{display:block;font-size:13px}.quick span{font-size:11px;color:var(--muted)}
-    footer{padding:26px 2px 10px;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin-top:28px}
-    @media(max-width:760px){.wrap{padding-left:11px;padding-right:11px}.title{font-size:27px}.core-grid,.sat-grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}.quick{grid-template-columns:1fr 1fr}.card{min-height:98px}.widget-shell{min-height:360px}}
+    .section{margin-top:23px;scroll-margin-top:62px}
+    .section-head{display:flex;justify-content:space-between;align-items:end;margin:0 2px 9px;gap:10px}
+    .section h2{font-size:15px;margin:0;letter-spacing:.02em}.section small{color:var(--muted)}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .card{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel2));border-radius:14px;padding:14px;position:relative}
+    .tag{display:inline-block;font-size:10px;font-weight:850;letter-spacing:.08em;color:var(--accent);margin-bottom:7px}
+    .tag.blue{color:var(--blue)}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}
+    .ticker-name{font-size:19px;font-weight:850;letter-spacing:-.025em}
+    .fund{font-size:12px;color:#d9dfeb;margin-top:2px}.meta{font-size:11px;color:var(--muted);margin-top:8px}
+    .facts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.pill{font-size:10px;padding:5px 7px;border-radius:8px;border:1px solid var(--line);background:#0a0d12;color:#c6cfdd}
+    .widget-shell{border:1px solid var(--line);background:var(--panel);border-radius:14px;overflow:hidden;min-height:420px}
+    .readme{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.step{padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--panel2)}
+    .step b{display:block;margin-bottom:4px;font-size:12px}.step span{font-size:11px;color:var(--muted)}
+    .notice{border:1px solid #3b3522;background:#16140d;border-radius:14px;padding:13px}.notice b{color:var(--warn)}
+    .compare{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--panel2);font-size:11px}
+    .compare th,.compare td{padding:10px 9px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.compare th{color:#fff;background:#11151d}.compare tr:last-child td{border-bottom:0}.compare td{color:#c7cfdb}.compare .muted{color:var(--muted)}
+    .checklist{display:grid;gap:7px}.check{display:flex;align-items:flex-start;gap:9px;padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}
+    .check input{margin-top:2px;width:18px;height:18px;accent-color:#d8ff52}.check b{font-size:12px;display:block}.check span{font-size:11px;color:var(--muted)}
+    .score{margin-top:9px;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0a0d12;display:flex;justify-content:space-between;gap:10px;align-items:center}.score strong{font-size:18px}
+    .belgium{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.belgium .card{min-height:105px}
+    .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.quick a{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--panel2)}.quick b{display:block;font-size:12px}.quick span{font-size:10px;color:var(--muted)}
+    footer{padding:26px 2px 10px;color:var(--muted);font-size:10px;border-top:1px solid var(--line);margin-top:28px}
+    @media(max-width:760px){
+      .wrap{padding-left:11px;padding-right:11px}.nav{margin-left:-11px;margin-right:-11px;padding-left:11px;padding-right:11px}
+      .title{font-size:28px}.grid3,.grid2,.readme,.belgium{grid-template-columns:1fr}.quick{grid-template-columns:1fr 1fr}
+      .widget-shell{min-height:360px}.compare{font-size:10px}.compare th,.compare td{padding:8px 6px}
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="eyebrow">ARGUS MARKET</div>
-      <h1 class="title">Tout le marché.<br>Sans bruit.</h1>
-      <div class="sub">ETF essentiels d’abord, puis marchés mondiaux, actions, or, Bitcoin et actualité macro — dans une seule page qui se met à jour automatiquement.</div>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ARGUS MARKET · v2</div>
+    <h1 class="title">Investment<br>Cockpit.</h1>
+    <div class="sub">Pas seulement des prix : un tableau de bord pour vérifier le marché, le risque, les ETF, les événements et les chevauchements avant de prendre une décision.</div>
+    <div class="statusrow">
       <div class="status"><span class="dot"></span>Données marché automatiques</div>
-    </header>
+      <div class="status">Session · <span id="clock">—</span></div>
+      <div class="status">Mobile first</div>
+    </div>
+  </header>
 
-    <section class="section" style="margin-top:4px">
-      <div class="section-head"><h2>ETF LIVE</h2><small>Prix & variation</small></div>
-      <div class="ticker">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-          {
-            "symbols": [
-              {"proName":"XETR:VWCE","title":"VWCE · All-World"},
-              {"proName":"EURONEXT:IWDA","title":"IWDA · MSCI World"},
-              {"proName":"XETR:SXR8","title":"SXR8 · S&P 500"},
-              {"proName":"XETR:VVSM","title":"VVSM · Semiconductors"},
-              {"proName":"EURONEXT:WTAI","title":"WTAI · AI"},
-              {"proName":"LSE:ISPY","title":"ISPY · Cybersecurity"}
-            ],
-            "showSymbolLogo": true,
-            "isTransparent": true,
-            "displayMode": "adaptive",
-            "colorTheme": "dark",
-            "locale": "fr"
-          }
-          </script>
-        </div>
-      </div>
-    </section>
+  <nav class="nav">
+    <a href="#today">Aujourd’hui</a><a href="#etf">ETF</a><a href="#macro">Risque</a><a href="#calendar">Calendrier</a><a href="#heatmap">Heatmap</a><a href="#decision">Décision</a><a href="#belgium">Belgique</a>
+  </nav>
 
+  <section class="section" id="today">
+    <div class="section-head"><h2>LECTURE EN 60 SECONDES</h2><small>Ordre recommandé</small></div>
+    <div class="readme">
+      <div class="step"><b>1 · Risque</b><span>Regarde VIX, taux US 10Y, dollar et or. Ils donnent le contexte avant les performances.</span></div>
+      <div class="step"><b>2 · Core ETF</b><span>Regarde VWCE / IWDA / SXR8 sans courir derrière la meilleure performance du jour.</span></div>
+      <div class="step"><b>3 · Événements</b><span>Vérifie le calendrier macro avant une grosse décision : Fed, BCE, inflation, emploi, PIB.</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>MARKET PULSE</h2><small>Live / différé selon la place</small></div>
     <div class="ticker">
       <div class="tradingview-widget-container">
         <div class="tradingview-widget-container__widget"></div>
         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
         {
-          "symbols": [
-            {"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},
-            {"proName":"NASDAQ:NDX","title":"Nasdaq 100"},
-            {"proName":"XETR:DAX","title":"DAX"},
+          "symbols":[
+            {"proName":"XETR:VWCE","title":"VWCE"},
+            {"proName":"EURONEXT:IWDA","title":"IWDA"},
+            {"proName":"XETR:SXR8","title":"S&P 500 ETF"},
+            {"proName":"XETR:EQQX","title":"Nasdaq-100 ETF"},
+            {"proName":"TVC:VIX","title":"VIX"},
+            {"proName":"TVC:US10Y","title":"US 10Y"},
+            {"proName":"TVC:DXY","title":"Dollar"},
             {"proName":"TVC:GOLD","title":"Or"},
             {"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},
             {"proName":"FX_IDC:EURUSD","title":"EUR/USD"}
           ],
-          "showSymbolLogo": true,
-          "isTransparent": true,
-          "displayMode": "adaptive",
-          "colorTheme": "dark",
-          "locale": "fr"
+          "showSymbolLogo":true,"isTransparent":true,"displayMode":"adaptive","colorTheme":"dark","locale":"fr"
         }
         </script>
       </div>
     </div>
+  </section>
 
-    <section class="section">
-      <div class="section-head"><h2>ETF ESSENTIELS</h2><small>Base long terme</small></div>
-      <div class="core-grid">
-        <a class="card" href="https://www.tradingview.com/symbols/XETR-VWCE/" target="_blank" rel="noopener">
-          <div class="rank">#1</div><div class="tag">CORE MONDE</div><div class="ticker-name">VWCE</div>
-          <div class="fund">Vanguard FTSE All-World UCITS ETF Acc</div><div class="meta"><strong>IE00BK5BQT80</strong> · Monde développé + émergent</div>
-        </a>
-        <a class="card" href="https://www.tradingview.com/symbols/EURONEXT-IWDA/" target="_blank" rel="noopener">
-          <div class="rank">#2</div><div class="tag">CORE MONDE</div><div class="ticker-name">IWDA</div>
-          <div class="fund">iShares Core MSCI World UCITS ETF</div><div class="meta"><strong>IE00B4L5Y983</strong> · Marchés développés</div>
-        </a>
-        <a class="card" href="https://www.tradingview.com/symbols/XETR-SXR8/" target="_blank" rel="noopener">
-          <div class="rank">#3</div><div class="tag">CORE USA</div><div class="ticker-name">SXR8</div>
-          <div class="fund">iShares Core S&amp;P 500 UCITS ETF Acc</div><div class="meta"><strong>IE00B5BMR087</strong> · Grandes capitalisations US</div>
-        </a>
+  <section class="section" id="etf">
+    <div class="section-head"><h2>ETF CORE — CHOISIR UN RÔLE</h2><small>Pas un classement</small></div>
+    <div class="grid3">
+      <a class="card" href="https://www.tradingview.com/symbols/XETR-VWCE/" target="_blank" rel="noopener">
+        <div class="tag">CORE GLOBAL</div><div class="ticker-name">VWCE</div>
+        <div class="fund">Vanguard FTSE All-World UCITS ETF Acc</div>
+        <div class="meta">IE00BK5BQT80 · Développés + émergents · Accumulation</div>
+        <div class="facts"><span class="pill">OCF ≈ 0,19%</span><span class="pill">Irlande</span><span class="pill">UCITS</span></div>
+      </a>
+      <a class="card" href="https://www.tradingview.com/symbols/EURONEXT-IWDA/" target="_blank" rel="noopener">
+        <div class="tag">CORE DÉVELOPPÉS</div><div class="ticker-name">IWDA</div>
+        <div class="fund">iShares Core MSCI World UCITS ETF Acc</div>
+        <div class="meta">IE00B4L5Y983 · Marchés développés · Accumulation</div>
+        <div class="facts"><span class="pill">TER 0,20%</span><span class="pill">Irlande</span><span class="pill">UCITS</span></div>
+      </a>
+      <a class="card" href="https://www.tradingview.com/symbols/XETR-SXR8/" target="_blank" rel="noopener">
+        <div class="tag">TILT USA</div><div class="ticker-name">SXR8</div>
+        <div class="fund">iShares Core S&amp;P 500 UCITS ETF Acc</div>
+        <div class="meta">IE00B5BMR087 · Grandes capitalisations US · Accumulation</div>
+        <div class="facts"><span class="pill">TER 0,07%</span><span class="pill">504 titres*</span><span class="pill">UCITS</span></div>
+      </a>
+    </div>
+
+    <div class="section-head" style="margin-top:13px"><h2>SATELLITES</h2><small>Concentration plus élevée</small></div>
+    <div class="grid3">
+      <a class="card" href="https://www.tradingview.com/symbols/XETR-EQQX/" target="_blank" rel="noopener">
+        <div class="tag blue">NASDAQ-100</div><div class="ticker-name">EQQX</div>
+        <div class="fund">Invesco NASDAQ-100 Swap UCITS ETF Acc</div>
+        <div class="meta">IE00BNRQM384 · USA growth · Réplication synthétique</div>
+        <div class="facts"><span class="pill">Coûts gestion ≈ 0,20%</span><span class="pill">Concentré tech/growth</span></div>
+      </a>
+      <a class="card" href="https://www.tradingview.com/symbols/XETR-VVSM/" target="_blank" rel="noopener">
+        <div class="tag blue">SEMICONDUCTEURS</div><div class="ticker-name">VVSM</div>
+        <div class="fund">VanEck Semiconductor UCITS ETF</div>
+        <div class="meta">IE00BMC38736 · Secteur cyclique · Concentration élevée</div>
+        <div class="facts"><span class="pill">TER 0,35%</span><span class="pill">Irlande</span></div>
+      </a>
+      <a class="card" href="https://www.tradingview.com/symbols/EURONEXT-ISPY/" target="_blank" rel="noopener">
+        <div class="tag blue">CYBERSÉCURITÉ</div><div class="ticker-name">ISPY</div>
+        <div class="fund">L&amp;G Cyber Security UCITS ETF</div>
+        <div class="meta">IE00BYPLS672 · Thématique mondiale · Accumulation</div>
+        <div class="facts"><span class="pill">TER ~0,69%</span><span class="pill">Concentration tech</span></div>
+      </a>
+    </div>
+
+    <div class="notice" style="margin-top:10px">
+      <b>⚠ Chevauchement important.</b> VWCE et IWDA possèdent déjà beaucoup de grandes actions américaines. SXR8, Nasdaq-100, semi-conducteurs, IA et cyber peuvent ajouter plusieurs fois les mêmes moteurs (Nvidia, Broadcom, Microsoft, etc.). Un satellite augmente surtout la concentration — pas forcément la diversification.
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>COMPARATEUR RAPIDE</h2><small>Frais vérifiés · sept. 2026</small></div>
+    <div style="overflow:auto;border-radius:14px">
+      <table class="compare">
+        <thead><tr><th>ETF</th><th>Rôle</th><th>Coût</th><th>Point fort</th><th>À surveiller</th></tr></thead>
+        <tbody>
+          <tr><td><b>VWCE</b></td><td>Core global</td><td>~0,19%</td><td>Un seul ETF monde + émergents</td><td class="muted">Poids US élevé</td></tr>
+          <tr><td><b>IWDA</b></td><td>Core développé</td><td>0,20%</td><td>Très large et liquide</td><td class="muted">Pas d'émergents</td></tr>
+          <tr><td><b>SXR8</b></td><td>Tilt USA</td><td>0,07%</td><td>Très faible coût</td><td class="muted">Ajoute du chevauchement US</td></tr>
+          <tr><td><b>EQQX</b></td><td>Tilt growth</td><td>~0,20%</td><td>Nasdaq-100</td><td class="muted">Synthétique + concentration</td></tr>
+          <tr><td><b>VVSM</b></td><td>Thématique</td><td>0,35%</td><td>Pure-play semi-conducteurs</td><td class="muted">Volatilité / cycle</td></tr>
+          <tr><td><b>WTAI</b></td><td>Thématique</td><td>0,40%</td><td>IA diversifiée</td><td class="muted">Valorisations / overlap tech</td></tr>
+          <tr><td><b>ISPY</b></td><td>Thématique</td><td>~0,69%</td><td>Cyber mondial</td><td class="muted">Coût + concentration</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="macro">
+    <div class="section-head"><h2>RISQUE & MACRO</h2><small>Contexte avant performance</small></div>
+    <div class="widget-shell">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+        {
+          "colorTheme":"dark","dateRange":"12M","showChart":true,"locale":"fr","isTransparent":true,
+          "showSymbolLogo":true,"showFloatingTooltip":false,"width":"100%","height":"640",
+          "tabs":[
+            {"title":"ETF","symbols":[
+              {"s":"XETR:VWCE","d":"Vanguard All-World"},
+              {"s":"EURONEXT:IWDA","d":"iShares MSCI World"},
+              {"s":"XETR:SXR8","d":"S&P 500 UCITS"},
+              {"s":"XETR:EQQX","d":"Nasdaq-100 Swap"},
+              {"s":"XETR:VVSM","d":"Semiconductors"},
+              {"s":"EURONEXT:ISPY","d":"Cyber Security"}
+            ]},
+            {"title":"Monde","symbols":[
+              {"s":"FOREXCOM:SPXUSD","d":"S&P 500"},
+              {"s":"NASDAQ:NDX","d":"Nasdaq 100"},
+              {"s":"XETR:DAX","d":"DAX"},
+              {"s":"TVC:NI225","d":"Nikkei 225"},
+              {"s":"TVC:UKX","d":"FTSE 100"}
+            ]},
+            {"title":"Risque","symbols":[
+              {"s":"TVC:VIX","d":"VIX"},
+              {"s":"TVC:US10Y","d":"US 10Y"},
+              {"s":"TVC:DXY","d":"Dollar Index"},
+              {"s":"TVC:GOLD","d":"Gold"},
+              {"s":"NYMEX:CL1!","d":"WTI Oil"},
+              {"s":"FX_IDC:EURUSD","d":"EUR/USD"}
+            ]}
+          ]
+        }
+        </script>
       </div>
-    </section>
+    </div>
+    <div class="grid2" style="margin-top:9px">
+      <div class="card"><div class="tag warn">COMMENT LIRE</div><div class="fund"><b>VIX ↑</b> = stress de marché. <b>Taux ↑</b> = pression potentielle sur les valorisations, surtout growth/tech. <b>DXY ↑</b> = dollar plus fort, parfois vent contraire aux actifs risqués.</div></div>
+      <div class="card"><div class="tag warn">NE PAS CONFONDRE</div><div class="fund">Un marché en hausse n'est pas automatiquement “bon marché”. Prix, valorisation, concentration, macro et horizon doivent être lus ensemble.</div></div>
+    </div>
+  </section>
 
-    <section class="section">
-      <div class="section-head"><h2>THÉMATIQUES À SURVEILLER</h2><small>Satellites</small></div>
-      <div class="sat-grid">
-        <a class="card sat" href="https://www.tradingview.com/symbols/XETR-VVSM/" target="_blank" rel="noopener">
-          <div class="tag">SEMICONDUCTEURS</div><div class="ticker-name">VVSM</div><div class="fund">VanEck Semiconductor UCITS ETF</div>
-        </a>
-        <a class="card sat" href="https://www.tradingview.com/symbols/EURONEXT-WTAI/" target="_blank" rel="noopener">
-          <div class="tag">IA</div><div class="ticker-name">WTAI</div><div class="fund">WisdomTree Artificial Intelligence UCITS ETF</div>
-        </a>
-        <a class="card sat" href="https://www.tradingview.com/symbols/LSE-ISPY/" target="_blank" rel="noopener">
-          <div class="tag">CYBERSÉCURITÉ</div><div class="ticker-name">ISPY</div><div class="fund">L&amp;G Cyber Security UCITS ETF</div>
-        </a>
+  <section class="section" id="calendar">
+    <div class="section-head"><h2>CALENDRIER ÉCONOMIQUE</h2><small>Événements à fort impact</small></div>
+    <div class="widget-shell" style="min-height:520px">
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+        {
+          "colorTheme":"dark","isTransparent":true,"locale":"fr",
+          "countryFilter":"us,eu,de,fr,it,gb,cn,jp","importanceFilter":"1",
+          "width":"100%","height":520
+        }
+        </script>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section">
-      <div class="section-head"><h2>TABLEAU DE BORD</h2><small>ETF · indices · actions</small></div>
-      <div class="widget-shell">
-        <div class="tradingview-widget-container" style="height:100%;width:100%">
-          <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-          {
-            "colorTheme":"dark",
-            "dateRange":"12M",
-            "showChart":true,
-            "locale":"fr",
-            "isTransparent":true,
-            "showSymbolLogo":true,
-            "showFloatingTooltip":false,
-            "width":"100%",
-            "height":"650",
-            "tabs":[
-              {"title":"ETF","symbols":[
-                {"s":"XETR:VWCE","d":"Vanguard All-World"},
-                {"s":"EURONEXT:IWDA","d":"iShares MSCI World"},
-                {"s":"XETR:SXR8","d":"iShares S&P 500"},
-                {"s":"XETR:VVSM","d":"VanEck Semiconductor"},
-                {"s":"EURONEXT:WTAI","d":"WisdomTree AI"},
-                {"s":"LSE:ISPY","d":"L&G Cyber Security"}
-              ]},
-              {"title":"Indices","symbols":[
-                {"s":"FOREXCOM:SPXUSD","d":"S&P 500"},
-                {"s":"NASDAQ:NDX","d":"Nasdaq 100"},
-                {"s":"XETR:DAX","d":"DAX"},
-                {"s":"TVC:NI225","d":"Nikkei 225"}
-              ]},
-              {"title":"Actions","symbols":[
-                {"s":"NASDAQ:NVDA","d":"NVIDIA"},
-                {"s":"NASDAQ:AAPL","d":"Apple"},
-                {"s":"NASDAQ:MSFT","d":"Microsoft"},
-                {"s":"NASDAQ:AMZN","d":"Amazon"},
-                {"s":"NASDAQ:GOOGL","d":"Alphabet"},
-                {"s":"NASDAQ:TSLA","d":"Tesla"}
-              ]}
-            ]
-          }
-          </script>
-        </div>
+  <section class="section" id="heatmap">
+    <div class="section-head"><h2>QUI FAIT BOUGER LE MARCHÉ ?</h2><small>S&P 500 par secteur</small></div>
+    <div class="widget-shell" style="height:560px">
+      <div class="tradingview-widget-container" style="height:100%;width:100%">
+        <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+        {
+          "exchanges":[],"dataSource":"SPX500","grouping":"sector","blockSize":"market_cap_basic","blockColor":"change",
+          "locale":"fr","symbolUrl":"","colorTheme":"dark","hasTopBar":false,"isDataSetEnabled":false,
+          "isZoomEnabled":true,"hasSymbolTooltip":true,"isMonoSize":false,"width":"100%","height":"100%"
+        }
+        </script>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section">
-      <div class="two">
-        <div>
-          <div class="section-head"><h2>ACTUALITÉ MARCHÉ</h2><small>Flux automatique</small></div>
-          <div class="widget-shell">
-            <div class="tradingview-widget-container">
-              <div class="tradingview-widget-container__widget"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
-              {
-                "feedMode":"market",
-                "market":"stock",
-                "isTransparent":true,
-                "displayMode":"adaptive",
-                "width":"100%",
-                "height":"520",
-                "colorTheme":"dark",
-                "locale":"fr"
-              }
-              </script>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="section-head"><h2>MOUVEMENTS</h2><small>USA</small></div>
-          <div class="widget-shell">
-            <div class="tradingview-widget-container">
-              <div class="tradingview-widget-container__widget"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>
-              {
-                "colorTheme":"dark",
-                "dateRange":"12M",
-                "exchange":"US",
-                "showChart":true,
-                "locale":"fr",
-                "isTransparent":true,
-                "showSymbolLogo":false,
-                "showFloatingTooltip":false,
-                "width":"100%",
-                "height":"520"
-              }
-              </script>
-            </div>
-          </div>
-        </div>
+  <section class="section" id="decision">
+    <div class="section-head"><h2>CHECKLIST AVANT D'INVESTIR</h2><small id="decisionText">0 / 6 vérifications</small></div>
+    <div class="checklist">
+      <label class="check"><input type="checkbox" class="decision-check"><div><b>1. Je connais le rôle de cet actif.</b><span>Core, tilt ou satellite — pas seulement “ça monte”.</span></div></label>
+      <label class="check"><input type="checkbox" class="decision-check"><div><b>2. J'ai vérifié les frais et la structure.</b><span>TER/OCF, physique ou synthétique, accumulation/distribution, domicile, UCITS.</span></div></label>
+      <label class="check"><input type="checkbox" class="decision-check"><div><b>3. J'ai vérifié le chevauchement.</b><span>Je sais si je rachète indirectement les mêmes grandes positions.</span></div></label>
+      <label class="check"><input type="checkbox" class="decision-check"><div><b>4. Le risque correspond à mon horizon.</b><span>Une thématique peut perdre beaucoup plus qu'un ETF monde.</span></div></label>
+      <label class="check"><input type="checkbox" class="decision-check"><div><b>5. J'ai regardé le contexte macro.</b><span>VIX, taux, dollar et gros événement économique imminent.</span></div></label>
+      <label class="check"><input type="checkbox" class="decision-check"><div><b>6. Je peux expliquer en une phrase pourquoi j'achète.</b><span>Si la réponse est seulement FOMO ou performance récente, la décision n'est pas prête.</span></div></label>
+    </div>
+    <div class="score"><div><b>Decision Gate</b><div class="meta" id="gateMsg">Checklist incomplète — observe avant d'agir.</div></div><strong id="score">0/6</strong></div>
+  </section>
+
+  <section class="section" id="belgium">
+    <div class="section-head"><h2>LENTILLE INVESTISSEUR BELGE</h2><small>À vérifier avant achat</small></div>
+    <div class="belgium">
+      <div class="card"><div class="tag">PRODUIT</div><div class="fund"><b>UCITS + KID</b><br><span class="meta">Vérifie que le produit est accessible à un investisseur européen et lis le KID avant achat.</span></div></div>
+      <div class="card"><div class="tag">FISCALITÉ</div><div class="fund"><b>TOB / traitement fiscal</b><br><span class="meta">Le traitement dépend du produit, du broker et des règles belges en vigueur. Vérifie le montant appliqué avant exécution.</span></div></div>
+      <div class="card"><div class="tag">COTATION</div><div class="fund"><b>ISIN avant ticker</b><br><span class="meta">Le même ETF peut avoir plusieurs tickers et devises. Identifie d'abord l'ISIN, puis la place de cotation et le spread.</span></div></div>
+      <div class="card"><div class="tag">COÛT RÉEL</div><div class="fund"><b>TER ≠ coût total</b><br><span class="meta">Ajoute spread, courtage, change éventuel et taxes au coût annuel du fonds.</span></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>ACTUALITÉ MARCHÉ</h2><small>Flux automatique</small></div>
+    <div class="widget-shell">
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+        {
+          "feedMode":"market","market":"stock","isTransparent":true,"displayMode":"adaptive",
+          "width":"100%","height":520,"colorTheme":"dark","locale":"fr"
+        }
+        </script>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section">
-      <div class="section-head"><h2>ACCÈS RAPIDE</h2><small>Ce qui compte</small></div>
-      <div class="quick">
-        <a href="https://www.tradingview.com/markets/stocks-usa/market-movers-large-cap/" target="_blank" rel="noopener"><b>Actions US</b><span>Leaders & mouvements</span></a>
-        <a href="https://www.tradingview.com/markets/etfs/" target="_blank" rel="noopener"><b>ETF</b><span>Vue globale</span></a>
-        <a href="https://www.tradingview.com/markets/cryptocurrencies/" target="_blank" rel="noopener"><b>Crypto</b><span>Bitcoin & marché</span></a>
-        <a href="https://www.tradingview.com/markets/currencies/" target="_blank" rel="noopener"><b>Devises</b><span>EUR/USD & FX</span></a>
-      </div>
-    </section>
+  <section class="section">
+    <div class="section-head"><h2>OUTILS</h2><small>Approfondir seulement si nécessaire</small></div>
+    <div class="quick">
+      <a href="https://www.tradingview.com/heatmap/etf/" target="_blank" rel="noopener"><b>ETF Heatmap</b><span>Performance, AUM, volatilité</span></a>
+      <a href="https://www.tradingview.com/markets/stocks-usa/market-movers-large-cap/" target="_blank" rel="noopener"><b>Actions US</b><span>Leaders & mouvements</span></a>
+      <a href="https://www.tradingview.com/economic-calendar/" target="_blank" rel="noopener"><b>Macro</b><span>Calendrier complet</span></a>
+      <a href="https://www.tradingview.com/markets/etfs/" target="_blank" rel="noopener"><b>Screener ETF</b><span>Comparer avant d'acheter</span></a>
+    </div>
+  </section>
 
-    <footer>
-      ARGUS MARKET · Dashboard personnel · Les données proviennent de widgets de marché externes et peuvent être différées selon la place boursière. Informations générales uniquement, pas un conseil financier.
-    </footer>
-  </div>
+  <footer>
+    ARGUS MARKET · Investment Cockpit. Données de marché fournies par widgets externes et pouvant être différées. Les frais affichés sont des repères vérifiés en septembre 2026 et peuvent évoluer : toujours confirmer auprès de l'émetteur/KID et de votre broker. La checklist est un outil de discipline, pas une recommandation personnalisée d'achat ou de vente. *Nombre de positions SXR8 selon données iShares consultées début septembre 2026.
+  </footer>
+</div>
+
+<script>
+  const clock = document.getElementById('clock');
+  const fmt = new Intl.DateTimeFormat('fr-BE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  clock.textContent = fmt.format(new Date());
+
+  const checks = [...document.querySelectorAll('.decision-check')];
+  const score = document.getElementById('score');
+  const text = document.getElementById('decisionText');
+  const gate = document.getElementById('gateMsg');
+  function updateGate(){
+    const n = checks.filter(c=>c.checked).length;
+    score.textContent = n + '/6';
+    text.textContent = n + ' / 6 vérifications';
+    if(n <= 2) gate.textContent = "Checklist incomplète — observe avant d'agir.";
+    else if(n <= 4) gate.textContent = "Décision partiellement préparée — vérifie les points restants.";
+    else if(n === 5) gate.textContent = "Presque prêt — un point reste à clarifier.";
+    else gate.textContent = "Checklist complète — la décision est structurée, pas garantie.";
+  }
+  checks.forEach(c=>c.addEventListener('change',updateGate));
+</script>
 </body>
 </html>
