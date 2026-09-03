@@ -98,6 +98,79 @@
     </div>
   </section>
 
+
+  <section class="section" id="intelligence">
+    <div class="section-head"><h2>ARGUS INTELLIGENCE CORE</h2><span>SHADOW · EVIDENCE FIRST</span></div>
+    <div class="grid2">
+      <article class="panel card">
+        <div class="label">BULL vs BEAR</div>
+        <h3 id="debateAsset">No candidate</h3>
+        <div class="debate-grid">
+          <div class="case bull"><b>BULL CASE</b><ul id="bullCase"><li>Waiting for verified evidence.</li></ul></div>
+          <div class="case bear"><b>BEAR CASE</b><ul id="bearCase"><li>Waiting for verified evidence.</li></ul></div>
+        </div>
+        <div class="verdict"><span>ARGUS VERDICT</span><b id="debateVerdict">WAIT</b></div>
+      </article>
+
+      <article class="panel card">
+        <div class="label risk">INDEPENDENT RISK GOVERNOR</div>
+        <h3 id="governorState">WAIT / CASH</h3>
+        <p id="governorReal">REAL EXECUTION: BLOCKED</p>
+        <ul id="governorReasons" class="compact-list"><li>Waiting for the verified data gate.</li></ul>
+        <div class="notice" style="margin-top:10px"><strong>Rule:</strong> the Risk Governor may block a paper allocation even when another ARGUS module likes an asset.</div>
+      </article>
+    </div>
+
+    <div class="grid2" style="margin-top:10px">
+      <article class="panel card">
+        <div class="label">BULL / BASE / BEAR SCENARIOS</div>
+        <div class="scenario-prob-grid">
+          <div><span>BULL</span><b id="scenarioBull">—</b></div>
+          <div><span>BASE</span><b id="scenarioBase">—</b></div>
+          <div><span>BEAR</span><b id="scenarioBear">—</b></div>
+        </div>
+        <p id="scenarioLabel">MODELLED SCENARIO WEIGHTS</p>
+        <p class="raw">These are regime-sensitive scenario weights, not promises of return. They are suppressed when the verified global state is unavailable.</p>
+      </article>
+
+      <article class="panel card">
+        <div class="label">DECISION PACKET</div>
+        <div id="decisionPacket" class="health"></div>
+        <p style="margin-top:10px">The simple screen shows the decision. PRO mode exposes the evidence, disagreement and governance behind it.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="virtual">
+    <div class="section-head"><h2>VIRTUAL MONEY LAB</h2><span>€100K PAPER PORTFOLIO · NO REAL ORDERS</span></div>
+    <div class="panel" style="padding:14px">
+      <div class="virtual-head">
+        <div>
+          <div class="label">ARGUS SHADOW PORTFOLIO</div>
+          <h3>Test decisions with virtual money before trusting them.</h3>
+          <p>ARGUS can allocate only when verified data passes the Risk Governor. Otherwise virtual capital stays in cash.</p>
+        </div>
+        <span class="paper-badge">PAPER ONLY</span>
+      </div>
+
+      <div class="form-grid virtual-controls">
+        <div class="field"><label>VIRTUAL CAPITAL €</label><input id="vCap" type="number" value="100000" min="1000" step="1000"></div>
+        <div class="field"><label>PROFILE</label><select id="vProfile"><option value="conservative">Conservative</option><option value="moderate" selected>Moderate</option><option value="growth">Growth</option></select></div>
+        <div class="toolbar virtual-actions"><button class="btn primary" id="buildVirtual">BUILD / REBALANCE PAPER PORTFOLIO</button><button class="btn" id="resetVirtual">RESET</button></div>
+      </div>
+
+      <div class="health virtual-metrics">
+        <div class="mini"><span>VIRTUAL VALUE</span><b id="virtualValue">—</b></div>
+        <div class="mini"><span>CASH</span><b id="virtualCash">—</b></div>
+        <div class="mini"><span>ARGUS P/L</span><b id="virtualPnl">—</b></div>
+        <div class="mini"><span>GLOBAL BENCHMARK</span><b id="virtualBenchmark">—</b></div>
+      </div>
+
+      <div id="virtualHoldings" class="virtual-list"><div class="empty">No virtual portfolio yet.</div></div>
+      <div class="raw notice" style="margin-top:10px"><strong>Audit rule:</strong> entry proxy price, score, signal, timestamp and benchmark are frozen when the virtual portfolio is created. Later values are marked from the newest verified proxy snapshot.</div>
+    </div>
+  </section>
+
   <section class="section" id="simulator">
     <div class="section-head"><h2>INVESTMENT SIMULATOR</h2><span>SCENARIO · NOT FORECAST</span></div>
     <div class="panel" style="padding:14px">
@@ -198,8 +271,9 @@
   <a href="#markets"><b>↗</b>MARKETS</a>
   <a href="#etf"><b>◫</b>ETF</a>
   <a href="#simulator"><b>∑</b>SIM</a>
-  <a href="#portfolio"><b>◉</b>PORTFOLIO</a>
+  <a href="#virtual"><b>◉</b>VIRTUAL</a>
 </nav>
+<script src="capital/intelligence-lab.js" defer></script>
 <script src="capital/app.js" defer></script>
 </body>
 </html>
