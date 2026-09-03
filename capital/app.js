@@ -154,11 +154,97 @@ function runGuide(){
   const root=$('#guideAllocation');
   if(root) root.innerHTML=blueprint.map(([pct,name,example,w,why])=>'<div class="guide-row"><div class="guide-pct">'+pct+'</div><div><b>'+esc(name)+'</b><span>'+esc(example)+'</span><p>'+esc(why)+'</p></div><strong>'+fmtEur(cap*w)+'</strong></div>').join('');
 }
+function renderSimpleAdvice(){
+  const root=$('#advicePlan');
+  if(!root) return;
+  const cap=Math.max(1000,Number($('#adviceCap')?.value)||10000);
+  const coverage=Number(DATA?.data_quality?.coverage_pct||0);
+  const rawGlobal=DATA?.global_market?.score;
+  const rawEurope=DATA?.scores?.europe?.score;
+  const rawSemis=DATA?.scores?.semis?.score;
+  const globalScore=rawGlobal==null?null:Number(rawGlobal);
+  const europeScore=rawEurope==null?null:Number(rawEurope);
+  const semisScore=rawSemis==null?null:Number(rawSemis);
+  const best=DATA?.today?.best_opportunity||{};
+  const products={
+    core:(CONFIG?.etfs||[]).find(x=>x.id==='vwce'),
+    bonds:(CONFIG?.etfs||[]).find(x=>x.id==='aggh'),
+    gold:(CONFIG?.etfs||[]).find(x=>x.id==='sgln')
+  };
+
+  let action='ASPETTA';
+  let subtitle='Prima controllo che i dati siano abbastanza buoni.';
+  let weights={core:0,bonds:0,gold:0,cash:100};
+  if(coverage>=70 && Number.isFinite(globalScore)){
+    if(globalScore>=72){
+      action='INVESTI GRADUALMENTE';
+      subtitle='I dati sono abbastanza buoni, ma non serve investire tutto in un solo giorno.';
+      weights={core:60,bonds:15,gold:10,cash:15};
+    }else if(globalScore>=58){
+      action='INVESTI UNA PARTE, NON TUTTO';
+      subtitle='Il mercato è discreto, ma ARGUS non vede un segnale abbastanza forte per entrare con tutto.';
+      weights={core:40,bonds:15,gold:10,cash:35};
+    }else{
+      action='INVESTI POCO E TIENI MOLTA LIQUIDITÀ';
+      subtitle='Il mercato non è abbastanza forte: meglio essere prudenti.';
+      weights={core:20,bonds:15,gold:10,cash:55};
+    }
+  }
+
+  setText('#adviceAction',action);
+  setText('#adviceSubtitle',subtitle);
+
+  const rows=[
+    {key:'core',name:'ETF GLOBALE',product:products.core?.ticker||'VWCE',verb:weights.core?'COMPRA A PICCOLI PASSI':'NON COMPRARE ORA',why:'È la base: tante aziende e tanti Paesi in un solo strumento.'},
+    {key:'bonds',name:'OBBLIGAZIONI',product:products.bonds?.ticker||'AGGH',verb:weights.bonds?'AGGIUNGI DIFESA':'ASPETTA',why:'Servono a non dipendere solo dalle azioni.'},
+    {key:'gold',name:'ORO',product:products.gold?.ticker||'SGLN',verb:weights.gold?'PICCOLA QUOTA':'ASPETTA',why:'È una cintura di sicurezza, non il motore principale.'},
+    {key:'cash',name:'LIQUIDITÀ',product:'EUR',verb:'TIENI DA PARTE',why:'Ti lascia soldi pronti se arrivano prezzi migliori.'}
+  ];
+  root.innerHTML=rows.map(r=>{
+    const pct=weights[r.key]||0, amount=cap*pct/100;
+    return '<div class="advice-row"><div class="advice-pct">'+pct+'%</div><div class="advice-copy"><b>'+esc(r.name)+' · '+esc(r.product)+'</b><span>'+esc(r.verb)+'</span><p>'+esc(r.why)+'</p></div><strong>'+fmtEur(amount)+'</strong></div>';
+  }).join('');
+
+  let why='ARGUS preferisce un portafoglio semplice e diversificato.';
+  if(Number.isFinite(europeScore) && europeScore>=72){
+    why='Oggi le azioni europee sono la zona più interessante ('+europeScore+'/100), ma la base resta globale: niente scommesse su un solo Paese.';
+  }else if(best.asset){
+    why='La migliore opportunità rilevata è '+translateSentence(it(best.asset))+', ma il portafoglio resta diviso per ridurre il rischio.';
+  }
+  setText('#adviceWhy',why);
+
+  let avoid='Non investire tutto in una volta e non comprare cinque ETF che contengono quasi le stesse aziende.';
+  if(Number.isFinite(semisScore) && semisScore<72){
+    avoid='Non inseguirei semiconduttori e temi AI adesso: score '+semisScore+'/100. Prima viene il core.';
+  }
+  setText('#adviceAvoid',avoid);
+}
+
+function renderAIPortfolios(){
+  const root=$('#aiPortfolioGrid');
+  if(!root) return;
+  const items=CONFIG?.ai_portfolios||[];
+  root.innerHTML=items.map(p=>{
+    const verified=!!p.verified;
+    const stats=verified
+      ? '<div class="ai-stats"><div><span>DA INIZIO</span><b>'+fmtPct(p.since_inception_net_pct)+'</b></div><div><span>PEGGIOR CALO</span><b>'+fmtPct(p.max_drawdown_pct)+'</b></div><div><span>VOLATILITÀ</span><b>'+Number(p.annualized_volatility_pct).toFixed(1)+'%</b></div><div><span>GIORNI LIVE</span><b>'+esc(p.days_live)+'</b></div></div>'
+      : '<div class="ai-no-data">NESSUN TRACK RECORD LIVE VERIFICATO COLLEGATO</div>';
+    const holdings=verified && (p.top_holdings||[]).length
+      ? '<div class="ai-holdings"><span>POSIZIONI PIÙ GRANDI</span>'+p.top_holdings.slice(0,5).map(h=>'<b>'+esc(h.ticker)+' '+Number(h.weight_pct).toFixed(1)+'%</b>').join('')+'</div>'
+      : '';
+    const source=verified && p.source_url
+      ? '<a class="ai-source" href="'+esc(p.source_url)+'" target="_blank" rel="noopener">VEDI FONTE PUBBLICA ↗</a>'
+      : '<span class="ai-source muted">ARGUS NON INVENTA NUMERI</span>';
+    return '<article class="ai-card '+(verified?'verified':'pending')+'"><div class="ai-card-top"><div><span class="badge '+(verified?'good':'watch')+'">'+esc(p.status)+'</span><h3>'+esc(p.name)+'</h3><p>'+esc(p.model)+' · '+esc(p.company)+'</p></div><div class="ai-mark">'+esc((p.model||'AI').slice(0,2).toUpperCase())+'</div></div>'+stats+holdings+'<div class="child-explain"><b>In parole semplici</b><p>'+esc(p.simple_take_it||'')+'</p></div><div class="ai-foot"><span>'+esc(p.data_as_of?'Dati '+p.data_as_of:(p.maturity_it||'In ricerca'))+'</span>'+source+'</div></article>';
+  }).join('')||'<div class="empty">Nessun portafoglio AI verificato collegato.</div>';
+}
+
 function renderSources(){
   const src=DATA.sources||{};
   const sourceNames={market:'MERCATI',macro:'MACRO',etf_metadata:'METADATI ETF'};
   const sourceDesc={
     'Stooq daily market data (proxy instruments)':'Stooq — dati giornalieri di mercato tramite strumenti proxy',
+    'Stooq daily market data with Yahoo Finance chart fallback (proxy instruments)':'Stooq + Yahoo Finance — dati giornalieri di mercato tramite strumenti proxy',
     'FRED public CSV series; underlying source varies by series':'FRED — serie pubbliche; la fonte sottostante varia per serie',
     'Issuer pages / verified static config':'Siti ufficiali degli emittenti / configurazione verificata'
   };
@@ -207,7 +293,7 @@ async function boot(){
       loadJSON('capital/config.json'),
       loadJSON('capital/data/track-record.json').catch(()=>null)
     ]);
-    renderTop();renderRanking();renderIdeas();renderPulse();renderETF();renderInvestments();renderSources();renderPortfolio();runSim();
+    renderSimpleAdvice();renderTop();renderRanking();renderIdeas();renderPulse();renderETF();renderInvestments();renderAIPortfolios();renderSources();renderPortfolio();runSim();
     window.ARGUS_CAPITAL_LAB?.render({data:DATA,config:CONFIG,track:TRACK});
     setText('#lastUpdate',new Date(DATA.generated_at).toLocaleString('it-IT'));
   }catch(e){
@@ -221,5 +307,6 @@ async function boot(){
 $('#runSim').onclick=runSim;
 $('#addHolding').onclick=addHolding;
 $('#guideCap')?.addEventListener('input',runGuide);
+$('#adviceCap')?.addEventListener('input',renderSimpleAdvice);
 $$('.mode button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 boot();
