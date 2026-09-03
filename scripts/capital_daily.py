@@ -345,7 +345,16 @@ for k,meta in FRED.items():
 
 scores={}
 for k,meta in ASSETS.items():
-    scores[k]=score_asset(market.get(k,{}),meta["asset_class"],macro)
+    if meta["asset_class"] == "STOCK":
+        scores[k] = {
+            "score": None,
+            "status": "DATA INSUFFICIENT",
+            "evidence": "Weak",
+            "coverage": 0,
+            "note": "No stock recommendation: verified fundamentals, valuation and earnings-revision feeds are not connected yet. Price/momentum data is shown for context only."
+        }
+    else:
+        scores[k]=score_asset(market.get(k,{}),meta["asset_class"],macro)
 
 # Cash EUR is scored from ECB deposit rate if available; no pretend market-price score.
 ecb=macro.get("ecb_deposit",{})
