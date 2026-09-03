@@ -37,7 +37,7 @@
       "role": "CORE_DEVELOPED",
       "role_it": "Core paesi sviluppati",
       "tier_it": "CORE",
-      "ter": 0.20,
+      "ter": 0.2,
       "income": "Ad accumulazione",
       "domicile": "Irlanda",
       "ucits": true,
@@ -81,7 +81,7 @@
       "role": "GROWTH_TILT",
       "role_it": "Crescita / tecnologia",
       "tier_it": "CRESCITA",
-      "ter": 0.20,
+      "ter": 0.2,
       "income": "Ad accumulazione",
       "domicile": "Irlanda",
       "ucits": true,
@@ -125,7 +125,7 @@
       "role": "THEMATIC",
       "role_it": "Intelligenza artificiale",
       "tier_it": "SATELLITE",
-      "ter": 0.40,
+      "ter": 0.4,
       "income": "Ad accumulazione",
       "domicile": "Irlanda",
       "ucits": true,
@@ -169,7 +169,7 @@
       "role": "BOND_CORE",
       "role_it": "Obbligazioni globali",
       "tier_it": "DIFESA",
-      "ter": 0.10,
+      "ter": 0.1,
       "income": "Ad accumulazione",
       "domicile": "Irlanda",
       "ucits": true,
@@ -249,16 +249,108 @@
       "risk_it": "Molto volatile e concentrato: quota piccola, non core.",
       "source_url": "https://hanetf.com/fr/fund/urnm-uranium-miners-etf/",
       "verified_on": "2026-09-04"
+    },
+    {
+      "id": "copx",
+      "name": "Global X Copper Miners UCITS ETF",
+      "ticker": "COPX",
+      "isin": "IE0003Z9E2Y3",
+      "kind": "ETF",
+      "role": "RESOURCE_THEMATIC",
+      "role_it": "Miniere di rame",
+      "tier_it": "SATELLITE",
+      "ter": 0.55,
+      "income": "Ad accumulazione",
+      "domicile": "Irlanda",
+      "ucits": true,
+      "benchmark": "Solactive Global Copper Miners v2 Index",
+      "replication": "Fisica completa",
+      "proxy_id": "copx",
+      "paper_eligible": false,
+      "why_it": "Espone ai produttori di rame, materiale chiave per reti elettriche, data center, veicoli e infrastrutture.",
+      "risk_it": "Ciclico e concentrato: dipende molto da prezzi delle materie prime e crescita mondiale.",
+      "source_url": "https://globalxetfs.eu/it/funds/copx",
+      "verified_on": "2026-09-04"
+    },
+    {
+      "id": "litu",
+      "name": "Global X Lithium & Battery Tech UCITS ETF",
+      "ticker": "LITU",
+      "isin": "IE00BLCHJN13",
+      "kind": "ETF",
+      "role": "RESOURCE_THEMATIC",
+      "role_it": "Litio e batterie",
+      "tier_it": "SATELLITE",
+      "ter": 0.6,
+      "income": "Ad accumulazione",
+      "domicile": "Irlanda",
+      "ucits": true,
+      "benchmark": "Solactive Global Lithium v2 Index",
+      "replication": "Fisica completa",
+      "proxy_id": "lit",
+      "paper_eligible": false,
+      "why_it": "Copre il ciclo del litio, dall'estrazione alle batterie.",
+      "risk_it": "Molto ciclico: domanda, offerta e prezzi del litio possono cambiare rapidamente.",
+      "source_url": "https://globalxetfs.eu/it/funds/litu",
+      "verified_on": "2026-09-04"
     }
   ],
   "stock_watchlist": [
-    {"ticker":"MSFT","name":"Microsoft","theme_it":"Cloud + AI + software","reason_it":"Qualità del business e ricavi ricorrenti.","status_it":"ATTESA DATI FONDAMENTALI"},
-    {"ticker":"NVDA","name":"NVIDIA","theme_it":"AI + semiconduttori","reason_it":"Leader dell'infrastruttura AI, ma valutazione e ciclo vanno controllati.","status_it":"ATTESA DATI FONDAMENTALI"},
-    {"ticker":"ASML","name":"ASML","theme_it":"Macchine per semiconduttori","reason_it":"Posizione strategica nella litografia avanzata.","status_it":"ATTESA DATI FONDAMENTALI"},
-    {"ticker":"TSM","name":"TSMC","theme_it":"Produzione chip","reason_it":"Nodo essenziale della catena globale dei semiconduttori.","status_it":"ATTESA DATI FONDAMENTALI"},
-    {"ticker":"GOOGL","name":"Alphabet","theme_it":"AI + ricerca + cloud","reason_it":"Ecosistema digitale molto forte e grandi investimenti AI.","status_it":"ATTESA DATI FONDAMENTALI"},
-    {"ticker":"AMZN","name":"Amazon","theme_it":"Cloud + e-commerce","reason_it":"AWS e infrastruttura digitale globale.","status_it":"ATTESA DATI FONDAMENTALI"},
-    {"ticker":"BRK.B","name":"Berkshire Hathaway","theme_it":"Qualità + diversificazione","reason_it":"Conglomerato diversificato e disciplina nell'allocazione del capitale.","status_it":"ATTESA DATI FONDAMENTALI"},
-    {"ticker":"V","name":"Visa","theme_it":"Pagamenti","reason_it":"Rete globale, margini elevati e crescita dei pagamenti digitali.","status_it":"ATTESA DATI FONDAMENTALI"}
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "theme_it": "Cloud + AI + software",
+      "reason_it": "Qualità del business e ricavi ricorrenti.",
+      "status_it": "ATTESA DATI FONDAMENTALI"
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "theme_it": "AI + semiconduttori",
+      "reason_it": "Leader dell'infrastruttura AI, ma valutazione e ciclo vanno controllati.",
+      "status_it": "ATTESA DATI FONDAMENTALI"
+    },
+    {
+      "ticker": "ASML",
+      "name": "ASML",
+      "theme_it": "Macchine per semiconduttori",
+      "reason_it": "Posizione strategica nella litografia avanzata.",
+      "status_it": "ATTESA DATI FONDAMENTALI"
+    },
+    {
+      "ticker": "TSM",
+      "name": "TSMC",
+      "theme_it": "Produzione chip",
+      "reason_it": "Nodo essenziale della catena globale dei semiconduttori.",
+      "status_it": "ATTESA DATI FONDAMENTALI"
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet",
+      "theme_it": "AI + ricerca + cloud",
+      "reason_it": "Ecosistema digitale molto forte e grandi investimenti AI.",
+      "status_it": "ATTESA DATI FONDAMENTALI"
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "theme_it": "Cloud + e-commerce",
+      "reason_it": "AWS e infrastruttura digitale globale.",
+      "status_it": "ATTESA DATI FONDAMENTALI"
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway",
+      "theme_it": "Qualità + diversificazione",
+      "reason_it": "Conglomerato diversificato e disciplina nell'allocazione del capitale.",
+      "status_it": "ATTESA DATI FONDAMENTALI"
+    },
+    {
+      "ticker": "V",
+      "name": "Visa",
+      "theme_it": "Pagamenti",
+      "reason_it": "Rete globale, margini elevati e crescita dei pagamenti digitali.",
+      "status_it": "ATTESA DATI FONDAMENTALI"
+    }
   ]
 }
