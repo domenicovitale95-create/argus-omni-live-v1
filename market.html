@@ -26,6 +26,29 @@
     </div>
   </header>
 
+  <section class="section simple-advice-section" id="advice">
+    <div class="section-head"><h2>CONSIGLIO INVESTIMENTI</h2><span>SEMPLICE · CHIARO · NIENTE PAROLE DIFFICILI</span></div>
+    <div class="panel simple-advice">
+      <div class="simple-advice-head">
+        <div>
+          <div class="label">SE VOGLIO INVESTIRE €</div>
+          <input id="adviceCap" class="advice-cap" type="number" value="10000" min="1000" step="1000">
+        </div>
+        <div class="advice-answer">
+          <span>ARGUS OGGI DICE</span>
+          <b id="adviceAction">ASPETTA</b>
+          <p id="adviceSubtitle">Sto leggendo i dati...</p>
+        </div>
+      </div>
+      <div id="advicePlan" class="advice-plan"></div>
+      <div class="advice-simple-box">
+        <div><span>PERCHÉ?</span><b id="adviceWhy">—</b></div>
+        <div><span>COSA NON FAREI?</span><b id="adviceAvoid">—</b></div>
+      </div>
+      <div class="notice advice-disclaimer"><strong>Importante:</strong> è un esempio educativo per un profilo moderato, non una consulenza personale. ARGUS preferisce dire “aspetta” piuttosto che inventare una buona occasione.</div>
+    </div>
+  </section>
+
   <section class="first-screen" id="home">
     <article class="panel market-card">
       <div class="market-top">
@@ -112,6 +135,20 @@
     <div class="section-head invest-subhead"><h2>AZIONI CHE ARGUS DEVE STUDIARE MOLTO BENE</h2><span>NESSUN ACQUISTO FINCHÉ MANCANO FONDAMENTALI VERIFICATI</span></div>
     <div id="stockWatchlist" class="stock-watch-grid"></div>
     <div class="notice" style="margin-top:10px"><strong>Regola azioni:</strong> prezzo e momentum non bastano. Prima di trasformare una società in ACQUISTO, ARGUS deve avere fondamentali, valutazione, utili, revisioni degli analisti e rischi verificati.</div>
+  </section>
+
+  <section class="section" id="ai-portfolios">
+    <div class="section-head"><h2>PORTAFOGLI AI NEL MONDO</h2><span>CLAUDE · GPT · DEEPSEEK · GEMINI · GROK</span></div>
+    <div class="panel ai-intro">
+      <div>
+        <div class="label">AI ARENA</div>
+        <h3>Guardiamo cosa fanno gli altri. Non copiamo nessuno alla cieca.</h3>
+        <p>ARGUS mostra solo risultati pubblici che riesce a verificare. Se un portafoglio non ha un record live affidabile, resta segnato come “DA VERIFICARE”.</p>
+      </div>
+      <div class="ai-rule">DATI VERI &gt; MARKETING</div>
+    </div>
+    <div id="aiPortfolioGrid" class="ai-portfolio-grid"></div>
+    <div class="notice" style="margin-top:10px"><strong>Regola ARGUS:</strong> un rendimento alto in pochi mesi non significa “migliore al mondo”. Contano anche perdite massime, concentrazione, durata dello storico e ripetibilità.</div>
   </section>
 
   <section class="section" id="markets">
@@ -303,9 +340,9 @@
 
 <nav class="bottom-nav">
   <a href="#home"><b>⌂</b>HOME</a>
-  <a href="#today"><b>◎</b>OGGI</a>
+  <a href="#advice"><b>✓</b>CONSIGLIO</a>
   <a href="#my-investments"><b>★</b>I MIEI</a>
-  <a href="#etf"><b>◫</b>ETF</a>
+  <a href="#ai-portfolios"><b>AI</b>PORTFOLI</a>
   <a href="#simulator"><b>∑</b>SIMULA</a>
   <a href="#virtual"><b>◉</b>VIRTUALE</a>
 </nav>
