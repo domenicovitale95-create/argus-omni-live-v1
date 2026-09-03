@@ -24,7 +24,7 @@ const LABEL_IT={
   'US 2Y Treasury Yield':'Rendimento Treasury USA 2 anni','Broad US Dollar Index':'Indice ampio del dollaro USA',
   'ECB Deposit Facility Rate':'Tasso sui depositi BCE','Bitcoin / USD':'Bitcoin / USD'
 };
-function it(v){return STATUS_IT[v]||LABEL_IT[v]||v??'—'}
+function it(v){return STATUS_IT[v]||LABEL_IT[v]||(v??'—')}
 function translateSentence(v){
   let s=String(v??'');
   const exact={
