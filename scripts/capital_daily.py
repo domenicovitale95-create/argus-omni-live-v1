@@ -2,7 +2,7 @@
 """
 ARGUS CAPITAL daily data engine.
 No API keys. Public sources only.
-- Market proxies: Stooq daily CSV
+- Market proxies: Stooq daily CSV with Yahoo Finance chart fallback
 - Macro: FRED CSV (official Federal Reserve Bank of St. Louis distribution)
 The engine never fabricates missing numbers: failed series become DATA_UNAVAILABLE or stale fallback.
 """
@@ -23,7 +23,7 @@ CONFIG = ROOT / "capital" / "config.json"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 HIST_DIR.mkdir(parents=True, exist_ok=True)
 
-UA = "ARGUS-CAPITAL/1.0 (+https://github.com/domenicovitale95-create/argus-omni-live-v1)"
+UA = "Mozilla/5.0 (compatible; ARGUS-CAPITAL/1.1; +https://github.com/domenicovitale95-create/argus-omni-live-v1)"
 NOW = datetime.now(timezone.utc)
 TODAY = NOW.date().isoformat()
 
@@ -40,6 +40,20 @@ ASSETS = {
     "cash_proxy": {"label":"US T-Bills","symbol":"bil.us","asset_class":"CASH","region":"USA"},
     "quality_stock": {"label":"Microsoft","symbol":"msft.us","asset_class":"STOCK","region":"USA"},
     "nvidia": {"label":"NVIDIA","symbol":"nvda.us","asset_class":"STOCK","region":"USA"}
+}
+YAHOO_SYMBOLS = {
+    "global_equity":"ACWI",
+    "sp500":"SPY",
+    "nasdaq":"QQQ",
+    "europe":"VGK",
+    "emerging":"EEM",
+    "semis":"SMH",
+    "gold":"GLD",
+    "treasuries":"IEF",
+    "corp_bonds":"LQD",
+    "cash_proxy":"BIL",
+    "quality_stock":"MSFT",
+    "nvidia":"NVDA"
 }
 FRED = {
     "us10y": {"series":"DGS10","label":"US 10Y Treasury Yield","unit":"%","asset_class":"RATE"},
@@ -71,6 +85,50 @@ def fetch_stooq(symbol):
     if len(rows) < 60:
         raise ValueError(f"insufficient history for {symbol}: {len(rows)}")
     return rows, url
+
+def fetch_yahoo(symbol):
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{quote(symbol)}?range=10y&interval=1d&events=history&includeAdjustedClose=true"
+    payload = json.loads(fetch(url))
+    result = (((payload or {}).get("chart") or {}).get("result") or [])
+    if not result:
+        err = ((payload or {}).get("chart") or {}).get("error")
+        raise ValueError(f"Yahoo chart unavailable for {symbol}: {err}")
+    node = result[0]
+    timestamps = node.get("timestamp") or []
+    quote_nodes = (((node.get("indicators") or {}).get("quote")) or [])
+    closes = quote_nodes[0].get("close") if quote_nodes else []
+    rows = []
+    for ts, close in zip(timestamps, closes or []):
+        try:
+            if close is None:
+                continue
+            v = float(close)
+            if not math.isfinite(v) or v <= 0:
+                continue
+            d = datetime.fromtimestamp(int(ts), tz=timezone.utc).date()
+            rows.append((d, v))
+        except Exception:
+            continue
+    rows.sort(key=lambda x:x[0])
+    if len(rows) < 60:
+        raise ValueError(f"insufficient Yahoo history for {symbol}: {len(rows)}")
+    return rows, url
+
+def fetch_market_rows(asset_id, meta):
+    provider_errors = []
+    try:
+        rows, url = fetch_stooq(meta["symbol"])
+        return rows, url, "STOOQ"
+    except Exception as e:
+        provider_errors.append(f"Stooq: {e}")
+    yahoo_symbol = YAHOO_SYMBOLS.get(asset_id)
+    if yahoo_symbol:
+        try:
+            rows, url = fetch_yahoo(yahoo_symbol)
+            return rows, url, "YAHOO"
+        except Exception as e:
+            provider_errors.append(f"Yahoo: {e}")
+    raise ValueError(" | ".join(provider_errors) or f"no market provider configured for {asset_id}")
 
 def fetch_fred(series):
     url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={quote(series)}"
@@ -316,8 +374,8 @@ errors=[]
 
 for k,meta in ASSETS.items():
     try:
-        rows,url=fetch_stooq(meta["symbol"])
-        market[k]={**summarize(rows,url),"label":meta["label"],"asset_class":meta["asset_class"],"proxy_symbol":meta["symbol"],"data_type":"OBSERVED_PROXY"}
+        rows,url,provider=fetch_market_rows(k,meta)
+        market[k]={**summarize(rows,url),"label":meta["label"],"asset_class":meta["asset_class"],"proxy_symbol":meta["symbol"],"provider":provider,"data_type":"OBSERVED_PROXY"}
         histories[k]=monthly_points(rows)
     except Exception as e:
         old=previous.get("market",{}).get(k)
@@ -421,7 +479,7 @@ payload={
     "market":market,
     "macro":macro,
     "scores":scores,
-    "sources":{"market":"Stooq daily market data (proxy instruments)","macro":"FRED public CSV series; underlying source varies by series","etf_metadata":"Issuer pages / verified static config"},
+    "sources":{"market":"Stooq daily market data with Yahoo Finance chart fallback (proxy instruments)","macro":"FRED public CSV series; underlying source varies by series","etf_metadata":"Issuer pages / verified static config"},
     "states":{"prices":"OBSERVED_PROXY","macro":"OBSERVED","scores":"MODELLED","simulations":"SCENARIO"}
 }
 
