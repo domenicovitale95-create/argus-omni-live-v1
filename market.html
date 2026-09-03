@@ -1,277 +1,313 @@
 <!doctype html>
-<html lang="fr">
+<html lang="it">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07090d">
-<title>ARGUS CAPITAL — Investment Intelligence</title>
-<meta name="description" content="ARGUS CAPITAL — verified market intelligence, investment signals, ETF intelligence, portfolio and simulation.">
+<title>ARGUS CAPITAL — Intelligenza per gli investimenti</title>
+<meta name="description" content="ARGUS CAPITAL — mercati verificati, idee di investimento, ETF, azioni, metalli, portafoglio virtuale e simulazioni.">
 <link rel="stylesheet" href="capital/styles.css">
 </head>
 <body>
 <div class="app">
   <div class="topbar">
-    <div class="brand"><div class="brand-mark">A</div><div class="brand-copy"><b>ARGUS CAPITAL</b><span>UNDERSTAND THE WORLD. INVEST WITH CLARITY.</span></div></div>
-    <div class="mode"><button class="active" data-mode="simple">SIMPLE</button><button data-mode="pro">PRO</button></div>
+    <div class="brand"><div class="brand-mark">A</div><div class="brand-copy"><b>ARGUS CAPITAL</b><span>CAPIRE IL MONDO. INVESTIRE CON CHIAREZZA.</span></div></div>
+    <div class="mode"><button class="active" data-mode="simple">SEMPLICE</button><button data-mode="pro">PRO</button></div>
   </div>
 
   <header class="hero">
-    <div class="hero-kicker">GLOBAL INVESTMENT INTELLIGENCE</div>
-    <h1>Complex data.<br>Simple decisions.</h1>
-    <p>Le moteur analyse marchés, risque et alternatives. S’il n’y a pas d’avantage clair, ARGUS doit pouvoir dire <b>WAIT</b>.</p>
+    <div class="hero-kicker">INTELLIGENZA GLOBALE PER GLI INVESTIMENTI</div>
+    <h1>Dati complessi.<br>Decisioni semplici.</h1>
+    <p>ARGUS analizza mercati, rischio e alternative. Se non vede un vantaggio chiaro, deve poter dire <b>ASPETTA</b>.</p>
     <div class="live-row">
-      <span class="chip"><span class="dot"></span>Data engine active</span>
-      <span class="chip">Dernière mise à jour · <strong id="lastUpdate">—</strong></span>
-      <span class="chip">Belgium / EUR mode</span>
+      <span class="chip"><span class="dot"></span>Motore dati attivo</span>
+      <span class="chip">Ultimo aggiornamento · <strong id="lastUpdate">—</strong></span>
+      <span class="chip">Belgio · EUR · Italiano</span>
     </div>
   </header>
 
   <section class="first-screen" id="home">
     <article class="panel market-card">
       <div class="market-top">
-        <div><div class="label">GLOBAL MARKET STATUS</div><div id="marketStatus" class="status-word">DATA UNAVAILABLE</div></div>
+        <div><div class="label">STATO GLOBALE DEI MERCATI</div><div id="marketStatus" class="status-word">DATI NON DISPONIBILI</div></div>
         <div id="scoreRing" class="score-ring"><span id="marketScore">—</span></div>
       </div>
       <div class="meta-grid">
         <div class="mini"><span>TREND</span><b id="marketTrend">—</b></div>
         <div class="mini"><span>REGIME</span><b id="marketRegime">—</b></div>
-        <div class="mini"><span>EVIDENCE</span><b id="dataQuality">—</b></div>
+        <div class="mini"><span>EVIDENZA</span><b id="dataQuality">—</b></div>
       </div>
       <div class="raw" style="margin-top:12px">
-        <div class="notice"><strong>Methodology:</strong> Global score is DERIVED from trend breadth, momentum, VIX, rates and a credit proxy. It is not a probability of profit.</div>
+        <div class="notice"><strong>Metodo:</strong> lo score globale deriva da ampiezza del trend, momentum, VIX, tassi e proxy del credito. Non è una probabilità di guadagno.</div>
       </div>
     </article>
 
     <article class="panel action-card">
       <div>
-        <div class="label">ARGUS VIEW TODAY</div>
-        <div id="bestAsset" class="action-big">Data engine is warming up</div>
-        <div><span id="bestStatus" class="badge watch">WAIT</span> <strong id="bestScore" style="margin-left:7px">—</strong></div>
+        <div class="label">LA VISIONE DI ARGUS OGGI</div>
+        <div id="bestAsset" class="action-big">Motore dati in avvio</div>
+        <div><span id="bestStatus" class="badge watch">ASPETTA</span> <strong id="bestScore" style="margin-left:7px">—</strong></div>
       </div>
       <div style="margin-top:14px">
-        <div class="label">WHAT SHOULD I DO TODAY?</div>
-        <div id="dailyAction" class="action-title">WAIT / REVIEW</div>
-        <div class="action-note">General market intelligence, not personalised regulated advice.</div>
+        <div class="label">COSA FACCIO OGGI?</div>
+        <div id="dailyAction" class="action-title">ASPETTA / CONTROLLA</div>
+        <div class="action-note">Informazione generale di mercato: nessuna promessa di rendimento e nessun ordine automatico.</div>
       </div>
     </article>
   </section>
 
   <section class="section" id="today">
-    <div class="section-head"><h2>WHAT CHANGED?</h2><span>MAX 4 · NO NOISE</span></div>
-    <div class="panel" style="padding:4px 14px"><div id="changed"><div class="empty">Waiting for verified snapshot.</div></div></div>
+    <div class="section-head"><h2>COSA È CAMBIATO?</h2><span>MAX 4 · NIENTE RUMORE</span></div>
+    <div class="panel" style="padding:4px 14px"><div id="changed"><div class="empty">In attesa di uno snapshot verificato.</div></div></div>
   </section>
 
   <section class="section">
-    <div class="section-head"><h2>BIGGEST RISK TODAY</h2><span>RISK FIRST</span></div>
-    <div class="panel card"><div class="label risk">RISK OF THE DAY</div><h3 id="riskTitle">DATA UNAVAILABLE</h3><p id="riskDetail">No verified risk summary available.</p></div>
+    <div class="section-head"><h2>IL RISCHIO PIÙ IMPORTANTE OGGI</h2><span>PRIMA IL RISCHIO</span></div>
+    <div class="panel card"><div class="label risk">RISCHIO DEL GIORNO</div><h3 id="riskTitle">DATI NON DISPONIBILI</h3><p id="riskDetail">Nessun riepilogo del rischio verificato disponibile.</p></div>
   </section>
 
   <section class="section">
-    <div class="section-head"><h2>TODAY'S CAPITAL ALLOCATION RADAR</h2><span>RELATIVE · MODELLED</span></div>
-    <div id="ranking" class="panel ranking"><div class="empty">DATA INSUFFICIENT</div></div>
-    <div class="raw notice" style="margin-top:8px"><strong>Important:</strong> the score currently excludes valuation when no verified valuation feed is available. ARGUS never fills that gap with invented numbers.</div>
+    <div class="section-head"><h2>DOVE È PIÙ INTERESSANTE IL CAPITALE OGGI?</h2><span>RELATIVO · MODELLATO</span></div>
+    <div id="ranking" class="panel ranking"><div class="empty">DATI INSUFFICIENTI</div></div>
+    <div class="raw notice" style="margin-top:8px"><strong>Importante:</strong> se manca una valutazione verificata, ARGUS non la inventa e riduce la forza del segnale.</div>
   </section>
 
   <section class="section">
-    <div class="section-head"><h2>TOP IDEAS</h2><span>MAX 3 · NO FORCED BUY</span></div>
-    <div id="ideas" class="grid3"><div class="empty">No idea until the data layer validates one.</div></div>
+    <div class="section-head"><h2>LE 3 IDEE MIGLIORI DI OGGI</h2><span>NESSUN ACQUISTO FORZATO</span></div>
+    <div id="ideas" class="grid3"><div class="empty">Nessuna idea finché i dati non ne validano una.</div></div>
+  </section>
+
+  <section class="section" id="my-investments">
+    <div class="section-head"><h2>I MIEI INVESTIMENTI</h2><span>PRIMA SEMPLICE · POI SOFISTICATO</span></div>
+    <div class="panel investment-manifesto">
+      <div>
+        <div class="label">LA REGOLA PIÙ IMPORTANTE</div>
+        <h3>Non devi comprare tutto.</h3>
+        <p>Immagina un castello: prima costruisci le fondamenta, poi aggiungi le torri. Il core viene prima di tecnologia, miniere e temi di moda.</p>
+      </div>
+      <div class="priority-steps">
+        <span><b>1</b> CORE</span><span><b>2</b> DIFESA</span><span><b>3</b> CRESCITA</span><span><b>4</b> SATELLITI</span>
+      </div>
+    </div>
+
+    <div class="panel guide-panel">
+      <div class="section-head"><h2>UN PORTAFOGLIO SEMPLICE DI RIFERIMENTO</h2><span>ESEMPIO MODERATO · NON PERSONALIZZATO</span></div>
+      <div class="field guide-field"><label>SE VOGLIO SIMULARE CON €</label><input id="guideCap" type="number" value="10000" min="1000" step="1000"></div>
+      <div id="guideAllocation" class="guide-allocation"></div>
+      <div class="notice" style="margin-top:10px"><strong>Idea semplice:</strong> usa un solo grande ETF globale come base. Gli altri strumenti servono solo per aggiungere qualcosa di preciso, non per riempire il portafoglio.</div>
+    </div>
+
+    <div class="section-head invest-subhead"><h2>1 · FONDAMENTA</h2><span>LE COSE DA GUARDARE PER PRIME</span></div>
+    <div id="investCore" class="invest-grid"></div>
+
+    <div class="section-head invest-subhead"><h2>2 · CRESCITA</h2><span>USA · NASDAQ · TECNOLOGIA</span></div>
+    <div id="investGrowth" class="invest-grid"></div>
+
+    <div class="section-head invest-subhead"><h2>3 · DIFESA</h2><span>OBBLIGAZIONI · ORO</span></div>
+    <div id="investDefense" class="invest-grid"></div>
+
+    <div class="section-head invest-subhead"><h2>4 · METALLI, MINERALI E TEMI</h2><span>QUOTE PICCOLE · RISCHIO PIÙ ALTO</span></div>
+    <div id="investSatellite" class="invest-grid"></div>
+
+    <div class="section-head invest-subhead"><h2>AZIONI CHE ARGUS DEVE STUDIARE MOLTO BENE</h2><span>NESSUN ACQUISTO FINCHÉ MANCANO FONDAMENTALI VERIFICATI</span></div>
+    <div id="stockWatchlist" class="stock-watch-grid"></div>
+    <div class="notice" style="margin-top:10px"><strong>Regola azioni:</strong> prezzo e momentum non bastano. Prima di trasformare una società in ACQUISTO, ARGUS deve avere fondamentali, valutazione, utili, revisioni degli analisti e rischi verificati.</div>
   </section>
 
   <section class="section" id="markets">
-    <div class="section-head"><h2>ASSET PULSE</h2><span>OBSERVED MARKET PROXIES</span></div>
+    <div class="section-head"><h2>POLSO DEI MERCATI</h2><span>PROXY DI MERCATO OSSERVATI</span></div>
     <div id="pulse" class="grid3"></div>
-    <div class="section-head" style="margin-top:14px"><h2>MACRO / RISK PULSE</h2><span>FRED / OFFICIAL SERIES DISTRIBUTION</span></div>
+    <div class="section-head" style="margin-top:14px"><h2>MACRO E RISCHIO</h2><span>SERIE UFFICIALI / FRED</span></div>
     <div id="macroPulse" class="grid3"></div>
   </section>
 
   <section class="section" id="etf">
-    <div class="section-head"><h2>ETF INTELLIGENCE</h2><span>UCITS · VERIFIED METADATA</span></div>
+    <div class="section-head"><h2>ETF, ETC E STRUMENTI</h2><span>METADATI VERIFICATI</span></div>
     <div id="etfs" class="grid3"></div>
-    <div class="notice" style="margin-top:10px"><strong>Overlap rule:</strong> un World ETF + S&P 500 + Nasdaq + semi-conducteurs/IA/cyber peut multiplier l’exposition aux mêmes méga-cap US. L’overlap holdings-level exact ne sera affiché que lorsque les positions de fonds seront récupérées depuis un feed vérifié.</div>
+    <div class="notice" style="margin-top:10px"><strong>Attenzione alle sovrapposizioni:</strong> un ETF mondiale + S&P 500 + Nasdaq + semiconduttori + AI può significare comprare più volte le stesse grandi società USA.</div>
   </section>
 
   <section class="section" id="stocks">
-    <div class="section-head"><h2>STOCK INTELLIGENCE</h2><span>HALLUCINATION FIREWALL</span></div>
+    <div class="section-head"><h2>INTELLIGENZA SULLE AZIONI</h2><span>FILTRO ANTI-ALLUCINAZIONE</span></div>
     <div class="grid2">
-      <div class="card panel"><div class="label">MICROSOFT / NVIDIA MARKET CONTEXT</div><h3>Prices & momentum may be monitored.</h3><p>Fundamentals, valuation and earnings revisions are not yet connected to a verified provider. Therefore ARGUS publishes <b>no Stock of the Day recommendation</b> from price action alone.</p></div>
-      <div class="card panel"><div class="label risk">DATA STATE</div><h3>FUNDAMENTALS: DATA UNAVAILABLE</h3><p>This is intentional. Quality and valuation cannot be invented to make the product look complete.</p></div>
+      <div class="card panel"><div class="label">CONTESTO PREZZI</div><h3>ARGUS può monitorare prezzo e momentum.</h3><p>Ma non pubblica un “titolo del giorno” basato solo sul grafico.</p></div>
+      <div class="card panel"><div class="label risk">STATO DATI</div><h3>FONDAMENTALI: ANCORA INCOMPLETI</h3><p>È intenzionale: qualità, valutazione e utili non possono essere inventati per far sembrare completo il prodotto.</p></div>
     </div>
   </section>
 
-
   <section class="section" id="intelligence">
-    <div class="section-head"><h2>ARGUS INTELLIGENCE CORE</h2><span>SHADOW · EVIDENCE FIRST</span></div>
+    <div class="section-head"><h2>IL CERVELLO DI ARGUS</h2><span>SHADOW · PRIMA L'EVIDENZA</span></div>
     <div class="grid2">
       <article class="panel card">
-        <div class="label">BULL vs BEAR</div>
-        <h3 id="debateAsset">No candidate</h3>
+        <div class="label">TESI POSITIVA vs TESI NEGATIVA</div>
+        <h3 id="debateAsset">Nessun candidato</h3>
         <div class="debate-grid">
-          <div class="case bull"><b>BULL CASE</b><ul id="bullCase"><li>Waiting for verified evidence.</li></ul></div>
-          <div class="case bear"><b>BEAR CASE</b><ul id="bearCase"><li>Waiting for verified evidence.</li></ul></div>
+          <div class="case bull"><b>PERCHÉ POTREBBE SALIRE</b><ul id="bullCase"><li>In attesa di evidenza verificata.</li></ul></div>
+          <div class="case bear"><b>PERCHÉ POTREBBE ANDARE MALE</b><ul id="bearCase"><li>In attesa di evidenza verificata.</li></ul></div>
         </div>
-        <div class="verdict"><span>ARGUS VERDICT</span><b id="debateVerdict">WAIT</b></div>
+        <div class="verdict"><span>VERDETTO ARGUS</span><b id="debateVerdict">ASPETTA</b></div>
       </article>
 
       <article class="panel card">
-        <div class="label risk">INDEPENDENT RISK GOVERNOR</div>
-        <h3 id="governorState">WAIT / CASH</h3>
-        <p id="governorReal">REAL EXECUTION: BLOCKED</p>
-        <ul id="governorReasons" class="compact-list"><li>Waiting for the verified data gate.</li></ul>
-        <div class="notice" style="margin-top:10px"><strong>Rule:</strong> the Risk Governor may block a paper allocation even when another ARGUS module likes an asset.</div>
+        <div class="label risk">GUARDIANO DEL RISCHIO INDIPENDENTE</div>
+        <h3 id="governorState">ASPETTA / LIQUIDITÀ</h3>
+        <p id="governorReal">ESECUZIONE REALE: BLOCCATA</p>
+        <ul id="governorReasons" class="compact-list"><li>In attesa del filtro dati verificato.</li></ul>
+        <div class="notice" style="margin-top:10px"><strong>Regola:</strong> il Guardiano del rischio può bloccare anche un investimento virtuale se i dati non sono abbastanza buoni.</div>
       </article>
     </div>
 
     <div class="grid2" style="margin-top:10px">
       <article class="panel card">
-        <div class="label">BULL / BASE / BEAR SCENARIOS</div>
+        <div class="label">SCENARI</div>
         <div class="scenario-prob-grid">
-          <div><span>BULL</span><b id="scenarioBull">—</b></div>
+          <div><span>POSITIVO</span><b id="scenarioBull">—</b></div>
           <div><span>BASE</span><b id="scenarioBase">—</b></div>
-          <div><span>BEAR</span><b id="scenarioBear">—</b></div>
+          <div><span>NEGATIVO</span><b id="scenarioBear">—</b></div>
         </div>
-        <p id="scenarioLabel">MODELLED SCENARIO WEIGHTS</p>
-        <p class="raw">These are regime-sensitive scenario weights, not promises of return. They are suppressed when the verified global state is unavailable.</p>
+        <p id="scenarioLabel">PESI DI SCENARIO MODELLATI</p>
+        <p class="raw">Sono pesi di scenario sensibili al regime di mercato, non promesse di rendimento.</p>
       </article>
 
       <article class="panel card">
-        <div class="label">DECISION PACKET</div>
+        <div class="label">PACCHETTO DECISIONALE</div>
         <div id="decisionPacket" class="health"></div>
-        <p style="margin-top:10px">The simple screen shows the decision. PRO mode exposes the evidence, disagreement and governance behind it.</p>
+        <p style="margin-top:10px">La modalità Semplice mostra la decisione. La modalità PRO mostra evidenza, disaccordo e governance.</p>
       </article>
     </div>
   </section>
 
   <section class="section" id="virtual">
-    <div class="section-head"><h2>VIRTUAL MONEY LAB</h2><span>€100K PAPER PORTFOLIO · NO REAL ORDERS</span></div>
+    <div class="section-head"><h2>LABORATORIO CON SOLDI VIRTUALI</h2><span>€100.000 VIRTUALI · NESSUN ORDINE REALE</span></div>
     <div class="panel" style="padding:14px">
       <div class="virtual-head">
         <div>
-          <div class="label">ARGUS SHADOW PORTFOLIO</div>
-          <h3>Test decisions with virtual money before trusting them.</h3>
-          <p>ARGUS can allocate only when verified data passes the Risk Governor. Otherwise virtual capital stays in cash.</p>
+          <div class="label">PORTAFOGLIO SHADOW ARGUS</div>
+          <h3>Prima proviamo. Poi misuriamo. Solo dopo ci fidiamo.</h3>
+          <p>ARGUS può investire i soldi virtuali solo se i dati superano il Guardiano del rischio. Altrimenti resta in liquidità.</p>
         </div>
-        <span class="paper-badge">PAPER ONLY</span>
+        <span class="paper-badge">SOLO VIRTUALE</span>
       </div>
 
       <div class="form-grid virtual-controls">
-        <div class="field"><label>VIRTUAL CAPITAL €</label><input id="vCap" type="number" value="100000" min="1000" step="1000"></div>
-        <div class="field"><label>PROFILE</label><select id="vProfile"><option value="conservative">Conservative</option><option value="moderate" selected>Moderate</option><option value="growth">Growth</option></select></div>
-        <div class="toolbar virtual-actions"><button class="btn primary" id="buildVirtual">BUILD / REBALANCE PAPER PORTFOLIO</button><button class="btn" id="resetVirtual">RESET</button></div>
+        <div class="field"><label>CAPITALE VIRTUALE €</label><input id="vCap" type="number" value="100000" min="1000" step="1000"></div>
+        <div class="field"><label>PROFILO</label><select id="vProfile"><option value="conservative">Prudente</option><option value="moderate" selected>Moderato</option><option value="growth">Crescita</option></select></div>
+        <div class="toolbar virtual-actions"><button class="btn primary" id="buildVirtual">CREA / RIBILANCIA PORTAFOGLIO VIRTUALE</button><button class="btn" id="resetVirtual">AZZERA</button></div>
       </div>
 
       <div class="health virtual-metrics">
-        <div class="mini"><span>VIRTUAL VALUE</span><b id="virtualValue">—</b></div>
-        <div class="mini"><span>CASH</span><b id="virtualCash">—</b></div>
-        <div class="mini"><span>ARGUS P/L</span><b id="virtualPnl">—</b></div>
-        <div class="mini"><span>GLOBAL BENCHMARK</span><b id="virtualBenchmark">—</b></div>
+        <div class="mini"><span>VALORE VIRTUALE</span><b id="virtualValue">—</b></div>
+        <div class="mini"><span>LIQUIDITÀ</span><b id="virtualCash">—</b></div>
+        <div class="mini"><span>RISULTATO ARGUS</span><b id="virtualPnl">—</b></div>
+        <div class="mini"><span>BENCHMARK GLOBALE</span><b id="virtualBenchmark">—</b></div>
       </div>
 
-      <div id="virtualHoldings" class="virtual-list"><div class="empty">No virtual portfolio yet.</div></div>
-      <div class="raw notice" style="margin-top:10px"><strong>Audit rule:</strong> entry proxy price, score, signal, timestamp and benchmark are frozen when the virtual portfolio is created. Later values are marked from the newest verified proxy snapshot.</div>
+      <div id="virtualHoldings" class="virtual-list"><div class="empty">Nessun portafoglio virtuale.</div></div>
+      <div class="raw notice" style="margin-top:10px"><strong>Regola audit:</strong> prezzo proxy di ingresso, score, segnale, data e benchmark vengono congelati quando nasce il portafoglio virtuale.</div>
     </div>
   </section>
 
   <section class="section" id="simulator">
-    <div class="section-head"><h2>INVESTMENT SIMULATOR</h2><span>SCENARIO · NOT FORECAST</span></div>
+    <div class="section-head"><h2>SIMULATORE DI INVESTIMENTO</h2><span>SCENARIO · NON PREVISIONE</span></div>
     <div class="panel" style="padding:14px">
       <div class="form-grid">
-        <div class="field"><label>STARTING CAPITAL €</label><input id="simCap" type="number" value="10000" min="0"></div>
-        <div class="field"><label>MONTHLY CONTRIBUTION €</label><input id="simMonthly" type="number" value="300" min="0"></div>
-        <div class="field"><label>YEARS</label><input id="simYears" type="number" value="20" min="1" max="60"></div>
-        <div class="field"><label>BASE RETURN % / YEAR</label><input id="simReturn" type="number" value="6" step=".1"></div>
-        <div class="field"><label>INFLATION %</label><input id="simInfl" type="number" value="2" step=".1"></div>
-        <div class="field"><label>ANNUAL FEES %</label><input id="simFee" type="number" value=".2" step=".01"></div>
+        <div class="field"><label>CAPITALE INIZIALE €</label><input id="simCap" type="number" value="10000" min="0"></div>
+        <div class="field"><label>VERSAMENTO MENSILE €</label><input id="simMonthly" type="number" value="300" min="0"></div>
+        <div class="field"><label>ANNI</label><input id="simYears" type="number" value="20" min="1" max="60"></div>
+        <div class="field"><label>RENDIMENTO BASE % / ANNO</label><input id="simReturn" type="number" value="6" step=".1"></div>
+        <div class="field"><label>INFLAZIONE %</label><input id="simInfl" type="number" value="2" step=".1"></div>
+        <div class="field"><label>COSTI ANNUI %</label><input id="simFee" type="number" value=".2" step=".01"></div>
       </div>
-      <div class="toolbar" style="margin-top:10px"><button class="btn primary" id="runSim">CALCULATE</button></div>
+      <div class="toolbar" style="margin-top:10px"><button class="btn primary" id="runSim">CALCOLA</button></div>
       <div id="simResults" class="sim-results"></div>
-      <div class="section-head" style="margin-top:14px"><h2>CRASH SIMULATOR</h2><span>LOSS + REQUIRED RECOVERY</span></div>
+      <div class="section-head" style="margin-top:14px"><h2>SIMULATORE DI CRASH</h2><span>PERDITA + RECUPERO NECESSARIO</span></div>
       <div id="crashGrid" class="crash-grid"></div>
     </div>
   </section>
 
   <section class="section" id="portfolio">
-    <div class="section-head"><h2>PORTFOLIO BUILDER</h2><span>LOCAL TO THIS BROWSER</span></div>
+    <div class="section-head"><h2>IL MIO PORTAFOGLIO</h2><span>SALVATO SOLO IN QUESTO BROWSER</span></div>
     <div class="panel" style="padding:14px">
-      <div class="toolbar"><button id="addHolding" class="btn primary">+ ADD ETF POSITION</button></div>
+      <div class="toolbar"><button id="addHolding" class="btn primary">+ AGGIUNGI POSIZIONE</button></div>
       <div id="holdingList" class="portfolio-list"></div>
       <div class="health">
-        <div class="mini"><span>TOTAL</span><b id="pTotal">€0</b></div>
-        <div class="mini"><span>LARGEST POSITION</span><b id="pMax">—</b></div>
-        <div class="mini"><span>WEIGHTED TER</span><b id="pFee">—</b></div>
-        <div class="mini"><span>DIVERSIFICATION*</span><b id="pDivers">—</b></div>
+        <div class="mini"><span>TOTALE</span><b id="pTotal">€0</b></div>
+        <div class="mini"><span>POSIZIONE PIÙ GRANDE</span><b id="pMax">—</b></div>
+        <div class="mini"><span>COSTO MEDIO</span><b id="pFee">—</b></div>
+        <div class="mini"><span>DIVERSIFICAZIONE*</span><b id="pDivers">—</b></div>
       </div>
-      <div id="pWarning" class="notice" style="margin-top:10px">No portfolio yet.</div>
-      <div class="raw muted" style="margin-top:8px;font-size:10px">*Partial structural score only. Currency, holdings-level overlap and verified cross-asset correlations are not yet fully included.</div>
+      <div id="pWarning" class="notice" style="margin-top:10px">Nessun portafoglio ancora.</div>
+      <div class="raw muted" style="margin-top:8px;font-size:10px">*Score strutturale parziale. Valute, sovrapposizioni reali delle partecipazioni e correlazioni cross-asset richiedono dati aggiuntivi verificati.</div>
     </div>
   </section>
 
   <section class="section" id="catalysts">
-    <div class="section-head"><h2>CATALYST CALENDAR</h2><span>CONTEXT ONLY · NOT SCORED</span></div>
+    <div class="section-head"><h2>CALENDARIO DEGLI EVENTI</h2><span>CONTESTO · NON ENTRA ANCORA NELLO SCORE</span></div>
     <div class="widget-shell">
       <div class="tradingview-widget-container">
         <div class="tradingview-widget-container__widget"></div>
         <script src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
-        {"colorTheme":"dark","isTransparent":true,"locale":"fr","countryFilter":"us,eu,de,fr,it,gb,cn,jp","importanceFilter":"1","width":"100%","height":480}
+        {"colorTheme":"dark","isTransparent":true,"locale":"it","countryFilter":"us,eu,de,fr,it,gb,cn,jp","importanceFilter":"1","width":"100%","height":480}
         </script>
       </div>
     </div>
   </section>
 
   <section class="section" id="news">
-    <div class="section-head"><h2>NEWS CONTEXT</h2><span>NOT YET INGESTED INTO SCORES</span></div>
-    <div class="notice" style="margin-bottom:8px"><strong>Firewall:</strong> until ARGUS has a verified, deduplicated news ingestion layer with timestamps and source validation, news is displayed as context only and cannot create a recommendation.</div>
+    <div class="section-head"><h2>NOTIZIE DI MERCATO</h2><span>CONTESTO FINCHÉ NON SONO VALIDATE</span></div>
+    <div class="notice" style="margin-bottom:8px"><strong>Filtro:</strong> finché ARGUS non ha un flusso news verificato, deduplicato e con data e ora, una notizia non può creare da sola un ACQUISTO.</div>
     <div class="widget-shell">
       <div class="tradingview-widget-container">
         <div class="tradingview-widget-container__widget"></div>
         <script src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
-        {"feedMode":"market","market":"stock","isTransparent":true,"displayMode":"adaptive","width":"100%","height":480,"colorTheme":"dark","locale":"fr"}
+        {"feedMode":"market","market":"stock","isTransparent":true,"displayMode":"adaptive","width":"100%","height":480,"colorTheme":"dark","locale":"it"}
         </script>
       </div>
     </div>
   </section>
 
   <section class="section" id="geo">
-    <div class="section-head"><h2>GEOPOLITICAL RISK RADAR</h2><span>V1 QUALITY GATE</span></div>
-    <div class="panel card"><div class="label risk">DATA UNAVAILABLE</div><h3>No automated verified geopolitical feed connected yet.</h3><p>ARGUS will not transform unverified headlines into FACT / PROBABILITY / INVESTMENT IMPACT. This module remains blocked until a source layer meets the master prompt’s validation rules.</p></div>
+    <div class="section-head"><h2>RISCHIO GEOPOLITICO</h2><span>FILTRO QUALITÀ V1</span></div>
+    <div class="panel card"><div class="label risk">DATI NON ANCORA COLLEGATI</div><h3>Nessun feed geopolitico automatizzato verificato è ancora attivo.</h3><p>ARGUS non trasforma titoli non verificati in fatti, probabilità o impatto di investimento. Il modulo resta bloccato finché le fonti non superano i controlli.</p></div>
   </section>
 
   <section class="section raw" id="methodology">
-    <div class="section-head"><h2>MODEL & DATA TRANSPARENCY</h2><span>PRO MODE</span></div>
+    <div class="section-head"><h2>MODELLO E TRASPARENZA DEI DATI</h2><span>MODALITÀ PRO</span></div>
     <div class="grid3">
-      <div class="card panel"><div class="label">GLOBAL SCORE</div><h3>Trend + Momentum + VIX + Credit proxy + Rates</h3><p>No hidden valuation estimate. Score direction is compared with the prior verified snapshot.</p></div>
-      <div class="card panel"><div class="label">ASSET SCORE</div><h3>30% Momentum · 25% Trend · 20% Risk · 15% Entry · 10% Macro</h3><p>Asset-class adapted. MODELLED, not a probability of return.</p></div>
-      <div class="card panel"><div class="label">NO FALSE PRECISION</div><h3>Missing component = missing component.</h3><p>ARGUS suppresses or weakens a signal instead of creating a fake estimate.</p></div>
+      <div class="card panel"><div class="label">SCORE GLOBALE</div><h3>Trend + Momentum + VIX + Credito + Tassi</h3><p>Nessuna valutazione nascosta. La direzione viene confrontata con lo snapshot verificato precedente.</p></div>
+      <div class="card panel"><div class="label">SCORE ASSET</div><h3>30% Momentum · 25% Trend · 20% Rischio · 15% Entrata · 10% Macro</h3><p>Adattato per classe di attivo. È modellato, non una probabilità di rendimento.</p></div>
+      <div class="card panel"><div class="label">NIENTE FALSA PRECISIONE</div><h3>Dato mancante = dato mancante.</h3><p>ARGUS indebolisce o blocca il segnale invece di inventare una stima.</p></div>
     </div>
   </section>
 
   <section class="section" id="track">
-    <div class="section-head"><h2>ARGUS TRACK RECORD</h2><span>ACCOUNTABILITY FROM DAY 1</span></div>
+    <div class="section-head"><h2>STORICO DEI RISULTATI ARGUS</h2><span>RESPONSABILITÀ DAL GIORNO 1</span></div>
     <div class="grid3">
-      <div class="card panel"><div class="label">EVALUATED SIGNALS</div><div id="trackEvaluated" class="value">0</div></div>
-      <div class="card panel"><div class="label">POSITIVE HIT RATE</div><div id="trackHit" class="value">—</div></div>
-      <div class="card panel"><div class="label">AVG RETURN TO LATEST</div><div id="trackAvg" class="value">—</div></div>
+      <div class="card panel"><div class="label">SEGNALI VALUTATI</div><div id="trackEvaluated" class="value">0</div></div>
+      <div class="card panel"><div class="label">PERCENTUALE POSITIVA</div><div id="trackHit" class="value">—</div></div>
+      <div class="card panel"><div class="label">RENDIMENTO MEDIO FINO A OGGI</div><div id="trackAvg" class="value">—</div></div>
     </div>
-    <p class="muted" style="font-size:10px">The track record starts only from signals actually generated by this engine. No retroactive cherry-picking.</p>
+    <p class="muted" style="font-size:10px">Lo storico parte solo dai segnali realmente generati dal motore. Nessuna selezione retroattiva dei risultati migliori.</p>
   </section>
 
   <section class="section raw" id="sourceTransparency">
-    <div class="section-head"><h2>SOURCE TRANSPARENCY</h2><span>PRO MODE</span></div>
+    <div class="section-head"><h2>TRASPARENZA DELLE FONTI</h2><span>MODALITÀ PRO</span></div>
     <div id="sources" class="source-list"></div>
     <div id="qualityRules" class="muted" style="font-size:10px;margin-top:8px"></div>
   </section>
 
   <footer>
-    ARGUS provides market intelligence, quantitative signals, simulations and educational analysis. It does not guarantee future results and does not replace regulated personalised financial, legal or tax advice. Data states include OBSERVED, OBSERVED_PROXY, MODELLED, SCENARIO and DATA UNAVAILABLE. Tax rules, including Belgian treatment, must be verified from current official sources before execution.
+    ARGUS fornisce intelligence di mercato, segnali quantitativi, simulazioni e analisi educative. Non garantisce risultati futuri e non sostituisce consulenza finanziaria, fiscale o legale personalizzata e regolamentata. Prima di investire denaro reale vanno verificati prodotto, KID, broker, costi e fiscalità applicabile in Belgio.
   </footer>
 </div>
 
 <nav class="bottom-nav">
   <a href="#home"><b>⌂</b>HOME</a>
-  <a href="#today"><b>◎</b>TODAY</a>
-  <a href="#markets"><b>↗</b>MARKETS</a>
+  <a href="#today"><b>◎</b>OGGI</a>
+  <a href="#my-investments"><b>★</b>I MIEI</a>
   <a href="#etf"><b>◫</b>ETF</a>
-  <a href="#simulator"><b>∑</b>SIM</a>
-  <a href="#virtual"><b>◉</b>VIRTUAL</a>
+  <a href="#simulator"><b>∑</b>SIMULA</a>
+  <a href="#virtual"><b>◉</b>VIRTUALE</a>
 </nav>
 <script src="capital/intelligence-lab.js" defer></script>
 <script src="capital/app.js" defer></script>
