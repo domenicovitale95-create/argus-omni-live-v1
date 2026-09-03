@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#090b0f" />
+  <title>ARGUS MARKET — Daily Finance Dashboard</title>
+  <meta name="description" content="Dashboard financier personnel: ETF, indices, actions, or, Bitcoin, actualités et calendrier économique." />
+  <style>
+    :root{--bg:#090b0f;--panel:#10131a;--panel2:#0d1016;--line:#202532;--text:#f5f7fb;--muted:#8f98aa;--accent:#d8ff52;--good:#69e6a6;--warn:#ffd166}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}.wrap{max-width:1100px;margin:auto;padding:0 14px 40px}
+    header{padding:22px 2px 14px}.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:800}.title{font-size:29px;line-height:1.02;margin:7px 0 5px;letter-spacing:-.04em}.sub{color:var(--muted);font-size:13px;max-width:650px}
+    .status{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#0c0f14;color:#cbd2df;font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 12px var(--good)}
+    .ticker{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);margin:4px 0 16px}
+    .section{margin-top:20px}.section-head{display:flex;justify-content:space-between;align-items:end;margin:0 2px 9px}.section h2{font-size:15px;margin:0;letter-spacing:.02em}.section small{color:var(--muted)}
+    .core-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.card{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel2));border-radius:14px;padding:14px;min-height:112px;position:relative}
+    .rank{position:absolute;top:12px;right:12px;color:var(--muted);font-size:11px}.tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--accent);margin-bottom:8px}.ticker-name{font-size:19px;font-weight:800;letter-spacing:-.02em}.fund{font-size:12px;color:#d6dce7;margin-top:2px}.meta{font-size:11px;color:var(--muted);margin-top:9px}.card strong{color:#fff}
+    .sat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.sat{padding:12px;min-height:86px}.sat .ticker-name{font-size:16px}
+    .widget-shell{border:1px solid var(--line);background:var(--panel);border-radius:14px;overflow:hidden;min-height:420px}.two{display:grid;grid-template-columns:1.45fr .85fr;gap:10px}
+    .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.quick a{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--panel2)}.quick b{display:block;font-size:13px}.quick span{font-size:11px;color:var(--muted)}
+    footer{padding:26px 2px 10px;color:var(--muted);font-size:11px;border-top:1px solid var(--line);margin-top:28px}
+    @media(max-width:760px){.wrap{padding-left:11px;padding-right:11px}.title{font-size:27px}.core-grid,.sat-grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}.quick{grid-template-columns:1fr 1fr}.card{min-height:98px}.widget-shell{min-height:360px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">ARGUS MARKET</div>
+      <h1 class="title">Tout le marché.<br>Sans bruit.</h1>
+      <div class="sub">ETF essentiels d’abord, puis marchés mondiaux, actions, or, Bitcoin et actualité macro — dans une seule page qui se met à jour automatiquement.</div>
+      <div class="status"><span class="dot"></span>Données marché automatiques</div>
+    </header>
+
+    <div class="ticker">
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+        {
+          "symbols": [
+            {"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},
+            {"proName":"NASDAQ:NDX","title":"Nasdaq 100"},
+            {"proName":"XETR:DAX","title":"DAX"},
+            {"proName":"TVC:GOLD","title":"Or"},
+            {"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},
+            {"proName":"FX_IDC:EURUSD","title":"EUR/USD"}
+          ],
+          "showSymbolLogo": true,
+          "isTransparent": true,
+          "displayMode": "adaptive",
+          "colorTheme": "dark",
+          "locale": "fr"
+        }
+        </script>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-head"><h2>ETF ESSENTIELS</h2><small>Base long terme</small></div>
+      <div class="core-grid">
+        <a class="card" href="https://www.tradingview.com/symbols/XETR-VWCE/" target="_blank" rel="noopener">
+          <div class="rank">#1</div><div class="tag">CORE MONDE</div><div class="ticker-name">VWCE</div>
+          <div class="fund">Vanguard FTSE All-World UCITS ETF Acc</div><div class="meta"><strong>IE00BK5BQT80</strong> · Monde développé + émergent</div>
+        </a>
+        <a class="card" href="https://www.tradingview.com/symbols/EURONEXT-IWDA/" target="_blank" rel="noopener">
+          <div class="rank">#2</div><div class="tag">CORE MONDE</div><div class="ticker-name">IWDA</div>
+          <div class="fund">iShares Core MSCI World UCITS ETF</div><div class="meta"><strong>IE00B4L5Y983</strong> · Marchés développés</div>
+        </a>
+        <a class="card" href="https://www.tradingview.com/symbols/XETR-SXR8/" target="_blank" rel="noopener">
+          <div class="rank">#3</div><div class="tag">CORE USA</div><div class="ticker-name">SXR8</div>
+          <div class="fund">iShares Core S&amp;P 500 UCITS ETF Acc</div><div class="meta"><strong>IE00B5BMR087</strong> · Grandes capitalisations US</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>THÉMATIQUES À SURVEILLER</h2><small>Satellites</small></div>
+      <div class="sat-grid">
+        <a class="card sat" href="https://www.tradingview.com/symbols/XETR-VVSM/" target="_blank" rel="noopener">
+          <div class="tag">SEMICONDUCTEURS</div><div class="ticker-name">VVSM</div><div class="fund">VanEck Semiconductor UCITS ETF</div>
+        </a>
+        <a class="card sat" href="https://www.tradingview.com/symbols/EURONEXT-WTAI/" target="_blank" rel="noopener">
+          <div class="tag">IA</div><div class="ticker-name">WTAI</div><div class="fund">WisdomTree Artificial Intelligence UCITS ETF</div>
+        </a>
+        <a class="card sat" href="https://www.tradingview.com/symbols/LSE-ISPY/" target="_blank" rel="noopener">
+          <div class="tag">CYBERSÉCURITÉ</div><div class="ticker-name">ISPY</div><div class="fund">L&amp;G Cyber Security UCITS ETF</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>TABLEAU DE BORD</h2><small>ETF · indices · actions</small></div>
+      <div class="widget-shell">
+        <div class="tradingview-widget-container" style="height:100%;width:100%">
+          <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+          {
+            "colorTheme":"dark",
+            "dateRange":"12M",
+            "showChart":true,
+            "locale":"fr",
+            "isTransparent":true,
+            "showSymbolLogo":true,
+            "showFloatingTooltip":false,
+            "width":"100%",
+            "height":"650",
+            "tabs":[
+              {"title":"ETF","symbols":[
+                {"s":"XETR:VWCE","d":"Vanguard All-World"},
+                {"s":"EURONEXT:IWDA","d":"iShares MSCI World"},
+                {"s":"XETR:SXR8","d":"iShares S&P 500"},
+                {"s":"XETR:VVSM","d":"VanEck Semiconductor"},
+                {"s":"EURONEXT:WTAI","d":"WisdomTree AI"},
+                {"s":"LSE:ISPY","d":"L&G Cyber Security"}
+              ]},
+              {"title":"Indices","symbols":[
+                {"s":"FOREXCOM:SPXUSD","d":"S&P 500"},
+                {"s":"NASDAQ:NDX","d":"Nasdaq 100"},
+                {"s":"XETR:DAX","d":"DAX"},
+                {"s":"TVC:NI225","d":"Nikkei 225"}
+              ]},
+              {"title":"Actions","symbols":[
+                {"s":"NASDAQ:NVDA","d":"NVIDIA"},
+                {"s":"NASDAQ:AAPL","d":"Apple"},
+                {"s":"NASDAQ:MSFT","d":"Microsoft"},
+                {"s":"NASDAQ:AMZN","d":"Amazon"},
+                {"s":"NASDAQ:GOOGL","d":"Alphabet"},
+                {"s":"NASDAQ:TSLA","d":"Tesla"}
+              ]}
+            ]
+          }
+          </script>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="two">
+        <div>
+          <div class="section-head"><h2>ACTUALITÉ MARCHÉ</h2><small>Flux automatique</small></div>
+          <div class="widget-shell">
+            <div class="tradingview-widget-container">
+              <div class="tradingview-widget-container__widget"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+              {
+                "feedMode":"market",
+                "market":"stock",
+                "isTransparent":true,
+                "displayMode":"adaptive",
+                "width":"100%",
+                "height":"520",
+                "colorTheme":"dark",
+                "locale":"fr"
+              }
+              </script>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-head"><h2>MOUVEMENTS</h2><small>USA</small></div>
+          <div class="widget-shell">
+            <div class="tradingview-widget-container">
+              <div class="tradingview-widget-container__widget"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>
+              {
+                "colorTheme":"dark",
+                "dateRange":"12M",
+                "exchange":"US",
+                "showChart":true,
+                "locale":"fr",
+                "isTransparent":true,
+                "showSymbolLogo":false,
+                "showFloatingTooltip":false,
+                "width":"100%",
+                "height":"520"
+              }
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>ACCÈS RAPIDE</h2><small>Ce qui compte</small></div>
+      <div class="quick">
+        <a href="https://www.tradingview.com/markets/stocks-usa/market-movers-large-cap/" target="_blank" rel="noopener"><b>Actions US</b><span>Leaders & mouvements</span></a>
+        <a href="https://www.tradingview.com/markets/etfs/" target="_blank" rel="noopener"><b>ETF</b><span>Vue globale</span></a>
+        <a href="https://www.tradingview.com/markets/cryptocurrencies/" target="_blank" rel="noopener"><b>Crypto</b><span>Bitcoin & marché</span></a>
+        <a href="https://www.tradingview.com/markets/currencies/" target="_blank" rel="noopener"><b>Devises</b><span>EUR/USD & FX</span></a>
+      </div>
+    </section>
+
+    <footer>
+      ARGUS MARKET · Dashboard personnel · Les données proviennent de widgets de marché externes et peuvent être différées selon la place boursière. Informations générales uniquement, pas un conseil financier.
+    </footer>
+  </div>
+</body>
+</html>
