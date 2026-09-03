@@ -1,0 +1,65 @@
+name: ARGUS Capital Data Engine
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/capital_daily.py'
+      - 'capital/config.json'
+      - '.github/workflows/capital-data-engine.yml'
+  schedule:
+    - cron: '15 6,12,18 * * 1-5'
+    - cron: '15 8 * * 0,6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: argus-capital-data
+  cancel-in-progress: false
+
+jobs:
+  update-capital-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run ARGUS Capital data engine
+        run: python scripts/capital_daily.py
+
+      - name: Validate generated dataset
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("capital/data/latest.json")
+          assert p.exists(), "latest.json missing"
+          d=json.loads(p.read_text())
+          assert d.get("schema_version")=="1.0"
+          assert "data_quality" in d and "global_market" in d and "today" in d
+          assert d["data_quality"]["coverage_pct"] >= 50, "insufficient data coverage"
+          print("ARGUS Capital dataset valid:", d["data_quality"])
+          PY
+
+      - name: Commit only changed data
+        run: |
+          git config user.name "argus-capital-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add capital/data
+          if git diff --cached --quiet; then
+            echo "No data changes."
+            exit 0
+          fi
+          git commit -m "data(capital): refresh verified market dataset"
+          git pull --rebase origin main
+          git push origin HEAD:main
