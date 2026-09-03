@@ -1,0 +1,28 @@
+name: Capital Intelligence Regression
+
+on:
+  pull_request:
+    paths:
+      - 'market.html'
+      - 'capital/**'
+      - 'tests/capital-intelligence-virtual-regression.mjs'
+      - '.github/workflows/capital-intelligence-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'market.html'
+      - 'capital/**'
+      - 'tests/capital-intelligence-virtual-regression.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  capital-intelligence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node tests/capital-intelligence-virtual-regression.mjs
