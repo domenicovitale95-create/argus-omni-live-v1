@@ -333,10 +333,12 @@ for k,meta in FRED.items():
         rows,url=fetch_fred(meta["series"])
         mm=macro_metrics(rows)
         mm.update({"label":meta["label"],"unit":meta["unit"],"source":url,"data_type":"OBSERVED"})
+        # Rates are expressed as percentage-point changes; VIX/FX/Crypto use percentage returns.
+        if meta["asset_class"] in ("VOL","FX","CRYPTO"):
+            mm["ret_1d"]=r2(ret_at(rows,1))
+            mm["ret_1m"]=r2(ret_at(rows,21))
         macro[k]=mm
         if k=="btc":
-            # retain percentage return semantics for BTC
-            macro[k]["ret_1d"]=r2(ret_at(rows,1)); macro[k]["ret_1m"]=r2(ret_at(rows,21))
             histories[k]=monthly_points(rows)
     except Exception as e:
         old=previous.get("macro",{}).get(k)
