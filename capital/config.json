@@ -1,5 +1,5 @@
 {
-  "version": "1.2",
+  "version": "1.3",
   "investor_mode": {
     "country": "Belgium",
     "currency": "EUR",
@@ -351,6 +351,94 @@
       "theme_it": "Pagamenti",
       "reason_it": "Rete globale, margini elevati e crescita dei pagamenti digitali.",
       "status_it": "ATTESA DATI FONDAMENTALI"
+    }
+  ],
+  "ai_portfolios": [
+    {
+      "id": "claude",
+      "name": "Claude Portfolio",
+      "model": "Claude Opus",
+      "company": "Anthropic",
+      "status": "VERIFICATO LIVE",
+      "verified": true,
+      "public_record": true,
+      "launch_date": "2026-03-03",
+      "data_as_of": "2026-09-02",
+      "days_live": 183,
+      "since_inception_net_pct": 29.6,
+      "max_drawdown_pct": -10.2,
+      "annualized_volatility_pct": 17.1,
+      "maturity_it": "STORICO ANCORA CORTO",
+      "simple_take_it": "Ha fatto molto bene finora, ma è concentrato e ha solo pochi mesi di storia. Da studiare, non da copiare alla cieca.",
+      "top_holdings": [
+        {
+          "ticker": "VST",
+          "name": "Vistra",
+          "weight_pct": 29
+        },
+        {
+          "ticker": "VIST",
+          "name": "Vista Energy",
+          "weight_pct": 20.6
+        },
+        {
+          "ticker": "PGY",
+          "name": "Pagaya",
+          "weight_pct": 18.2
+        },
+        {
+          "ticker": "SKWD",
+          "name": "Skyward Specialty Insurance",
+          "weight_pct": 16.1
+        },
+        {
+          "ticker": "ARIS",
+          "name": "Aris Mining",
+          "weight_pct": 16.1
+        }
+      ],
+      "source_url": "https://autopilotfactsheets.com/portfolios/claude-portfolio",
+      "source_note_it": "Record pubblico Autopilot. Non affiliato ad Anthropic."
+    },
+    {
+      "id": "gpt",
+      "name": "GPT Portfolio",
+      "model": "GPT",
+      "company": "OpenAI",
+      "status": "DA VERIFICARE",
+      "verified": false,
+      "public_record": false,
+      "simple_take_it": "ARGUS non ha ancora collegato un track record pubblico live e verificabile. Nessun rendimento viene inventato."
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek Portfolio",
+      "model": "DeepSeek",
+      "company": "DeepSeek",
+      "status": "DA VERIFICARE",
+      "verified": false,
+      "public_record": false,
+      "simple_take_it": "ARGUS non ha ancora collegato un track record pubblico live e verificabile. Nessun rendimento viene inventato."
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini Portfolio",
+      "model": "Gemini",
+      "company": "Google",
+      "status": "DA VERIFICARE",
+      "verified": false,
+      "public_record": false,
+      "simple_take_it": "ARGUS non ha ancora collegato un track record pubblico live e verificabile. Nessun rendimento viene inventato."
+    },
+    {
+      "id": "grok",
+      "name": "Grok Portfolio",
+      "model": "Grok",
+      "company": "xAI",
+      "status": "DA VERIFICARE",
+      "verified": false,
+      "public_record": false,
+      "simple_take_it": "ARGUS non ha ancora collegato un track record pubblico live e verificabile. Nessun rendimento viene inventato."
     }
   ]
 }
