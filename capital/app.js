@@ -81,10 +81,10 @@ async function boot(){
       loadJSON('capital/config.json'),
       loadJSON('capital/data/track-record.json').catch(()=>null)
     ]);
-    renderTop();renderRanking();renderIdeas();renderPulse();renderETF();renderSources();renderPortfolio();runSim();
+    renderTop();renderRanking();renderIdeas();renderPulse();renderETF();renderSources();renderPortfolio();runSim();\n    window.ARGUS_CAPITAL_LAB?.render({data:DATA,config:CONFIG,track:TRACK});
     setText('#lastUpdate',new Date(DATA.generated_at).toLocaleString('fr-BE'));
   }catch(e){
-    console.error(e); setText('#marketStatus','DATA UNAVAILABLE'); setText('#bestAsset','Data engine is warming up'); $('#changed').innerHTML='<div class="empty">Le moteur de données n’a pas encore produit son premier snapshot vérifié. Aucun chiffre n’est inventé.</div>';
+    console.error(e); setText('#marketStatus','DATA UNAVAILABLE'); setText('#bestAsset','Data engine is warming up'); $('#changed').innerHTML='<div class="empty">Le moteur de données n’a pas encore produit son premier snapshot vérifié. Aucun chiffre n’est inventé.</div>';\n    window.ARGUS_CAPITAL_LAB?.render({data:DATA,config:CONFIG,track:TRACK});
   }
 }
 $('#runSim').onclick=runSim; $('#addHolding').onclick=addHolding;
