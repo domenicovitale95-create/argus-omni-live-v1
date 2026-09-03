@@ -138,7 +138,7 @@
       return {
         version:2,createdAt:now,profile,startingCapital:capital,cash:capital,positions:[],
         benchmarkEntry:globalPrice,benchmarkEntryDate:data?.market?.global_equity?.date||null,
-        governorAtEntry:governor.shadow,note:'Il Risk Governor ha lasciato il portafoglio virtuale interamente in liquidità.'
+        governorAtEntry:governor.shadow,note:'Il Guardiano del rischio ha lasciato il portafoglio virtuale interamente in liquidità.'
       };
     }
 
@@ -224,7 +224,7 @@
         ['REGIME',statusIt(data?.global_market?.regime||'DATA INSUFFICIENT')],
         ['EVIDENZA',statusIt(q.state||'WEAK')+' · '+(q.coverage_pct??0)+'%'],
         ['DIBATTITO',statusIt(d.action||'WAIT')],
-        ['RISK GOVERNOR',gov.shadow]
+        ['GUARDIANO DEL RISCHIO',gov.shadow]
       ].map(([k,v])=>'<div class="mini"><span>'+esc(k)+'</span><b>'+esc(v)+'</b></div>').join('');
     }
   }
