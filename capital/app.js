@@ -55,6 +55,13 @@ function translateSentence(v){
     'Patience / cash remains rational':'Pazienza e liquidità restano razionali'
   };
   if(exact[s]) return exact[s];
+  const vixMatch=s.match(/^VIX is ([0-9.]+); short-term market stress is elevated\.$/);
+  if(vixMatch) return 'Il VIX è a '+vixMatch[1]+': lo stress di breve periodo è elevato.';
+  const yieldMatch=s.match(/^US 10Y yield rose ([0-9.]+) pp over ~1 month, a headwind for duration-sensitive assets\.$/);
+  if(yieldMatch) return 'Il rendimento USA a 10 anni è salito di '+yieldMatch[1]+' punti percentuali in circa un mese: pressione per gli asset sensibili ai tassi.';
+  if(s==='Nasdaq is materially above its 200-day average; entry risk is less attractive even if trend is strong.') return 'Il Nasdaq è molto sopra la media a 200 giorni: il trend può essere forte, ma il punto di entrata è meno favorevole.';
+  if(s==='Risk remains distributed across rates, valuation, growth and geopolitics; monitor catalysts rather than forcing a single narrative.') return 'Il rischio è distribuito tra tassi, valutazioni, crescita e geopolitica: meglio monitorare gli eventi senza forzare una sola storia.';
+  if(s==='ARGUS will not publish a market recommendation until the first verified data snapshot passes validation.') return 'ARGUS non pubblica indicazioni di mercato finché il primo snapshot verificato non supera i controlli.';
   s=s.replace('3-month momentum:','Momentum a 3 mesi:')
      .replace('Distance vs 200-day average:','Distanza dalla media a 200 giorni:')
      .replace('20-day annualised volatility:','Volatilità annualizzata a 20 giorni:')
