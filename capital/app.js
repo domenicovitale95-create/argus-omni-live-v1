@@ -339,3 +339,4 @@ $('#guideCap')?.addEventListener('input',runGuide);
 $('#adviceCap')?.addEventListener('input',renderSimpleAdvice);
 $$('.mode button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 boot();
+
