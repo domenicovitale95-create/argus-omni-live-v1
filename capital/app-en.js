@@ -210,6 +210,7 @@ function holdings(){try{return JSON.parse(localStorage.getItem('argusCapitalHold
 function saveHoldings(x){localStorage.setItem('argusCapitalHoldings',JSON.stringify(x));renderPortfolio()}
 function addHolding(){const x=holdings();x.push({id:(CONFIG?.etfs?.[0]?.id||'vwce'),amount:1000});saveHoldings(x)}
 function renderPortfolio(){
+  if(!document.querySelector("#holdingList")) return;
   const x=holdings(), etfs=CONFIG?.etfs||[], total=x.reduce((a,b)=>a+(+b.amount||0),0);
   $('#holdingList').innerHTML=x.map((h,i)=>'<div class="holding"><select data-i="'+i+'" class="h-id">'+etfs.map(e=>'<option value="'+esc(e.id)+'" '+(e.id===h.id?'selected':'')+'>'+esc(e.ticker)+' · '+esc(e.role_it||e.role)+'</option>').join('')+'</select><input data-i="'+i+'" class="h-amount" type="number" value="'+Number(h.amount||0)+'" min="0"><button data-i="'+i+'" class="h-del">×</button></div>').join('')||'<div class="empty">Add your investments manually. They stay in this browser only.</div>';
   $$('.h-id').forEach(e=>e.onchange=()=>{x[+e.dataset.i].id=e.value;saveHoldings(x)});
@@ -266,7 +267,7 @@ async function boot(){
   window.addEventListener('focus',()=>refreshLiveData(false));
 }
 $('#runSim').onclick=runSim;
-$('#addHolding').onclick=addHolding;
+$('#addHolding')?.addEventListener('click',addHolding);
 $('#guideCap')?.addEventListener('input',runGuide);
 $('#adviceCap')?.addEventListener('input',renderSimpleAdvice);
 $$('.mode button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
