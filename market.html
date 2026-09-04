@@ -348,6 +348,53 @@
   <a href="#virtual"><b>◉</b>VIRTUALE</a>
 </nav>
 <script src="capital/intelligence-lab.js" defer></script>
-<script src="capital/app.js?v=20260904-autorefresh-2" defer></script>
+<script src="https://raw.githack.com/domenicovitale95-create/argus-omni-live-v1/749b3548fbb50d082bb36a9710248771e867b277/capital/app.js" defer></script>
+<script>
+(function(){
+  const RAW='https://raw.githubusercontent.com/domenicovitale95-create/argus-omni-live-v1/main/';
+  let busy=false;
+  async function j(path){
+    const r=await fetch(RAW+path+'?ts='+Date.now(),{
+      cache:'no-store',
+      headers:{'Cache-Control':'no-cache','Pragma':'no-cache'}
+    });
+    if(!r.ok) throw new Error(path+' '+r.status);
+    return r.json();
+  }
+  async function hardRefresh(){
+    if(busy) return;
+    busy=true;
+    const status=document.getElementById('autoRefresh');
+    try{
+      const fresh=await j('capital/data/latest.json');
+      const old=(typeof DATA!=='undefined'&&DATA)?DATA.generated_at:null;
+      if(typeof DATA!=='undefined') DATA=fresh;
+      if(typeof renderAll==='function'){
+        renderAll();
+      }else{
+        if(typeof renderSimpleAdvice==='function') renderSimpleAdvice();
+        if(typeof renderTop==='function') renderTop();
+        if(typeof renderRanking==='function') renderRanking();
+        if(typeof renderIdeas==='function') renderIdeas();
+        if(typeof renderPulse==='function') renderPulse();
+        if(typeof renderSources==='function') renderSources();
+        const stamp=document.getElementById('lastUpdate');
+        if(stamp&&fresh.generated_at) stamp.textContent=new Date(fresh.generated_at).toLocaleString('it-IT');
+      }
+      if(status) status.textContent=(old&&old!==fresh.generated_at)?'NUOVI DATI CARICATI':'CONTROLLATO ORA';
+    }catch(e){
+      console.error('ARGUS hard refresh',e);
+      if(status) status.textContent='RIPROVO AUTOMATICAMENTE';
+    }finally{
+      busy=false;
+    }
+  }
+  window.addEventListener('load',()=>setTimeout(hardRefresh,700));
+  setInterval(hardRefresh,30000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible') hardRefresh()});
+  window.addEventListener('focus',hardRefresh);
+  window.ARGUS_HARD_REFRESH=hardRefresh;
+})();
+</script>
 </body>
 </html>
