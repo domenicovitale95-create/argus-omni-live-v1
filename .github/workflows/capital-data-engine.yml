@@ -8,8 +8,10 @@ on:
       - 'capital/config.json'
       - '.github/workflows/capital-data-engine.yml'
   schedule:
-    - cron: '15 6,12,18 * * 1-5'
-    - cron: '15 8 * * 0,6'
+    # Weekdays: refresh every hour. Weekend: every 3 hours.
+    # UTC schedule; the UI always shows the actual data timestamp.
+    - cron: '7 * * * 1-5'
+    - cron: '7 */3 * * 0,6'
   workflow_dispatch:
 
 permissions:
