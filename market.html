@@ -150,6 +150,17 @@
  <p>The Top 10 offers alternatives; the Top 3 combines different roles. All-World, ACWI IMI and MSCI World overlap substantially. Adding S&amp;P 500 or emerging markets to a global fund changes its weights; Gold Miners and Junior Gold Miners may share holdings.</p>
  </details>
 </section><details class="simple-fold asset-category" id="gold-picks"><summary><span class="visual-menu-title">Gold</span><span class="visual-menu-note">Physical gold exposure and mining shares</span></summary>
+<div class="asset-pick gold-eur-quote" id="gold-eur-price">
+<span class="pick-label">GOLD PRICE · EUR PER TROY OUNCE</span>
+<div class="tradingview-widget-container" style="min-height:140px;margin-top:12px">
+<div class="tradingview-widget-container__widget"></div>
+<div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/XAUEUR/?exchange=OANDA" rel="noopener noreferrer" target="_blank">Gold / EUR on TradingView</a></div>
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+{"symbol":"OANDA:XAUEUR","width":"100%","isTransparent":true,"colorTheme":"dark","locale":"en"}
+</script></div>
+<p class="selection-date">1 troy ounce = 31.1035 grams. Indicative OANDA gold/EUR quote; dealer prices for bars include premiums and spreads. The feed may be delayed or paused when markets are closed.</p>
+<p class="selection-date">If the quote does not load, <a href="https://www.tradingview.com/symbols/XAUEUR/?exchange=OANDA" target="_blank" rel="noopener noreferrer">open the gold price here ↗</a>.</p>
+</div>
 <p class="selection-date">Research selection · 4 September 2026</p>
 <article class="asset-pick"><span class="pick-label">FIRST PRODUCT TO RESEARCH · ETC</span><h3>iShares Physical Gold ETC</h3><p>Exposure backed by physical gold. A possible diversifier alongside stocks.</p><p class="pick-risk">Gold can fall and produces no income. This is an ETC, not a UCITS ETF.</p><details><summary>Product details and source</summary><p>ISIN IE00B4ND3602. Check the trading currency, fees and broker availability.</p><a href="https://www.ishares.com/uk/individual/en/products/258441" target="_blank" rel="noopener noreferrer">Official iShares factsheet ↗</a></details></article>
 <article class="asset-pick"><span class="pick-label">HIGHER-RISK ALTERNATIVE · ETF</span><h3>VanEck Gold Miners UCITS ETF</h3><p>Owns gold-mining companies. Returns depend on their costs and profits as well as gold prices.</p><p class="pick-risk">Mining shares can fall much more than gold. They are not a substitute for physical gold.</p><a href="https://www.vaneck.com/uk/en/investments/gold-miners-etf/" target="_blank" rel="noopener noreferrer">Official fund details ↗</a></article>
@@ -466,6 +477,7 @@
     if(busy) return;
     busy=true;
     const status=document.getElementById('autoRefresh');
+    if(status) status.textContent='CHECKING FOR NEW DATA';
     try{
       const fresh=await j('capital/data/latest.json');
       const old=(typeof DATA!=='undefined'&&DATA)?DATA.generated_at:null;
@@ -482,7 +494,7 @@
         const stamp=document.getElementById('lastUpdate');
         if(stamp&&fresh.generated_at) stamp.textContent=new Date(fresh.generated_at).toLocaleString('en-GB');
       }
-      if(status) status.textContent=(old&&old!==fresh.generated_at)?'NEW DATA LOADED':'CHECKED JUST NOW';
+      if(status) status.textContent=(old&&old!==fresh.generated_at)?'NEW DATA LOADED':'SOURCE CHECKED · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
     }catch(e){
       console.error('ARGUS hard refresh',e);
       if(status) status.textContent='RETRYING AUTOMATICALLY';
@@ -490,7 +502,12 @@
       busy=false;
     }
   }
-  window.addEventListener('load',()=>setTimeout(hardRefresh,700));
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',hardRefresh,{once:true});
+  }else{
+    hardRefresh();
+  }
+  window.addEventListener('pageshow',hardRefresh);
   setInterval(hardRefresh,30000);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible') hardRefresh()});
   window.addEventListener('focus',hardRefresh);
