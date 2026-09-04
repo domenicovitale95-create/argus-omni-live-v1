@@ -4,6 +4,8 @@ const fmtPct=n=>n==null?'—':(Number(n)>0?'+':'')+Number(n).toFixed(1)+'%';
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const cls=s=>/ACCUMULATE|ATTRACTIVE|POSITIVE|ACCUMULA|INTERESSANTE|POSITIVO/.test(s||'')?'good':/RISK|DEFENSIVE|AVOID|RISCHIO|DIFENSIVO/.test(s||'')?'risk':/WATCH|CAUTION|WAIT|OSSERVA|PRUDENZA|ASPETTA/.test(s||'')?'watch':'neutral';
 let DATA=null, CONFIG=null, TRACK=null, MODE='simple';
+const RAW_BASE='https://raw.githubusercontent.com/domenicovitale95-create/argus-omni-live-v1/main/';
+let refreshInFlight=false;
 
 const STATUS_IT={
   'DATA UNAVAILABLE':'DATI NON DISPONIBILI','DATA INSUFFICIENT':'DATI INSUFFICIENTI',
@@ -76,8 +78,10 @@ function translateSentence(v){
 }
 
 async function loadJSON(path){
-  const sep=path.includes('?')?'&':'?';
-  const r=await fetch(path+sep+'v='+Date.now(),{cache:'no-store'});
+  const absolute=/^https?:\/\//.test(path)?path:RAW_BASE+path.replace(/^\//,'');
+  const sep=absolute.includes('?')?'&':'?';
+  const url=absolute+sep+'v='+Date.now();
+  const r=await fetch(url,{cache:'no-store',headers:{'Cache-Control':'no-cache','Pragma':'no-cache'}});
   if(!r.ok) throw new Error(path+' '+r.status);
   return r.json();
 }
@@ -286,23 +290,48 @@ function renderPortfolio(){
   $('#pWarning').innerHTML=overlap?'<strong>Sovrapposizione rilevata.</strong> Un ETF mondiale insieme a S&P 500, Nasdaq o temi specifici può aumentare molto il peso delle stesse grandi società.':'Nessuna sovrapposizione strutturale evidente con le regole parziali attuali.';
 }
 function setMode(m){MODE=m;document.body.classList.toggle('pro',m==='pro');$$('.mode button').forEach(b=>b.classList.toggle('active',b.dataset.mode===m))}
+function renderAll(){
+  renderSimpleAdvice();renderTop();renderRanking();renderIdeas();renderPulse();renderETF();renderInvestments();renderAIPortfolios();renderSources();renderPortfolio();runSim();
+  window.ARGUS_CAPITAL_LAB?.render({data:DATA,config:CONFIG,track:TRACK});
+  if(DATA?.generated_at) setText('#lastUpdate',new Date(DATA.generated_at).toLocaleString('it-IT'));
+}
+async function refreshLiveData(forceConfig=false){
+  if(refreshInFlight) return;
+  refreshInFlight=true;
+  try{
+    const previousStamp=DATA?.generated_at||null;
+    const jobs=[
+      loadJSON('capital/data/latest.json'),
+      loadJSON('capital/data/track-record.json').catch(()=>TRACK)
+    ];
+    if(forceConfig||!CONFIG) jobs.push(loadJSON('capital/config.json'));
+    const out=await Promise.all(jobs);
+    DATA=out[0]; TRACK=out[1];
+    if(out[2]) CONFIG=out[2];
+    renderAll();
+    const changed=previousStamp&&DATA?.generated_at&&previousStamp!==DATA.generated_at;
+    setText('#autoRefresh',changed?'NUOVI DATI CARICATI':'CONTROLLATO ORA');
+    const dot=$('#autoRefreshDot'); if(dot) dot.classList.remove('stale');
+  }catch(e){
+    console.error('ARGUS auto-refresh failed',e);
+    setText('#autoRefresh','RIPROVO AUTOMATICAMENTE');
+    const dot=$('#autoRefreshDot'); if(dot) dot.classList.add('stale');
+  }finally{
+    refreshInFlight=false;
+  }
+}
 async function boot(){
   try{
-    [DATA,CONFIG,TRACK]=await Promise.all([
-      loadJSON('capital/data/latest.json'),
-      loadJSON('capital/config.json'),
-      loadJSON('capital/data/track-record.json').catch(()=>null)
-    ]);
-    renderSimpleAdvice();renderTop();renderRanking();renderIdeas();renderPulse();renderETF();renderInvestments();renderAIPortfolios();renderSources();renderPortfolio();runSim();
-    window.ARGUS_CAPITAL_LAB?.render({data:DATA,config:CONFIG,track:TRACK});
-    setText('#lastUpdate',new Date(DATA.generated_at).toLocaleString('it-IT'));
+    await refreshLiveData(true);
   }catch(e){
     console.error(e);
     setText('#marketStatus','DATI NON DISPONIBILI');
     setText('#bestAsset','Motore dati in avvio');
     $('#changed').innerHTML='<div class="empty">Il motore dati non ha ancora prodotto uno snapshot verificato. ARGUS non inventa numeri.</div>';
-    window.ARGUS_CAPITAL_LAB?.render({data:DATA,config:CONFIG,track:TRACK});
   }
+  setInterval(()=>refreshLiveData(false),60000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible') refreshLiveData(false)});
+  window.addEventListener('focus',()=>refreshLiveData(false));
 }
 $('#runSim').onclick=runSim;
 $('#addHolding').onclick=addHolding;
