@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-04T20:17:30.441458+00:00",
+  "generated_at": "2026-09-04T21:16:31.077235+00:00",
   "data_quality": {
     "fresh_series": 18,
     "total_series": 18,
@@ -511,12 +511,12 @@
   },
   "macro": {
     "us10y": {
-      "price": 4.79,
-      "date": "2026-09-02",
-      "ret_1d": 0.0,
-      "ret_1m": 0.16,
-      "last_update": "2026-09-02",
-      "delay_days": 2,
+      "price": 4.77,
+      "date": "2026-09-03",
+      "ret_1d": -0.02,
+      "ret_1m": 0.14,
+      "last_update": "2026-09-03",
+      "delay_days": 1,
       "fresh": true,
       "label": "US 10Y Treasury Yield",
       "unit": "%",
@@ -524,12 +524,12 @@
       "data_type": "OBSERVED"
     },
     "us2y": {
-      "price": 4.39,
-      "date": "2026-09-02",
-      "ret_1d": 0.0,
-      "ret_1m": 0.19,
-      "last_update": "2026-09-02",
-      "delay_days": 2,
+      "price": 4.34,
+      "date": "2026-09-03",
+      "ret_1d": -0.05,
+      "ret_1m": 0.16,
+      "last_update": "2026-09-03",
+      "delay_days": 1,
       "fresh": true,
       "label": "US 2Y Treasury Yield",
       "unit": "%",
