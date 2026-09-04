@@ -7,6 +7,20 @@
 <title>ARGUS CAPITAL — Intelligenza per gli investimenti</title>
 <meta name="description" content="ARGUS CAPITAL — mercati verificati, idee di investimento, ETF, azioni, metalli, portafoglio virtuale e simulazioni.">
 <link rel="stylesheet" href="capital/styles.css">
+<style>
+.etf-review{scroll-margin-top:24px;color:#eef2f8;font-size:1rem;line-height:1.6}
+.etf-review h3{font-size:1.15rem;line-height:1.4;margin:12px 0}
+.etf-review p{font-size:1rem;line-height:1.6;margin:10px 0}
+.etf-review a{color:#87c7ff;text-decoration:underline;text-underline-offset:3px}
+.etf-review-intro,.etf-review-notes{padding:20px;margin:16px 0}
+.etf-review-top3,.etf-review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px;margin:18px 0}
+.etf-review-card{padding:18px;border:1px solid #34445e;border-radius:14px;background:#101925;min-width:0;overflow-wrap:anywhere}
+.etf-review .etf-review-kicker{font-size:.875rem;color:#91caff;font-weight:700}
+.etf-review .etf-review-meta{font-size:.875rem;color:#cad4e4}
+.etf-review summary{cursor:pointer;font-size:1rem;font-weight:700;min-height:44px}
+.etf-review-top3 .etf-review-card{border-top:3px solid #71baff}
+.etf-review-link{display:inline-block;margin-top:12px;color:#a8d6ff;text-decoration:underline;font-size:1rem;padding:10px 0}
+</style>
 </head>
 <body>
 <div class="app">
@@ -25,7 +39,43 @@
       <span class="chip">Auto-refresh · <strong id="autoRefresh">OGNI 60 SEC</strong></span>
       <span class="chip">Belgio · EUR · Italiano</span>
     </div>
+  <a class="etf-review-link" href="#top-etf">Vai alla Top 10 e alla Top 3 ETF</a>
   </header>
+
+<!-- ETF editorial review 2026-09-04: independent of live market signals -->
+<section class="section etf-review" id="top-etf">
+ <div class="section-head"><h2>TOP 10 ETF · LA SELEZIONE ARGUS</h2><span>ANALISI DEL 4 SETTEMBRE 2026</span></div>
+ <div class="panel etf-review-intro"><h3>La mia prima scelta: Vanguard FTSE All-World.</h3>
+ <p>Una selezione ragionata per un investitore europeo di lungo periodo. L'ordine privilegia diversificazione, costi e utilità nel portafoglio; non promette i rendimenti più alti del mondo. Non comprare tutti e dieci.</p>
+ <p><strong>Orizzonte ipotizzato: almeno 10 anni.</strong> Tieni separati fondo di emergenza e denaro necessario per la casa. Gli ETF azionari non sono investimenti a basso rischio.</p>
+ <p>Questa classifica è un'analisi editoriale datata. Il refresh dei prezzi non aggiorna automaticamente la selezione e non la trasforma in un segnale di acquisto oggi.</p></div>
+ <h3>TOP 3 · Tre ruoli complementari</h3>
+ <div class="etf-review-top3">
+ <article class="etf-review-card"><p class="etf-review-kicker">1 · BASE MONDIALE</p><h3>Vanguard FTSE All-World</h3><p>IE00BK5BQT80</p><p>La componente principale per partecipare alla crescita globale, senza scegliere il paese vincente.</p></article>
+ <article class="etf-review-card"><p class="etf-review-kicker">2 · EQUILIBRIO</p><h3>iShares Global Aggregate Bond EUR Hedged</h3><p>IE00BDBRDM35</p><p>Obbligazioni per diversificare il rischio azionario. La copertura in euro riduce il rischio di cambio, non quello dei tassi.</p></article>
+ <article class="etf-review-card"><p class="etf-review-kicker">3 · CRESCITA OPZIONALE</p><h3>VanEck Semiconductor</h3><p>IE00BMC38736</p><p>Solo una piccola quota per chi accetta forti oscillazioni. Aumenta l'esposizione tecnologica già presente nel fondo mondiale.</p></article>
+ </div>
+ <p><strong>Esempio da simulare, non allocazione personale definitiva:</strong> 60% All-World, 35% obbligazioni globali EUR Hedged, 5% semiconduttori. Su €300: €180 / €105 / €15. Se il broker non permette frazioni o applica commissioni minime, evita tre piccoli ordini mensili e accumula gli importi prima dell'acquisto. Anche questa combinazione può perdere sensibilmente. Per un profilo più prudente il tema semiconduttori è facoltativo.</p>
+ <div class="etf-review-grid"><article class="etf-review-card" data-etf-rank="1"><p class="etf-review-kicker">1 · Base mondiale</p><h3>Vanguard FTSE All-World UCITS ETF (Acc)</h3><p class="etf-review-meta">ISIN IE00BK5BQT80 · Costo annuo 0,14%</p><p>La mia prima scelta per semplicità: grandi e medie imprese dei mercati sviluppati ed emergenti.</p><p><strong>Rischio:</strong> Azionario: può subire perdite forti; forte peso degli USA.</p><a href="https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
+<article class="etf-review-card" data-etf-rank="2"><p class="etf-review-kicker">2 · Alternativa globale</p><h3>State Street SPDR MSCI ACWI IMI UCITS ETF (Acc)</h3><p class="etf-review-meta">ISIN IE00B3YLTY66 · Costo annuo 0,17%</p><p>Include anche le piccole imprese. Alternativa al Vanguard, non un secondo acquisto necessario.</p><p><strong>Rischio:</strong> Ampia sovrapposizione con All-World; rischio azionario.</p><a href="https://www.ssga.com/uk/en_gb/intermediary/etfs/state-street-spdr-msci-all-country-world-investable-market-ucits-etf-acc-spyi-gy" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
+<article class="etf-review-card" data-etf-rank="3"><p class="etf-review-kicker">3 · Mercati sviluppati</p><h3>iShares Core MSCI World UCITS ETF (Acc)</h3><p class="etf-review-meta">ISIN IE00B4L5Y983 · Costo annuo 0,20%</p><p>Solida base se si vuole scegliere separatamente la quota emergente.</p><p><strong>Rischio:</strong> Non include i mercati emergenti; si sovrappone ai primi due.</p><a href="https://www.ishares.com/uk/individual/en/products/251882" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
+<article class="etf-review-card" data-etf-rank="4"><p class="etf-review-kicker">4 · Equilibrio</p><h3>iShares Core Global Aggregate Bond UCITS ETF EUR Hedged (Acc)</h3><p class="etf-review-meta">ISIN IE00BDBRDM35 · Costo annuo 0,10%</p><p>Obbligazioni globali con copertura del cambio in euro: complemento alla parte azionaria.</p><p><strong>Rischio:</strong> Può perdere con rialzi dei tassi o peggioramento del credito; non è liquidità garantita.</p><a href="https://www.ishares.com/uk/individual/en/products/291770/ishares-core-global-aggregate-bond-ucits-etf" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
+<article class="etf-review-card" data-etf-rank="5"><p class="etf-review-kicker">5 · Grandi imprese USA</p><h3>iShares Core S&amp;P 500 UCITS ETF (Acc)</h3><p class="etf-review-meta">ISIN IE00B5BMR087 · Costo annuo 0,07%</p><p>Costo basso per una scelta intenzionale sul mercato statunitense.</p><p><strong>Rischio:</strong> Aumenta il peso USA già presente negli ETF mondiali.</p><a href="https://www.ishares.com/uk/individual/en/products/253743" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
+<article class="etf-review-card" data-etf-rank="6"><p class="etf-review-kicker">6 · Mercati emergenti</p><h3>iShares Core MSCI EM IMI UCITS ETF (Acc)</h3><p class="etf-review-meta">ISIN IE00BKM4GZ66 · Costo annuo 0,18%</p><p>Esposizione ampia a grandi, medie e piccole imprese emergenti.</p><p><strong>Rischio:</strong> Rischi politici, valutari e di governance; già parzialmente presente nei fondi globali.</p><a href="https://www.ishares.com/uk/individual/en/products/264659" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
+<article class="etf-review-card" data-etf-rank="7"><p class="etf-review-kicker">7 · Crescita · quota piccola</p><h3>VanEck Semiconductor UCITS ETF</h3><p class="etf-review-meta">ISIN IE00BMC38736 · Costo annuo 0,35%</p><p>Esposizione ai chip, compresi Micron e Broadcom: la mia preferenza tra i temi tecnologici esaminati.</p><p><strong>Rischio:</strong> Concentrato e ciclico; prezzi elevati possono anticipare molta crescita futura.</p><a href="https://www.vaneck.com/uk/en/investments/semiconductor-etf/" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
+<article class="etf-review-card" data-etf-rank="8"><p class="etf-review-kicker">8 · Biotech · quota piccola</p><h3>iShares Nasdaq US Biotechnology UCITS ETF (Acc)</h3><p class="etf-review-meta">ISIN IE00BYXG2H39 · Costo annuo 0,35%</p><p>Paniere biotech e farmaceutico, con alcune società viste nei portafogli AI.</p><p><strong>Rischio:</strong> Rischi clinici, brevetti, regolazione e finanziamento; non una base autonoma.</p><a href="https://www.ishares.com/uk/individual/en/products/291450/ishares-nasdaq-us-biotechnology-ucits-etf" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
+<article class="etf-review-card" data-etf-rank="9"><p class="etf-review-kicker">9 · Miniere · quota piccola</p><h3>VanEck Gold Miners UCITS ETF</h3><p class="etf-review-meta">ISIN IE00BQQP9F84 · Costo annuo 0,53%</p><p>Esposizione alle società aurifere, inclusa Kinross.</p><p><strong>Rischio:</strong> Non è oro fisico: costi di estrazione, gestione e rischio azionario.</p><a href="https://www.vaneck.com/uk/en/investments/gold-miners-etf/" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
+<article class="etf-review-card" data-etf-rank="10"><p class="etf-review-kicker">10 · Speculativo</p><h3>VanEck Junior Gold Miners UCITS ETF</h3><p class="etf-review-meta">ISIN IE00BQQP9G91 · Costo annuo 0,55%</p><p>Include Aris, Aura, Fortuna, NovaGold e Coeur nelle composizioni consultate.</p><p><strong>Rischio:</strong> Tra le scelte più rischiose: imprese minerarie minori, liquidità e forte volatilità.</p><a href="https://www.vaneck.com/uk/en/investments/junior-gold-miners-etf/" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article></div>
+ <details class="panel etf-review-notes"><summary>Perché questa selezione è cambiata</summary>
+ <p>Ho ridotto la priorità di singoli paesi e temi come Corea, uranio e cybersecurity: possono essere interessanti, ma aumentano concentrazione e sovrapposizioni. Non li escludo per una previsione di ribasso. L'ETF globale offre una base più robusta.</p>
+ <p>Il <a href="https://www.imf.org/en/publications/weo/issues/2026/07/08/world-economic-outlook-update-july-2026" target="_blank" rel="noopener noreferrer">FMI di luglio 2026</a> segnala rischi da conflitti e rivalutazione dei mercati. La mia conclusione è diversificare, non costruire il portafoglio intorno a un solo scenario geopolitico.</p>
+ <p><strong>Evidenza AI:</strong> nelle schermate fornite, Claude detiene SGOV al 14%; le altre schermate mostrano soprattutto azioni e sono incomplete. Non abbiamo verificato tutti i portafogli AI del mondo, né dimostrato acquisti degli ETF VanEck da parte loro. Avere Micron in comune non significa copiare la strategia AI.</p>
+ <p><strong>Rialzi recenti, non previsioni:</strong> nelle schede VanEck al 31 agosto 2026, in USD e con proventi reinvestiti: Semiconductor +114,40% a un anno ma −6,31% a tre mesi; Gold Miners +32,87% ad agosto; Junior Gold Miners +34,07% ad agosto. Il periodo conta; il rendimento in euro è diverso. Non uso questi rialzi come promessa o motivo sufficiente per comprare.</p>
+ <p>Fonti rendimenti: <a href="https://www.vaneck.com/it/en/library/fact-sheets/smh-fact-sheet/" target="_blank" rel="noopener noreferrer">Semiconductor</a> · <a href="https://www.vaneck.com/fr/fr/library/fact-sheets/gdx-fact-sheet.pdf/" target="_blank" rel="noopener noreferrer">Gold Miners</a> · <a href="https://www.vaneck.com/uk/en/library/fact-sheets/gdxj-fact-sheet.pdf" target="_blank" rel="noopener noreferrer">Junior Gold Miners</a>.</p>
+ <p><strong>Belgio:</strong> i costi indicati sono TER/OCF annui, esclusi commissioni, spread e imposte. La disponibilità UCITS non garantisce la negoziabilità presso ogni broker. Verifica KID, TOB e fiscalità applicabile all'ISIN, soprattutto alla componente obbligazionaria, prima di comprare. <a href="https://www.wikifin.be/fr/impots-emploi-et-revenus/declaration-dimpots/vos-revenus-mobiliers/les-taxes-sur-vos" target="_blank" rel="noopener noreferrer">Guida fiscale Wikifin</a>.</p>
+ <p>La Top 10 è un insieme di alternative, la Top 3 una combinazione per ruoli. All-World, ACWI IMI e MSCI World si sovrappongono ampiamente. S&amp;P 500 ed emergenti aggiunti a un globale ne modificano i pesi; Gold Miners e Junior Gold Miners possono condividere società.</p>
+ </details>
+</section>
 
   <section class="section simple-advice-section" id="advice">
     <div class="section-head"><h2>CONSIGLIO INVESTIMENTI</h2><span>SEMPLICE · CHIARO · NIENTE PAROLE DIFFICILI</span></div>
