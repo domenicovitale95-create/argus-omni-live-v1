@@ -49,6 +49,45 @@
 .simple-layout :is(a,button,summary,input,select):focus-visible{outline:2px solid #a4caff;outline-offset:4px}
 .simple-layout .simple-fold,.simple-layout .etf-review-card{overflow-wrap:anywhere}
 @media(max-width:600px){.simple-layout .etf-review-top3{grid-template-columns:1fr}.simple-layout .holding{grid-template-columns:minmax(0,1fr) 80px 30px}.simple-layout .form-grid{grid-template-columns:1fr}.simple-layout .section-head>span{display:block}.simple-layout .app{padding-bottom:110px}}
+
+/* Clear visual hierarchy: one foundation, two optional additions. */
+.simple-layout{--muted:#b0bdce;background:#080e17}
+.simple-layout .app{max-width:840px;padding-left:20px;padding-right:20px}
+.simple-layout .topbar{padding-top:24px}
+.simple-layout .brand-copy b{letter-spacing:.08em;font-size:.875rem}
+.simple-layout .hero{padding-top:24px}
+.simple-layout .hero h1{font-size:clamp(1.9rem,6vw,2.65rem);font-weight:700;margin:0 0 16px}
+.simple-layout .hero .live-row{margin-top:0;color:#a9b7ca}
+.simple-layout #top-etf{margin-top:28px}
+.simple-layout .section-head h2{font-size:1.05rem;font-weight:600}
+.simple-layout .section-head span{font-size:.875rem;color:#a9b7ca}
+.simple-layout .visual-picks{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.simple-layout .visual-main{grid-column:1/-1;background:#eaf2ff;color:#102442;border:0!important;border-radius:22px;padding:28px}
+.simple-layout .visual-main .etf-review-kicker{color:#325987;font-size:.875rem;letter-spacing:.08em}
+.simple-layout .visual-main h3{font-size:clamp(1.9rem,6vw,2.65rem);line-height:1.12;letter-spacing:-.035em;margin:16px 0}
+.simple-layout .visual-main .visual-description{font-size:1.125rem;line-height:1.5;color:#284568}
+.simple-layout .visual-facts{display:grid;grid-template-columns:1fr 1fr;gap:16px;border-top:1px solid #becde0;padding-top:18px;margin-top:24px}
+.simple-layout .visual-facts span{font-size:.875rem;color:#365476}
+.simple-layout .visual-facts strong{display:block;color:#122f53;font-size:1rem}
+.simple-layout .visual-main .visual-risk{font-size:.875rem;color:#365476;margin-top:20px}
+.simple-layout .visual-product{border-top:1px solid #34445e;margin-top:18px;padding-top:6px}
+.simple-layout .visual-product summary{font-size:.9375rem;min-height:44px;padding:10px 0;font-weight:600;cursor:pointer}
+.simple-layout .visual-main .visual-product{border-color:#becde0}
+.simple-layout .visual-main a{color:#174d88}
+.simple-layout .visual-option-label{grid-column:1/-1;font-size:1.05rem;font-weight:600;margin-top:12px}
+.simple-layout .visual-option-label span{display:block;color:#a9b7ca;font-size:.875rem;font-weight:400;margin-top:2px}
+.simple-layout .visual-secondary{border:1px solid #2b3d55;border-top:1px solid #2b3d55!important;border-radius:18px;padding:22px;background:#101c2c}
+.simple-layout .visual-secondary h3{font-size:1.3rem;margin:14px 0 10px}
+.simple-layout .visual-secondary>p:not(.etf-review-kicker){color:#c1cede}
+.simple-layout .visual-menu-title{display:block;font-size:1.1rem}
+.simple-layout .visual-menu-note{display:block;font-size:.875rem;color:#afbdd0;font-weight:400;margin-top:4px}
+.simple-layout #my-money,.simple-layout #practice{margin-top:20px;border-color:#49607f}
+.simple-layout #more-research{margin-top:28px}
+.simple-layout .bottom-nav{background:#142238;border-color:#49607f;border-radius:18px}
+.simple-layout .bottom-nav a:hover,.simple-layout .bottom-nav a:focus-visible{color:#132c4e;background:#eaf2ff;font-weight:700}
+.simple-layout summary::marker{color:#89afe1}
+.simple-layout .visual-main summary::marker{color:#325987}
+@media(max-width:600px){.simple-layout .visual-picks{grid-template-columns:1fr}.simple-layout .visual-main{padding:24px}.simple-layout .app{padding-left:16px;padding-right:16px}.simple-layout .visual-secondary{padding:20px}}
 </style>
 </head>
 <body class="simple-layout">
@@ -58,16 +97,23 @@
     <div class="mode"><button class="active" data-mode="simple">SEMPLICE</button><button data-mode="pro">PRO</button></div>
   </div>
 
-  <header class="hero"><h1>Investire, un passo alla volta.</h1><p>Tre ETF da capire. I tuoi investimenti. Una simulazione.</p><div class="live-row"><span class="chip">Dati di mercato · <strong id="lastUpdate">—</strong></span><span class="chip"><span id="autoRefreshDot"></span><strong id="autoRefresh">Verifica in corso</strong></span></div></header>
+  <header class="hero"><h1>Da dove cominciare?</h1><div class="live-row"><span class="chip">Dati di mercato · <strong id="lastUpdate">—</strong></span><span class="chip"><span id="autoRefreshDot"></span><strong id="autoRefresh">Verifica in corso</strong></span></div></header>
 
 <section class="section etf-review" id="top-etf">
- <div class="section-head"><h2>Da quali ETF partire?</h2><span>Selezione del 4 settembre 2026</span></div>
- <p>Parti da un ETF mondiale. Gli altri due hanno ruoli diversi e sono facoltativi.</p><p class="simple-caution">Per obiettivi di almeno 10 anni. Puoi perdere denaro: tieni separati i soldi per la casa e le emergenze.</p>
- 
- <div class="etf-review-top3">
- <article class="etf-review-card"><p class="etf-review-kicker">1 · BASE MONDIALE</p><h3>Vanguard FTSE All-World</h3><p>IE00BK5BQT80</p><p>Un solo fondo per investire in tante aziende nel mondo. La prima scelta della selezione.</p></article>
- <article class="etf-review-card"><p class="etf-review-kicker">2 · EQUILIBRIO</p><h3>iShares Global Aggregate Bond EUR Hedged</h3><p>IE00BDBRDM35</p><p>Per bilanciare le azioni con obbligazioni. Può aiutare a ridurre le oscillazioni, ma può perdere valore.</p></article>
- <article class="etf-review-card"><p class="etf-review-kicker">3 · CRESCITA OPZIONALE</p><h3>VanEck Semiconductor</h3><p>IE00BMC38736</p><p>Investe nei produttori di chip. Solo una piccola quota, se accetti forti salite e discese.</p></article>
+
+ <div class="section-head"><h2>Il punto di partenza</h2><span>Selezione · 4 settembre 2026</span></div>
+ <div class="etf-review-top3 visual-picks">
+ <article class="etf-review-card visual-main">
+ <p class="etf-review-kicker">01 · LA BASE</p>
+ <h3>Vanguard<br>FTSE All-World</h3>
+ <p class="visual-description">Tante aziende nel mondo.<br>Un solo ETF.</p>
+ <div class="visual-facts"><span><strong>Globale</strong>Azioni di molti paesi</span><span><strong>Lungo periodo</strong>Almeno 10 anni</span></div>
+ <p class="visual-risk">Può subire forti perdite. Tieni separati i soldi per la casa e le emergenze.</p>
+ <details class="visual-product"><summary>Codice e scheda del fondo</summary><p>ISIN: <strong>IE00BK5BQT80</strong></p><a href="https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating" target="_blank" rel="noopener noreferrer">Apri la scheda ufficiale</a></details>
+ </article>
+ <div class="visual-option-label">Due possibili aggiunte <span>Non sono acquisti necessari</span></div>
+ <article class="etf-review-card visual-secondary"><p class="etf-review-kicker">02 · PER BILANCIARE</p><h3>Obbligazioni globali</h3><p>Per cercare di ridurre le oscillazioni delle azioni. Può comunque perdere valore.</p><details class="visual-product"><summary>Quale ETF?</summary><p><strong>iShares Global Aggregate Bond EUR Hedged</strong></p><p>ISIN: IE00BDBRDM35</p><p>La copertura in euro riduce il rischio di cambio.</p></details></article>
+ <article class="etf-review-card visual-secondary"><p class="etf-review-kicker">03 · QUOTA PICCOLA</p><h3>Tecnologia e chip</h3><p>Per investire nei produttori di chip. Forti salite e discese: è una scelta più rischiosa.</p><details class="visual-product"><summary>Quale ETF?</summary><p><strong>VanEck Semiconductor</strong></p><p>ISIN: IE00BMC38736</p><p>Aggiunge tecnologia già presente nel fondo mondiale.</p></details></article>
  </div>
 <details class="simple-fold"><summary>Come dividere 300 €? Un esempio</summary><p>180 € nel fondo mondiale · 105 € in obbligazioni · 15 € nei chip.</p><p>È un esempio, non un piano personale. La quota chip è facoltativa. Controlla le commissioni prima di fare piccoli acquisti.</p></details>
  <details class="simple-fold" id="full-etf-list"><summary>Vedi tutti i 10 ETF, costi e rischi</summary><p>Sono alternative: non serve comprarli tutti.</p><div class="etf-review-grid"><article class="etf-review-card" data-etf-rank="1"><p class="etf-review-kicker">1 · Base mondiale</p><h3>Vanguard FTSE All-World UCITS ETF (Acc)</h3><p class="etf-review-meta">ISIN IE00BK5BQT80 · Costo annuo 0,14%</p><p>La mia prima scelta per semplicità: grandi e medie imprese dei mercati sviluppati ed emergenti.</p><p><strong>Rischio:</strong> Azionario: può subire perdite forti; forte peso degli USA.</p><a href="https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating" target="_blank" rel="noopener noreferrer">Scheda ufficiale e documenti ↗</a></article>
@@ -89,7 +135,7 @@
  <p><strong>Belgio:</strong> i costi indicati sono TER/OCF annui, esclusi commissioni, spread e imposte. La disponibilità UCITS non garantisce la negoziabilità presso ogni broker. Verifica KID, TOB e fiscalità applicabile all'ISIN, soprattutto alla componente obbligazionaria, prima di comprare. <a href="https://www.wikifin.be/fr/impots-emploi-et-revenus/declaration-dimpots/vos-revenus-mobiliers/les-taxes-sur-vos" target="_blank" rel="noopener noreferrer">Guida fiscale Wikifin</a>.</p>
  <p>La Top 10 è un insieme di alternative, la Top 3 una combinazione per ruoli. All-World, ACWI IMI e MSCI World si sovrappongono ampiamente. S&amp;P 500 ed emergenti aggiunti a un globale ne modificano i pesi; Gold Miners e Junior Gold Miners possono condividere società.</p>
  </details>
-</section><details class="simple-fold" id="my-money"><summary>I miei investimenti</summary><section class="section" id="portfolio">
+</section><details class="simple-fold" id="my-money"><summary><span class="visual-menu-title">I miei investimenti</span><span class="visual-menu-note">Aggiungi e controlla quello che possiedi</span></summary><section class="section" id="portfolio">
     <div class="section-head"><h2>I miei investimenti</h2><span>I dati restano su questo dispositivo</span></div>
     <div class="panel" style="padding:14px">
       <div class="toolbar"><button id="addHolding" class="btn primary">+ AGGIUNGI POSIZIONE</button></div>
@@ -103,7 +149,7 @@
       <div id="pWarning" class="notice" style="margin-top:10px">Nessun portafoglio ancora.</div>
       <div class="raw muted" style="margin-top:8px;font-size:10px">*Score strutturale parziale. Valute, sovrapposizioni reali delle partecipazioni e correlazioni cross-asset richiedono dati aggiuntivi verificati.</div>
     </div>
-  </section></details><details class="simple-fold" id="practice"><summary>Simula senza usare soldi veri</summary><section class="section" id="simulator">
+  </section></details><details class="simple-fold" id="practice"><summary><span class="visual-menu-title">Prova con una simulazione</span><span class="visual-menu-note">Scopri diversi scenari, senza investire denaro</span></summary><section class="section" id="simulator">
     <div class="section-head"><h2>SIMULATORE DI INVESTIMENTO</h2><span>SCENARIO · NON PREVISIONE</span></div>
     <div class="panel" style="padding:14px">
       <div class="form-grid">
