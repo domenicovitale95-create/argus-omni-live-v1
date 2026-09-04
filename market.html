@@ -20,8 +20,9 @@
     <h1>Dati complessi.<br>Decisioni semplici.</h1>
     <p>ARGUS analizza mercati, rischio e alternative. Se non vede un vantaggio chiaro, deve poter dire <b>ASPETTA</b>.</p>
     <div class="live-row">
-      <span class="chip"><span class="dot"></span>Motore dati attivo</span>
-      <span class="chip">Ultimo aggiornamento · <strong id="lastUpdate">—</strong></span>
+      <span class="chip"><span class="dot" id="autoRefreshDot"></span>Motore dati attivo</span>
+      <span class="chip">Dati · <strong id="lastUpdate">—</strong></span>
+      <span class="chip">Auto-refresh · <strong id="autoRefresh">OGNI 60 SEC</strong></span>
       <span class="chip">Belgio · EUR · Italiano</span>
     </div>
   </header>
@@ -347,6 +348,6 @@
   <a href="#virtual"><b>◉</b>VIRTUALE</a>
 </nav>
 <script src="capital/intelligence-lab.js" defer></script>
-<script src="capital/app.js" defer></script>
+<script src="capital/app.js?v=20260904-autorefresh-2" defer></script>
 </body>
 </html>
