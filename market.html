@@ -110,6 +110,75 @@
 .simple-layout .quote-explainer ul{padding-left:20px}
 .simple-layout .quote-explainer li{margin:10px 0;font-size:.875rem}
 .simple-layout .quotes-board .tradingview-widget-container{max-width:100%}
+
+/* Phone layout, including narrow screens and iPhone safe areas. */
+html{scroll-padding-top:88px}
+.simple-layout .app{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+.simple-layout .app *{min-width:0}
+.simple-layout :is(input,select,textarea){font-size:16px}
+.simple-layout :is(a,button,summary){touch-action:manipulation}
+.simple-layout .asset-nav{overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin;grid-template-columns:repeat(5,minmax(64px,1fr));-webkit-overflow-scrolling:touch}
+.simple-layout .asset-nav a{white-space:nowrap}
+.simple-layout .bottom-nav{bottom:max(8px,env(safe-area-inset-bottom));width:min(600px,calc(100% - 24px));padding:5px}
+.simple-layout .quotes-board{overflow:hidden}
+.simple-layout .quotes-board .tradingview-widget-container{width:100%;min-width:0}
+.simple-layout .tradingview-widget-container iframe{max-width:100%}
+.simple-layout .quote-explainer a{overflow-wrap:anywhere}
+@media(max-width:600px){
+ .simple-layout .topbar{padding-top:16px;padding-bottom:8px}
+ .simple-layout .hero{padding-top:16px}
+ .simple-layout .hero h1{font-size:1.85rem;line-height:1.18}
+ .simple-layout .hero .live-row{display:grid;grid-template-columns:1fr;gap:4px}
+ .simple-layout .hero .chip{white-space:normal;overflow-wrap:anywhere;line-height:1.5}
+ .simple-layout .asset-nav{margin-top:12px;padding:10px 0}
+ .simple-layout .asset-nav a{min-height:48px}
+ .simple-layout .section-head{display:block}
+ .simple-layout .section-head h2{font-size:1.125rem;line-height:1.4}
+ .simple-layout .section-head>span{display:block;margin-top:6px;line-height:1.5}
+ .simple-layout .quotes-board{padding:14px 10px}
+ .simple-layout .quotes-board>p,.simple-layout .quotes-board>.section-head,.simple-layout .quotes-board>.quote-explainer{margin-left:4px;margin-right:4px}
+ .simple-layout .visual-main{padding:22px}
+ .simple-layout .visual-main h3{font-size:2rem}
+ .simple-layout .visual-facts{gap:12px}
+ .simple-layout .etf-review-top3,.simple-layout .etf-review-grid,
+ .simple-layout .grid2,.simple-layout .grid3,.simple-layout .first-screen,
+ .simple-layout .invest-grid,.simple-layout .stock-watch-grid,
+ .simple-layout .ai-portfolio-grid,.simple-layout .debate-grid,
+ .simple-layout .simple-advice-head,.simple-layout .simple-advice-box,
+ .simple-layout .stock-watch,.simple-layout .investment-manifesto{grid-template-columns:1fr}
+ .simple-layout .simple-fold{padding-left:14px;padding-right:14px;margin:14px 0}
+ .simple-layout .simple-fold .simple-fold{padding-left:10px;padding-right:10px}
+ .simple-layout .simple-fold>summary{font-size:1rem;line-height:1.5;padding:16px 0;overflow-wrap:anywhere}
+ .simple-layout :is(.form-grid,.virtual-controls){grid-template-columns:1fr;gap:14px}
+ .simple-layout .virtual-actions{grid-column:auto;display:grid;grid-template-columns:1fr;width:100%}
+ .simple-layout .toolbar .btn{min-height:48px;white-space:normal}
+ .simple-layout .field label{font-size:.875rem;letter-spacing:0;line-height:1.5}
+ .simple-layout .field input,.simple-layout .field select{min-height:48px;width:100%}
+ .simple-layout .health,.simple-layout .ai-stats,.simple-layout .meta-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .simple-layout .mini{padding:10px}
+ .simple-layout .mini span,.simple-layout .mini b{font-size:.875rem;overflow-wrap:anywhere}
+ .simple-layout .virtual-head,.simple-layout .ai-intro{display:block}
+ .simple-layout .ai-rule{white-space:normal;display:inline-block}
+ .simple-layout .virtual-row{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:6px}
+ .simple-layout .virtual-row>div:first-child span{font-size:.875rem;overflow-wrap:anywhere}
+ .simple-layout .virtual-row>div:not(:first-child) :is(span,b){font-size:.875rem}
+ .simple-layout :is(.label,.badge,.kind,.product-name,.invest-meta,.ai-foot>span,.ai-source,.source span,.source b,.card p,.changed-item p,.changed-item b,.action-note,.paper-badge,.advice-copy p,.advice-copy span,.child-explain p,.child-explain b,.case li,.compact-list li){font-size:.875rem;letter-spacing:0;line-height:1.5}
+ .simple-layout .invest-meta,.simple-layout .ai-foot{flex-wrap:wrap}
+ .simple-layout .source{grid-template-columns:1fr}
+ .simple-layout .rank-row{grid-template-columns:26px minmax(0,1fr) auto}
+ .simple-layout .rank-label b,.simple-layout .rank-label span{font-size:.875rem}
+ .simple-layout .bottom-nav a{min-height:48px;font-size:.875rem;padding:8px 4px}
+ .simple-layout footer{font-size:.875rem;line-height:1.6}
+}
+@media(max-width:360px){
+ .simple-layout .app{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+ .simple-layout .visual-main{padding:18px}
+ .simple-layout .visual-main h3{font-size:1.8rem}
+ .simple-layout .visual-facts,.simple-layout .scenario-prob-grid{grid-template-columns:1fr}
+ .simple-layout .simple-fold{padding-left:12px;padding-right:12px}
+ .simple-layout .bottom-nav{width:calc(100% - 16px)}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body class="simple-layout">
