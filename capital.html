@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#07100d"/>
+  <meta name="description" content="ARGUS CAPITAL — global market intelligence made simple."/>
+  <title>ARGUS CAPITAL — Investment Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/capital.css"/>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/capital">
+        <div class="mark">A</div>
+        <div><strong>ARGUS CAPITAL</strong><span>Investment Intelligence</span></div>
+      </a>
+      <nav>
+        <a href="#today">Today</a>
+        <a href="#opportunities">Opportunities</a>
+        <a href="#markets">Markets</a>
+        <a href="#simulator">Simulator</a>
+      </nav>
+      <button class="refresh" id="refreshBtn" type="button">Refresh data</button>
+    </header>
+
+    <main>
+      <section class="hero" id="today">
+        <div class="hero-copy">
+          <p class="eyebrow">ARGUS DAILY ACTION ENGINE</p>
+          <h1>Understand the world.<br><span>Invest with clarity.</span></h1>
+          <p class="lead">ARGUS turns market data into a few simple signals: what is strong, what is risky, and what deserves attention now.</p>
+          <div class="statusline"><span class="dot"></span><span id="lastUpdate">Loading market data…</span></div>
+        </div>
+        <div class="hero-card">
+          <div class="card-label">WHAT ARGUS SAYS NOW</div>
+          <div class="verdict" id="marketVerdict">Analysing…</div>
+          <p id="verdictText">Checking global equities, gold, oil and crypto.</p>
+          <div class="hero-mini">
+            <div><span>Market regime</span><strong id="regime">—</strong></div>
+            <div><span>Best signal</span><strong id="bestSignal">—</strong></div>
+            <div><span>Risk level</span><strong id="riskLevel">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="market-strip" aria-label="Key markets">
+        <article><span>World ETF</span><strong id="q-vwce">—</strong><small id="c-vwce">—</small></article>
+        <article><span>S&P 500</span><strong id="q-spy">—</strong><small id="c-spy">—</small></article>
+        <article><span>Gold</span><strong id="q-gold">—</strong><small id="c-gold">—</small></article>
+        <article><span>Oil</span><strong id="q-oil">—</strong><small id="c-oil">—</small></article>
+        <article><span>Bitcoin</span><strong id="q-btc">—</strong><small id="c-btc">—</small></article>
+      </section>
+
+      <section class="section" id="opportunities">
+        <div class="section-head">
+          <div><p class="eyebrow">ARGUS RANKING</p><h2>Best opportunities now</h2></div>
+          <p>Ranked automatically from recent momentum and volatility. A high score is a research signal, not a guarantee.</p>
+        </div>
+        <div class="opportunity-grid" id="opportunityGrid">
+          <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+        </div>
+      </section>
+
+      <section class="section" id="markets">
+        <div class="section-head">
+          <div><p class="eyebrow">GLOBAL UNIVERSE</p><h2>Everything important, one screen</h2></div>
+          <div class="tabs" id="tabs">
+            <button class="tab active" data-filter="all">All</button>
+            <button class="tab" data-filter="ETF">ETF</button>
+            <button class="tab" data-filter="Stock">Stocks</button>
+            <button class="tab" data-filter="Commodity">Gold & Oil</button>
+            <button class="tab" data-filter="Crypto">Crypto</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Asset</th><th>Type</th><th>Price</th><th>1D</th><th>1M</th><th>3M</th><th>ARGUS</th></tr></thead>
+            <tbody id="marketTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="split">
+        <article class="panel belgium">
+          <p class="eyebrow">BELGIUM / EU LENS</p>
+          <h2>Keep the core simple.</h2>
+          <div class="rule"><b>1</b><div><strong>Prefer UCITS for ETF exposure</strong><span>European-listed funds are the natural starting point for an EU investor.</span></div></div>
+          <div class="rule"><b>2</b><div><strong>Core first, themes second</strong><span>Broad world exposure can be the base; semiconductors and cyber security are satellite ideas.</span></div></div>
+          <div class="rule"><b>3</b><div><strong>Check Belgian taxes and broker fees</strong><span>TOB and product structure can materially change the real result. ARGUS does not replace tax advice.</span></div></div>
+        </article>
+
+        <article class="panel allocation">
+          <p class="eyebrow">SIMPLE MODEL</p>
+          <h2>One example allocation</h2>
+          <div class="alloc-row"><span>Global core ETF</span><strong>60%</strong><i style="--w:60%"></i></div>
+          <div class="alloc-row"><span>Growth / technology</span><strong>20%</strong><i style="--w:20%"></i></div>
+          <div class="alloc-row"><span>Gold</span><strong>15%</strong><i style="--w:15%"></i></div>
+          <div class="alloc-row"><span>Cash reserve</span><strong>5%</strong><i style="--w:5%"></i></div>
+          <small>Illustrative research model only. Adjust risk, horizon and liquidity needs before investing.</small>
+        </article>
+      </section>
+
+      <section class="section simulator" id="simulator">
+        <div class="section-head">
+          <div><p class="eyebrow">VIRTUAL MONEY</p><h2>Portfolio simulator</h2></div>
+          <p>See how a simple diversified plan divides your capital before using real money.</p>
+        </div>
+        <div class="sim-grid">
+          <div class="sim-controls panel">
+            <label>Capital to simulate <div class="money"><span>€</span><input id="amountInput" type="number" min="100" step="100" value="10000"/></div></label>
+            <div class="preset-row">
+              <button class="preset" data-preset="defensive">Defensive</button>
+              <button class="preset active" data-preset="balanced">Balanced</button>
+              <button class="preset" data-preset="growth">Growth</button>
+            </div>
+            <p id="presetText">Balanced: diversified core with measured growth exposure.</p>
+          </div>
+          <div class="sim-result panel" id="simResult"></div>
+        </div>
+      </section>
+
+      <section class="method panel">
+        <div><p class="eyebrow">HOW IT WORKS</p><h2>Complex data → simple decisions.</h2></div>
+        <div class="method-grid">
+          <div><b>01</b><strong>Collect</strong><span>Prices and recent market history.</span></div>
+          <div><b>02</b><strong>Compare</strong><span>Momentum across asset classes.</span></div>
+          <div><b>03</b><strong>Control risk</strong><span>Volatility lowers aggressive signals.</span></div>
+          <div><b>04</b><strong>Rank</strong><span>ARGUS Score highlights what deserves research.</span></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <strong>ARGUS CAPITAL</strong>
+      <span>Research dashboard · Prices may be delayed · Not financial, tax or legal advice.</span>
+      <a href="/">ARGUS OMNI →</a>
+    </footer>
+  </div>
+  <script src="/capital.js"></script>
+</body>
+</html>
