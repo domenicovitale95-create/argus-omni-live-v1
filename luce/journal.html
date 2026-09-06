@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080706">
+<link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
+<title>LUCE — Mon Voyage</title>
+<style>
+:root{--bg:#080706;--ink:#efe8da;--muted:#8f887d;--gold:#d7b36a;--line:rgba(255,255,255,.1)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,rgba(215,179,106,.11),transparent 30%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+a,button{color:inherit;font:inherit}a{text-decoration:none}.wrap{width:min(920px,92vw);margin:auto}.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0}.brand{font-family:Georgia,serif;letter-spacing:.16em;color:#e5cf9e}.x{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center}
+header{padding:72px 0 40px}.k{font-size:.68rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(3.2rem,10vw,6.5rem);line-height:.92;letter-spacing:-.04em;margin:.15em 0 .28em}.lead{color:#bbb2a5;line-height:1.7;max-width:720px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0}.card{border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.025);padding:20px;min-height:150px}.card .label{font-size:.68rem;color:#827b71;letter-spacing:.14em;text-transform:uppercase}.card strong{display:block;font-family:Georgia,serif;font-size:2rem;font-weight:400;margin-top:12px}.card p{color:#928b80;line-height:1.5;font-size:.88rem}
+section{padding:34px 0;border-top:1px solid var(--line)}h2{font-family:Georgia,serif;font-weight:400;font-size:2.1rem}.entry{border:1px solid var(--line);border-radius:18px;padding:16px;margin:10px 0;background:rgba(255,255,255,.018)}.entry small{color:#746e65}.entry p{white-space:pre-wrap;line-height:1.55;color:#c1b8aa}.actions{display:flex;gap:9px;flex-wrap:wrap;margin:28px 0 90px}.btn{border:1px solid rgba(215,179,106,.38);background:rgba(215,179,106,.055);border-radius:999px;padding:12px 16px;cursor:pointer}.btn.secondary{border-color:var(--line);background:transparent}.daily{border:1px solid rgba(215,179,106,.28);border-radius:24px;padding:26px;background:radial-gradient(circle at top,rgba(215,179,106,.09),transparent 55%)}.daily blockquote{font-family:Georgia,serif;font-style:italic;font-size:1.25rem;line-height:1.55;margin:16px 0}.empty{color:#777066}
+@media(max-width:650px){.grid{grid-template-columns:1fr}header{padding-top:48px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="top"><a class="brand" href="/luce/">LUCE</a><a class="x" href="/luce/">×</a></div>
+ <header>
+  <div class="k">Espace privé · sur cet appareil</div>
+  <h1>MON VOYAGE</h1>
+  <p class="lead">Ta progression, tes favoris, tes notes et ton Chapitre LI réunis au même endroit. Rien n’est envoyé automatiquement ailleurs.</p>
+ </header>
+
+ <div class="grid">
+  <div class="card"><div class="label">Lecture</div><strong id="chapterNow">—</strong><p id="chapterName">Aucun chapitre ouvert.</p></div>
+  <div class="card"><div class="label">Favoris</div><strong id="marksCount">0</strong><p>Passages que tu as choisi de garder près de toi.</p></div>
+  <div class="card"><div class="label">Notes</div><strong id="notesCount">0</strong><p>Réflexions privées enregistrées pendant la lecture.</p></div>
+  <div class="card"><div class="label">Chapitre LI</div><strong id="chapter51State">En attente</strong><p id="chapter51Line">Le chapitre attend ta première phrase.</p></div>
+ </div>
+
+ <section>
+  <div class="daily">
+   <div class="k">Lumière du jour</div>
+   <blockquote id="dailyQuote"></blockquote>
+   <a class="btn secondary" id="dailyLink" href="/luce/book.html">Lire ce chapitre →</a>
+  </div>
+ </section>
+
+ <section>
+  <h2>Mes favoris</h2>
+  <div id="marks"></div>
+ </section>
+
+ <section>
+  <h2>Mes notes</h2>
+  <div id="notes"></div>
+ </section>
+
+ <section>
+  <h2>Ce que j’ai déposé</h2>
+  <div id="release" class="entry"></div>
+ </section>
+
+ <div class="actions">
+  <button class="btn" id="exportBtn">Exporter mon voyage</button>
+  <a class="btn secondary" href="/luce/book.html">Continuer à lire</a>
+  <button class="btn secondary" id="resetBtn">Effacer mes données LUCE</button>
+ </div>
+</div>
+<script src="/luce/book-data.js"></script>
+<script>
+(function(){
+ const B=window.LUCE_BOOK||[],$=s=>document.querySelector(s);
+ const load=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}},esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+ let current=Number(load('luce_chapter')||0);if(current&&B[current-1]){$('#chapterNow').textContent=current+' / '+B.length;$('#chapterName').textContent=B[current-1].title}
+ let marks=[];try{marks=JSON.parse(load('luce_marks')||'[]')}catch(e){};$('#marksCount').textContent=marks.length;
+ const markRoot=$('#marks');if(!marks.length)markRoot.innerHTML='<p class="empty">Aucun favori pour le moment.</p>';else marks.sort((a,b)=>a-b).forEach(n=>{const ch=B[n-1];if(!ch)return;const d=document.createElement('div');d.className='entry';d.innerHTML='<small>'+esc(ch.part)+'</small><p><a href="/luce/book.html?c='+n+'">'+esc(ch.title)+' →</a></p>';markRoot.appendChild(d)});
+ let notes=[];for(let i=1;i<=B.length;i++){const v=load('luce_note_'+i).trim();if(v)notes.push({i,v})}$('#notesCount').textContent=notes.length;
+ const notesRoot=$('#notes');if(!notes.length)notesRoot.innerHTML='<p class="empty">Aucune note enregistrée.</p>';else notes.forEach(n=>{const d=document.createElement('div');d.className='entry';d.innerHTML='<small>'+esc(B[n.i-1].title)+'</small><p>'+esc(n.v)+'</p>';notesRoot.appendChild(d)});
+ const line=load('luce_first_line').trim();if(line){$('#chapter51State').textContent='Commencé';$('#chapter51Line').textContent='« '+line+' »'}
+ const rel=load('luce_release').trim();$('#release').innerHTML=rel?'<p>'+esc(rel)+'</p>':'<p class="empty">Rien n’a été déposé dans le désert.</p>';
+ const day=Math.floor(Date.now()/86400000),ch=B[day%B.length]||B[0];if(ch){const paras=ch.text.split(/\n+/).filter(x=>x.trim().length>25);const q=paras[(day*7)%Math.max(1,paras.length)]||ch.text.split('\n')[0];$('#dailyQuote').textContent='« '+q+' »';$('#dailyLink').href='/luce/book.html?c='+ch.id}
+ $('#exportBtn').onclick=()=>{
+  let out='LUCE — MON VOYAGE\n\n';if(line)out+='CHAPITRE LI — TOI\n« '+line+' »\n\n';if(rel)out+='CE QUE J’AI DÉPOSÉ\n'+rel+'\n\n';
+  if(marks.length){out+='MES FAVORIS\n';marks.forEach(n=>{if(B[n-1])out+='- '+B[n-1].title+'\n'});out+='\n'}
+  if(notes.length){out+='MES NOTES\n';notes.forEach(n=>{out+='\n'+B[n.i-1].title+'\n'+n.v+'\n'})}
+  const blob=new Blob([out],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='LUCE-Mon-Voyage.txt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+ };
+ $('#resetBtn').onclick=()=>{if(!confirm('Effacer les notes, favoris, progression et réponses LUCE enregistrés sur cet appareil ?'))return;Object.keys(localStorage).filter(k=>k.startsWith('luce_')).forEach(k=>localStorage.removeItem(k));location.reload()};
+})();
+</script>
+</body>
+</html>
