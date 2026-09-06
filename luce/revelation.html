@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#010101">
+<link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
+<title>LUCE — LA RÉVÉLATION</title>
+<meta name="description" content="LUCE — La Révélation. Une expérience cinématique interactive inspirée de L’Éveil de l’Âme.">
+<style>
+:root{--gold:#d8b56d;--gold2:#f2dda8;--ink:#f5eee0;--muted:#8c857a;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#010101;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,a{font:inherit;color:inherit}
+button{cursor:pointer}
+a{text-decoration:none}
+#world{position:fixed;inset:0;width:100%;height:100%;touch-action:none}
+.vignette{position:fixed;inset:0;pointer-events:none;z-index:3;background:radial-gradient(circle at 50% 45%,transparent 0 34%,rgba(0,0,0,.32) 67%,rgba(0,0,0,.8) 100%)}
+.grain{position:fixed;inset:-50%;z-index:4;pointer-events:none;opacity:.11;background-image:radial-gradient(rgba(255,255,255,.8) .45px,transparent .45px);background-size:7px 7px;animation:grain 7s steps(4) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(3%,1%)}50%{transform:translate(-2%,3%)}75%{transform:translate(2%,-2%)}100%{transform:translate(0,0)}}
+.ui{position:fixed;z-index:30;left:0;right:0;top:0;padding:max(18px,env(safe-area-inset-top)) 18px 0;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:Georgia,serif;letter-spacing:.17em;font-size:.9rem}
+.controls{display:flex;gap:8px}
+.circle{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(0,0,0,.28);backdrop-filter:blur(12px);display:grid;place-items:center}
+.progress{position:fixed;z-index:35;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,.06)}
+.progress i{display:block;width:0;height:100%;background:linear-gradient(90deg,#825822,#f2dda8);box-shadow:0 0 18px rgba(216,181,109,.45);transition:width 1s ease}
+.scene{position:fixed;z-index:10;inset:0;display:grid;place-items:center;text-align:center;padding:30px;opacity:0;pointer-events:none;transition:opacity 1.3s ease}
+.scene.on{opacity:1;pointer-events:auto}
+.inner{width:min(900px,92vw)}
+.kicker{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:#8c8479}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.04em;margin:.14em 0}
+h1{font-size:clamp(4.8rem,20vw,12rem);line-height:.78}
+h2{font-size:clamp(2.7rem,9vw,6.5rem);line-height:.93}
+.copy{font-family:Georgia,serif;color:#c7bcaa;font-size:clamp(1.1rem,3.5vw,1.6rem);line-height:1.55;max-width:720px;margin:24px auto}
+.mini{font-size:.75rem;line-height:1.55;color:#746e65;max-width:620px;margin:14px auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.65rem;min-height:49px;padding:12px 18px;border-radius:999px;border:1px solid rgba(216,181,109,.44);background:rgba(216,181,109,.055);font-size:.69rem;letter-spacing:.13em;text-transform:uppercase}
+.btn.secondary{border-color:var(--line);background:rgba(255,255,255,.02)}
+.btn:hover{background:rgba(216,181,109,.12)}
+.hold{width:110px;height:110px;border-radius:50%;border:1px solid rgba(216,181,109,.3);margin:35px auto 22px;position:relative;display:grid;place-items:center;background:radial-gradient(circle,rgba(216,181,109,.16),rgba(216,181,109,.02) 55%,transparent 70%);box-shadow:0 0 70px rgba(216,181,109,.1);touch-action:none;user-select:none}
+.hold::before{content:"";position:absolute;inset:10px;border-radius:50%;border:1px solid rgba(242,221,168,.3)}
+.hold i{position:absolute;inset:-1px;border-radius:50%;background:conic-gradient(var(--gold2) var(--p,0%),transparent 0);mask:radial-gradient(circle,transparent 67%,#000 69%);-webkit-mask:radial-gradient(circle,transparent 67%,#000 69%)}
+.hold span{font-size:.62rem;letter-spacing:.13em;color:#9c9387;text-transform:uppercase}
+.hold.charged{box-shadow:0 0 50px rgba(242,221,168,.4),0 0 160px rgba(216,181,109,.22)}
+.eyes{display:flex;justify-content:center;gap:clamp(55px,14vw,165px);margin:48px 0 38px;opacity:.08;transition:opacity 1.7s ease}
+.scene.on .eyes{opacity:1}
+.eye{width:clamp(50px,8vw,88px);height:clamp(14px,2.3vw,24px);border-radius:80% 20% 80% 20%;background:radial-gradient(circle,#f3d994 0 13%,#78551c 21% 38%,#020202 42%);box-shadow:0 0 36px rgba(216,181,109,.34)}
+.portal{width:min(70vw,430px);aspect-ratio:1;border-radius:50%;margin:26px auto;position:relative;display:grid;place-items:center}
+.portal::before,.portal::after{content:"";position:absolute;border-radius:50%;inset:0;border:1px solid rgba(216,181,109,.22);animation:spin 14s linear infinite}
+.portal::after{inset:12%;animation-direction:reverse;animation-duration:9s;border-style:dashed}
+.portal-core{width:28%;height:28%;border-radius:50%;background:radial-gradient(circle,#fff8e1 0 5%,#efd28e 26%,rgba(216,181,109,.2) 56%,transparent 72%);box-shadow:0 0 48px rgba(242,221,168,.38),0 0 150px rgba(216,181,109,.18);animation:pulse 4.8s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{transform:scale(.82)}50%{transform:scale(1.15)}}
+.choice{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:28px auto;max-width:720px}
+.choice button{border:1px solid var(--line);background:rgba(0,0,0,.35);border-radius:999px;padding:10px 14px;font-size:.7rem;color:#a49b8f}
+.choice button.on{border-color:rgba(216,181,109,.62);background:rgba(216,181,109,.12);color:#f2dda8}
+.final-actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.whisper{position:fixed;z-index:12;left:50%;top:50%;transform:translate(-50%,-50%);font-family:Georgia,serif;font-style:italic;font-size:clamp(1.3rem,4vw,2.2rem);color:#e4d3ae;text-shadow:0 0 30px rgba(216,181,109,.18);opacity:0;pointer-events:none;transition:opacity 1.2s ease;text-align:center;width:min(80vw,700px)}
+.whisper.show{opacity:1}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<canvas id="world"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div class="whisper" id="whisper"></div>
+
+<div class="ui">
+ <a class="brand" href="/luce/">LUCE</a>
+ <div class="controls">
+  <button class="circle" id="motionBtn" aria-label="Activer le mouvement">◎</button>
+  <button class="circle" id="soundBtn" aria-label="Ambiance sonore">♫</button>
+  <a class="circle" href="/luce/" aria-label="Fermer">×</a>
+ </div>
+</div>
+
+<div class="scene on" data-s="0">
+ <div class="inner">
+  <div class="kicker">Expérience cinématique · LUCE</div>
+  <h1>LA<br>RÉVÉLATION</h1>
+  <p class="copy">Pas une page à lire.<br>Un passage à traverser.</p>
+  <button class="btn" id="begin">Entrer</button>
+  <p class="mini">≈ 90 secondes · casque conseillé · rien n’est enregistré ailleurs</p>
+ </div>
+</div>
+
+<div class="scene" data-s="1">
+ <div class="inner">
+  <div class="kicker">I · Le Silence</div>
+  <h2>ÉTEINS<br>LE BRUIT.</h2>
+  <p class="copy">Maintiens la lumière. Ne fais rien d’autre.</p>
+  <div class="hold" id="hold"><i></i><span>Maintenir</span></div>
+  <p class="mini">Quand le cercle sera complet, le monde changera.</p>
+ </div>
+</div>
+
+<div class="scene" data-s="2">
+ <div class="inner">
+  <div class="kicker">II · Le Désert</div>
+  <h2>AVANCE<br>SANS CARTE.</h2>
+  <div class="portal"><div class="portal-core"></div></div>
+  <p class="copy">Le chemin apparaît seulement après le premier pas.</p>
+  <button class="btn" data-next>Continuer</button>
+ </div>
+</div>
+
+<div class="scene" data-s="3">
+ <div class="inner">
+  <div class="kicker">III · Le Gardien</div>
+  <div class="eyes"><div class="eye"></div><div class="eye" style="transform:scaleX(-1)"></div></div>
+  <h2>NE FUIS PAS<br>L’OMBRE.</h2>
+  <p class="copy">Elle ne vient pas t’arrêter. Elle vient vérifier si tu es prêt à rester.</p>
+  <button class="btn" data-next>Je reste</button>
+ </div>
+</div>
+
+<div class="scene" data-s="4">
+ <div class="inner">
+  <div class="kicker">IV · Ton centre</div>
+  <h2>CHOISIS<br>UNE LUMIÈRE.</h2>
+  <div class="choice" id="choice"></div>
+  <p class="mini" id="choiceHint">Un seul mot. Celui que tu veux garder quand tout le reste disparaît.</p>
+  <button class="btn" id="choiceNext" disabled>Continuer</button>
+ </div>
+</div>
+
+<div class="scene" data-s="5">
+ <div class="inner">
+  <div class="kicker">V · L’Univers en toi</div>
+  <h2 id="formTitle">REGARDE.</h2>
+  <p class="copy" id="formCopy">Ta lumière n’était pas devant toi. Elle dessinait déjà un chemin.</p>
+  <div class="final-actions">
+   <button class="btn" id="formLuce">Former LUCE</button>
+   <button class="btn secondary" data-next>Passer à la fin</button>
+  </div>
+ </div>
+</div>
+
+<div class="scene" data-s="6">
+ <div class="inner">
+  <div class="kicker">VI · Chapitre LI</div>
+  <h2>MAINTENANT,<br>ÉCRIS LA TIENNE.</h2>
+  <p class="copy">Le livre t’a conduit jusqu’ici. La prochaine phrase n’appartient plus à l’auteur.</p>
+  <div class="final-actions">
+   <a class="btn" href="/luce/#chapter51">Ouvrir le Chapitre LI — TOI</a>
+   <a class="btn secondary" href="/luce/threshold.html">Voir ma signature</a>
+  </div>
+ </div>
+</div>
+
+<div class="progress"><i id="progress"></i></div>
+
+<script>
+(function(){
+ const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
+ const canvas=$('#world'),ctx=canvas.getContext('2d'),progress=$('#progress');
+ let W=0,H=0,dpr=1,scene=0,particles=[],targets=[],forming=false,tiltX=0,tiltY=0,sound=false,audioCtx=null,master=null,holding=false,holdStart=0,holdRAF=0;
+ const scenes=$$('.scene');
+ const save=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},load=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}};
+
+ function setScene(n){
+  scene=Math.max(0,Math.min(scenes.length-1,n));
+  scenes.forEach((el,i)=>el.classList.toggle('on',i===scene));
+  progress.style.width=(scene/(scenes.length-1)*100)+'%';
+  forming=false;targets=[];
+  whisper('');
+  if(scene===3)setTimeout(()=>whisper('« Tu n’es pas seul. »',2300),900);
+  if(scene===5)buildJourneyConstellation();
+ }
+ $$('[data-next]').forEach(b=>b.onclick=()=>setScene(scene+1));
+ $('#begin').onclick=()=>{startSound();setScene(1);save('luce_revelation_started','1')};
+
+ function whisper(text,duration=1800){
+  const w=$('#whisper');w.textContent=text;w.classList.toggle('show',!!text);
+  if(text)setTimeout(()=>w.classList.remove('show'),duration);
+ }
+
+ function startSound(){
+  if(sound)return;
+  try{
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)();master=audioCtx.createGain();master.gain.value=.03;master.connect(audioCtx.destination);
+    [55,82.41,110,164.81,220].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=i<2?'sine':'triangle';o.frequency.value=f;g.gain.value=[.36,.16,.07,.025,.012][i];o.connect(g).connect(master);o.start()});
+    sound=true;$('#soundBtn').textContent='♪';
+  }catch(e){}
+ }
+ function stopSound(){if(!sound)return;try{master.gain.setTargetAtTime(0,audioCtx.currentTime,.06);setTimeout(()=>audioCtx.close(),180)}catch(e){}sound=false;$('#soundBtn').textContent='♫'}
+ $('#soundBtn').onclick=()=>sound?stopSound():startSound();
+
+ async function enableMotion(){
+  try{
+    if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+      const p=await DeviceOrientationEvent.requestPermission();if(p!=='granted')return;
+    }
+    addEventListener('deviceorientation',e=>{tiltX=Math.max(-1,Math.min(1,(e.gamma||0)/30));tiltY=Math.max(-1,Math.min(1,(e.beta||0)/45))});
+    $('#motionBtn').textContent='◉';
+  }catch(e){}
+ }
+ $('#motionBtn').onclick=enableMotion;
+
+ // Hold-to-open ritual
+ const hold=$('#hold'),ring=hold.querySelector('i');
+ function holdTick(t){
+  if(!holding)return;const p=Math.min(1,(t-holdStart)/3200);ring.style.setProperty('--p',(p*100)+'%');
+  if(p>=1){holding=false;hold.classList.add('charged');try{navigator.vibrate&&navigator.vibrate([10,35,10])}catch(e){}whisper('Le silence est une porte.',1500);setTimeout(()=>setScene(2),1100);return}
+  holdRAF=requestAnimationFrame(holdTick);
+ }
+ function startHold(e){e.preventDefault();holding=true;holdStart=performance.now();cancelAnimationFrame(holdRAF);holdRAF=requestAnimationFrame(holdTick)}
+ function stopHold(){if(!holding)return;holding=false;cancelAnimationFrame(holdRAF);ring.style.setProperty('--p','0%')}
+ hold.addEventListener('pointerdown',startHold);hold.addEventListener('pointerup',stopHold);hold.addEventListener('pointercancel',stopHold);hold.addEventListener('pointerleave',stopHold);
+
+ // Light choice
+ const choices=['PAIX','PRÉSENCE','COURAGE','CONFIANCE','GRATITUDE','AMOUR','LUMIÈRE'];
+ let chosen=load('luce_keeper_word')||'';
+ choices.forEach(w=>{const b=document.createElement('button');b.textContent=w;b.classList.toggle('on',w===chosen);b.onclick=()=>{chosen=w;save('luce_keeper_word',w);$$('#choice button').forEach(x=>x.classList.toggle('on',x===b));$('#choiceNext').disabled=false;$('#choiceHint').textContent=w.charAt(0)+w.slice(1).toLowerCase()+' restera au centre.'};$('#choice').appendChild(b)});
+ if(chosen){$('#choiceNext').disabled=false;$('#choiceHint').textContent=chosen.charAt(0)+chosen.slice(1).toLowerCase()+' restera au centre.'}
+ $('#choiceNext').onclick=()=>setScene(5);
+
+ function size(){
+  dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  initParticles();
+ }
+ function initParticles(){
+  const count=Math.min(520,Math.max(260,Math.floor(W*H/2900)));particles=Array.from({length:count},(_,i)=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:.45+Math.random()*1.45,a:.16+Math.random()*.45,t:null}));
+ }
+ function stats(){
+  let st={};try{st=JSON.parse(load('luce_state')||'{}')}catch(e){}
+  let marks=[];try{marks=JSON.parse(load('luce_marks')||'[]')}catch(e){}
+  let notes=0;try{for(let i=0;i<localStorage.length;i++)if((localStorage.key(i)||'').startsWith('luce_note_')&&(localStorage.getItem(localStorage.key(i))||'').trim())notes++}catch(e){}
+  return {worlds:[st.desert,st.aql,st.guardian,st.card,st.chapter].filter(Boolean).length,marks:marks.length,notes,chapter:Number(load('luce_chapter')||0)};
+ }
+ function hash(s){let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+ function rndFactory(seed){let h=hash(seed);return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+ function seed(){
+  let s=load('luce_seed');if(!s){s=Date.now()+'-'+Math.random().toString(36).slice(2);save('luce_seed',s)}return s+'|'+(chosen||'LUCE');
+ }
+ function buildJourneyConstellation(){
+  const S=stats(),rnd=rndFactory(seed()),cx=W/2,cy=H*.47,rad=Math.min(W,H)*.26;
+  targets=[];for(let i=0;i<Math.min(particles.length,90+S.marks*4+S.notes*5+S.worlds*18);i++){
+    const arm=i%5,a=-Math.PI/2+arm*Math.PI*2/5+(rnd()-.5)*.18,rr=rad*(.18+rnd()*.9);
+    targets.push({x:cx+Math.cos(a)*rr,y:cy+Math.sin(a)*rr});
+  }
+  assignTargets();forming=true;
+ }
+ function textTargets(text){
+  const off=document.createElement('canvas'),oc=off.getContext('2d');off.width=Math.max(800,W);off.height=360;
+  oc.fillStyle='#fff';oc.textAlign='center';oc.textBaseline='middle';oc.font='bold '+Math.min(220,off.width*.25)+'px Georgia';oc.fillText(text,off.width/2,off.height/2);
+  const data=oc.getImageData(0,0,off.width,off.height).data,pts=[],step=7;
+  for(let y=0;y<off.height;y+=step)for(let x=0;x<off.width;x+=step)if(data[(y*off.width+x)*4+3]>90)pts.push({x:(x/off.width)*W,y:H*.48+(y-off.height/2)*(Math.min(1,W/800))});
+  return pts;
+ }
+ function assignTargets(){
+  particles.forEach((p,i)=>{p.t=targets.length?targets[i%targets.length]:null});
+ }
+ $('#formLuce').onclick=()=>{targets=textTargets('LUCE');assignTargets();forming=true;$('#formTitle').textContent='LUCE';$('#formCopy').textContent='Tout ce que tu cherchais dehors vient de prendre forme en toi.';try{navigator.vibrate&&navigator.vibrate([8,35,8,35,14])}catch(e){};setTimeout(()=>whisper((chosen?chosen.charAt(0)+chosen.slice(1).toLowerCase():'Ta lumière')+' est au centre.',1700),700)};
+
+ // Interaction trail
+ let pointer={x:W/2,y:H/2,active:false};
+ canvas.addEventListener('pointermove',e=>{pointer.x=e.clientX;pointer.y=e.clientY;pointer.active=true});
+ canvas.addEventListener('pointerdown',e=>{pointer.x=e.clientX;pointer.y=e.clientY;pointer.active=true;for(let i=0;i<14;i++){const p=particles[Math.floor(Math.random()*particles.length)];p.x=pointer.x+(Math.random()-.5)*30;p.y=pointer.y+(Math.random()-.5)*30;p.vx+=(Math.random()-.5)*1.5;p.vy+=(Math.random()-.5)*1.5}});
+
+ function draw(){
+  ctx.clearRect(0,0,W,H);
+  const bg=ctx.createRadialGradient(W*.5+tiltX*80,H*.45+tiltY*60,20,W*.5,H*.45,Math.max(W,H)*.75);bg.addColorStop(0,scene>=5?'#17130e':'#0d0c0a');bg.addColorStop(.45,'#060606');bg.addColorStop(1,'#010101');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  if(scene===2){
+    // desert horizon
+    const dg=ctx.createLinearGradient(0,H*.48,0,H);dg.addColorStop(0,'rgba(128,87,35,.02)');dg.addColorStop(1,'rgba(151,101,39,.16)');ctx.fillStyle=dg;ctx.fillRect(0,H*.48,W,H*.52);
+  }
+  particles.forEach((p,i)=>{
+    if(forming&&p.t){p.vx+=(p.t.x-p.x)*.0028;p.vy+=(p.t.y-p.y)*.0028;p.vx*=.94;p.vy*=.94}else{p.vx+=tiltX*.0008;p.vy+=tiltY*.0008;p.vx*=.995;p.vy*=.995}
+    if(pointer.active&&!forming){const dx=p.x-pointer.x,dy=p.y-pointer.y,d2=dx*dx+dy*dy;if(d2<10000&&d2>20){const f=(1-d2/10000)*.025;p.vx+=dx*f;p.vy+=dy*f}}
+    p.x+=p.vx;p.y+=p.vy;if(!forming){if(p.x<-20)p.x=W+20;if(p.x>W+20)p.x=-20;if(p.y<-20)p.y=H+20;if(p.y>H+20)p.y=-20}
+    const glow=forming&&p.t?1:.55;ctx.globalAlpha=p.a*glow;ctx.fillStyle=i%11===0?'#f1dba5':'#eee5d4';ctx.beginPath();ctx.arc(p.x,p.y,p.r*(forming?1.15:1),0,Math.PI*2);ctx.fill();
+  });
+  ctx.globalAlpha=1;
+  requestAnimationFrame(draw);
+ }
+ size();addEventListener('resize',size);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)draw();else draw();
+ addEventListener('beforeunload',stopSound);
+ setScene(0);
+})();
+</script>
+</body>
+</html>
