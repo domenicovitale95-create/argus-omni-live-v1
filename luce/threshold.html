@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#020202">
+<link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
+<title>LUCE — LE SEUIL</title>
+<meta name="description" content="LE SEUIL — une expérience finale de LUCE inspirée du Gardien du Vide.">
+<style>
+:root{--gold:#d8b56d;--gold2:#f0d99d;--ink:#f4eddf;--muted:#8e867a;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#020202;color:var(--ink);overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,a{font:inherit;color:inherit}a{text-decoration:none}
+.stage{position:fixed;inset:0;background:radial-gradient(circle at 50% 45%,#0c0b09,#020202 62%);overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.veil{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(216,181,109,.045),transparent 30%),#020202;transition:opacity 1.6s ease;z-index:2}
+.veil.fade{opacity:.15}
+.ui{position:fixed;z-index:50;top:0;left:0;right:0;padding:max(18px,env(safe-area-inset-top)) 18px 0;display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:Georgia,serif;letter-spacing:.16em}
+.controls{display:flex;gap:8px}
+.circle{width:44px;height:44px;border:1px solid var(--line);border-radius:50%;background:rgba(0,0,0,.35);backdrop-filter:blur(12px);display:grid;place-items:center}
+.phase{position:absolute;z-index:10;inset:0;display:grid;place-items:center;text-align:center;padding:30px;opacity:0;pointer-events:none;transition:opacity 1.2s ease}
+.phase.on{opacity:1;pointer-events:auto}
+.phase-inner{width:min(860px,90vw)}
+.k{font-size:.67rem;letter-spacing:.22em;text-transform:uppercase;color:#8e8578}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.035em;margin:.15em 0}
+h1{font-size:clamp(4rem,16vw,9rem);line-height:.84}
+h2{font-size:clamp(2.4rem,8vw,5.4rem);line-height:.98}
+.quote{font-family:Georgia,serif;font-style:italic;font-size:clamp(1.2rem,4vw,2rem);line-height:1.45;color:#d0c4b0;max-width:760px;margin:26px auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:48px;padding:12px 18px;border-radius:999px;border:1px solid rgba(216,181,109,.42);background:rgba(216,181,109,.06);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;cursor:pointer}
+.btn.secondary{border-color:var(--line);background:rgba(255,255,255,.02)}
+.btn:hover{background:rgba(216,181,109,.12)}
+.breath{width:86px;height:86px;border-radius:50%;margin:34px auto;border:0;background:radial-gradient(circle,#fff7df 0 5%,#edd092 23%,rgba(216,181,109,.27) 47%,transparent 72%);box-shadow:0 0 35px rgba(216,181,109,.25),0 0 120px rgba(216,181,109,.12);animation:breathe 5.6s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.76);opacity:.68}50%{transform:scale(1.18);opacity:1;box-shadow:0 0 52px rgba(240,217,157,.45),0 0 160px rgba(216,181,109,.18)}}
+.eyes{display:flex;justify-content:center;gap:clamp(54px,12vw,150px);margin:58px 0 40px;opacity:.08;transition:opacity 1.5s ease}
+.phase.on .eyes{opacity:1}
+.eye{width:clamp(48px,7vw,78px);height:clamp(14px,2vw,21px);border-radius:80% 20% 80% 20%;background:radial-gradient(circle,#efd58f 0 13%,#74521b 21% 38%,#030303 42%);box-shadow:0 0 34px rgba(216,181,109,.34)}
+.words{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:32px auto;max-width:740px}
+.words button{border:1px solid var(--line);background:rgba(0,0,0,.36);border-radius:999px;padding:10px 14px;color:#aaa195;font-size:.73rem;cursor:pointer}
+.words button.on{border-color:rgba(216,181,109,.62);background:rgba(216,181,109,.12);color:#f0dda9}
+.sigil-wrap{width:min(78vw,520px);aspect-ratio:1;margin:16px auto 12px;position:relative}
+.sigil{width:100%;height:100%}
+.sigil-glow{position:absolute;inset:20%;border-radius:50%;box-shadow:0 0 90px rgba(216,181,109,.14);pointer-events:none}
+.final-copy{font-family:Georgia,serif;font-size:clamp(1.4rem,4vw,2.2rem);line-height:1.45;max-width:780px;margin:20px auto}
+.sub{font-size:.78rem;color:#777066;line-height:1.55}
+.timeline{position:fixed;z-index:55;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,.08)}
+.timeline i{display:block;width:0;height:100%;background:linear-gradient(90deg,#8b6127,#efd99d);transition:width .7s ease}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="stage">
+ <canvas id="particles"></canvas>
+ <div class="veil" id="veil"></div>
+
+ <section class="phase on" data-phase="0">
+  <div class="phase-inner">
+   <div class="k">Chapitre L · Le Gardien du Vide</div>
+   <h1>LE SEUIL</h1>
+   <button class="breath" id="startBtn" aria-label="Entrer dans le seuil"></button>
+   <p class="quote">« Le vide n’est pas absence. C’est un espace. »</p>
+   <div class="sub">Touchez la lumière quand vous êtes prêt.</div>
+  </div>
+ </section>
+
+ <section class="phase" data-phase="1">
+  <div class="phase-inner">
+   <div class="k">Le Gardien</div>
+   <div class="eyes"><div class="eye"></div><div class="eye" style="transform:scaleX(-1)"></div></div>
+   <h2>Reste.</h2>
+   <p class="quote">Pas pour attendre. Pour entendre ce qui demeure quand le bruit disparaît.</p>
+   <button class="btn" data-next>Continuer</button>
+  </div>
+ </section>
+
+ <section class="phase" data-phase="2">
+  <div class="phase-inner">
+   <div class="k">Ce que tu gardes</div>
+   <h2>Quelle lumière veux-tu protéger&nbsp;?</h2>
+   <div class="words" id="keeperWords"></div>
+   <p class="sub" id="keeperHint">Choisis un seul mot. Il deviendra le cœur de ta signature.</p>
+   <button class="btn" id="keeperNext" disabled>Créer ma signature</button>
+  </div>
+ </section>
+
+ <section class="phase" data-phase="3">
+  <div class="phase-inner">
+   <div class="k">Empreinte du voyage</div>
+   <div class="sigil-wrap"><canvas class="sigil" id="sigil"></canvas><div class="sigil-glow"></div></div>
+   <h2>TA LUMIÈRE</h2>
+   <p class="sub" id="sigilMeta">Une signature symbolique née de ton parcours dans LUCE.</p>
+   <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+    <button class="btn" data-next>Passer le seuil</button>
+    <button class="btn secondary" id="shareSigil">Partager la signature</button>
+   </div>
+  </div>
+ </section>
+
+ <section class="phase" data-phase="4">
+  <div class="phase-inner">
+   <div class="k">Après le cinquantième chapitre</div>
+   <p class="final-copy">Jusqu’ici, tu suivais une lumière.<br>Maintenant, écris la tienne.</p>
+   <p class="quote">« Je reste. Et dans ce rester ma Lumière devient stable. Devient guide. Devient paix. »</p>
+   <a class="btn" href="/luce/#chapter51">Ouvrir le Chapitre LI — TOI →</a>
+   <p class="sub" style="margin-top:20px">Le livre se termine. Ton voyage, non.</p>
+  </div>
+ </section>
+</div>
+
+<div class="ui">
+ <a class="brand" href="/luce/">LUCE</a>
+ <div class="controls"><button class="circle" id="sound" aria-label="Ambiance sonore">♫</button><a class="circle" href="/luce/" aria-label="Fermer">×</a></div>
+</div>
+<div class="timeline"><i id="bar"></i></div>
+
+<script>
+(function(){
+ const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
+ const save=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},load=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}};
+ let phase=0,keeper=load('luce_keeper_word')||'',ctx=null,gain=null,sound=false;
+ const phases=$$('.phase'),bar=$('#bar');
+
+ function show(n){
+  phase=Math.max(0,Math.min(phases.length-1,n));phases.forEach((p,i)=>p.classList.toggle('on',i===phase));bar.style.width=((phase)/(phases.length-1)*100)+'%';
+  if(phase>=1)$('#veil').classList.add('fade');
+  if(phase===3){drawSigil();try{navigator.vibrate&&navigator.vibrate([8,35,8])}catch(e){}}
+ }
+ function audioOn(){
+  if(sound)return;try{
+   ctx=new (window.AudioContext||window.webkitAudioContext)();gain=ctx.createGain();gain.gain.value=.028;gain.connect(ctx.destination);
+   [55,82.41,110,164.81].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=i<2?'sine':'triangle';o.frequency.value=f;g.gain.value=[.4,.18,.07,.025][i];o.connect(g).connect(gain);o.start()});
+   sound=true;$('#sound').textContent='♪';
+  }catch(e){}
+ }
+ function audioOff(){if(!sound)return;try{gain.gain.setTargetAtTime(0,ctx.currentTime,.06);setTimeout(()=>ctx.close(),180)}catch(e){}sound=false;$('#sound').textContent='♫'}
+ $('#sound').onclick=()=>sound?audioOff():audioOn();
+ $('#startBtn').onclick=()=>{audioOn();show(1);save('luce_threshold_started','1')};
+ $$('[data-next]').forEach(b=>b.onclick=()=>show(phase+1));
+
+ const words=['PAIX','PRÉSENCE','COURAGE','CONFIANCE','GRATITUDE','AMOUR','LUMIÈRE'];
+ words.forEach(w=>{const b=document.createElement('button');b.textContent=w;b.classList.toggle('on',keeper===w);b.onclick=()=>{keeper=w;save('luce_keeper_word',w);$$('#keeperWords button').forEach(x=>x.classList.toggle('on',x===b));$('#keeperNext').disabled=false;$('#keeperHint').textContent=w.charAt(0)+w.slice(1).toLowerCase()+' devient le cœur de ta signature.'};$('#keeperWords').appendChild(b)});
+ if(keeper){$('#keeperNext').disabled=false;$('#keeperHint').textContent=keeper.charAt(0)+keeper.slice(1).toLowerCase()+' devient le cœur de ta signature.'}
+ $('#keeperNext').onclick=()=>show(3);
+
+ function hash(s){let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+ function rng(seed){let h=hash(seed);return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+ function stats(){
+  let st={};try{st=JSON.parse(load('luce_state')||'{}')}catch(e){}
+  let marks=[];try{marks=JSON.parse(load('luce_marks')||'[]')}catch(e){}
+  let notes=0;try{for(let i=0;i<localStorage.length;i++)if((localStorage.key(i)||'').startsWith('luce_note_')&&(localStorage.getItem(localStorage.key(i))||'').trim())notes++}catch(e){}
+  let grat=[];try{grat=JSON.parse(load('luce_gratitude')||'[]')}catch(e){}
+  return {worlds:[st.desert,st.aql,st.guardian,st.card,st.chapter].filter(Boolean).length,marks:marks.length,notes,gratitude:grat.length,chapter:Number(load('luce_chapter')||0)};
+ }
+ function seed(){
+  let s=load('luce_seed');if(!s){s=String(Date.now())+'-'+Math.random().toString(36).slice(2);save('luce_seed',s)}return s+'|'+keeper;
+ }
+ function drawSigil(){
+  const canvas=$('#sigil'),rect=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2),x=canvas.getContext('2d');canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;x.setTransform(dpr,0,0,dpr,0,0);
+  const W=rect.width,H=rect.height,cx=W/2,cy=H/2,r=Math.min(W,H)*.34,random=rng(seed()),S=stats();
+  x.clearRect(0,0,W,H);
+  const g=x.createRadialGradient(cx,cy,0,cx,cy,r*1.6);g.addColorStop(0,'rgba(216,181,109,.16)');g.addColorStop(.5,'rgba(216,181,109,.04)');g.addColorStop(1,'rgba(216,181,109,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+  const pts=[];
+  const sides=5;
+  for(let i=0;i<sides;i++){const a=-Math.PI/2+i*(Math.PI*2/sides)+(random()-.5)*.12,rr=r*(.76+random()*.18);pts.push({x:cx+Math.cos(a)*rr,y:cy+Math.sin(a)*rr})}
+  x.lineWidth=1.4;x.strokeStyle='rgba(232,207,151,.56)';x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p.x,p.y):x.moveTo(p.x,p.y));x.closePath();x.stroke();
+  // inner geometry depends on progress
+  const order=[0,2,4,1,3,0];x.strokeStyle='rgba(216,181,109,.34)';x.beginPath();order.forEach((n,i)=>i?x.lineTo(pts[n].x,pts[n].y):x.moveTo(pts[n].x,pts[n].y));x.stroke();
+  pts.forEach((p,i)=>{const on=i<Math.max(1,S.worlds);const rg=x.createRadialGradient(p.x,p.y,0,p.x,p.y,on?28:16);rg.addColorStop(0,on?'rgba(255,246,218,1)':'rgba(160,155,145,.5)');rg.addColorStop(.3,on?'rgba(216,181,109,.38)':'rgba(255,255,255,.08)');rg.addColorStop(1,'rgba(216,181,109,0)');x.fillStyle=rg;x.beginPath();x.arc(p.x,p.y,on?28:16,0,Math.PI*2);x.fill();x.fillStyle=on?'#f4e4bd':'#777';x.beginPath();x.arc(p.x,p.y,on?3.7:2.2,0,Math.PI*2);x.fill()});
+  // keeper core
+  x.fillStyle='#f5e6bf';x.beginPath();x.arc(cx,cy,5.5,0,Math.PI*2);x.fill();const core=x.createRadialGradient(cx,cy,0,cx,cy,55);core.addColorStop(0,'rgba(242,221,168,.7)');core.addColorStop(1,'rgba(216,181,109,0)');x.fillStyle=core;x.beginPath();x.arc(cx,cy,55,0,Math.PI*2);x.fill();
+  x.fillStyle='#9a9183';x.font='12px system-ui';x.textAlign='center';x.fillText(keeper||'LUCE',cx,H-18);
+  $('#sigilMeta').textContent=(keeper?keeper.charAt(0)+keeper.slice(1).toLowerCase():'Ta lumière')+' · '+S.worlds+'/5 mondes · '+S.marks+' favoris · '+S.notes+' notes';
+ }
+ addEventListener('resize',()=>{if(phase===3)drawSigil()});
+
+ $('#shareSigil').onclick=()=>{drawSigil();const canvas=$('#sigil');canvas.toBlob(async blob=>{if(!blob)return;const file=new File([blob],'LUCE-Ma-Signature.png',{type:'image/png'});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({title:'LUCE — Ma Signature',text:keeper?('Ma lumière : '+keeper):'LUCE',files:[file]});return}catch(e){}}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='LUCE-Ma-Signature.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)},'image/png')};
+
+ // background particles
+ const pc=$('#particles'),px=pc.getContext('2d');let P=[];
+ function sizeParticles(){const dpr=Math.min(devicePixelRatio||1,2);pc.width=innerWidth*dpr;pc.height=innerHeight*dpr;px.setTransform(dpr,0,0,dpr,0,0);P=Array.from({length:75},(_,i)=>({x:(i*83)%innerWidth,y:(i*137)%innerHeight,r:.4+(i%5)*.22,v:.05+(i%7)*.012}))}
+ function animate(){px.clearRect(0,0,innerWidth,innerHeight);P.forEach(p=>{p.y-=p.v;if(p.y<-5)p.y=innerHeight+5;px.globalAlpha=.12+(p.r*.12);px.fillStyle='#e4d1a6';px.beginPath();px.arc(p.x,p.y,p.r,0,Math.PI*2);px.fill()});px.globalAlpha=1;requestAnimationFrame(animate)}
+ sizeParticles();addEventListener('resize',sizeParticles);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)animate();
+
+ addEventListener('beforeunload',audioOff);
+ show(0);
+})();
+</script>
+</body>
+</html>
