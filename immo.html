@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08111f">
+<title>ARGUS IMMO BELGIUM — Acheter avec clarté</title>
+<meta name="description" content="ARGUS IMMO BELGIUM — décision immobilière simple: où acheter, quoi acheter, quand acheter, pourquoi acheter et combien cela coûte en Belgique.">
+<style>
+:root{
+  --bg:#07101d;--bg2:#0b1728;--panel:#101f34;--panel2:#14263d;--line:#2d4564;
+  --text:#f4f7fb;--muted:#b6c2d2;--blue:#a8cdfd;--good:#9ae6b4;--warn:#f3d59b;--bad:#f5abab;
+  --paper:#eef5ff;--ink:#102640;--shadow:0 18px 55px rgba(0,0,0,.24)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{margin:0;background:linear-gradient(180deg,#06101c 0%,#091526 48%,#07101d 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+a{color:var(--blue)}
+button,input,select{font:inherit}
+button,a,summary{touch-action:manipulation}
+.shell{width:min(1180px,calc(100% - 32px));margin:auto;padding-bottom:110px}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(7,16,29,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(98,129,169,.2);padding:14px max(16px,env(safe-area-inset-right)) 12px max(16px,env(safe-area-inset-left));margin:0 calc((100vw - 100%)/-2)}
+.topbar-inner{width:min(1180px,calc(100% - 32px));margin:auto;display:flex;align-items:center;gap:16px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:white}
+.mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--paper);color:var(--ink);font-weight:900;box-shadow:var(--shadow)}
+.brand strong{display:block;font-size:.96rem;letter-spacing:.08em}
+.brand small{display:block;color:var(--muted);font-size:.73rem}
+.nav{display:flex;gap:8px;overflow:auto;scrollbar-width:none}
+.nav a{white-space:nowrap;text-decoration:none;color:var(--muted);padding:9px 12px;border-radius:10px;font-size:.86rem;font-weight:700}
+.nav a:hover,.nav a:focus-visible{background:var(--panel2);color:white;outline:none}
+.hero{padding:58px 0 26px}
+.eyebrow{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-weight:800;margin:0 0 10px}
+h1{font-size:clamp(2.45rem,7vw,5.3rem);line-height:.98;letter-spacing:-.055em;margin:0;max-width:950px}
+.lead{font-size:clamp(1.04rem,2.2vw,1.3rem);max-width:780px;color:#cad5e3;margin:22px 0}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);border-radius:13px;min-height:48px;padding:12px 16px;background:var(--panel);color:white;text-decoration:none;font-weight:800;cursor:pointer}
+.btn.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.hero-grid,.grid3,.grid2,.stats,.source-grid,.rank-grid{display:grid;gap:14px}
+.hero-grid{grid-template-columns:repeat(4,1fr);margin:28px 0}
+.card,.panel,.decision-box{background:linear-gradient(180deg,rgba(18,35,57,.95),rgba(12,25,42,.95));border:1px solid var(--line);border-radius:19px;box-shadow:var(--shadow)}
+.hero-card{padding:18px}
+.hero-card span{display:block;color:var(--blue);font-size:.76rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+.hero-card strong{display:block;font-size:1.12rem;margin:7px 0 5px}
+.hero-card small{color:var(--muted)}
+.section{padding:38px 0}
+.section-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}
+.section-head h2{font-size:clamp(1.7rem,4vw,2.7rem);line-height:1.05;letter-spacing:-.04em;margin:0}
+.section-head p{max-width:610px;color:var(--muted);margin:0}
+.decision-box{padding:26px;background:var(--paper);color:var(--ink);border-color:#c8d8ed}
+.decision-box .eyebrow{color:#335b88}
+.decision-box h2{font-size:clamp(1.75rem,4vw,2.8rem);line-height:1.05;margin:0 0 12px;letter-spacing:-.04em}
+.decision-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:20px}
+.decision-main{padding-right:16px;border-right:1px solid #c7d5e5}
+.big-answer{font-size:clamp(1.3rem,3vw,2rem);line-height:1.2;font-weight:900;margin:0 0 14px}
+.checkline{display:flex;gap:10px;margin:9px 0;align-items:flex-start}
+.dot{width:20px;height:20px;flex:0 0 20px;border-radius:50%;display:grid;place-items:center;background:#dfeaf6;color:#17314f;font-size:.75rem;font-weight:900}
+.decision-side{display:grid;gap:10px}
+.mini{padding:14px;border-radius:14px;background:#dfeaf6}
+.mini span{display:block;font-size:.75rem;color:#4c6380;text-transform:uppercase;font-weight:800;letter-spacing:.08em}
+.mini strong{display:block;margin-top:3px}
+.grid3{grid-template-columns:repeat(3,1fr)}
+.grid2{grid-template-columns:repeat(2,1fr)}
+.panel{padding:21px}
+.panel h3{margin:5px 0 8px;font-size:1.22rem}
+.panel p{margin:0;color:var(--muted)}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:.76rem;font-weight:800;color:var(--blue)}
+.buybox{border-top:4px solid #9fc7fb}
+.buybox ul{padding-left:18px;margin:14px 0 0;color:#d8e1ed}
+.buybox li{margin:8px 0}
+.rank-grid{grid-template-columns:1.15fr .85fr}
+.ranking{padding:20px}
+.rank-row{display:grid;grid-template-columns:28px minmax(115px,1fr) 2fr 60px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(119,145,180,.18)}
+.rank-row:last-child{border-bottom:0}
+.rank-num{color:var(--blue);font-weight:900}
+.rank-name{font-weight:800}
+.bar{height:9px;background:#1b2d46;border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#7fb9fa,#d8e9ff);border-radius:999px}
+.rank-score{text-align:right;font-variant-numeric:tabular-nums;color:#dbe7f6;font-weight:800}
+.note{font-size:.84rem;color:var(--muted)}
+.market-card{padding:18px}
+.market-card strong{font-size:1.45rem}
+.market-card span{display:block;color:var(--muted);font-size:.86rem}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px}
+table{width:100%;border-collapse:collapse;min-width:680px;background:rgba(12,25,42,.78)}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid rgba(119,145,180,.17);font-size:.91rem}
+th{color:var(--blue);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+td b{color:white}
+.simulator{display:grid;grid-template-columns:.9fr 1.1fr;gap:16px}
+.form{padding:21px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.field label{display:block;font-size:.78rem;color:var(--muted);margin:0 0 5px;font-weight:700}
+.field input,.field select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:11px;background:#07111e;color:white;padding:10px 12px}
+.field.full{grid-column:1/-1}
+.results{padding:21px;background:var(--paper);color:var(--ink);border-radius:19px;border:1px solid #c7d8eb}
+.results h3{margin:0 0 14px}
+.stats{grid-template-columns:repeat(2,1fr)}
+.stat{padding:14px;border-radius:13px;background:#dfeaf6}
+.stat span{display:block;color:#4d6380;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.stat strong{display:block;font-size:1.2rem;margin-top:2px}
+.verdict{margin-top:14px;padding:16px;border-radius:13px;background:#183453;color:white}
+.verdict.good{background:#17492f}.verdict.warn{background:#66501e}.verdict.bad{background:#672c31}
+.verdict small{display:block;color:#dce6f2;margin-top:4px}
+details.guide{border:1px solid var(--line);border-radius:15px;background:rgba(16,31,52,.86);margin:10px 0;padding:0 16px}
+details.guide>summary{cursor:pointer;min-height:56px;display:flex;align-items:center;font-weight:800}
+details.guide .inside{padding:0 0 16px;color:#d2dce8}
+.steps{counter-reset:step}
+.step{display:grid;grid-template-columns:40px 1fr;gap:13px;margin:16px 0}
+.step:before{counter-increment:step;content:counter(step);width:40px;height:40px;border-radius:12px;background:var(--paper);color:var(--ink);display:grid;place-items:center;font-weight:900}
+.step strong{display:block}
+.step span{display:block;color:var(--muted);font-size:.91rem}
+.source-grid{grid-template-columns:repeat(2,1fr)}
+.source{padding:16px;border:1px solid var(--line);border-radius:14px;background:#0d1a2c}
+.source strong{display:block;margin-bottom:5px}
+.source small{color:var(--muted)}
+.footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:.84rem}
+.sticky-action{position:fixed;left:50%;transform:translateX(-50%);bottom:max(10px,env(safe-area-inset-bottom));width:min(680px,calc(100% - 24px));z-index:60;background:rgba(18,35,57,.95);backdrop-filter:blur(14px);border:1px solid #55759d;border-radius:17px;padding:7px;display:grid;grid-template-columns:1fr 1fr;gap:7px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.sticky-action a{min-height:46px;display:grid;place-items:center;text-decoration:none;border-radius:11px;color:white;font-weight:900}
+.sticky-action a:first-child{background:var(--paper);color:var(--ink)}
+.badge-good{color:var(--good)}.badge-warn{color:var(--warn)}.badge-bad{color:var(--bad)}
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:repeat(2,1fr)}
+  .rank-grid,.simulator,.decision-grid{grid-template-columns:1fr}
+  .decision-main{border-right:0;border-bottom:1px solid #c7d5e5;padding:0 0 18px}
+}
+@media(max-width:700px){
+  .shell,.topbar-inner{width:min(100% - 24px,1180px)}
+  .topbar-inner{display:block}
+  .nav{margin-top:10px}
+  .hero{padding-top:40px}
+  .hero-grid,.grid3,.grid2,.source-grid{grid-template-columns:1fr}
+  .section-head{display:block}
+  .section-head p{margin-top:9px}
+  .rank-row{grid-template-columns:24px minmax(110px,1fr) 1.4fr 50px;font-size:.88rem}
+  .form-grid,.stats{grid-template-columns:1fr}
+  .field.full{grid-column:auto}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/immo" aria-label="ARGUS IMMO BELGIUM">
+      <span class="mark">A</span><span><strong>ARGUS IMMO BELGIUM</strong><small>Belgique · données & décision</small></span>
+    </a>
+    <nav class="nav" aria-label="Navigation">
+      <a href="#decision">Décision</a><a href="#ou">Où acheter</a><a href="#simulateur">Simulateur</a><a href="#verifier">À vérifier</a><a href="#guide">Guide</a>
+    </nav>
+  </div>
+</div>
+
+<main class="shell">
+<section class="hero">
+  <p class="eyebrow">Complex data → simple decision</p>
+  <h1>Comprendre exactement où, quoi, quand et pourquoi acheter.</h1>
+  <p class="lead">ARGUS transforme les guides immobiliers belges, la fiscalité, le financement, la demande locative et les contrôles techniques en une décision lisible avant de faire une offre.</p>
+  <div class="hero-cta"><a class="btn primary" href="#simulateur">Analyser un achat</a><a class="btn" href="#ou">Voir les meilleures zones</a></div>
+  <div class="hero-grid">
+    <article class="card hero-card"><span>Où ?</span><strong>Schaerbeek · Anderlecht · Evere</strong><small>Notre point de départ pour un bon rapport demande/prix à Bruxelles.</small></article>
+    <article class="card hero-card"><span>Quoi ?</span><strong>2–4 unités reconnues</strong><small>Pour l'investissement: priorité à l'urbanisme clair, aux compteurs et aux loyers prouvés.</small></article>
+    <article class="card hero-card"><span>Quand ?</span><strong>Quand le dossier reste solide après stress-test</strong><small>Horizon long, réserve de sécurité, mensualité supportable et documents vérifiés.</small></article>
+    <article class="card hero-card"><span>Pourquoi ?</span><strong>Patrimoine + loyers + levier</strong><small>Seulement si le rendement net et le risque justifient le prix total.</small></article>
+  </div>
+</section>
+
+<section class="section" id="decision">
+  <div class="decision-box">
+    <p class="eyebrow">La réponse ARGUS</p>
+    <h2>Pour un immeuble de rapport, voici ce que nous chercherions d'abord.</h2>
+    <div class="decision-grid">
+      <div class="decision-main">
+        <p class="big-answer">3 unités officiellement reconnues, bien connectées, avec rendement brut cible ≥ 6,5–7 % après négociation.</p>
+        <div class="checkline"><span class="dot">✓</span><span><b>Schaerbeek</b> en priorité: forte base locative, loyers d'appartements +10,13 % en 2025 et prix moins tendus qu'Ixelles.</span></div>
+        <div class="checkline"><span class="dot">✓</span><span><b>Anderlecht</b>: bon levier prix/demande, loyers +9,11 %, population +6,3 % depuis 2021.</span></div>
+        <div class="checkline"><span class="dot">✓</span><span><b>Evere</b>: profil plus défensif, population et ménages en forte progression.</span></div>
+        <div class="checkline"><span class="dot">!</span><span><b>Ixelles / Etterbeek / Saint-Gilles</b>: demande exceptionnelle, mais n'acheter que si la décote ou la création de valeur compense le prix d'entrée.</span></div>
+      </div>
+      <div class="decision-side">
+        <div class="mini"><span>Règle n°1</span><strong>Coût total, jamais prix affiché seul</strong></div>
+        <div class="mini"><span>Règle n°2</span><strong>Urbanisme et baux avant rendement</strong></div>
+        <div class="mini"><span>Règle n°3</span><strong>Cash restant après l'acte</strong></div>
+        <div class="mini"><span>Règle n°4</span><strong>Plan A, B et C pour la sortie</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><div><p class="eyebrow">Buy box</p><h2>Le bien que nous voulons.</h2></div><p>Le manuel 2026 résume un bon achat comme: bon emplacement + prix justifié + financement sécurisé + documents vérifiés + travaux chiffrés + fiscalité comprise + marge de sécurité + stratégie de sortie.</p></div>
+  <div class="grid3">
+    <article class="panel buybox"><span class="pill">IMMEUBLE DE RAPPORT</span><h3>Priorité ARGUS</h3><ul><li>2 à 4 logements reconnus urbanistiquement</li><li>compteurs séparés si possible</li><li>proximité métro, tram, gare, campus ou emploi</li><li>loyers actuels prouvés ou loyers comparables réalistes</li><li>rendement brut cible ≥ 6,5–7 % après négociation</li><li>toiture, humidité et électricité maîtrisées</li></ul></article>
+    <article class="panel"><span class="pill">APPARTEMENT LOCATIF</span><h3>Simple mais sélectif</h3><p>Privilégier une petite copropriété, faibles charges, PEB maîtrisable, chauffage individuel et demande locative profonde. Un appartement moins cher peut coûter plus cher après charges, travaux et fiscalité.</p></article>
+    <article class="panel"><span class="pill">RÉSIDENCE PRINCIPALE</span><h3>Logique différente</h3><p>L'achat devient généralement plus rationnel avec un horizon d'au moins 5 à 7 ans, une réserve après achat et une mensualité supportable même si les revenus ou charges évoluent.</p></article>
+  </div>
+</section>
+
+<section class="section" id="ou">
+  <div class="section-head"><div><p class="eyebrow">Bruxelles</p><h2>Top 10 de pression locative durable.</h2></div><p>Indice analytique ARGUS 0–100, construit dans le dossier 2026: 40 % part de locataires, 25 % croissance des loyers, 20 % démographie, 15 % densité. Ce n'est pas un indice officiel.</p></div>
+  <div class="rank-grid">
+    <div class="panel ranking">
+      <div class="rank-row"><span class="rank-num">1</span><span class="rank-name">Saint-Gilles</span><span class="bar"><i style="width:77.5%"></i></span><span class="rank-score">77,5</span></div>
+      <div class="rank-row"><span class="rank-num">2</span><span class="rank-name">Ixelles</span><span class="bar"><i style="width:72.4%"></i></span><span class="rank-score">72,4</span></div>
+      <div class="rank-row"><span class="rank-num">3</span><span class="rank-name">Etterbeek</span><span class="bar"><i style="width:63.8%"></i></span><span class="rank-score">63,8</span></div>
+      <div class="rank-row"><span class="rank-num">4</span><span class="rank-name">Bruxelles-Ville</span><span class="bar"><i style="width:59.6%"></i></span><span class="rank-score">59,6</span></div>
+      <div class="rank-row"><span class="rank-num">5</span><span class="rank-name">Saint-Josse</span><span class="bar"><i style="width:56.6%"></i></span><span class="rank-score">56,6</span></div>
+      <div class="rank-row"><span class="rank-num">6</span><span class="rank-name">Anderlecht</span><span class="bar"><i style="width:49.5%"></i></span><span class="rank-score">49,5</span></div>
+      <div class="rank-row"><span class="rank-num">7</span><span class="rank-name">Schaerbeek</span><span class="bar"><i style="width:46.5%"></i></span><span class="rank-score">46,5</span></div>
+      <div class="rank-row"><span class="rank-num">8</span><span class="rank-name">Molenbeek</span><span class="bar"><i style="width:37.2%"></i></span><span class="rank-score">37,2</span></div>
+      <div class="rank-row"><span class="rank-num">9</span><span class="rank-name">Evere</span><span class="bar"><i style="width:34.6%"></i></span><span class="rank-score">34,6</span></div>
+      <div class="rank-row"><span class="rank-num">10</span><span class="rank-name">Woluwe-Saint-Lambert</span><span class="bar"><i style="width:32.4%"></i></span><span class="rank-score">32,4</span></div>
+      <p class="note">Demande maximale ≠ meilleur investissement. Le prix d'acquisition et le risque micro-local changent le classement pour l'investisseur.</p>
+    </div>
+    <div class="grid2">
+      <article class="panel market-card"><span>Bruxelles</span><strong>62 %</strong><span>des logements classiques occupés sont loués (Census 2021).</span></article>
+      <article class="panel market-card"><span>Loyer appartement 2025</span><strong>1 330 €</strong><span>moyenne des nouveaux baux via agences.</span></article>
+      <article class="panel market-card"><span>Étudiants</span><strong>137 000+</strong><span>avec seulement 11 305 unités étudiantes dédiées recensées en 2025.</span></article>
+      <article class="panel market-card"><span>Offre locative</span><strong>&lt; 8 000</strong><span>nouveaux contrats dans l'échantillon Federia 2025, contre env. 10–11k en 2021–2023.</span></article>
+    </div>
+  </div>
+
+  <div class="section-head" style="margin-top:32px"><div><p class="eyebrow">Belgique</p><h2>Où le marché locatif bouge le plus.</h2></div><p>Nombre de baux résidentiels enregistrés en 2025 selon les données SPF Finances compilées par PropertyWeb/CBRE. Le millésime 2025 peut être incomplet.</p></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Marché</th><th>Baux 2025</th><th>Loyer médian*</th><th>Évolution</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>Anvers</b></td><td>16 025</td><td>820 €</td><td>+3,1 %</td></tr>
+        <tr><td>2</td><td><b>Gand</b></td><td>13 778</td><td>700 €</td><td>+3,7 %</td></tr>
+        <tr><td>3</td><td><b>Louvain</b></td><td>10 625</td><td>626 €</td><td>+4,3 %</td></tr>
+        <tr><td>4</td><td><b>Ottignies-LLN</b></td><td>6 286</td><td>289 €</td><td>-3,0 %</td></tr>
+        <tr><td>5</td><td><b>Bruxelles-Ville</b></td><td>5 562</td><td>928 €</td><td>+3,6 %</td></tr>
+        <tr><td>6</td><td><b>Liège</b></td><td>5 237</td><td>680 €</td><td>+4,6 %</td></tr>
+        <tr><td>7</td><td><b>Ixelles</b></td><td>4 104</td><td>1 100 €</td><td>+10,0 %</td></tr>
+        <tr><td>8</td><td><b>Mons</b></td><td>3 606</td><td>626 €</td><td>+4,3 %</td></tr>
+        <tr><td>9</td><td><b>Charleroi</b></td><td>3 397</td><td>650 €</td><td>+0,8 %</td></tr>
+        <tr><td>10</td><td><b>Namur</b></td><td>3 241</td><td>725 €</td><td>+3,6 %</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">*Tous types confondus: les kots et petites unités peuvent tirer la médiane vers le bas dans les marchés étudiants.</p>
+</section>
+
+<section class="section" id="simulateur">
+  <div class="section-head"><div><p class="eyebrow">Simulateur ARGUS</p><h2>Un prix affiché n'est jamais le vrai coût.</h2></div><p>Le calcul ci-dessous additionne droits, frais, travaux, financement, loyers et charges. Les frais exacts doivent être validés par le notaire et la banque.</p></div>
+  <div class="simulator">
+    <div class="panel form">
+      <div class="form-grid">
+        <div class="field"><label>Prix d'achat (€)</label><input id="price" type="number" value="300000" min="0"></div>
+        <div class="field"><label>Région</label><select id="region"><option value="brussels">Bruxelles</option><option value="wallonia">Wallonie</option><option value="flanders">Flandre</option></select></div>
+        <div class="field"><label>Usage</label><select id="usage"><option value="investment">Investissement locatif</option><option value="home">Habitation propre/unique — si conditions remplies</option></select></div>
+        <div class="field"><label>Apport sur le prix (€)</label><input id="down" type="number" value="60000" min="0"></div>
+        <div class="field"><label>Travaux immédiats (€)</label><input id="works" type="number" value="15000" min="0"></div>
+        <div class="field"><label>Autres frais d'achat estimés (%)</label><input id="otherFees" type="number" value="3" step=".1" min="0"><span class="note">Hypothèse pédagogique hors droits. Remplacer par devis notarial.</span></div>
+        <div class="field"><label>Taux du crédit (%)</label><input id="rate" type="number" value="4" step=".05" min="0"></div>
+        <div class="field"><label>Durée du crédit (années)</label><input id="years" type="number" value="25" min="1"></div>
+        <div class="field"><label>Loyers totaux / mois (€)</label><input id="rent" type="number" value="2100" min="0"></div>
+        <div class="field"><label>Charges propriétaire / mois (€)</label><input id="charges" type="number" value="250" min="0"></div>
+        <div class="field"><label>Précompte + assurance / an (€)</label><input id="annualFixed" type="number" value="2200" min="0"></div>
+        <div class="field"><label>Vacance/entretien réserve (%)</label><input id="reservePct" type="number" value="8" step=".5" min="0"></div>
+        <div class="field"><label>Commune bruxelloise</label><select id="commune"><option value="46.5">Schaerbeek</option><option value="49.5">Anderlecht</option><option value="34.6">Evere</option><option value="37.2">Molenbeek</option><option value="72.4">Ixelles</option><option value="63.8">Etterbeek</option><option value="77.5">Saint-Gilles</option><option value="59.6">Bruxelles-Ville</option><option value="56.6">Saint-Josse</option><option value="32.4">Woluwe-Saint-Lambert</option><option value="40">Autre / hors Bruxelles</option></select></div>
+        <div class="field"><label>PEB</label><select id="peb"><option value="10">A / B</option><option value="8" selected>C / D</option><option value="4">E</option><option value="0">F / G</option></select></div>
+        <div class="field full"><label>Chaque unité est-elle officiellement reconnue ?</label><select id="legal"><option value="yes">Oui / à confirmer par document urbanistique</option><option value="no">Non / inconnu</option></select></div>
+        <div class="field full"><label>Cash restant après achat (€)</label><input id="cashLeft" type="number" value="20000" min="0"></div>
+      </div>
+    </div>
+
+    <div class="results">
+      <h3>Résultat de l'opération</h3>
+      <div class="stats">
+        <div class="stat"><span>Droits estimés</span><strong id="taxOut">—</strong></div>
+        <div class="stat"><span>Coût total projet</span><strong id="totalOut">—</strong></div>
+        <div class="stat"><span>Crédit estimé</span><strong id="loanOut">—</strong></div>
+        <div class="stat"><span>Mensualité</span><strong id="paymentOut">—</strong></div>
+        <div class="stat"><span>Rendement brut</span><strong id="grossOut">—</strong></div>
+        <div class="stat"><span>Cash-flow mensuel*</span><strong id="cashflowOut">—</strong></div>
+        <div class="stat"><span>Cash initial nécessaire</span><strong id="cashNeedOut">—</strong></div>
+        <div class="stat"><span>Score ARGUS</span><strong id="scoreOut">—</strong></div>
+      </div>
+      <div class="verdict" id="verdict"><b id="verdictTitle">—</b><small id="verdictText">Remplissez les données du bien.</small></div>
+      <p class="note" style="color:#445a76">*Avant fiscalité personnelle et grands travaux extraordinaires. Le simulateur est pédagogique et ne remplace pas un calcul notarial, bancaire ou fiscal.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="verifier">
+  <div class="section-head"><div><p class="eyebrow">Avant l'offre</p><h2>Ne jamais acheter un rendement sur papier.</h2></div><p>Les documents peuvent transformer une “bonne affaire” en mauvais achat. Une banque qui finance un bien ne garantit pas que le bien est bon.</p></div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Immeuble de rapport: 10 preuves à obtenir</h3>
+      <div class="checkline"><span class="dot">1</span><span>Reconnaissance urbanistique de chaque unité.</span></div>
+      <div class="checkline"><span class="dot">2</span><span>Baux enregistrés et loyers réellement payés.</span></div>
+      <div class="checkline"><span class="dot">3</span><span>Historique de vacance et éventuels impayés.</span></div>
+      <div class="checkline"><span class="dot">4</span><span>PEB de chaque logement.</span></div>
+      <div class="checkline"><span class="dot">5</span><span>Contrôle électrique et compteurs.</span></div>
+      <div class="checkline"><span class="dot">6</span><span>Toiture, humidité, chauffage, isolation.</span></div>
+      <div class="checkline"><span class="dot">7</span><span>Revenu cadastral et précompte immobilier.</span></div>
+      <div class="checkline"><span class="dot">8</span><span>Travaux réalisés avec permis/factures.</span></div>
+      <div class="checkline"><span class="dot">9</span><span>Servitudes, infractions et renseignements urbanistiques.</span></div>
+      <div class="checkline"><span class="dot">10</span><span>Plan de sortie: revente, relocation ou rénovation.</span></div>
+    </div>
+    <div class="panel">
+      <h3>Appartement: copropriété</h3>
+      <p>Demander au minimum les PV d'assemblées générales, fonds de réserve, appels de fonds, gros travaux votés ou envisagés, décomptes de charges, règlement de copropriété et informations du syndic.</p>
+      <h3 style="margin-top:22px">Offre d'achat</h3>
+      <p>L'offre peut engager l'acheteur. Si un crédit est nécessaire, prévoir une condition suspensive de financement et faire relire l'offre par le notaire avant signature lorsque le dossier présente un enjeu important.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="guide">
+  <div class="section-head"><div><p class="eyebrow">Guide express 2026</p><h2>Le parcours en 8 étapes.</h2></div><p>Le site est conçu pour que quelqu'un qui n'y connaît rien puisse savoir immédiatement quoi faire ensuite.</p></div>
+  <div class="panel steps">
+    <div class="step"><div><strong>Définir l'objectif</strong><span>Habiter, louer, mixte, immeuble de rapport. Le même bien n'est pas optimal pour tous les objectifs.</span></div></div>
+    <div class="step"><div><strong>Fixer le budget complet</strong><span>Prix + droits + frais + travaux + crédit + réserve de sécurité.</span></div></div>
+    <div class="step"><div><strong>Valider la capacité bancaire</strong><span>CBC donne comme principe général que l'ensemble des engagements de remboursement mensuel ne devrait pas dépasser 40 % du revenu net du ménage.</span></div></div>
+    <div class="step"><div><strong>Choisir la micro-zone</strong><span>Transports, emploi, campus, demande locative, revente, bruit, sécurité et projets publics.</span></div></div>
+    <div class="step"><div><strong>Visiter et chiffrer</strong><span>PEB, humidité, toiture, électricité, chauffage, isolation et travaux avec marge.</span></div></div>
+    <div class="step"><div><strong>Contrôler les documents</strong><span>Urbanisme, bail, copropriété, servitudes, PEB, électricité et fiscalité avant de juger le rendement.</span></div></div>
+    <div class="step"><div><strong>Négocier et faire relire l'offre</strong><span>Comparer aux biens concurrents et utiliser les défauts documentés pour justifier le prix.</span></div></div>
+    <div class="step"><div><strong>Signer seulement quand le financement et le risque sont compris</strong><span>Compromis, crédit, acte notarié puis plan de gestion/relocation/travaux.</span></div></div>
+  </div>
+
+  <details class="guide"><summary>Fiscalité d'achat — repères 2026</summary><div class="inside"><p><b>Bruxelles:</b> taux normal 12,5 %. Pour une habitation propre/unique, un abattement peut s'appliquer sur une partie de la base taxable sous conditions; le dossier utilisé indique les premiers 200 000 € comme repère 2026.</p><p><b>Wallonie:</b> taux normal 12,5 %. Taux réduit de 3 % depuis 2025 pour l'habitation propre et unique si les conditions sont remplies.</p><p><b>Flandre:</b> taux normal 12 %. Taux réduit de 2 % depuis 2025 pour l'habitation unique et propre si les conditions sont remplies.</p><p class="note">Les règles fiscales évoluent: confirmer le régime applicable avec le notaire au moment de l'achat.</p></div></details>
+  <details class="guide"><summary>Pourquoi garder une réserve après l'achat ?</summary><div class="inside"><p>Le manuel recommande de garder du cash après l'acte pour absorber sécurité, travaux, énergie, impôts et vacance locative. Un rendement élevé ne compense pas une trésorerie à zéro lorsqu'une toiture ou un chauffage tombe en panne.</p></div></details>
+  <details class="guide"><summary>Demande maximale ou meilleur investissement ?</summary><div class="inside"><p>Ixelles, Saint-Gilles et Etterbeek offrent une demande très profonde mais des prix d'acquisition élevés. Pour un immeuble de rapport, le dossier ARGUS privilégie d'abord Schaerbeek et Anderlecht, puis Evere et certaines parties de Molenbeek, parce que le rapport demande/prix peut être plus favorable.</p></div></details>
+</section>
+
+<section class="section">
+  <div class="section-head"><div><p class="eyebrow">Base documentaire</p><h2>Ce que le site a intégré.</h2></div><p>Les chiffres ne sont pas inventés: le site reprend les documents fournis et le dossier statistique 2026, puis les transforme en règles simples.</p></div>
+  <div class="source-grid">
+    <article class="source"><strong>Manuel Ultime Immobilier Belgique 2026</strong><small>Marché, budget, fiscalité, financement, procédure, technique, copropriété, travaux, rendement, négociation, check-lists.</small></article>
+    <article class="source"><strong>Guide expert — Acheter en immobilier en Belgique</strong><small>Pourquoi acheter, acheter ou louer, coût total, crédit, risques juridiques et techniques.</small></article>
+    <article class="source"><strong>Manuel premiers acheteurs — Belgique 2026</strong><small>Processus, documents, visite, offre, compromis, financement et mini-manuel investisseur.</small></article>
+    <article class="source"><strong>Guide CBC — Devenir propriétaire</strong><small>Capacité de remboursement, crédit hypothécaire, étapes d'achat, droits et check-list bancaire.</small></article>
+    <article class="source"><strong>Dossier Demande Locative Bruxelles & Belgique — Sept. 2026</strong><small>Federia, IBSA/Statbel, SPF Finances, perspective.brussels, SmartBlock/Trends-Tendances et lecture investisseur.</small></article>
+    <article class="source"><strong>Sources institutionnelles citées</strong><small>Statbel, Notaire.be, SPF Finances, Bruxelles Fiscalité, Wallonie, Vlaanderen, Bruxelles Environnement, Perspective.brussels, Federia.</small></article>
+  </div>
+</section>
+
+<footer class="footer">
+  <b>ARGUS IMMO BELGIUM</b><br>
+  Outil pédagogique d'aide à la décision. Il ne remplace pas un notaire, une banque, un expert immobilier, un architecte, un fiscaliste ou un avocat. Les règles fiscales, urbanistiques et bancaires doivent être vérifiées au moment de signer.
+</footer>
+</main>
+
+<div class="sticky-action"><a href="#simulateur">Analyser un bien</a><a href="#ou">Où acheter ?</a></div>
+
+<script>
+const euro = n => new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
+const pct = n => (Number.isFinite(n)?n:0).toFixed(2).replace('.',',')+' %';
+const $ = id => document.getElementById(id);
+
+function registrationTax(price, region, usage){
+  if(usage==='investment'){
+    if(region==='flanders') return price*.12;
+    return price*.125;
+  }
+  if(region==='wallonia') return price*.03;
+  if(region==='flanders') return price*.02;
+  return Math.max(0,price-200000)*.125;
+}
+function monthlyPayment(principal, annualRate, years){
+  if(principal<=0) return 0;
+  const n=years*12;
+  const r=annualRate/100/12;
+  if(r===0) return principal/n;
+  return principal*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+}
+function calc(){
+  const price=+$('price').value||0;
+  const region=$('region').value;
+  const usage=$('usage').value;
+  const down=+$('down').value||0;
+  const works=+$('works').value||0;
+  const otherFees=(+$('otherFees').value||0)/100;
+  const rate=+$('rate').value||0;
+  const years=+$('years').value||25;
+  const rent=+$('rent').value||0;
+  const charges=+$('charges').value||0;
+  const annualFixed=+$('annualFixed').value||0;
+  const reservePct=(+$('reservePct').value||0)/100;
+  const demand=+$('commune').value||40;
+  const peb=+$('peb').value||0;
+  const legal=$('legal').value;
+  const cashLeft=+$('cashLeft').value||0;
+
+  const tax=registrationTax(price,region,usage);
+  const other=price*otherFees;
+  const total=price+tax+other+works;
+  const loan=Math.max(0,price-down);
+  const payment=monthlyPayment(loan,rate,years);
+  const grossYield=price>0?(rent*12/price*100):0;
+  const reserve=rent*reservePct;
+  const monthlyFixed=annualFixed/12;
+  const cashflow=rent-reserve-charges-monthlyFixed-payment;
+  const cashNeed=down+tax+other+works;
+
+  let score=0;
+  if(grossYield>=7) score+=25; else if(grossYield>=6) score+=19; else if(grossYield>=5) score+=11; else score+=4;
+  if(cashflow>=250) score+=20; else if(cashflow>=0) score+=15; else if(cashflow>-250) score+=7;
+  score+=Math.round(Math.min(15,demand/100*15));
+  score+=peb;
+  if(legal==='yes') score+=20;
+  if(cashLeft>=15000) score+=10; else if(cashLeft>=7500) score+=5;
+  score=Math.min(100,score);
+
+  $('taxOut').textContent=euro(tax);
+  $('totalOut').textContent=euro(total);
+  $('loanOut').textContent=euro(loan);
+  $('paymentOut').textContent=euro(payment)+'/mois';
+  $('grossOut').textContent=pct(grossYield);
+  $('cashflowOut').textContent=euro(cashflow)+'/mois';
+  $('cashNeedOut').textContent=euro(cashNeed);
+  $('scoreOut').textContent=score+'/100';
+
+  const v=$('verdict');
+  if(legal!=='yes'){
+    v.className='verdict bad'; $('verdictTitle').textContent='STOP — urbanisme non confirmé';
+    $('verdictText').textContent='Ne jugez pas l\'immeuble sur son rendement tant que chaque unité n\'est pas officiellement reconnue.';
+  }else if(score>=78 && grossYield>=6.5 && cashflow>=0){
+    v.className='verdict good'; $('verdictTitle').textContent='GO / VISITE PRIORITAIRE';
+    $('verdictText').textContent='Le dossier passe les filtres de départ. Il faut maintenant valider loyers, technique, urbanisme, fiscalité et financement avant toute offre.';
+  }else if(score>=62){
+    v.className='verdict warn'; $('verdictTitle').textContent='NÉGOCIER / APPROFONDIR';
+    $('verdictText').textContent='Le bien peut devenir intéressant, mais le prix, les charges, le PEB ou le cash-flow doivent être améliorés ou confirmés.';
+  }else{
+    v.className='verdict bad'; $('verdictTitle').textContent='WAIT / PASSER';
+    $('verdictText').textContent='Le rapport rendement-risque ne semble pas assez fort avec ces hypothèses. Chercher une décote, moins de travaux ou un meilleur loyer réel.';
+  }
+}
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',calc));
+calc();
+</script>
+</body>
+</html>
