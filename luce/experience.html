@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
+<title>LUCE — Les Expériences</title>
+<style>
+:root{--bg:#050505;--ink:#f3eddf;--muted:#8f887d;--gold:#d8b56d;--line:rgba(255,255,255,.11)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 50% 0,rgba(216,181,109,.08),transparent 34%),#050505;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+a,button{font:inherit;color:inherit}a{text-decoration:none}button{cursor:pointer}
+.wrap{width:min(820px,92vw);margin:auto}
+.top{position:sticky;top:0;z-index:40;background:rgba(5,5,5,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topin{width:min(820px,92vw);margin:auto;min-height:64px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:Georgia,serif;letter-spacing:.16em}.close{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center}
+header{padding:74px 0 46px}.k{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#817a70}h1{font-family:Georgia,serif;font-size:clamp(3.4rem,12vw,6.5rem);font-weight:400;line-height:.9;letter-spacing:-.04em;margin:.16em 0 .25em}.lead{color:#9e968a;line-height:1.65;max-width:650px}
+.list{display:grid;gap:10px;padding-bottom:100px}
+.item{border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.02);overflow:hidden}
+.item>button{width:100%;border:0;background:transparent;padding:20px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.item .num{font-size:.65rem;letter-spacing:.14em;color:#746e65}.item strong{display:block;font-family:Georgia,serif;font-size:1.55rem;font-weight:400;margin-top:4px}.arrow{color:#827b70}
+.body{display:none;padding:0 20px 22px}.item.open .body{display:block}.item.open .arrow{transform:rotate(45deg)}
+.body p{color:#918a7f;line-height:1.6}
+.center{text-align:center;padding:20px 0}
+.orb{width:150px;height:150px;border:0;border-radius:50%;background:radial-gradient(circle,#fff7df 0 5%,#edcf90 22%,rgba(216,181,109,.28) 45%,transparent 72%);box-shadow:0 0 48px rgba(216,181,109,.18)}.orb.run{animation:breathe 12s ease-in-out infinite}@keyframes breathe{0%,100%{transform:scale(.76)}33%{transform:scale(1.17)}50%{transform:scale(1.17)}}
+.label{font-size:.7rem;letter-spacing:.15em;color:#4a3618;font-weight:800}
+.cave{height:320px;border-radius:20px;background:radial-gradient(circle at 50% 115%,rgba(216,181,109,.3),transparent 30%),#030303;display:grid;place-items:center;position:relative;overflow:hidden}.cave-light{width:18px;height:18px;border-radius:50%;background:#ead199;box-shadow:0 0 24px #ead199,0 0 90px rgba(216,181,109,.45);transition:1.4s ease}.cave.open .cave-light{transform:scale(14)}.cave button{position:absolute;bottom:20px}
+.btn{display:inline-flex;min-height:46px;padding:11px 16px;border-radius:999px;border:1px solid rgba(216,181,109,.42);background:rgba(216,181,109,.06);align-items:center;justify-content:center;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase}
+.guardian{height:330px;border-radius:20px;background:radial-gradient(circle at 50% 45%,#151515,#030303 62%);display:grid;place-items:center;position:relative}.eyes{display:flex;gap:54px;opacity:.08;transition:1s ease}.guardian.on .eyes{opacity:1}.eye{width:44px;height:14px;border-radius:80% 20% 80% 20%;background:radial-gradient(circle,#efd38a 0 14%,#75521b 21% 38%,#030303 42%);box-shadow:0 0 26px rgba(216,181,109,.28)}.guardian-copy{position:absolute;bottom:18px;left:18px;right:18px;text-align:center;color:#9b9387}
+.invisible{height:350px;border-radius:20px;position:relative;overflow:hidden;background:#050505}.under{position:absolute;inset:0;display:grid;place-items:center;padding:35px;text-align:center;font-family:Georgia,serif;font-size:clamp(1.5rem,4vw,2.1rem);color:#ead9b2}.invisible canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.note{font-size:.75rem;color:#716b63;margin-top:12px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="top"><div class="topin"><a class="brand" href="/luce/">LUCE</a><a class="close" href="/luce/">×</a></div></div>
+<main class="wrap">
+<header><div class="k">Vivre LUCE</div><h1>LES EXPÉRIENCES</h1><p class="lead">Quatre expériences. Choisis-en une. Pas de score, pas de diagnostic, rien à réussir.</p></header>
+
+<div class="list">
+ <section class="item open">
+  <button><div><span class="num">01</span><strong>RESPIRER</strong></div><span class="arrow">＋</span></button>
+  <div class="body">
+   <p>Le Souffle du Désert. Suis simplement le rythme.</p>
+   <div class="center"><button class="orb" id="breath"><span class="label" id="breathLabel">TOUCHER</span></button><div class="note">Inspirer 4 s · garder 2 s · expirer 6 s</div></div>
+  </div>
+ </section>
+
+ <section class="item">
+  <button><div><span class="num">02</span><strong>SE RETOURNER</strong></div><span class="arrow">＋</span></button>
+  <div class="body">
+   <p>La Caverne et les Ombres. Une seule action : se tourner vers la lumière.</p>
+   <div class="cave" id="cave"><div class="cave-light"></div><button class="btn" id="caveBtn">Vers la lumière</button></div>
+  </div>
+ </section>
+
+ <section class="item">
+  <button><div><span class="num">03</span><strong>RESTER</strong></div><span class="arrow">＋</span></button>
+  <div class="body">
+   <p>La Panthère. Pas une prédiction : une présence silencieuse.</p>
+   <div class="guardian" id="guardian"><div class="eyes"><div class="eye"></div><div class="eye" style="transform:scaleX(-1)"></div></div><div class="guardian-copy" id="guardianCopy">Touchez pour révéler.</div></div>
+  </div>
+ </section>
+
+ <section class="item">
+  <button><div><span class="num">04</span><strong>RÉVÉLER</strong></div><span class="arrow">＋</span></button>
+  <div class="body">
+   <p>L’Invisible. Passe ton doigt dans l’obscurité.</p>
+   <div class="invisible" id="invisible"><div class="under">« L’invisible n’est pas ailleurs.<br>Il est ici.<br>Depuis toujours. »</div><canvas id="canvas"></canvas></div>
+   <div class="note">Ton doigt devient la lumière.</div>
+  </div>
+ </section>
+</div>
+</main>
+<script>
+(function(){
+ const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s)),save=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+ $$('.item>button').forEach(b=>b.onclick=()=>{const item=b.parentElement;$$('.item').forEach(x=>{if(x!==item)x.classList.remove('open')});item.classList.toggle('open');setTimeout(sizeCanvas,80)});
+ let timer;$('#breath').onclick=function(){clearTimeout(timer);this.classList.add('run');save('luce_state',JSON.stringify(Object.assign({},JSON.parse(localStorage.getItem('luce_state')||'{}'),{desert:true})));const seq=[['INSPIRE',4000],['GARDE',2000],['EXPIRE',6000]];let i=0;function tick(){$('#breathLabel').textContent=seq[i][0];timer=setTimeout(()=>{i=(i+1)%seq.length;tick()},seq[i][1])}tick()};
+ $('#caveBtn').onclick=function(){$('#cave').classList.toggle('open');this.textContent=$('#cave').classList.contains('open')?'Revenir':'Vers la lumière'};
+ const gm=['Continue.','Tu n’es pas seul.','La force n’a pas besoin de bruit.'];let gi=0;$('#guardian').onclick=()=>{$('#guardian').classList.add('on');$('#guardianCopy').textContent=gm[gi++%gm.length]};
+ const canvas=$('#canvas'),ctx=canvas.getContext('2d');let down=false;
+ function sizeCanvas(){const r=canvas.getBoundingClientRect();if(!r.width)return;const d=Math.min(devicePixelRatio||1,2);canvas.width=r.width*d;canvas.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);ctx.globalCompositeOperation='source-over';ctx.fillStyle='#070707';ctx.fillRect(0,0,r.width,r.height)}
+ function reveal(e){const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;ctx.save();ctx.globalCompositeOperation='destination-out';const g=ctx.createRadialGradient(x,y,8,x,y,58);g.addColorStop(0,'rgba(0,0,0,1)');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,60,0,Math.PI*2);ctx.fill();ctx.restore()}
+ canvas.addEventListener('pointerdown',e=>{down=true;reveal(e)});canvas.addEventListener('pointermove',e=>{if(down)reveal(e)});canvas.addEventListener('pointerup',()=>down=false);canvas.addEventListener('pointercancel',()=>down=false);addEventListener('resize',sizeCanvas);sizeCanvas();
+})();
+</script>
+</body>
+</html>
