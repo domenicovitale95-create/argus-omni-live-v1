@@ -117,6 +117,26 @@ details.guide .inside{padding:0 0 16px;color:#d2dce8}
 .sticky-action a{min-height:46px;display:grid;place-items:center;text-decoration:none;border-radius:11px;color:white;font-weight:900}
 .sticky-action a:first-child{background:var(--paper);color:var(--ink)}
 .badge-good{color:var(--good)}.badge-warn{color:var(--warn)}.badge-bad{color:var(--bad)}
+.tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.tool-card{border:1px solid var(--line);border-radius:17px;background:#0d1b2e;overflow:hidden}
+.tool-card summary{cursor:pointer;padding:18px 19px;min-height:62px;font-weight:900;display:flex;justify-content:space-between;gap:14px;align-items:center}
+.tool-card summary span{color:var(--muted);font-size:.78rem;font-weight:700}
+.tool-body{padding:0 19px 19px}
+.tool-body h4{margin:16px 0 8px;color:#eaf2fc}
+.tool-body ul{padding-left:18px;color:#d0dbe8;margin:8px 0}
+.tool-body li{margin:7px 0}
+.script{padding:13px 14px;background:#071321;border:1px solid #29415e;border-radius:12px;color:#dce8f6;font-size:.9rem;margin:10px 0}
+.qa-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.qa{padding:14px;border-radius:13px;border:1px solid var(--line);background:#0a1728}
+.qa b{display:block;color:#e9f2fc}
+.qa span{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+.checklist{display:grid;gap:8px}
+.checkitem{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:11px;border:1px solid #263f5d;background:#091727}
+.checkitem input{margin-top:4px;accent-color:#9ae6b4}
+.checkitem label{color:#d4dfeb;font-size:.9rem}
+.progress{height:10px;background:#13253b;border-radius:999px;overflow:hidden;margin:11px 0}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7fb9fa,#9ae6b4);transition:width .2s}
+.micro{font-size:.78rem;color:var(--muted)}
 @media(max-width:900px){
   .hero-grid{grid-template-columns:repeat(2,1fr)}
   .rank-grid,.simulator,.decision-grid{grid-template-columns:1fr}
@@ -127,7 +147,7 @@ details.guide .inside{padding:0 0 16px;color:#d2dce8}
   .topbar-inner{display:block}
   .nav{margin-top:10px}
   .hero{padding-top:40px}
-  .hero-grid,.grid3,.grid2,.source-grid{grid-template-columns:1fr}
+  .hero-grid,.grid3,.grid2,.source-grid,.tool-grid,.qa-grid{grid-template-columns:1fr}
   .section-head{display:block}
   .section-head p{margin-top:9px}
   .rank-row{grid-template-columns:24px minmax(110px,1fr) 1.4fr 50px;font-size:.88rem}
@@ -143,7 +163,7 @@ details.guide .inside{padding:0 0 16px;color:#d2dce8}
       <span class="mark">A</span><span><strong>ARGUS IMMO BELGIUM</strong><small>Belgique · données & décision</small></span>
     </a>
     <nav class="nav" aria-label="Navigation">
-      <a href="#decision">Décision</a><a href="#ou">Où acheter</a><a href="#simulateur">Simulateur</a><a href="#verifier">À vérifier</a><a href="#guide">Guide</a>
+      <a href="#decision">Décision</a><a href="#ou">Où acheter</a><a href="#simulateur">Simulateur</a><a href="#primo">Primo-acquéreur</a><a href="#outils">Outils</a><a href="#verifier">À vérifier</a>
     </nav>
   </div>
 </div>
@@ -238,6 +258,35 @@ details.guide .inside{padding:0 0 16px;color:#d2dce8}
   <p class="note">*Tous types confondus: les kots et petites unités peuvent tirer la médiane vers le bas dans les marchés étudiants.</p>
 </section>
 
+
+<section class="section" id="primo">
+  <div class="section-head"><div><p class="eyebrow">Mode primo-acquéreur</p><h2>Avant de chercher un bien, vérifiez d'abord si vous êtes prêt.</h2></div><p>Le manuel premiers acheteurs conseille de raisonner en coût global et de ne pas acheter si l'horizon, la réserve ou la mensualité rendent le projet fragile.</p></div>
+  <div class="grid2">
+    <article class="panel">
+      <span class="pill">MINI-TEST AVANT ACHAT</span><h3>6 questions qui évitent les achats trop rapides</h3>
+      <div class="checklist">
+        <div class="checkitem"><input type="checkbox" class="buyer-check" id="b1"><label for="b1">Je peux garder ce bien au moins 5 ans.</label></div>
+        <div class="checkitem"><input type="checkbox" class="buyer-check" id="b2"><label for="b2">Il me restera idéalement environ 6 mois de dépenses en réserve après l'achat.</label></div>
+        <div class="checkitem"><input type="checkbox" class="buyer-check" id="b3"><label for="b3">Le bien restera revendable si ma vie change.</label></div>
+        <div class="checkitem"><input type="checkbox" class="buyer-check" id="b4"><label for="b4">Le PEB et les travaux sont compatibles avec mon budget.</label></div>
+        <div class="checkitem"><input type="checkbox" class="buyer-check" id="b5"><label for="b5">Le quartier a une demande réelle: transports, commerces, emploi, écoles et services.</label></div>
+        <div class="checkitem"><input type="checkbox" class="buyer-check" id="b6"><label for="b6">La mensualité reste supportable si mes revenus baissent ou si les charges augmentent.</label></div>
+      </div>
+      <div class="progress"><i id="buyerProgress"></i></div><p class="micro" id="buyerProgressText">0/6 points validés.</p>
+    </article>
+    <article class="panel">
+      <span class="pill">QUI CONTACTER ?</span><h3>Le bon professionnel au bon moment</h3>
+      <div class="qa-grid">
+        <div class="qa"><b>Notaire</b><span>Dès l'offre si possible: actes, frais, urbanisme, clauses et compromis.</span></div>
+        <div class="qa"><b>Banque / courtier</b><span>Avant les visites sérieuses: capacité, quotité, TAEG, assurances et structure du crédit.</span></div>
+        <div class="qa"><b>Expert bâtiment</b><span>Avant offre ferme pour un bien ancien, cher, humide, fissuré ou à rénover.</span></div>
+        <div class="qa"><b>Avocat</b><span>Quand bail, indivision, société, urbanisme litigieux ou conflit rendent le dossier complexe.</span></div>
+      </div>
+      <p class="note" style="margin-top:12px">L'agent immobilier commercialise souvent pour le vendeur: son rôle n'est pas de sécuriser juridiquement votre achat.</p>
+    </article>
+  </div>
+</section>
+
 <section class="section" id="simulateur">
   <div class="section-head"><div><p class="eyebrow">Simulateur ARGUS</p><h2>Un prix affiché n'est jamais le vrai coût.</h2></div><p>Le calcul ci-dessous additionne droits, frais, travaux, financement, loyers et charges. Les frais exacts doivent être validés par le notaire et la banque.</p></div>
   <div class="simulator">
@@ -258,7 +307,10 @@ details.guide .inside{padding:0 0 16px;color:#d2dce8}
         <div class="field"><label>Commune bruxelloise</label><select id="commune"><option value="46.5">Schaerbeek</option><option value="49.5">Anderlecht</option><option value="34.6">Evere</option><option value="37.2">Molenbeek</option><option value="72.4">Ixelles</option><option value="63.8">Etterbeek</option><option value="77.5">Saint-Gilles</option><option value="59.6">Bruxelles-Ville</option><option value="56.6">Saint-Josse</option><option value="32.4">Woluwe-Saint-Lambert</option><option value="40">Autre / hors Bruxelles</option></select></div>
         <div class="field"><label>PEB</label><select id="peb"><option value="10">A / B</option><option value="8" selected>C / D</option><option value="4">E</option><option value="0">F / G</option></select></div>
         <div class="field full"><label>Chaque unité est-elle officiellement reconnue ?</label><select id="legal"><option value="yes">Oui / à confirmer par document urbanistique</option><option value="no">Non / inconnu</option></select></div>
-        <div class="field full"><label>Cash restant après achat (€)</label><input id="cashLeft" type="number" value="20000" min="0"></div>
+        <div class="field"><label>Cash restant après achat (€)</label><input id="cashLeft" type="number" value="20000" min="0"></div>
+        <div class="field"><label>Revenu net ménage / mois (€)</label><input id="income" type="number" value="4000" min="0"></div>
+        <div class="field"><label>Autres crédits / mois (€)</label><input id="otherDebt" type="number" value="0" min="0"></div>
+        <div class="field"><label>Travaux imprévus stress-test (€)</label><input id="stressWorks" type="number" value="10000" min="0"></div>
       </div>
     </div>
 
@@ -273,10 +325,50 @@ details.guide .inside{padding:0 0 16px;color:#d2dce8}
         <div class="stat"><span>Cash-flow mensuel*</span><strong id="cashflowOut">—</strong></div>
         <div class="stat"><span>Cash initial nécessaire</span><strong id="cashNeedOut">—</strong></div>
         <div class="stat"><span>Score ARGUS</span><strong id="scoreOut">—</strong></div>
+        <div class="stat"><span>Engagements / revenu</span><strong id="debtRatioOut">—</strong></div>
+        <div class="stat"><span>Stress-test mensuel</span><strong id="stressOut">—</strong></div>
       </div>
       <div class="verdict" id="verdict"><b id="verdictTitle">—</b><small id="verdictText">Remplissez les données du bien.</small></div>
       <p class="note" style="color:#445a76">*Avant fiscalité personnelle et grands travaux extraordinaires. Le simulateur est pédagogique et ne remplace pas un calcul notarial, bancaire ou fiscal.</p>
     </div>
+  </div>
+</section>
+
+
+<section class="section" id="outils">
+  <div class="section-head"><div><p class="eyebrow">Outils terrain intégrés</p><h2>Banque, visite, offre et stress-test.</h2></div><p>Les documents deviennent ici des modes d'emploi cliquables. Vous ouvrez uniquement ce dont vous avez besoin.</p></div>
+  <div class="tool-grid">
+    <details class="tool-card" open><summary>🏦 Préparer la banque <span>TAEG · hypothèque/mandat · assurances</span></summary><div class="tool-body">
+      <h4>Ce que la banque regarde</h4><ul><li>revenus et stabilité;</li><li>charges et reste à vivre;</li><li>apport et quotité;</li><li>qualité/valeur du bien;</li><li>historique financier.</li></ul>
+      <h4>Questions à poser</h4><ul><li>Taux nominal et TAEG ?</li><li>Coût total du crédit ?</li><li>Frais de dossier et expertise ?</li><li>Quelle part hypothèque / mandat ?</li><li>Quelles assurances conditionnent le taux ?</li><li>ASRD possible ailleurs ?</li><li>Travaux finançables ?</li><li>Indemnité de remboursement anticipé ?</li><li>Que se passe-t-il si l'expertise est inférieure au prix ?</li></ul>
+      <div class="script"><b>Script banque:</b> « Je souhaite comparer le coût total et pas seulement le taux. Pouvez-vous me simuler le même financement avec TAEG, assurances liées, frais, hypothèque/mandat et flexibilité de remboursement ? »</div>
+      <p class="note">Le guide CBC donne comme principe général que le total des engagements mensuels ne dépasse pas environ 40 % du revenu net du ménage. C'est un repère, pas une garantie bancaire.</p>
+    </div></details>
+
+    <details class="tool-card"><summary>💶 Tous les crédits utiles <span>achat · travaux · pont · social · vert</span></summary><div class="tool-body"><div class="qa-grid">
+      <div class="qa"><b>Prêt hypothécaire</b><span>Achat, construction ou rénovation. Comparer TAEG, durée, assurances et garanties.</span></div>
+      <div class="qa"><b>Prêt rénovation</b><span>Travaux énergie/confort. Peut être intégré au crédit ou séparé.</span></div>
+      <div class="qa"><b>Prêt pont</b><span>Acheter avant d'avoir vendu. Risque si la vente traîne ou se fait moins cher.</span></div>
+      <div class="qa"><b>Prêt social / public</b><span>Selon revenus et Région: Fonds du Logement, SWCS et mécanismes flamands.</span></div>
+      <div class="qa"><b>Crédit vert</b><span>Isolation, chauffage, panneaux et ventilation: vérifier primes et conditions.</span></div>
+      <div class="qa"><b>Crédit à tempérament</b><span>Plutôt petits travaux; TAEG souvent plus élevé.</span></div>
+    </div></div></details>
+
+    <details class="tool-card"><summary>🔍 Visite technique en 45 minutes <span>regarder avant de tomber amoureux</span></summary><div class="tool-body">
+      <ul><li><b>Extérieur:</b> façade, fissures, corniches, gouttières, toiture visible, eaux.</li><li><b>Cave:</b> humidité, odeur, salpêtre, ventilation, traces d'inondation.</li><li><b>Électricité:</b> tableau, prises, terre, conformité, âge apparent.</li><li><b>Chauffage:</b> chaudière, âge, entretien, radiateurs, consommation.</li><li><b>Châssis/isolation:</b> vitrage, ponts thermiques, ventilation.</li><li><b>Copropriété:</b> parties communes, toiture, ascenseur, propreté, affichages.</li><li><b>Quartier:</b> bruit, mobilité, commerces, écoles, stationnement, sécurité.</li></ul>
+      <h4>Questions à l'agent</h4><ul><li>Pourquoi le bien est-il vendu ?</li><li>Depuis combien de temps est-il en vente ?</li><li>Des offres ont-elles été refusées ?</li><li>Quels travaux ont des factures ?</li><li>Quels travaux sont prévus dans les 5 ans ?</li><li>Sinistres, infiltrations, conflits ou procédures ?</li></ul>
+      <p class="note">Méthode du manuel: visiter au moins deux fois — une fois avec l'émotion, une fois avec la méthode.</p>
+    </div></details>
+
+    <details class="tool-card"><summary>✍️ Offre & compromis <span>conditions suspensives · acompte · urbanisme</span></summary><div class="tool-body">
+      <h4>Clauses à discuter avec le notaire</h4><ul><li>condition suspensive de crédit: montant, durée, taux maximum, délai, preuves de refus;</li><li>PEB, électricité, urbanisme et documents de copropriété;</li><li>division, annexe, affectation ou permis douteux;</li><li>occupation, locataire et remise des clés;</li><li>acompte sur compte tiers du notaire;</li><li>cave, parking, panneaux, cuisine et autres accessoires;</li><li>sanctions, intérêts, résolution et date d'acte.</li></ul>
+      <div class="script"><b>Négociation travaux:</b> « Mon offre tient compte des postes objectivés suivants : … »</div>
+      <p class="note">Le manuel indique qu'une indemnité de 10 % est fréquente en cas de défaillance contractuelle; sur 300 000 €, cela représente 30 000 €.</p>
+    </div></details>
+
+    <details class="tool-card"><summary>🧯 Stress-test personnel <span>si ça casse ici, réduire le budget</span></summary><div class="tool-body"><ul><li>revenus -20 %;</li><li>charges +20 %;</li><li>travaux +20 %;</li><li>vacance locative jusqu'à 3 mois pour un investissement;</li><li>taux plus haut si variable;</li><li>précompte/assurance plus élevés.</li></ul><p class="note">Principe du manuel: si un seul stress-test vous met en danger, réduire le budget ou attendre.</p></div></details>
+
+    <details class="tool-card"><summary>🚫 Quand refuser un bien <span>refuser peut être une victoire</span></summary><div class="tool-body"><ul><li>prix trop élevé;</li><li>documents absents;</li><li>travaux inconnus;</li><li>urbanisme douteux;</li><li>copropriété opaque;</li><li>banque trop limite;</li><li>plus de réserve de sécurité après l'acte.</li></ul><p class="note">La discipline ARGUS: ne jamais forcer un achat moyen parce qu'on veut absolument acheter.</p></div></details>
   </div>
 </section>
 
@@ -381,6 +473,9 @@ function calc(){
   const peb=+$('peb').value||0;
   const legal=$('legal').value;
   const cashLeft=+$('cashLeft').value||0;
+  const income=+$('income').value||0;
+  const otherDebt=+$('otherDebt').value||0;
+  const stressWorks=+$('stressWorks').value||0;
 
   const tax=registrationTax(price,region,usage);
   const other=price*otherFees;
@@ -392,6 +487,10 @@ function calc(){
   const monthlyFixed=annualFixed/12;
   const cashflow=rent-reserve-charges-monthlyFixed-payment;
   const cashNeed=down+tax+other+works;
+  const debtRatio=income>0?((payment+otherDebt)/income*100):0;
+  const stressedIncome=income*.8;
+  const stressMonthly=(usage==='investment'?rent*.75:0)-(charges*1.2)-(annualFixed*1.2/12)-payment-(stressWorks/24);
+  const stressedDebtRatio=stressedIncome>0?((payment+otherDebt)/stressedIncome*100):0;
 
   let score=0;
   if(grossYield>=7) score+=25; else if(grossYield>=6) score+=19; else if(grossYield>=5) score+=11; else score+=4;
@@ -410,11 +509,17 @@ function calc(){
   $('cashflowOut').textContent=euro(cashflow)+'/mois';
   $('cashNeedOut').textContent=euro(cashNeed);
   $('scoreOut').textContent=score+'/100';
+  $('debtRatioOut').textContent=income>0?pct(debtRatio):'—';
+  $('stressOut').textContent=euro(stressMonthly)+'/mois';
 
   const v=$('verdict');
+  if(income>0 && debtRatio>40){ score=Math.max(0,score-12); $('scoreOut').textContent=score+'/100'; }
   if(legal!=='yes'){
     v.className='verdict bad'; $('verdictTitle').textContent='STOP — urbanisme non confirmé';
     $('verdictText').textContent='Ne jugez pas l\'immeuble sur son rendement tant que chaque unité n\'est pas officiellement reconnue.';
+  }else if(income>0 && stressedDebtRatio>50){
+    v.className='verdict bad'; $('verdictTitle').textContent='BUDGET TROP TENDU';
+    $('verdictText').textContent='Avec revenus -20 %, la charge de remboursement devient trop lourde. Réduisez le prix, augmentez l\'apport ou attendez.';
   }else if(score>=78 && grossYield>=6.5 && cashflow>=0){
     v.className='verdict good'; $('verdictTitle').textContent='GO / VISITE PRIORITAIRE';
     $('verdictText').textContent='Le dossier passe les filtres de départ. Il faut maintenant valider loyers, technique, urbanisme, fiscalité et financement avant toute offre.';
@@ -427,6 +532,14 @@ function calc(){
   }
 }
 document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',calc));
+function updateBuyerProgress(){
+  const all=[...document.querySelectorAll('.buyer-check')], done=all.filter(x=>x.checked).length;
+  const p=$('buyerProgress'), t=$('buyerProgressText');
+  if(p)p.style.width=(done/all.length*100)+'%';
+  if(t)t.textContent=done+'/'+all.length+' points validés'+(done===all.length?' — projet prêt à être étudié sérieusement.':done>=4?' — base correcte, sécurisez les points restants.':' — ne vous précipitez pas vers une offre.');
+}
+document.querySelectorAll('.buyer-check').forEach(x=>x.addEventListener('change',updateBuyerProgress));
+updateBuyerProgress();
 calc();
 </script>
 </body>
