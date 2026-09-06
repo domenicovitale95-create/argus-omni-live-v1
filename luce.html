@@ -10,6 +10,13 @@
 <link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
 <title>LUCE — L’Expérience</title>
 <meta name="description" content="LUCE — L’Éveil de l’Âme. Un livre vivant, public et interactif de Domenico Vitale.">
+<link rel="canonical" href="https://argus-omni-live.vercel.app/luce/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LUCE — L’Éveil de l’Âme">
+<meta property="og:description" content="Un livre vivant : 50 chapitres, film, expériences, journal privé et parcours interactif.">
+<meta property="og:url" content="https://argus-omni-live.vercel.app/luce/">
+<meta name="twitter:card" content="summary">
+<meta name="author" content="Domenico Vitale">
 <style>
 :root{
   --bg:#050505;--ink:#f3eddf;--muted:#9a9285;--gold:#d8b56d;--gold2:#f2dda8;
@@ -119,7 +126,25 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
 .final-card{display:none;margin:26px auto 0;width:min(100%,620px);aspect-ratio:4/5;border:1px solid rgba(216,181,109,.3);border-radius:28px;background:radial-gradient(circle at 50% 28%,rgba(216,181,109,.17),transparent 38%),#080808;padding:34px;flex-direction:column;justify-content:space-between;text-align:left}
 .final-card.show{display:flex}
 .final-card strong{font-family:Georgia,serif;font-size:clamp(2.5rem,8vw,4.4rem);font-weight:400}
-.final-card blockquote{font-family:Georgia,serif;font-style:italic;color:#c7bcaa;margin:0;font-size:1.05rem;line-height:1.55}
+.final-card blockquote{font-family:Georgia,serif;font-style:italic;color:#c7bcaa;margin:0;font-size:1.05rem;line-height:1.55}.share-preview{display:none;width:min(100%,420px);margin:20px auto 0;border-radius:20px;border:1px solid rgba(216,181,109,.28);box-shadow:0 18px 70px rgba(0,0,0,.35)}.share-preview.show{display:block}
+.magic-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+.invisible-stage,.constellation-stage{position:relative;min-height:520px;border:1px solid var(--line);border-radius:30px;overflow:hidden;background:#020202}
+.invisible-under{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:42px;background:radial-gradient(circle at 50% 50%,rgba(216,181,109,.11),transparent 38%),#050505}
+.invisible-under blockquote{font-family:Georgia,serif;font-size:clamp(1.7rem,4.5vw,3rem);line-height:1.25;margin:0;max-width:720px;color:#f0dfba;text-shadow:0 0 28px rgba(216,181,109,.18)}
+.invisible-under small{display:block;margin-top:18px;color:#8f877b;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase}
+.invisible-canvas,.constellation-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.magic-ui{position:absolute;inset:0;z-index:3;pointer-events:none;padding:22px;display:flex;flex-direction:column;justify-content:space-between}
+.magic-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.magic-ui button{pointer-events:auto}
+.magic-bottom{text-align:center;max-width:620px;margin:0 auto;color:#8d867d;font-size:.8rem;line-height:1.5}
+.magic-badge{border:1px solid var(--line);border-radius:999px;padding:7px 10px;background:rgba(0,0,0,.34);backdrop-filter:blur(8px);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:#978f83}
+.constellation-stage{background:radial-gradient(circle at 50% 35%,#11100e,#030303 62%)}
+.constellation-copy{position:absolute;z-index:3;left:24px;right:24px;bottom:24px;display:flex;align-items:end;justify-content:space-between;gap:16px;pointer-events:none}
+.constellation-copy strong{font-family:Georgia,serif;font-weight:400;font-size:clamp(1.6rem,4vw,2.5rem)}
+.constellation-copy p{color:#817a70;font-size:.78rem;margin:.35em 0 0}
+.constellation-copy .actions{pointer-events:auto;justify-content:flex-end}
+.magic-glow{animation:magicGlow 2s ease both}
+@keyframes magicGlow{0%{box-shadow:0 0 0 rgba(216,181,109,0)}50%{box-shadow:inset 0 0 120px rgba(216,181,109,.18),0 0 90px rgba(216,181,109,.13)}100%{box-shadow:inset 0 0 55px rgba(216,181,109,.08)}}
 .world-light{margin-top:34px;border:1px solid var(--line);border-radius:30px;overflow:hidden;background:#020202;position:relative}
 .sky{width:100%;height:520px;display:block}
 .sky-ui{position:absolute;inset:0;pointer-events:none;padding:26px;display:flex;flex-direction:column;justify-content:space-between}
@@ -135,8 +160,10 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
 .install-box{display:none;margin-top:22px}
 .install-box.show{display:block}
 .footer{padding:78px 0 120px;color:#6f6960;text-align:center;font-size:.78rem}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .75s ease,transform .75s ease}.reveal.visible{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
 @media(max-width:900px){
- .feature-grid,.grid2{grid-template-columns:1fr}
+ .feature-grid,.grid2,.magic-grid{grid-template-columns:1fr}
  .feature.big{min-height:410px}
  .worlds{grid-template-columns:1fr 1fr}
  .cards{grid-template-columns:1fr}
@@ -168,6 +195,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  <a href="/luce/book.html">Lire</a>
  <a href="/luce/film.html">Film</a>
  <a href="#experience">Vivre</a>
+ <a href="/luce/journal.html">Mon voyage</a>
  <button id="soundBtn" aria-label="Ambiance sonore">♫</button>
 </nav>
 
@@ -179,14 +207,14 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
   <div class="hero-sub">L’Éveil de l’Âme</div>
   <p class="quote">« La lumière que tu cherches est déjà en toi. »</p>
   <div class="actions">
-   <a class="btn" href="/luce/book.html">Lire le livre <span>→</span></a>
+   <a class="btn" id="readPrimary" href="/luce/book.html">Lire le livre <span>→</span></a>
    <a class="btn secondary" href="/luce/film.html">Voir le film expérimental</a>
   </div>
  </div>
- <div class="scroll">Descendez pour entrer dans le voyage</div>
+ <div class="scroll" id="heroProgress">Descendez pour entrer dans le voyage</div>
 </section>
 
-<section>
+<section class="reveal">
  <div class="no">01 · Le livre vivant</div>
  <h2>Lire. Écouter. Ressentir. Répondre.</h2>
  <p class="lead">LUCE devient un livre public qui ne se contente pas d’afficher du texte. Le lecteur peut parcourir les 50 chapitres, écouter le texte avec la voix de son appareil, enregistrer sa progression, écrire des notes privées et entrer dans des expériences inspirées du récit.</p>
@@ -203,10 +231,12 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
    <p>Un mini-film animé dans le navigateur : aube, désert, forêt, panthère, lumière. Une première traduction visuelle du livre.</p>
    <div class="bottom"><span class="pill">ANIMÉ</span><span>Regarder →</span></div>
   </a>
- </div>\n <div class="actions" style="margin-top:18px;justify-content:flex-start"><a class="btn secondary" href="/luce/journal.html">Ouvrir mon voyage privé →</a></div>\n <div class="install-box" id="installBox"><button class="btn" id="installBtn">Ajouter LUCE à mon écran d’accueil</button></div>
+ </div>
+ <div class="actions" style="margin-top:18px;justify-content:flex-start"><a class="btn secondary" href="/luce/journal.html">Ouvrir mon voyage privé →</a></div>
+ <div class="install-box" id="installBox"><button class="btn" id="installBtn">Ajouter LUCE à mon écran d’accueil</button></div>
 </section>
 
-<section>
+<section class="reveal">
  <div class="no">02 · Le chemin</div>
  <h2>Cinq mondes.<br>Un seul voyage.</h2>
  <p class="lead">La structure du livre devient une carte. Chaque étape s’allume à mesure que le lecteur vit les expériences.</p>
@@ -219,13 +249,13 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="experience">
+<section class="reveal" id="experience">
  <div class="no">03 · Expériences</div>
  <h2>Le livre te répond par le silence.</h2>
  <p class="lead">Ces expériences ne prétendent ni diagnostiquer ni prédire. Elles transforment simplement certains thèmes du livre en gestes : respirer, choisir, écrire, regarder autrement.</p>
 </section>
 
-<section id="desert">
+<section class="reveal" id="desert">
  <div class="no">03.1 · Le Souffle du Désert</div>
  <h2>Respire avant de chercher.</h2>
  <div class="grid2">
@@ -244,7 +274,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="aql">
+<section class="reveal" id="aql">
  <div class="no">03.2 · Aql & Nafs</div>
  <h2>Qui parle en toi maintenant&nbsp;?</h2>
  <p class="lead">Une pause pour reconnaître la voix qui veut comprendre et celle qui veut vivre, puis chercher l’accord entre les deux.</p>
@@ -257,7 +287,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="caverne">
+<section class="reveal" id="caverne">
  <div class="no">03.3 · La Caverne et les Ombres</div>
  <h2>Et si ce n’était qu’une ombre&nbsp;?</h2>
  <div class="cave" id="cave">
@@ -271,7 +301,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="panthere">
+<section class="reveal" id="panthere">
  <div class="no">03.4 · Le Gardien</div>
  <h2>La Panthère.</h2>
  <p class="lead">Elle ne prédit rien. Elle incarne ici la maîtrise, la protection et cette force silencieuse qui reste présente dans l’obscurité.</p>
@@ -286,7 +316,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="cards">
+<section class="reveal" id="cards">
  <div class="no">03.5 · Carte de Lumière</div>
  <h2>De quoi as-tu besoin aujourd’hui&nbsp;?</h2>
  <p class="lead">Choisis sans calculer. La carte est une invitation à rester quelques instants avec un mot.</p>
@@ -297,7 +327,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="chapter51">
+<section class="reveal" id="chapter51">
  <div class="no">04 · Le chapitre caché</div>
  <h2>CHAPITRE LI — TOI.</h2>
  <p class="lead">Jusqu’ici, tu lisais un voyage. Maintenant commence le tien. Le cinquante-et-unième chapitre appartient au lecteur.</p>
@@ -313,13 +343,43 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
   </div>
   <div class="actions" id="shareActions" style="display:none;margin-top:18px">
    <button class="btn" id="shareBtn">Partager</button>
+   <button class="btn secondary" id="cardBtn">Créer ma carte</button>
    <button class="btn secondary" id="copyBtn">Copier</button>
   </div>
  </div>
 </section>
 
-<section id="world">
- <div class="no">05 · The World of Light</div>
+<section class="reveal" id="invisible">
+ <div class="no">05 · L’Invisible</div>
+ <h2>La lumière révèle ce qui était déjà là.</h2>
+ <p class="lead">Passe ton doigt dans l’obscurité. Ne cherche pas la phrase : laisse-la apparaître. Cette expérience reprend l’idée centrale du premier regard sur l’invisible.</p>
+ <div class="magic-grid">
+  <div class="invisible-stage" id="invisibleStage">
+   <div class="invisible-under">
+    <div>
+     <blockquote>« L’invisible n’est pas ailleurs.<br>Il est ici.<br>Depuis toujours. »</blockquote>
+     <small>Chapitre II · Le Premier Regard sur l’Invisible</small>
+    </div>
+   </div>
+   <canvas class="invisible-canvas" id="invisibleCanvas"></canvas>
+   <div class="magic-ui">
+    <div class="magic-top"><span class="magic-badge">Touchez · glissez · révélez</span><button class="btn secondary" id="resetInvisible">Recommencer</button></div>
+    <div class="magic-bottom" id="invisibleHint">Ton doigt devient une lumière. Efface doucement l’ombre.</div>
+   </div>
+  </div>
+
+  <div class="constellation-stage" id="constellationStage">
+   <canvas class="constellation-canvas" id="constellationCanvas"></canvas>
+   <div class="constellation-copy">
+    <div><div class="no">Empreinte du voyage</div><strong>TA CONSTELLATION</strong><p id="constellationMeta">Elle se construit à partir de ton chemin dans LUCE.</p></div>
+    <div class="actions"><button class="btn" id="constellationBtn">Créer</button><button class="btn secondary" id="constellationShare">Partager</button></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="reveal" id="world">
+ <div class="no">06 · The World of Light</div>
  <h2>Une personne.<br>Une lumière.</h2>
  <p class="lead">Choisis un mot. S’il est possible de connecter le ciel collectif, ta lumière rejoint anonymement celles des autres lecteurs. Sinon, elle naît localement sur ton appareil : l’expérience reste gratuite dans les deux cas.</p>
  <div class="world-light">
@@ -354,6 +414,22 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
   $$('.world').forEach((w,i)=>w.classList.toggle('done',i<n));
  }
  renderWorlds();
+
+ // Return visitors go straight to the book world; first visit keeps the cinematic opening.
+ if(load('luce_seen')){setTimeout(()=>$('#intro').classList.add('out'),180)}
+
+ const currentChapter=Math.max(0,Number(load('luce_chapter')||0));
+ if(currentChapter){
+   $('#readPrimary').href='/luce/book.html?c='+currentChapter;
+   $('#readPrimary').innerHTML='Continuer · chapitre '+currentChapter+' <span>→</span>';
+   $('#heroProgress').textContent='Lecture en cours · '+currentChapter+' / 50 chapitres';
+ }
+
+ // Soft entrance reveals
+ const revealObserver=('IntersectionObserver'in window)?new IntersectionObserver(entries=>{
+   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}})
+ },{threshold:.08}):null;
+ $('.reveal').forEach(el=>revealObserver?revealObserver.observe(el):el.classList.add('visible'));
 
  // Intro & procedural ambience
  let ctx=null,gain=null,oscs=[],sound=false;
@@ -416,6 +492,72 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  $('#chapterBtn').onclick=()=>{const v=$('#firstLine').value.trim();save('luce_first_line',v);if(v){state.chapter=true;persist();chapterShow(v);$('#chapterMsg').textContent='Ton chapitre a commencé.'}else $('#chapterMsg').textContent='Le chapitre attend ta première phrase.'};
  $('#copyBtn').onclick=async function(){const v=$('#firstLine').value.trim(),t='LUCE — Chapitre LI · TOI\n« '+v+' »';try{await navigator.clipboard.writeText(t);this.textContent='Copié ✓';setTimeout(()=>this.textContent='Copier',1200)}catch(e){}};
  $('#shareBtn').onclick=async()=>{const v=$('#firstLine').value.trim(),t='LUCE — Chapitre LI · TOI\n« '+v+' »\nLa lumière que tu cherches est déjà en toi.';if(navigator.share)try{await navigator.share({title:'LUCE — Mon Chapitre LI',text:t,url:location.href})}catch(e){}};
+
+
+ // Invisible ink — the finger becomes the light.
+ const invCanvas=$('#invisibleCanvas'),invStage=$('#invisibleStage'),invCtx=invCanvas&&invCanvas.getContext('2d');
+ let invRevealed=false,invTouches=0;
+ function sizeInvisible(){
+   if(!invCanvas)return;
+   const rect=invCanvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);
+   invCanvas.width=rect.width*dpr;invCanvas.height=rect.height*dpr;invCtx.setTransform(dpr,0,0,dpr,0,0);
+   invCtx.globalCompositeOperation='source-over';
+   const g=invCtx.createRadialGradient(rect.width*.5,rect.height*.45,10,rect.width*.5,rect.height*.45,Math.max(rect.width,rect.height)*.7);
+   g.addColorStop(0,'#141311');g.addColorStop(.55,'#080808');g.addColorStop(1,'#020202');invCtx.fillStyle=g;invCtx.fillRect(0,0,rect.width,rect.height);
+   invCtx.fillStyle='rgba(255,255,255,.025)';
+   for(let i=0;i<120;i++){const x=(i*73)%rect.width,y=(i*149)%rect.height;invCtx.fillRect(x,y,1,1)}
+   invRevealed=false;invTouches=0;$('#invisibleHint').textContent='Ton doigt devient une lumière. Efface doucement l’ombre.';
+ }
+ function revealAt(clientX,clientY){
+   if(!invCanvas)return;const rect=invCanvas.getBoundingClientRect(),x=clientX-rect.left,y=clientY-rect.top;
+   invCtx.save();invCtx.globalCompositeOperation='destination-out';
+   const rg=invCtx.createRadialGradient(x,y,8,x,y,62);rg.addColorStop(0,'rgba(0,0,0,1)');rg.addColorStop(.65,'rgba(0,0,0,.72)');rg.addColorStop(1,'rgba(0,0,0,0)');
+   invCtx.fillStyle=rg;invCtx.beginPath();invCtx.arc(x,y,64,0,Math.PI*2);invCtx.fill();invCtx.restore();
+   invTouches++;
+   if(invTouches>18&&!invRevealed){invRevealed=true;invStage.classList.add('magic-glow');$('#invisibleHint').textContent='À présent, regarde sans chercher.';try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}}
+ }
+ let invDown=false;
+ if(invCanvas){
+   invCanvas.addEventListener('pointerdown',e=>{invDown=true;invCanvas.setPointerCapture?.(e.pointerId);revealAt(e.clientX,e.clientY)});
+   invCanvas.addEventListener('pointermove',e=>{if(invDown)revealAt(e.clientX,e.clientY)});
+   invCanvas.addEventListener('pointerup',()=>invDown=false);invCanvas.addEventListener('pointercancel',()=>invDown=false);
+   $('#resetInvisible').onclick=()=>{invStage.classList.remove('magic-glow');sizeInvisible()};
+   addEventListener('resize',sizeInvisible);setTimeout(sizeInvisible,80);
+ }
+
+ // A personal, symbolic constellation generated only from local LUCE progress.
+ const constCanvas=$('#constellationCanvas'),constStage=$('#constellationStage'),constCtx=constCanvas&&constCanvas.getContext('2d');
+ function localCount(prefix){let n=0;try{for(let i=0;i<localStorage.length;i++)if((localStorage.key(i)||'').startsWith(prefix))n++}catch(e){}return n}
+ function getJourneyStats(){
+   let st={};try{st=JSON.parse(load('luce_state')||'{}')}catch(e){}
+   let marks=[];try{marks=JSON.parse(load('luce_marks')||'[]')}catch(e){}
+   let gratitude=[];try{gratitude=JSON.parse(load('luce_gratitude')||'[]')}catch(e){}
+   return {worlds:[st.desert,st.aql,st.guardian,st.card,st.chapter].filter(Boolean).length,marks:marks.length,notes:localCount('luce_note_'),gratitude:gratitude.length,chapter:Number(load('luce_chapter')||0)};
+ }
+ function seedValue(){
+   let seed=load('luce_seed');if(!seed){seed=String(Date.now())+'-'+Math.random().toString(36).slice(2);save('luce_seed',seed)}return seed;
+ }
+ function randFactory(seed){let h=2166136261;for(const ch of seed){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+ function drawConstellation(){
+   if(!constCanvas)return;const rect=constCanvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);constCanvas.width=rect.width*dpr;constCanvas.height=rect.height*dpr;constCtx.setTransform(dpr,0,0,dpr,0,0);
+   constCtx.clearRect(0,0,rect.width,rect.height);const g=constCtx.createRadialGradient(rect.width*.48,rect.height*.36,0,rect.width*.48,rect.height*.36,Math.max(rect.width,rect.height)*.7);g.addColorStop(0,'#17140f');g.addColorStop(.42,'#090807');g.addColorStop(1,'#020202');constCtx.fillStyle=g;constCtx.fillRect(0,0,rect.width,rect.height);
+   const stats=getJourneyStats(),rnd=randFactory(seedValue()),pad=50,bottom=130;
+   // ambient stars
+   for(let i=0;i<85;i++){const x=rnd()*rect.width,y=rnd()*(rect.height-bottom),r=.4+rnd()*1.3;constCtx.globalAlpha=.2+rnd()*.45;constCtx.fillStyle='#f0dfba';constCtx.beginPath();constCtx.arc(x,y,r,0,Math.PI*2);constCtx.fill()}
+   constCtx.globalAlpha=1;
+   const main=[];for(let i=0;i<5;i++){main.push({x:pad+(i/(4))*(rect.width-pad*2)+(rnd()-.5)*34,y:78+rnd()*(rect.height-bottom-150),on:i<stats.worlds})}
+   constCtx.lineWidth=1.2;for(let i=0;i<main.length-1;i++){constCtx.strokeStyle=main[i].on&&main[i+1].on?'rgba(229,202,144,.48)':'rgba(255,255,255,.09)';constCtx.beginPath();constCtx.moveTo(main[i].x,main[i].y);constCtx.lineTo(main[i+1].x,main[i+1].y);constCtx.stroke()}
+   main.forEach((p,i)=>{const r=p.on?4.8:2.5,gl=constCtx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*7);gl.addColorStop(0,p.on?'rgba(255,244,211,1)':'rgba(180,175,165,.55)');gl.addColorStop(.25,p.on?'rgba(216,181,109,.48)':'rgba(255,255,255,.1)');gl.addColorStop(1,'rgba(216,181,109,0)');constCtx.fillStyle=gl;constCtx.beginPath();constCtx.arc(p.x,p.y,r*7,0,Math.PI*2);constCtx.fill();constCtx.fillStyle=p.on?'#f6e7c4':'#777';constCtx.beginPath();constCtx.arc(p.x,p.y,r,0,Math.PI*2);constCtx.fill()});
+   const extras=Math.min(28,stats.marks+stats.notes+stats.gratitude*2);
+   for(let i=0;i<extras;i++){const anchor=main[Math.floor(rnd()*main.length)],ang=rnd()*Math.PI*2,dist=22+rnd()*78,x=anchor.x+Math.cos(ang)*dist,y=anchor.y+Math.sin(ang)*dist;constCtx.strokeStyle='rgba(216,181,109,.14)';constCtx.beginPath();constCtx.moveTo(anchor.x,anchor.y);constCtx.lineTo(x,y);constCtx.stroke();constCtx.fillStyle='rgba(242,221,168,.72)';constCtx.beginPath();constCtx.arc(x,y,1.5+rnd()*1.4,0,Math.PI*2);constCtx.fill()}
+   $('#constellationMeta').textContent=stats.worlds+' / 5 mondes · '+stats.marks+' favoris · '+stats.notes+' notes · '+stats.gratitude+' rituels';
+   return stats;
+ }
+ if(constCanvas){
+   $('#constellationBtn').onclick=()=>{drawConstellation();constStage.classList.remove('magic-glow');void constStage.offsetWidth;constStage.classList.add('magic-glow');try{navigator.vibrate&&navigator.vibrate([8,40,8])}catch(e){}};
+   $('#constellationShare').onclick=()=>{drawConstellation();constCanvas.toBlob(async blob=>{if(!blob)return;const file=new File([blob],'LUCE-Ma-Constellation.png',{type:'image/png'});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({title:'LUCE — Ma Constellation',files:[file]});return}catch(e){}}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='LUCE-Ma-Constellation.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)},'image/png')};
+   addEventListener('resize',drawConstellation);setTimeout(drawConstellation,100);
+ }
 
  // World of Light
  const allowed=['AMOUR','COURAGE','DOUCEUR','ESPOIR','GRATITUDE','LIBERTÉ','LUMIÈRE','PAIX','PARDON','PRÉSENCE','CONFIANCE'];
