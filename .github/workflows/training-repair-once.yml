@@ -1,0 +1,38 @@
+name: ARGUS Training Repair Once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/training-repair-once.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  refresh-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
+    steps:
+      - name: Refresh Autopilot and Training
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
+          test -n "${CRON_SECRET:-}" || { echo "::error::CRON_SECRET missing"; exit 1; }
+
+          echo "Running fresh Autopilot cycle..."
+          curl --fail-with-body --silent --show-error --max-time 180 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "${BASE}/api/autopilot" > /tmp/autopilot.json
+
+          echo "Running Training capture..."
+          curl --fail-with-body --silent --show-error --max-time 120 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "${BASE}/api/training-bets-cron" > /tmp/training-run.json
+
+          echo "Training result:"
+          jq '{summary:.summary,run:.run,bets:(.bets|map({fixtureId,home,away,selection,odds,edgePct,evPct,confidence,status})|.[0:8])}' /tmp/training-run.json
