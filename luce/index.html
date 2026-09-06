@@ -10,6 +10,13 @@
 <link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
 <title>LUCE — L’Expérience</title>
 <meta name="description" content="LUCE — L’Éveil de l’Âme. Un livre vivant, public et interactif de Domenico Vitale.">
+<link rel="canonical" href="https://argus-omni-live.vercel.app/luce/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LUCE — L’Éveil de l’Âme">
+<meta property="og:description" content="Un livre vivant : 50 chapitres, film, expériences, journal privé et parcours interactif.">
+<meta property="og:url" content="https://argus-omni-live.vercel.app/luce/">
+<meta name="twitter:card" content="summary">
+<meta name="author" content="Domenico Vitale">
 <style>
 :root{
   --bg:#050505;--ink:#f3eddf;--muted:#9a9285;--gold:#d8b56d;--gold2:#f2dda8;
@@ -135,6 +142,8 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
 .install-box{display:none;margin-top:22px}
 .install-box.show{display:block}
 .footer{padding:78px 0 120px;color:#6f6960;text-align:center;font-size:.78rem}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .75s ease,transform .75s ease}.reveal.visible{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
 @media(max-width:900px){
  .feature-grid,.grid2{grid-template-columns:1fr}
  .feature.big{min-height:410px}
@@ -168,6 +177,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  <a href="/luce/book.html">Lire</a>
  <a href="/luce/film.html">Film</a>
  <a href="#experience">Vivre</a>
+ <a href="/luce/journal.html">Mon voyage</a>
  <button id="soundBtn" aria-label="Ambiance sonore">♫</button>
 </nav>
 
@@ -179,14 +189,14 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
   <div class="hero-sub">L’Éveil de l’Âme</div>
   <p class="quote">« La lumière que tu cherches est déjà en toi. »</p>
   <div class="actions">
-   <a class="btn" href="/luce/book.html">Lire le livre <span>→</span></a>
+   <a class="btn" id="readPrimary" href="/luce/book.html">Lire le livre <span>→</span></a>
    <a class="btn secondary" href="/luce/film.html">Voir le film expérimental</a>
   </div>
  </div>
- <div class="scroll">Descendez pour entrer dans le voyage</div>
+ <div class="scroll" id="heroProgress">Descendez pour entrer dans le voyage</div>
 </section>
 
-<section>
+<section class="reveal">
  <div class="no">01 · Le livre vivant</div>
  <h2>Lire. Écouter. Ressentir. Répondre.</h2>
  <p class="lead">LUCE devient un livre public qui ne se contente pas d’afficher du texte. Le lecteur peut parcourir les 50 chapitres, écouter le texte avec la voix de son appareil, enregistrer sa progression, écrire des notes privées et entrer dans des expériences inspirées du récit.</p>
@@ -203,10 +213,12 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
    <p>Un mini-film animé dans le navigateur : aube, désert, forêt, panthère, lumière. Une première traduction visuelle du livre.</p>
    <div class="bottom"><span class="pill">ANIMÉ</span><span>Regarder →</span></div>
   </a>
- </div>\n <div class="actions" style="margin-top:18px;justify-content:flex-start"><a class="btn secondary" href="/luce/journal.html">Ouvrir mon voyage privé →</a></div>\n <div class="install-box" id="installBox"><button class="btn" id="installBtn">Ajouter LUCE à mon écran d’accueil</button></div>
+ </div>
+ <div class="actions" style="margin-top:18px;justify-content:flex-start"><a class="btn secondary" href="/luce/journal.html">Ouvrir mon voyage privé →</a></div>
+ <div class="install-box" id="installBox"><button class="btn" id="installBtn">Ajouter LUCE à mon écran d’accueil</button></div>
 </section>
 
-<section>
+<section class="reveal">
  <div class="no">02 · Le chemin</div>
  <h2>Cinq mondes.<br>Un seul voyage.</h2>
  <p class="lead">La structure du livre devient une carte. Chaque étape s’allume à mesure que le lecteur vit les expériences.</p>
@@ -219,13 +231,13 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="experience">
+<section class="reveal" id="experience">
  <div class="no">03 · Expériences</div>
  <h2>Le livre te répond par le silence.</h2>
  <p class="lead">Ces expériences ne prétendent ni diagnostiquer ni prédire. Elles transforment simplement certains thèmes du livre en gestes : respirer, choisir, écrire, regarder autrement.</p>
 </section>
 
-<section id="desert">
+<section class="reveal" id="desert">
  <div class="no">03.1 · Le Souffle du Désert</div>
  <h2>Respire avant de chercher.</h2>
  <div class="grid2">
@@ -244,7 +256,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="aql">
+<section class="reveal" id="aql">
  <div class="no">03.2 · Aql & Nafs</div>
  <h2>Qui parle en toi maintenant&nbsp;?</h2>
  <p class="lead">Une pause pour reconnaître la voix qui veut comprendre et celle qui veut vivre, puis chercher l’accord entre les deux.</p>
@@ -257,7 +269,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="caverne">
+<section class="reveal" id="caverne">
  <div class="no">03.3 · La Caverne et les Ombres</div>
  <h2>Et si ce n’était qu’une ombre&nbsp;?</h2>
  <div class="cave" id="cave">
@@ -271,7 +283,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="panthere">
+<section class="reveal" id="panthere">
  <div class="no">03.4 · Le Gardien</div>
  <h2>La Panthère.</h2>
  <p class="lead">Elle ne prédit rien. Elle incarne ici la maîtrise, la protection et cette force silencieuse qui reste présente dans l’obscurité.</p>
@@ -286,7 +298,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="cards">
+<section class="reveal" id="cards">
  <div class="no">03.5 · Carte de Lumière</div>
  <h2>De quoi as-tu besoin aujourd’hui&nbsp;?</h2>
  <p class="lead">Choisis sans calculer. La carte est une invitation à rester quelques instants avec un mot.</p>
@@ -297,7 +309,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="chapter51">
+<section class="reveal" id="chapter51">
  <div class="no">04 · Le chapitre caché</div>
  <h2>CHAPITRE LI — TOI.</h2>
  <p class="lead">Jusqu’ici, tu lisais un voyage. Maintenant commence le tien. Le cinquante-et-unième chapitre appartient au lecteur.</p>
@@ -318,7 +330,7 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
  </div>
 </section>
 
-<section id="world">
+<section class="reveal" id="world">
  <div class="no">05 · The World of Light</div>
  <h2>Une personne.<br>Une lumière.</h2>
  <p class="lead">Choisis un mot. S’il est possible de connecter le ciel collectif, ta lumière rejoint anonymement celles des autres lecteurs. Sinon, elle naît localement sur ton appareil : l’expérience reste gratuite dans les deux cas.</p>
@@ -354,6 +366,22 @@ textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
   $$('.world').forEach((w,i)=>w.classList.toggle('done',i<n));
  }
  renderWorlds();
+
+ // Return visitors go straight to the book world; first visit keeps the cinematic opening.
+ if(load('luce_seen')){setTimeout(()=>$('#intro').classList.add('out'),180)}
+
+ const currentChapter=Math.max(0,Number(load('luce_chapter')||0));
+ if(currentChapter){
+   $('#readPrimary').href='/luce/book.html?c='+currentChapter;
+   $('#readPrimary').innerHTML='Continuer · chapitre '+currentChapter+' <span>→</span>';
+   $('#heroProgress').textContent='Lecture en cours · '+currentChapter+' / 50 chapitres';
+ }
+
+ // Soft entrance reveals
+ const revealObserver=('IntersectionObserver'in window)?new IntersectionObserver(entries=>{
+   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}})
+ },{threshold:.08}):null;
+ $('.reveal').forEach(el=>revealObserver?revealObserver.observe(el):el.classList.add('visible'));
 
  // Intro & procedural ambience
  let ctx=null,gain=null,oscs=[],sound=false;
