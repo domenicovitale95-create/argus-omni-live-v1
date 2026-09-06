@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#020202">
+<link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
+<title>LUCE — LE RÉVEIL · Film expérimental</title>
+<style>
+:root{--gold:#d8b56d;--ink:#f4eddf}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#020202;color:var(--ink);overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,a{font:inherit;color:inherit}
+.stage{position:fixed;inset:0;background:#020202;overflow:hidden}
+.scene{position:absolute;inset:0;opacity:0;transition:opacity 2s ease;pointer-events:none}
+.scene.on{opacity:1}
+.caption{position:absolute;z-index:20;left:50%;bottom:13vh;transform:translateX(-50%);width:min(84vw,780px);text-align:center;font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.35rem,4vw,2.35rem);line-height:1.35;text-shadow:0 2px 30px #000}
+.caption small{display:block;font-family:Inter,sans-serif;font-size:.65rem;letter-spacing:.22em;color:#a39a8c;text-transform:uppercase;margin-bottom:12px}
+.ui{position:fixed;z-index:50;left:0;right:0;top:0;padding:max(18px,env(safe-area-inset-top)) 18px 0;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:Georgia,serif;letter-spacing:.16em;text-decoration:none}
+.controls{display:flex;gap:8px}
+.circle{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.34);backdrop-filter:blur(12px);display:grid;place-items:center;text-decoration:none}
+.timeline{position:fixed;z-index:55;left:0;bottom:0;width:100%;height:3px;background:rgba(255,255,255,.08)}
+.timeline i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a5f24,#efd99f)}
+.start{position:fixed;z-index:100;inset:0;background:#020202;display:grid;place-items:center;text-align:center;transition:opacity 1.2s ease,visibility 1.2s ease}
+.start.out{opacity:0;visibility:hidden}
+.start h1{font-family:Georgia,serif;font-size:clamp(4.5rem,18vw,11rem);font-weight:400;letter-spacing:-.05em;line-height:.8;margin:.15em 0}
+.start p{color:#9b9386}
+.play{margin:28px auto 0;width:74px;height:74px;border-radius:50%;border:1px solid rgba(216,181,109,.5);background:radial-gradient(circle,rgba(216,181,109,.17),rgba(216,181,109,.03));display:grid;place-items:center;font-size:1.1rem}
+.note{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#69635b;margin-top:18px}
+.dawn{background:linear-gradient(#020202 0 28%,#14100b 58%,#674920 82%,#d8ae68 100%)}
+.sun{position:absolute;width:16vw;height:16vw;min-width:110px;min-height:110px;border-radius:50%;left:50%;bottom:15%;transform:translateX(-50%);background:radial-gradient(circle,#fff9e7 0 8%,#f1ce86 32%,rgba(216,181,109,.18) 64%,transparent 72%);box-shadow:0 0 80px rgba(216,181,109,.35);animation:sunrise 18s ease-in-out both}
+@keyframes sunrise{from{transform:translate(-50%,70%);opacity:.25}to{transform:translate(-50%,-30%);opacity:1}}
+.walker{position:absolute;left:50%;bottom:13%;width:18px;height:70px;transform:translateX(-50%);background:linear-gradient(#0a0a0a,#030303);border-radius:50% 50% 30% 30%;box-shadow:0 0 22px rgba(0,0,0,.8);animation:walk 2s ease-in-out infinite alternate}
+.walker:before{content:"";position:absolute;width:18px;height:18px;border-radius:50%;top:-14px;background:#050505}
+@keyframes walk{from{transform:translateX(-50%) translateY(0)}to{transform:translateX(-50%) translateY(3px)}}
+.desert{background:linear-gradient(#0c0a08 0 35%,#61451f 65%,#b37f38 100%)}
+.dune{position:absolute;left:-10%;right:-10%;height:52%;bottom:-22%;background:#8f632c;border-radius:50% 50% 0 0;filter:brightness(.8)}
+.dune.d2{bottom:-34%;left:20%;background:#c08b43;transform:rotate(-7deg)}
+.wind{position:absolute;inset:0;background:repeating-linear-gradient(170deg,transparent 0 45px,rgba(255,236,188,.035) 46px 47px);animation:wind 8s linear infinite}
+@keyframes wind{to{transform:translateX(-120px)}}
+.forest{background:linear-gradient(#020604,#07110b 55%,#0d1b10)}
+.tree{position:absolute;bottom:0;width:4vw;min-width:26px;height:76%;background:linear-gradient(90deg,#120e09,#291e11,#0c0906);border-radius:48% 52% 0 0;filter:brightness(.75)}
+.tree:after{content:"";position:absolute;width:16vw;height:16vw;min-width:120px;min-height:120px;border-radius:50%;background:radial-gradient(circle,#1e381f,#0d1d10 62%,transparent 68%);left:50%;top:-8%;transform:translateX(-50%)}
+.fog{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(204,225,201,.09),transparent 42%);animation:fog 8s ease-in-out infinite alternate}
+@keyframes fog{from{transform:translateX(-4%)}to{transform:translateX(4%)}}
+.panther{background:radial-gradient(circle at 50% 48%,#131313,#010101 58%)}
+.p-eyes{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);display:flex;gap:8vw;opacity:.05;animation:eyes 16s ease-in-out both}
+.peye{width:4.2vw;height:1.35vw;min-width:42px;min-height:13px;border-radius:80% 20% 80% 20%;background:radial-gradient(circle,#efd38a 0 15%,#72501c 22% 38%,#030303 42%);box-shadow:0 0 35px rgba(216,181,109,.34)}
+@keyframes eyes{0%,25%{opacity:.02}55%,90%{opacity:1}100%{opacity:.35}}
+.reveal{background:#020202}
+.core{position:absolute;left:50%;top:48%;width:30px;height:30px;border-radius:50%;transform:translate(-50%,-50%);background:#fff8df;box-shadow:0 0 30px #ffeab5,0 0 130px rgba(216,181,109,.5);animation:reveal 18s ease-in-out both}
+@keyframes reveal{0%{transform:translate(-50%,-50%) scale(.2);opacity:.2}65%{transform:translate(-50%,-50%) scale(7);opacity:.8}100%{transform:translate(-50%,-50%) scale(38);opacity:1}}
+.final{position:absolute;z-index:30;inset:0;display:grid;place-items:center;text-align:center;opacity:0;animation:final 18s ease-in-out both}
+.final h2{font-family:Georgia,serif;font-weight:400;font-size:clamp(3rem,12vw,8rem);letter-spacing:-.04em;margin:0}
+.final p{font-family:Georgia,serif;font-style:italic;font-size:clamp(1.1rem,3vw,1.7rem);color:#2e2518}
+@keyframes final{0%,55%{opacity:0}75%,100%{opacity:1}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="stage">
+ <section class="scene dawn" data-i="0">
+  <div class="sun"></div><div class="walker"></div>
+  <div class="caption"><small>01 · LE RÉVEIL</small>Tout commence dans le silence.</div>
+ </section>
+ <section class="scene desert" data-i="1">
+  <div class="wind"></div><div class="dune"></div><div class="dune d2"></div><div class="walker"></div>
+  <div class="caption"><small>02 · LE DÉSERT</small>Je n’ai pas de carte. Mais j’ai une faim de sens.</div>
+ </section>
+ <section class="scene forest" data-i="2">
+  <div class="tree" style="left:8%"></div><div class="tree" style="left:25%;height:64%"></div><div class="tree" style="left:47%;height:82%"></div><div class="tree" style="left:72%;height:68%"></div><div class="tree" style="left:90%;height:79%"></div><div class="fog"></div>
+  <div class="caption"><small>03 · LA FORÊT</small>Je n’apporte pas de mots. J’apporte l’écoute.</div>
+ </section>
+ <section class="scene panther" data-i="3">
+  <div class="p-eyes"><div class="peye"></div><div class="peye" style="transform:scaleX(-1)"></div></div>
+  <div class="caption"><small>04 · LA PANTHÈRE</small>La force n’est pas la violence. La force, c’est la maîtrise.</div>
+ </section>
+ <section class="scene reveal" data-i="4">
+  <div class="core"></div>
+  <div class="final"><div><h2>LUCE</h2><p>La lumière que tu cherches est déjà en toi.</p></div></div>
+ </section>
+</div>
+
+<div class="ui">
+ <a class="brand" href="/luce/">LUCE</a>
+ <div class="controls">
+  <button class="circle" id="sound" aria-label="Son">♫</button>
+  <button class="circle" id="pause" aria-label="Pause">Ⅱ</button>
+  <a class="circle" href="/luce/" aria-label="Fermer">×</a>
+ </div>
+</div>
+<div class="timeline"><i id="bar"></i></div>
+
+<div class="start" id="start">
+ <div>
+  <div style="font-size:.67rem;letter-spacing:.22em;color:#887f72;text-transform:uppercase">LUCE · Film expérimental I</div>
+  <h1>LE RÉVEIL</h1>
+  <p>Un mini-film animé directement dans ton navigateur.</p>
+  <button class="play" id="play">▶</button>
+  <div class="note">≈ 1 minute · écoute au casque recommandée</div>
+ </div>
+</div>
+
+<script>
+(function(){
+ const scenes=[...document.querySelectorAll('.scene')],bar=document.getElementById('bar');
+ const duration=65000,sceneDur=13000;let started=false,paused=false,startAt=0,elapsed=0,raf=0;
+ let ctx=null,gain=null,soundOn=false,oscs=[];
+ function audioStart(){
+  if(soundOn)return;
+  try{
+   ctx=new (window.AudioContext||window.webkitAudioContext)();gain=ctx.createGain();gain.gain.value=.034;gain.connect(ctx.destination);
+   [55,82.41,110,164.81].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=i<2?'sine':'triangle';o.frequency.value=f;g.gain.value=[.38,.16,.07,.025][i];o.connect(g).connect(gain);o.start();oscs.push(o)});soundOn=true;document.getElementById('sound').textContent='♪';
+  }catch(e){}
+ }
+ function audioStop(){if(!soundOn)return;try{gain.gain.setTargetAtTime(0,ctx.currentTime,.05);setTimeout(()=>ctx.close(),180)}catch(e){}soundOn=false;document.getElementById('sound').textContent='♫'}
+ function setScene(ms){const i=Math.min(scenes.length-1,Math.floor(ms/sceneDur));scenes.forEach((s,j)=>s.classList.toggle('on',j===i))}
+ function tick(t){
+  if(!started||paused)return;
+  const ms=elapsed+(t-startAt);bar.style.width=Math.min(100,ms/duration*100)+'%';setScene(ms);
+  if(ms>=duration){started=false;bar.style.width='100%';return}
+  raf=requestAnimationFrame(tick);
+ }
+ document.getElementById('play').onclick=()=>{document.getElementById('start').classList.add('out');audioStart();started=true;paused=false;elapsed=0;startAt=performance.now();setScene(0);raf=requestAnimationFrame(tick)};
+ document.getElementById('pause').onclick=function(){
+  if(!started)return;
+  if(!paused){paused=true;elapsed+=performance.now()-startAt;cancelAnimationFrame(raf);this.textContent='▶'}
+  else{paused=false;startAt=performance.now();this.textContent='Ⅱ';raf=requestAnimationFrame(tick)}
+ };
+ document.getElementById('sound').onclick=()=>soundOn?audioStop():audioStart();
+ addEventListener('beforeunload',audioStop);
+})();
+</script>
+</body>
+</html>
