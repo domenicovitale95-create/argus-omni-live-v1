@@ -17,8 +17,11 @@ try {
     { encoding: 'utf8' }
   ).trim().split(/\r?\n/).filter(Boolean);
 
-  const researchOnly = files.length > 0 && files.every(file => file.startsWith('research/daily/'));
-  process.exit(researchOnly ? 0 : 1);
+  const noFootballRuntimeChange = files.length > 0 && files.every(file =>
+    file.startsWith('research/daily/') ||
+    file.startsWith('capital/data/')
+  );
+  process.exit(noFootballRuntimeChange ? 0 : 1);
 } catch (_) {
   process.exit(1);
 }
