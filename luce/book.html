@@ -38,9 +38,9 @@ h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2
 .btn{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:999px;padding:10px 13px;font-size:.76rem}
 .btn:hover{border-color:rgba(215,179,106,.45);background:rgba(215,179,106,.06)}
 .text{font-family:Georgia,"Times New Roman",serif;font-size:var(--fs);line-height:1.72;max-width:760px;margin:42px auto;letter-spacing:.003em}
-.text .verse{white-space:normal}.text .verse br{content:""}.text .verse br+br{display:block;margin-top:1em}
+.text .verse{white-space:normal}.text .verse br{display:block;content:"";margin-bottom:.12em}
 .text mark{background:rgba(215,179,106,.25);color:#fff1cf;padding:0 .08em}
-.experience-card{max-width:760px;margin:24px auto 34px;border:1px solid rgba(215,179,106,.28);border-radius:22px;padding:20px;background:radial-gradient(circle at 0 0,rgba(215,179,106,.10),transparent 45%),rgba(255,255,255,.018);display:none}.experience-card.show{display:block}.experience-card .eyebrow{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}.experience-card strong{display:block;font-family:Georgia,serif;font-weight:400;font-size:1.4rem;margin:8px 0}.experience-card p{color:var(--muted);line-height:1.55;margin:.3em 0 1em}.note{max-width:760px;margin:30px auto;border:1px solid var(--line);border-radius:22px;padding:20px;background:rgba(255,255,255,.02)}
+.final-gate{display:none;max-width:760px;margin:42px auto;border:1px solid rgba(215,179,106,.38);border-radius:26px;padding:28px;text-align:center;background:radial-gradient(circle at 50% 0,rgba(215,179,106,.12),transparent 55%),rgba(255,255,255,.018)}.final-gate.show{display:block}.final-gate strong{display:block;font-family:Georgia,serif;font-size:clamp(2rem,6vw,3.6rem);font-weight:400;margin:.25em 0}.final-gate p{color:var(--muted);line-height:1.6}.experience-card{max-width:760px;margin:24px auto 34px;border:1px solid rgba(215,179,106,.28);border-radius:22px;padding:20px;background:radial-gradient(circle at 0 0,rgba(215,179,106,.10),transparent 45%),rgba(255,255,255,.018);display:none}.experience-card.show{display:block}.experience-card .eyebrow{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}.experience-card strong{display:block;font-family:Georgia,serif;font-weight:400;font-size:1.4rem;margin:8px 0}.experience-card p{color:var(--muted);line-height:1.55;margin:.3em 0 1em}.note{max-width:760px;margin:30px auto;border:1px solid var(--line);border-radius:22px;padding:20px;background:rgba(255,255,255,.02)}
 .note label{display:block;font-size:.72rem;color:#8f877b;text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px}
 .note textarea{width:100%;min-height:100px;border:1px solid var(--line);background:#0b0a08;border-radius:14px;padding:12px;resize:vertical;outline:none}
 .navchap{max-width:760px;margin:42px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -95,6 +95,8 @@ h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2
 
   <div class="experience-card" id="experienceCard"><div class="eyebrow">Expérience liée à ce chapitre</div><strong id="experienceTitle"></strong><p id="experienceCopy"></p><a class="btn" id="experienceLink" href="/luce/">Vivre l’expérience →</a></div>
 
+  <div class="final-gate" id="finalGate"><div class="part">Après le Chapitre L</div><strong>Le livre ne se ferme pas ici.</strong><p>Le Gardien du Vide ouvre un dernier passage. Entre dans LE SEUIL, choisis la lumière que tu veux protéger et crée ta signature symbolique.</p><a class="btn" href="/luce/threshold.html">Passer le seuil →</a></div>
+
   <div class="note">
    <label for="note">Ma note privée sur ce chapitre</label>
    <textarea id="note" placeholder="Ce que je veux retenir…"></textarea>
@@ -128,10 +130,17 @@ h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2
  document.documentElement.style.setProperty('--fs',fs+'px');
 
  function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
- function paragraphs(text){
-  return text.split(/\n+/).filter(Boolean).map(p=>'<p>'+esc(p)+'</p>').join('');
- }
+ function paragraphs(text){return '<div class="verse">'+text.split('\n').map(esc).join('<br>')+'</div>'}
  function shortTitle(t){return t.replace(/^Chapitre\s+[IVXLCDM]+\s+[–-]\s*/,'')}
+ const experiences={
+  3:{title:'Le Silence qui Parle',copy:'Entre dans un espace de silence avant de poursuivre.',href:'/luce/#desert'},
+  4:{title:'Le Souffle du Désert',copy:'Respire au rythme de LUCE puis dépose ce que tu veux laisser derrière toi.',href:'/luce/#desert'},
+  6:{title:'Le Chant de la Panthère',copy:'Rencontre le gardien silencieux du voyage.',href:'/luce/#panthere'},
+  7:{title:'Aql & Nafs',copy:'Observe quelle voix intérieure parle le plus fort aujourd’hui.',href:'/luce/#aql'},
+  8:{title:'La Caverne et les Ombres',copy:'Retourne-toi symboliquement vers la lumière.',href:'/luce/#caverne'},
+  34:{title:'La Gratitude comme Rituel',copy:'Écris trois gratitudes dans ton espace privé.',href:'/luce/journal.html#gratitude'},
+  50:{title:'LE SEUIL',copy:'Le cinquantième chapitre ne se ferme pas. Il ouvre un passage vers ta propre lumière.',href:'/luce/threshold.html'}
+ };
  function renderToc(q=''){
   const root=$('#toc');root.innerHTML='';let last='';
   B.forEach((ch,i)=>{
@@ -150,6 +159,8 @@ h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2
   $('#text').innerHTML=paragraphs(ch.text);
   const ex=experiences[idx+1],box=$('#experienceCard');
   if(ex){box.classList.add('show');$('#experienceTitle').textContent=ex.title;$('#experienceCopy').textContent=ex.copy;$('#experienceLink').href=ex.href}else box.classList.remove('show');
+  $('#finalGate').classList.toggle('show',idx===B.length-1);
+  if(idx===B.length-1)save('luce_reached_end','1');
   $('#note').value=load('luce_note_'+(idx+1));
   $('#bookmarkBtn').textContent=marks.has(idx+1)?'★':'☆';
   $('#saved').textContent=marks.has(idx+1)?'Favori':'';
@@ -179,7 +190,7 @@ h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2
   utter.onend=()=>{speaking=false;$('#listenBtn').textContent='▶'};speaking=true;$('#listenBtn').textContent='■';speechSynthesis.speak(utter);
  };
  addEventListener('beforeunload',stopSpeak);
- let scrollTimer;addEventListener('scroll',()=>{const m=document.documentElement.scrollHeight-innerHeight;$('#progress').style.width=(m>0?scrollY/m*100:0)+'%';clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>save('luce_scroll_'+(idx+1),String(Math.max(0,Math.round(scrollY)))),150)},{passive:true});addEventListener('keydown',e=>{if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight'&&idx<B.length-1)go(idx+1);if(e.key==='ArrowLeft'&&idx>0)go(idx-1)});
+ let scrollTimer;addEventListener('scroll',()=>{const m=document.documentElement.scrollHeight-innerHeight,pct=m>0?scrollY/m:0;$('#progress').style.width=(pct*100)+'%';clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>save('luce_scroll_'+(idx+1),String(Math.max(0,Math.round(scrollY)))),150);if(idx===B.length-1&&pct>.82)save('luce_reached_end','1')},{passive:true});addEventListener('keydown',e=>{if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight'&&idx<B.length-1)go(idx+1);if(e.key==='ArrowLeft'&&idx>0)go(idx-1)});
  document.addEventListener('selectionchange',()=>{
    const s=String(getSelection()).trim();
    if(s.length>20&&s.length<500) $('#share').textContent='Partager la sélection';
