@@ -9,7 +9,8 @@ import alertEngine from './alert-engine.js';
 
 const STATE='argus/health/fast-cycle.json';
 const ACTIVE_LOCK_MS=4*60*1000;
-const CALL_TIMEOUT_MS=55000;
+const CALL_TIMEOUT_MS=50000;
+const RUN_BUDGET_MS=100000;
 
 function secret(){return String(process.env.CRON_SECRET||'').trim()}
 function authorized(req){const s=secret();return !s||req.headers.authorization===`Bearer ${s}`}
@@ -115,7 +116,7 @@ export default async function handler(req,res){
   await writeJson(STATE,{version:'FAST-CYCLE-4',runId,source,status:'RUNNING',startedAt,completedAt:null,results:[],policy:{primaryScheduler:'VERCEL_CRON',backupScheduler:'GITHUB_CONDITIONAL',currentCycleAttestationRequired:true,livePaperSettlementDue:dueLivePaperSettlement,automaticRealWagering:false}});
 
   const jobs=[
-    {path:'/api/prediction-ledger-cron',handler:predictionLedgerCron},
+    {path:'/api/prediction-ledger-cron',handler:predictionLedgerCron,networkOnly:true},
     {path:'/api/virtual-bankroll?mode=run',handler:virtualBankroll,query:{mode:'run'}}
   ];
   if(dueLivePaperSettlement)jobs.push({path:'/api/live-paper-bankroll',handler:livePaperBankroll});
@@ -127,8 +128,14 @@ export default async function handler(req,res){
   if(process.env.VAPID_PUBLIC_KEY&&process.env.VAPID_PRIVATE_KEY){
     const mod=await import('./push-dispatch.js');jobs.push({path:'/api/push-dispatch',handler:mod.default});
   }
-  const results=[];
-  for(const job of jobs)results.push(await callLocal(base,job,auth));
+  const results=[],cycleStartedMs=new Date(startedAt).getTime();
+  for(const job of jobs){
+    if(Date.now()-cycleStartedMs>=RUN_BUDGET_MS){
+      results.push({path:job.path,ok:true,httpStatus:200,ms:0,executionMode:'SKIPPED_BUDGET',body:{status:'SKIPPED',reason:'FAST_CYCLE_BUDGET_PROTECTED'}});
+      continue;
+    }
+    results.push(await (job.networkOnly?callNetwork(base,job.path,auth):callLocal(base,job,auth)));
+  }
   const failures=results.filter(x=>!x.ok),fallbacks=results.filter(x=>x.executionMode==='NETWORK_FALLBACK'),completedAt=new Date().toISOString();
   const state={
     version:'FAST-CYCLE-4',runId,source,startedAt,completedAt,
