@@ -201,6 +201,23 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 .scanverdict span{display:block;margin-top:4px;font-size:.84rem;color:#e5edf5}
 .manualgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}
 .manualgrid .field input,.manualgrid .field select{font-size:16px}
+.intelgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.intelbox{padding:12px;border-radius:12px;background:#eef4fb;border:1px solid #cbd9e9;color:var(--ink)}
+.intelbox span{display:block;color:#5b7089;font-size:.66rem;text-transform:uppercase;font-weight:850}
+.intelbox b{display:block;margin-top:3px;font-size:1rem}
+.reasonbox{margin-top:12px;padding:13px;border-radius:12px;background:#e8f0f9;color:var(--ink)}
+.reasonbox h4{margin:0 0 7px}
+.reasonbox ul{margin:0;padding-left:18px}
+.reasonbox li{margin:5px 0;font-size:.83rem;color:#405a76}
+.missingbox{margin-top:10px;padding:12px;border-radius:12px;background:#f6e8c8;color:#5d481a}
+.missingbox.good{background:#dcefe5;color:#1e593e}
+.missingbox b{display:block;margin-bottom:4px}
+.missingbox span{font-size:.83rem}
+.nextdeal{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.nextdeal a,.nextdeal button{min-height:44px;padding:9px 12px;border-radius:11px;border:1px solid #b7cadf;background:#173650;color:white;text-decoration:none;font-weight:850}
+.nextdeal .secondary{background:white;color:#173650}
+.confidencebar{height:9px;background:#cbd9e9;border-radius:999px;overflow:hidden;margin-top:7px}
+.confidencebar i{display:block;height:100%;background:linear-gradient(90deg,#e0ad52,#79c49e);width:0}
 :focus-visible{outline:3px solid rgba(158,200,255,.55);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 .footer{padding:28px 0 100px;color:#8195aa;font-size:.79rem;border-top:1px solid var(--line)}
@@ -218,7 +235,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  .bottom a{text-decoration:none;color:#dbe7f5;min-height:48px;display:grid;place-items:center;text-align:center;border-radius:10px;font-size:.69rem;font-weight:850;padding:3px}
  .bottom a:active{background:#e8f2ff;color:#102640}
  .nextaction{position:sticky;top:76px;z-index:25}
- .readinessgrid,.redflags,.glossary,.typegrid,.scanfields,.dealgrid,.manualgrid{grid-template-columns:1fr}
+ .readinessgrid,.redflags,.glossary,.typegrid,.scanfields,.dealgrid,.manualgrid,.intelgrid{grid-template-columns:1fr}
  .urlrow{grid-template-columns:1fr}
  .urlrow .actionbtn{width:100%}
  .field input,.field select{font-size:16px}
@@ -383,6 +400,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
     <div class="field"><label>Référence locale €/m² (optionnel)</label><input id="scanLocalPsm" type="number" placeholder="Ex. 3500"></div>
     <div class="field"><label>Travaux estimés (€)</label><input id="scanWorks" type="number" value="10000"></div>
     <div class="field"><label>Loyer réaliste / mois (€)</label><input id="scanRent" type="number" value="1200"></div>
+    <div class="field"><label>Rendement brut cible ARGUS (%)</label><input id="scanTargetYield" type="number" value="6.5" step=".1" min="1"><span class="note">Hypothèse modifiable selon type, zone et risque.</span></div>
     <div class="field"><label>Charges propriétaire / mois (€)</label><input id="scanCharges" type="number" value="150"></div>
     <div class="field"><label>Précompte + assurance / an (€)</label><input id="scanFixed" type="number" value="1800"></div>
     <div class="field"><label>Apport sur le prix (€)</label><input id="scanDown" type="number" value="60000"></div>
@@ -401,6 +419,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
     <h3 style="margin-top:0">Analyse ARGUS du bien</h3>
     <div class="dealgrid">
      <div class="deal"><span>ASK</span><b id="dealAsk">—</b></div>
+     <div class="deal"><span>FAIR VALUE*</span><b id="dealFair">—</b></div>
      <div class="deal"><span>1ère offre</span><b id="dealFirst">—</b></div>
      <div class="deal"><span>Target deal</span><b id="dealTarget">—</b></div>
      <div class="deal"><span>ABS MAX</span><b id="dealMax">—</b></div>
@@ -409,9 +428,20 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
      <div class="deal"><span>Prix / m²</span><b id="dealPsm">—</b></div>
      <div class="deal"><span>Score</span><b id="dealScore">—</b></div>
     </div>
+    <div class="intelgrid">
+     <div class="intelbox"><span>Confiance données</span><b id="dealConfidence">—</b><div class="confidencebar"><i id="dealConfidenceBar"></i></div></div>
+     <div class="intelbox"><span>Cash initial estimé</span><b id="dealCashNeed">—</b></div>
+     <div class="intelbox"><span>Compatibilité budget</span><b id="dealBudgetFit">—</b></div>
+    </div>
     <div class="scanverdict" id="dealVerdict"><b id="dealVerdictTitle">—</b><span id="dealVerdictText">—</span></div>
+    <div class="missingbox" id="dealMissing"><b>Données manquantes</b><span id="dealMissingText">—</span></div>
+    <div class="reasonbox"><h4>Pourquoi ARGUS arrive à ce verdict</h4><ul id="dealReasons"></ul></div>
     <div class="typeguide" id="dealTypeGuide" style="margin-top:12px"></div>
-    <p class="note" style="color:#526a86;margin-top:10px">Le “prix cible” n'est pas une expertise immobilière. Pour une résidence, il utilise votre référence locale €/m² si vous la fournissez. Pour un investissement, il utilise surtout le rendement, les travaux et la solidité juridique. Les comparables réels restent indispensables.</p>
+    <div class="nextdeal">
+     <a id="dealNextLink" href="#documents">Prochaine action</a>
+     <button id="copyDealSummary" class="secondary" type="button">Copier le résumé</button>
+    </div>
+    <p class="note" style="color:#526a86;margin-top:10px">*FAIR VALUE, Target Deal et ABS MAX sont des estimations disciplinaires ARGUS, pas une expertise officielle. Pour une résidence, la référence locale €/m² est indispensable pour une estimation sérieuse. Pour un investissement, ARGUS combine rendement cible, travaux et risque documentaire. Les comparables réels restent indispensables.</p>
    </div>
   </article>
  </div>
@@ -766,7 +796,7 @@ function renderTypeGuide(type,target='typeGuide'){
 }
 document.querySelectorAll('.typebtn').forEach(b=>b.addEventListener('click',()=>{
  document.querySelectorAll('.typebtn').forEach(x=>x.classList.toggle('active',x===b));
- $('wType').value=b.dataset.ptype; $('scanType').value=b.dataset.ptype; saveWizard(); renderTypeGuide(b.dataset.ptype);
+ $('wType').value=b.dataset.ptype; $('scanType').value=b.dataset.ptype; $('scanTargetYield').value=defaultYieldForType(b.dataset.ptype)||6.5; saveWizard(); saveScanState?.(); renderTypeGuide(b.dataset.ptype);
 }));
 renderTypeGuide('apartment');
 function saveWizard(){const s={};wizardIds.forEach(id=>s[id]=$(id).value);try{localStorage.setItem('argus-immo-wizard',JSON.stringify(s))}catch(e){}}
@@ -848,38 +878,147 @@ $('scanListing').addEventListener('click',async()=>{
   status.className='scanstatus warn';status.textContent='Extraction automatique indisponible : '+e.message+'. Remplissez les champs manuellement — le calcul ARGUS fonctionne quand même.';
  }
 });
-$('scanType').addEventListener('change',()=>renderTypeGuide($('scanType').value,'dealTypeGuide'));
+function defaultYieldForType(type){
+ return ({building:7.5,studio:7.0,apartment:6.5,house:6.0,commercial:8.0,new:5.5,land:0})[type]??6.5;
+}
+$('scanType').addEventListener('change',()=>{
+ renderTypeGuide($('scanType').value,'dealTypeGuide');
+ const y=defaultYieldForType($('scanType').value);
+ if(y)$('scanTargetYield').value=y;
+ syncScanKpis();
+});
 
 function calculateDeal(){
- const type=$('scanType').value,region=$('scanRegion').value,use=$('scanUse').value,price=safeNum('scanPrice'),surface=safeNum('scanSurface'),localPsm=safeNum('scanLocalPsm'),works=safeNum('scanWorks'),rent=safeNum('scanRent'),charges=safeNum('scanCharges'),fixed=safeNum('scanFixed'),down=Math.min(price,safeNum('scanDown')),legal=$('scanLegal').value,docs=$('scanDocs').value,peb=$('scanPeb').value;
- const [rate,years]=$('scanFinance').value.split(',').map(Number),loan=Math.max(0,price-down),payment=financePayment(loan,rate,years),gross=price>0?rent*12/price*100:0,noi=rent*.92-charges-fixed/12,cf=noi-payment,psm=surface?price/surface:0;
- const investment=use==='investment'||use==='mixed'||type==='building',tax=scanRegTax(price,region,investment?'investment':'home'),total=price+tax+price*.03+works;
- let maxByMarket=localPsm&&surface?localPsm*surface-works:Infinity;
- let targetYield=type==='building'?0.075:type==='studio'?0.07:0.065;
- let maxByYield=investment&&rent?rent*12/targetYield-works:Infinity;
- let absMax=Math.min(maxByMarket,maxByYield);
- if(!Number.isFinite(absMax))absMax=price;
- absMax=Math.max(0,absMax);
- const target=Math.max(0,Math.min(absMax,price*.97));
- const first=Math.max(0,Math.min(target*.96,price*.92));
- let score=70;
- if(localPsm&&psm<=localPsm)score+=8;if(investment&&gross>=targetYield*100)score+=10;if(investment&&cf>=0)score+=8;
- if(legal==='yes')score+=8;else if(legal==='unknown')score-=12;else score-=35;
- if(docs==='yes')score+=6;else if(docs==='partial')score-=5;else score-=18;
- if(['F','G'].includes(peb))score-=10;if(works>price*.15)score-=8;if(price>absMax*1.08)score-=10;
- if(type==='land'){score=legal==='yes'&&docs!=='no'?65:35}
+ const type=$('scanType').value,region=$('scanRegion').value,use=$('scanUse').value;
+ const price=safeNum('scanPrice'),surface=safeNum('scanSurface'),localPsm=safeNum('scanLocalPsm'),works=safeNum('scanWorks'),rent=safeNum('scanRent'),targetYieldPct=safeNum('scanTargetYield'),charges=safeNum('scanCharges'),fixed=safeNum('scanFixed'),down=Math.min(price,safeNum('scanDown'));
+ const legal=$('scanLegal').value,docs=$('scanDocs').value,peb=$('scanPeb').value;
+ const [rate,years]=$('scanFinance').value.split(',').map(Number);
+ const investment=use==='investment'||use==='mixed'||type==='building'||type==='commercial';
+ const loan=Math.max(0,price-down),payment=financePayment(loan,rate,years),gross=price>0?rent*12/price*100:0,noi=rent*.92-charges-fixed/12,cf=noi-payment,psm=surface?price/surface:0;
+ const tax=scanRegTax(price,region,investment?'investment':'home'),otherFees=price*.03,total=price+tax+otherFees+works,cashNeed=down+tax+otherFees+works;
+ const targetYield=(targetYieldPct||defaultYieldForType(type)||6.5)/100;
+
+ const marketValue=localPsm&&surface?localPsm*surface:null;
+ const yieldValue=investment&&rent&&targetYield?rent*12/targetYield:null;
+ let fairCandidates=[marketValue,yieldValue].filter(Number.isFinite);
+ let fairValue=fairCandidates.length?fairCandidates.reduce((a,b)=>a+b,0)/fairCandidates.length:null;
+ if(fairValue!=null)fairValue=Math.max(0,fairValue-works*.5);
+
+ let maxCandidates=[];
+ if(marketValue!=null)maxCandidates.push(Math.max(0,marketValue-works));
+ if(yieldValue!=null)maxCandidates.push(Math.max(0,yieldValue-works));
+ let absMax=maxCandidates.length?Math.min(...maxCandidates):null;
+ const target=absMax!=null?Math.max(0,Math.min(absMax,price*.97)):null;
+ const first=target!=null?Math.max(0,Math.min(target*.96,price*.92)):null;
+
+ const missing=[];
+ if(!price)missing.push('prix annoncé');
+ if(type!=='land'&&!surface)missing.push('surface');
+ if(!investment&&!localPsm)missing.push('référence locale €/m²');
+ if(investment&&!rent)missing.push('loyer réaliste');
+ if(investment&&!targetYieldPct)missing.push('rendement cible');
+ if(peb==='?')missing.push('PEB / EPC');
+ if(legal==='unknown')missing.push('confirmation urbanistique');
+ if(docs==='partial')missing.push('documents complets');
+ if(docs==='no')missing.push('documents principaux');
+
+ let confidence=100;
+ confidence-=missing.length*8;
+ if(!localPsm&&!investment)confidence-=15;
+ if(investment&&!rent)confidence-=20;
+ if(legal==='unknown')confidence-=12;
+ if(docs==='partial')confidence-=8;
+ if(docs==='no')confidence-=22;
+ confidence=Math.max(0,Math.min(100,confidence));
+
+ let score=62,reasons=[];
+ if(marketValue!=null){
+   const delta=(marketValue-price)/Math.max(1,marketValue);
+   if(delta>=.05){score+=12;reasons.push('Prix annoncé sous la référence locale fournie.')}
+   else if(delta>=-.03){score+=5;reasons.push('Prix annoncé proche de la référence locale fournie.')}
+   else{score-=10;reasons.push('Prix annoncé au-dessus de la référence locale fournie.')}
+ }else if(!investment){score-=12;reasons.push('Aucune référence locale €/m² : valeur de marché insuffisamment documentée.')}
+ if(investment){
+   if(gross>=targetYieldPct){score+=12;reasons.push('Rendement brut au moins égal à la cible saisie.')}
+   else{score-=10;reasons.push('Rendement brut inférieur à la cible saisie.')}
+   if(cf>=0){score+=8;reasons.push('Cash-flow estimatif non négatif après réserve de vacance/entretien.')}
+   else{score-=8;reasons.push('Cash-flow estimatif négatif avec le financement saisi.')}
+ }
+ if(legal==='yes'){score+=10;reasons.push('Urbanisme indiqué comme confirmé.')}
+ else if(legal==='unknown'){score-=15;reasons.push('Urbanisme encore à confirmer.')}
+ else{score-=40;reasons.push('Risque urbanistique sérieux déclaré.')}
+ if(docs==='yes'){score+=8;reasons.push('Documents principaux indiqués comme reçus.')}
+ else if(docs==='partial'){score-=6;reasons.push('Dossier documentaire encore incomplet.')}
+ else{score-=22;reasons.push('Documents principaux manquants.')}
+ if(['F','G'].includes(peb)){score-=10;reasons.push('PEB faible : risque de travaux énergétiques et de décote.')}
+ else if(['A','B','C','D'].includes(peb)){score+=4;reasons.push('PEB relativement maîtrisable selon le niveau déclaré.')}
+ if(price&&works>price*.15){score-=8;reasons.push('Travaux supérieurs à 15 % du prix demandé.')}
+ if(absMax!=null&&price>absMax*1.08){score-=12;reasons.push('Prix demandé sensiblement au-dessus du plafond ARGUS calculé.')}
+ if(type==='land'){score=legal==='yes'&&docs!=='no'?65:30;reasons=['Pour un terrain, la constructibilité et l’urbanisme dominent le calcul financier.']}
  score=Math.max(0,Math.min(100,score));
- $('dealResult').classList.remove('hidden');$('dealAsk').textContent=euro(price);$('dealFirst').textContent=euro(first);$('dealTarget').textContent=euro(target);$('dealMax').textContent=euro(absMax);
+
+ let budgetFit='Profil non renseigné',budgetBlock=false;
+ try{
+   const ws=JSON.parse(localStorage.getItem('argus-immo-wizard')||'{}');
+   const sav=Number(ws.wSavings)||0,inc=Number(ws.wIncome)||0,debt=Number(ws.wDebt)||0,exp=Number(ws.wExpenses)||0;
+   if(sav||inc){
+     const reserveAfter=sav-cashNeed,ratio=inc>0?(payment+debt)/inc*100:null,minReserve=Math.max(exp*6,5000);
+     if(reserveAfter<0){budgetFit='Cash insuffisant';budgetBlock=true;reasons.push('Le cash nécessaire dépasse l’épargne du profil ARGUS.')}
+     else if(ratio!=null&&ratio>40){budgetFit='Mensualité trop haute';budgetBlock=true;reasons.push('Les engagements dépassent le repère général de 40 % des revenus du profil.')}
+     else if(reserveAfter<minReserve){budgetFit='Réserve faible';reasons.push('La réserve restante serait inférieure à environ 6 mois de dépenses.')}
+     else budgetFit='Compatible';
+   }
+ }catch(e){}
+
+ const hardStop=legal==='no'||docs==='no'||(legal==='unknown'&&['building','studio'].includes(type));
+ const insufficientData=(!investment&&!localPsm)||(investment&&!rent)||confidence<55;
+ $('dealResult').classList.remove('hidden');
+ $('dealAsk').textContent=euro(price);$('dealFair').textContent=fairValue!=null?euro(fairValue):'À compléter';$('dealFirst').textContent=first!=null?euro(first):'À compléter';$('dealTarget').textContent=target!=null?euro(target):'À compléter';$('dealMax').textContent=absMax!=null?euro(absMax):'À compléter';
  $('dealGross').textContent=investment?pct(gross):'N/A';$('dealCashflow').textContent=investment?euro(cf)+'/mois':'N/A';$('dealPsm').textContent=psm?euro(psm)+'/m²':'—';$('dealScore').textContent=score+'/100';
+ $('dealConfidence').textContent=confidence+'/100';$('dealConfidenceBar').style.width=confidence+'%';$('dealCashNeed').textContent=euro(cashNeed);$('dealBudgetFit').textContent=budgetFit;
+ $('dealMissingText').textContent=missing.length?missing.join(' · '):'Aucun champ essentiel manquant dans les données saisies.';
+ $('dealMissing').className='missingbox'+(missing.length?'':' good');
+ $('dealReasons').innerHTML=reasons.slice(0,8).map(r=>'<li>'+r+'</li>').join('');
  renderTypeGuide(type,'dealTypeGuide');
- const v=$('dealVerdict'),t=$('dealVerdictTitle'),tx=$('dealVerdictText');
- if(legal==='no'){v.className='scanverdict bad';t.textContent='PASS / STOP';tx.textContent='La configuration ou l’urbanisme présente un problème sérieux. Ne compensez pas un risque juridique par un rendement élevé.'}
- else if(legal==='unknown'&&['building','studio'].includes(type)){v.className='scanverdict bad';t.textContent='STOP DOCUMENTS';tx.textContent='Pour ce type de bien, la conformité et la reconnaissance urbanistique doivent être confirmées avant toute offre.'}
- else if(score>=82&&price<=absMax*1.03){v.className='scanverdict good';t.textContent='BUY / VISITE PRIORITAIRE';tx.textContent='Les hypothèses passent les filtres ARGUS. Validez maintenant comparables, documents, technique et financement avant offre.'}
- else if(score>=62||price<=absMax*1.10){v.className='scanverdict warn';t.textContent='NEGOTIATE';tx.textContent='Le bien peut devenir intéressant à un prix plus bas ou avec des documents/risques mieux sécurisés. Utilisez Target Deal et ABS MAX comme discipline de négociation.'}
- else{v.className='scanverdict bad';t.textContent='PASS';tx.textContent='Le prix ou les risques ne donnent pas assez de marge avec les hypothèses saisies.'}
-}
-$('calculateDeal').addEventListener('click',calculateDeal);
+
+ const v=$('dealVerdict'),t=$('dealVerdictTitle'),tx=$('dealVerdictText'),next=$('dealNextLink');
+ if(hardStop){
+   v.className='scanverdict bad';t.textContent=legal==='no'?'PASS / STOP':'STOP DOCUMENTS';
+   tx.textContent=legal==='no'?'Le risque juridique/urbanistique est trop important pour continuer sur la base actuelle.':'Ce type de bien exige une confirmation documentaire avant toute offre.';
+   next.href='#documents';next.textContent='Obtenir les documents';
+ }else if(insufficientData){
+   v.className='scanverdict warn';t.textContent='DATA INCOMPLETE';
+   tx.textContent='ARGUS refuse de donner un BUY tant que la valeur de marché ou le revenu locatif n’est pas suffisamment documenté.';
+   next.href='#scanner';next.textContent='Compléter les données';
+ }else if(budgetBlock){
+   v.className='scanverdict bad';t.textContent='PASS / BUDGET';
+   tx.textContent='Le bien peut être correct, mais il ne rentre pas dans le profil financier enregistré avec les hypothèses actuelles.';
+   next.href='#budget';next.textContent='Revoir le budget';
+ }else if(score>=82&&absMax!=null&&price<=absMax*1.03&&confidence>=75){
+   v.className='scanverdict good';t.textContent='BUY / VISITE PRIORITAIRE';
+   tx.textContent='Le bien passe les filtres ARGUS avec une confiance suffisante. Prochaine étape : comparables finaux, documents, technique et financement.';
+   next.href='#ready';next.textContent='Vérifier avant offre';
+ }else if(score>=60||(absMax!=null&&price<=absMax*1.10)){
+   v.className='scanverdict warn';t.textContent='NEGOTIATE';
+   tx.textContent='Le bien peut devenir intéressant, mais le prix ou certains risques doivent être améliorés. Respectez Target Deal et ABS MAX.';
+   next.href='#scanner';next.textContent='Ajuster l’analyse';
+ }else{
+   v.className='scanverdict bad';t.textContent='PASS';
+   tx.textContent='Le rapport prix / risque / rendement n’offre pas assez de marge avec les données saisies.';
+   next.href='#types';next.textContent='Comparer un autre bien';
+ }
+ window.__lastDealSummary='ARGUS IMMO — '+typeLabel(type)+'\nASK: '+euro(price)+'\nFAIR VALUE: '+(fairValue!=null?euro(fairValue):'à compléter')+'\nFIRST OFFER: '+(first!=null?euro(first):'à compléter')+'\nTARGET: '+(target!=null?euro(target):'à compléter')+'\nABS MAX: '+(absMax!=null?euro(absMax):'à compléter')+'\nScore: '+score+'/100\nConfiance: '+confidence+'/100\nBudget: '+budgetFit+'\nVerdict: '+t.textContent+'\nÀ vérifier: '+(missing.length?missing.join(', '):'aucun champ essentiel manquant');
+}$('calculateDeal').addEventListener('click',calculateDeal);
+$('copyDealSummary').addEventListener('click',async()=>{
+ const txt=window.__lastDealSummary||'Lancez d’abord l’analyse ARGUS.';
+ try{await navigator.clipboard.writeText(txt);$('copyDealSummary').textContent='Résumé copié ✓';setTimeout(()=>$('copyDealSummary').textContent='Copier le résumé',1600)}
+ catch(e){$('copyDealSummary').textContent='Copie indisponible'}
+});
+const scanStateIds=['listingUrl','scanType','scanRegion','scanUse','scanPrice','scanSurface','scanLocalPsm','scanWorks','scanRent','scanTargetYield','scanCharges','scanFixed','scanDown','scanFinance','scanPeb','scanLegal','scanDocs'];
+function saveScanState(){const o={};scanStateIds.forEach(id=>o[id]=$(id)?.value);try{localStorage.setItem('argus-immo-scan',JSON.stringify(o))}catch(e){}}
+try{const o=JSON.parse(localStorage.getItem('argus-immo-scan')||'{}');scanStateIds.forEach(id=>{if(o[id]!=null&&$(id))$(id).value=o[id]})}catch(e){}
+scanStateIds.forEach(id=>$(id)?.addEventListener('input',saveScanState));
+syncScanKpis();
 $('copyDealToBudget').addEventListener('click',()=>{$('price').value=$('scanPrice').value;$('works').value=$('scanWorks').value;$('down').value=$('scanDown').value;$('region').value=$('scanRegion').value;$('usage').value=$('scanUse').value==='investment'?'investment':'home';calc();location.hash='#budget'});
 
 document.querySelectorAll('.modebtn').forEach(b=>b.addEventListener('click',()=>{
