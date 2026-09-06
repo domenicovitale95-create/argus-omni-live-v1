@@ -43,7 +43,21 @@ function compactSchedulerDecision(d={}){
  };
 }
 function compactSchedulerBody(body={}){
- const matches=(Array.isArray(body.matches)?body.matches:[]).filter(m=>m&&!m.isFinished).slice(0,MAX_SCHEDULER_MATCHES),ids=new Set();
+ const nowMs=Date.now(),sourceMatches=Array.isArray(body.matches)?body.matches:[];
+ const hasPrice=m=>Boolean((m?.markets&&Object.keys(m.markets).length)||(m?.marketOdds&&Object.keys(m.marketOdds).length));
+ const kickoffMs=m=>new Date(m?.kickoff||0).getTime();
+ const candidates=sourceMatches.filter(m=>{
+  if(!m||m.isFinished)return false;
+  const ko=kickoffMs(m);
+  return Boolean(m.isLive||(Number.isFinite(ko)&&ko>nowMs));
+ });
+ candidates.sort((a,b)=>{
+  const pa=(!a.isLive&&hasPrice(a)?0:a.isLive?1:2),pb=(!b.isLive&&hasPrice(b)?0:b.isLive?1:2);
+  if(pa!==pb)return pa-pb;
+  const ka=kickoffMs(a),kb=kickoffMs(b);
+  return (Number.isFinite(ka)?ka:Number.MAX_SAFE_INTEGER)-(Number.isFinite(kb)?kb:Number.MAX_SAFE_INTEGER);
+ });
+ const matches=candidates.slice(0,MAX_SCHEDULER_MATCHES),ids=new Set();
  for(const m of matches){if(m?.id!=null)ids.add(String(m.id));if(m?.fixtureId!=null)ids.add(String(m.fixtureId))}
  const keepKey=key=>ids.has(String(key));
  const decisionSource=body.eligibility?.decisions&&typeof body.eligibility.decisions==='object'?body.eligibility.decisions:{};
