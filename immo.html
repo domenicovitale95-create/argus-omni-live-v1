@@ -116,6 +116,33 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 .source{padding:15px}
 .source b{display:block}
 .source span{display:block;color:var(--muted);font-size:.81rem;margin-top:4px}
+.wizard{padding:20px}
+.wizardtop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.wizardtop h3{margin:0;font-size:1.25rem}
+.wizardtop p{margin:4px 0 0;color:var(--muted);font-size:.88rem}
+.wizardbadge{white-space:nowrap;border:1px solid #335272;border-radius:999px;padding:6px 9px;color:var(--blue);font-size:.72rem;font-weight:850}
+.wizardgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.wizardactions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}
+.actionbtn{min-height:46px;border-radius:11px;border:1px solid var(--line);padding:10px 14px;background:#12263e;color:white;font-weight:850}
+.actionbtn.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.plan{margin-top:14px;padding:18px;background:var(--paper);color:var(--ink);border:1px solid #cbdaf0;border-radius:16px}
+.plan.hidden{display:none}
+.planhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.planhead h3{margin:0;font-size:1.35rem}
+.planhead p{margin:5px 0 0;color:#4b6581;font-size:.88rem}
+.planscore{min-width:78px;text-align:center;background:#dceafa;border-radius:12px;padding:10px}
+.planscore span{display:block;font-size:.66rem;color:#5b728d;text-transform:uppercase;font-weight:850}
+.planscore b{display:block;font-size:1.35rem}
+.planmetrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}
+.planmetric{padding:12px;border-radius:12px;background:#dfeaf6}
+.planmetric span{display:block;color:#526a86;font-size:.67rem;font-weight:850;text-transform:uppercase;letter-spacing:.04em}
+.planmetric b{display:block;margin-top:3px;font-size:1rem}
+.plansteps{display:grid;gap:8px;margin-top:13px}
+.planstep{display:grid;grid-template-columns:28px 1fr;gap:9px;padding:10px;border-radius:11px;background:#e5eef8}
+.planstep i{width:28px;height:28px;border-radius:9px;background:#17334f;color:white;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:.8rem}
+.planstep b{display:block;font-size:.9rem}
+.planstep span{display:block;color:#526a86;font-size:.79rem;margin-top:2px}
+.planalert{margin-top:12px;padding:11px 12px;border-radius:11px;background:#f6e9c9;color:#5d481a;font-size:.84rem}
 .footer{padding:28px 0 100px;color:#8195aa;font-size:.79rem;border-top:1px solid var(--line)}
 .bottom{display:none}
 .hidden{display:none!important}
@@ -136,7 +163,9 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  .hero{padding-top:32px}
  h1{font-size:2.65rem}
  .four{grid-template-columns:1fr}
- .formgrid,.metrics{grid-template-columns:1fr}
+ .formgrid,.metrics,.wizardgrid,.planmetrics{grid-template-columns:1fr}
+ .wizardtop,.planhead{display:block}
+ .wizardbadge,.planscore{display:inline-block;margin-top:10px}
  .stepcard summary{grid-template-columns:38px 1fr auto;padding:11px 12px}
  .rankrow{grid-template-columns:22px 105px 1fr 45px;font-size:.78rem}
  .start,.panel,.card{border-radius:15px}
@@ -147,7 +176,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 <header class="top">
  <div class="wrap topin">
   <a class="brand" href="#home"><span class="logo">A</span><span><b>ARGUS IMMO BELGIUM</b><small>Premier achat · investissement · Belgique 2026</small></span></a>
-  <nav class="desktopnav"><a href="#parcours">Parcours</a><a href="#budget">Budget</a><a href="#documents">Documents</a><a href="#zones">Zones</a><a href="#check">Checklist</a></nav>
+  <nav class="desktopnav"><a href="#assistant">Mon plan</a><a href="#parcours">Parcours</a><a href="#budget">Budget</a><a href="#documents">Documents</a><a href="#zones">Zones</a><a href="#check">Checklist</a></nav>
  </div>
 </header>
 
@@ -189,6 +218,43 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
    <article class="card"><p class="eyebrow">Règle 2</p><h3>Une offre peut déjà engager</h3><p>Ne traitez jamais l'offre comme un simple message d'intérêt.</p></article>
    <article class="card"><p class="eyebrow">Règle 3</p><h3>La banque ne valide pas le bien</h3><p>Elle valide surtout votre financement et sa garantie. À vous de contrôler le bien.</p></article>
   </div>
+ </div>
+</section>
+
+
+<section class="section" id="assistant">
+ <div class="wrap">
+  <div class="sectionhead"><div><p class="eyebrow">Assistant personnalisé</p><h2>Répondez à 8 questions. ARGUS construit votre plan.</h2></div><p>Le résultat est volontairement prudent : il aide à préparer une recherche et un rendez-vous bancaire, pas à remplacer une décision de crédit.</p></div>
+  <article class="panel wizard">
+   <div class="wizardtop"><div><h3>Votre situation</h3><p>Environ 2 minutes. Les réponses restent dans votre navigateur.</p></div><span class="wizardbadge">Mobile-first</span></div>
+   <div class="wizardgrid">
+    <div class="field"><label>Votre projet</label><select id="wGoal"><option value="home">Premier achat — j'y habite</option><option value="mixed">J'y habite + je loue une partie</option><option value="invest">Investissement locatif</option></select></div>
+    <div class="field"><label>Région recherchée</label><select id="wRegion"><option value="brussels">Bruxelles</option><option value="wallonia">Wallonie</option><option value="flanders">Flandre</option></select></div>
+    <div class="field"><label>Épargne disponible (€)</label><input id="wSavings" type="number" value="100000" min="0"></div>
+    <div class="field"><label>Revenu net ménage / mois (€)</label><input id="wIncome" type="number" value="4000" min="0"></div>
+    <div class="field"><label>Autres crédits / mois (€)</label><input id="wDebt" type="number" value="0" min="0"></div>
+    <div class="field"><label>Dépenses essentielles / mois (€)</label><input id="wExpenses" type="number" value="1800" min="0"></div>
+    <div class="field"><label>Horizon prévu</label><select id="wHorizon"><option value="3">Moins de 5 ans</option><option value="7" selected>5 à 10 ans</option><option value="12">10 ans ou plus</option></select></div>
+    <div class="field"><label>Travaux acceptés</label><select id="wWorks"><option value="none">Très peu / clé en main</option><option value="light" selected>Petits travaux</option><option value="heavy">Rénovation importante si bonne affaire</option></select></div>
+   </div>
+   <div class="wizardactions">
+    <button class="actionbtn primary" id="buildPlan" type="button">Créer mon plan personnalisé</button>
+    <button class="actionbtn" id="sendToBudget" type="button">Envoyer au simulateur budget</button>
+    <button class="actionbtn" id="resetPlan" type="button">Réinitialiser</button>
+   </div>
+   <div class="plan hidden" id="personalPlan">
+    <div class="planhead"><div><h3 id="planTitle">Votre plan ARGUS</h3><p id="planSubtitle">—</p></div><div class="planscore"><span>Préparation</span><b id="planScore">—</b></div></div>
+    <div class="planmetrics">
+     <div class="planmetric"><span>Mensualité confort*</span><b id="comfortPayment">—</b></div>
+     <div class="planmetric"><span>Repère 40 %*</span><b id="bankPayment">—</b></div>
+     <div class="planmetric"><span>Réserve 6 mois</span><b id="planReserve">—</b></div>
+     <div class="planmetric"><span>Enveloppe prudente*</span><b id="planEnvelope">—</b></div>
+    </div>
+    <div class="plansteps" id="planSteps"></div>
+    <div class="planalert" id="planAlert">—</div>
+    <p class="note" style="color:#526a86;margin:10px 0 0">*Hypothèses pédagogiques ARGUS : mensualité confort ≈ 35 % des revenus nets moins autres crédits ; repère général du guide CBC ≈ 40 % ; enveloppe indicative calculée avec 4 % sur 25 ans, réserve de 6 mois et financement prudent. La banque et le notaire restent déterminants.</p>
+   </div>
+  </article>
  </div>
 </section>
 
@@ -462,7 +528,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 </main>
 
 <nav class="bottom" aria-label="Navigation mobile">
- <a href="#home">Accueil</a><a href="#parcours">Étapes</a><a href="#budget">Budget</a><a href="#documents">Docs</a><a href="#check">Checklist</a>
+ <a href="#home">Accueil</a><a href="#assistant">Mon plan</a><a href="#parcours">Étapes</a><a href="#budget">Budget</a><a href="#check">Checklist</a>
 </nav>
 
 <script>
@@ -470,11 +536,57 @@ const $=id=>document.getElementById(id);
 const euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
 const pct=n=>(Number.isFinite(n)?n:0).toFixed(1).replace('.',',')+' %';
 
+const wizardIds=['wGoal','wRegion','wSavings','wIncome','wDebt','wExpenses','wHorizon','wWorks'];
+function saveWizard(){const s={};wizardIds.forEach(id=>s[id]=$(id).value);try{localStorage.setItem('argus-immo-wizard',JSON.stringify(s))}catch(e){}}
+try{const s=JSON.parse(localStorage.getItem('argus-immo-wizard')||'{}');wizardIds.forEach(id=>{if(s[id]!==undefined)$(id).value=s[id]});}catch(e){}
+wizardIds.forEach(id=>$(id).addEventListener('input',saveWizard));
+
+function loanFromPayment(monthly,rate=4,years=25){const r=rate/100/12,n=years*12;if(monthly<=0)return 0;return monthly*(1-Math.pow(1+r,-n))/r}
+function regTaxPlan(price,region,goal){const home=goal!=='invest';if(!home)return price*(region==='flanders'?.12:.125);if(region==='wallonia')return price*.03;if(region==='flanders')return price*.02;return Math.max(0,price-200000)*.125}
+function prudentEnvelope(goal,region,savings,income,debt,expenses){
+ const reserve=Math.max(expenses*6,5000),usable=Math.max(0,savings-reserve),comfort=Math.max(0,income*.35-debt),loanCap=loanFromPayment(comfort,4,25);
+ let lo=0,hi=Math.max(100000,loanCap+usable+150000);
+ for(let i=0;i<40;i++){const mid=(lo+hi)/2,tax=regTaxPlan(mid,region,goal),other=mid*.03,bankLoan=Math.min(loanCap,mid*.90),cashNeeded=(mid-bankLoan)+tax+other;if(cashNeeded<=usable)lo=mid;else hi=mid}
+ return {price:lo,reserve,usable,comfort,bank:Math.max(0,income*.40-debt),loanCap};
+}
+function buildPersonalPlan(){
+ saveWizard();
+ const goal=$('wGoal').value,region=$('wRegion').value,savings=+$('wSavings').value||0,income=+$('wIncome').value||0,debt=+$('wDebt').value||0,expenses=+$('wExpenses').value||0,h=+$('wHorizon').value||0,works=$('wWorks').value;
+ const p=prudentEnvelope(goal,region,savings,income,debt,expenses),names={brussels:'Bruxelles',wallonia:'Wallonie',flanders:'Flandre'},goalNames={home:'premier achat pour y habiter',mixed:'achat mixte — y habiter et louer une partie',invest:'investissement locatif'};
+ let score=100,alerts=[];
+ if(h<5){score-=28;alerts.push('Votre horizon est court : les frais d’entrée rendent l’achat plus difficile à amortir.')}
+ if(p.bank<=0){score-=35;alerts.push('Vos autres crédits absorbent déjà le repère de remboursement : priorité au désendettement ou à l’augmentation des revenus.')}
+ if(savings<p.reserve){score-=25;alerts.push('Votre épargne est inférieure à une réserve de 6 mois de dépenses : ne cherchez pas encore le prix maximum.')}
+ if(income>0&&debt/income>.15){score-=10;alerts.push('Vos crédits existants réduisent nettement la capacité de financement.')}
+ if(works==='heavy'&&savings<p.reserve+25000){score-=10;alerts.push('Une rénovation lourde exige une réserve travaux plus importante.')}
+ if(goal==='invest'&&savings<50000){score-=8;alerts.push('Pour un investissement, droits au taux normal et apport bancaire peuvent consommer rapidement le cash.')}
+ score=Math.max(0,Math.min(100,score));
+ $('personalPlan').classList.remove('hidden');$('planScore').textContent=score+'/100';$('comfortPayment').textContent=euro(p.comfort)+'/mois';$('bankPayment').textContent=euro(p.bank)+'/mois';$('planReserve').textContent=euro(p.reserve);$('planEnvelope').textContent=euro(p.price);
+ let sub='Profil : '+goalNames[goal]+'. ';
+ if(goal==='home')sub+='Priorité : budget, financement, documents et revente future.';
+ if(goal==='mixed')sub+='Priorité : vérifier que la partie louée est exploitable légalement et que le projet reste supportable sans ce loyer.';
+ if(goal==='invest')sub+='Priorité : rentabilité nette, reconnaissance urbanistique et loyers réels.';
+ $('planTitle').textContent='Plan personnalisé — '+names[region];$('planSubtitle').textContent=sub;
+ const steps=[];
+ steps.push(['1','Maintenant','Prenez rendez-vous avec 2 à 3 banques/courtiers avec exactement le même scénario pour comparer TAEG, coût total, assurances et hypothèque/mandat.']);
+ steps.push(['2','Budget de recherche','Utilisez '+euro(p.price)+' comme enveloppe prudente de départ, pas comme promesse de crédit. Gardez environ '+euro(p.reserve)+' de réserve.']);
+ if(goal==='home')steps.push(['3','Recherche','Cherchez d’abord un bien revendable, proche des transports/services, avec PEB et travaux compatibles avec votre budget.']);
+ if(goal==='mixed')steps.push(['3','Recherche','Cherchez un bien dont la partie louée est autorisée et documentée. Faites le budget comme si le loyer disparaissait temporairement.']);
+ if(goal==='invest')steps.push(['3','Recherche','Filtrez les biens sur rendement net, demande locative, urbanisme, baux, compteurs et coûts à 5 ans — pas uniquement le rendement brut.']);
+ steps.push(['4','Avant toute offre','Recevez PEB, électricité, urbanisme, titre/servitudes et, si appartement, PV d’AG + fonds de réserve + charges.']);
+ steps.push(['5','Offre','Fixez première offre, prix cible et maximum absolu; insérez les conditions suspensives nécessaires et faites relire le texte si l’enjeu est important.']);
+ $('planSteps').innerHTML=steps.map(x=>'<div class="planstep"><i>'+x[0]+'</i><div><b>'+x[1]+'</b><span>'+x[2]+'</span></div></div>').join('');
+ $('planAlert').textContent=alerts.length?alerts.join(' '):'Alerte ARGUS : aucune faiblesse majeure détectée dans les données saisies, mais le bien précis peut encore être mauvais. Prochaine étape : financement puis documents.';
+}
+$('buildPlan').addEventListener('click',buildPersonalPlan);
+$('sendToBudget').addEventListener('click',()=>{$('region').value=$('wRegion').value;$('usage').value=$('wGoal').value==='invest'?'investment':'home';$('income').value=$('wIncome').value;$('otherDebt').value=$('wDebt').value;$('savings').value=$('wSavings').value;$('expenses').value=$('wExpenses').value;calc();location.hash='#budget'});
+$('resetPlan').addEventListener('click',()=>{try{localStorage.removeItem('argus-immo-wizard')}catch(e){}$('wGoal').value='home';$('wRegion').value='brussels';$('wSavings').value=100000;$('wIncome').value=4000;$('wDebt').value=0;$('wExpenses').value=1800;$('wHorizon').value=7;$('wWorks').value='light';$('personalPlan').classList.add('hidden');saveWizard()});
+
 document.querySelectorAll('.modebtn').forEach(b=>b.addEventListener('click',()=>{
  document.querySelectorAll('.modebtn').forEach(x=>x.classList.toggle('active',x===b));
  $('firstStart').classList.toggle('hidden',b.dataset.mode!=='first');
  $('investStart').classList.toggle('hidden',b.dataset.mode!=='invest');
- if(b.dataset.mode==='invest') location.hash='#zones';
+ if(b.dataset.mode==='invest'){ $('wGoal').value='invest'; saveWizard(); location.hash='#assistant'; } else { $('wGoal').value='home'; saveWizard(); location.hash='#assistant'; }
 }));
 
 const checks=[...document.querySelectorAll('.stepcheck')];
