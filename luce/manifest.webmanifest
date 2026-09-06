@@ -1,0 +1,14 @@
+{
+  "name":"LUCE — L’Expérience",
+  "short_name":"LUCE",
+  "description":"LUCE — L’Éveil de l’Âme. Living Book interactif de Domenico Vitale.",
+  "start_url":"/luce/",
+  "scope":"/luce/",
+  "display":"standalone",
+  "background_color":"#050505",
+  "theme_color":"#050505",
+  "lang":"fr",
+  "icons":[
+    {"src":"/luce/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
