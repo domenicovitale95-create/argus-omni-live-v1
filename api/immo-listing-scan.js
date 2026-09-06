@@ -89,6 +89,7 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   res.setHeader('Access-Control-Allow-Origin','*');
   if(req.method==='OPTIONS')return res.status(204).end();
+  if(req.method==='GET')return res.status(200).json({ok:true,service:'ARGUS IMMO listing scanner',version:'1.1',supported:ALLOWED_HOSTS,mode:'public-listing-metadata'});
   if(req.method!=='POST')return res.status(405).json({ok:false,error:'POST required'});
   try{
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});
