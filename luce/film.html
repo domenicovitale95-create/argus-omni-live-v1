@@ -21,7 +21,7 @@ button,a{font:inherit;color:inherit}
 .controls{display:flex;gap:8px}
 .circle{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.34);backdrop-filter:blur(12px);display:grid;place-items:center;text-decoration:none}
 .timeline{position:fixed;z-index:55;left:0;bottom:0;width:100%;height:3px;background:rgba(255,255,255,.08)}
-.timeline i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a5f24,#efd99f)}
+.timeline i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a5f24,#efd99f)}.scene-dots{position:fixed;z-index:56;left:50%;bottom:18px;transform:translateX(-50%);display:flex;gap:8px}.scene-dots button{width:8px;height:8px;border:0;border-radius:50%;padding:0;background:rgba(255,255,255,.25)}.scene-dots button.on{background:#efd99f;box-shadow:0 0 14px rgba(216,181,109,.6)}.end-actions{position:absolute;z-index:40;left:50%;bottom:9vh;transform:translateX(-50%);display:none;gap:10px;flex-wrap:wrap;justify-content:center}.end-actions.show{display:flex}.end-actions a,.end-actions button{border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.36);backdrop-filter:blur(10px);border-radius:999px;padding:11px 15px;text-decoration:none}
 .start{position:fixed;z-index:100;inset:0;background:#020202;display:grid;place-items:center;text-align:center;transition:opacity 1.2s ease,visibility 1.2s ease}
 .start.out{opacity:0;visibility:hidden}
 .start h1{font-family:Georgia,serif;font-size:clamp(4.5rem,18vw,11rem);font-weight:400;letter-spacing:-.05em;line-height:.8;margin:.15em 0}
@@ -90,7 +90,7 @@ button,a{font:inherit;color:inherit}
   <a class="circle" href="/luce/" aria-label="Fermer">×</a>
  </div>
 </div>
-<div class="timeline"><i id="bar"></i></div>
+<div class="timeline"><i id="bar"></i></div><div class="scene-dots" id="sceneDots"></div><div class="end-actions" id="endActions"><button id="replay">Revoir</button><a href="/luce/book.html?c=1">Lire le début du livre →</a></div>
 
 <div class="start" id="start">
  <div>
@@ -104,7 +104,7 @@ button,a{font:inherit;color:inherit}
 
 <script>
 (function(){
- const scenes=[...document.querySelectorAll('.scene')],bar=document.getElementById('bar');
+ const scenes=[...document.querySelectorAll('.scene')],bar=document.getElementById('bar'),dots=document.getElementById('sceneDots');const dotBtns=scenes.map((_,i)=>{const b=document.createElement('button');b.setAttribute('aria-label','Scène '+(i+1));b.onclick=()=>jumpTo(i);dots.appendChild(b);return b});
  const duration=65000,sceneDur=13000;let started=false,paused=false,startAt=0,elapsed=0,raf=0;
  let ctx=null,gain=null,soundOn=false,oscs=[];
  function audioStart(){
@@ -115,21 +115,24 @@ button,a{font:inherit;color:inherit}
   }catch(e){}
  }
  function audioStop(){if(!soundOn)return;try{gain.gain.setTargetAtTime(0,ctx.currentTime,.05);setTimeout(()=>ctx.close(),180)}catch(e){}soundOn=false;document.getElementById('sound').textContent='♫'}
- function setScene(ms){const i=Math.min(scenes.length-1,Math.floor(ms/sceneDur));scenes.forEach((s,j)=>s.classList.toggle('on',j===i))}
+ function setScene(ms){const i=Math.min(scenes.length-1,Math.floor(ms/sceneDur));scenes.forEach((s,j)=>s.classList.toggle('on',j===i));dotBtns.forEach((b,j)=>b.classList.toggle('on',j===i))}
  function tick(t){
   if(!started||paused)return;
   const ms=elapsed+(t-startAt);bar.style.width=Math.min(100,ms/duration*100)+'%';setScene(ms);
-  if(ms>=duration){started=false;bar.style.width='100%';return}
+  if(ms>=duration){started=false;bar.style.width='100%';document.getElementById('endActions').classList.add('show');return}
   raf=requestAnimationFrame(tick);
  }
- document.getElementById('play').onclick=()=>{document.getElementById('start').classList.add('out');audioStart();started=true;paused=false;elapsed=0;startAt=performance.now();setScene(0);raf=requestAnimationFrame(tick)};
+ function begin(at=0){document.getElementById('start').classList.add('out');document.getElementById('endActions').classList.remove('show');audioStart();started=true;paused=false;elapsed=at;startAt=performance.now();document.getElementById('pause').textContent='Ⅱ';setScene(at);cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)}
+ function jumpTo(i){begin(Math.max(0,Math.min(scenes.length-1,i))*sceneDur)}
+ document.getElementById('play').onclick=()=>begin(0);
+ document.getElementById('replay').onclick=()=>begin(0);
  document.getElementById('pause').onclick=function(){
   if(!started)return;
   if(!paused){paused=true;elapsed+=performance.now()-startAt;cancelAnimationFrame(raf);this.textContent='▶'}
   else{paused=false;startAt=performance.now();this.textContent='Ⅱ';raf=requestAnimationFrame(tick)}
  };
  document.getElementById('sound').onclick=()=>soundOn?audioStop():audioStart();
- addEventListener('beforeunload',audioStop);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden&&started&&!paused)document.getElementById('pause').click()});addEventListener('keydown',e=>{if(e.key==='ArrowRight'){const i=scenes.findIndex(s=>s.classList.contains('on'));jumpTo(Math.min(scenes.length-1,i+1))}if(e.key==='ArrowLeft'){const i=scenes.findIndex(s=>s.classList.contains('on'));jumpTo(Math.max(0,i-1))}if(e.key===' '){e.preventDefault();document.getElementById('pause').click()}});addEventListener('beforeunload',audioStop);
 })();
 </script>
 </body>
