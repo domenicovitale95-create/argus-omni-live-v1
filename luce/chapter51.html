@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
+<title>LUCE — Chapitre LI · TOI</title>
+<style>
+:root{--bg:#050505;--ink:#f3eddf;--muted:#8e877c;--gold:#d8b56d;--line:rgba(255,255,255,.11)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#050505;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+a,button,input{font:inherit;color:inherit}a{text-decoration:none}
+.wrap{width:min(760px,92vw);margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;padding:max(18px,env(safe-area-inset-top)) 0 0}
+.brand{font-family:Georgia,serif;letter-spacing:.16em}.close{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center}
+main{min-height:calc(100svh - 70px);display:grid;place-items:center;padding:60px 0 100px;text-align:center}
+.k{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#817a70}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(4rem,14vw,8rem);letter-spacing:-.04em;line-height:.82;margin:.18em 0 .3em}
+.copy{font-family:Georgia,serif;font-size:clamp(1.2rem,3.5vw,1.7rem);color:#b8ae9f;line-height:1.5;max-width:650px;margin:0 auto 32px}
+input{width:min(100%,620px);border:0;border-bottom:1px solid rgba(216,181,109,.36);background:transparent;text-align:center;padding:14px 8px;font-family:Georgia,serif;font-size:clamp(1.25rem,4vw,1.8rem);outline:none}
+input:focus{border-color:#d8b56d}
+.actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.btn{display:inline-flex;min-height:48px;padding:12px 18px;border-radius:999px;border:1px solid rgba(216,181,109,.42);background:rgba(216,181,109,.06);align-items:center;justify-content:center;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase}
+.btn.secondary{border-color:var(--line);background:transparent}
+.result{display:none;margin-top:42px}.result.show{display:block}.result blockquote{font-family:Georgia,serif;font-size:clamp(1.4rem,4vw,2rem);font-style:italic;color:#d6c9b4;line-height:1.5;margin:0 auto 18px}.note{font-size:.75rem;color:#716b63}
+.card{display:none;width:min(100%,420px);margin:30px auto 0;border-radius:22px;border:1px solid rgba(216,181,109,.28);box-shadow:0 18px 60px rgba(0,0,0,.4)}.card.show{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="top"><a class="brand" href="/luce/">LUCE</a><a class="close" href="/luce/">×</a></div>
+ <main>
+  <div>
+   <div class="k">Chapitre LI</div>
+   <h1>TOI</h1>
+   <p class="copy">Jusqu’ici, tu lisais un voyage.<br>Maintenant commence le tien.</p>
+   <input id="line" placeholder="Écris la première phrase de ton voyage…" autocomplete="off">
+   <div class="actions">
+    <button class="btn" id="begin">Commencer</button>
+    <a class="btn secondary" href="/luce/journal.html">Mon voyage</a>
+   </div>
+   <div class="result" id="result">
+    <blockquote id="quote"></blockquote>
+    <div class="actions"><button class="btn secondary" id="share">Partager</button><button class="btn secondary" id="cardBtn">Créer ma carte</button></div>
+    <div class="note">Ta phrase reste sur cet appareil.</div>
+    <canvas id="canvas" width="1080" height="1350" style="display:none"></canvas>
+    <img class="card" id="preview" alt="Carte LUCE">
+   </div>
+  </div>
+ </main>
+</div>
+<script>
+(function(){
+ const $=s=>document.querySelector(s),save=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},load=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}};
+ $('#line').value=load('luce_first_line');
+ function show(){const v=$('#line').value.trim();if(!v)return;save('luce_first_line',v);let st={};try{st=JSON.parse(load('luce_state')||'{}')}catch(e){}st.chapter=true;save('luce_state',JSON.stringify(st));$('#quote').textContent='« '+v+' »';$('#result').classList.add('show')}
+ if($('#line').value.trim())show();
+ $('#begin').onclick=show;
+ $('#line').addEventListener('keydown',e=>{if(e.key==='Enter')show()});
+ $('#share').onclick=async()=>{const v=$('#line').value.trim(),t='LUCE — Chapitre LI · TOI\n« '+v+' »';if(navigator.share)try{await navigator.share({title:'LUCE — Chapitre LI',text:t,url:location.href})}catch(e){}else try{await navigator.clipboard.writeText(t)}catch(e){}};
+ function wrap(ctx,text,max){const words=text.split(/\s+/),lines=[];let line='';words.forEach(w=>{const test=line?line+' '+w:w;if(ctx.measureText(test).width>max&&line){lines.push(line);line=w}else line=test});if(line)lines.push(line);return lines}
+ $('#cardBtn').onclick=()=>{const v=$('#line').value.trim();if(!v)return;const c=$('#canvas'),x=c.getContext('2d'),W=c.width,H=c.height;x.fillStyle='#070707';x.fillRect(0,0,W,H);const g=x.createRadialGradient(W/2,360,0,W/2,360,440);g.addColorStop(0,'rgba(216,181,109,.20)');g.addColorStop(1,'rgba(216,181,109,0)');x.fillStyle=g;x.fillRect(0,0,W,H);x.strokeStyle='rgba(216,181,109,.28)';x.strokeRect(55,55,W-110,H-110);x.textAlign='center';x.fillStyle='#d8b56d';x.font='24px system-ui';x.fillText('LUCE · CHAPITRE LI',W/2,155);x.fillStyle='#f3eddf';x.font='112px Georgia';x.fillText('TOI',W/2,320);x.fillStyle='#c8bcaa';x.font='italic 46px Georgia';const lines=wrap(x,'« '+v+' »',820),lh=66,start=H/2-lines.length*lh/2;lines.slice(0,8).forEach((l,i)=>x.fillText(l,W/2,start+i*lh));x.fillStyle='#8e8679';x.font='26px Georgia';x.fillText('La lumière que tu cherches est déjà en toi.',W/2,H-220);x.fillStyle='#ece0c4';x.fillText('Domenico Vitale · LUCE',W/2,H-135);$('#preview').src=c.toDataURL('image/png');$('#preview').classList.add('show')};
+})();
+</script>
+</body>
+</html>
