@@ -12,9 +12,14 @@ function cleanText(v=''){
     .replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/\s+/g,' ').trim();
 }
 function meta(html,key){
+  const escaped=key.replace(/[.*+?^$()|[\]\\]/g,'\\function meta(html,key){
   const escaped=key.replace(/[.*+?^$()|[\]\\]/g,'\\$&');
   const re1=new RegExp('<meta[^>]+(?:property|name)=["\\']'+escaped+'["\\'][^>]+content=["\\']([^"\\']*)["\\'][^>]*>','i');
   const re2=new RegExp('<meta[^>]+content=["\\']([^"\\']*)["\\'][^>]+(?:property|name)=["\\']'+escaped+'["\\'][^>]*>','i');
+  return cleanText((html.match(re1)||html.match(re2)||[])[1]||'');
+}');
+  const re1=new RegExp(`<meta[^>]+(?:property|name)=["']${escaped}["'][^>]+content=["']([^"']*)["'][^>]*>`,'i');
+  const re2=new RegExp(`<meta[^>]+content=["']([^"']*)["'][^>]+(?:property|name)=["']${escaped}["'][^>]*>`,'i');
   return cleanText((html.match(re1)||html.match(re2)||[])[1]||'');
 }
 function parseNumber(v){
