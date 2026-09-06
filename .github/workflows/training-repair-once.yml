@@ -27,7 +27,7 @@ jobs:
           echo "Running fresh Autopilot cycle..."
           curl --fail-with-body --silent --show-error --max-time 180 \
             -H "Authorization: Bearer ${CRON_SECRET}" \
-            "${BASE}/api/autopilot" > /tmp/autopilot.json
+            "${BASE}/api/autopilot?force=1" > /tmp/autopilot.json
 
           echo "Running Training capture..."
           curl --fail-with-body --silent --show-error --max-time 120 \
