@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080706">
+<link rel="manifest" href="/luce/manifest.webmanifest">
+<link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
+<title>LUCE — Lire le livre</title>
+<meta name="description" content="Lire LUCE — L’Éveil de l’Âme de Domenico Vitale. 50 chapitres, lecture publique et interactive.">
+<style>
+:root{--bg:#090806;--paper:#11100d;--ink:#eee7d8;--muted:#90897d;--gold:#d7b36a;--line:rgba(255,255,255,.1);--fs:20px}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:radial-gradient(circle at 50% 0,rgba(215,179,106,.08),transparent 28%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button,a{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.top{position:sticky;top:0;z-index:50;background:rgba(9,8,6,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topin{width:min(1180px,94vw);margin:auto;display:flex;align-items:center;gap:10px;min-height:64px}
+.brand{font-family:Georgia,serif;letter-spacing:.16em;color:#e6cf9d;margin-right:auto}
+.iconbtn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.025)}
+.progress{height:2px;background:linear-gradient(90deg,#8c6024,var(--gold));width:0}
+.layout{width:min(1180px,94vw);margin:auto;display:grid;grid-template-columns:310px minmax(0,1fr);gap:28px;padding:28px 0 90px}
+.sidebar{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;border:1px solid var(--line);border-radius:22px;padding:14px;background:rgba(255,255,255,.022)}
+.search{display:flex;gap:8px;position:sticky;top:0;background:#0b0a08;padding-bottom:12px;z-index:2}
+.search input{width:100%;border:1px solid var(--line);background:#11100e;border-radius:12px;padding:10px 12px;outline:none}
+.search input:focus{border-color:rgba(215,179,106,.45)}
+.toc-part{font-size:.67rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:18px 8px 7px}
+.toc button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#9d968a;padding:10px;border-radius:10px;font-size:.84rem;line-height:1.35}
+.toc button:hover,.toc button.on{background:rgba(215,179,106,.08);color:#f0e7d6}
+.reader{min-width:0}
+.chapter-head{padding:32px 0 24px;border-bottom:1px solid var(--line)}
+.part{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2.6rem,7vw,5.3rem);line-height:.98;letter-spacing:-.035em;margin:.18em 0 .25em}
+.meta{display:flex;gap:12px;flex-wrap:wrap;color:#7f786e;font-size:.78rem}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:999px;padding:10px 13px;font-size:.76rem}
+.btn:hover{border-color:rgba(215,179,106,.45);background:rgba(215,179,106,.06)}
+.text{font-family:Georgia,"Times New Roman",serif;font-size:var(--fs);line-height:1.82;max-width:760px;margin:42px auto}
+.text p{margin:0 0 1.15em}
+.text mark{background:rgba(215,179,106,.25);color:#fff1cf;padding:0 .08em}
+.note{max-width:760px;margin:30px auto;border:1px solid var(--line);border-radius:22px;padding:20px;background:rgba(255,255,255,.02)}
+.note label{display:block;font-size:.72rem;color:#8f877b;text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px}
+.note textarea{width:100%;min-height:100px;border:1px solid var(--line);background:#0b0a08;border-radius:14px;padding:12px;resize:vertical;outline:none}
+.navchap{max-width:760px;margin:42px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.navchap button{min-height:82px;border:1px solid var(--line);background:rgba(255,255,255,.02);border-radius:18px;padding:15px;text-align:left}
+.navchap button:last-child{text-align:right}
+.navchap small{display:block;color:#736d64;margin-bottom:4px}
+.empty{padding:40px;color:#817a70;text-align:center}
+.settings{position:fixed;z-index:60;right:16px;bottom:max(18px,env(safe-area-inset-bottom));display:flex;gap:6px;padding:6px;border:1px solid var(--line);border-radius:999px;background:rgba(8,7,6,.78);backdrop-filter:blur(16px)}
+.settings button{border:0;background:transparent;border-radius:999px;padding:9px 11px}
+.drawerbtn{display:none}
+@media(max-width:850px){
+ .layout{display:block;width:min(94vw,820px)}
+ .sidebar{position:fixed;z-index:70;inset:64px 0 0 0;max-height:none;border-radius:0;border:0;background:#090806;transform:translateX(-105%);transition:transform .28s ease;padding:18px}
+ .sidebar.open{transform:none}
+ .drawerbtn{display:block}
+ .text{font-size:var(--fs);line-height:1.75}
+ .topin{width:94vw}
+}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="topin">
+  <button class="iconbtn drawerbtn" id="drawerBtn" aria-label="Sommaire">☰</button>
+  <a class="brand" href="/luce/">LUCE</a>
+  <button class="iconbtn" id="listenBtn" aria-label="Écouter">▶</button>
+  <button class="iconbtn" id="bookmarkBtn" aria-label="Favori">☆</button>
+  <a class="iconbtn" href="/luce/" style="display:grid;place-items:center" aria-label="Fermer">×</a>
+ </div>
+ <div class="progress" id="progress"></div>
+</header>
+
+<div class="layout">
+ <aside class="sidebar" id="sidebar">
+  <div class="search"><input id="search" placeholder="Rechercher dans le livre…"></div>
+  <div class="toc" id="toc"></div>
+ </aside>
+
+ <main class="reader">
+  <div class="chapter-head">
+   <div class="part" id="part"></div>
+   <h1 id="title">LUCE</h1>
+   <div class="meta"><span id="position"></span><span id="time"></span><span id="saved"></span></div>
+   <div class="tools">
+    <button class="btn" id="minus">A−</button>
+    <button class="btn" id="plus">A+</button>
+    <button class="btn" id="share">Partager le chapitre</button>
+    <button class="btn" id="random">Ouvrir une page au hasard</button>
+   </div>
+  </div>
+  <article class="text" id="text"></article>
+
+  <div class="note">
+   <label for="note">Ma note privée sur ce chapitre</label>
+   <textarea id="note" placeholder="Ce que je veux retenir…"></textarea>
+   <div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px">
+    <span style="font-size:.75rem;color:#716b63">Enregistrée uniquement sur cet appareil.</span>
+    <button class="btn" id="saveNote">Enregistrer</button>
+   </div>
+  </div>
+
+  <div class="navchap">
+   <button id="prev"><small>← Chapitre précédent</small><span></span></button>
+   <button id="next"><small>Chapitre suivant →</small><span></span></button>
+  </div>
+ </main>
+</div>
+
+<div class="settings">
+ <button id="theme" title="Mode lecture">◐</button>
+ <button id="topBtn" title="Retour en haut">↑</button>
+</div>
+
+<script src="/luce/book-data.js"></script>
+<script>
+(function(){
+ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+ const B=window.LUCE_BOOK||[];
+ const save=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}, load=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}};
+ let idx=Math.max(0,Math.min(B.length-1,Number(new URLSearchParams(location.search).get('c')||load('luce_chapter')||1)-1));
+ let fs=Number(load('luce_fs')||20), speaking=false, utter=null, marks=new Set();
+ try{marks=new Set(JSON.parse(load('luce_marks')||'[]'))}catch(e){}
+ document.documentElement.style.setProperty('--fs',fs+'px');
+
+ function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+ function paragraphs(text){
+  return text.split(/\n+/).filter(Boolean).map(p=>'<p>'+esc(p)+'</p>').join('');
+ }
+ function shortTitle(t){return t.replace(/^Chapitre\s+[IVXLCDM]+\s+[–-]\s*/,'')}
+ function renderToc(q=''){
+  const root=$('#toc');root.innerHTML='';let last='';
+  B.forEach((ch,i)=>{
+   if(q && !(ch.title+' '+ch.text).toLowerCase().includes(q.toLowerCase()))return;
+   if(ch.part!==last){last=ch.part;const h=document.createElement('div');h.className='toc-part';h.textContent=last;root.appendChild(h)}
+   const b=document.createElement('button');b.textContent=ch.title;b.className=i===idx?'on':'';b.onclick=()=>go(i);root.appendChild(b);
+  });
+  if(!root.children.length)root.innerHTML='<div class="empty">Aucun passage trouvé.</div>';
+ }
+ function render(){
+  if(!B.length)return;
+  const ch=B[idx];save('luce_chapter',String(idx+1));history.replaceState(null,'','?c='+(idx+1));
+  $('#part').textContent=ch.part;$('#title').textContent=ch.title;
+  $('#position').textContent='Chapitre '+(idx+1)+' / '+B.length;
+  const words=ch.text.trim().split(/\s+/).length;$('#time').textContent='≈ '+Math.max(1,Math.ceil(words/180))+' min de lecture';
+  $('#text').innerHTML=paragraphs(ch.text);
+  $('#note').value=load('luce_note_'+(idx+1));
+  $('#bookmarkBtn').textContent=marks.has(idx+1)?'★':'☆';
+  $('#saved').textContent=marks.has(idx+1)?'Favori':'';
+  const p=B[idx-1],n=B[idx+1];
+  $('#prev').disabled=!p;$('#prev').querySelector('span').textContent=p?shortTitle(p.title):'Début';
+  $('#next').disabled=!n;$('#next').querySelector('span').textContent=n?shortTitle(n.title):'Fin';
+  renderToc($('#search').value);scrollTo({top:0,behavior:'smooth'});stopSpeak();
+ }
+ function go(i){idx=Math.max(0,Math.min(B.length-1,i));render();$('#sidebar').classList.remove('open')}
+ $('#prev').onclick=()=>go(idx-1);$('#next').onclick=()=>go(idx+1);
+ $('#drawerBtn').onclick=()=>$('#sidebar').classList.toggle('open');
+ $('#search').oninput=e=>renderToc(e.target.value);
+ $('#saveNote').onclick=function(){save('luce_note_'+(idx+1),$('#note').value);this.textContent='Enregistré ✓';setTimeout(()=>this.textContent='Enregistrer',1100)};
+ $('#minus').onclick=()=>{fs=Math.max(16,fs-1);save('luce_fs',fs);document.documentElement.style.setProperty('--fs',fs+'px')};
+ $('#plus').onclick=()=>{fs=Math.min(30,fs+1);save('luce_fs',fs);document.documentElement.style.setProperty('--fs',fs+'px')};
+ $('#bookmarkBtn').onclick=()=>{const n=idx+1;marks.has(n)?marks.delete(n):marks.add(n);save('luce_marks',JSON.stringify([...marks]));render()};
+ $('#random').onclick=()=>go(Math.floor(Math.random()*B.length));
+ $('#topBtn').onclick=()=>scrollTo({top:0,behavior:'smooth'});
+ $('#theme').onclick=()=>document.body.classList.toggle('light');
+ $('#share').onclick=async()=>{const ch=B[idx],text='LUCE — '+ch.title+' · Domenico Vitale';if(navigator.share)try{await navigator.share({title:ch.title,text,url:location.href})}catch(e){}else try{await navigator.clipboard.writeText(location.href)}catch(e){}};
+
+ function stopSpeak(){if('speechSynthesis'in window)speechSynthesis.cancel();speaking=false;$('#listenBtn').textContent='▶'}
+ $('#listenBtn').onclick=()=>{
+  if(!('speechSynthesis'in window))return;
+  if(speaking){stopSpeak();return}
+  const ch=B[idx];utter=new SpeechSynthesisUtterance(ch.title+'. '+ch.text);utter.lang='fr-FR';utter.rate=.9;utter.pitch=1;
+  utter.onend=()=>{speaking=false;$('#listenBtn').textContent='▶'};speaking=true;$('#listenBtn').textContent='■';speechSynthesis.speak(utter);
+ };
+ addEventListener('beforeunload',stopSpeak);
+ addEventListener('scroll',()=>{
+  const m=document.documentElement.scrollHeight-innerHeight;$('#progress').style.width=(m>0?scrollY/m*100:0)+'%';
+ },{passive:true});
+ document.addEventListener('selectionchange',()=>{
+   const s=String(getSelection()).trim();
+   if(s.length>20&&s.length<500) $('#share').textContent='Partager la sélection';
+   else $('#share').textContent='Partager le chapitre';
+ });
+ render();
+})();
+</script>
+</body>
+</html>
