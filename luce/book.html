@@ -9,7 +9,7 @@
 <title>LUCE — Lire le livre</title>
 <meta name="description" content="Lire LUCE — L’Éveil de l’Âme de Domenico Vitale. 50 chapitres, lecture publique et interactive.">
 <style>
-:root{--bg:#090806;--paper:#11100d;--ink:#eee7d8;--muted:#90897d;--gold:#d7b36a;--line:rgba(255,255,255,.1);--fs:20px}
+:root{--bg:#090806;--paper:#11100d;--ink:#eee7d8;--muted:#90897d;--gold:#d7b36a;--line:rgba(255,255,255,.1);--fs:20px} body.paper{--bg:#efe7d7;--paper:#f7f1e6;--ink:#2d271f;--muted:#746b5e;--gold:#8c6427;--line:rgba(45,39,31,.14)} body.paper{background:#efe7d7;color:#2d271f} body.paper .top{background:rgba(239,231,215,.88)} body.paper .sidebar,body.paper .search{background:#f2eadb} body.paper .search input,body.paper .note textarea{background:#f8f2e8;color:#2d271f} body.paper .btn,body.paper .navchap button,body.paper .iconbtn{background:rgba(45,39,31,.035)} body.focus .sidebar{display:none} body.focus .layout{grid-template-columns:minmax(0,1fr);max-width:900px} body.focus .tools{opacity:.3;transition:.2s} body.focus .tools:hover{opacity:1}
 *{box-sizing:border-box}
 html{background:var(--bg)}
 body{margin:0;background:radial-gradient(circle at 50% 0,rgba(215,179,106,.08),transparent 28%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -37,10 +37,10 @@ h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2
 .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
 .btn{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:999px;padding:10px 13px;font-size:.76rem}
 .btn:hover{border-color:rgba(215,179,106,.45);background:rgba(215,179,106,.06)}
-.text{font-family:Georgia,"Times New Roman",serif;font-size:var(--fs);line-height:1.82;max-width:760px;margin:42px auto}
-.text p{margin:0 0 1.15em}
+.text{font-family:Georgia,"Times New Roman",serif;font-size:var(--fs);line-height:1.72;max-width:760px;margin:42px auto;letter-spacing:.003em}
+.text .verse{white-space:normal}.text .verse br{content:""}.text .verse br+br{display:block;margin-top:1em}
 .text mark{background:rgba(215,179,106,.25);color:#fff1cf;padding:0 .08em}
-.note{max-width:760px;margin:30px auto;border:1px solid var(--line);border-radius:22px;padding:20px;background:rgba(255,255,255,.02)}
+.experience-card{max-width:760px;margin:24px auto 34px;border:1px solid rgba(215,179,106,.28);border-radius:22px;padding:20px;background:radial-gradient(circle at 0 0,rgba(215,179,106,.10),transparent 45%),rgba(255,255,255,.018);display:none}.experience-card.show{display:block}.experience-card .eyebrow{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}.experience-card strong{display:block;font-family:Georgia,serif;font-weight:400;font-size:1.4rem;margin:8px 0}.experience-card p{color:var(--muted);line-height:1.55;margin:.3em 0 1em}.note{max-width:760px;margin:30px auto;border:1px solid var(--line);border-radius:22px;padding:20px;background:rgba(255,255,255,.02)}
 .note label{display:block;font-size:.72rem;color:#8f877b;text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px}
 .note textarea{width:100%;min-height:100px;border:1px solid var(--line);background:#0b0a08;border-radius:14px;padding:12px;resize:vertical;outline:none}
 .navchap{max-width:760px;margin:42px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -88,10 +88,12 @@ h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2
     <button class="btn" id="minus">A−</button>
     <button class="btn" id="plus">A+</button>
     <button class="btn" id="share">Partager le chapitre</button>
-    <button class="btn" id="random">Ouvrir une page au hasard</button>
+    <button class="btn" id="random">Ouvrir une page au hasard</button><button class="btn" id="focusBtn">Mode concentration</button>
    </div>
   </div>
   <article class="text" id="text"></article>
+
+  <div class="experience-card" id="experienceCard"><div class="eyebrow">Expérience liée à ce chapitre</div><strong id="experienceTitle"></strong><p id="experienceCopy"></p><a class="btn" id="experienceLink" href="/luce/">Vivre l’expérience →</a></div>
 
   <div class="note">
    <label for="note">Ma note privée sur ce chapitre</label>
@@ -146,26 +148,28 @@ h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2
   $('#position').textContent='Chapitre '+(idx+1)+' / '+B.length;
   const words=ch.text.trim().split(/\s+/).length;$('#time').textContent='≈ '+Math.max(1,Math.ceil(words/180))+' min de lecture';
   $('#text').innerHTML=paragraphs(ch.text);
+  const ex=experiences[idx+1],box=$('#experienceCard');
+  if(ex){box.classList.add('show');$('#experienceTitle').textContent=ex.title;$('#experienceCopy').textContent=ex.copy;$('#experienceLink').href=ex.href}else box.classList.remove('show');
   $('#note').value=load('luce_note_'+(idx+1));
   $('#bookmarkBtn').textContent=marks.has(idx+1)?'★':'☆';
   $('#saved').textContent=marks.has(idx+1)?'Favori':'';
   const p=B[idx-1],n=B[idx+1];
   $('#prev').disabled=!p;$('#prev').querySelector('span').textContent=p?shortTitle(p.title):'Début';
   $('#next').disabled=!n;$('#next').querySelector('span').textContent=n?shortTitle(n.title):'Fin';
-  renderToc($('#search').value);scrollTo({top:0,behavior:'smooth'});stopSpeak();
+  renderToc($('#search').value);stopSpeak();const savedY=Number(load('luce_scroll_'+(idx+1))||0);setTimeout(()=>scrollTo({top:savedY,behavior:'auto'}),30);
  }
  function go(i){idx=Math.max(0,Math.min(B.length-1,i));render();$('#sidebar').classList.remove('open')}
  $('#prev').onclick=()=>go(idx-1);$('#next').onclick=()=>go(idx+1);
  $('#drawerBtn').onclick=()=>$('#sidebar').classList.toggle('open');
  $('#search').oninput=e=>renderToc(e.target.value);
- $('#saveNote').onclick=function(){save('luce_note_'+(idx+1),$('#note').value);this.textContent='Enregistré ✓';setTimeout(()=>this.textContent='Enregistrer',1100)};
+ $('#saveNote').onclick=function(){save('luce_note_'+(idx+1),$('#note').value);this.textContent='Enregistré ✓';setTimeout(()=>this.textContent='Enregistrer',1100)};let noteTimer;$('#note').addEventListener('input',()=>{clearTimeout(noteTimer);noteTimer=setTimeout(()=>save('luce_note_'+(idx+1),$('#note').value),450)});
  $('#minus').onclick=()=>{fs=Math.max(16,fs-1);save('luce_fs',fs);document.documentElement.style.setProperty('--fs',fs+'px')};
  $('#plus').onclick=()=>{fs=Math.min(30,fs+1);save('luce_fs',fs);document.documentElement.style.setProperty('--fs',fs+'px')};
  $('#bookmarkBtn').onclick=()=>{const n=idx+1;marks.has(n)?marks.delete(n):marks.add(n);save('luce_marks',JSON.stringify([...marks]));render()};
  $('#random').onclick=()=>go(Math.floor(Math.random()*B.length));
  $('#topBtn').onclick=()=>scrollTo({top:0,behavior:'smooth'});
- $('#theme').onclick=()=>document.body.classList.toggle('light');
- $('#share').onclick=async()=>{const ch=B[idx],text='LUCE — '+ch.title+' · Domenico Vitale';if(navigator.share)try{await navigator.share({title:ch.title,text,url:location.href})}catch(e){}else try{await navigator.clipboard.writeText(location.href)}catch(e){}};
+ const mode=load('luce_reader_mode');if(mode==='paper')document.body.classList.add('paper');$('#theme').onclick=()=>{document.body.classList.toggle('paper');save('luce_reader_mode',document.body.classList.contains('paper')?'paper':'dark')};$('#focusBtn').onclick=function(){document.body.classList.toggle('focus');this.textContent=document.body.classList.contains('focus')?'Quitter concentration':'Mode concentration'};
+ $('#share').onclick=async()=>{const ch=B[idx],sel=String(getSelection()).trim(),text=sel.length>20&&sel.length<500?'« '+sel+' »\n— '+ch.title+', LUCE':'LUCE — '+ch.title+' · Domenico Vitale';if(navigator.share)try{await navigator.share({title:ch.title,text,url:location.href})}catch(e){}else try{await navigator.clipboard.writeText(text+'\n'+location.href)}catch(e){}};
 
  function stopSpeak(){if('speechSynthesis'in window)speechSynthesis.cancel();speaking=false;$('#listenBtn').textContent='▶'}
  $('#listenBtn').onclick=()=>{
@@ -175,9 +179,7 @@ h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2
   utter.onend=()=>{speaking=false;$('#listenBtn').textContent='▶'};speaking=true;$('#listenBtn').textContent='■';speechSynthesis.speak(utter);
  };
  addEventListener('beforeunload',stopSpeak);
- addEventListener('scroll',()=>{
-  const m=document.documentElement.scrollHeight-innerHeight;$('#progress').style.width=(m>0?scrollY/m*100:0)+'%';
- },{passive:true});
+ let scrollTimer;addEventListener('scroll',()=>{const m=document.documentElement.scrollHeight-innerHeight;$('#progress').style.width=(m>0?scrollY/m*100:0)+'%';clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>save('luce_scroll_'+(idx+1),String(Math.max(0,Math.round(scrollY)))),150)},{passive:true});addEventListener('keydown',e=>{if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight'&&idx<B.length-1)go(idx+1);if(e.key==='ArrowLeft'&&idx>0)go(idx-1)});
  document.addEventListener('selectionchange',()=>{
    const s=String(getSelection()).trim();
    if(s.length>20&&s.length<500) $('#share').textContent='Partager la sélection';
