@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>LUCE — L’Expérience</title>
+<meta name="description" content="LUCE — L’Éveil de l’Âme. Une expérience de lecture vivante et interactive de Domenico Vitale.">
+<style>
+:root{
+ --bg:#050505;--ink:#f4eee2;--muted:#9d9589;--gold:#d9b66e;--gold2:#f1dba5;
+ --line:rgba(255,255,255,.12);--glass:rgba(255,255,255,.04);--shadow:rgba(216,179,106,.23)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;color:var(--ink);background:
+ radial-gradient(circle at 50% -10%,rgba(216,182,110,.15),transparent 34%),
+ radial-gradient(circle at 14% 42%,rgba(255,255,255,.035),transparent 20%),
+ var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;
+ background-image:radial-gradient(rgba(255,255,255,.75) .42px,transparent .42px);
+ background-size:26px 26px;mask-image:linear-gradient(to bottom,#000,transparent 80%)}
+button,input,textarea{font:inherit}
+button{color:inherit}
+a{color:inherit}
+#intro{position:fixed;inset:0;z-index:1000;background:#020202;display:grid;place-items:center;text-align:center;transition:opacity 1.2s ease,visibility 1.2s ease}
+#intro.out{opacity:0;visibility:hidden}
+.intro-wrap{width:min(92vw,650px);padding:30px}
+.intro-dot{width:48px;height:48px;border:0;border-radius:50%;cursor:pointer;margin:30px auto 24px;background:radial-gradient(circle at 42% 40%,#fff9ea 0 7%,#f5d590 20%,#9d681b 49%,rgba(157,104,27,.04) 73%);box-shadow:0 0 24px rgba(255,226,164,.58),0 0 100px rgba(216,182,110,.22);animation:breathe 4.8s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.84)}50%{transform:scale(1.14);box-shadow:0 0 38px rgba(255,232,178,.78),0 0 130px rgba(216,182,110,.34)}}
+.intro-line{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.2rem,5vw,2rem);letter-spacing:.01em;opacity:.93}
+.intro-hint{color:#756f66;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;margin-top:12px}
+.audio-toggle{position:fixed;right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));z-index:80;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(7,7,7,.72);backdrop-filter:blur(10px);cursor:pointer}
+.progress{position:fixed;left:0;top:0;height:2px;background:linear-gradient(90deg,#8e6427,var(--gold2));z-index:90;width:0;transition:width .25s linear}
+.wrap{width:min(1120px,92vw);margin:auto}
+.hero{min-height:100svh;display:grid;place-items:center;text-align:center;padding:84px 0 56px;position:relative}
+.kicker{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(5rem,21vw,13rem);line-height:.78;letter-spacing:-.055em;margin:.2em 0 .12em}
+.hero-sub{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.25rem,4vw,2.15rem);color:#dbd0bc;margin-bottom:28px}
+.hero-quote{font-family:Georgia,"Times New Roman",serif;font-style:italic;color:#bfb5a5;font-size:clamp(1rem,3vw,1.25rem);max-width:700px;margin:0 auto 32px}
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:.7rem;min-height:48px;padding:13px 20px;border-radius:999px;border:1px solid rgba(216,182,110,.46);background:rgba(216,182,110,.06);text-decoration:none;letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;cursor:pointer;backdrop-filter:blur(8px)}
+.cta:hover{background:rgba(216,182,110,.12)}
+.scroll-note{position:absolute;bottom:26px;color:#6f6960;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+section{padding:90px 0;border-top:1px solid var(--line);scroll-margin-top:20px}
+.section-no{color:var(--gold);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase}
+h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2.6rem,8.5vw,5.8rem);line-height:.96;letter-spacing:-.035em;margin:.12em 0 .35em}
+.lead{max-width:760px;color:#c1b9ad;line-height:1.72;font-size:1.02rem}
+.worlds{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:38px}
+.world{position:relative;overflow:hidden;min-height:265px;border:1px solid var(--line);border-radius:24px;padding:20px;background:linear-gradient(180deg,rgba(255,255,255,.046),rgba(255,255,255,.014));display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .25s ease,border-color .25s ease}
+.world:hover{transform:translateY(-3px);border-color:rgba(216,182,110,.35)}
+.world::after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-80px;top:-85px;background:radial-gradient(circle,rgba(216,182,110,.15),transparent 67%)}
+.world-num{font-family:Georgia,serif;font-size:1.35rem;color:#746d64}
+.world h3{font-family:Georgia,serif;font-weight:400;font-size:1.25rem;margin:0}
+.world p{color:#888177;font-size:.82rem;line-height:1.55;margin:.5rem 0 0}
+.world.done{border-color:rgba(216,182,110,.42);box-shadow:inset 0 0 35px rgba(216,182,110,.04)}
+.world.done::before{content:"✦";position:absolute;right:16px;bottom:16px;color:var(--gold)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+.panel{border:1px solid var(--line);border-radius:28px;background:var(--glass);padding:26px;min-height:390px}
+.center{display:grid;place-items:center}
+.breath-orb{width:160px;height:160px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;background:radial-gradient(circle,#fff7e7 0 5%,#edd096 22%,rgba(216,182,110,.32) 43%,rgba(216,182,110,.05) 69%,transparent 72%);box-shadow:0 0 55px rgba(216,182,110,.18)}
+.breath-orb.running{animation:cycle 12s ease-in-out infinite}
+@keyframes cycle{0%,100%{transform:scale(.76)}33%{transform:scale(1.18)}50%{transform:scale(1.18)}}
+.breath-label{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:#4a371a;font-weight:750}
+.prompt{display:flex;flex-direction:column;justify-content:center}
+.prompt label{font-family:Georgia,serif;font-size:1.8rem;line-height:1.18}
+textarea,input[type=text]{width:100%;background:rgba(255,255,255,.034);color:var(--ink);border:1px solid var(--line);border-radius:17px;padding:15px 16px;outline:none}
+textarea{min-height:126px;resize:vertical;margin:18px 0 12px}
+textarea:focus,input[type=text]:focus{border-color:rgba(216,182,110,.52)}
+.micro{color:#777168;font-size:.78rem;line-height:1.55}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.choice button{min-height:108px;border-radius:20px;border:1px solid var(--line);background:#0b0b0b;cursor:pointer;padding:18px;text-align:left}
+.choice button strong{display:block;font-family:Georgia,serif;font-size:1.35rem;font-weight:400;margin-bottom:6px}
+.choice button span{color:#8f887f;font-size:.82rem}
+.choice button.active{border-color:rgba(216,182,110,.55);background:rgba(216,182,110,.07)}
+.cave{min-height:460px;border-radius:30px;border:1px solid var(--line);overflow:hidden;position:relative;background:
+ radial-gradient(circle at 50% 115%,rgba(216,182,110,.34),transparent 31%),
+ linear-gradient(#030303,#090909)}
+.cave-shadow{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(255,255,255,.025),transparent 20%),radial-gradient(ellipse at 70% 55%,rgba(255,255,255,.03),transparent 18%);animation:drift 9s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(-3%) scale(1.04)}to{transform:translateX(3%) scale(1)}}
+.cave-content{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:28px}
+.cave-light{width:18px;height:18px;border-radius:50%;background:#e8cf96;box-shadow:0 0 20px #e8cf96,0 0 80px rgba(216,182,110,.5);transition:transform 1.6s ease,box-shadow 1.6s ease}
+.cave.open .cave-light{transform:scale(15);box-shadow:0 0 60px #f5e2b5,0 0 180px rgba(245,226,181,.65)}
+.cave-text{position:absolute;bottom:32px;max-width:650px;padding:0 22px}
+.cave.open .cave-text{color:#17130c;transition:color 1s ease .5s}
+.guardian{min-height:520px;border-radius:30px;border:1px solid var(--line);position:relative;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 47%,#151515,#050505 62%);margin-top:30px}
+.eyes{display:flex;gap:42px;opacity:.12;transition:opacity 1.2s ease}
+.eye{width:38px;height:13px;border-radius:80% 20% 80% 20%;background:radial-gradient(circle,#f2d58e 0 14%,#77551d 20% 38%,#0b0b0b 41%);box-shadow:0 0 24px rgba(216,182,110,.3)}
+.guardian.awake .eyes{opacity:.98}
+.guardian-copy{position:absolute;bottom:34px;text-align:center;padding:0 20px}
+.guardian-copy h3{font-family:Georgia,serif;font-size:2.35rem;font-weight:400;margin:.2em 0}
+.guardian-copy p{color:#9a9389;max-width:580px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.card{min-height:250px;perspective:900px;cursor:pointer}
+.card-in{position:relative;width:100%;height:250px;transform-style:preserve-3d;transition:transform .7s}
+.card.flip .card-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--line);border-radius:24px;display:grid;place-items:center;padding:24px;background:linear-gradient(145deg,#111,#090909)}
+.front{font-family:Georgia,serif;font-size:2.15rem;color:#d0c5b3}
+.back{transform:rotateY(180deg);text-align:center;background:radial-gradient(circle at top,rgba(216,182,110,.18),#0a0a0a 58%)}
+.back strong{display:block;font-family:Georgia,serif;font-size:1.8rem;font-weight:400;color:#ead8ab}
+.back p{color:#9f988f;line-height:1.58}
+.journey-bar{display:flex;gap:8px;align-items:center;margin:26px 0 0;flex-wrap:wrap}
+.journey-step{font-size:.72rem;color:#746e65;border:1px solid var(--line);border-radius:999px;padding:8px 12px}
+.journey-step.on{color:#ead8ab;border-color:rgba(216,182,110,.42);background:rgba(216,182,110,.06)}
+.secret{border:1px dashed rgba(216,182,110,.38);border-radius:26px;padding:30px;text-align:center;margin-top:32px;background:radial-gradient(circle at 50% 0,rgba(216,182,110,.08),transparent 40%)}
+.final-card{display:none;margin:28px auto 0;width:min(100%,620px);aspect-ratio:4/5;border-radius:26px;border:1px solid rgba(216,182,110,.32);background:radial-gradient(circle at 50% 28%,rgba(216,182,110,.18),transparent 38%),#080808;padding:34px;flex-direction:column;justify-content:space-between;text-align:left}
+.final-card.show{display:flex}
+.final-card .mini-title{letter-spacing:.22em;color:#918878;font-size:.68rem}
+.final-card strong{font-family:Georgia,serif;font-weight:400;font-size:clamp(2.4rem,8vw,4.3rem);line-height:.95}
+.final-card blockquote{font-family:Georgia,serif;font-style:italic;color:#c4b9a8;margin:0;font-size:1.05rem;line-height:1.5}
+.footer{padding:70px 0 95px;color:#746e65;text-align:center;font-size:.8rem}
+.fade{animation:fade .9s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(max-width:900px){.worlds{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.panel{min-height:360px}}
+@media(max-width:560px){.wrap{width:min(94vw,1120px)}section{padding:72px 0}.worlds{grid-template-columns:1fr}.hero{padding-top:70px}.panel{padding:20px}.choice{grid-template-columns:1fr}.cave{min-height:430px}.guardian{min-height:470px}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<button class="audio-toggle" id="audioToggle" aria-label="Activer ou couper l’ambiance">♫</button>
+
+<div id="intro">
+ <div class="intro-wrap">
+   <div class="intro-line">Tout commence dans le silence.</div>
+   <button class="intro-dot" id="enterLight" aria-label="Entrer dans LUCE"></button>
+   <div class="intro-hint">Touchez la lumière</div>
+ </div>
+</div>
+
+<main class="wrap">
+<section class="hero" id="home" style="border-top:0">
+ <div>
+  <div class="kicker">Domenico Vitale · Living Book</div>
+  <h1>LUCE</h1>
+  <div class="hero-sub">L’Éveil de l’Âme</div>
+  <p class="hero-quote">« La lumière que tu cherches est déjà en toi. »</p>
+  <a class="cta" href="#voyage">Commencer le voyage <span>→</span></a>
+  <div class="journey-bar" id="journeyBar">
+   <span class="journey-step on">Réveil</span><span class="journey-step">Ombres</span><span class="journey-step">Voyage</span><span class="journey-step">Ascension</span><span class="journey-step">Révélation</span>
+  </div>
+ </div>
+ <div class="scroll-note">Faites défiler lentement</div>
+</section>
+
+<section id="voyage">
+ <div class="section-no">01 · Le chemin</div>
+ <h2>Cinq mondes.<br>Un seul voyage.</h2>
+ <p class="lead">LUCE n’est pas seulement à lire. Cette version transforme certains passages en expériences : respirer, choisir, écrire, traverser l’ombre, rencontrer un symbole, puis commencer son propre chapitre.</p>
+ <div class="worlds">
+  <article class="world" data-world="0"><span class="world-num">I</span><div><h3>LE RÉVEIL</h3><p>Silence · souffle · regard intérieur</p></div></article>
+  <article class="world" data-world="1"><span class="world-num">II</span><div><h3>LES OMBRES</h3><p>Désir · caverne · choix</p></div></article>
+  <article class="world" data-world="2"><span class="world-num">III</span><div><h3>LE VOYAGE</h3><p>Sens · symboles · rencontre</p></div></article>
+  <article class="world" data-world="3"><span class="world-num">IV</span><div><h3>L’ASCENSION</h3><p>Corps · vibration · gratitude</p></div></article>
+  <article class="world" data-world="4"><span class="world-num">V</span><div><h3>LA RÉVÉLATION</h3><p>Vérité · mémoire · renaissance</p></div></article>
+ </div>
+</section>
+
+<section id="desert">
+ <div class="section-no">02 · Le Souffle du Désert</div>
+ <h2>Respire avant de chercher.</h2>
+ <p class="lead">Une expérience très simple : le cercle donne le rythme, puis le lecteur dépose une pensée qu’il souhaite laisser derrière lui. Rien n’est envoyé à un serveur.</p>
+ <div class="grid2">
+  <div class="panel center">
+   <div style="text-align:center">
+    <button class="breath-orb" id="breathOrb"><span class="breath-label" id="breathLabel">Toucher</span></button>
+    <p class="micro" style="margin-top:24px">Inspirer 4 s · garder 2 s · expirer 6 s</p>
+   </div>
+  </div>
+  <div class="panel prompt">
+   <label for="release">Qu’est-ce que tu veux laisser dans le désert&nbsp;?</label>
+   <textarea id="release" placeholder="Écris ici…"></textarea>
+   <button class="cta" id="releaseBtn">Déposer dans le silence</button>
+   <p class="micro" id="releaseMsg">Votre réponse reste uniquement sur cet appareil.</p>
+  </div>
+ </div>
+</section>
+
+<section id="aqlnafs">
+ <div class="section-no">03 · Aql & Nafs</div>
+ <h2>Qui parle en toi maintenant&nbsp;?</h2>
+ <p class="lead">Pas un diagnostic. Une pause pour distinguer la voix qui veut comprendre de celle qui veut sentir, puis chercher un accord entre les deux.</p>
+ <div class="panel" style="margin-top:30px">
+  <div class="choice" id="innerChoice">
+   <button data-choice="aql"><strong>AQL</strong><span>Je veux comprendre avant d’avancer.</span></button>
+   <button data-choice="nafs"><strong>NAFS</strong><span>Je veux vivre, sentir, aller vers l’intensité.</span></button>
+  </div>
+  <div id="choiceReply" class="lead" style="margin-top:18px">Choisis la voix qui semble la plus forte aujourd’hui.</div>
+ </div>
+</section>
+
+<section id="caverne">
+ <div class="section-no">04 · La Caverne et les Ombres</div>
+ <h2>Et si ce n’était qu’une ombre&nbsp;?</h2>
+ <p class="lead">Le lecteur rencontre une idée, une peur ou une habitude qu’il prend peut-être pour une vérité, puis choisit symboliquement de se retourner vers la lumière.</p>
+ <div class="cave" id="cave">
+  <div class="cave-shadow"></div>
+  <div class="cave-content">
+   <div class="cave-light"></div>
+   <div class="cave-text">
+    <div id="cavePrompt" style="font-family:Georgia,serif;font-size:1.65rem;margin-bottom:18px">Quelle ombre prends-tu encore pour une vérité&nbsp;?</div>
+    <button class="cta" id="turnBtn">Me retourner vers la lumière</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="panthere">
+ <div class="section-no">05 · Le Gardien</div>
+ <h2>La Panthère.</h2>
+ <p class="lead">Elle n’est pas un oracle. Elle ne prédit rien. Elle incarne ici une présence silencieuse : maîtrise, protection et courage dans l’obscurité.</p>
+ <div class="guardian" id="guardian">
+  <div class="eyes"><div class="eye"></div><div class="eye" style="transform:scaleX(-1)"></div></div>
+  <div class="guardian-copy">
+   <div class="section-no">Présence</div>
+   <h3 id="guardianLine">Elle est là.</h3>
+   <p id="guardianSub">Touchez pour révéler un message du voyage.</p>
+   <button class="cta" id="guardianBtn">Révéler</button>
+  </div>
+ </div>
+</section>
+
+<section id="cards">
+ <div class="section-no">06 · Carte de Lumière</div>
+ <h2>De quoi as-tu besoin aujourd’hui&nbsp;?</h2>
+ <p class="lead">Choisissez sans calculer. La carte n’est pas une prédiction : c’est une invitation à réfléchir à un mot pendant quelques instants.</p>
+ <div class="cards">
+  <div class="card"><div class="card-in"><div class="face front">✦</div><div class="face back"><div><strong>PRÉSENCE</strong><p>Ralentis assez pour entendre ce que le bruit recouvre.</p></div></div></div></div>
+  <div class="card"><div class="card-in"><div class="face front">◉</div><div class="face back"><div><strong>COURAGE</strong><p>La peur peut rester. Toi aussi. Fais seulement le prochain pas.</p></div></div></div></div>
+  <div class="card"><div class="card-in"><div class="face front">△</div><div class="face back"><div><strong>CONFIANCE</strong><p>Tu n’as pas besoin de voir tout le chemin pour continuer.</p></div></div></div></div>
+ </div>
+</section>
+
+<section id="chapter51">
+ <div class="section-no">07 · Le chapitre caché</div>
+ <h2>CHAPITRE LI — TOI.</h2>
+ <p class="lead">Jusqu’ici, tu lisais un voyage. Maintenant commence le tien. Le cinquante-et-unième chapitre appartient au lecteur.</p>
+ <div class="secret">
+  <p style="font-family:Georgia,serif;font-size:1.5rem">Écris la première phrase de ton voyage.</p>
+  <input id="firstLine" type="text" placeholder="Aujourd’hui, je…">
+  <div style="margin-top:16px"><button class="cta" id="chapterBtn">Commencer mon chapitre</button></div>
+  <p class="micro" id="chapterMsg" style="margin-top:18px">La phrase reste sur votre appareil.</p>
+  <div class="final-card" id="finalCard">
+   <div><div class="mini-title">LUCE · MON CHAPITRE LI</div><strong>TOI</strong></div>
+   <blockquote id="finalQuote"></blockquote>
+   <div style="display:flex;justify-content:space-between;gap:10px;align-items:end"><span style="font-family:Georgia,serif">Domenico Vitale · LUCE</span><span style="color:#8b8378">✦</span></div>
+  </div>
+  <div id="shareActions" style="display:none;margin-top:20px;gap:10px;justify-content:center;flex-wrap:wrap">
+   <button class="cta" id="shareBtn">Partager ma phrase</button>
+   <button class="cta" id="copyBtn">Copier</button>
+  </div>
+ </div>
+</section>
+
+<section id="worldlight">
+ <div class="section-no">08 · Bientôt</div>
+ <h2>THE WORLD OF LIGHT.</h2>
+ <p class="lead">La prochaine étape sera un ciel collectif : chaque lecteur pourra laisser un mot — paix, courage, amour, espoir — qui deviendra un point lumineux anonyme visible par les autres lecteurs du monde. Cette version prépare l’expérience sans collecter de données.</p>
+</section>
+
+<div class="footer">LUCE — L’Éveil de l’Âme · Domenico Vitale · Living Book v0.2<br><span style="color:#58534c">Expérience conçue pour mobile · sans compte · sans traçage dans ce prototype</span></div>
+</main>
+
+<script>
+(function(){
+ const $=function(s){return document.querySelector(s)}, $$=function(s){return Array.from(document.querySelectorAll(s))};
+ const store=function(k,v){try{localStorage.setItem(k,v)}catch(e){}};
+ const load=function(k){try{return localStorage.getItem(k)||''}catch(e){return ''}};
+
+ // Intro + procedural ambient sound
+ var ctx=null, gain=null, osc1=null, osc2=null, audioOn=false;
+ function startAudio(){
+  if(audioOn)return;
+  try{
+   ctx=new (window.AudioContext||window.webkitAudioContext)();
+   gain=ctx.createGain(); gain.gain.value=.035; gain.connect(ctx.destination);
+   osc1=ctx.createOscillator(); osc2=ctx.createOscillator();
+   osc1.type='sine'; osc2.type='sine'; osc1.frequency.value=110; osc2.frequency.value=164.81;
+   var g1=ctx.createGain(),g2=ctx.createGain(); g1.gain.value=.5;g2.gain.value=.22;
+   osc1.connect(g1).connect(gain);osc2.connect(g2).connect(gain);osc1.start();osc2.start();audioOn=true;$('#audioToggle').textContent='♪';
+  }catch(e){}
+ }
+ function stopAudio(){
+  if(!audioOn)return;
+  try{gain.gain.setTargetAtTime(0,ctx.currentTime,.08);setTimeout(function(){ctx.close()},250)}catch(e){}
+  audioOn=false;$('#audioToggle').textContent='♫';
+ }
+ $('#enterLight').addEventListener('click',function(){startAudio();store('luce_entered','1');$('#intro').classList.add('out')});
+ $('#audioToggle').addEventListener('click',function(){audioOn?stopAudio():startAudio()});
+
+ // Scroll progress
+ function scrollProgress(){
+  var max=document.documentElement.scrollHeight-innerHeight;
+  var pct=max>0?(scrollY/max)*100:0;$('#progress').style.width=pct+'%';
+ }
+ addEventListener('scroll',scrollProgress,{passive:true});scrollProgress();
+
+ // Journey state
+ var state={desert:false,choice:false,cave:false,guardian:false,card:false,chapter:false};
+ try{state=Object.assign(state,JSON.parse(load('luce_state')||'{}'))}catch(e){}
+ function saveState(){store('luce_state',JSON.stringify(state));renderJourney()}
+ function renderJourney(){
+  var n=[state.desert,state.choice,state.cave,state.guardian,state.chapter].filter(Boolean).length;
+  $$('.journey-step').forEach(function(el,i){el.classList.toggle('on',i<=Math.min(4,n))});
+  $$('.world').forEach(function(el,i){el.classList.toggle('done',i<Math.min(5,n))});
+ }
+ renderJourney();
+
+ // World navigation
+ var anchors=['#desert','#aqlnafs','#caverne','#panthere','#chapter51'];
+ $$('.world').forEach(function(w){w.addEventListener('click',function(){var i=Number(w.getAttribute('data-world'));document.querySelector(anchors[i]).scrollIntoView({behavior:'smooth'})})});
+
+ // Breath
+ var breathTimer=null;
+ $('#breathOrb').addEventListener('click',function(){
+  clearTimeout(breathTimer);this.classList.add('running');
+  var seq=[['INSPIRE',4000],['GARDE',2000],['EXPIRE',6000]],i=0;
+  function run(){ $('#breathLabel').textContent=seq[i][0]; breathTimer=setTimeout(function(){i=(i+1)%seq.length;run()},seq[i][1]) } run();
+  state.desert=true;saveState();
+ });
+ $('#release').value=load('luce_release');
+ $('#releaseBtn').addEventListener('click',function(){
+  var v=$('#release').value.trim();store('luce_release',v);state.desert=true;saveState();
+  $('#releaseMsg').textContent=v?'Déposé. Tu peux continuer plus léger.':'Le silence peut aussi rester vide.';
+ });
+
+ // Aql / Nafs
+ $$('#innerChoice button').forEach(function(b){b.addEventListener('click',function(){
+  $$('#innerChoice button').forEach(function(x){x.classList.remove('active')});b.classList.add('active');
+  var c=b.getAttribute('data-choice');store('luce_choice',c);state.choice=true;saveState();
+  $('#choiceReply').textContent=c==='aql'?'Laisse la raison éclairer le chemin sans étouffer la vie. Maintenant demande-toi : qu’est-ce que ton désir essaie aussi de te dire ?':'Laisse le désir te rappeler que tu es vivant sans lui donner tout le volant. Maintenant demande-toi : qu’est-ce que ta raison essaie de protéger ?';
+ })});
+ var oldChoice=load('luce_choice'); if(oldChoice){var btn=document.querySelector('[data-choice="'+oldChoice+'"]');if(btn)btn.click()}
+
+ // Cave
+ $('#turnBtn').addEventListener('click',function(){
+  $('#cave').classList.toggle('open');state.cave=true;saveState();
+  $('#cavePrompt').textContent=$('#cave').classList.contains('open')?'Ce n’est peut-être pas le monde qui change. C’est ton regard qui s’ouvre.':'Quelle ombre prends-tu encore pour une vérité ?';
+  this.textContent=$('#cave').classList.contains('open')?'Revenir dans l’ombre':'Me retourner vers la lumière';
+ });
+
+ // Guardian
+ var gm=[
+  ['Continue.','Tu n’as pas besoin de tout comprendre maintenant.'],
+  ['Tu n’es pas seul.','La force n’a pas toujours besoin de bruit.'],
+  ['Reste présent.','L’obscurité n’annule pas ta lumière.'],
+  ['Avance doucement.','La maîtrise peut être plus forte que l’urgence.']
+ ],gi=0;
+ $('#guardianBtn').addEventListener('click',function(){
+  $('#guardian').classList.add('awake');var m=gm[gi%gm.length];gi++;
+  $('#guardianLine').textContent=m[0];$('#guardianSub').textContent=m[1];state.guardian=true;saveState();
+ });
+
+ // Cards
+ $$('.card').forEach(function(c){c.addEventListener('click',function(){
+  $$('.card').forEach(function(x){if(x!==c)x.classList.remove('flip')});c.classList.toggle('flip');state.card=true;saveState();
+ })});
+
+ // Chapter 51 + share
+ $('#firstLine').value=load('luce_first_line');
+ function showChapter(v){
+  if(!v)return;$('#finalQuote').textContent='« '+v+' »';$('#finalCard').classList.add('show');$('#shareActions').style.display='flex';
+ }
+ showChapter($('#firstLine').value.trim());
+ $('#chapterBtn').addEventListener('click',function(){
+  var v=$('#firstLine').value.trim();store('luce_first_line',v);
+  if(v){state.chapter=true;saveState();showChapter(v);$('#chapterMsg').textContent='Ton chapitre a commencé.'}
+  else{$('#chapterMsg').textContent='Le chapitre attend ta première phrase.'}
+ });
+ $('#copyBtn').addEventListener('click',async function(){
+  var v=$('#firstLine').value.trim();var t='LUCE — Chapitre LI · TOI\n« '+v+' »';
+  try{await navigator.clipboard.writeText(t);this.textContent='Copié ✓';setTimeout(()=>this.textContent='Copier',1300)}catch(e){}
+ });
+ $('#shareBtn').addEventListener('click',async function(){
+  var v=$('#firstLine').value.trim();var t='LUCE — Chapitre LI · TOI\n« '+v+' »\nLa lumière que tu cherches est déjà en toi.';
+  if(navigator.share){try{await navigator.share({title:'LUCE — Mon Chapitre LI',text:t})}catch(e){}}
+  else{try{await navigator.clipboard.writeText(t);this.textContent='Copié ✓'}catch(e){}}
+ });
+})();
+</script>
+</body>
+</html>
