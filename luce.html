@@ -1,1 +1,465 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=/luce/"><title>LUCE</title><script>location.replace('/luce/'+location.search+location.hash)</script></head><body style="margin:0;background:#050505;color:#eee;font-family:system-ui;display:grid;place-items:center;min-height:100vh"><a href="/luce/" style="color:#ead6a5">Entrer dans LUCE →</a></body></html>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/luce/manifest.webmanifest">
+<link rel="icon" href="/luce/icon.svg" type="image/svg+xml">
+<title>LUCE — L’Expérience</title>
+<meta name="description" content="LUCE — L’Éveil de l’Âme. Un livre vivant, public et interactif de Domenico Vitale.">
+<style>
+:root{
+  --bg:#050505;--ink:#f3eddf;--muted:#9a9285;--gold:#d8b56d;--gold2:#f2dda8;
+  --line:rgba(255,255,255,.11);--glass:rgba(255,255,255,.035);--soft:rgba(216,181,109,.08);
+  --safe-b:max(18px,env(safe-area-inset-bottom));
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;background:
+ radial-gradient(circle at 50% -10%,rgba(216,181,109,.13),transparent 35%),
+ radial-gradient(circle at 15% 42%,rgba(255,255,255,.025),transparent 24%),
+ #050505;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:
+ radial-gradient(circle at 10% 20%,rgba(255,255,255,.04),transparent 18%),
+ radial-gradient(circle at 88% 62%,rgba(216,181,109,.045),transparent 22%)}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{width:min(1160px,92vw);margin:auto}
+.progress{position:fixed;z-index:90;left:0;top:0;height:2px;width:0;background:linear-gradient(90deg,#8d6022,var(--gold2));box-shadow:0 0 20px rgba(216,181,109,.35)}
+.nav{position:fixed;z-index:80;left:50%;bottom:var(--safe-b);transform:translateX(-50%);display:flex;gap:6px;padding:6px;border:1px solid var(--line);background:rgba(5,5,5,.78);backdrop-filter:blur(18px);border-radius:999px;box-shadow:0 16px 50px rgba(0,0,0,.35)}
+.nav a,.nav button{border:0;background:transparent;border-radius:999px;padding:11px 13px;font-size:.72rem;color:#a79f92;white-space:nowrap}
+.nav a:hover,.nav button:hover{background:rgba(255,255,255,.05);color:var(--ink)}
+.brand-mini{font-family:Georgia,serif;letter-spacing:.12em;color:#ead6a5!important}
+.intro{position:fixed;z-index:1000;inset:0;display:grid;place-items:center;text-align:center;background:#020202;transition:opacity 1.2s ease,visibility 1.2s ease}
+.intro.out{opacity:0;visibility:hidden}
+.intro .line{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.25rem,5vw,2rem);line-height:1.35}
+.intro .sub{margin-top:12px;color:#625d56;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}
+.light{display:block;margin:34px auto 24px;width:54px;height:54px;border:0;border-radius:50%;background:radial-gradient(circle at 42% 40%,#fff9e6 0 6%,#f3d48d 21%,#a56d1d 48%,rgba(165,109,29,.03) 72%);box-shadow:0 0 28px rgba(255,229,169,.65),0 0 120px rgba(216,181,109,.26);animation:breathe 4.8s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.84)}50%{transform:scale(1.15);box-shadow:0 0 42px rgba(255,234,183,.85),0 0 150px rgba(216,181,109,.34)}}
+.hero{min-height:100svh;display:grid;place-items:center;text-align:center;padding:86px 0 100px;position:relative}
+.kicker{font-size:.68rem;color:var(--muted);letter-spacing:.28em;text-transform:uppercase}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(5rem,21vw,13rem);line-height:.78;letter-spacing:-.055em;margin:.22em 0 .1em}
+.hero-sub{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.3rem,4vw,2.2rem);color:#d9cebb}
+.quote{font-family:Georgia,"Times New Roman",serif;font-style:italic;color:#beb4a4;max-width:730px;margin:30px auto 34px;font-size:clamp(1rem,3vw,1.22rem)}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.65rem;min-height:48px;padding:13px 20px;border-radius:999px;border:1px solid rgba(216,181,109,.42);background:rgba(216,181,109,.055);letter-spacing:.12em;text-transform:uppercase;font-size:.7rem}
+.btn:hover{background:rgba(216,181,109,.12)}
+.btn.secondary{border-color:var(--line);background:rgba(255,255,255,.025)}
+.scroll{position:absolute;bottom:74px;color:#5f5a53;font-size:.68rem;text-transform:uppercase;letter-spacing:.15em}
+section{padding:92px 0;border-top:1px solid var(--line);scroll-margin-top:20px}
+.no{color:var(--gold);font-size:.67rem;letter-spacing:.22em;text-transform:uppercase}
+h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(2.7rem,8vw,5.9rem);line-height:.96;letter-spacing:-.035em;margin:.12em 0 .33em}
+h3{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+.lead{max-width:780px;color:#c2baad;line-height:1.72;font-size:1.02rem}
+.feature-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:36px}
+.feature{border:1px solid var(--line);border-radius:28px;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.014));min-height:330px;position:relative;overflow:hidden}
+.feature.big{min-height:470px}
+.feature::after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-125px;top:-130px;background:radial-gradient(circle,rgba(216,181,109,.15),transparent 65%)}
+.feature .tag{font-size:.67rem;color:#8c8478;letter-spacing:.16em;text-transform:uppercase}
+.feature h3{font-size:clamp(2rem,5vw,3.5rem);line-height:1.02;margin:.55em 0 .35em}
+.feature p{color:#9e9689;line-height:1.65;max-width:560px}
+.feature .bottom{position:absolute;left:28px;right:28px;bottom:26px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.pill{font-size:.7rem;color:#9d9588;border:1px solid var(--line);border-radius:999px;padding:7px 10px}
+.worlds{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:38px}
+.world{min-height:255px;border:1px solid var(--line);border-radius:23px;padding:19px;background:linear-gradient(180deg,rgba(255,255,255,.042),rgba(255,255,255,.012));display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;transition:.25s ease}
+.world:hover{transform:translateY(-3px);border-color:rgba(216,181,109,.36)}
+.world .roman{font-family:Georgia,serif;color:#6d675e;font-size:1.3rem}
+.world h3{font-size:1.2rem;margin:0}
+.world p{font-size:.82rem;color:#858077;line-height:1.5;margin:.45rem 0 0}
+.world.done{border-color:rgba(216,181,109,.38)}
+.world.done::before{content:"✦";position:absolute;right:14px;bottom:14px;color:var(--gold)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+.panel{border:1px solid var(--line);border-radius:28px;background:var(--glass);padding:26px;min-height:370px}
+.center{display:grid;place-items:center}
+.breath{width:164px;height:164px;border:0;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#fff7e4 0 5%,#edd095 21%,rgba(216,181,109,.31) 43%,rgba(216,181,109,.05) 68%,transparent 73%);box-shadow:0 0 54px rgba(216,181,109,.17)}
+.breath.run{animation:cycle 12s ease-in-out infinite}
+@keyframes cycle{0%,100%{transform:scale(.75)}33%{transform:scale(1.2)}50%{transform:scale(1.2)}}
+.breath span{color:#493619;font-weight:800;font-size:.7rem;letter-spacing:.15em}
+.prompt{display:flex;flex-direction:column;justify-content:center}
+.prompt label{font-family:Georgia,serif;font-size:1.75rem;line-height:1.18}
+textarea,input[type=text]{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.028);border-radius:17px;padding:15px 16px;outline:none}
+textarea{min-height:125px;margin:18px 0 12px;resize:vertical}
+textarea:focus,input:focus{border-color:rgba(216,181,109,.5)}
+.micro{font-size:.78rem;line-height:1.5;color:#777169}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px}
+.choice button{min-height:120px;text-align:left;border:1px solid var(--line);border-radius:20px;background:#0b0b0b;padding:18px}
+.choice button strong{display:block;font-family:Georgia,serif;font-size:1.4rem;font-weight:400;margin-bottom:7px}
+.choice button span{color:#8e877d;font-size:.82rem}
+.choice button.on{border-color:rgba(216,181,109,.52);background:rgba(216,181,109,.07)}
+.cave{min-height:470px;border:1px solid var(--line);border-radius:30px;margin-top:32px;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 118%,rgba(216,181,109,.32),transparent 30%),#050505}
+.cave::before,.cave::after{content:"";position:absolute;width:60%;height:70%;top:15%;border-radius:50%;filter:blur(20px);background:rgba(255,255,255,.018);animation:drift 9s ease-in-out infinite alternate}
+.cave::before{left:-25%}.cave::after{right:-25%;animation-direction:alternate-reverse}
+@keyframes drift{from{transform:translateY(-3%) scale(1.02)}to{transform:translateY(5%) scale(1.08)}}
+.cave-inner{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px}
+.cave-light{width:18px;height:18px;border-radius:50%;background:#ead29a;box-shadow:0 0 24px #ead29a,0 0 95px rgba(216,181,109,.5);transition:transform 1.6s ease,box-shadow 1.6s ease}
+.cave.open .cave-light{transform:scale(17);box-shadow:0 0 70px #f5e3ba,0 0 210px rgba(245,227,186,.72)}
+.cave-copy{position:absolute;bottom:32px;padding:0 24px;max-width:680px}
+.cave.open .cave-copy{color:#151109;transition:color .9s ease .55s}
+.guardian{min-height:510px;border:1px solid var(--line);border-radius:30px;margin-top:32px;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 45%,#151515,#040404 62%)}
+.eyes{display:flex;gap:42px;opacity:.1;transition:opacity 1.2s ease}
+.eye{width:38px;height:13px;border-radius:80% 20% 80% 20%;background:radial-gradient(circle,#f0d58f 0 14%,#75541d 20% 38%,#090909 41%);box-shadow:0 0 24px rgba(216,181,109,.3)}
+.guardian.awake .eyes{opacity:1}
+.guardian-copy{position:absolute;bottom:34px;text-align:center;padding:0 20px}
+.guardian-copy h3{font-size:2.35rem;margin:.2em 0}
+.guardian-copy p{color:#938c82;max-width:580px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.card{height:250px;perspective:900px}
+.card-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s}
+.card.flip .card-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--line);border-radius:24px;display:grid;place-items:center;padding:24px;background:linear-gradient(145deg,#111,#090909)}
+.front{font-family:Georgia,serif;font-size:2.1rem;color:#cfc3b0}
+.back{transform:rotateY(180deg);text-align:center;background:radial-gradient(circle at top,rgba(216,181,109,.17),#090909 58%)}
+.back strong{font-family:Georgia,serif;font-weight:400;font-size:1.75rem;color:#ead9ad}
+.back p{color:#9a9389;line-height:1.55}
+.secret{border:1px dashed rgba(216,181,109,.38);border-radius:26px;padding:30px;text-align:center;margin-top:32px;background:radial-gradient(circle at 50% 0,rgba(216,181,109,.08),transparent 42%)}
+.final-card{display:none;margin:26px auto 0;width:min(100%,620px);aspect-ratio:4/5;border:1px solid rgba(216,181,109,.3);border-radius:28px;background:radial-gradient(circle at 50% 28%,rgba(216,181,109,.17),transparent 38%),#080808;padding:34px;flex-direction:column;justify-content:space-between;text-align:left}
+.final-card.show{display:flex}
+.final-card strong{font-family:Georgia,serif;font-size:clamp(2.5rem,8vw,4.4rem);font-weight:400}
+.final-card blockquote{font-family:Georgia,serif;font-style:italic;color:#c7bcaa;margin:0;font-size:1.05rem;line-height:1.55}
+.world-light{margin-top:34px;border:1px solid var(--line);border-radius:30px;overflow:hidden;background:#020202;position:relative}
+.sky{width:100%;height:520px;display:block}
+.sky-ui{position:absolute;inset:0;pointer-events:none;padding:26px;display:flex;flex-direction:column;justify-content:space-between}
+.sky-top{display:flex;justify-content:space-between;gap:14px}
+.sky-count{font-family:Georgia,serif;font-size:1.8rem}
+.sky-count small{display:block;font-family:Inter,sans-serif;font-size:.7rem;letter-spacing:.14em;color:#777069;text-transform:uppercase}
+.sky-message{align-self:center;text-align:center;max-width:640px}
+.sky-message strong{font-family:Georgia,serif;font-size:clamp(1.5rem,4vw,2.4rem);font-weight:400}
+.light-form{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.light-form button{pointer-events:auto;border:1px solid var(--line);background:rgba(5,5,5,.74);border-radius:999px;padding:10px 13px;font-size:.7rem;color:#aaa196}
+.light-form button:hover{border-color:rgba(216,181,109,.48);color:#ead7aa}
+.light-form button.selected{background:rgba(216,181,109,.13);border-color:rgba(216,181,109,.55);color:#f2dfb2}
+.install-box{display:none;margin-top:22px}
+.install-box.show{display:block}
+.footer{padding:78px 0 120px;color:#6f6960;text-align:center;font-size:.78rem}
+@media(max-width:900px){
+ .feature-grid,.grid2{grid-template-columns:1fr}
+ .feature.big{min-height:410px}
+ .worlds{grid-template-columns:1fr 1fr}
+ .cards{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+ .wrap{width:min(94vw,1160px)}
+ section{padding:72px 0}
+ .worlds{grid-template-columns:1fr}
+ .nav a:nth-child(3){display:none}
+ .feature{padding:22px}.feature .bottom{left:22px;right:22px}
+ .choice{grid-template-columns:1fr}
+ .sky{height:560px}
+ .sky-ui{padding:20px}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="intro" id="intro">
+ <div>
+  <div class="line">Tout commence dans le silence.</div>
+  <button class="light" id="enter" aria-label="Entrer dans LUCE"></button>
+  <div class="sub">Touchez la lumière</div>
+ </div>
+</div>
+
+<nav class="nav" aria-label="Navigation LUCE">
+ <a class="brand-mini" href="#home">LUCE</a>
+ <a href="/luce/book.html">Lire</a>
+ <a href="/luce/film.html">Film</a>
+ <a href="#experience">Vivre</a>
+ <button id="soundBtn" aria-label="Ambiance sonore">♫</button>
+</nav>
+
+<main class="wrap">
+<section class="hero" id="home" style="border-top:0">
+ <div>
+  <div class="kicker">Domenico Vitale · Living Book</div>
+  <h1>LUCE</h1>
+  <div class="hero-sub">L’Éveil de l’Âme</div>
+  <p class="quote">« La lumière que tu cherches est déjà en toi. »</p>
+  <div class="actions">
+   <a class="btn" href="/luce/book.html">Lire le livre <span>→</span></a>
+   <a class="btn secondary" href="/luce/film.html">Voir le film expérimental</a>
+  </div>
+ </div>
+ <div class="scroll">Descendez pour entrer dans le voyage</div>
+</section>
+
+<section>
+ <div class="no">01 · Le livre vivant</div>
+ <h2>Lire. Écouter. Ressentir. Répondre.</h2>
+ <p class="lead">LUCE devient un livre public qui ne se contente pas d’afficher du texte. Le lecteur peut parcourir les 50 chapitres, écouter le texte avec la voix de son appareil, enregistrer sa progression, écrire des notes privées et entrer dans des expériences inspirées du récit.</p>
+ <div class="feature-grid">
+  <a class="feature big" href="/luce/book.html">
+   <div class="tag">Livre complet · 50 chapitres</div>
+   <h3>La bibliothèque LUCE</h3>
+   <p>Une lecture mobile sans distraction, avec sommaire, recherche, taille du texte, progression, favoris, notes privées et lecture à voix haute.</p>
+   <div class="bottom"><span class="pill">PUBLIC · GRATUIT</span><span>Ouvrir →</span></div>
+  </a>
+  <a class="feature" href="/luce/film.html">
+   <div class="tag">Film expérimental · gratuit</div>
+   <h3>LE RÉVEIL</h3>
+   <p>Un mini-film animé dans le navigateur : aube, désert, forêt, panthère, lumière. Une première traduction visuelle du livre.</p>
+   <div class="bottom"><span class="pill">ANIMÉ</span><span>Regarder →</span></div>
+  </a>
+ </div>\n <div class="actions" style="margin-top:18px;justify-content:flex-start"><a class="btn secondary" href="/luce/journal.html">Ouvrir mon voyage privé →</a></div>\n <div class="install-box" id="installBox"><button class="btn" id="installBtn">Ajouter LUCE à mon écran d’accueil</button></div>
+</section>
+
+<section>
+ <div class="no">02 · Le chemin</div>
+ <h2>Cinq mondes.<br>Un seul voyage.</h2>
+ <p class="lead">La structure du livre devient une carte. Chaque étape s’allume à mesure que le lecteur vit les expériences.</p>
+ <div class="worlds">
+  <a class="world" data-world="0" href="#desert"><span class="roman">I</span><div><h3>LE RÉVEIL</h3><p>Silence · souffle · regard intérieur</p></div></a>
+  <a class="world" data-world="1" href="#aql"><span class="roman">II</span><div><h3>LES OMBRES</h3><p>Désir · caverne · choix</p></div></a>
+  <a class="world" data-world="2" href="#panthere"><span class="roman">III</span><div><h3>LE VOYAGE</h3><p>Sens · symbole · rencontre</p></div></a>
+  <a class="world" data-world="3" href="#cards"><span class="roman">IV</span><div><h3>L’ASCENSION</h3><p>Corps · vibration · gratitude</p></div></a>
+  <a class="world" data-world="4" href="#chapter51"><span class="roman">V</span><div><h3>LA RÉVÉLATION</h3><p>Vérité · mémoire · renaissance</p></div></a>
+ </div>
+</section>
+
+<section id="experience">
+ <div class="no">03 · Expériences</div>
+ <h2>Le livre te répond par le silence.</h2>
+ <p class="lead">Ces expériences ne prétendent ni diagnostiquer ni prédire. Elles transforment simplement certains thèmes du livre en gestes : respirer, choisir, écrire, regarder autrement.</p>
+</section>
+
+<section id="desert">
+ <div class="no">03.1 · Le Souffle du Désert</div>
+ <h2>Respire avant de chercher.</h2>
+ <div class="grid2">
+  <div class="panel center">
+   <div style="text-align:center">
+    <button class="breath" id="breath"><span id="breathLabel">TOUCHER</span></button>
+    <p class="micro" style="margin-top:24px">Inspirer 4 s · garder 2 s · expirer 6 s</p>
+   </div>
+  </div>
+  <div class="panel prompt">
+   <label for="release">Qu’est-ce que tu veux laisser dans le désert&nbsp;?</label>
+   <textarea id="release" placeholder="Écris ici…"></textarea>
+   <button class="btn" id="releaseBtn">Déposer dans le silence</button>
+   <p class="micro" id="releaseMsg">Cette réponse reste uniquement sur ton appareil.</p>
+  </div>
+ </div>
+</section>
+
+<section id="aql">
+ <div class="no">03.2 · Aql & Nafs</div>
+ <h2>Qui parle en toi maintenant&nbsp;?</h2>
+ <p class="lead">Une pause pour reconnaître la voix qui veut comprendre et celle qui veut vivre, puis chercher l’accord entre les deux.</p>
+ <div class="panel" style="margin-top:30px">
+  <div class="choice" id="choice">
+   <button data-c="aql"><strong>AQL</strong><span>Je veux comprendre avant d’avancer.</span></button>
+   <button data-c="nafs"><strong>NAFS</strong><span>Je veux sentir, vivre, aller vers l’intensité.</span></button>
+  </div>
+  <p class="lead" id="choiceText">Choisis simplement la voix la plus forte aujourd’hui.</p>
+ </div>
+</section>
+
+<section id="caverne">
+ <div class="no">03.3 · La Caverne et les Ombres</div>
+ <h2>Et si ce n’était qu’une ombre&nbsp;?</h2>
+ <div class="cave" id="cave">
+  <div class="cave-inner">
+   <div class="cave-light"></div>
+   <div class="cave-copy">
+    <div id="caveText" style="font-family:Georgia,serif;font-size:1.65rem;margin-bottom:18px">Quelle ombre prends-tu encore pour une vérité&nbsp;?</div>
+    <button class="btn" id="turnBtn">Me retourner vers la lumière</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="panthere">
+ <div class="no">03.4 · Le Gardien</div>
+ <h2>La Panthère.</h2>
+ <p class="lead">Elle ne prédit rien. Elle incarne ici la maîtrise, la protection et cette force silencieuse qui reste présente dans l’obscurité.</p>
+ <div class="guardian" id="guardian">
+  <div class="eyes"><div class="eye"></div><div class="eye" style="transform:scaleX(-1)"></div></div>
+  <div class="guardian-copy">
+   <div class="no">Présence</div>
+   <h3 id="gLine">Elle est là.</h3>
+   <p id="gSub">Touchez pour révéler un message du voyage.</p>
+   <button class="btn" id="gBtn">Révéler</button>
+  </div>
+ </div>
+</section>
+
+<section id="cards">
+ <div class="no">03.5 · Carte de Lumière</div>
+ <h2>De quoi as-tu besoin aujourd’hui&nbsp;?</h2>
+ <p class="lead">Choisis sans calculer. La carte est une invitation à rester quelques instants avec un mot.</p>
+ <div class="cards">
+  <div class="card"><div class="card-in"><div class="face front">✦</div><div class="face back"><div><strong>PRÉSENCE</strong><p>Ralentis assez pour entendre ce que le bruit recouvre.</p></div></div></div></div>
+  <div class="card"><div class="card-in"><div class="face front">◉</div><div class="face back"><div><strong>COURAGE</strong><p>La peur peut rester. Toi aussi. Fais seulement le prochain pas.</p></div></div></div></div>
+  <div class="card"><div class="card-in"><div class="face front">△</div><div class="face back"><div><strong>CONFIANCE</strong><p>Tu n’as pas besoin de voir tout le chemin pour continuer.</p></div></div></div></div>
+ </div>
+</section>
+
+<section id="chapter51">
+ <div class="no">04 · Le chapitre caché</div>
+ <h2>CHAPITRE LI — TOI.</h2>
+ <p class="lead">Jusqu’ici, tu lisais un voyage. Maintenant commence le tien. Le cinquante-et-unième chapitre appartient au lecteur.</p>
+ <div class="secret">
+  <p style="font-family:Georgia,serif;font-size:1.5rem">Écris la première phrase de ton voyage.</p>
+  <input type="text" id="firstLine" placeholder="Aujourd’hui, je…">
+  <div style="margin-top:16px"><button class="btn" id="chapterBtn">Commencer mon chapitre</button></div>
+  <p class="micro" id="chapterMsg">Ta phrase reste sur cet appareil.</p>
+  <div class="final-card" id="finalCard">
+   <div><div class="kicker">LUCE · MON CHAPITRE LI</div><strong>TOI</strong></div>
+   <blockquote id="finalQuote"></blockquote>
+   <div style="display:flex;justify-content:space-between"><span style="font-family:Georgia,serif">Domenico Vitale · LUCE</span><span>✦</span></div>
+  </div>
+  <div class="actions" id="shareActions" style="display:none;margin-top:18px">
+   <button class="btn" id="shareBtn">Partager</button>
+   <button class="btn secondary" id="copyBtn">Copier</button>
+  </div>
+ </div>
+</section>
+
+<section id="world">
+ <div class="no">05 · The World of Light</div>
+ <h2>Une personne.<br>Une lumière.</h2>
+ <p class="lead">Choisis un mot. S’il est possible de connecter le ciel collectif, ta lumière rejoint anonymement celles des autres lecteurs. Sinon, elle naît localement sur ton appareil : l’expérience reste gratuite dans les deux cas.</p>
+ <div class="world-light">
+  <canvas class="sky" id="sky"></canvas>
+  <div class="sky-ui">
+   <div class="sky-top">
+    <div class="sky-count"><span id="lightCount">0</span><small>lumières visibles</small></div>
+    <div class="micro" id="skyMode">Connexion du ciel…</div>
+   </div>
+   <div class="sky-message">
+    <strong id="skyMessage">Quelle lumière veux-tu laisser au monde&nbsp;?</strong>
+    <div class="light-form" id="lightForm"></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<div class="footer">
+ LUCE — L’Éveil de l’Âme · Domenico Vitale<br>
+ <span style="color:#514d47">Livre vivant · lecture publique · expériences privées par défaut</span>
+</div>
+</main>
+
+<script>
+(function(){
+ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+ const save=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}, load=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}};
+ const state=(()=>{try{return Object.assign({desert:false,aql:false,cave:false,guardian:false,card:false,chapter:false},JSON.parse(load('luce_state')||'{}'))}catch(e){return {}}})();
+ const persist=()=>{save('luce_state',JSON.stringify(state));renderWorlds()};
+ function renderWorlds(){
+  const n=[state.desert,state.aql,state.guardian,state.card,state.chapter].filter(Boolean).length;
+  $$('.world').forEach((w,i)=>w.classList.toggle('done',i<n));
+ }
+ renderWorlds();
+
+ // Intro & procedural ambience
+ let ctx=null,gain=null,oscs=[],sound=false;
+ function soundOn(){
+  if(sound)return;
+  try{
+   ctx=new (window.AudioContext||window.webkitAudioContext)();
+   gain=ctx.createGain();gain.gain.value=.026;gain.connect(ctx.destination);
+   [110,164.81,220].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.value=[.45,.18,.07][i];o.connect(g).connect(gain);o.start();oscs.push(o)});
+   sound=true;$('#soundBtn').textContent='♪';
+  }catch(e){}
+ }
+ function soundOff(){if(!sound)return;try{gain.gain.setTargetAtTime(0,ctx.currentTime,.06);setTimeout(()=>ctx.close(),200)}catch(e){}sound=false;$('#soundBtn').textContent='♫'}
+ $('#enter').onclick=()=>{soundOn();$('#intro').classList.add('out');save('luce_seen','1')};
+ $('#soundBtn').onclick=()=>sound?soundOff():soundOn();
+
+ // Scroll
+ addEventListener('scroll',()=>{const m=document.documentElement.scrollHeight-innerHeight;$('#progress').style.width=(m>0?scrollY/m*100:0)+'%'},{passive:true});
+
+ // PWA install
+ let deferred=null;
+ addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;$('#installBox').classList.add('show')});
+ $('#installBtn').onclick=async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice;deferred=null;$('#installBox').classList.remove('show')};
+ if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/luce/sw.js').catch(()=>{}));
+
+ // Breath
+ let timer=null;
+ $('#release').value=load('luce_release');
+ $('#breath').onclick=function(){
+  clearTimeout(timer);this.classList.add('run');state.desert=true;persist();
+  const seq=[['INSPIRE',4000],['GARDE',2000],['EXPIRE',6000]];let i=0;
+  const tick=()=>{$('#breathLabel').textContent=seq[i][0];timer=setTimeout(()=>{i=(i+1)%seq.length;tick()},seq[i][1])};tick();
+ };
+ $('#releaseBtn').onclick=()=>{const v=$('#release').value.trim();save('luce_release',v);state.desert=true;persist();$('#releaseMsg').textContent=v?'Déposé. Tu peux continuer plus léger.':'Le silence peut aussi rester vide.'};
+
+ // AQL/NAFS
+ $$('#choice button').forEach(b=>b.onclick=()=>{
+  $$('#choice button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const c=b.dataset.c;save('luce_choice',c);state.aql=true;persist();
+  $('#choiceText').textContent=c==='aql'?'Laisse la raison éclairer le chemin sans étouffer la vie. Qu’est-ce que ton désir essaie aussi de te dire ?':'Laisse le désir te rappeler que tu es vivant sans lui donner tout le volant. Qu’est-ce que ta raison essaie de protéger ?';
+ });
+ const c0=load('luce_choice');if(c0){const b=document.querySelector('[data-c="'+c0+'"]');if(b)b.click()}
+
+ // Cave
+ $('#turnBtn').onclick=function(){
+  $('#cave').classList.toggle('open');state.cave=true;persist();
+  const o=$('#cave').classList.contains('open');$('#caveText').textContent=o?'Ce n’est peut-être pas le monde qui change. C’est ton regard qui s’ouvre.':'Quelle ombre prends-tu encore pour une vérité ?';this.textContent=o?'Revenir dans l’ombre':'Me retourner vers la lumière';
+ };
+
+ // Panther
+ const gm=[['Continue.','Tu n’as pas besoin de tout comprendre maintenant.'],['Tu n’es pas seul.','La force n’a pas toujours besoin de bruit.'],['Reste présent.','L’obscurité n’annule pas ta lumière.'],['Avance doucement.','La maîtrise peut être plus forte que l’urgence.']];let gi=0;
+ $('#gBtn').onclick=()=>{$('#guardian').classList.add('awake');const m=gm[gi++%gm.length];$('#gLine').textContent=m[0];$('#gSub').textContent=m[1];state.guardian=true;persist()};
+
+ // Cards
+ $$('.card').forEach(c=>c.onclick=()=>{$$('.card').forEach(x=>{if(x!==c)x.classList.remove('flip')});c.classList.toggle('flip');state.card=true;persist()});
+
+ // Chapter 51
+ $('#firstLine').value=load('luce_first_line');
+ function chapterShow(v){if(!v)return;$('#finalQuote').textContent='« '+v+' »';$('#finalCard').classList.add('show');$('#shareActions').style.display='flex'}
+ chapterShow($('#firstLine').value.trim());
+ $('#chapterBtn').onclick=()=>{const v=$('#firstLine').value.trim();save('luce_first_line',v);if(v){state.chapter=true;persist();chapterShow(v);$('#chapterMsg').textContent='Ton chapitre a commencé.'}else $('#chapterMsg').textContent='Le chapitre attend ta première phrase.'};
+ $('#copyBtn').onclick=async function(){const v=$('#firstLine').value.trim(),t='LUCE — Chapitre LI · TOI\n« '+v+' »';try{await navigator.clipboard.writeText(t);this.textContent='Copié ✓';setTimeout(()=>this.textContent='Copier',1200)}catch(e){}};
+ $('#shareBtn').onclick=async()=>{const v=$('#firstLine').value.trim(),t='LUCE — Chapitre LI · TOI\n« '+v+' »\nLa lumière que tu cherches est déjà en toi.';if(navigator.share)try{await navigator.share({title:'LUCE — Mon Chapitre LI',text:t,url:location.href})}catch(e){}};
+
+ // World of Light
+ const allowed=['AMOUR','COURAGE','DOUCEUR','ESPOIR','GRATITUDE','LIBERTÉ','LUMIÈRE','PAIX','PARDON','PRÉSENCE','CONFIANCE'];
+ let lights=[],collective=false,selected='';
+ const form=$('#lightForm');
+ allowed.forEach(w=>{const b=document.createElement('button');b.textContent=w;b.onclick=()=>chooseLight(w,b);form.appendChild(b)});
+ function chooseLight(w,b){
+  selected=w;$$('#lightForm button').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');sendLight(w);
+ }
+ function seedLocal(){
+  let local=[];try{local=JSON.parse(load('luce_lights')||'[]')}catch(e){}
+  if(!local.length)local=[{word:'ESPOIR',ts:1},{word:'PAIX',ts:2},{word:'COURAGE',ts:3},{word:'AMOUR',ts:4}];
+  return local;
+ }
+ async function loadSky(){
+  try{
+   const r=await fetch('/api/luce-light',{cache:'no-store'});const d=await r.json();
+   collective=d.mode==='collective';lights=(d.lights&&d.lights.length?d.lights:seedLocal());
+   $('#skyMode').textContent=collective?'Ciel collectif · anonyme':'Ciel local · privé';
+  }catch(e){collective=false;lights=seedLocal();$('#skyMode').textContent='Ciel local · privé'}
+  drawSky();$('#lightCount').textContent=lights.length;
+ }
+ async function sendLight(w){
+  const item={word:w,ts:Date.now()};let done=false;
+  if(collective){
+    try{const r=await fetch('/api/luce-light',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({word:w})});if(r.ok){const d=await r.json();lights.push(d.light||item);done=true}}catch(e){}
+  }
+  if(!done){
+   let local=[];try{local=JSON.parse(load('luce_lights')||'[]')}catch(e){}
+   local.push(item);local=local.slice(-80);save('luce_lights',JSON.stringify(local));lights=local;
+  }
+  $('#skyMessage').textContent='Quelque part, une âme a choisi : '+w.charAt(0)+w.slice(1).toLowerCase()+'.';
+  $('#lightCount').textContent=lights.length;drawSky();
+ }
+ const canvas=$('#sky'),c=canvas.getContext('2d');
+ function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+ function drawSky(){
+  const dpr=Math.min(devicePixelRatio||1,2),rect=canvas.getBoundingClientRect();canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;c.setTransform(dpr,0,0,dpr,0,0);
+  c.clearRect(0,0,rect.width,rect.height);
+  const g=c.createRadialGradient(rect.width*.5,rect.height*.45,0,rect.width*.5,rect.height*.45,Math.max(rect.width,rect.height)*.65);g.addColorStop(0,'#11100e');g.addColorStop(.45,'#070707');g.addColorStop(1,'#020202');c.fillStyle=g;c.fillRect(0,0,rect.width,rect.height);
+  const display=lights.slice(-400);display.forEach((l,i)=>{const h=hash(l.word+'|'+l.ts+'|'+i),x=((h%10000)/10000)*rect.width,y=38+(((h>>>8)%10000)/10000)*(rect.height-90),r=1.3+(((h>>>16)%1000)/1000)*2.2;const rg=c.createRadialGradient(x,y,0,x,y,r*6);rg.addColorStop(0,'rgba(255,244,211,.95)');rg.addColorStop(.22,'rgba(224,190,115,.55)');rg.addColorStop(1,'rgba(216,181,109,0)');c.fillStyle=rg;c.beginPath();c.arc(x,y,r*6,0,Math.PI*2);c.fill();c.fillStyle='#f6e7c4';c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill()});
+ }
+ addEventListener('resize',drawSky);loadSky();
+})();
+</script>
+</body>
+</html>
