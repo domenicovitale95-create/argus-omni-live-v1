@@ -167,6 +167,40 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 .term b{display:block;color:#edf5ff}
 .term span{display:block;color:var(--muted);font-size:.82rem;margin-top:4px}
 .ioshint{display:none}
+.typegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.typebtn{padding:14px;border:1px solid var(--line);border-radius:13px;background:#0a1727;color:white;text-align:left;min-height:92px}
+.typebtn.active{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.typebtn b{display:block}
+.typebtn span{display:block;font-size:.79rem;color:var(--muted);margin-top:4px}
+.typebtn.active span{color:#536c89}
+.typeguide{margin-top:12px;padding:16px;border-radius:14px;background:#0a1727;border:1px solid #2a445f}
+.typeguide h3{margin:0 0 8px}
+.typeguide ul{padding-left:18px;margin:8px 0}
+.typeguide li{margin:6px 0;color:#c8d4e1;font-size:.87rem}
+.scanbox{padding:19px}
+.urlrow{display:grid;grid-template-columns:1fr auto;gap:9px}
+.urlrow input{width:100%;min-height:48px;border-radius:12px;border:1px solid #2d4868;background:#071421;color:white;padding:10px 12px;font-size:16px}
+.scanstatus{margin-top:10px;color:var(--muted);font-size:.82rem}
+.scanstatus.good{color:var(--green)}.scanstatus.warn{color:var(--amber)}.scanstatus.bad{color:var(--red)}
+.scanresult{margin-top:13px}
+.scanhead{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+.scanhead h3{margin:0}
+.scanhead p{margin:4px 0 0;color:var(--muted);font-size:.84rem}
+.scansource{font-size:.72rem;color:var(--blue);border:1px solid #355170;padding:6px 8px;border-radius:999px}
+.scanfields{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.scankpi{padding:12px;border-radius:12px;background:#0a1727;border:1px solid #29415e}
+.scankpi span{display:block;color:var(--muted);font-size:.68rem;text-transform:uppercase;font-weight:850}
+.scankpi b{display:block;margin-top:3px}
+.dealgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.deal{padding:12px;border-radius:12px;background:#dfeaf6}
+.deal span{display:block;color:#536c89;font-size:.66rem;text-transform:uppercase;font-weight:850}
+.deal b{display:block;margin-top:3px;color:var(--ink)}
+.scanverdict{margin-top:12px;padding:14px;border-radius:12px;background:#173451;color:white}
+.scanverdict.good{background:#174a31}.scanverdict.warn{background:#6b521d}.scanverdict.bad{background:#6a3037}
+.scanverdict b{display:block}
+.scanverdict span{display:block;margin-top:4px;font-size:.84rem;color:#e5edf5}
+.manualgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}
+.manualgrid .field input,.manualgrid .field select{font-size:16px}
 :focus-visible{outline:3px solid rgba(158,200,255,.55);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 .footer{padding:28px 0 100px;color:#8195aa;font-size:.79rem;border-top:1px solid var(--line)}
@@ -184,7 +218,9 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  .bottom a{text-decoration:none;color:#dbe7f5;min-height:48px;display:grid;place-items:center;text-align:center;border-radius:10px;font-size:.69rem;font-weight:850;padding:3px}
  .bottom a:active{background:#e8f2ff;color:#102640}
  .nextaction{position:sticky;top:76px;z-index:25}
- .readinessgrid,.redflags,.glossary{grid-template-columns:1fr}
+ .readinessgrid,.redflags,.glossary,.typegrid,.scanfields,.dealgrid,.manualgrid{grid-template-columns:1fr}
+ .urlrow{grid-template-columns:1fr}
+ .urlrow .actionbtn{width:100%}
  .field input,.field select{font-size:16px}
  .modebtn,.actionbtn{width:100%}
  .ioshint{display:block;color:#8ea4ba;font-size:.72rem;margin-top:8px}
@@ -207,7 +243,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 <header class="top">
  <div class="wrap topin">
   <a class="brand" href="#home"><span class="logo">A</span><span><b>ARGUS IMMO BELGIUM</b><small>Premier achat · investissement · Belgique 2026</small></span></a>
-  <nav class="desktopnav"><a href="#assistant">Mon plan</a><a href="#parcours">Parcours</a><a href="#budget">Budget</a><a href="#documents">Documents</a><a href="#ready">Prêt à offrir ?</a><a href="#check">Checklist</a></nav>
+  <nav class="desktopnav"><a href="#assistant">Mon plan</a><a href="#types">Type de bien</a><a href="#scanner">Scanner annonce</a><a href="#parcours">Parcours</a><a href="#budget">Budget</a><a href="#ready">Prêt à offrir ?</a></nav>
  </div>
 </header>
 
@@ -259,6 +295,22 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 </section>
 
 
+
+<section class="section" id="types">
+ <div class="wrap">
+  <div class="sectionhead"><div><p class="eyebrow">Type de bien</p><h2>ARGUS ne contrôle pas tous les biens de la même manière.</h2></div><p>Sélectionnez un type : la checklist et les risques changent immédiatement.</p></div>
+  <div class="typegrid">
+   <button class="typebtn active" data-ptype="apartment"><b>🏢 Appartement</b><span>Copropriété, charges, fonds de réserve, PEB.</span></button>
+   <button class="typebtn" data-ptype="house"><b>🏠 Maison</b><span>Toiture, structure, humidité, installations.</span></button>
+   <button class="typebtn" data-ptype="studio"><b>🔑 Studio</b><span>Surface, conformité, charges, demande locative.</span></button>
+   <button class="typebtn" data-ptype="building"><b>🏘 Immeuble de rapport</b><span>Unités reconnues, baux, compteurs, rendement.</span></button>
+   <button class="typebtn" data-ptype="new"><b>✨ Neuf / sur plan</b><span>TVA, Loi Breyne, cahier des charges, livraison.</span></button>
+   <button class="typebtn" data-ptype="land"><b>📐 Terrain</b><span>Urbanisme, constructibilité, sol, raccordements.</span></button>
+  </div>
+  <article class="typeguide" id="typeGuide"></article>
+ </div>
+</section>
+
 <section class="section" id="assistant">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Assistant personnalisé</p><h2>Répondez à 8 questions. ARGUS construit votre plan.</h2></div><p>Le résultat est volontairement prudent : il aide à préparer une recherche et un rendez-vous bancaire, pas à remplacer une décision de crédit.</p></div>
@@ -266,6 +318,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
    <div class="wizardtop"><div><h3>Votre situation</h3><p>Environ 2 minutes. Les réponses restent dans votre navigateur et servent uniquement à personnaliser le parcours.</p><span class="ioshint">Astuce GSM : les champs sont volontairement grands pour éviter le zoom automatique sur iPhone.</span></div><span class="wizardbadge">Mobile-first</span></div>
    <div class="wizardgrid">
     <div class="field"><label>Votre projet</label><select id="wGoal"><option value="home">Premier achat — j'y habite</option><option value="mixed">J'y habite + je loue une partie</option><option value="invest">Investissement locatif</option></select></div>
+    <div class="field"><label>Type de bien</label><select id="wType"><option value="apartment">Appartement</option><option value="house">Maison</option><option value="studio">Studio</option><option value="building">Immeuble de rapport</option><option value="new">Neuf / sur plan</option><option value="land">Terrain</option></select></div>
     <div class="field"><label>Région recherchée</label><select id="wRegion"><option value="brussels">Bruxelles</option><option value="wallonia">Wallonie</option><option value="flanders">Flandre</option></select></div>
     <div class="field"><label>Épargne disponible (€)</label><input id="wSavings" type="number" value="100000" min="0"></div>
     <div class="field"><label>Revenu net ménage / mois (€)</label><input id="wIncome" type="number" value="4000" min="0"></div>
@@ -290,6 +343,75 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
     <div class="plansteps" id="planSteps"></div>
     <div class="planalert" id="planAlert">—</div>
     <p class="note" style="color:#526a86;margin:10px 0 0">*Hypothèses pédagogiques ARGUS : mensualité confort ≈ 35 % des revenus nets moins autres crédits ; repère général du guide CBC ≈ 40 % ; enveloppe indicative calculée avec 4 % sur 25 ans, réserve de 6 mois et financement prudent. La banque et le notaire restent déterminants.</p>
+   </div>
+  </article>
+ </div>
+</section>
+
+
+<section class="section" id="scanner">
+ <div class="wrap">
+  <div class="sectionhead"><div><p class="eyebrow">Scanner d'annonce</p><h2>Collez le lien d'un bien. ARGUS prépare l'analyse.</h2></div><p>Le scanner tente d'extraire automatiquement les données publiques de l'annonce. Vous validez ensuite les chiffres manquants avant le verdict.</p></div>
+  <article class="panel scanbox">
+   <div class="urlrow">
+    <input id="listingUrl" type="url" inputmode="url" placeholder="https://www.immoweb.be/..." aria-label="Lien de l'annonce">
+    <button class="actionbtn primary" id="scanListing" type="button">Analyser le lien</button>
+   </div>
+   <div class="scanstatus" id="scanStatus">Sites supportés au départ : Immoweb, Immovlan, Zimmo, Realo, ERA et Logic-Immo. Si l'extraction échoue, vous pouvez remplir les champs manuellement.</div>
+
+   <div class="scanresult hidden" id="scanResult">
+    <div class="scanhead">
+     <div><h3 id="scanTitle">Annonce</h3><p id="scanMeta">—</p></div>
+     <span class="scansource" id="scanSource">—</span>
+    </div>
+    <div class="scanfields">
+     <div class="scankpi"><span>Prix annoncé</span><b id="scanPriceKpi">—</b></div>
+     <div class="scankpi"><span>Surface</span><b id="scanSurfaceKpi">—</b></div>
+     <div class="scankpi"><span>Type détecté</span><b id="scanTypeKpi">—</b></div>
+     <div class="scankpi"><span>Prix / m²</span><b id="scanPsmKpi">—</b></div>
+     <div class="scankpi"><span>PEB / EPC</span><b id="scanPebKpi">—</b></div>
+     <div class="scankpi"><span>Localisation</span><b id="scanLocationKpi">—</b></div>
+    </div>
+   </div>
+
+   <div class="manualgrid">
+    <div class="field"><label>Type de bien</label><select id="scanType"><option value="apartment">Appartement</option><option value="house">Maison</option><option value="studio">Studio</option><option value="building">Immeuble de rapport</option><option value="new">Neuf / sur plan</option><option value="land">Terrain</option><option value="commercial">Commercial</option></select></div>
+    <div class="field"><label>Région</label><select id="scanRegion"><option value="brussels">Bruxelles</option><option value="wallonia">Wallonie</option><option value="flanders">Flandre</option></select></div>
+    <div class="field"><label>Usage</label><select id="scanUse"><option value="home">J'y habite</option><option value="investment">Je le loue</option><option value="mixed">Mixte</option></select></div>
+    <div class="field"><label>Prix annoncé (€)</label><input id="scanPrice" type="number" value="300000"></div>
+    <div class="field"><label>Surface (m²)</label><input id="scanSurface" type="number" value="80"></div>
+    <div class="field"><label>Référence locale €/m² (optionnel)</label><input id="scanLocalPsm" type="number" placeholder="Ex. 3500"></div>
+    <div class="field"><label>Travaux estimés (€)</label><input id="scanWorks" type="number" value="10000"></div>
+    <div class="field"><label>Loyer réaliste / mois (€)</label><input id="scanRent" type="number" value="1200"></div>
+    <div class="field"><label>Charges propriétaire / mois (€)</label><input id="scanCharges" type="number" value="150"></div>
+    <div class="field"><label>Précompte + assurance / an (€)</label><input id="scanFixed" type="number" value="1800"></div>
+    <div class="field"><label>Apport sur le prix (€)</label><input id="scanDown" type="number" value="60000"></div>
+    <div class="field"><label>Taux / durée</label><select id="scanFinance"><option value="4,25">4 % · 25 ans</option><option value="3.5,25">3,5 % · 25 ans</option><option value="4,20">4 % · 20 ans</option></select></div>
+    <div class="field"><label>PEB / EPC</label><select id="scanPeb"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D" selected>D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="?">Inconnu</option></select></div>
+    <div class="field"><label>Urbanisme / configuration</label><select id="scanLegal"><option value="yes">Conforme / confirmé</option><option value="unknown" selected>À vérifier</option><option value="no">Non conforme / doute sérieux</option></select></div>
+    <div class="field"><label>Documents principaux</label><select id="scanDocs"><option value="yes">Reçus et lisibles</option><option value="partial" selected>Partiels</option><option value="no">Manquants</option></select></div>
+   </div>
+
+   <div class="wizardactions">
+    <button class="actionbtn primary" id="calculateDeal" type="button">Calculer BUY / NEGOTIATE / PASS</button>
+    <button class="actionbtn" id="copyDealToBudget" type="button">Envoyer au budget</button>
+   </div>
+
+   <div class="results hidden" id="dealResult" style="margin-top:13px">
+    <h3 style="margin-top:0">Analyse ARGUS du bien</h3>
+    <div class="dealgrid">
+     <div class="deal"><span>ASK</span><b id="dealAsk">—</b></div>
+     <div class="deal"><span>1ère offre</span><b id="dealFirst">—</b></div>
+     <div class="deal"><span>Target deal</span><b id="dealTarget">—</b></div>
+     <div class="deal"><span>ABS MAX</span><b id="dealMax">—</b></div>
+     <div class="deal"><span>Rendement brut</span><b id="dealGross">—</b></div>
+     <div class="deal"><span>Cash-flow / mois</span><b id="dealCashflow">—</b></div>
+     <div class="deal"><span>Prix / m²</span><b id="dealPsm">—</b></div>
+     <div class="deal"><span>Score</span><b id="dealScore">—</b></div>
+    </div>
+    <div class="scanverdict" id="dealVerdict"><b id="dealVerdictTitle">—</b><span id="dealVerdictText">—</span></div>
+    <div class="typeguide" id="dealTypeGuide" style="margin-top:12px"></div>
+    <p class="note" style="color:#526a86;margin-top:10px">Le “prix cible” n'est pas une expertise immobilière. Pour une résidence, il utilise votre référence locale €/m² si vous la fournissez. Pour un investissement, il utilise surtout le rendement, les travaux et la solidité juridique. Les comparables réels restent indispensables.</p>
    </div>
   </article>
  </div>
@@ -619,7 +741,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 </main>
 
 <nav class="bottom" aria-label="Navigation mobile">
- <a href="#home">Accueil</a><a href="#assistant">Mon plan</a><a href="#parcours">Étapes</a><a href="#ready">Offre ?</a><a href="#check">Checklist</a>
+ <a href="#assistant">Mon plan</a><a href="#scanner">Scanner</a><a href="#parcours">Étapes</a><a href="#ready">Offre ?</a><a href="#check">Checklist</a>
 </nav>
 
 <script>
@@ -627,7 +749,26 @@ const $=id=>document.getElementById(id);
 const euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
 const pct=n=>(Number.isFinite(n)?n:0).toFixed(1).replace('.',',')+' %';
 
-const wizardIds=['wGoal','wRegion','wSavings','wIncome','wDebt','wExpenses','wHorizon','wWorks'];
+const wizardIds=['wGoal','wType','wRegion','wSavings','wIncome','wDebt','wExpenses','wHorizon','wWorks'];
+
+const propertyTypeGuides={
+ apartment:{name:'Appartement',checks:['PV des 3 dernières AG','Fonds de réserve et fonds de roulement','Charges ordinaires + appels de fonds','Travaux votés : toiture, façade, ascenseur, chauffage','PEB et électricité de l’unité','Règlement de copropriété'],risk:'Le risque caché principal est la copropriété : un appartement correct dans un immeuble financièrement fragile peut devenir coûteux.'},
+ house:{name:'Maison',checks:['Toiture et charpente','Humidité, caves, façades et fissures','Électricité, chauffage, gaz','Égouttage et raccordements','Châssis, isolation, ventilation','Urbanisme des annexes et transformations'],risk:'Le risque principal est technique : contrairement à une copropriété, vous supportez seul la toiture, les façades et les gros équipements.'},
+ studio:{name:'Studio',checks:['Surface et affectation légale','Conformité urbanistique','Charges fixes par rapport au loyer','PEB et ventilation','Demande locative micro-locale','Liquidité de revente'],risk:'Un studio peut offrir un bon rendement, mais une charge fixe élevée ou une configuration non conforme peut annuler l’avantage.'},
+ building:{name:'Immeuble de rapport',checks:['Nombre exact d’unités reconnues','Baux enregistrés + preuves de loyers','Compteurs et répartition des charges','Sécurité incendie / permis si applicable','PEB et électricité de chaque unité','Toiture, structure et gros travaux'],risk:'Le rendement n’a aucune valeur si les unités ne sont pas reconnues ou si les loyers ne sont pas documentés.'},
+ new:{name:'Neuf / sur plan',checks:['TVA et régime fiscal exact','Loi Breyne si applicable','Cahier des charges et finitions','Délais de livraison et pénalités','Garantie, réception provisoire/définitive','Charges communes futures estimées'],risk:'Le risque principal est contractuel : ce que vous achetez n’existe parfois pas encore. Le cahier des charges et les garanties sont essentiels.'},
+ land:{name:'Terrain',checks:['Affectation urbanistique','Constructibilité et prescriptions','Accès à la voirie','Raccordements eau/électricité/égout','Étude de sol / pollution / stabilité','Servitudes et limites cadastrales'],risk:'Un terrain bon marché peut être inutilisable. La constructibilité vaut plus que le prix au m².'},
+ commercial:{name:'Commercial',checks:['Affectation et permis','Bail commercial et durée','Solvabilité du locataire','Précompte et charges','Vacance structurelle du secteur','Travaux de remise en état'],risk:'Le commercial dépend beaucoup plus du locataire, du bail et de la vacance que le résidentiel.'}
+};
+function renderTypeGuide(type,target='typeGuide'){
+ const g=propertyTypeGuides[type]||propertyTypeGuides.apartment,el=$(target);if(!el)return;
+ el.innerHTML='<h3>'+g.name+' — ce qu’ARGUS vérifie</h3><ul>'+g.checks.map(x=>'<li>'+x+'</li>').join('')+'</ul><p class="note"><b>Risque clé :</b> '+g.risk+'</p>';
+}
+document.querySelectorAll('.typebtn').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('.typebtn').forEach(x=>x.classList.toggle('active',x===b));
+ $('wType').value=b.dataset.ptype; $('scanType').value=b.dataset.ptype; saveWizard(); renderTypeGuide(b.dataset.ptype);
+}));
+renderTypeGuide('apartment');
 function saveWizard(){const s={};wizardIds.forEach(id=>s[id]=$(id).value);try{localStorage.setItem('argus-immo-wizard',JSON.stringify(s))}catch(e){}}
 try{const s=JSON.parse(localStorage.getItem('argus-immo-wizard')||'{}');wizardIds.forEach(id=>{if(s[id]!==undefined)$(id).value=s[id]});}catch(e){}
 wizardIds.forEach(id=>$(id).addEventListener('input',saveWizard));
@@ -642,7 +783,7 @@ function prudentEnvelope(goal,region,savings,income,debt,expenses){
 }
 function buildPersonalPlan(){
  saveWizard();
- const goal=$('wGoal').value,region=$('wRegion').value,savings=+$('wSavings').value||0,income=+$('wIncome').value||0,debt=+$('wDebt').value||0,expenses=+$('wExpenses').value||0,h=+$('wHorizon').value||0,works=$('wWorks').value;
+ const goal=$('wGoal').value,type=$('wType').value,region=$('wRegion').value,savings=+$('wSavings').value||0,income=+$('wIncome').value||0,debt=+$('wDebt').value||0,expenses=+$('wExpenses').value||0,h=+$('wHorizon').value||0,works=$('wWorks').value;
  const p=prudentEnvelope(goal,region,savings,income,debt,expenses),names={brussels:'Bruxelles',wallonia:'Wallonie',flanders:'Flandre'},goalNames={home:'premier achat pour y habiter',mixed:'achat mixte — y habiter et louer une partie',invest:'investissement locatif'};
  let score=100,alerts=[];
  if(h<5){score-=28;alerts.push('Votre horizon est court : les frais d’entrée rendent l’achat plus difficile à amortir.')}
@@ -657,14 +798,14 @@ function buildPersonalPlan(){
  if(goal==='home')sub+='Priorité : budget, financement, documents et revente future.';
  if(goal==='mixed')sub+='Priorité : vérifier que la partie louée est exploitable légalement et que le projet reste supportable sans ce loyer.';
  if(goal==='invest')sub+='Priorité : rentabilité nette, reconnaissance urbanistique et loyers réels.';
- $('planTitle').textContent='Plan personnalisé — '+names[region];$('planSubtitle').textContent=sub;
+ $('planTitle').textContent='Plan personnalisé — '+names[region]+' · '+(propertyTypeGuides[type]?.name||'Bien');$('planSubtitle').textContent=sub;
  const steps=[];
  steps.push(['1','Maintenant','Prenez rendez-vous avec 2 à 3 banques/courtiers avec exactement le même scénario pour comparer TAEG, coût total, assurances et hypothèque/mandat.']);
  steps.push(['2','Budget de recherche','Utilisez '+euro(p.price)+' comme enveloppe prudente de départ, pas comme promesse de crédit. Gardez environ '+euro(p.reserve)+' de réserve.']);
  if(goal==='home')steps.push(['3','Recherche','Cherchez d’abord un bien revendable, proche des transports/services, avec PEB et travaux compatibles avec votre budget.']);
  if(goal==='mixed')steps.push(['3','Recherche','Cherchez un bien dont la partie louée est autorisée et documentée. Faites le budget comme si le loyer disparaissait temporairement.']);
  if(goal==='invest')steps.push(['3','Recherche','Filtrez les biens sur rendement net, demande locative, urbanisme, baux, compteurs et coûts à 5 ans — pas uniquement le rendement brut.']);
- steps.push(['4','Avant toute offre','Recevez PEB, électricité, urbanisme, titre/servitudes et, si appartement, PV d’AG + fonds de réserve + charges.']);
+ steps.push(['4','Avant toute offre','Contrôles spécifiques '+(propertyTypeGuides[type]?.name||'bien')+' : '+(propertyTypeGuides[type]?.checks||[]).slice(0,3).join(', ')+'.']);
  steps.push(['5','Offre','Fixez première offre, prix cible et maximum absolu; insérez les conditions suspensives nécessaires et faites relire le texte si l’enjeu est important.']);
  $('planSteps').innerHTML=steps.map(x=>'<div class="planstep"><i>'+x[0]+'</i><div><b>'+x[1]+'</b><span>'+x[2]+'</span></div></div>').join('');
  $('planAlert').textContent=alerts.length?alerts.join(' '):'Alerte ARGUS : aucune faiblesse majeure détectée dans les données saisies, mais le bien précis peut encore être mauvais. Prochaine étape : financement puis documents.';
@@ -672,6 +813,74 @@ function buildPersonalPlan(){
 $('buildPlan').addEventListener('click',buildPersonalPlan);
 $('sendToBudget').addEventListener('click',()=>{$('region').value=$('wRegion').value;$('usage').value=$('wGoal').value==='invest'?'investment':'home';$('income').value=$('wIncome').value;$('otherDebt').value=$('wDebt').value;$('savings').value=$('wSavings').value;$('expenses').value=$('wExpenses').value;calc();location.hash='#budget'});
 $('resetPlan').addEventListener('click',()=>{try{localStorage.removeItem('argus-immo-wizard')}catch(e){}$('wGoal').value='home';$('wRegion').value='brussels';$('wSavings').value=100000;$('wIncome').value=4000;$('wDebt').value=0;$('wExpenses').value=1800;$('wHorizon').value=7;$('wWorks').value='light';$('personalPlan').classList.add('hidden');saveWizard()});
+
+function typeLabel(t){return propertyTypeGuides[t]?.name||t||'Inconnu'}
+function safeNum(id){return Math.max(0,Number($(id)?.value)||0)}
+function scanRegTax(price,region,use){
+ if(use==='investment')return price*(region==='flanders'?.12:.125);
+ if(region==='wallonia')return price*.03;
+ if(region==='flanders')return price*.02;
+ return Math.max(0,price-200000)*.125;
+}
+function financePayment(principal,rate,years){if(principal<=0)return 0;const r=rate/100/12,n=years*12;if(!r)return principal/n;return principal*r/(1-Math.pow(1+r,-n))}
+function syncScanKpis(){
+ const price=safeNum('scanPrice'),surface=safeNum('scanSurface'),type=$('scanType').value;
+ $('scanPriceKpi').textContent=euro(price);$('scanSurfaceKpi').textContent=surface?surface+' m²':'—';$('scanTypeKpi').textContent=typeLabel(type);
+ $('scanPsmKpi').textContent=price&&surface?euro(price/surface)+'/m²':'—';$('scanPebKpi').textContent=$('scanPeb').value||'—';
+}
+document.querySelectorAll('#scanner input,#scanner select').forEach(x=>x.addEventListener('input',syncScanKpis));
+$('scanListing').addEventListener('click',async()=>{
+ const url=$('listingUrl').value.trim(),status=$('scanStatus');
+ if(!url){status.className='scanstatus bad';status.textContent='Collez d’abord le lien de l’annonce.';return}
+ status.className='scanstatus';status.textContent='Lecture de l’annonce…';
+ try{
+  const r=await fetch('/api/immo-listing-scan',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({url})});
+  const j=await r.json();
+  if(!j.ok)throw new Error(j.error||'Extraction impossible');
+  const d=j.data||{};$('scanResult').classList.remove('hidden');
+  $('scanTitle').textContent=d.title||'Annonce immobilière';$('scanMeta').textContent=[d.address,d.bedrooms!=null?d.bedrooms+' ch.':null,d.bathrooms!=null?d.bathrooms+' sdb':null].filter(Boolean).join(' · ')||'Vérifiez les champs ci-dessous';
+  $('scanSource').textContent=d.source||'source';$('scanLocationKpi').textContent=d.address||d.city||'—';
+  if(d.price)$('scanPrice').value=Math.round(d.price);if(d.surface)$('scanSurface').value=d.surface;if(d.type&&d.type!=='unknown')$('scanType').value=d.type;if(d.epc)$('scanPeb').value=d.epc.charAt(0);
+  renderTypeGuide($('scanType').value,'dealTypeGuide');syncScanKpis();
+  status.className='scanstatus good';status.textContent='Annonce lue. Vérifiez les champs, complétez loyer/travaux/documents, puis lancez le calcul.';
+ }catch(e){
+  $('scanResult').classList.remove('hidden');syncScanKpis();
+  status.className='scanstatus warn';status.textContent='Extraction automatique indisponible : '+e.message+'. Remplissez les champs manuellement — le calcul ARGUS fonctionne quand même.';
+ }
+});
+$('scanType').addEventListener('change',()=>renderTypeGuide($('scanType').value,'dealTypeGuide'));
+
+function calculateDeal(){
+ const type=$('scanType').value,region=$('scanRegion').value,use=$('scanUse').value,price=safeNum('scanPrice'),surface=safeNum('scanSurface'),localPsm=safeNum('scanLocalPsm'),works=safeNum('scanWorks'),rent=safeNum('scanRent'),charges=safeNum('scanCharges'),fixed=safeNum('scanFixed'),down=Math.min(price,safeNum('scanDown')),legal=$('scanLegal').value,docs=$('scanDocs').value,peb=$('scanPeb').value;
+ const [rate,years]=$('scanFinance').value.split(',').map(Number),loan=Math.max(0,price-down),payment=financePayment(loan,rate,years),gross=price>0?rent*12/price*100:0,noi=rent*.92-charges-fixed/12,cf=noi-payment,psm=surface?price/surface:0;
+ const investment=use==='investment'||use==='mixed'||type==='building',tax=scanRegTax(price,region,investment?'investment':'home'),total=price+tax+price*.03+works;
+ let maxByMarket=localPsm&&surface?localPsm*surface-works:Infinity;
+ let targetYield=type==='building'?0.075:type==='studio'?0.07:0.065;
+ let maxByYield=investment&&rent?rent*12/targetYield-works:Infinity;
+ let absMax=Math.min(maxByMarket,maxByYield);
+ if(!Number.isFinite(absMax))absMax=price;
+ absMax=Math.max(0,absMax);
+ const target=Math.max(0,Math.min(absMax,price*.97));
+ const first=Math.max(0,Math.min(target*.96,price*.92));
+ let score=70;
+ if(localPsm&&psm<=localPsm)score+=8;if(investment&&gross>=targetYield*100)score+=10;if(investment&&cf>=0)score+=8;
+ if(legal==='yes')score+=8;else if(legal==='unknown')score-=12;else score-=35;
+ if(docs==='yes')score+=6;else if(docs==='partial')score-=5;else score-=18;
+ if(['F','G'].includes(peb))score-=10;if(works>price*.15)score-=8;if(price>absMax*1.08)score-=10;
+ if(type==='land'){score=legal==='yes'&&docs!=='no'?65:35}
+ score=Math.max(0,Math.min(100,score));
+ $('dealResult').classList.remove('hidden');$('dealAsk').textContent=euro(price);$('dealFirst').textContent=euro(first);$('dealTarget').textContent=euro(target);$('dealMax').textContent=euro(absMax);
+ $('dealGross').textContent=investment?pct(gross):'N/A';$('dealCashflow').textContent=investment?euro(cf)+'/mois':'N/A';$('dealPsm').textContent=psm?euro(psm)+'/m²':'—';$('dealScore').textContent=score+'/100';
+ renderTypeGuide(type,'dealTypeGuide');
+ const v=$('dealVerdict'),t=$('dealVerdictTitle'),tx=$('dealVerdictText');
+ if(legal==='no'){v.className='scanverdict bad';t.textContent='PASS / STOP';tx.textContent='La configuration ou l’urbanisme présente un problème sérieux. Ne compensez pas un risque juridique par un rendement élevé.'}
+ else if(legal==='unknown'&&['building','studio'].includes(type)){v.className='scanverdict bad';t.textContent='STOP DOCUMENTS';tx.textContent='Pour ce type de bien, la conformité et la reconnaissance urbanistique doivent être confirmées avant toute offre.'}
+ else if(score>=82&&price<=absMax*1.03){v.className='scanverdict good';t.textContent='BUY / VISITE PRIORITAIRE';tx.textContent='Les hypothèses passent les filtres ARGUS. Validez maintenant comparables, documents, technique et financement avant offre.'}
+ else if(score>=62||price<=absMax*1.10){v.className='scanverdict warn';t.textContent='NEGOTIATE';tx.textContent='Le bien peut devenir intéressant à un prix plus bas ou avec des documents/risques mieux sécurisés. Utilisez Target Deal et ABS MAX comme discipline de négociation.'}
+ else{v.className='scanverdict bad';t.textContent='PASS';tx.textContent='Le prix ou les risques ne donnent pas assez de marge avec les hypothèses saisies.'}
+}
+$('calculateDeal').addEventListener('click',calculateDeal);
+$('copyDealToBudget').addEventListener('click',()=>{$('price').value=$('scanPrice').value;$('works').value=$('scanWorks').value;$('down').value=$('scanDown').value;$('region').value=$('scanRegion').value;$('usage').value=$('scanUse').value==='investment'?'investment':'home';calc();location.hash='#budget'});
 
 document.querySelectorAll('.modebtn').forEach(b=>b.addEventListener('click',()=>{
  document.querySelectorAll('.modebtn').forEach(x=>x.classList.toggle('active',x===b));
