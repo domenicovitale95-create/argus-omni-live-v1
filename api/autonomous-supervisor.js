@@ -1,7 +1,7 @@
 import { readJson, readJsonFresh, writeJson, storageReady } from './_report-store.js';
 import { providerPlanMeta } from './_provider-plan.js';
 
-export const config = { maxDuration: 60 };
+export const config = { maxDuration: 120 };
 
 const STATE_PATH = 'argus/health/autonomous-supervisor.json';
 const INCIDENTS_PATH = 'argus/health/incidents.json';
@@ -41,7 +41,7 @@ function baseUrl(req){
   return host ? `${proto}://${host}` : null;
 }
 function authHeaders(){ const s = secret(); return { Accept:'application/json', ...(s ? { Authorization:`Bearer ${s}` } : {}) }; }
-async function call(base, path, timeoutMs = 52000){
+async function call(base, path, timeoutMs = 45000){
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   const started = Date.now();
@@ -118,7 +118,7 @@ export default async function handler(req,res){
 
   const shouldRecoverPlan = activeWindow(clock) && !quotaHalt && !noFixturesCooldownBefore && (planAgeBefore == null || planAgeBefore > PLAN_STALE_MINUTES);
   if(shouldRecoverPlan){
-    const result = await call(base, '/api/autopilot', 54000);
+    const result = await call(base, '/api/autopilot', 45000);
     const skipped = Boolean(result?.data?.skipped);
     const skipReason = skipped ? (result?.data?.reason || 'SKIPPED') : null;
     planRecoveryEffective = effectiveRemediation(result);
@@ -130,7 +130,7 @@ export default async function handler(req,res){
 
   const shouldRecoverLedger = ledgerAgeBefore == null || ledgerAgeBefore > LEDGER_STALE_MINUTES;
   if(shouldRecoverLedger && !heavyRemediationTaken){
-    const result = await call(base, '/api/prediction-ledger-cron', 54000);
+    const result = await call(base, '/api/prediction-ledger-cron', 45000);
     actions.push(event('LEDGER_RECOVERY', result, { reason:'STALE_LEDGER_HEARTBEAT', beforeAgeMinutes:ledgerAgeBefore, effective:effectiveRemediation(result) }));
     if(result?.ok && result?.data?.healthPersisted !== false && result?.data?.completedAt) ledgerRecoveryState = result.data;
     heavyRemediationTaken = effectiveRemediation(result);
@@ -140,7 +140,7 @@ export default async function handler(req,res){
   const previousHistAttemptAge = ageMinutes(previous?.lastHistoricalRecoveryAttemptAt);
   const histStalled = histIncomplete && (histAgeBefore == null || histAgeBefore > HIST_STALL_MINUTES);
   if(histStalled && !heavyRemediationTaken && (previousHistAttemptAge == null || previousHistAttemptAge > HIST_RECOVERY_COOLDOWN_MINUTES)){
-    const result = await call(base, '/api/historical-shard-migrate?months=6', 54000);
+    const result = await call(base, '/api/historical-shard-migrate?months=6', 45000);
     historicalRecoveryEffective = effectiveRemediation(result);
     actions.push(event('HISTORICAL_MIGRATION_RECOVERY', result, { reason:'MIGRATION_STALLED', beforeAgeMinutes:histAgeBefore, effective:historicalRecoveryEffective }));
     heavyRemediationTaken = historicalRecoveryEffective;
