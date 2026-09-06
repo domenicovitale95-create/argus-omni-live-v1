@@ -143,6 +143,32 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 .planstep b{display:block;font-size:.9rem}
 .planstep span{display:block;color:#526a86;font-size:.79rem;margin-top:2px}
 .planalert{margin-top:12px;padding:11px 12px;border-radius:11px;background:#f6e9c9;color:#5d481a;font-size:.84rem}
+.nextaction{margin:14px 0 0;padding:16px 17px;border:1px solid #5c7fa8;border-radius:16px;background:linear-gradient(180deg,#102943,#0c2036);box-shadow:var(--shadow)}
+.nextaction .label{display:block;color:var(--blue);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900}
+.nextaction b{display:block;font-size:1.12rem;margin-top:4px}
+.nextaction p{margin:5px 0 0;color:#c9d6e5;font-size:.88rem}
+.nextaction a{display:inline-flex;align-items:center;justify-content:center;margin-top:11px;min-height:44px;padding:9px 13px;border-radius:11px;text-decoration:none;background:var(--paper);color:var(--ink);font-weight:900}
+.readiness{padding:18px}
+.readinessgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.readinessitem{padding:12px;border:1px solid #29435f;border-radius:12px;background:#091827}
+.readinessitem span{display:block;color:var(--muted);font-size:.72rem;font-weight:800}
+.readinessitem b{display:block;font-size:1.05rem;margin-top:3px}
+.offerbar{height:11px;border-radius:999px;background:#0a1727;overflow:hidden;border:1px solid #29405c;margin:12px 0}
+.offerbar i{height:100%;display:block;width:0;background:linear-gradient(90deg,#f2a7ad,#f2d18d,#91dfb7);transition:width .2s}
+.offerstatus{padding:12px;border-radius:12px;background:#0a1727;border:1px solid #2a425e}
+.offerstatus b{display:block}
+.offerstatus span{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+.redflags{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.redflag{padding:13px;border:1px solid #6f3944;border-radius:12px;background:#2c1920}
+.redflag b{display:block;color:#ffd8dc}
+.redflag span{display:block;color:#e8c4c8;font-size:.82rem;margin-top:4px}
+.glossary{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.term{padding:13px;border:1px solid var(--line);border-radius:12px;background:#0a1727}
+.term b{display:block;color:#edf5ff}
+.term span{display:block;color:var(--muted);font-size:.82rem;margin-top:4px}
+.ioshint{display:none}
+:focus-visible{outline:3px solid rgba(158,200,255,.55);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 .footer{padding:28px 0 100px;color:#8195aa;font-size:.79rem;border-top:1px solid var(--line)}
 .bottom{display:none}
 .hidden{display:none!important}
@@ -157,6 +183,11 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  .bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;z-index:90;left:50%;transform:translateX(-50%);bottom:max(8px,env(safe-area-inset-bottom));width:min(620px,calc(100% - 16px));background:rgba(11,25,42,.97);backdrop-filter:blur(14px);border:1px solid #395471;border-radius:16px;padding:6px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
  .bottom a{text-decoration:none;color:#dbe7f5;min-height:48px;display:grid;place-items:center;text-align:center;border-radius:10px;font-size:.69rem;font-weight:850;padding:3px}
  .bottom a:active{background:#e8f2ff;color:#102640}
+ .nextaction{position:sticky;top:76px;z-index:25}
+ .readinessgrid,.redflags,.glossary{grid-template-columns:1fr}
+ .field input,.field select{font-size:16px}
+ .modebtn,.actionbtn{width:100%}
+ .ioshint{display:block;color:#8ea4ba;font-size:.72rem;margin-top:8px}
 }
 @media(max-width:560px){
  .wrap{width:min(100% - 20px,1120px)}
@@ -176,7 +207,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 <header class="top">
  <div class="wrap topin">
   <a class="brand" href="#home"><span class="logo">A</span><span><b>ARGUS IMMO BELGIUM</b><small>Premier achat · investissement · Belgique 2026</small></span></a>
-  <nav class="desktopnav"><a href="#assistant">Mon plan</a><a href="#parcours">Parcours</a><a href="#budget">Budget</a><a href="#documents">Documents</a><a href="#zones">Zones</a><a href="#check">Checklist</a></nav>
+  <nav class="desktopnav"><a href="#assistant">Mon plan</a><a href="#parcours">Parcours</a><a href="#budget">Budget</a><a href="#documents">Documents</a><a href="#ready">Prêt à offrir ?</a><a href="#check">Checklist</a></nav>
  </div>
 </header>
 
@@ -218,6 +249,12 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
    <article class="card"><p class="eyebrow">Règle 2</p><h3>Une offre peut déjà engager</h3><p>Ne traitez jamais l'offre comme un simple message d'intérêt.</p></article>
    <article class="card"><p class="eyebrow">Règle 3</p><h3>La banque ne valide pas le bien</h3><p>Elle valide surtout votre financement et sa garantie. À vous de contrôler le bien.</p></article>
   </div>
+  <aside class="nextaction" id="nextActionCard">
+   <span class="label">Votre prochaine action</span>
+   <b id="nextActionTitle">Créer votre plan personnalisé</b>
+   <p id="nextActionText">Commencez par 8 questions simples pour savoir quel budget rechercher et quelles étapes suivre.</p>
+   <a id="nextActionLink" href="#assistant">Commencer maintenant</a>
+  </aside>
  </div>
 </section>
 
@@ -226,7 +263,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Assistant personnalisé</p><h2>Répondez à 8 questions. ARGUS construit votre plan.</h2></div><p>Le résultat est volontairement prudent : il aide à préparer une recherche et un rendez-vous bancaire, pas à remplacer une décision de crédit.</p></div>
   <article class="panel wizard">
-   <div class="wizardtop"><div><h3>Votre situation</h3><p>Environ 2 minutes. Les réponses restent dans votre navigateur.</p></div><span class="wizardbadge">Mobile-first</span></div>
+   <div class="wizardtop"><div><h3>Votre situation</h3><p>Environ 2 minutes. Les réponses restent dans votre navigateur et servent uniquement à personnaliser le parcours.</p><span class="ioshint">Astuce GSM : les champs sont volontairement grands pour éviter le zoom automatique sur iPhone.</span></div><span class="wizardbadge">Mobile-first</span></div>
    <div class="wizardgrid">
     <div class="field"><label>Votre projet</label><select id="wGoal"><option value="home">Premier achat — j'y habite</option><option value="mixed">J'y habite + je loue une partie</option><option value="invest">Investissement locatif</option></select></div>
     <div class="field"><label>Région recherchée</label><select id="wRegion"><option value="brussels">Bruxelles</option><option value="wallonia">Wallonie</option><option value="flanders">Flandre</option></select></div>
@@ -438,28 +475,61 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
+
+<section class="section" id="ready">
+ <div class="wrap">
+  <div class="sectionhead"><div><p class="eyebrow">Avant de faire une offre</p><h2>Êtes-vous réellement prêt à offrir ?</h2></div><p>Ce score ne dit pas si le bien est “bon”. Il dit si votre dossier est suffisamment préparé pour ne pas offrir à l'aveugle.</p></div>
+  <article class="panel readiness">
+   <div class="readinessgrid">
+    <div class="readinessitem"><span>Parcours terminé</span><b id="readyJourney">0/12</b></div>
+    <div class="readinessitem"><span>Checklist avant offre</span><b id="readyChecklist">0/14</b></div>
+    <div class="readinessitem"><span>Score préparation</span><b id="offerScore">0/100</b></div>
+   </div>
+   <div class="offerbar"><i id="offerBar"></i></div>
+   <div class="offerstatus"><b id="offerStatusTitle">PAS PRÊT À OFFRIR</b><span id="offerStatusText">Commencez par le budget, le financement et les documents.</span></div>
+  </article>
+ </div>
+</section>
+
 <section class="section" id="check">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Checklist avant offre</p><h2>Si un point rouge reste inconnu, ne vous précipitez pas.</h2></div><p>Cette liste est volontairement simple à cocher sur téléphone pendant une visite ou juste avant une offre.</p></div>
   <div class="grid2">
    <div class="panel" style="padding:18px"><div class="checks">
-    <div class="check"><input type="checkbox"><label>Budget total calculé avec travaux et réserve.</label></div>
-    <div class="check"><input type="checkbox"><label>Financement réaliste / simulation bancaire faite.</label></div>
-    <div class="check"><input type="checkbox"><label>Prix comparé avec des biens similaires.</label></div>
-    <div class="check"><input type="checkbox"><label>PEB lu et coût d'amélioration compris.</label></div>
-    <div class="check"><input type="checkbox"><label>Électricité vérifiée.</label></div>
-    <div class="check"><input type="checkbox"><label>Urbanisme et affectation vérifiés.</label></div>
-    <div class="check"><input type="checkbox"><label>Toiture / humidité / structure examinées.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc1"><label for="oc1">Budget total calculé avec travaux et réserve.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc2"><label for="oc2">Financement réaliste / simulation bancaire faite.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc3"><label for="oc3">Prix comparé avec des biens similaires.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc4"><label for="oc4">PEB lu et coût d'amélioration compris.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc5"><label for="oc5">Électricité vérifiée.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc6"><label for="oc6">Urbanisme et affectation vérifiés.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc7"><label for="oc7">Toiture / humidité / structure examinées.</label></div>
    </div></div>
    <div class="panel" style="padding:18px"><div class="checks">
-    <div class="check"><input type="checkbox"><label>Copropriété / PV AG / fonds de réserve lus si appartement.</label></div>
-    <div class="check"><input type="checkbox"><label>Bail et occupation vérifiés si bien loué.</label></div>
-    <div class="check"><input type="checkbox"><label>Travaux importants chiffrés par devis ou avis fiable.</label></div>
-    <div class="check"><input type="checkbox"><label>Prix maximum absolu défini.</label></div>
-    <div class="check"><input type="checkbox"><label>Condition suspensive de crédit prévue si nécessaire.</label></div>
-    <div class="check"><input type="checkbox"><label>Offre relue si le dossier est complexe ou engageant.</label></div>
-    <div class="check"><input type="checkbox"><label>Il restera une réserve de sécurité après l'achat.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc8"><label for="oc8">Copropriété / PV AG / fonds de réserve lus si appartement.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc9"><label for="oc9">Bail et occupation vérifiés si bien loué.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc10"><label for="oc10">Travaux importants chiffrés par devis ou avis fiable.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc11"><label for="oc11">Prix maximum absolu défini.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc12"><label for="oc12">Condition suspensive de crédit prévue si nécessaire.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc13"><label for="oc13">Offre relue si le dossier est complexe ou engageant.</label></div>
+    <div class="check"><input type="checkbox" class="offercheck" id="oc14"><label for="oc14">Il restera une réserve de sécurité après l'achat.</label></div>
    </div></div>
+  </div>
+ </div>
+</section>
+
+
+<section class="section" id="redflags">
+ <div class="wrap">
+  <div class="sectionhead"><div><p class="eyebrow">Red flags</p><h2>8 raisons de ralentir ou de partir.</h2></div><p>Un premier acheteur doit savoir reconnaître les situations où l'urgence commerciale ne doit jamais remplacer la vérification.</p></div>
+  <div class="redflags">
+   <div class="redflag"><b>Urbanisme flou</b><span>Annexe, division, grenier, studio ou usage non confirmé.</span></div>
+   <div class="redflag"><b>Documents refusés</b><span>Le vendeur ou l'agence ne fournit pas PEB, électricité, PV ou informations essentielles.</span></div>
+   <div class="redflag"><b>Humidité / fissures</b><span>Sans diagnostic ni chiffrage, ne minimisez pas le risque.</span></div>
+   <div class="redflag"><b>Gros travaux de copropriété</b><span>Façade, toiture, ascenseur ou chauffage collectif sans fonds suffisant.</span></div>
+   <div class="redflag"><b>Mensualité à la limite</b><span>Si le projet ne fonctionne que “au maximum de la banque”, la marge de sécurité est faible.</span></div>
+   <div class="redflag"><b>Épargne vidée</b><span>Après l'acte, il doit rester une réserve pour les imprévus.</span></div>
+   <div class="redflag"><b>Loyer irréaliste</b><span>Pour investir, vérifiez le loyer avec des comparables et non avec l'estimation du vendeur.</span></div>
+   <div class="redflag"><b>Pression pour signer</b><span>Une offre peut engager : ne signez pas un texte que vous ne comprenez pas.</span></div>
   </div>
  </div>
 </section>
@@ -510,6 +580,27 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
+
+<section class="section" id="lexique">
+ <div class="wrap">
+  <div class="sectionhead"><div><p class="eyebrow">Lexique ultra-simple</p><h2>Les mots que vous devez comprendre avant d'acheter.</h2></div><p>Un premier achat devient plus simple quand le vocabulaire cesse d'être un obstacle.</p></div>
+  <div class="glossary">
+   <div class="term"><b>Offre</b><span>Proposition écrite d'achat. Si elle est acceptée et suffisamment précise, elle peut déjà engager.</span></div>
+   <div class="term"><b>Compromis</b><span>Contrat très engageant qui fixe les conditions essentielles de la vente avant l'acte.</span></div>
+   <div class="term"><b>Acte authentique</b><span>Acte signé chez le notaire qui officialise et publie la vente.</span></div>
+   <div class="term"><b>PEB / EPC</b><span>Certificat de performance énergétique du logement.</span></div>
+   <div class="term"><b>RC</b><span>Revenu cadastral : base utilisée pour certains calculs fiscaux, distincte du loyer réel.</span></div>
+   <div class="term"><b>Précompte immobilier</b><span>Impôt immobilier récurrent payé par le propriétaire.</span></div>
+   <div class="term"><b>TAEG</b><span>Indicateur du coût annuel du crédit incluant davantage de coûts que le seul taux nominal.</span></div>
+   <div class="term"><b>Hypothèque</b><span>Garantie immobilière donnée à la banque pour sécuriser le crédit.</span></div>
+   <div class="term"><b>Mandat hypothécaire</b><span>Autorisation permettant à la banque de prendre une hypothèque plus tard selon les conditions prévues.</span></div>
+   <div class="term"><b>Condition suspensive</b><span>Condition qui peut empêcher la vente de devenir définitive si l'événement prévu ne se réalise pas, par exemple l'obtention du crédit.</span></div>
+   <div class="term"><b>Fonds de réserve</b><span>Épargne de la copropriété destinée notamment aux dépenses importantes futures.</span></div>
+   <div class="term"><b>Servitude</b><span>Droit ou charge attaché au bien, par exemple un passage au profit d'un autre fonds.</span></div>
+  </div>
+ </div>
+</section>
+
 <section class="section">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Sources intégrées</p><h2>La base documentaire ARGUS.</h2></div><p>Le site transforme les documents en parcours opérationnel; il ne remplace pas leur validation professionnelle.</p></div>
@@ -528,7 +619,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 </main>
 
 <nav class="bottom" aria-label="Navigation mobile">
- <a href="#home">Accueil</a><a href="#assistant">Mon plan</a><a href="#parcours">Étapes</a><a href="#budget">Budget</a><a href="#check">Checklist</a>
+ <a href="#home">Accueil</a><a href="#assistant">Mon plan</a><a href="#parcours">Étapes</a><a href="#ready">Offre ?</a><a href="#check">Checklist</a>
 </nav>
 
 <script>
@@ -602,6 +693,7 @@ function updateProgress(){
  const next=checks.findIndex(c=>!c.checked);
  const names=['Budget','Banque','Critères','Zone','Première visite','Documents','Travaux','Prix maximum','Offre','Compromis','Crédit final','Acte'];
  $('nextStep').textContent=next<0?'Parcours terminé':('Prochaine : '+names[next]);
+ if(typeof updateNextAction==='function')updateNextAction();
 }
 try{
  const saved=JSON.parse(localStorage.getItem('argus-immo-progress')||'{}');
@@ -609,6 +701,56 @@ try{
 }catch(e){}
 checks.forEach(c=>c.addEventListener('change',saveProgress));
 updateProgress();
+
+const offerChecks=[...document.querySelectorAll('.offercheck')];
+function saveOfferChecks(){
+ const s={};offerChecks.forEach(c=>s[c.id]=c.checked);
+ try{localStorage.setItem('argus-immo-offer-checks',JSON.stringify(s))}catch(e){}
+ updateOfferReadiness();
+}
+try{
+ const s=JSON.parse(localStorage.getItem('argus-immo-offer-checks')||'{}');
+ offerChecks.forEach(c=>{if(s[c.id])c.checked=true});
+}catch(e){}
+offerChecks.forEach(c=>c.addEventListener('change',saveOfferChecks));
+
+function updateNextAction(){
+ const done=checks.filter(c=>c.checked).length;
+ const title=$('nextActionTitle'),textEl=$('nextActionText'),link=$('nextActionLink');
+ if(!title)return;
+ if(done===0){title.textContent='Créer votre plan personnalisé';textEl.textContent='Commencez par votre budget, vos revenus, votre Région et votre horizon.';link.href='#assistant';link.textContent='Créer mon plan';}
+ else if(done<2){title.textContent='Sécuriser votre budget et la banque';textEl.textContent='Ne cherchez pas encore le bien parfait : commencez par savoir combien vous pouvez acheter sans vous mettre sous pression.';link.href='#budget';link.textContent='Vérifier mon budget';}
+ else if(done<5){title.textContent='Définir votre zone et commencer les visites';textEl.textContent='Votre financement prend forme. Passez maintenant aux critères, comparables et premières visites.';link.href='#parcours';link.textContent='Continuer les étapes';}
+ else if(done<8){title.textContent='Passer des visites aux preuves';textEl.textContent='Demandez les documents, chiffrez les travaux et fixez votre prix maximum avant de négocier.';link.href='#documents';link.textContent='Voir les documents';}
+ else if(done<10){title.textContent='Préparer une offre sans perdre vos protections';textEl.textContent='Vérifiez votre score “prêt à offrir” et les conditions suspensives avant d’envoyer une offre.';link.href='#ready';link.textContent='Suis-je prêt à offrir ?';}
+ else if(done<12){title.textContent='Finaliser le crédit et l’acte';textEl.textContent='Le compromis est en place : sécurisez le crédit définitif, les assurances et l’acte.';link.href='#parcours';link.textContent='Finir le parcours';}
+ else{title.textContent='Parcours d’achat terminé';textEl.textContent='Conservez vos documents, factures, assurances et préparez maintenant la gestion du bien.';link.href='#home';link.textContent='Retour à l’accueil';}
+}
+function updateOfferReadiness(){
+ const journeyDone=checks.filter(c=>c.checked).length;
+ const offerDone=offerChecks.filter(c=>c.checked).length;
+ const journeyPct=journeyDone/checks.length;
+ const offerPct=offerChecks.length?offerDone/offerChecks.length:0;
+ let score=Math.round((journeyPct*.55+offerPct*.45)*100);
+ const critical=['oc1','oc2','oc6','oc11','oc12','oc14'];
+ const criticalOk=critical.every(id=>{const el=$(id);return !el||el.checked});
+ if(!criticalOk)score=Math.min(score,69);
+ if($('readyJourney'))$('readyJourney').textContent=journeyDone+'/'+checks.length;
+ if($('readyChecklist'))$('readyChecklist').textContent=offerDone+'/'+offerChecks.length;
+ if($('offerScore'))$('offerScore').textContent=score+'/100';
+ if($('offerBar'))$('offerBar').style.width=score+'%';
+ const t=$('offerStatusTitle'),s=$('offerStatusText');
+ if(t&&s){
+  if(score>=85&&criticalOk){t.textContent='PRÊT À ENVISAGER UNE OFFRE';s.textContent='Votre préparation est solide. Vérifiez encore le texte exact de l’offre et faites relire les points juridiques importants.';}
+  else if(score>=65){t.textContent='PRESQUE PRÊT — POINTS À FERMER';s.textContent='Il reste des vérifications importantes. Ne laissez pas l’urgence commerciale supprimer vos protections.';}
+  else{t.textContent='PAS PRÊT À OFFRIR';s.textContent='Budget, financement, documents ou risques ne sont pas encore suffisamment sécurisés.';}
+ }
+ updateNextAction();
+}
+offerChecks.forEach(c=>c.addEventListener('change',updateOfferReadiness));
+checks.forEach(c=>c.addEventListener('change',updateOfferReadiness));
+updateOfferReadiness();
+updateNextAction();
 
 function regTax(price,region,usage){
  if(usage==='investment') return price*(region==='flanders'?.12:.125);
@@ -640,6 +782,11 @@ function calc(){
 }
 document.querySelectorAll('#budget input,#budget select').forEach(x=>x.addEventListener('input',calc));
 calc();
+try{
+ const savedWizard=localStorage.getItem('argus-immo-wizard');
+ if(savedWizard&&savedWizard!=='{}')buildPersonalPlan();
+}catch(e){}
+
 </script>
 </body>
 </html>
