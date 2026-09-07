@@ -184,8 +184,8 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 .scanstatus.good{color:var(--green)}.scanstatus.warn{color:var(--amber)}.scanstatus.bad{color:var(--red)}
 .scanresult{margin-top:13px}
 .scanhead{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
-.scanhead h3{margin:0}
-.scanhead p{margin:4px 0 0;color:var(--muted);font-size:.84rem}
+.scanhead h3{margin:0;font-size:1.08rem;line-height:1.28;letter-spacing:-.01em;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.scanhead p{margin:5px 0 0;color:var(--muted);font-size:.82rem;line-height:1.35}
 .scansource{font-size:.72rem;color:var(--blue);border:1px solid #355170;padding:6px 8px;border-radius:999px}
 .scanfields{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
 .scankpi{padding:12px;border-radius:12px;background:#0a1727;border:1px solid #29415e}
@@ -220,8 +220,9 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 .confidencebar i{display:block;height:100%;background:linear-gradient(90deg,#e0ad52,#79c49e);width:0}
 :focus-visible{outline:3px solid rgba(158,200,255,.55);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-.footer{padding:28px 0 100px;color:#8195aa;font-size:.79rem;border-top:1px solid var(--line)}
+.footer{padding:28px 0 110px;color:#8195aa;font-size:.79rem;border-top:1px solid var(--line)}
 .bottom{display:none}
+@media(max-width:860px){main{padding-bottom:72px}}
 .hidden{display:none!important}
 @media(max-width:860px){
  .desktopnav{display:none}
@@ -231,8 +232,8 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  .sectionhead{display:block}
  .sectionhead p{margin-top:8px}
  .stepbody{padding-left:16px}
- .bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;z-index:90;left:50%;transform:translateX(-50%);bottom:max(8px,env(safe-area-inset-bottom));width:min(620px,calc(100% - 16px));background:rgba(11,25,42,.97);backdrop-filter:blur(14px);border:1px solid #395471;border-radius:16px;padding:6px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
- .bottom a{text-decoration:none;color:#dbe7f5;min-height:48px;display:grid;place-items:center;text-align:center;border-radius:10px;font-size:.69rem;font-weight:850;padding:3px}
+ .bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;z-index:90;left:50%;transform:translateX(-50%);bottom:max(5px,env(safe-area-inset-bottom));width:min(600px,calc(100% - 20px));background:rgba(11,25,42,.96);backdrop-filter:blur(14px);border:1px solid #395471;border-radius:14px;padding:4px;box-shadow:0 14px 38px rgba(0,0,0,.3)}
+ .bottom a{text-decoration:none;color:#dbe7f5;min-height:40px;display:grid;place-items:center;text-align:center;border-radius:9px;font-size:.62rem;line-height:1.05;font-weight:850;padding:2px;white-space:nowrap}
  .bottom a:active{background:#e8f2ff;color:#102640}
  .nextaction{position:sticky;top:76px;z-index:25}
  .readinessgrid,.redflags,.glossary,.typegrid,.scanfields,.dealgrid,.manualgrid,.intelgrid{grid-template-columns:1fr}
@@ -771,7 +772,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 </main>
 
 <nav class="bottom" aria-label="Navigation mobile">
- <a href="#assistant">Mon plan</a><a href="#scanner">Scanner</a><a href="#parcours">Étapes</a><a href="#ready">Offre ?</a><a href="#check">Checklist</a>
+ <a href="#assistant">Plan</a><a href="#scanner">Scanner</a><a href="#parcours">Étapes</a><a href="#ready">Offre</a><a href="#check">Check</a>
 </nav>
 
 <script>
@@ -846,6 +847,22 @@ $('resetPlan').addEventListener('click',()=>{try{localStorage.removeItem('argus-
 
 function typeLabel(t){return propertyTypeGuides[t]?.name||t||'Inconnu'}
 function safeNum(id){return Math.max(0,Number($(id)?.value)||0)}
+function parseListingPriceFromText(text=''){
+ const s=String(text).replace(/\u00a0/g,' ');
+ const m=s.match(/(?:^|\D)(\d[\d .,'’]{3,})\s*€/i)||s.match(/€\s*(\d[\d .,'’]{3,})/i);
+ if(!m)return null;
+ const n=Number(String(m[1]).replace(/[^0-9]/g,''));
+ return Number.isFinite(n)&&n>=10000&&n<=100000000?n:null;
+}
+function parseListingSurfaceFromText(text=''){
+ const m=String(text).replace(/\u00a0/g,' ').match(/(\d{1,4}(?:[.,]\d+)?)\s*m(?:²|2)\b/i);
+ if(!m)return null;
+ const n=Number(m[1].replace(',','.'));
+ return Number.isFinite(n)&&n>5&&n<10000?n:null;
+}
+function cleanListingTitle(title=''){
+ return String(title).replace(/\s*[-|]\s*(Immoweb|Immovlan|Zimmo|Realo|ERA|Logic[- ]?Immo).*$/i,'').trim();
+}
 function scanRegTax(price,region,use){
  if(use==='investment')return price*(region==='flanders'?.12:.125);
  if(region==='wallonia')return price*.03;
@@ -860,22 +877,37 @@ function syncScanKpis(){
 }
 document.querySelectorAll('#scanner input,#scanner select').forEach(x=>x.addEventListener('input',syncScanKpis));
 $('scanListing').addEventListener('click',async()=>{
- const url=$('listingUrl').value.trim(),status=$('scanStatus');
+ const url=$('listingUrl').value.trim(),status=$('scanStatus'),btn=$('scanListing');
  if(!url){status.className='scanstatus bad';status.textContent='Collez d’abord le lien de l’annonce.';return}
- status.className='scanstatus';status.textContent='Lecture de l’annonce…';
+ btn.disabled=true;btn.textContent='Analyse…';status.className='scanstatus';status.textContent='Lecture de l’annonce…';
  try{
   const r=await fetch('/api/immo-listing-scan',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({url})});
   const j=await r.json();
   if(!j.ok)throw new Error(j.error||'Extraction impossible');
   const d=j.data||{};$('scanResult').classList.remove('hidden');
-  $('scanTitle').textContent=d.title||'Annonce immobilière';$('scanMeta').textContent=[d.address,d.bedrooms!=null?d.bedrooms+' ch.':null,d.bathrooms!=null?d.bathrooms+' sdb':null].filter(Boolean).join(' · ')||'Vérifiez les champs ci-dessous';
+  const rawTitle=d.title||'Annonce immobilière';
+  const fallbackPrice=parseListingPriceFromText(rawTitle+' '+(d.description||''));
+  const fallbackSurface=parseListingSurfaceFromText(rawTitle+' '+(d.description||''));
+  const resolvedPrice=Number(d.price)||fallbackPrice;
+  const resolvedSurface=Number(d.surface)||fallbackSurface;
+  $('scanTitle').textContent=cleanListingTitle(rawTitle);
+  $('scanMeta').textContent=[d.address,d.bedrooms!=null?d.bedrooms+' ch.':null,d.bathrooms!=null?d.bathrooms+' sdb':null].filter(Boolean).join(' · ')||'Vérifiez les champs ci-dessous';
   $('scanSource').textContent=d.source||'source';$('scanLocationKpi').textContent=d.address||d.city||'—';
-  if(d.price)$('scanPrice').value=Math.round(d.price);if(d.surface)$('scanSurface').value=d.surface;if(d.type&&d.type!=='unknown')$('scanType').value=d.type;if(d.epc)$('scanPeb').value=d.epc.charAt(0);
-  renderTypeGuide($('scanType').value,'dealTypeGuide');syncScanKpis();
-  status.className='scanstatus good';status.textContent='Annonce lue. Vérifiez les champs, complétez loyer/travaux/documents, puis lancez le calcul.';
+  if(resolvedPrice)$('scanPrice').value=Math.round(resolvedPrice);
+  if(resolvedSurface)$('scanSurface').value=resolvedSurface;
+  if(d.type&&d.type!=='unknown')$('scanType').value=d.type;
+  if(d.epc)$('scanPeb').value=d.epc.charAt(0);
+  const y=defaultYieldForType($('scanType').value);if(y)$('scanTargetYield').value=y;
+  renderTypeGuide($('scanType').value,'dealTypeGuide');syncScanKpis();saveScanState?.();
+  status.className=(resolvedPrice&&resolvedSurface)?'scanstatus good':'scanstatus warn';
+  status.textContent=(resolvedPrice&&resolvedSurface)
+   ?'Annonce lue : prix et surface détectés. Vérifiez les données puis lancez le calcul.'
+   :'Annonce lue partiellement. Vérifiez le prix et la surface avant le calcul.';
  }catch(e){
   $('scanResult').classList.remove('hidden');syncScanKpis();
   status.className='scanstatus warn';status.textContent='Extraction automatique indisponible : '+e.message+'. Remplissez les champs manuellement — le calcul ARGUS fonctionne quand même.';
+ }finally{
+  btn.disabled=false;btn.textContent='Analyser le lien';
  }
 });
 function defaultYieldForType(type){
