@@ -1221,7 +1221,7 @@ document.querySelectorAll('.modebtn').forEach(b=>b.addEventListener('click',()=>
  if(b.dataset.mode==='invest'){ $('wGoal').value='invest'; saveWizard(); location.hash='#assistant'; } else { $('wGoal').value='home'; saveWizard(); location.hash='#assistant'; }
 }));
 
-const journey=$('.journey'),journeyToggle=$('toggleJourney');
+const journey=document.querySelector('.journey'),journeyToggle=$('toggleJourney');
 if(journeyToggle&&journey){
  journeyToggle.addEventListener('click',()=>{
   const hidden=journey.classList.toggle('hidden-detail');
