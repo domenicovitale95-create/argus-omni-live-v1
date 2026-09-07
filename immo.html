@@ -218,6 +218,36 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 .nextdeal .secondary{background:white;color:#173650}
 .confidencebar{height:9px;background:#cbd9e9;border-radius:999px;overflow:hidden;margin-top:7px}
 .confidencebar i{display:block;height:100%;background:linear-gradient(90deg,#e0ad52,#79c49e);width:0}
+.brain{margin-top:13px;border:1px solid #aec5df;border-radius:15px;background:#f5f9fe;color:var(--ink);padding:15px}
+.brainhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.brainhead h4{margin:0;font-size:1.08rem}
+.brainhead p{margin:4px 0 0;color:#586f88;font-size:.8rem}
+.brainbadge{white-space:nowrap;border-radius:999px;background:#173650;color:white;padding:6px 9px;font-size:.68rem;font-weight:900}
+.pillars{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:11px}
+.pillar{padding:9px 8px;border-radius:10px;background:#e1ebf6;text-align:center}
+.pillar span{display:block;color:#5e748c;font-size:.61rem;text-transform:uppercase;font-weight:900}
+.pillar b{display:block;margin-top:3px;font-size:.93rem}
+.brainoverall{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:center;margin-top:11px;padding:11px;border-radius:12px;background:#dbe9f7}
+.brainoverall strong{font-size:1.5rem}
+.brainoverall span{display:block;color:#536b85;font-size:.78rem}
+.scenarios{width:100%;border-collapse:collapse;margin-top:11px}
+.scenarios th,.scenarios td{padding:8px 7px;border-bottom:1px solid #cddbea;text-align:left;font-size:.76rem}
+.scenarios th{color:#536b85;font-size:.65rem;text-transform:uppercase;letter-spacing:.05em}
+.smartqs{margin-top:11px;padding:11px;border-radius:12px;background:#e8f0f9}
+.smartqs b{display:block;margin-bottom:6px}
+.smartqs ol{margin:0;padding-left:19px}
+.smartqs li{margin:5px 0;color:#405a75;font-size:.8rem}
+.marketpulse{margin-top:10px;color:#526b84;font-size:.76rem}
+.brainmethod{margin-top:10px;border:1px solid #c7d7e7;border-radius:11px;background:white}
+.brainmethod summary{cursor:pointer;padding:10px 11px;font-weight:850;font-size:.8rem}
+.brainmethod div{padding:0 11px 11px;color:#526981;font-size:.78rem}
+@media(max-width:700px){
+ .pillars{grid-template-columns:repeat(3,1fr)}
+ .brainhead{display:block}
+ .brainbadge{display:inline-block;margin-top:8px}
+ .brainoverall{grid-template-columns:1fr}
+ .scenarios th,.scenarios td{font-size:.7rem;padding:7px 5px}
+}
 :focus-visible{outline:3px solid rgba(158,200,255,.55);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 .footer{padding:28px 0 110px;color:#8195aa;font-size:.79rem;border-top:1px solid var(--line)}
@@ -526,6 +556,7 @@ body.show-theory-advanced .advanced-theory{display:block!important}
     <div class="field"><label>Prix annoncé (€)</label><input id="scanPrice" type="number" value="300000"></div>
     <div class="field"><label>Surface (m²)</label><input id="scanSurface" type="number" value="80"></div>
     <div class="field"><label>Référence locale €/m² (optionnel)</label><input id="scanLocalPsm" type="number" placeholder="Ex. 3500"></div>
+    <div class="field"><label>Comparables locaux</label><select id="scanComparables"><option value="unknown" selected>Pas encore vérifiés</option><option value="few">1–2 comparables</option><option value="strong">3+ comparables cohérents</option><option value="weak">Comparables contradictoires / faible liquidité</option></select></div>
     <div class="field"><label>Travaux estimés (€)</label><input id="scanWorks" type="number" value="10000"></div>
     <div class="field"><label>Loyer réaliste / mois (€)</label><input id="scanRent" type="number" value="1200"></div>
     <div class="field"><label>Rendement brut cible ARGUS (%)</label><input id="scanTargetYield" type="number" value="6.5" step=".1" min="1"><span class="note">Hypothèse modifiable selon type, zone et risque.</span></div>
@@ -564,6 +595,31 @@ body.show-theory-advanced .advanced-theory{display:block!important}
     <div class="scanverdict" id="dealVerdict"><b id="dealVerdictTitle">—</b><span id="dealVerdictText">—</span></div>
     <div class="missingbox" id="dealMissing"><b>Données manquantes</b><span id="dealMissingText">—</span></div>
     <div class="reasonbox"><h4>Pourquoi ARGUS arrive à ce verdict</h4><ul id="dealReasons"></ul></div>
+
+    <div class="brain" id="argusBrain">
+     <div class="brainhead"><div><h4>ARGUS BRAIN — décision multi-couches</h4><p>Un score élevé ne peut jamais compenser un blocage juridique ou des données insuffisantes.</p></div><span class="brainbadge" id="brainMode">EVIDENCE FIRST</span></div>
+     <div class="pillars">
+      <div class="pillar"><span>Preuves</span><b id="brainEvidence">—</b></div>
+      <div class="pillar"><span>Juridique</span><b id="brainLegal">—</b></div>
+      <div class="pillar"><span>Valeur</span><b id="brainValue">—</b></div>
+      <div class="pillar"><span>Finance</span><b id="brainFinance">—</b></div>
+      <div class="pillar"><span>Technique</span><b id="brainTechnical">—</b></div>
+      <div class="pillar"><span>Sortie</span><b id="brainExit">—</b></div>
+     </div>
+     <div class="brainoverall"><strong id="brainOverall">—</strong><span><b id="brainDecision">—</b><br><span id="brainDecisionWhy">—</span></span></div>
+     <table class="scenarios">
+      <thead><tr><th>Scénario</th><th id="scenarioMetricHead">Mesure</th><th>Résultat</th><th>Lecture</th></tr></thead>
+      <tbody>
+       <tr><td>Base</td><td id="scenarioBaseMetric">—</td><td id="scenarioBase">—</td><td id="scenarioBaseRead">—</td></tr>
+       <tr><td>Stress</td><td id="scenarioStressMetric">—</td><td id="scenarioStress">—</td><td id="scenarioStressRead">—</td></tr>
+       <tr><td>Sévère</td><td id="scenarioSevereMetric">—</td><td id="scenarioSevere">—</td><td id="scenarioSevereRead">—</td></tr>
+      </tbody>
+     </table>
+     <div class="smartqs"><b>Les prochaines questions intelligentes</b><ol id="brainQuestions"></ol></div>
+     <div class="marketpulse" id="brainMarketPulse">—</div>
+     <details class="brainmethod"><summary>Comment ARGUS BRAIN raisonne</summary><div>1. Vérifie les preuves. 2. Applique les STOP juridiques. 3. Estime valeur et marge. 4. Vérifie votre financement. 5. Mesure le risque technique. 6. Teste un scénario stressé. 7. Donne une seule prochaine action. Aucun score ne peut effacer un STOP.</div></details>
+    </div>
+
     <div class="typeguide" id="dealTypeGuide" style="margin-top:12px"></div>
     <div class="nextdeal">
      <a id="dealNextLink" href="#documents">Prochaine action</a>
@@ -965,7 +1021,7 @@ try{const s=JSON.parse(localStorage.getItem('argus-immo-wizard')||'{}');wizardId
 wizardIds.forEach(id=>$(id).addEventListener('input',saveWizard));
 
 function loanFromPayment(monthly,rate=4,years=25){const r=rate/100/12,n=years*12;if(monthly<=0)return 0;return monthly*(1-Math.pow(1+r,-n))/r}
-function regTaxPlan(price,region,goal){const home=goal!=='invest';if(!home)return price*(region==='flanders'?.12:.125);if(region==='wallonia')return price*.03;if(region==='flanders')return price*.02;return Math.max(0,price-200000)*.125}
+function regTaxPlan(price,region,goal){const home=goal!=='invest';if(!home)return price*(region==='flanders'?.12:.125);if(region==='wallonia')return price*.03;if(region==='flanders')return price*.02;if(price>600000)return price*.125;return Math.max(0,price-200000)*.125}
 function prudentEnvelope(goal,region,savings,income,debt,expenses){
  const reserve=Math.max(expenses*6,5000),usable=Math.max(0,savings-reserve),comfort=Math.max(0,income*.35-debt),loanCap=loanFromPayment(comfort,4,25);
  let lo=0,hi=Math.max(100000,loanCap+usable+150000);
@@ -1081,8 +1137,135 @@ $('scanType').addEventListener('change',()=>{
  syncScanKpis();
 });
 
+
+const macro2026={
+ apartment:{brussels:275000,wallonia:195000,flanders:265000,belgium:257000},
+ house:{brussels:543500,wallonia:200000,flanders:321318,belgium:285000}
+};
+function clamp100(n){return Math.max(0,Math.min(100,Math.round(n)))}
+function scoreLabel(n){return n>=80?'fort':n>=65?'correct':n>=50?'moyen':'faible'}
+function macroLine(type,region){
+ const row=macro2026[type];
+ if(!row)return 'Contexte marché : pas de médiane Statbel directement comparable pour ce type. Le contexte macro ne sert pas à fixer FAIR VALUE.';
+ const names={brussels:'Bruxelles',wallonia:'Wallonie',flanders:'Flandre'};
+ return 'Repère macro Statbel Q1 2026 — '+names[region]+' : '+euro(row[region])+' médiane '+(type==='apartment'?'appartement':'maison 2–3 façades')+'. Belgique : '+euro(row.belgium)+'. HPI Belgique Q1 2026 : +2,0 % sur un an, -0,8 % sur le trimestre. Ce repère ne remplace pas les comparables locaux.';
+}
+function buildBrainQuestions(ctx){
+ const q=[];
+ if(ctx.legal==='unknown')q.push('Pouvez-vous fournir les renseignements urbanistiques et confirmer par écrit que la configuration actuelle est autorisée ?');
+ if(ctx.docs!=='yes')q.push('Pouvez-vous envoyer le dossier complet avant offre : PEB/EPC, électricité, urbanisme, titre/servitudes et pièces spécifiques au bien ?');
+ if(ctx.comparables!=='strong')q.push('Quels sont les 3 biens réellement comparables dans cette rue ou micro-zone et à quel prix ont-ils été vendus ou récemment négociés ?');
+ if(ctx.type==='apartment')q.push('Pouvez-vous envoyer les 3 derniers PV d’AG, le fonds de réserve, les charges et la liste des travaux votés ou envisagés ?');
+ if(ctx.type==='building')q.push('Combien d’unités sont officiellement reconnues, et pouvez-vous fournir les baux enregistrés ainsi que les preuves de loyers encaissés ?');
+ if(ctx.type==='house')q.push('Quel est l’âge de la toiture, de la chaudière et des installations, et existe-t-il des antécédents d’humidité ou de sinistre ?');
+ if(ctx.type==='studio')q.push('La surface, l’affectation et la configuration du studio sont-elles explicitement reconnues par l’urbanisme ?');
+ if(['F','G','E'].includes(ctx.peb))q.push('Quels travaux énergétiques sont recommandés par le PEB et existe-t-il des devis récents pour les postes principaux ?');
+ if(ctx.works>0)q.push('Quels travaux sont documentés par devis ou factures, et lesquels sont urgents dans les 24 premiers mois ?');
+ if(ctx.investment)q.push('Le loyer saisi est-il confirmé par le bail actuel ou par au moins 3 comparables locatifs récents ?');
+ return [...new Set(q)].slice(0,5);
+}
+function runArgusBrain(ctx){
+ const comp=ctx.comparables||'unknown';
+ let evidence=ctx.confidence;
+ if(comp==='strong')evidence+=10; else if(comp==='few')evidence+=3; else if(comp==='weak')evidence-=10; else evidence-=7;
+ evidence=clamp100(evidence);
+
+ let legal=ctx.legal==='yes'?88:ctx.legal==='unknown'?45:8;
+ legal+=ctx.docs==='yes'?10:ctx.docs==='partial'?-5:-25;
+ if((ctx.type==='building'||ctx.type==='studio')&&ctx.legal==='unknown')legal=Math.min(legal,35);
+ legal=clamp100(legal);
+
+ let value=40;
+ if(ctx.fairValue!=null&&ctx.price>0){
+  const r=ctx.price/ctx.fairValue;
+  value=r<=.93?96:r<=1?88:r<=1.05?72:r<=1.1?55:r<=1.2?35:18;
+ }else if(ctx.marketValue!=null) value=65;
+ if(comp==='strong')value+=6;else if(comp==='weak')value-=10;
+ value=clamp100(value);
+
+ let finance=50;
+ const fit=ctx.budgetFit;
+ if(fit==='Compatible')finance=88;
+ else if(fit==='Réserve faible')finance=60;
+ else if(fit==='Mensualité trop haute')finance=28;
+ else if(fit==='Cash insuffisant')finance=12;
+ if(ctx.investment){
+  finance+=(ctx.cf>=0?8:-10);
+  finance+=(ctx.gross>=ctx.targetYieldPct?6:-6);
+ }
+ finance=clamp100(finance);
+
+ let technical=({A:94,B:90,C:84,D:76,E:62,F:43,G:28,'?':50})[ctx.peb]??50;
+ const workShare=ctx.price>0?ctx.works/ctx.price:0;
+ if(workShare>.20)technical-=20;else if(workShare>.10)technical-=10;else if(workShare>.05)technical-=4;
+ technical=clamp100(technical);
+
+ let exit=({strong:90,few:68,weak:38,unknown:48})[comp]??48;
+ const typeAdj={apartment:7,house:3,studio:-2,building:-8,new:0,land:-12,commercial:-15}[ctx.type]||0;
+ exit=clamp100(exit+typeAdj);
+
+ const weights=ctx.investment
+   ?{evidence:.15,legal:.20,value:.15,finance:.25,technical:.10,exit:.15}
+   :{evidence:.15,legal:.20,value:.20,finance:.25,technical:.15,exit:.05};
+ let overall=clamp100(evidence*weights.evidence+legal*weights.legal+value*weights.value+finance*weights.finance+technical*weights.technical+exit*weights.exit);
+
+ const hardStop=ctx.legal==='no'||ctx.docs==='no'||((ctx.type==='building'||ctx.type==='studio')&&ctx.legal==='unknown');
+ const notEnough=evidence<60||(!ctx.investment&&ctx.marketValue==null)||(ctx.investment&&!ctx.rent);
+ if(hardStop)overall=Math.min(overall,39);
+ else if(notEnough)overall=Math.min(overall,59);
+ else if(ctx.budgetBlock)overall=Math.min(overall,49);
+
+ // Stress tests
+ let baseValue,stressValue,severeValue,head,baseMetric,stressMetric,severeMetric;
+ if(ctx.investment){
+   head='Cash-flow';
+   const vacancyStress=ctx.rent*.85;
+   const vacancySevere=ctx.rent*.70;
+   const stressNoi=vacancyStress*.90-ctx.charges*1.20-ctx.fixed*1.20/12-(ctx.works*.20/24);
+   const severeNoi=vacancySevere*.88-ctx.charges*1.30-ctx.fixed*1.25/12-(ctx.works*.30/24);
+   baseValue=ctx.cf;stressValue=stressNoi-ctx.payment;severeValue=severeNoi-ctx.payment;
+   baseMetric='Hypothèses saisies';stressMetric='Loyer -15 %, charges +20 %';severeMetric='Loyer -30 %, charges +30 %';
+ }else{
+   head='Charge / revenu';
+   let inc=0,debt=0;
+   try{const ws=JSON.parse(localStorage.getItem('argus-immo-wizard')||'{}');inc=Number(ws.wIncome)||0;debt=Number(ws.wDebt)||0}catch(e){}
+   const housing=ctx.payment+ctx.charges+ctx.fixed/12;
+   baseValue=inc>0?(housing+debt)/inc*100:null;
+   stressValue=inc>0?(ctx.payment+ctx.charges*1.2+ctx.fixed*1.2/12+debt+(ctx.works*.2/24))/(inc*.8)*100:null;
+   severeValue=inc>0?(ctx.payment+ctx.charges*1.3+ctx.fixed*1.25/12+debt+(ctx.works*.3/24))/(inc*.7)*100:null;
+   baseMetric='Situation actuelle';stressMetric='Revenu -20 %, charges +20 %';severeMetric='Revenu -30 %, charges +30 %';
+ }
+ function scenarioText(v){
+  if(v==null)return ['—','Profil incomplet'];
+  if(ctx.investment)return [euro(v)+'/mois',v>=0?'Résiste':'Négatif'];
+  return [pct(v),v<=40?'Confortable':v<=50?'Tendu':'Fragile'];
+ }
+
+ let decision='WAIT — compléter les preuves',why='ARGUS manque encore de données suffisamment solides pour décider.';
+ let mode='EVIDENCE FIRST';
+ if(hardStop){decision='STOP — risque non compensable';why='Un blocage juridique ou documentaire passe avant le prix et le rendement.';mode='HARD GATE';}
+ else if(notEnough){decision='DATA FIRST — ne pas offrir';why='La valeur ou le revenu ne sont pas assez documentés pour justifier une offre.';mode='LOW CONFIDENCE';}
+ else if(ctx.budgetBlock){decision='PASS POUR CE PROFIL';why='Le bien peut être bon, mais pas avec votre structure financière actuelle.';mode='PERSONAL FIT';}
+ else if(overall>=82 && (ctx.investment?stressValue>=0:(stressValue!=null&&stressValue<=50))){decision='PRIORITÉ — approfondir puis offrir';why='Les couches prix, risques, financement et stress-test restent cohérentes.';mode='GO WITH PROOF';}
+ else if(overall>=65){decision='NÉGOCIER / SÉCURISER';why='Le dossier est intéressant mais une ou plusieurs marges doivent être améliorées.';mode='NEGOTIATE';}
+ else {decision='PASS / ATTENDRE';why='La marge de sécurité n’est pas suffisante face aux risques actuels.';mode='MARGIN FIRST';}
+
+ const vals={brainEvidence:evidence,brainLegal:legal,brainValue:value,brainFinance:finance,brainTechnical:technical,brainExit:exit};
+ Object.entries(vals).forEach(([id,v])=>{if($(id))$(id).textContent=v+'/100'});
+ $('brainOverall').textContent=overall+'/100';
+ $('brainDecision').textContent=decision;$('brainDecisionWhy').textContent=why;$('brainMode').textContent=mode;
+ $('scenarioMetricHead').textContent=head;
+ const b=scenarioText(baseValue),st=scenarioText(stressValue),sv=scenarioText(severeValue);
+ $('scenarioBaseMetric').textContent=baseMetric;$('scenarioStressMetric').textContent=stressMetric;$('scenarioSevereMetric').textContent=severeMetric;
+ $('scenarioBase').textContent=b[0];$('scenarioBaseRead').textContent=b[1];$('scenarioStress').textContent=st[0];$('scenarioStressRead').textContent=st[1];$('scenarioSevere').textContent=sv[0];$('scenarioSevereRead').textContent=sv[1];
+ $('brainQuestions').innerHTML=buildBrainQuestions(ctx).map(q=>'<li>'+q+'</li>').join('');
+ $('brainMarketPulse').textContent=macroLine(ctx.type,ctx.region);
+
+ return {overall,decision,why,mode,stressValue,hardStop,notEnough};
+}
+
 function calculateDeal(){
- const type=$('scanType').value,region=$('scanRegion').value,use=$('scanUse').value;
+ const type=$('scanType').value,region=$('scanRegion').value,use=$('scanUse').value,comparables=$('scanComparables').value;
  const price=safeNum('scanPrice'),surface=safeNum('scanSurface'),localPsm=safeNum('scanLocalPsm'),works=safeNum('scanWorks'),rent=safeNum('scanRent'),targetYieldPct=safeNum('scanTargetYield'),charges=safeNum('scanCharges'),fixed=safeNum('scanFixed'),down=Math.min(price,safeNum('scanDown'));
  const legal=$('scanLegal').value,docs=$('scanDocs').value,peb=$('scanPeb').value;
  const [rate,years]=$('scanFinance').value.split(',').map(Number);
@@ -1122,6 +1305,7 @@ function calculateDeal(){
  if(legal==='unknown')confidence-=12;
  if(docs==='partial')confidence-=8;
  if(docs==='no')confidence-=22;
+ if(comparables==='strong')confidence+=8;else if(comparables==='few')confidence+=2;else if(comparables==='weak')confidence-=10;else confidence-=6;
  confidence=Math.max(0,Math.min(100,confidence));
 
  let score=62,reasons=[];
@@ -1200,14 +1384,24 @@ function calculateDeal(){
    tx.textContent='Le rapport prix / risque / rendement n’offre pas assez de marge avec les données saisies.';
    next.href='#types';next.textContent='Comparer un autre bien';
  }
- window.__lastDealSummary='ARGUS IMMO — '+typeLabel(type)+'\nASK: '+euro(price)+'\nFAIR VALUE: '+(fairValue!=null?euro(fairValue):'à compléter')+'\nFIRST OFFER: '+(first!=null?euro(first):'à compléter')+'\nTARGET: '+(target!=null?euro(target):'à compléter')+'\nABS MAX: '+(absMax!=null?euro(absMax):'à compléter')+'\nScore: '+score+'/100\nConfiance: '+confidence+'/100\nBudget: '+budgetFit+'\nVerdict: '+t.textContent+'\nÀ vérifier: '+(missing.length?missing.join(', '):'aucun champ essentiel manquant');
+
+ const brain=runArgusBrain({type,region,use,comparables,price,surface,marketValue,fairValue,target,absMax,investment,rent,gross,targetYieldPct,cf,payment,charges,fixed,works,legal,docs,peb,confidence,budgetFit,budgetBlock,cashNeed,rate,years,down});
+ $('dealScore').textContent=brain.overall+'/100';
+ if(brain.hardStop){v.className='scanverdict bad';t.textContent='STOP';tx.textContent=brain.why;next.href='#documents';next.textContent='Sécuriser les preuves';}
+ else if(brain.notEnough){v.className='scanverdict warn';t.textContent='DATA FIRST';tx.textContent=brain.why;next.href='#scanner';next.textContent='Compléter les données';}
+ else if(budgetBlock){v.className='scanverdict bad';t.textContent='PASS / BUDGET';tx.textContent=brain.why;next.href='#budget';next.textContent='Revoir le budget';}
+ else if(brain.overall>=82){v.className='scanverdict good';t.textContent='PRIORITÉ';tx.textContent=brain.why;next.href='#ready';next.textContent='Vérifier avant offre';}
+ else if(brain.overall>=65){v.className='scanverdict warn';t.textContent='NEGOTIATE';tx.textContent=brain.why;next.href='#scanner';next.textContent='Améliorer le deal';}
+ else{v.className='scanverdict bad';t.textContent='PASS / WAIT';tx.textContent=brain.why;next.href='#types';next.textContent='Comparer un autre bien';}
+
+ window.__lastDealSummary='ARGUS IMMO — '+typeLabel(type)+'\nASK: '+euro(price)+'\nFAIR VALUE: '+(fairValue!=null?euro(fairValue):'à compléter')+'\nFIRST OFFER: '+(first!=null?euro(first):'à compléter')+'\nTARGET: '+(target!=null?euro(target):'à compléter')+'\nABS MAX: '+(absMax!=null?euro(absMax):'à compléter')+'\nARGUS BRAIN: '+brain.overall+'/100\nConfiance: '+confidence+'/100\nBudget: '+budgetFit+'\nVerdict: '+t.textContent+'\nÀ vérifier: '+(missing.length?missing.join(', '):'aucun champ essentiel manquant');
 }$('calculateDeal').addEventListener('click',calculateDeal);
 $('copyDealSummary').addEventListener('click',async()=>{
  const txt=window.__lastDealSummary||'Lancez d’abord l’analyse ARGUS.';
  try{await navigator.clipboard.writeText(txt);$('copyDealSummary').textContent='Résumé copié ✓';setTimeout(()=>$('copyDealSummary').textContent='Copier le résumé',1600)}
  catch(e){$('copyDealSummary').textContent='Copie indisponible'}
 });
-const scanStateIds=['listingUrl','scanType','scanRegion','scanUse','scanPrice','scanSurface','scanLocalPsm','scanWorks','scanRent','scanTargetYield','scanCharges','scanFixed','scanDown','scanFinance','scanPeb','scanLegal','scanDocs'];
+const scanStateIds=['listingUrl','scanType','scanRegion','scanUse','scanPrice','scanSurface','scanLocalPsm','scanComparables','scanWorks','scanRent','scanTargetYield','scanCharges','scanFixed','scanDown','scanFinance','scanPeb','scanLegal','scanDocs'];
 function saveScanState(){const o={};scanStateIds.forEach(id=>o[id]=$(id)?.value);try{localStorage.setItem('argus-immo-scan',JSON.stringify(o))}catch(e){}}
 try{const o=JSON.parse(localStorage.getItem('argus-immo-scan')||'{}');scanStateIds.forEach(id=>{if(o[id]!=null&&$(id))$(id).value=o[id]})}catch(e){}
 scanStateIds.forEach(id=>$(id)?.addEventListener('input',saveScanState));
