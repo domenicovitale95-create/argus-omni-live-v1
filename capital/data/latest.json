@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-07T11:18:17.971636+00:00",
+  "generated_at": "2026-09-07T12:25:03.886736+00:00",
   "data_quality": {
     "fresh_series": 17,
     "total_series": 18,
@@ -564,11 +564,11 @@
     },
     "ecb_deposit": {
       "price": 2.25,
-      "date": "2026-09-04",
+      "date": "2026-09-07",
       "ret_1d": 0.0,
       "ret_1m": 0.0,
-      "last_update": "2026-09-04",
-      "delay_days": 3,
+      "last_update": "2026-09-07",
+      "delay_days": 0,
       "fresh": true,
       "label": "ECB Deposit Facility Rate",
       "unit": "%",
