@@ -71,7 +71,19 @@ function extract(html,url){
     if(bathrooms==null){const n=parseNumber(o.numberOfBathroomsTotal??o.numberOfBathrooms); if(n!=null)bathrooms=n}
   });
   const text=cleanText(html).slice(0,500000);
-  if(price==null)price=regexNum(text,[/prix\s*[:\-]?\s*€?\s*([0-9 .,'’]+)/i,/prijs\s*[:\-]?\s*€?\s*([0-9 .,'’]+)/i,/€\s*([0-9][0-9 .,'’]{4,})/]);
+  // Prefer explicit price in the listing title/description, e.g. "125 000 €".
+  if(price==null)price=regexNum(title+' '+description,[
+    /([0-9][0-9 .,'’]{3,})\s*€/i,
+    /€\s*([0-9][0-9 .,'’]{3,})/i,
+    /prix\s*[:\-]?\s*€?\s*([0-9 .,'’]+)/i,
+    /prijs\s*[:\-]?\s*€?\s*([0-9 .,'’]+)/i
+  ]);
+  if(price==null)price=regexNum(text,[
+    /prix\s*[:\-]?\s*€?\s*([0-9 .,'’]+)/i,
+    /prijs\s*[:\-]?\s*€?\s*([0-9 .,'’]+)/i,
+    /([0-9][0-9 .,'’]{3,})\s*€/i,
+    /€\s*([0-9][0-9 .,'’]{3,})/i
+  ]);
   if(surface==null)surface=regexNum(text,[/surface\s+habitable\s*[:\-]?\s*([0-9.,]+)\s*m²/i,/woonoppervlakte\s*[:\-]?\s*([0-9.,]+)\s*m²/i,/living\s+surface\s*[:\-]?\s*([0-9.,]+)\s*m²/i]);
   if(bedrooms==null)bedrooms=regexNum(text,[/([0-9]+)\s+chambre/i,/([0-9]+)\s+slaapkamer/i,/([0-9]+)\s+bedroom/i]);
   if(bathrooms==null)bathrooms=regexNum(text,[/([0-9]+)\s+salle(?:s)?\s+de\s+bain/i,/([0-9]+)\s+badkamer/i,/([0-9]+)\s+bathroom/i]);
