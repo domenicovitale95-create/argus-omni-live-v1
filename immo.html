@@ -224,6 +224,37 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 .bottom{display:none}
 @media(max-width:860px){main{padding-bottom:72px}}
 .hidden{display:none!important}
+.modehub{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+.modechoice{padding:20px;border-radius:17px;border:1px solid var(--line);background:#0d1b2d;color:white;text-align:left;min-height:138px}
+.modechoice.active{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.modechoice small{display:block;text-transform:uppercase;letter-spacing:.1em;font-size:.68rem;font-weight:900;color:var(--blue)}
+.modechoice.active small{color:#526b88}
+.modechoice b{display:block;font-size:1.25rem;margin-top:6px}
+.modechoice span{display:block;color:var(--muted);font-size:.86rem;margin-top:6px;line-height:1.4}
+.modechoice.active span{color:#536b86}
+.modestrip{position:sticky;top:66px;z-index:55;margin:0 auto 8px;width:min(620px,calc(100% - 24px));display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;background:rgba(11,25,42,.94);backdrop-filter:blur(14px);border:1px solid #34516f;border-radius:14px}
+.modestrip button{border:0;border-radius:10px;background:transparent;color:#cbd8e6;min-height:42px;font-weight:900}
+.modestrip button.active{background:var(--paper);color:var(--ink)}
+[data-zone]{display:none}
+body.view-theory [data-zone="theory"],body.view-practice [data-zone="practice"]{display:block}
+body.view-theory .bottom{display:none!important}
+.theorygrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.theorycard{border:1px solid var(--line);border-radius:15px;background:#0d1b2d;padding:17px}
+.theorycard b{display:block;font-size:1.02rem}
+.theorycard span{display:block;color:var(--muted);font-size:.85rem;margin-top:5px}
+.theorycard a{display:inline-block;margin-top:10px;text-decoration:none;font-size:.82rem;font-weight:850}
+.simplephases{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.phase{padding:13px;border-radius:12px;background:#0a1727;border:1px solid #29415e}
+.phase i{display:inline-grid;width:27px;height:27px;place-items:center;border-radius:8px;background:var(--paper);color:var(--ink);font-style:normal;font-weight:900}
+.phase b{display:block;margin-top:8px}
+.phase span{display:block;color:var(--muted);font-size:.8rem;margin-top:3px}
+.detailtoggle{margin-top:12px;min-height:44px;border:1px solid #3d5d7f;border-radius:11px;background:#12263d;color:white;padding:9px 13px;font-weight:850}
+.journey.hidden-detail{display:none}
+@media(max-width:700px){
+ .modehub,.theorygrid,.simplephases{grid-template-columns:1fr}
+ .modechoice{min-height:auto;padding:16px}
+ .modestrip{top:64px}
+}
 @media(max-width:860px){
  .desktopnav{display:none}
  .four{grid-template-columns:repeat(2,1fr)}
@@ -261,16 +292,21 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 <header class="top">
  <div class="wrap topin">
   <a class="brand" href="#home"><span class="logo">A</span><span><b>ARGUS IMMO BELGIUM</b><small>Premier achat · investissement · Belgique 2026</small></span></a>
-  <nav class="desktopnav"><a href="#assistant">Mon plan</a><a href="#types">Type de bien</a><a href="#scanner">Scanner annonce</a><a href="#parcours">Parcours</a><a href="#budget">Budget</a><a href="#ready">Prêt à offrir ?</a></nav>
+  <nav class="desktopnav"><a href="#theorie" data-view-link="theory">Comprendre</a><a href="#assistant" data-view-link="practice">Passer à l'action</a><a href="#scanner" data-view-link="practice">Scanner un bien</a></nav>
  </div>
 </header>
 
 <main>
 <section class="hero" id="home">
  <div class="wrap">
-  <p class="eyebrow">Guide immobilier belge, pensé pour téléphone</p>
-  <h1>Votre premier achat, expliqué dans le bon ordre.</h1>
-  <p class="lead">Pas 50 informations mélangées. ARGUS vous dit <b>quoi faire maintenant</b>, ce qu'il faut vérifier avant de signer, combien l'achat coûte réellement et quand il vaut mieux renoncer.</p>
+  <p class="eyebrow">ARGUS IMMO BELGIUM · Belgique 2026</p>
+  <h1>Comprendre d'abord. Agir ensuite.</h1>
+  <p class="lead">Le site est maintenant séparé en deux espaces très simples : <b>THÉORIE</b> pour apprendre ce qu'il faut savoir, et <b>PRATIQUE</b> pour préparer votre achat, scanner une annonce et décider quoi faire.</p>
+  <div class="modehub">
+   <button class="modechoice" data-view="theory"><small>01 · Théorie</small><b>Je veux comprendre</b><span>Budget, crédit, fiscalité, documents, types de biens, offre, compromis, acte et risques.</span></button>
+   <button class="modechoice active" data-view="practice"><small>02 · Pratique</small><b>Je veux passer à l'action</b><span>Plan personnalisé, scanner d'annonce, budget, parcours, score avant offre et checklist.</span></button>
+  </div>
+  <div data-zone="practice" id="practiceIntro">
   <div class="modebar">
    <button class="modebtn active" data-mode="first">🏠 Je veux acheter mon premier bien</button>
    <button class="modebtn" data-mode="invest">🏢 Je veux investir / immeuble de rapport</button>
@@ -309,12 +345,34 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
    <p id="nextActionText">Commencez par 8 questions simples pour savoir quel budget rechercher et quelles étapes suivre.</p>
    <a id="nextActionLink" href="#assistant">Commencer maintenant</a>
   </aside>
+  </div>
  </div>
 </section>
 
+<div class="modestrip" aria-label="Choisir l'espace ARGUS">
+ <button type="button" data-view="theory">THÉORIE</button>
+ <button type="button" data-view="practice" class="active">PRATIQUE</button>
+</div>
 
 
-<section class="section" id="types">
+
+
+<section class="section" id="theorie" data-zone="theory">
+ <div class="wrap">
+  <div class="sectionhead"><div><p class="eyebrow">Théorie essentielle</p><h2>6 choses à comprendre avant de visiter.</h2></div><p>La théorie ne doit pas être un livre entier à l'écran. Chaque bloc répond à une question précise; les détails sont disponibles plus bas.</p></div>
+  <div class="theorygrid">
+   <article class="theorycard"><b>1. Combien coûte vraiment un achat ?</b><span>Prix + droits/TVA + acte + crédit + assurances + travaux + réserve. Le prix affiché n'est jamais le budget complet.</span><a href="#fiscalite">Voir coût & fiscalité →</a></article>
+   <article class="theorycard"><b>2. Combien puis-je emprunter sans danger ?</b><span>La banque regarde revenus, stabilité, apport, quotité, autres crédits, valeur du bien et reste à vivre. Comparez le coût total, pas seulement le taux.</span><a href="#assistant" data-view-link="practice">Tester mon profil →</a></article>
+   <article class="theorycard"><b>3. Quel type de bien change quels risques ?</b><span>Appartement = copropriété. Maison = technique. Immeuble de rapport = urbanisme + baux. Neuf = contrat + TVA. Terrain = constructibilité.</span><a href="#types">Voir les types →</a></article>
+   <article class="theorycard"><b>4. Quels documents protègent l'acheteur ?</b><span>PEB/EPC, électricité, urbanisme, servitudes, copropriété, bail et travaux doivent transformer les inconnues en preuves.</span><a href="#documents">Voir les documents →</a></article>
+   <article class="theorycard"><b>5. Offre, compromis, acte : quand suis-je engagé ?</b><span>Une offre claire acceptée peut déjà engager. Le compromis fixe les conditions essentielles; l'acte authentique finalise la vente.</span><a href="#lexique">Comprendre les mots →</a></article>
+   <article class="theorycard"><b>6. Combien de temps prend un achat ?</b><span>Le manuel décrit souvent 2 à 4 mois entre l'offre et l'acte, avec budget/banque avant, puis visites, offre, compromis, crédit définitif et acte.</span><a href="#parcours" data-view-link="practice">Voir le parcours pratique →</a></article>
+  </div>
+  <div class="callout" style="margin-top:12px;padding:16px"><b>Règle ARGUS :</b> toute incertitude doit devenir un document, un devis, une condition suspensive, une renégociation ou un refus.</div>
+ </div>
+</section>
+
+<section class="section" id="types" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Type de bien</p><h2>ARGUS ne contrôle pas tous les biens de la même manière.</h2></div><p>Sélectionnez un type : la checklist et les risques changent immédiatement.</p></div>
   <div class="typegrid">
@@ -329,7 +387,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
-<section class="section" id="assistant">
+<section class="section" id="assistant" data-zone="practice">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Assistant personnalisé</p><h2>Répondez à 8 questions. ARGUS construit votre plan.</h2></div><p>Le résultat est volontairement prudent : il aide à préparer une recherche et un rendez-vous bancaire, pas à remplacer une décision de crédit.</p></div>
   <article class="panel wizard">
@@ -367,7 +425,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 </section>
 
 
-<section class="section" id="scanner">
+<section class="section" id="scanner" data-zone="practice">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Scanner d'annonce</p><h2>Collez le lien d'un bien. ARGUS prépare l'analyse.</h2></div><p>Le scanner tente d'extraire automatiquement les données publiques de l'annonce. Vous validez ensuite les chiffres manquants avant le verdict.</p></div>
   <article class="panel scanbox">
@@ -448,7 +506,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
-<section class="section" id="parcours">
+<section class="section" id="parcours" data-zone="practice">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Le parcours complet</p><h2>Premier achat en 12 étapes.</h2></div><p>Chaque étape est fermée par défaut sur mobile. Ouvrez uniquement celle dont vous avez besoin. Cochez-la quand elle est terminée.</p></div>
 
@@ -458,7 +516,16 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
    <div class="progressmeta"><span id="progressText">0/12 étapes terminées</span><span id="nextStep">Commencez par le budget</span></div>
   </div>
 
-  <div class="journey" style="margin-top:12px">
+  <div class="simplephases">
+   <div class="phase"><i>1</i><b>Préparer</b><span>Budget + banque</span></div>
+   <div class="phase"><i>2</i><b>Cibler</b><span>Critères + zone</span></div>
+   <div class="phase"><i>3</i><b>Vérifier</b><span>Visite + documents + travaux</span></div>
+   <div class="phase"><i>4</i><b>Décider</b><span>Prix max + offre</span></div>
+   <div class="phase"><i>5</i><b>Sécuriser</b><span>Compromis + crédit</span></div>
+   <div class="phase"><i>6</i><b>Finaliser</b><span>Acte + dossier</span></div>
+  </div>
+  <button class="detailtoggle" id="toggleJourney" type="button">Voir les 12 étapes détaillées</button>
+  <div class="journey hidden-detail" style="margin-top:12px">
    <details class="stepcard" open>
     <summary><span class="stepno">1</span><span class="steptitle"><b>Définir votre budget réel</b><span>Avant les annonces</span></span><span class="chev">⌄</span></summary>
     <div class="stepbody"><div class="cols3">
@@ -570,7 +637,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
-<section class="section" id="budget">
+<section class="section" id="budget" data-zone="practice">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Budget en 2 minutes</p><h2>Combien ce bien vous coûte vraiment.</h2></div><p>Simulation pédagogique. Les frais exacts d'acte et de crédit doivent être confirmés par votre notaire et votre prêteur.</p></div>
   <div class="calc">
@@ -606,7 +673,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
-<section class="section" id="documents">
+<section class="section" id="documents" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Documents</p><h2>Ce qu'il faut demander avant d'acheter.</h2></div><p>Une ligne inconnue devient une question, un devis, une condition suspensive ou une raison de renégocier.</p></div>
   <div class="grid3">
@@ -617,7 +684,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
-<section class="section" id="fiscalite">
+<section class="section" id="fiscalite" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Fiscalité d'achat 2026</p><h2>La Région peut changer votre budget de dizaines de milliers d'euros.</h2></div><p>Repères issus des guides fournis. Les conditions exactes doivent être vérifiées au moment de l'acte.</p></div>
   <div class="grid3">
@@ -629,7 +696,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 </section>
 
 
-<section class="section" id="ready">
+<section class="section" id="ready" data-zone="practice">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Avant de faire une offre</p><h2>Êtes-vous réellement prêt à offrir ?</h2></div><p>Ce score ne dit pas si le bien est “bon”. Il dit si votre dossier est suffisamment préparé pour ne pas offrir à l'aveugle.</p></div>
   <article class="panel readiness">
@@ -644,7 +711,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
-<section class="section" id="check">
+<section class="section" id="check" data-zone="practice">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Checklist avant offre</p><h2>Si un point rouge reste inconnu, ne vous précipitez pas.</h2></div><p>Cette liste est volontairement simple à cocher sur téléphone pendant une visite ou juste avant une offre.</p></div>
   <div class="grid2">
@@ -671,7 +738,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 </section>
 
 
-<section class="section" id="redflags">
+<section class="section" id="redflags" data-zone="practice">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Red flags</p><h2>8 raisons de ralentir ou de partir.</h2></div><p>Un premier acheteur doit savoir reconnaître les situations où l'urgence commerciale ne doit jamais remplacer la vérification.</p></div>
   <div class="redflags">
@@ -687,7 +754,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
-<section class="section" id="cas">
+<section class="section" id="cas" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Cas particuliers</p><h2>Les situations qui changent la méthode.</h2></div><p>Gardées en accordéons pour ne pas surcharger l'écran.</p></div>
   <details class="info"><summary>Appartement en copropriété</summary><div class="inside">Vous n'achetez pas seulement l'appartement : vous achetez aussi une quote-part des problèmes futurs de l'immeuble. Contrôlez PV d'AG, fonds de réserve, façade, toiture, ascenseur, chauffage collectif et appels de fonds.</div></details>
@@ -699,7 +766,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
  </div>
 </section>
 
-<section class="section" id="zones">
+<section class="section" id="zones" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Investissement locatif</p><h2>Bruxelles : demande locative vs opportunité d'achat.</h2></div><p>Indice ARGUS analytique basé sur le dossier 2026. Demande maximale ne signifie pas automatiquement meilleur rendement.</p></div>
   <div class="grid2">
@@ -734,7 +801,7 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 </section>
 
 
-<section class="section" id="lexique">
+<section class="section" id="lexique" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Lexique ultra-simple</p><h2>Les mots que vous devez comprendre avant d'acheter.</h2></div><p>Un premier achat devient plus simple quand le vocabulaire cesse d'être un obstacle.</p></div>
   <div class="glossary">
@@ -771,14 +838,30 @@ details.info .inside{padding:0 0 14px;color:#c4d0de;font-size:.9rem}
 <footer class="footer"><div class="wrap"><b>ARGUS IMMO BELGIUM</b><br>Outil pédagogique. Les règles fiscales, urbanistiques, bancaires et les primes changent : avant signature, faites relire l'offre et le compromis par votre notaire et validez les questions fiscales ou complexes avec le professionnel compétent.</div></footer>
 </main>
 
-<nav class="bottom" aria-label="Navigation mobile">
- <a href="#assistant">Plan</a><a href="#scanner">Scanner</a><a href="#parcours">Étapes</a><a href="#ready">Offre</a><a href="#check">Check</a>
+<nav class="bottom" aria-label="Navigation mobile" data-zone="practice">
+ <a href="#assistant">Plan</a><a href="#scanner">Scanner</a><a href="#budget">Budget</a><a href="#parcours">Parcours</a><a href="#ready">Offre</a>
 </nav>
 
 <script>
 const $=id=>document.getElementById(id);
 const euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
 const pct=n=>(Number.isFinite(n)?n:0).toFixed(1).replace('.',',')+' %';
+
+function setView(view,scroll=false){
+ const v=view==='theory'?'theory':'practice';
+ document.body.classList.toggle('view-theory',v==='theory');
+ document.body.classList.toggle('view-practice',v==='practice');
+ document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+ try{localStorage.setItem('argus-immo-view',v)}catch(e){}
+ if(scroll){
+  const target=v==='theory'?$('theorie'):$('assistant');
+  target?.scrollIntoView({behavior:'smooth',block:'start'});
+ }
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view,true)));
+document.querySelectorAll('[data-view-link]').forEach(a=>a.addEventListener('click',()=>setView(a.dataset.viewLink||'practice',false)));
+let initialView='practice';try{initialView=localStorage.getItem('argus-immo-view')||'practice'}catch(e){}
+setView(initialView,false);
 
 const wizardIds=['wGoal','wType','wRegion','wSavings','wIncome','wDebt','wExpenses','wHorizon','wWorks'];
 
@@ -1060,6 +1143,13 @@ document.querySelectorAll('.modebtn').forEach(b=>b.addEventListener('click',()=>
  if(b.dataset.mode==='invest'){ $('wGoal').value='invest'; saveWizard(); location.hash='#assistant'; } else { $('wGoal').value='home'; saveWizard(); location.hash='#assistant'; }
 }));
 
+const journey=$('.journey'),journeyToggle=$('toggleJourney');
+if(journeyToggle&&journey){
+ journeyToggle.addEventListener('click',()=>{
+  const hidden=journey.classList.toggle('hidden-detail');
+  journeyToggle.textContent=hidden?'Voir les 12 étapes détaillées':'Masquer les 12 étapes détaillées';
+ });
+}
 const checks=[...document.querySelectorAll('.stepcheck')];
 function saveProgress(){
  const state={};checks.forEach(c=>state[c.id]=c.checked);
@@ -1165,6 +1255,11 @@ calc();
 try{
  const savedWizard=localStorage.getItem('argus-immo-wizard');
  if(savedWizard&&savedWizard!=='{}')buildPersonalPlan();
+}catch(e){}
+// Keep the page order logical even as modules evolve.
+try{
+ const footer=document.querySelector('footer');
+ ['assistant','scanner','budget','parcours','ready','check','redflags'].forEach(id=>{const el=$(id);if(el&&footer)footer.before(el)});
 }catch(e){}
 
 </script>
