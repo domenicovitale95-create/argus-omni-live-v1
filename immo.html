@@ -821,7 +821,7 @@ body.view-theory .bottom{display:none!important}
  </div>
 </section>
 
-<section class="section">
+<section class="section" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Sources intégrées</p><h2>La base documentaire ARGUS.</h2></div><p>Le site transforme les documents en parcours opérationnel; il ne remplace pas leur validation professionnelle.</p></div>
   <div class="grid3">
@@ -839,7 +839,7 @@ body.view-theory .bottom{display:none!important}
 </main>
 
 <nav class="bottom" aria-label="Navigation mobile" data-zone="practice">
- <a href="#assistant">Plan</a><a href="#scanner">Scanner</a><a href="#budget">Budget</a><a href="#parcours">Parcours</a><a href="#ready">Offre</a>
+ <a href="#assistant">Plan</a><a href="#budget">Budget</a><a href="#scanner">Scanner</a><a href="#parcours">Parcours</a><a href="#ready">Offre</a>
 </nav>
 
 <script>
@@ -1259,7 +1259,7 @@ try{
 // Keep the page order logical even as modules evolve.
 try{
  const footer=document.querySelector('footer');
- ['assistant','scanner','budget','parcours','ready','check','redflags'].forEach(id=>{const el=$(id);if(el&&footer)footer.before(el)});
+ ['assistant','budget','scanner','parcours','ready','check','redflags'].forEach(id=>{const el=$(id);if(el&&footer)footer.before(el)});
 }catch(e){}
 
 </script>
