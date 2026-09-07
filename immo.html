@@ -243,6 +243,25 @@ body.view-theory .bottom{display:none!important}
 .theorycard b{display:block;font-size:1.02rem}
 .theorycard span{display:block;color:var(--muted);font-size:.85rem;margin-top:5px}
 .theorycard a{display:inline-block;margin-top:10px;text-decoration:none;font-size:.82rem;font-weight:850}
+.beginner-theory{display:grid;gap:9px;max-width:820px;margin:auto}
+.theoryfield{border:1px solid var(--line);border-radius:15px;background:#0d1b2d;overflow:hidden}
+.theoryfield summary{list-style:none;display:grid;grid-template-columns:38px 1fr auto;gap:11px;align-items:center;min-height:66px;padding:11px 14px;cursor:pointer}
+.theoryfield summary::-webkit-details-marker{display:none}
+.theoryfield .n{width:36px;height:36px;border-radius:11px;background:var(--paper);color:var(--ink);display:grid;place-items:center;font-weight:950}
+.theoryfield .t b{display:block;font-size:.98rem}
+.theoryfield .t span{display:block;color:var(--muted);font-size:.79rem;margin-top:2px}
+.theoryfield .arr{color:var(--blue);font-weight:900}
+.theoryfield .content{padding:0 14px 15px 63px}
+.theoryfield .content ul{margin:4px 0 9px;padding-left:18px}
+.theoryfield .content li{margin:6px 0;color:#d0dbe7;font-size:.86rem}
+.learningtip{padding:10px 12px;border-radius:11px;background:#0a1727;border:1px solid #29415e;color:#c9d5e3;font-size:.83rem}
+.learningtip b{color:white}
+.advanced-theory{display:none!important}
+body.show-theory-advanced .advanced-theory{display:block!important}
+.advanced-toggle-wrap{max-width:820px;margin:12px auto 0}
+.advanced-toggle{width:100%;min-height:46px;border:1px solid #3c5b7d;border-radius:12px;background:#12263e;color:white;font-weight:900;padding:10px 14px}
+.theory-status{display:flex;gap:8px;align-items:center;justify-content:center;color:var(--muted);font-size:.78rem;margin:10px 0 0}
+.theory-status i{width:8px;height:8px;border-radius:50%;background:var(--green)}
 .simplephases{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
 .phase{padding:13px;border-radius:12px;background:#0a1727;border:1px solid #29415e}
 .phase i{display:inline-grid;width:27px;height:27px;place-items:center;border-radius:8px;background:var(--paper);color:var(--ink);font-style:normal;font-weight:900}
@@ -253,6 +272,10 @@ body.view-theory .bottom{display:none!important}
 @media(max-width:700px){
  .modehub,.theorygrid,.simplephases{grid-template-columns:1fr}
  .modechoice{min-height:auto;padding:16px}
+ .theoryfield summary{grid-template-columns:34px 1fr auto;padding:10px 11px}
+ .theoryfield .n{width:32px;height:32px}
+ .theoryfield .content{padding:0 11px 13px 11px}
+ .theoryfield .t span{font-size:.75rem}
  .modestrip{top:64px}
 }
 @media(max-width:860px){
@@ -359,20 +382,66 @@ body.view-theory .bottom{display:none!important}
 
 <section class="section" id="theorie" data-zone="theory">
  <div class="wrap">
-  <div class="sectionhead"><div><p class="eyebrow">Théorie essentielle</p><h2>6 choses à comprendre avant de visiter.</h2></div><p>La théorie ne doit pas être un livre entier à l'écran. Chaque bloc répond à une question précise; les détails sont disponibles plus bas.</p></div>
-  <div class="theorygrid">
-   <article class="theorycard"><b>1. Combien coûte vraiment un achat ?</b><span>Prix + droits/TVA + acte + crédit + assurances + travaux + réserve. Le prix affiché n'est jamais le budget complet.</span><a href="#fiscalite">Voir coût & fiscalité →</a></article>
-   <article class="theorycard"><b>2. Combien puis-je emprunter sans danger ?</b><span>La banque regarde revenus, stabilité, apport, quotité, autres crédits, valeur du bien et reste à vivre. Comparez le coût total, pas seulement le taux.</span><a href="#assistant" data-view-link="practice">Tester mon profil →</a></article>
-   <article class="theorycard"><b>3. Quel type de bien change quels risques ?</b><span>Appartement = copropriété. Maison = technique. Immeuble de rapport = urbanisme + baux. Neuf = contrat + TVA. Terrain = constructibilité.</span><a href="#types">Voir les types →</a></article>
-   <article class="theorycard"><b>4. Quels documents protègent l'acheteur ?</b><span>PEB/EPC, électricité, urbanisme, servitudes, copropriété, bail et travaux doivent transformer les inconnues en preuves.</span><a href="#documents">Voir les documents →</a></article>
-   <article class="theorycard"><b>5. Offre, compromis, acte : quand suis-je engagé ?</b><span>Une offre claire acceptée peut déjà engager. Le compromis fixe les conditions essentielles; l'acte authentique finalise la vente.</span><a href="#lexique">Comprendre les mots →</a></article>
-   <article class="theorycard"><b>6. Combien de temps prend un achat ?</b><span>Le manuel décrit souvent 2 à 4 mois entre l'offre et l'acte, avec budget/banque avant, puis visites, offre, compromis, crédit définitif et acte.</span><a href="#parcours" data-view-link="practice">Voir le parcours pratique →</a></article>
+  <div class="sectionhead"><div><p class="eyebrow">Théorie pour débuter</p><h2>6 champs. Pas plus.</h2></div><p>Ouvrez un champ à la fois. L'objectif est de comprendre les bases avant de passer à la pratique, pas de mémoriser tout l'immobilier belge.</p></div>
+
+  <div class="beginner-theory">
+   <details class="theoryfield" open>
+    <summary><span class="n">1</span><span class="t"><b>Budget : combien coûte vraiment l'achat ?</b><span>Prix ≠ coût total</span></span><span class="arr">⌄</span></summary>
+    <div class="content">
+     <ul><li>Le budget comprend le prix, les droits ou la TVA, les frais d'acte et de crédit, les assurances, les travaux et une réserve.</li><li>Ne mettez pas 100 % de votre épargne dans l'achat : gardez du cash pour les imprévus.</li><li>Le bon prix est celui que vous pouvez supporter sans être au maximum de vos moyens.</li></ul>
+     <div class="learningtip"><b>À retenir :</b> avant de regarder les annonces, calculez votre coût total et votre réserve.</div>
+    </div>
+   </details>
+
+   <details class="theoryfield">
+    <summary><span class="n">2</span><span class="t"><b>Crédit : ce que la banque regarde</b><span>Revenus, apport, dettes, quotité, reste à vivre</span></span><span class="arr">⌄</span></summary>
+    <div class="content">
+     <ul><li>La banque analyse vos revenus, leur stabilité, votre apport, vos crédits existants, la valeur du bien et votre reste à vivre.</li><li>Comparez le TAEG, les frais, les assurances et le coût total — pas seulement le taux nominal.</li><li>Le guide CBC utilise environ 40 % du revenu net comme repère général pour l'ensemble des remboursements, pas comme une garantie d'acceptation.</li></ul>
+     <div class="learningtip"><b>À retenir :</b> un crédit accepté ne signifie pas que le bien est un bon achat.</div>
+    </div>
+   </details>
+
+   <details class="theoryfield">
+    <summary><span class="n">3</span><span class="t"><b>Le bien : ce qu'il faut regarder</b><span>Type, état, PEB, urbanisme, revente</span></span><span class="arr">⌄</span></summary>
+    <div class="content">
+     <ul><li>Appartement : regardez aussi la copropriété. Maison : toiture, humidité et installations. Immeuble de rapport : unités reconnues et baux.</li><li>Le PEB/EPC, l'électricité, l'humidité, la toiture et les travaux peuvent changer fortement le vrai coût du bien.</li><li>Un bien doit aussi rester revendable si votre vie change.</li></ul>
+     <div class="learningtip"><b>À retenir :</b> vous n'achetez pas seulement des mètres carrés ; vous achetez aussi les risques du bâtiment.</div>
+    </div>
+   </details>
+
+   <details class="theoryfield">
+    <summary><span class="n">4</span><span class="t"><b>Documents : les preuves avant l'offre</b><span>PEB, électricité, urbanisme, copropriété, bail</span></span><span class="arr">⌄</span></summary>
+    <div class="content">
+     <ul><li>Demandez les documents avant de juger définitivement le bien : PEB/EPC, électricité, renseignements urbanistiques, servitudes et informations fiscales utiles.</li><li>Appartement : ajoutez les PV d'assemblée générale, les charges, les travaux votés et le fonds de réserve.</li><li>Bien loué : lisez le bail, son enregistrement, le loyer, la garantie et les conditions d'occupation.</li></ul>
+     <div class="learningtip"><b>Règle ARGUS :</b> une incertitude devient un document, un devis, une condition suspensive, une renégociation ou un refus.</div>
+    </div>
+   </details>
+
+   <details class="theoryfield">
+    <summary><span class="n">5</span><span class="t"><b>Offre → compromis → acte</b><span>Le moment où l'achat devient engageant</span></span><span class="arr">⌄</span></summary>
+    <div class="content">
+     <ul><li>Une offre claire et acceptée peut déjà engager : ce n'est pas un simple message d'intérêt.</li><li>Si vous dépendez d'un crédit, discutez une condition suspensive précise avec votre notaire.</li><li>Le compromis fixe les conditions essentielles ; l'acte authentique finalise et publie le transfert.</li></ul>
+     <div class="learningtip"><b>À retenir :</b> faites relire avant de signer, pas après.</div>
+    </div>
+   </details>
+
+   <details class="theoryfield">
+    <summary><span class="n">6</span><span class="t"><b>Qui contacter et quand ?</b><span>Banque, notaire, expert — dans le bon ordre</span></span><span class="arr">⌄</span></summary>
+    <div class="content">
+     <ul><li>Banque ou courtier : avant les visites sérieuses et avant l'offre.</li><li>Notaire : idéalement dès l'offre, et impérativement avant de signer un compromis que vous ne maîtrisez pas.</li><li>Expert bâtiment : avant une offre ferme ou un compromis lorsqu'il y a rénovation, humidité, fissures, toiture ou enjeu financier important.</li></ul>
+     <div class="learningtip"><b>Chronologie simple :</b> budget → banque → visites/documents → offre → compromis → crédit définitif → acte. Le manuel situe souvent l'offre à l'acte sur environ 2 à 4 mois.</div>
+    </div>
+   </details>
   </div>
-  <div class="callout" style="margin-top:12px;padding:16px"><b>Règle ARGUS :</b> toute incertitude doit devenir un document, un devis, une condition suspensive, une renégociation ou un refus.</div>
+
+  <div class="advanced-toggle-wrap">
+   <button class="advanced-toggle" id="toggleAdvancedTheory" type="button">Approfondir seulement si nécessaire</button>
+   <div class="theory-status"><i></i><span>Les bases ci-dessus suffisent pour commencer à apprendre.</span></div>
+  </div>
  </div>
 </section>
 
-<section class="section" id="types" data-zone="theory">
+<section class="section advanced-theory" id="types" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Type de bien</p><h2>ARGUS ne contrôle pas tous les biens de la même manière.</h2></div><p>Sélectionnez un type : la checklist et les risques changent immédiatement.</p></div>
   <div class="typegrid">
@@ -673,7 +742,7 @@ body.view-theory .bottom{display:none!important}
  </div>
 </section>
 
-<section class="section" id="documents" data-zone="theory">
+<section class="section advanced-theory" id="documents" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Documents</p><h2>Ce qu'il faut demander avant d'acheter.</h2></div><p>Une ligne inconnue devient une question, un devis, une condition suspensive ou une raison de renégocier.</p></div>
   <div class="grid3">
@@ -684,13 +753,13 @@ body.view-theory .bottom{display:none!important}
  </div>
 </section>
 
-<section class="section" id="fiscalite" data-zone="theory">
+<section class="section advanced-theory" id="fiscalite" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Fiscalité d'achat 2026</p><h2>La Région peut changer votre budget de dizaines de milliers d'euros.</h2></div><p>Repères issus des guides fournis. Les conditions exactes doivent être vérifiées au moment de l'acte.</p></div>
   <div class="grid3">
-   <article class="panel tax"><span>Bruxelles</span><strong>12,5 %</strong><span>Taux normal. Abattement possible sur les premiers 200 000 € pour habitation principale sous conditions.</span></article>
-   <article class="panel tax"><span>Wallonie</span><strong>12,5 % / 3 %</strong><span>3 % possible pour habitation propre et unique sous conditions depuis 2025.</span></article>
-   <article class="panel tax"><span>Flandre</span><strong>12 % / 2 %</strong><span>2 % possible pour l'unique habitation propre sous conditions depuis 2025.</span></article>
+   <article class="panel tax"><span>Bruxelles</span><strong>12,5 %</strong><span>Taux normal. Abattement possible sur les premiers 200 000 € sous conditions ; notamment bien/charges ≤ 600 000 €, résidence principale à établir dans les 3 ans et à conserver 5 ans.</span></article>
+   <article class="panel tax"><span>Wallonie</span><strong>12,5 % / 3 %</strong><span>3 % pour habitation propre et unique sous conditions. Pour une habitation construite, résidence principale à établir dans les 3 ans et à conserver 3 années entières.</span></article>
+   <article class="panel tax"><span>Flandre</span><strong>12 % / 2 %</strong><span>2 % pour l'unique habitation propre sous conditions. Pour les conventions dès 2026 : notamment personne(s) physique(s), pleine propriété, domiciliation dans les 3 ans et maintien au moins 1 an.</span></article>
   </div>
  </div>
 </section>
@@ -754,7 +823,7 @@ body.view-theory .bottom{display:none!important}
  </div>
 </section>
 
-<section class="section" id="cas" data-zone="theory">
+<section class="section advanced-theory" id="cas" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Cas particuliers</p><h2>Les situations qui changent la méthode.</h2></div><p>Gardées en accordéons pour ne pas surcharger l'écran.</p></div>
   <details class="info"><summary>Appartement en copropriété</summary><div class="inside">Vous n'achetez pas seulement l'appartement : vous achetez aussi une quote-part des problèmes futurs de l'immeuble. Contrôlez PV d'AG, fonds de réserve, façade, toiture, ascenseur, chauffage collectif et appels de fonds.</div></details>
@@ -766,7 +835,7 @@ body.view-theory .bottom{display:none!important}
  </div>
 </section>
 
-<section class="section" id="zones" data-zone="theory">
+<section class="section advanced-theory" id="zones" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Investissement locatif</p><h2>Bruxelles : demande locative vs opportunité d'achat.</h2></div><p>Indice ARGUS analytique basé sur le dossier 2026. Demande maximale ne signifie pas automatiquement meilleur rendement.</p></div>
   <div class="grid2">
@@ -801,7 +870,7 @@ body.view-theory .bottom{display:none!important}
 </section>
 
 
-<section class="section" id="lexique" data-zone="theory">
+<section class="section advanced-theory" id="lexique" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Lexique ultra-simple</p><h2>Les mots que vous devez comprendre avant d'acheter.</h2></div><p>Un premier achat devient plus simple quand le vocabulaire cesse d'être un obstacle.</p></div>
   <div class="glossary">
@@ -821,7 +890,7 @@ body.view-theory .bottom{display:none!important}
  </div>
 </section>
 
-<section class="section" data-zone="theory">
+<section class="section advanced-theory" data-zone="theory">
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Sources intégrées</p><h2>La base documentaire ARGUS.</h2></div><p>Le site transforme les documents en parcours opérationnel; il ne remplace pas leur validation professionnelle.</p></div>
   <div class="grid3">
@@ -847,10 +916,18 @@ const $=id=>document.getElementById(id);
 const euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
 const pct=n=>(Number.isFinite(n)?n:0).toFixed(1).replace('.',',')+' %';
 
+const advancedTheoryBtn=$('toggleAdvancedTheory');
+if(advancedTheoryBtn){
+ advancedTheoryBtn.addEventListener('click',()=>{
+  const on=document.body.classList.toggle('show-theory-advanced');
+  advancedTheoryBtn.textContent=on?'Masquer les fiches avancées':'Approfondir seulement si nécessaire';
+ });
+}
 function setView(view,scroll=false){
  const v=view==='theory'?'theory':'practice';
  document.body.classList.toggle('view-theory',v==='theory');
  document.body.classList.toggle('view-practice',v==='practice');
+ if(v!=='theory')document.body.classList.remove('show-theory-advanced');
  document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
  try{localStorage.setItem('argus-immo-view',v)}catch(e){}
  if(scroll){
@@ -950,6 +1027,7 @@ function scanRegTax(price,region,use){
  if(use==='investment')return price*(region==='flanders'?.12:.125);
  if(region==='wallonia')return price*.03;
  if(region==='flanders')return price*.02;
+ if(price>600000)return price*.125;
  return Math.max(0,price-200000)*.125;
 }
 function financePayment(principal,rate,years){if(principal<=0)return 0;const r=rate/100/12,n=years*12;if(!r)return principal/n;return principal*r/(1-Math.pow(1+r,-n))}
@@ -1226,6 +1304,7 @@ function regTax(price,region,usage){
  if(usage==='investment') return price*(region==='flanders'?.12:.125);
  if(region==='wallonia') return price*.03;
  if(region==='flanders') return price*.02;
+ if(price>600000) return price*.125;
  return Math.max(0,price-200000)*.125;
 }
 function pmt(principal,rate,years){
