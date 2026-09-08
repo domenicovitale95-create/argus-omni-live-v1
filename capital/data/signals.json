@@ -289,6 +289,57 @@
       ],
       "source_date": "2026-09-04",
       "outcomes": {}
+    },
+    {
+      "date": "2026-09-08",
+      "asset_id": "europe",
+      "asset": "European Equities",
+      "signal": "ATTRACTIVE",
+      "score": 73,
+      "price": 91.74,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +5.3%",
+        "Distance vs 200-day average: +5.5%",
+        "20-day annualised volatility: 7.9%"
+      ],
+      "source_date": "2026-09-04",
+      "outcomes": {}
+    },
+    {
+      "date": "2026-09-08",
+      "asset_id": "emerging",
+      "asset": "Emerging Markets",
+      "signal": "WATCH",
+      "score": 71,
+      "price": 68.7,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +6.4%",
+        "Distance vs 200-day average: +11.3%",
+        "20-day annualised volatility: 18.1%"
+      ],
+      "source_date": "2026-09-04",
+      "outcomes": {}
+    },
+    {
+      "date": "2026-09-08",
+      "asset_id": "global_equity",
+      "asset": "Global Equities",
+      "signal": "WATCH",
+      "score": 69,
+      "price": 161.89,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +4.9%",
+        "Distance vs 200-day average: +8.2%",
+        "20-day annualised volatility: 8.3%"
+      ],
+      "source_date": "2026-09-04",
+      "outcomes": {}
     }
   ]
 }
