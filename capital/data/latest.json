@@ -1,12 +1,21 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-09T00:29:26.591728+00:00",
+  "generated_at": "2026-09-09T01:17:19.999408+00:00",
   "data_quality": {
-    "fresh_series": 18,
+    "fresh_series": 16,
     "total_series": 18,
-    "coverage_pct": 100,
-    "state": "STRONG",
-    "errors": [],
+    "coverage_pct": 89,
+    "state": "MODERATE",
+    "errors": [
+      {
+        "series": "sp500",
+        "error": "Stooq: insufficient history for spy.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
+      },
+      {
+        "series": "nasdaq",
+        "error": "Stooq: insufficient history for qqq.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
+      }
+    ],
     "rules": [
       "No synthetic price fabrication",
       "Stale fallback explicitly labelled",
@@ -175,20 +184,6 @@
       "evidence": "Moderate"
     },
     {
-      "id": "sp500",
-      "label": "S&P 500",
-      "score": 69,
-      "status": "WATCH",
-      "evidence": "Moderate"
-    },
-    {
-      "id": "nasdaq",
-      "label": "Nasdaq 100",
-      "score": 68,
-      "status": "WATCH",
-      "evidence": "Moderate"
-    },
-    {
       "id": "cash_eur",
       "label": "Euro Cash",
       "score": 68,
@@ -271,12 +266,14 @@
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-04",
       "delay_days": 5,
-      "data_type": "OBSERVED_PROXY",
-      "fresh": true,
+      "data_type": "STALE_LAST_KNOWN_GOOD",
+      "fresh": false,
       "label": "S&P 500",
       "asset_class": "EQUITY",
       "proxy_symbol": "spy.us",
-      "provider": "YAHOO"
+      "provider": "YAHOO",
+      "fallback": true,
+      "error": "Stooq: insufficient history for spy.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
     },
     "nasdaq": {
       "price": 718.96,
@@ -294,12 +291,14 @@
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/QQQ?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-04",
       "delay_days": 5,
-      "data_type": "OBSERVED_PROXY",
-      "fresh": true,
+      "data_type": "STALE_LAST_KNOWN_GOOD",
+      "fresh": false,
       "label": "Nasdaq 100",
       "asset_class": "EQUITY",
       "proxy_symbol": "qqq.us",
-      "provider": "YAHOO"
+      "provider": "YAHOO",
+      "fallback": true,
+      "error": "Stooq: insufficient history for qqq.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
     },
     "europe": {
       "price": 91.74,
@@ -612,46 +611,16 @@
       "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
     },
     "sp500": {
-      "score": 69,
-      "status": "WATCH",
-      "evidence": "Moderate",
-      "coverage": 100,
-      "components": {
-        "momentum": 59,
-        "trend": 75,
-        "risk": 85,
-        "entry": 62,
-        "macro": 60
-      },
-      "methodology": {
-        "momentum": 30,
-        "trend": 25,
-        "risk": 20,
-        "entry_quality": 15,
-        "macro_overlay": 10
-      },
-      "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
+      "score": null,
+      "status": "DATA INSUFFICIENT",
+      "evidence": "Weak",
+      "coverage": 100
     },
     "nasdaq": {
-      "score": 68,
-      "status": "WATCH",
-      "evidence": "Moderate",
-      "coverage": 100,
-      "components": {
-        "momentum": 59,
-        "trend": 75,
-        "risk": 83,
-        "entry": 62,
-        "macro": 60
-      },
-      "methodology": {
-        "momentum": 30,
-        "trend": 25,
-        "risk": 20,
-        "entry_quality": 15,
-        "macro_overlay": 10
-      },
-      "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
+      "score": null,
+      "status": "DATA INSUFFICIENT",
+      "evidence": "Weak",
+      "coverage": 100
     },
     "europe": {
       "score": 73,
