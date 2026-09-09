@@ -6,16 +6,19 @@ function brusselsParts(){
   const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Brussels',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
   return Object.fromEntries(parts.map(p=>[p.type,p.value]));
 }
-function authorized(req){const secret=process.env.CRON_SECRET;return !secret||req.headers.authorization===`Bearer ${secret}`}
+function cronSecret(){return String(process.env.CRON_SECRET||'').trim()}
+function authorizationHeader(req){return String(req.headers.authorization||'').trim()}
+function authorized(req){const secret=cronSecret();return !secret||authorizationHeader(req)===`Bearer ${secret}`}
+function requestSource(req){return req.headers['x-vercel-cron-schedule']?'VERCEL_CRON':'MANUAL_OR_INTERNAL'}
 async function getJson(url,authorization){const r=await fetch(url,{headers:{Accept:'application/json',Authorization:authorization||''}});const data=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,data}}
 async function postJson(url,authorization){const r=await fetch(url,{method:'POST',headers:{Accept:'application/json',Authorization:authorization||''}});const data=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,data}}
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
-  if(!authorized(req))return res.status(401).json({error:'Unauthorized'});
+  if(!authorized(req))return res.status(401).json({error:'Unauthorized',code:'CRON_AUTH_MISMATCH',source:requestSource(req)});
   const p=brusselsParts();
   if(Number(p.hour)!==23)return res.status(200).json({ok:true,skipped:true,reason:'NOT_23H_BRUSSELS',localHour:p.hour});
-  const date=`${p.year}-${p.month}-${p.day}`,proto=(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app',base=`${proto}://${host}`,auth=req.headers.authorization||'',reportAuth=reportAuthorization(req),guard=await readJson(QUOTA_GUARD_PATH,null),providerBlocked=Boolean(guard?.date===date&&guard?.exhausted);
+  const date=`${p.year}-${p.month}-${p.day}`,proto=(req.headers['x-forwarded-proto']||'https').split(',')[0],host=req.headers['x-forwarded-host']||req.headers.host||'argus-omni-live.vercel.app',base=`${proto}://${host}`,auth=authorizationHeader(req),reportAuth=reportAuthorization(req),guard=await readJson(QUOTA_GUARD_PATH,null),providerBlocked=Boolean(guard?.date===date&&guard?.exhausted);
   const report=providerBlocked?{ok:true,status:200,data:{summary:null,skipped:true,reason:'PROVIDER_BLOCKED_BY_QUOTA_GUARD'}}:await getJson(`${base}/api/daily-report?date=${date}&force=1`,reportAuth);
   if(!report.ok)return res.status(report.status).json({ok:false,error:report.data.error||'Daily report failed'});
   const ledger=await postJson(`${base}/api/prediction-ledger?mode=settle&date=${date}`,auth);
