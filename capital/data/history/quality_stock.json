@@ -1,6 +1,6 @@
 {
   "asset_id": "quality_stock",
-  "generated_at": "2026-09-10T01:17:24.394207+00:00",
+  "generated_at": "2026-09-10T02:18:54.161091+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -484,8 +484,8 @@
       "price": 507.29
     },
     {
-      "date": "2026-09-08",
-      "price": 493.95
+      "date": "2026-09-09",
+      "price": 491.65
     }
   ]
 }
