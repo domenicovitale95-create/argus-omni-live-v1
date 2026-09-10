@@ -1,17 +1,12 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-10T02:18:54.161091+00:00",
+  "generated_at": "2026-09-10T03:19:26.149086+00:00",
   "data_quality": {
-    "fresh_series": 17,
+    "fresh_series": 18,
     "total_series": 18,
-    "coverage_pct": 94,
+    "coverage_pct": 100,
     "state": "STRONG",
-    "errors": [
-      {
-        "series": "global_equity",
-        "error": "Stooq: insufficient history for acwi.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
-      }
-    ],
+    "errors": [],
     "rules": [
       "No synthetic price fabrication",
       "Stale fallback explicitly labelled",
@@ -21,7 +16,7 @@
   },
   "global_market": {
     "status": "CAUTION",
-    "score": 65,
+    "score": 64,
     "trend": "Stable →",
     "regime": "EARLY / MID BULL",
     "regime_confidence": "Medium",
@@ -44,8 +39,8 @@
   "today": {
     "best_opportunity": {
       "type": "BEST CURRENT OPPORTUNITY",
-      "asset": "S&P 500",
-      "score": 72,
+      "asset": "Global Equities",
+      "score": 73,
       "status": "ATTRACTIVE"
     },
     "biggest_risk": {
@@ -82,15 +77,36 @@
         ]
       },
       {
-        "event": "Emerging markets moved",
-        "move": -0.51,
-        "why_it_matters": "EM risk appetite and global growth sensitivity changed.",
+        "event": "Global equities moved",
+        "move": -0.61,
+        "why_it_matters": "Broad risk appetite changed across global stocks.",
         "affected_assets": [
-          "emerging"
+          "global_equity"
         ]
       }
     ],
     "top_ideas": [
+      {
+        "asset_id": "global_equity",
+        "asset": "Global Equities",
+        "ucits_candidate": "VWCE",
+        "score": 73,
+        "action": "ATTRACTIVE",
+        "conviction": "Medium",
+        "horizon": "Years",
+        "why": [
+          "3-month momentum: +3.6%",
+          "Distance vs 200-day average: +6.9%",
+          "20-day annualised volatility: 8.8%"
+        ],
+        "risks": [
+          "Earnings, rates or risk-premium shocks can cause material drawdowns."
+        ],
+        "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
+        "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
+        "evidence_quality": "Strong",
+        "data_date": "2026-09-09"
+      },
       {
         "asset_id": "sp500",
         "asset": "S&P 500",
@@ -132,32 +148,18 @@
         "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
         "evidence_quality": "Strong",
         "data_date": "2026-09-09"
-      },
-      {
-        "asset_id": "emerging",
-        "asset": "Emerging Markets",
-        "ucits_candidate": null,
-        "score": 70,
-        "action": "WATCH",
-        "conviction": "Medium",
-        "horizon": "Years",
-        "why": [
-          "3-month momentum: +4.0%",
-          "Distance vs 200-day average: +10.7%",
-          "20-day annualised volatility: 18.0%"
-        ],
-        "risks": [
-          "Earnings, rates or risk-premium shocks can cause material drawdowns."
-        ],
-        "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
-        "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
-        "evidence_quality": "Strong",
-        "data_date": "2026-09-09"
       }
     ],
     "no_forced_recommendation": true
   },
   "ranking": [
+    {
+      "id": "global_equity",
+      "label": "Global Equities",
+      "score": 73,
+      "status": "ATTRACTIVE",
+      "evidence": "Strong"
+    },
     {
       "id": "sp500",
       "label": "S&P 500",
@@ -231,29 +233,27 @@
   ],
   "market": {
     "global_equity": {
-      "price": 161.13,
-      "date": "2026-09-08",
-      "ret_1d": -0.47,
-      "ret_1m": -0.19,
-      "ret_3m": 4.01,
-      "ret_6m": 12.64,
-      "ret_1y": 20.18,
-      "vol_20d_ann": 8.49,
-      "sma_200": 149.69,
-      "distance_200dma": 7.64,
-      "drawdown_52w": -0.83,
+      "price": 160.15,
+      "date": "2026-09-09",
+      "ret_1d": -0.61,
+      "ret_1m": -0.59,
+      "ret_3m": 3.59,
+      "ret_6m": 11.95,
+      "ret_1y": 18.88,
+      "vol_20d_ann": 8.76,
+      "sma_200": 149.8,
+      "distance_200dma": 6.91,
+      "drawdown_52w": -1.43,
       "max_drawdown": -33.53,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/ACWI?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-09-08",
-      "delay_days": 2,
-      "data_type": "STALE_LAST_KNOWN_GOOD",
-      "fresh": false,
+      "last_update": "2026-09-09",
+      "delay_days": 1,
+      "data_type": "OBSERVED_PROXY",
+      "fresh": true,
       "label": "Global Equities",
       "asset_class": "EQUITY",
       "proxy_symbol": "acwi.us",
-      "provider": "YAHOO",
-      "fallback": true,
-      "error": "Stooq: insufficient history for acwi.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
+      "provider": "YAHOO"
     },
     "sp500": {
       "price": 762.4,
@@ -591,10 +591,25 @@
   },
   "scores": {
     "global_equity": {
-      "score": null,
-      "status": "DATA INSUFFICIENT",
-      "evidence": "Weak",
-      "coverage": 100
+      "score": 73,
+      "status": "ATTRACTIVE",
+      "evidence": "Strong",
+      "coverage": 100,
+      "components": {
+        "momentum": 56,
+        "trend": 85,
+        "risk": 84,
+        "entry": 78,
+        "macro": 60
+      },
+      "methodology": {
+        "momentum": 30,
+        "trend": 25,
+        "risk": 20,
+        "entry_quality": 15,
+        "macro_overlay": 10
+      },
+      "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
     },
     "sp500": {
       "score": 72,
