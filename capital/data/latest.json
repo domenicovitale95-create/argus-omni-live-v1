@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-11T20:18:17.938042+00:00",
+  "generated_at": "2026-09-11T21:16:37.340803+00:00",
   "data_quality": {
     "fresh_series": 18,
     "total_series": 18,
@@ -25,7 +25,7 @@
       "momentum": 53,
       "volatility": 82,
       "credit_proxy": 35,
-      "rates": 64,
+      "rates": 63,
       "weights": {
         "trend_breadth": 30,
         "momentum": 25,
@@ -69,19 +69,22 @@
         ]
       },
       {
+        "event": "US 10Y yield changed",
+        "move_pp": 0.12,
+        "why_it_matters": "Discount rates moved, affecting bonds and equity valuations.",
+        "affected_assets": [
+          "bonds",
+          "growth equities",
+          "USD",
+          "gold"
+        ]
+      },
+      {
         "event": "Global equities moved",
         "move": 0.92,
         "why_it_matters": "Broad risk appetite changed across global stocks.",
         "affected_assets": [
           "global_equity"
-        ]
-      },
-      {
-        "event": "Nasdaq moved",
-        "move": 0.87,
-        "why_it_matters": "Growth and duration-sensitive equities changed materially.",
-        "affected_assets": [
-          "nasdaq"
         ]
       }
     ],
@@ -511,12 +514,12 @@
   },
   "macro": {
     "us10y": {
-      "price": 4.83,
-      "date": "2026-09-09",
-      "ret_1d": 0.03,
-      "ret_1m": 0.11,
-      "last_update": "2026-09-09",
-      "delay_days": 2,
+      "price": 4.95,
+      "date": "2026-09-10",
+      "ret_1d": 0.12,
+      "ret_1m": 0.25,
+      "last_update": "2026-09-10",
+      "delay_days": 1,
       "fresh": true,
       "label": "US 10Y Treasury Yield",
       "unit": "%",
