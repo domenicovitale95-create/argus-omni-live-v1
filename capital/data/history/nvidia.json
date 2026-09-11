@@ -1,6 +1,6 @@
 {
   "asset_id": "nvidia",
-  "generated_at": "2026-09-10T23:14:47.818286+00:00",
+  "generated_at": "2026-09-11T00:25:58.588606+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -484,8 +484,8 @@
       "price": 220.78
     },
     {
-      "date": "2026-09-10",
-      "price": 218.36
+      "date": "2026-09-09",
+      "price": 223.67
     }
   ]
 }
