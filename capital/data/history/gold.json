@@ -1,6 +1,6 @@
 {
   "asset_id": "gold",
-  "generated_at": "2026-09-11T14:19:04.633774+00:00",
+  "generated_at": "2026-09-11T15:17:43.708564+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -485,7 +485,7 @@
     },
     {
       "date": "2026-09-11",
-      "price": 401.57
+      "price": 400.24
     }
   ]
 }
