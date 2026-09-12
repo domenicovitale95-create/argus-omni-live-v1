@@ -166,11 +166,14 @@ export async function listJson(prefix, limit = 100) {
   return result.blobs;
 }
 
-export async function readManyJson(blobs) {
+export async function readManyJson(blobs, options = {}) {
+  const concurrency = Math.max(1, Math.min(16, Number(options.concurrency) || 8));
   const out = [];
-  for (const blob of blobs) {
-    const row = await readJson(blob.pathname, null);
-    if (row) out.push(row);
+  for (let offset = 0; offset < blobs.length; offset += concurrency) {
+    const batch = await Promise.all(
+      blobs.slice(offset, offset + concurrency).map((blob) => readJson(blob.pathname, null))
+    );
+    out.push(...batch.filter(Boolean));
   }
   return out;
 }
