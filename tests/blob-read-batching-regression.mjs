@@ -10,7 +10,7 @@ assert.match(
 );
 assert.match(
   source,
-  /Math\.max\(1, Math\.min\(16, Number\(options\.concurrency\) \|\| 8\)\)/,
+  /Math\.max\(1, Math\.min\(16, Number\(options\.concurrency\) \|\| 16\)\)/,
   'bulk reads must enforce a conservative concurrency bound'
 );
 assert.match(
