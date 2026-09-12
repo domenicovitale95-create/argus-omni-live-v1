@@ -1,0 +1,27 @@
+name: Pre-kickoff Payload Compaction Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/autopilot-v2.js'
+      - 'tests/prekickoff-payload-compaction-regression.mjs'
+      - '.github/workflows/prekickoff-payload-compaction-regression.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'api/autopilot-v2.js'
+      - 'tests/prekickoff-payload-compaction-regression.mjs'
+      - '.github/workflows/prekickoff-payload-compaction-regression.yml'
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check autopilot
+        run: node --check api/autopilot-v2.js
+      - name: Pre-kickoff payload compaction regression
+        run: node tests/prekickoff-payload-compaction-regression.mjs
