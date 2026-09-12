@@ -167,7 +167,7 @@ export async function listJson(prefix, limit = 100) {
 }
 
 export async function readManyJson(blobs, options = {}) {
-  const concurrency = Math.max(1, Math.min(16, Number(options.concurrency) || 8));
+  const concurrency = Math.max(1, Math.min(16, Number(options.concurrency) || 16));
   const out = [];
   for (let offset = 0; offset < blobs.length; offset += concurrency) {
     const batch = await Promise.all(
