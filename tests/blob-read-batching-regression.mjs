@@ -15,6 +15,11 @@ assert.match(
 );
 assert.match(
   source,
+  /const batch = await Promise\.all\(/,
+  'each bounded batch must overlap independent Blob reads'
+);
+assert.match(
+  source,
   /blobs\.slice\(offset, offset \+ concurrency\)\.map\(\(blob\) => readJson\(blob\.pathname, null\)\)/,
   'each batch must keep using the existing cached JSON reader'
 );
