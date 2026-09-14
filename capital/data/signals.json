@@ -697,6 +697,23 @@
       ],
       "source_date": "2026-09-11",
       "outcomes": {}
+    },
+    {
+      "date": "2026-09-14",
+      "asset_id": "emerging",
+      "asset": "Emerging Markets",
+      "signal": "WATCH",
+      "score": 71,
+      "price": 66.4,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: -2.2%",
+        "Distance vs 200-day average: +6.9%",
+        "20-day annualised volatility: 21.1%"
+      ],
+      "source_date": "2026-09-14",
+      "outcomes": {}
     }
   ]
 }
