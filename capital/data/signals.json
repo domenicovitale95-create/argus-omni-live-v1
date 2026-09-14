@@ -646,6 +646,57 @@
       ],
       "source_date": "2026-09-11",
       "outcomes": {}
+    },
+    {
+      "date": "2026-09-14",
+      "asset_id": "global_equity",
+      "asset": "Global Equities",
+      "signal": "ATTRACTIVE",
+      "score": 73,
+      "price": 160.25,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +2.8%",
+        "Distance vs 200-day average: +6.8%",
+        "20-day annualised volatility: 9.5%"
+      ],
+      "source_date": "2026-09-11",
+      "outcomes": {}
+    },
+    {
+      "date": "2026-09-14",
+      "asset_id": "europe",
+      "asset": "European Equities",
+      "signal": "WATCH",
+      "score": 71,
+      "price": 90.02,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +0.6%",
+        "Distance vs 200-day average: +3.3%",
+        "20-day annualised volatility: 9.7%"
+      ],
+      "source_date": "2026-09-11",
+      "outcomes": {}
+    },
+    {
+      "date": "2026-09-14",
+      "asset_id": "sp500",
+      "asset": "S&P 500",
+      "signal": "WATCH",
+      "score": 70,
+      "price": 764.29,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +3.6%",
+        "Distance vs 200-day average: +7.0%",
+        "20-day annualised volatility: 8.7%"
+      ],
+      "source_date": "2026-09-11",
+      "outcomes": {}
     }
   ]
 }
