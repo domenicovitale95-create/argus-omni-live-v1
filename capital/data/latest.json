@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-15T20:08:30.682237+00:00",
+  "generated_at": "2026-09-15T23:29:45.694466+00:00",
   "data_quality": {
     "fresh_series": 18,
     "total_series": 18,
@@ -78,7 +78,7 @@
       },
       {
         "event": "S&P 500 moved",
-        "move": -0.45,
+        "move": -0.46,
         "why_it_matters": "US large caps shifted, affecting many global UCITS portfolios.",
         "affected_assets": [
           "sp500"
@@ -189,18 +189,18 @@
       "evidence": "Strong"
     },
     {
+      "id": "cash_proxy",
+      "label": "US T-Bills",
+      "score": 70,
+      "status": "WATCH",
+      "evidence": "Strong"
+    },
+    {
       "id": "cash_eur",
       "label": "Euro Cash",
       "score": 68,
       "status": "WATCH",
       "evidence": "Moderate"
-    },
-    {
-      "id": "cash_proxy",
-      "label": "US T-Bills",
-      "score": 58,
-      "status": "NEUTRAL",
-      "evidence": "Strong"
     },
     {
       "id": "semis",
@@ -256,16 +256,16 @@
       "provider": "YAHOO"
     },
     "sp500": {
-      "price": 757.44,
+      "price": 757.39,
       "date": "2026-09-15",
-      "ret_1d": -0.45,
-      "ret_1m": -2.43,
-      "ret_3m": 0.35,
+      "ret_1d": -0.46,
+      "ret_1m": -2.44,
+      "ret_3m": 0.34,
       "ret_6m": 13.21,
-      "ret_1y": 15.22,
+      "ret_1y": 15.21,
       "vol_20d_ann": 8.82,
       "sma_200": 715.11,
-      "distance_200dma": 5.92,
+      "distance_200dma": 5.91,
       "drawdown_52w": -2.63,
       "max_drawdown": -34.1,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=10y&interval=1d&events=history&includeAdjustedClose=true",
@@ -325,17 +325,17 @@
       "provider": "YAHOO"
     },
     "emerging": {
-      "price": 65.78,
+      "price": 65.76,
       "date": "2026-09-15",
-      "ret_1d": -0.32,
-      "ret_1m": -1.25,
-      "ret_3m": -5.69,
-      "ret_6m": 12.68,
-      "ret_1y": 25.87,
-      "vol_20d_ann": 21.62,
+      "ret_1d": -0.35,
+      "ret_1m": -1.28,
+      "ret_3m": -5.72,
+      "ret_6m": 12.64,
+      "ret_1y": 25.83,
+      "vol_20d_ann": 21.63,
       "sma_200": 62.15,
-      "distance_200dma": 5.84,
-      "drawdown_52w": -7.63,
+      "distance_200dma": 5.8,
+      "drawdown_52w": -7.65,
       "max_drawdown": -41.46,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/EEM?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-15",
@@ -371,16 +371,16 @@
       "provider": "YAHOO"
     },
     "gold": {
-      "price": 394.12,
+      "price": 394.15,
       "date": "2026-09-15",
       "ret_1d": 0.33,
       "ret_1m": -1.83,
       "ret_3m": -0.61,
       "ret_6m": -14.4,
-      "ret_1y": 17.5,
+      "ret_1y": 17.51,
       "vol_20d_ann": 28.02,
       "sma_200": 416.07,
-      "distance_200dma": -5.28,
+      "distance_200dma": -5.27,
       "drawdown_52w": -20.52,
       "max_drawdown": -26.4,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/GLD?range=10y&interval=1d&events=history&includeAdjustedClose=true",
@@ -417,16 +417,16 @@
       "provider": "YAHOO"
     },
     "corp_bonds": {
-      "price": 104.29,
+      "price": 104.28,
       "date": "2026-09-15",
-      "ret_1d": -0.01,
+      "ret_1d": -0.02,
       "ret_1m": -1.73,
       "ret_3m": -4.32,
-      "ret_6m": -4.05,
+      "ret_6m": -4.06,
       "ret_1y": -6.9,
       "vol_20d_ann": 6.33,
       "sma_200": 108.9,
-      "distance_200dma": -4.23,
+      "distance_200dma": -4.24,
       "drawdown_52w": -7.65,
       "max_drawdown": -29.37,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/LQD?range=10y&interval=1d&events=history&includeAdjustedClose=true",
@@ -440,17 +440,17 @@
       "provider": "YAHOO"
     },
     "cash_proxy": {
-      "price": 91.5,
+      "price": 91.51,
       "date": "2026-09-15",
       "ret_1d": 0.01,
-      "ret_1m": -0.03,
-      "ret_3m": -0.01,
-      "ret_6m": -0.01,
+      "ret_1m": -0.02,
+      "ret_3m": 0.0,
+      "ret_6m": 0.0,
       "ret_1y": -0.1,
       "vol_20d_ann": 1.1,
       "sma_200": 91.51,
-      "distance_200dma": -0.01,
-      "drawdown_52w": -0.28,
+      "distance_200dma": -0.0,
+      "drawdown_52w": -0.27,
       "max_drawdown": -0.7,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/BIL?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-15",
@@ -511,12 +511,12 @@
   },
   "macro": {
     "us10y": {
-      "price": 4.96,
-      "date": "2026-09-11",
+      "price": 4.97,
+      "date": "2026-09-14",
       "ret_1d": 0.01,
-      "ret_1m": 0.28,
-      "last_update": "2026-09-11",
-      "delay_days": 4,
+      "ret_1m": 0.34,
+      "last_update": "2026-09-14",
+      "delay_days": 1,
       "fresh": true,
       "label": "US 10Y Treasury Yield",
       "unit": "%",
@@ -524,12 +524,12 @@
       "data_type": "OBSERVED"
     },
     "us2y": {
-      "price": 4.63,
-      "date": "2026-09-11",
-      "ret_1d": 0.07,
-      "ret_1m": 0.43,
-      "last_update": "2026-09-11",
-      "delay_days": 4,
+      "price": 4.65,
+      "date": "2026-09-14",
+      "ret_1d": 0.02,
+      "ret_1m": 0.5,
+      "last_update": "2026-09-14",
+      "delay_days": 1,
       "fresh": true,
       "label": "US 2Y Treasury Yield",
       "unit": "%",
@@ -780,13 +780,13 @@
       "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
     },
     "cash_proxy": {
-      "score": 58,
-      "status": "NEUTRAL",
+      "score": 70,
+      "status": "WATCH",
       "evidence": "Strong",
       "coverage": 100,
       "components": {
         "momentum": 50,
-        "trend": 35,
+        "trend": 85,
         "risk": 85,
         "entry": 78,
         "macro": 55
