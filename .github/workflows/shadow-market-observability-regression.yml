@@ -2,7 +2,7 @@ name: Shadow Market Observability Regression
 
 on:
   push:
-    branches: [main, argus/shadow-market-observability, argus/shadow-market-observability-v2]
+    branches: [main, argus/shadow-market-observability, argus/shadow-market-observability-v2, argus/shadow-risk-bootstrap-observability]
   pull_request:
 
 jobs:
@@ -20,5 +20,8 @@ jobs:
           node --check api/_shadow-market-observability.js
           node --check api/shadow-market-observability.js
           node --check tests/shadow-market-observability-regression.mjs
+          node --check tests/shadow-market-risk-observability-regression.mjs
       - name: Canonical market observability regression suite
         run: node tests/shadow-market-observability-regression.mjs
+      - name: Fixture-block ROI risk observability regression suite
+        run: node tests/shadow-market-risk-observability-regression.mjs
