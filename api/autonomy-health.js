@@ -1,9 +1,9 @@
 import { readJsonFresh, storageReady } from './_report-store.js';
 
 const STATE_PATH='argus/health/autonomous-supervisor.json';
-const EXPECTED_MINUTES=30;
-const LATE_AFTER_MINUTES=45;
-const STALE_AFTER_MINUTES=75;
+const EXPECTED_MINUTES=60;
+const LATE_AFTER_MINUTES=75;
+const STALE_AFTER_MINUTES=135;
 const POLICY={
   scope:'AUTONOMY_SUPERVISOR',
   readOnly:true,
@@ -48,6 +48,6 @@ export default async function handler(req,res){
     issues:Array.isArray(state.issues)?state.issues:[],
     lastActions:Array.isArray(state.actions)?state.actions:[],
     components:refreshComponentAges(state.components||{}),
-    policy:{...POLICY,cronExpectedEveryMinutes:EXPECTED_MINUTES,githubWatchdogEveryMinutes:60,githubRecoveryAfterMinutes:50,lateAfterMinutes:LATE_AFTER_MINUTES,staleAfterMinutes:STALE_AFTER_MINUTES,schedulerJitterTolerated:true,runsWithoutChat:true,consistentStateRead:true}
+    policy:{...POLICY,cronExpectedEveryMinutes:EXPECTED_MINUTES,githubWatchdogEveryMinutes:60,githubRecoveryAfterMinutes:80,lateAfterMinutes:LATE_AFTER_MINUTES,staleAfterMinutes:STALE_AFTER_MINUTES,schedulerJitterTolerated:true,runsWithoutChat:true,consistentStateRead:true}
   });
 }
