@@ -128,9 +128,9 @@ jobs:
               age=999999
             fi
 
-            # Primary supervisor cadence is 30m. Recovery starts only after a
+            # Primary supervisor cadence is 60m. Recovery starts only after a
             # genuinely missed heartbeat, not during normal scheduler jitter.
-            if [ "${age}" -gt 50 ] || [ "${status}" = "LATE" ] || [ "${status}" = "STALE" ] || [ "${status}" = "CRITICAL" ] || [ "${status}" = "WAITING" ]; then
+            if [ "${age}" -gt 80 ] || [ "${status}" = "LATE" ] || [ "${status}" = "STALE" ] || [ "${status}" = "CRITICAL" ] || [ "${status}" = "WAITING" ]; then
               echo "Backup required: status=${status}, heartbeatAgeMinutes=${age}."
               echo "::endgroup::"
               call '/api/autonomous-supervisor' 'Autonomous supervisor backup recovery'
