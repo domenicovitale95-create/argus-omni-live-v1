@@ -1,4 +1,4 @@
-import { listJson, readManyJson, readJson, writeJson, storageReady } from './_report-store.js';
+import { listJsonComplete, readManyJson, readJson, writeJson, storageReady } from './_report-store.js';
 import { CHALLENGER_VALIDATION_POLICY, evaluateChallengers } from './_challenger-validation.js';
 import { dedupeShadowFixtures } from './_shadow-fixture-dedupe.js';
 
@@ -17,12 +17,28 @@ function compact(x){
     holdoutImprovementPct:x.holdoutImprovementPct,holdoutBrierCI:x.holdoutBrierCI
   };
 }
+function listingDiagnostics(listing){
+  return{
+    complete:Boolean(listing?.complete),
+    blobs:Array.isArray(listing?.blobs)?listing.blobs.length:0,
+    scanned:Number(listing?.scanned)||0,
+    pages:Number(listing?.pages)||0,
+    hasMore:Boolean(listing?.hasMore),
+    capped:Boolean(listing?.capped),
+    error:listing?.error||null
+  };
+}
 
 export default async function handler(req,res){
   res.setHeader('Cache-Control','s-maxage=900, stale-while-revalidate=1800');
   if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
   if(!storageReady())return res.status(503).json({error:'Storage unavailable'});
-  const blobs=await listJson('argus/shadow/',300),books=await readManyJson(blobs),canonicalView=dedupeShadowFixtures(books),rows=[];
+  const listing=await listJsonComplete('argus/shadow/',{maxBlobs:5000,pageSize:500}),shadowListing=listingDiagnostics(listing);
+  if(!listing.complete)return res.status(503).json({
+    version:'CHALLENGER-FACTORY-2',generatedAt:new Date().toISOString(),error:`SHADOW_LISTING_INCOMPLETE:${listing.error||'UNKNOWN'}`,
+    shadowListing,productionMutation:false,automaticPromotion:false,automaticRealWagering:false
+  });
+  const books=await readManyJson(listing.blobs),canonicalView=dedupeShadowFixtures(books),rows=[];
   for(const f of canonicalView.fixtures){
     const t=eventTime(f),fixtureKey=f?.fixtureId;
     for(const p of f.picks||[])if(['WIN','LOSS'].includes(String(p?.outcome||'').toUpperCase()))rows.push({...p,_fixtureKey:fixtureKey,_eventTime:t});
@@ -39,6 +55,6 @@ export default async function handler(req,res){
   return res.status(200).json({
     version:'CHALLENGER-FACTORY-2',generatedAt:new Date().toISOString(),baseline:validation.baseline,
     trainBaseline:validation.trainBaseline,holdoutBaseline:validation.holdoutBaseline,split:validation.split,
-    canonicalShadowEvidence:canonicalView.diagnostics,candidates,approved,state:{updatedAt:state.updatedAt,history:state.history||[]},policy:{...CHALLENGER_VALIDATION_POLICY,selection:'Candidates are ranked on the earlier chronological fixture block and must independently clear every gate on the later holdout block.',fixtureIsolation:true,noSameFixtureAcrossTrainAndHoldout:true,fixtureIdentityCanonicalized:true,duplicatePolicy:canonicalView.policy,productionMutation:false,automaticPromotion:false,rule:'The factory may propose bounded challengers only. Approval requires independent temporal holdout evidence and still cannot alter production or bypass Champion/Challenger governance.'}
+    shadowListing,canonicalShadowEvidence:canonicalView.diagnostics,candidates,approved,state:{updatedAt:state.updatedAt,history:state.history||[]},policy:{...CHALLENGER_VALIDATION_POLICY,selection:'Candidates are ranked on the earlier chronological fixture block and must independently clear every gate on the later holdout block.',fixtureIsolation:true,noSameFixtureAcrossTrainAndHoldout:true,fixtureIdentityCanonicalized:true,completeShadowHistoryRequired:true,shadowHistoryMaxBlobs:5000,duplicatePolicy:canonicalView.policy,productionMutation:false,automaticPromotion:false,rule:'The factory may propose bounded challengers only from a complete SHADOW history listing. Approval requires independent temporal holdout evidence and still cannot alter production or bypass Champion/Challenger governance.'}
   });
 }
