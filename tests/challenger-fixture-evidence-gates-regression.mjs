@@ -15,7 +15,7 @@ function row(fixtureId,time,overrides={}){
   };
 }
 
-assert.equal(CHALLENGER_VALIDATION_POLICY.version,'CHALLENGER-VALIDATION-4');
+assert.equal(CHALLENGER_VALIDATION_POLICY.version,'CHALLENGER-VALIDATION-5');
 assert.ok(CHALLENGER_VALIDATION_POLICY.minimumTrainMarketFairFixtures>0);
 assert.ok(CHALLENGER_VALIDATION_POLICY.minimumHoldoutMarketFairFixtures>0);
 assert.ok(CHALLENGER_VALIDATION_POLICY.minimumHoldoutSimulatedBetFixtures>0);

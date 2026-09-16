@@ -3,7 +3,7 @@ const finite=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
 const n=(v,f=null)=>finite(v)?Number(v):f;
 
 export const CHALLENGER_VALIDATION_POLICY=Object.freeze({
-  version:'CHALLENGER-VALIDATION-4',
+  version:'CHALLENGER-VALIDATION-5',
   trainFraction:.70,
   minimumTrainSample:150,
   minimumHoldoutSample:100,
@@ -46,11 +46,12 @@ function improvementPct(base,candidate){return base?.brier>0&&candidate?.brier!=
 
 export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
   let sample=0,bs=0,pnl=0,simulatedBets=0,clv=0,clvSamples=0,marketFairSamples=0;
-  const fixtures=new Set(),marketFairFixtures=new Set(),simulatedBetFixtures=new Set(),clvFixtures=new Set();
+  const fixtures=new Set(),marketFairFixtures=new Set(),simulatedBetFixtures=new Set(),clvFixtures=new Set(),fixtureBrier=new Map();
   for(let i=0;i<(rows||[]).length;i++){
     const r=rows[i];if(!validScoringRow(r))continue;
-    const p0=n(r.probability),marketProbability=rowMarketProbability(r),p=applyChallenger(c,p0,marketProbability),y=String(r.outcome).toUpperCase()==='WIN'?1:0,key=rowFixtureKey(r,i);
-    sample++;fixtures.add(key);bs+=(p-y)**2;
+    const p0=n(r.probability),marketProbability=rowMarketProbability(r),p=applyChallenger(c,p0,marketProbability),y=String(r.outcome).toUpperCase()==='WIN'?1:0,key=rowFixtureKey(r,i),err=(p-y)**2;
+    sample++;fixtures.add(key);bs+=err;
+    const fg=fixtureBrier.get(key)||{sum:0,count:0};fg.sum+=err;fg.count++;fixtureBrier.set(key,fg);
     if(marketProbability!=null){marketFairSamples++;marketFairFixtures.add(key)}
     const odds=n(r.odds),rawBreakEven=odds>1?1/odds:null;
     // Positive-EV simulation legitimately uses the offered price break-even threshold.
@@ -60,13 +61,16 @@ export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
       if(finite(r.clv)){clv+=Number(r.clv);clvSamples++;clvFixtures.add(key)}
     }
   }
+  const fixtureMeans=[...fixtureBrier.values()].map(x=>x.sum/x.count),fixtureBalancedBrier=fixtureMeans.length?fixtureMeans.reduce((a,b)=>a+b,0)/fixtureMeans.length:null;
   return{
     ...c,
     sample,
     fixtures:fixtures.size,
     marketFairSamples,
     marketFairFixtures:marketFairFixtures.size,
-    brier:sample?Number((bs/sample).toFixed(5)):null,
+    brier:fixtureBalancedBrier==null?null:Number(fixtureBalancedBrier.toFixed(5)),
+    rawPickBrier:sample?Number((bs/sample).toFixed(5)):null,
+    brierWeighting:'FIXTURE_BALANCED_MEAN_OF_FIXTURE_MEANS',
     simulatedBets,
     simulatedBetFixtures:simulatedBetFixtures.size,
     flatStakePL:Number(pnl.toFixed(2)),
