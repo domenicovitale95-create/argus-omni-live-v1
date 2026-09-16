@@ -3,7 +3,7 @@ const finite=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
 const n=(v,f=null)=>finite(v)?Number(v):f;
 
 export const CHALLENGER_VALIDATION_POLICY=Object.freeze({
-  version:'CHALLENGER-VALIDATION-3',
+  version:'CHALLENGER-VALIDATION-4',
   trainFraction:.70,
   minimumTrainSample:150,
   minimumHoldoutSample:100,
@@ -11,8 +11,12 @@ export const CHALLENGER_VALIDATION_POLICY=Object.freeze({
   minimumHoldoutFixtures:20,
   minimumTrainMarketFairSamples:100,
   minimumHoldoutMarketFairSamples:50,
+  minimumTrainMarketFairFixtures:20,
+  minimumHoldoutMarketFairFixtures:10,
   minimumHoldoutSimulatedBets:20,
+  minimumHoldoutSimulatedBetFixtures:10,
   minimumHoldoutClvSamples:20,
+  minimumHoldoutClvFixtures:10,
   minimumBrierImprovementPct:3,
   betEdgeFloor:.03,
   bootstrapReps:1200,
@@ -42,7 +46,7 @@ function improvementPct(base,candidate){return base?.brier>0&&candidate?.brier!=
 
 export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
   let sample=0,bs=0,pnl=0,simulatedBets=0,clv=0,clvSamples=0,marketFairSamples=0;
-  const fixtures=new Set(),marketFairFixtures=new Set();
+  const fixtures=new Set(),marketFairFixtures=new Set(),simulatedBetFixtures=new Set(),clvFixtures=new Set();
   for(let i=0;i<(rows||[]).length;i++){
     const r=rows[i];if(!validScoringRow(r))continue;
     const p0=n(r.probability),marketProbability=rowMarketProbability(r),p=applyChallenger(c,p0,marketProbability),y=String(r.outcome).toUpperCase()==='WIN'?1:0,key=rowFixtureKey(r,i);
@@ -52,8 +56,8 @@ export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
     // Positive-EV simulation legitimately uses the offered price break-even threshold.
     // Market-blend calibration, by contrast, may use only explicitly de-vigged fair probabilities.
     if(rawBreakEven!=null&&p-rawBreakEven>=CHALLENGER_VALIDATION_POLICY.betEdgeFloor){
-      simulatedBets++;pnl+=y?(odds-1):-1;
-      if(finite(r.clv)){clv+=Number(r.clv);clvSamples++}
+      simulatedBets++;simulatedBetFixtures.add(key);pnl+=y?(odds-1):-1;
+      if(finite(r.clv)){clv+=Number(r.clv);clvSamples++;clvFixtures.add(key)}
     }
   }
   return{
@@ -64,9 +68,11 @@ export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
     marketFairFixtures:marketFairFixtures.size,
     brier:sample?Number((bs/sample).toFixed(5)):null,
     simulatedBets,
+    simulatedBetFixtures:simulatedBetFixtures.size,
     flatStakePL:Number(pnl.toFixed(2)),
     roi:simulatedBets?Number((pnl/simulatedBets*100).toFixed(2)):null,
     clvSamples,
+    clvFixtures:clvFixtures.size,
     avgCLV:clvSamples?Number((clv/clvSamples).toFixed(2)):null
   };
 }
@@ -112,12 +118,16 @@ function blockersFor(x){
   if(x.holdout.fixtures<p.minimumHoldoutFixtures)b.push('HOLDOUT_FIXTURES_INSUFFICIENT');
   if(x.type==='MARKET_BLEND'&&x.train.marketFairSamples<p.minimumTrainMarketFairSamples)b.push('TRAIN_FAIR_MARKET_SAMPLE_INSUFFICIENT');
   if(x.type==='MARKET_BLEND'&&x.holdout.marketFairSamples<p.minimumHoldoutMarketFairSamples)b.push('HOLDOUT_FAIR_MARKET_SAMPLE_INSUFFICIENT');
+  if(x.type==='MARKET_BLEND'&&x.train.marketFairFixtures<p.minimumTrainMarketFairFixtures)b.push('TRAIN_FAIR_MARKET_FIXTURES_INSUFFICIENT');
+  if(x.type==='MARKET_BLEND'&&x.holdout.marketFairFixtures<p.minimumHoldoutMarketFairFixtures)b.push('HOLDOUT_FAIR_MARKET_FIXTURES_INSUFFICIENT');
   if(!(x.trainImprovementPct>=p.minimumBrierImprovementPct))b.push('TRAIN_BRIER_GAIN_BELOW_FLOOR');
   if(!(x.holdoutImprovementPct>=p.minimumBrierImprovementPct))b.push('HOLDOUT_BRIER_GAIN_BELOW_FLOOR');
   if(!(x.holdoutBrierCI?.upper95<0))b.push('HOLDOUT_BRIER_GAIN_NOT_STATISTICALLY_SEPARATED');
   if(x.holdout.simulatedBets<p.minimumHoldoutSimulatedBets)b.push('HOLDOUT_BET_SAMPLE_INSUFFICIENT');
+  if(x.holdout.simulatedBetFixtures<p.minimumHoldoutSimulatedBetFixtures)b.push('HOLDOUT_BET_FIXTURES_INSUFFICIENT');
   if(!(x.holdout.roi>=0))b.push('HOLDOUT_ROI_NOT_POSITIVE');
   if(x.holdout.clvSamples<p.minimumHoldoutClvSamples)b.push('HOLDOUT_CLV_SAMPLE_INSUFFICIENT');
+  if(x.holdout.clvFixtures<p.minimumHoldoutClvFixtures)b.push('HOLDOUT_CLV_FIXTURES_INSUFFICIENT');
   if(!(x.holdout.avgCLV>=0))b.push('HOLDOUT_CLV_NOT_POSITIVE');
   return b;
 }
