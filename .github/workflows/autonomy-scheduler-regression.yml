@@ -6,6 +6,7 @@ on:
     paths:
       - 'vercel.json'
       - 'api/autonomy-health.js'
+      - 'api/fast-cycle-health.js'
       - 'api/autonomous-supervisor.js'
       - 'api/daily-cron.js'
       - 'tests/nightly-report-auth-regression.mjs'
@@ -69,6 +70,11 @@ jobs:
           if (scheduler.includes("- cron: '19,49 * * * *'")) throw new Error('Obsolete 30-minute autonomy watchdog still present');
           if (scheduler.includes("- cron: '53 21,22 * * *'")) throw new Error('GitHub must not duplicate Vercel nightly settlement scheduling');
           if (scheduler.includes("call '/api/daily-cron'")) throw new Error('GitHub must not mutate nightly settlement through a second secret boundary');
+
+          const fastHealth = fs.readFileSync('api/fast-cycle-health.js','utf8');
+          if (!fastHealth.includes('const PRIMARY_CADENCE_MINUTES=30;')) throw new Error('Fast-cycle health cadence is not aligned to the 30-minute primary cron');
+          if (!fastHealth.includes('const LATE_AFTER_MINUTES=40;')) throw new Error('Fast-cycle late threshold cannot detect one missed primary run at the backup check');
+          if (!fastHealth.includes('const STALE_AFTER_MINUTES=65;')) throw new Error('Fast-cycle stale threshold is not aligned to the 30-minute cadence');
 
           const health = fs.readFileSync('api/autonomy-health.js','utf8');
           if (!health.includes("primaryScheduler:'VERCEL_CRON'")) throw new Error('Health endpoint does not expose Vercel as primary scheduler');
