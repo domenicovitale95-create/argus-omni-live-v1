@@ -2,7 +2,7 @@ name: Shadow Market Devig Regression
 
 on:
   push:
-    branches: [main, hardening/shadow-market-devig]
+    branches: [main, hardening/shadow-market-devig, argus/shadow-multimarket-complements]
   pull_request:
 
 jobs:
@@ -14,13 +14,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - name: Install runtime dependencies for evidence-core regression
+        run: npm install --ignore-scripts --no-audit --no-fund
       - name: Syntax checks
         run: |
           node --check api/_market-devig.js
           node --check api/_challenger-validation.js
           node --check api/_shadow-evidence-core.js
           node --check tests/shadow-market-devig-regression.mjs
+          node --check tests/shadow-multimarket-complements-regression.mjs
       - name: De-vig regression suite
         run: node tests/shadow-market-devig-regression.mjs
+      - name: Multi-market complements regression suite
+        run: node tests/shadow-multimarket-complements-regression.mjs
       - name: Existing challenger regression suite
         run: node tests/challenger-temporal-holdout-regression.mjs
