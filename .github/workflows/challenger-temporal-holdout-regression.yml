@@ -2,7 +2,7 @@ name: Challenger Temporal Holdout Regression
 
 on:
   push:
-    branches: [main, hardening/challenger-temporal-holdout, argus/challenger-fixture-evidence-gates, argus/challenger-fixture-balanced-brier]
+    branches: [main, hardening/challenger-temporal-holdout, argus/challenger-fixture-evidence-gates, argus/challenger-fixture-balanced-brier, argus/challenger-fixture-balanced-roi-clv]
   pull_request:
 
 jobs:
@@ -21,9 +21,12 @@ jobs:
           node --check tests/challenger-temporal-holdout-regression.mjs
           node --check tests/challenger-fixture-evidence-gates-regression.mjs
           node --check tests/challenger-fixture-balanced-brier-regression.mjs
+          node --check tests/challenger-fixture-balanced-roi-clv-regression.mjs
       - name: Temporal holdout regression suite
         run: node tests/challenger-temporal-holdout-regression.mjs
       - name: Fixture evidence independence regression suite
         run: node tests/challenger-fixture-evidence-gates-regression.mjs
       - name: Fixture-balanced Brier regression suite
         run: node tests/challenger-fixture-balanced-brier-regression.mjs
+      - name: Fixture-balanced ROI and CLV regression suite
+        run: node tests/challenger-fixture-balanced-roi-clv-regression.mjs
