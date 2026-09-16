@@ -2,7 +2,7 @@ name: Shadow Fixture Dedupe Regression
 
 on:
   push:
-    branches: [main, hardening/shadow-fixture-dedup]
+    branches: [main, hardening/shadow-fixture-dedup, argus/shadow-dedupe-complementary-settlement]
   pull_request:
 
 jobs:
@@ -20,8 +20,11 @@ jobs:
           node --check api/_source-calibration-audit.js
           node --check api/_multiclass-calibration-challenger.js
           node --check tests/shadow-fixture-dedup-regression.mjs
+          node --check tests/shadow-dedupe-complementary-markets-regression.mjs
       - name: Dedupe regression suite
         run: node tests/shadow-fixture-dedup-regression.mjs
+      - name: Complementary-market reschedule settlement suite
+        run: node tests/shadow-dedupe-complementary-markets-regression.mjs
       - name: Source calibration integrity suite
         run: node tests/source-calibration-integrity-regression.mjs
       - name: Multiclass calibration challenger suite

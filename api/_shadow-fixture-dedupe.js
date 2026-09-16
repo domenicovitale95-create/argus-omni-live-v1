@@ -62,8 +62,9 @@ function settledScore(fixture){
 function scoreKey(score){return score?`${score.home}:${score.away}`:null}
 function settleKey(key,h,a){
   if(key==='home')return h>a;if(key==='draw')return h===a;if(key==='away')return a>h;
-  if(key==='over15')return h+a>1;if(key==='over25')return h+a>2;if(key==='over35')return h+a>3;if(key==='under25')return h+a<3;
-  if(key==='bttsYes')return h>0&&a>0;if(key==='bttsNo')return !(h>0&&a>0);if(key==='homeOver05')return h>0;if(key==='awayOver05')return a>0;
+  if(key==='over15')return h+a>1;if(key==='under15')return h+a<2;if(key==='over25')return h+a>2;if(key==='under25')return h+a<3;if(key==='over35')return h+a>3;if(key==='under35')return h+a<4;
+  if(key==='bttsYes')return h>0&&a>0;if(key==='bttsNo')return !(h>0&&a>0);
+  if(key==='homeOver05')return h>0;if(key==='homeUnder05')return h===0;if(key==='awayOver05')return a>0;if(key==='awayUnder05')return a===0;
   if(key==='doubleChance1X')return h>=a;if(key==='doubleChance12')return h!==a;if(key==='doubleChanceX2')return a>=h;
   if(String(key||'').startsWith('score:'))return String(key).slice(6)===`${h}-${a}`;
   return null;
