@@ -1,0 +1,23 @@
+name: Binary Calibration Challenger Regression
+
+on:
+  push:
+    branches: [main, argus/binary-isotonic-calibration-shadow]
+  pull_request:
+
+jobs:
+  binary-calibration-challenger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Syntax checks
+        run: |
+          node --check api/_binary-calibration-challenger.js
+          node --check api/binary-calibration-challenger.js
+          node --check tests/binary-calibration-challenger-regression.mjs
+      - name: Binary calibration challenger regression suite
+        run: node tests/binary-calibration-challenger-regression.mjs
