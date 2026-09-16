@@ -40,9 +40,9 @@ jobs:
           const vercel = JSON.parse(fs.readFileSync('vercel.json','utf8'));
           const supervisorCron = (vercel.crons || []).find(x => x.path === '/api/autonomous-supervisor');
           if (!supervisorCron) throw new Error('Missing Vercel autonomous supervisor cron');
-          if (supervisorCron.schedule !== '*/30 * * * *') throw new Error(`Unexpected supervisor schedule: ${supervisorCron.schedule}`);
+          if (supervisorCron.schedule !== '23 * * * *') throw new Error(`Unexpected supervisor schedule: ${supervisorCron.schedule}`);
           const fastCron = (vercel.crons || []).find(x => x.path === '/api/fast-cycle');
-          if (!fastCron || fastCron.schedule !== '2-57/15 * * * *') throw new Error(`Unexpected fast-cycle schedule: ${fastCron?.schedule}`);
+          if (!fastCron || fastCron.schedule !== '2,32 * * * *') throw new Error(`Unexpected fast-cycle schedule: ${fastCron?.schedule}`);
           const nightlyCron = (vercel.crons || []).find(x => x.path === '/api/daily-cron');
           if (!nightlyCron || nightlyCron.schedule !== '53 21,22 * * *') throw new Error(`Unexpected nightly settlement schedule: ${nightlyCron?.schedule}`);
           if ((vercel.functions?.['api/daily-cron.js']?.maxDuration || 0) < 120) throw new Error('Nightly settlement is not given enough runtime');
@@ -63,6 +63,7 @@ jobs:
           if (!scheduler.includes("- cron: '13,43 * * * *'")) throw new Error('Missing 30-minute GitHub fast-cycle backup health check');
           if (!scheduler.includes("- cron: '23 * * * *'")) throw new Error('Missing hourly GitHub autonomy watchdog');
           if (!scheduler.includes('run_watchdog()')) throw new Error('Missing health-gated watchdog');
+          if (!scheduler.includes('[ "${age}" -gt 80 ]')) throw new Error('Autonomy watchdog recovery threshold is not aligned to hourly primary cadence');
           if (!scheduler.includes("'/api/autonomous-supervisor' 'Autonomous supervisor backup recovery'")) throw new Error('Missing backup supervisor recovery');
           if (scheduler.includes("- cron: '4-54/10 * * * *'")) throw new Error('Old duplicate GitHub 10-minute supervisor schedule still present');
           if (scheduler.includes("- cron: '19,49 * * * *'")) throw new Error('Obsolete 30-minute autonomy watchdog still present');
@@ -73,6 +74,10 @@ jobs:
           if (!health.includes("primaryScheduler:'VERCEL_CRON'")) throw new Error('Health endpoint does not expose Vercel as primary scheduler');
           if (!health.includes("backupScheduler:'GITHUB_WATCHDOG'")) throw new Error('Health endpoint does not expose GitHub watchdog backup');
           if (!health.includes('cronExpectedEveryMinutes:EXPECTED_MINUTES')) throw new Error('Health endpoint does not expose expected cadence');
+          if (!health.includes('const EXPECTED_MINUTES=60;')) throw new Error('Health expected cadence is not aligned to hourly supervisor');
+          if (!health.includes('const LATE_AFTER_MINUTES=75;')) throw new Error('Health late threshold does not tolerate hourly scheduler jitter');
+          if (!health.includes('const STALE_AFTER_MINUTES=135;')) throw new Error('Health stale threshold cannot distinguish one missed hourly heartbeat');
+          if (!health.includes('githubRecoveryAfterMinutes:80')) throw new Error('Reported watchdog recovery threshold is not aligned to implementation');
           if (!health.includes('placesRealWagers:false')) throw new Error('Health endpoint must explicitly state it places no real wagers');
           if (!health.includes('wageringCapabilityOwnedByThisEndpoint:false')) throw new Error('Health endpoint ownership boundary for wagering is missing');
           if (!health.includes("globalWageringStatus:'UNVERIFIED'")) throw new Error('Health endpoint must not claim global wagering state it cannot observe');
