@@ -2,7 +2,7 @@ name: Shadow Market Observability Regression
 
 on:
   push:
-    branches: [main, argus/shadow-market-observability]
+    branches: [main, argus/shadow-market-observability, argus/shadow-market-observability-v2]
   pull_request:
 
 jobs:
@@ -16,8 +16,9 @@ jobs:
           node-version: '24'
       - name: Syntax checks
         run: |
+          node --check api/_shadow-fixture-dedupe.js
           node --check api/_shadow-market-observability.js
           node --check api/shadow-market-observability.js
           node --check tests/shadow-market-observability-regression.mjs
-      - name: Market-family observability regression suite
+      - name: Canonical market observability regression suite
         run: node tests/shadow-market-observability-regression.mjs
