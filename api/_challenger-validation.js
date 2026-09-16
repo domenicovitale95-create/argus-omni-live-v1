@@ -3,7 +3,7 @@ const finite=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
 const n=(v,f=null)=>finite(v)?Number(v):f;
 
 export const CHALLENGER_VALIDATION_POLICY=Object.freeze({
-  version:'CHALLENGER-VALIDATION-5',
+  version:'CHALLENGER-VALIDATION-6',
   trainFraction:.70,
   minimumTrainSample:150,
   minimumHoldoutSample:100,
@@ -43,10 +43,11 @@ function rowMarketProbability(r){
 function rowFixtureKey(r,index=0){return String(r?._fixtureKey??r?.fixtureId??`ROW-${index}`)}
 function validScoringRow(r){const p=n(r?.probability);return p>0&&p<1&&['WIN','LOSS'].includes(String(r?.outcome||'').toUpperCase())}
 function improvementPct(base,candidate){return base?.brier>0&&candidate?.brier!=null?Number(((base.brier-candidate.brier)/base.brier*100).toFixed(3)):null}
+function meanOfGroupMeans(map){const means=[...map.values()].filter(x=>x.count>0).map(x=>x.sum/x.count);return means.length?means.reduce((a,b)=>a+b,0)/means.length:null}
 
 export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
   let sample=0,bs=0,pnl=0,simulatedBets=0,clv=0,clvSamples=0,marketFairSamples=0;
-  const fixtures=new Set(),marketFairFixtures=new Set(),simulatedBetFixtures=new Set(),clvFixtures=new Set(),fixtureBrier=new Map();
+  const fixtures=new Set(),marketFairFixtures=new Set(),simulatedBetFixtures=new Set(),clvFixtures=new Set(),fixtureBrier=new Map(),fixtureReturn=new Map(),fixtureClv=new Map();
   for(let i=0;i<(rows||[]).length;i++){
     const r=rows[i];if(!validScoringRow(r))continue;
     const p0=n(r.probability),marketProbability=rowMarketProbability(r),p=applyChallenger(c,p0,marketProbability),y=String(r.outcome).toUpperCase()==='WIN'?1:0,key=rowFixtureKey(r,i),err=(p-y)**2;
@@ -57,11 +58,17 @@ export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
     // Positive-EV simulation legitimately uses the offered price break-even threshold.
     // Market-blend calibration, by contrast, may use only explicitly de-vigged fair probabilities.
     if(rawBreakEven!=null&&p-rawBreakEven>=CHALLENGER_VALIDATION_POLICY.betEdgeFloor){
-      simulatedBets++;simulatedBetFixtures.add(key);pnl+=y?(odds-1):-1;
-      if(finite(r.clv)){clv+=Number(r.clv);clvSamples++;clvFixtures.add(key)}
+      const ret=y?(odds-1):-1;
+      simulatedBets++;simulatedBetFixtures.add(key);pnl+=ret;
+      const rg=fixtureReturn.get(key)||{sum:0,count:0};rg.sum+=ret;rg.count++;fixtureReturn.set(key,rg);
+      if(finite(r.clv)){
+        const cv=Number(r.clv);
+        clv+=cv;clvSamples++;clvFixtures.add(key);
+        const cg=fixtureClv.get(key)||{sum:0,count:0};cg.sum+=cv;cg.count++;fixtureClv.set(key,cg);
+      }
     }
   }
-  const fixtureMeans=[...fixtureBrier.values()].map(x=>x.sum/x.count),fixtureBalancedBrier=fixtureMeans.length?fixtureMeans.reduce((a,b)=>a+b,0)/fixtureMeans.length:null;
+  const fixtureBalancedBrier=meanOfGroupMeans(fixtureBrier),fixtureBalancedReturn=meanOfGroupMeans(fixtureReturn),fixtureBalancedClv=meanOfGroupMeans(fixtureClv);
   return{
     ...c,
     sample,
@@ -75,9 +82,13 @@ export function scoreChallenger(rows,c={id:'BASELINE',type:'BASELINE'}){
     simulatedBetFixtures:simulatedBetFixtures.size,
     flatStakePL:Number(pnl.toFixed(2)),
     roi:simulatedBets?Number((pnl/simulatedBets*100).toFixed(2)):null,
+    fixtureBalancedRoi:fixtureBalancedReturn==null?null:Number((fixtureBalancedReturn*100).toFixed(2)),
+    roiValidationWeighting:'FIXTURE_BALANCED_MEAN_OF_FIXTURE_RETURNS',
     clvSamples,
     clvFixtures:clvFixtures.size,
-    avgCLV:clvSamples?Number((clv/clvSamples).toFixed(2)):null
+    avgCLV:clvSamples?Number((clv/clvSamples).toFixed(2)):null,
+    fixtureBalancedAvgCLV:fixtureBalancedClv==null?null:Number(fixtureBalancedClv.toFixed(2)),
+    clvValidationWeighting:'FIXTURE_BALANCED_MEAN_OF_FIXTURE_CLV'
   };
 }
 
@@ -130,9 +141,11 @@ function blockersFor(x){
   if(x.holdout.simulatedBets<p.minimumHoldoutSimulatedBets)b.push('HOLDOUT_BET_SAMPLE_INSUFFICIENT');
   if(x.holdout.simulatedBetFixtures<p.minimumHoldoutSimulatedBetFixtures)b.push('HOLDOUT_BET_FIXTURES_INSUFFICIENT');
   if(!(x.holdout.roi>=0))b.push('HOLDOUT_ROI_NOT_POSITIVE');
+  if(!(x.holdout.fixtureBalancedRoi>=0))b.push('HOLDOUT_FIXTURE_BALANCED_ROI_NOT_POSITIVE');
   if(x.holdout.clvSamples<p.minimumHoldoutClvSamples)b.push('HOLDOUT_CLV_SAMPLE_INSUFFICIENT');
   if(x.holdout.clvFixtures<p.minimumHoldoutClvFixtures)b.push('HOLDOUT_CLV_FIXTURES_INSUFFICIENT');
   if(!(x.holdout.avgCLV>=0))b.push('HOLDOUT_CLV_NOT_POSITIVE');
+  if(!(x.holdout.fixtureBalancedAvgCLV>=0))b.push('HOLDOUT_FIXTURE_BALANCED_CLV_NOT_POSITIVE');
   return b;
 }
 
