@@ -1,9 +1,9 @@
 import { readJsonFresh, storageReady } from './_report-store.js';
 
 const STATE='argus/health/fast-cycle.json';
-const PRIMARY_CADENCE_MINUTES=15;
-const LATE_AFTER_MINUTES=22;
-const STALE_AFTER_MINUTES=35;
+const PRIMARY_CADENCE_MINUTES=30;
+const LATE_AFTER_MINUTES=40;
+const STALE_AFTER_MINUTES=65;
 
 function ageMinutes(value){const t=new Date(value||0).getTime();return Number.isFinite(t)&&t>0?Math.max(0,Math.floor((Date.now()-t)/60000)):null}
 function failedJobs(results){
