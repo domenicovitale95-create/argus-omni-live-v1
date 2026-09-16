@@ -34,7 +34,7 @@ const currentFixture={
 const books=[{fixtures:{old:oldFixture,current:currentFixture}},{fixtures:{oldDuplicate:{...oldFixture,picks:oldFixture.picks.map(p=>({...p}))}}}];
 
 const x=buildShadowMarketObservability(books);
-assert.equal(x.version,'SHADOW-MARKET-OBSERVABILITY-2');
+assert.equal(x.version,'SHADOW-MARKET-OBSERVABILITY-3');
 assert.equal(x.policy.descriptiveOnly,true);
 assert.equal(x.policy.productionAuthority,false);
 assert.equal(x.policy.automaticPromotion,false);
@@ -55,9 +55,15 @@ assert.equal(x.overall.clvCoveragePct,75);
 assert.equal(x.overall.calibrationCoveragePct,100);
 assert.equal(x.overall.flatStakePL,.4);
 assert.equal(x.overall.flatStakeRoiPct,13.33);
+assert.equal(x.overall.pnlFixtures,2);
+assert.equal(x.overall.flatStakeRoiConfidence95.reps,0,'small fixture samples must not emit pseudo-precise ROI confidence intervals');
+assert.equal(x.overall.maxDrawdownUnits,.5);
 assert.equal(x.overall.frozenOddsPnlSamples,2);
 assert.equal(x.overall.frozenOddsFlatStakePL,1.4);
 assert.equal(x.overall.frozenOddsRoiPct,70);
+assert.equal(x.overall.frozenOddsPnlFixtures,2);
+assert.equal(x.overall.frozenOddsRoiConfidence95.reps,0);
+assert.equal(x.overall.frozenOddsMaxDrawdownUnits,0);
 assert.equal(x.overall.lateBoundPnlSamples,1);
 assert.equal(x.overall.brier,.15313);
 assert.equal(x.overall.logLoss,.49404);
