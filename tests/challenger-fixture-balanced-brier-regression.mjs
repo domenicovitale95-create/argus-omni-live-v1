@@ -13,7 +13,7 @@ function row(fixtureId,outcome,probability){
   };
 }
 
-assert.equal(CHALLENGER_VALIDATION_POLICY.version,'CHALLENGER-VALIDATION-5');
+assert.equal(CHALLENGER_VALIDATION_POLICY.version,'CHALLENGER-VALIDATION-6');
 
 // One fixture emits many correlated markets and is badly wrong. Twenty other fixtures
 // emit one pick each and are extremely accurate. A raw pick mean lets the high-volume
