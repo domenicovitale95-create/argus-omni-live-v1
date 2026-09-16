@@ -14,6 +14,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - name: Install runtime dependencies for evidence-core regression
+        run: npm install --ignore-scripts --no-audit --no-fund
       - name: Syntax checks
         run: |
           node --check api/_market-devig.js
