@@ -59,9 +59,10 @@ jobs:
       - name: Verify fast-cycle synthetic queries and 30-minute cadence contract
         run: |
           grep -Fq "url:qs?" api/fast-cycle.js
-          grep -Fq "primaryCadenceMinutes:30" api/fast-cycle.js
-          grep -Fq "livePaperSettlementCadenceMinutes:30" api/fast-cycle.js
-          grep -Fq "%30" api/fast-cycle.js
+          grep -Fq "const PRIMARY_CADENCE_MINUTES=30" api/fast-cycle.js
+          grep -Fq "primaryCadenceMinutes:PRIMARY_CADENCE_MINUTES" api/fast-cycle.js
+          grep -Fq "livePaperSettlementCadenceMinutes:PRIMARY_CADENCE_MINUTES" api/fast-cycle.js
+          grep -Fq "%PRIMARY_CADENCE_MINUTES" api/fast-cycle.js
           grep -Fq "backupHealthCheckMinutes:30" api/fast-cycle.js
           if grep -Fq "primaryCadenceMinutes:15" api/fast-cycle.js; then
             echo "Obsolete 15-minute primary cadence metadata remains" >&2
