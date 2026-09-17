@@ -56,11 +56,17 @@ jobs:
           grep -Fq '"schedule": "23 8 * * *"' vercel.json
           grep -Fq "Unauthorized" api/shadow-mode.js
           grep -Fq "API_FOOTBALL_RECOVERY" api/shadow-mode.js
-      - name: Verify fast-cycle synthetic queries use req.url semantics
+      - name: Verify fast-cycle synthetic queries and 30-minute cadence contract
         run: |
           grep -Fq "url:qs?" api/fast-cycle.js
-          grep -Fq "primaryCadenceMinutes:15" api/fast-cycle.js
+          grep -Fq "primaryCadenceMinutes:30" api/fast-cycle.js
+          grep -Fq "livePaperSettlementCadenceMinutes:30" api/fast-cycle.js
+          grep -Fq "%30" api/fast-cycle.js
           grep -Fq "backupHealthCheckMinutes:30" api/fast-cycle.js
+          if grep -Fq "primaryCadenceMinutes:15" api/fast-cycle.js; then
+            echo "Obsolete 15-minute primary cadence metadata remains" >&2
+            exit 1
+          fi
       - name: Verify readiness still consumes persisted shadow evidence
         run: |
           grep -Fq "listJson('argus/shadow/',180)" api/autopilot-readiness.js
