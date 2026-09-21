@@ -1,0 +1,31 @@
+name: Strategic Brussels Regression
+
+on:
+  pull_request:
+    paths:
+      - 'data/strategic-brussels.json'
+      - 'data/strategic-watch-snapshot.json'
+      - 'lib/strategic-brussels.js'
+      - 'api/strategic-brussels.js'
+      - 'strategic-brussels.html'
+      - 'scripts/strategic-discovery.mjs'
+      - 'tests/strategic-brussels-regression.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'data/strategic-brussels.json'
+      - 'lib/strategic-brussels.js'
+      - 'api/strategic-brussels.js'
+      - 'strategic-brussels.html'
+      - 'tests/strategic-brussels-regression.mjs'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/strategic-brussels-regression.mjs

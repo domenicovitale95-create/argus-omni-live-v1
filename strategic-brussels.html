@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111d">
+<title>Strategic Brussels — ARGUS IMMO</title>
+<meta name="description" content="ARGUS Strategic Brussels: urban transformation, infrastructure, EU institutions and long-term value across all 19 municipalities of Brussels.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{
+  --bg:#07111d;--bg2:#0b1725;--panel:#0e1b2b;--panel2:#101f31;--panel3:#14263b;
+  --line:#24394f;--line2:#3d5e80;--text:#f5f7fa;--muted:#9fb0c3;--soft:#ced8e3;
+  --paper:#eff4f9;--ink:#102238;--blue:#a8c8ee;--green:#9eddbb;--amber:#e9c785;--red:#e7a1a7;
+  --radius:18px;--shadow:0 26px 65px rgba(0,0,0,.24)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 15% -10%,rgba(96,143,193,.2),transparent 30%),var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}
+.wrap{width:min(1440px,calc(100% - 34px));margin:auto}
+.top{position:sticky;top:0;z-index:1200;background:rgba(7,17,29,.9);backdrop-filter:blur(18px);border-bottom:1px solid rgba(168,200,238,.12)}
+.nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.mark{width:38px;height:38px;border-radius:12px;background:var(--paper);color:var(--ink);display:grid;place-items:center;font-weight:950}
+.brand strong{display:block;font-size:.91rem;letter-spacing:.08em}.brand span{display:block;color:var(--muted);font-size:.69rem}
+.links{display:flex;align-items:center;gap:6px}.links a{text-decoration:none;color:var(--soft);font-size:.79rem;font-weight:800;padding:9px 11px;border-radius:10px}.links a.active,.links a:hover{background:var(--panel2);color:white}
+.live{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:7px 9px;color:var(--soft);font-size:.72rem;font-weight:800}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(158,221,187,.08)}
+.hero{padding:48px 0 24px}
+.eyebrow{display:flex;gap:8px;align-items:center;color:var(--blue);font-size:.72rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.hero h1{font-size:clamp(3rem,8vw,6.4rem);letter-spacing:-.065em;line-height:.92;margin:12px 0 18px;max-width:1100px}
+.hero .lead{color:#c5d0dc;max-width:850px;font-size:clamp(1rem,2vw,1.22rem);margin:0}
+.guardrail{display:flex;gap:10px;align-items:flex-start;margin-top:20px;border:1px solid rgba(233,199,133,.22);background:rgba(91,69,30,.18);border-radius:15px;padding:12px 14px;color:#e5d8bd;font-size:.8rem}
+.guardrail b{color:white}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:24px}
+.kpi{border:1px solid var(--line);background:rgba(14,27,43,.7);border-radius:14px;padding:13px 14px;min-height:80px}
+.kpi span{display:block;color:var(--muted);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;font-weight:850}
+.kpi strong{display:block;font-size:1.45rem;margin-top:7px;letter-spacing:-.04em}
+.section{margin:26px 0 42px}
+.sectionhead{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:12px}
+.sectionhead h2{margin:0;font-size:1.55rem;letter-spacing:-.025em}.sectionhead p{margin:5px 0 0;color:var(--muted);font-size:.84rem;max-width:820px}
+.badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel2);padding:6px 8px;border-radius:999px;color:#d5e1ed;font-size:.69rem;font-weight:850}
+.topgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.topcard{border:1px solid var(--line);background:linear-gradient(160deg,rgba(16,31,49,.96),rgba(12,24,39,.96));border-radius:16px;padding:15px;min-height:155px;cursor:pointer;transition:.16s transform,.16s border-color}
+.topcard:hover{transform:translateY(-2px);border-color:#53779c}.topcard small{display:block;color:var(--blue);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900}.topcard h3{font-size:1rem;margin:8px 0 5px}.topcard p{font-size:.76rem;color:var(--muted);margin:0}.topscore{display:flex;align-items:end;justify-content:space-between;margin-top:13px}.topscore strong{font-size:1.5rem;letter-spacing:-.05em}.topscore span{font-size:.7rem;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(430px,.95fr);gap:14px;align-items:start}
+.mapcard{position:sticky;top:84px;border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:9px;box-shadow:var(--shadow)}
+.maphead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 8px 10px}.maphead strong{font-size:.92rem}.maphead span{display:block;color:var(--muted);font-size:.7rem}
+#map{height:calc(100vh - 160px);min-height:590px;border-radius:13px;background:#091421}
+.toolbar{display:flex;gap:7px;flex-wrap:wrap;border:1px solid var(--line);background:rgba(14,27,43,.86);border-radius:14px;padding:8px;margin-bottom:10px}
+.search{flex:1 1 230px;display:flex;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:0 10px}
+.search input{width:100%;height:40px;border:0;outline:0;background:transparent;color:white}.search input::placeholder{color:#75899f}
+.select,.filter{height:40px;border:1px solid var(--line);background:var(--bg2);color:white;border-radius:10px;padding:0 10px;font-weight:800}
+.filter.active{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.zonelist{display:grid;gap:9px}
+.zone{border:1px solid var(--line);background:rgba(14,27,43,.94);border-radius:16px;padding:14px;transition:.15s border-color,.15s transform}
+.zone:hover{border-color:#456987;transform:translateY(-1px)}
+.zonehead{display:flex;justify-content:space-between;gap:13px;align-items:flex-start}
+.zone small{color:var(--blue);text-transform:uppercase;letter-spacing:.09em;font-size:.61rem;font-weight:900}.zone h3{font-size:1.02rem;margin:5px 0 3px}.zone .commune{font-size:.74rem;color:var(--muted)}
+.scorebox{text-align:right;white-space:nowrap}.scorebox strong{display:block;font-size:1.5rem;letter-spacing:-.05em}.scorebox span{display:block;color:var(--muted);font-size:.65rem}
+.zonefacts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}
+.fact{background:var(--bg2);border:1px solid rgba(36,57,79,.75);border-radius:9px;padding:8px;min-width:0}.fact span{display:block;color:var(--muted);font-size:.57rem;text-transform:uppercase;letter-spacing:.06em;font-weight:850}.fact b{display:block;font-size:.79rem;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reasons{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.reasons span{font-size:.68rem;padding:5px 7px;border-radius:999px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);color:#cfd9e3}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.actions button,.actions a{height:36px;border:1px solid var(--line);background:var(--panel3);color:white;border-radius:9px;padding:0 10px;font-size:.72rem;font-weight:850;text-decoration:none;display:inline-flex;align-items:center}.actions .main{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.reference{border-color:rgba(168,200,238,.28);background:linear-gradient(135deg,rgba(38,59,86,.34),rgba(14,27,43,.94))}
+.emerging{border:1px dashed var(--line2);background:rgba(14,27,43,.5);border-radius:16px;padding:18px;color:var(--muted)}
+.coverage{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.communechip{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:9px 10px}.communechip b{display:block;font-size:.75rem}.communechip span{display:block;color:var(--muted);font-size:.65rem;margin-top:3px}
+.drawerback{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1400;opacity:0;pointer-events:none;transition:.2s opacity}
+.drawerback.open{opacity:1;pointer-events:auto}
+.drawer{position:absolute;right:0;top:0;height:100%;width:min(680px,100%);background:#091523;border-left:1px solid var(--line);overflow:auto;padding:20px 20px 40px;transform:translateX(100%);transition:.25s transform}
+.drawerback.open .drawer{transform:translateX(0)}
+.drawerclose{position:sticky;top:0;float:right;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:white;z-index:3}
+.draw-eyebrow{color:var(--blue);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900;margin-top:8px}.drawer h2{font-size:2.1rem;letter-spacing:-.04em;margin:9px 0 5px}.drawsub{color:var(--muted);margin:0 0 16px}
+.bigscore{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}.big{border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:12px}.big span{display:block;color:var(--muted);font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;font-weight:850}.big strong{font-size:1.35rem;display:block;margin-top:5px}
+.scoregrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.scoreline{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:9px}.scoreline div{display:flex;justify-content:space-between;gap:10px;font-size:.72rem}.bar{height:5px;background:#162b42;border-radius:999px;overflow:hidden;margin-top:7px}.bar i{display:block;height:100%;background:#9dbfe6}
+.project{border-left:2px solid var(--line2);padding:0 0 14px 12px;margin-left:4px}.project b{font-size:.83rem}.stage{display:inline-block;margin-left:6px;padding:3px 6px;border-radius:999px;background:var(--panel3);font-size:.58rem;font-weight:900;letter-spacing:.05em}.project p{font-size:.73rem;color:var(--muted);margin:5px 0}.sources a{display:block;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:9px 10px;text-decoration:none;margin:6px 0;font-size:.73rem}.sources small{display:block;color:var(--muted);margin-top:2px}
+.note{border:1px solid rgba(233,199,133,.2);background:rgba(91,69,30,.16);border-radius:11px;padding:10px;color:#decfac;font-size:.73rem;margin-top:10px}
+.loading{padding:34px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);text-align:center}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#0d1b2b;color:white}.leaflet-popup-content{margin:11px 12px}.leaflet-popup-content a{color:#bcd5f2}
+@media(max-width:1050px){.workspace{grid-template-columns:1fr}.mapcard{position:relative;top:0}#map{height:560px;min-height:0}.kpis{grid-template-columns:repeat(3,1fr)}.coverage{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:700px){.wrap{width:min(100% - 22px,1440px)}.links a{display:none}.live{display:none}.hero{padding-top:34px}.hero h1{font-size:3rem}.kpis{grid-template-columns:repeat(2,1fr)}.topgrid{grid-template-columns:1fr}.zonefacts{grid-template-columns:repeat(2,1fr)}.coverage{grid-template-columns:repeat(2,1fr)}#map{height:58vh}.drawer{padding:15px 14px 32px}.drawer h2{font-size:1.7rem}.scoregrid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap nav">
+  <a class="brand" href="/immo-opportunities"><span class="mark">A</span><span><strong>ARGUS IMMO</strong><span>Strategic Brussels</span></span></a>
+  <nav class="links"><a href="/immo-opportunities">Opportunités</a><a class="active" href="/strategic-brussels">Strategic Brussels</a><a href="/immo#scanner">Scanner</a><span class="live"><span class="dot"></span>19 communes sous surveillance</span></nav>
+</div></header>
+
+<main class="wrap">
+<section class="hero">
+  <div class="eyebrow"><span class="dot"></span> Urban transformation · Infrastructure · EU institutions · Long-term value</div>
+  <h1>Strategic<br>Brussels.</h1>
+  <p class="lead">Un laboratoire de surveillance renforcée pour détecter les micro-zones où le prix actuel peut ne pas encore refléter une amélioration structurelle réelle, financée et mesurable.</p>
+  <div class="guardrail"><b>ANTI-HYPE RULE</b><span>Les clusters initiaux ne sont pas des gagnants prédéfinis. ARGUS continue de scanner toute la Région et peut faire remonter une zone qui n’est pas dans la Watchlist. Un projet annoncé pèse beaucoup moins qu’un projet permis ou en chantier.</span></div>
+  <div class="kpis">
+    <div class="kpi"><span>Communes couvertes</span><strong id="kMunicipalities">19/19</strong></div>
+    <div class="kpi"><span>Zones renforcées</span><strong id="kZones">—</strong></div>
+    <div class="kpi"><span>Urban Upside max</span><strong id="kUpside">—</strong></div>
+    <div class="kpi"><span>Emerging areas</span><strong id="kEmerging">—</strong></div>
+    <div class="kpi"><span>Data update</span><strong id="kUpdated">—</strong></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><h2>Top Opportunities Now</h2><p>Les catégories sont recalculées par le moteur à chaque mise à jour. Aucun quartier n’est codé en dur comme “#1”.</p></div><span class="badge">DYNAMIC RANKING</span></div>
+  <div id="topGrid" class="topgrid"><div class="loading">Calcul du classement…</div></div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><h2>Carte stratégique de Bruxelles</h2><p>Les scores synthétisent valeur actuelle, catalyseurs, certitude d’exécution et risques. La carte ne remplace jamais l’analyse micro-locale.</p></div><span id="mapLegend" class="badge">Urban Upside · 0–100</span></div>
+  <div class="workspace">
+    <div>
+      <div class="toolbar">
+        <label class="search"><input id="q" type="search" placeholder="Quartier, micro-zone, commune…"></label>
+        <select id="horizon" class="select"><option value="">Tous horizons</option><option value="SHORT">Short term</option><option value="MEDIUM">Medium term</option><option value="LONG">Long term</option></select>
+        <select id="risk" class="select"><option value="">Tous risques</option><option value="low">Risk ≤ 40</option><option value="medium">Risk ≤ 60</option><option value="high">Risk > 60</option></select>
+        <button id="enhancedOnly" class="filter active">Watchlist renforcée</button>
+      </div>
+      <div class="sectionhead" style="margin-top:16px"><div><h2 id="listTitle">ARGUS Strategic Watchlist</h2><p id="listMeta">Chargement…</p></div></div>
+      <div id="zoneList" class="zonelist"><div class="loading">Chargement des zones…</div></div>
+    </div>
+    <aside class="mapcard"><div class="maphead"><div><strong>Urban Upside Map</strong><span id="mapMeta">Calcul dynamique</span></div><span class="badge">Click zone → dossier</span></div><div id="map"></div></aside>
+  </div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><h2>European Core</h2><p>Benchmark institutionnel historique : Schuman, Loi, Léopold, Luxembourg, Arts-Loi, Maelbeek, Merode et Montgomery. Il sert de référence, pas de zone de rattrapage automatique.</p></div><span class="badge">REFERENCE BENCHMARK</span></div>
+  <div id="europeanCore"></div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><h2>New Emerging Area</h2><p>Une zone hors Watchlist n’apparaît ici que si plusieurs signaux objectifs convergent : permis, masterplan, transport, investissement public, emploi, espace vert, démographie ou changement de marché.</p></div><span class="badge">DISCOVERY ENGINE</span></div>
+  <div id="emerging" class="emerging">Analyse en cours…</div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><h2>19 communes : couverture de base</h2><p>Même sans cluster renforcé, aucune commune n’est exclue du moteur de découverte.</p></div><span class="badge">REGION-WIDE SCAN</span></div>
+  <div id="coverage" class="coverage"></div>
+</section>
+</main>
+
+<div id="drawerBack" class="drawerback" aria-hidden="true"><aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle"><button id="drawerClose" class="drawerclose" aria-label="Fermer">×</button><div id="drawerBody"></div></aside></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+let payload=null,zones=[],map,markers=[],filters={q:'',horizon:'',risk:'',enhanced:true};
+const euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(n)||0);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtDate=v=>{try{return new Intl.DateTimeFormat('fr-BE',{day:'2-digit',month:'short',year:'2-digit'}).format(new Date(v))}catch{return '—'}};
+const sourceMap=()=>Object.fromEntries((payload?.sources||[]).map(s=>[s.id,s]));
+const pct=v=>Math.round(Number(v)||0);
+function riskLabel(v){v=Number(v)||0;return v<=40?'LOW':v<=60?'MEDIUM':'HIGH'}
+function priceText(z){const p=z.market?.askingPricePerM2;return p?Math.round(p).toLocaleString('fr-BE')+' €/m²':'N/D'}
+function stageTone(stage){return {ANNOUNCED:20,PLANNED:40,APPROVED:60,PERMITTED:78,UNDER_CONSTRUCTION:90,DELIVERED:100}[stage]||0}
+function initMap(){
+  if(map||!window.L)return;
+  map=L.map('map',{zoomControl:false}).setView([50.8503,4.3517],11.6);
+  L.control.zoom({position:'bottomright'}).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(map);
+}
+function markerStyle(z){
+  const u=z.derived?.urbanUpside||0,r=8+u/12;
+  return {radius:r,weight:2,opacity:.95,fillOpacity:.72,color:u>=75?'#9eddbb':u>=60?'#e9c785':'#a8c8ee',fillColor:u>=75?'#2f7251':u>=60?'#785f2d':'#355f89'};
+}
+function renderMap(list){
+  initMap();markers.forEach(m=>map.removeLayer(m));markers=[];
+  const b=[];
+  list.forEach(z=>{
+    if(!z.center)return;
+    const m=L.circleMarker([z.center.lat,z.center.lng],markerStyle(z)).addTo(map);
+    m.bindTooltip('<b>'+esc(z.name)+'</b><br>Urban Upside '+pct(z.derived?.urbanUpside)+'/100<br>'+esc(z.timeHorizon||''));
+    m.on('click',()=>openZone(z.id));markers.push(m);b.push([z.center.lat,z.center.lng]);
+  });
+  if(b.length)map.fitBounds(b,{padding:[26,26],maxZoom:13});
+  document.getElementById('mapMeta').textContent=list.length+' zone(s) affichée(s)';
+}
+function filtered(){
+  let list=[...zones].filter(z=>z.status!=='REFERENCE_ONLY');
+  if(filters.enhanced)list=list.filter(z=>z.status==='ENHANCED_WATCH');
+  const q=filters.q.toLowerCase().trim();
+  if(q)list=list.filter(z=>JSON.stringify([z.name,z.communes,z.microzones]).toLowerCase().includes(q));
+  if(filters.horizon)list=list.filter(z=>String(z.timeHorizon||'').includes(filters.horizon));
+  if(filters.risk==='low')list=list.filter(z=>(z.derived?.risk||0)<=40);
+  if(filters.risk==='medium')list=list.filter(z=>(z.derived?.risk||0)<=60);
+  if(filters.risk==='high')list=list.filter(z=>(z.derived?.risk||0)>60);
+  return list;
+}
+function zoneCard(z,reference=false){
+  const reasons=(z.reasons||[]).slice(0,3);
+  return '<article class="zone '+(reference?'reference':'')+'"><div class="zonehead"><div><small>'+(reference?'EUROPEAN CORE':'CLUSTER '+esc(z.cluster))+'</small><h3>'+esc(z.name)+'</h3><div class="commune">'+esc((z.communes||[]).join(' · '))+'</div></div><div class="scorebox"><strong>'+pct(z.derived?.urbanUpside)+'</strong><span>URBAN UPSIDE</span></div></div>'+
+  '<div class="zonefacts"><div class="fact"><span>Prix indicatif</span><b>'+priceText(z)+'</b></div><div class="fact"><span>Project certainty</span><b>'+pct(z.derived?.executionConfidence)+'/100</b></div><div class="fact"><span>Risk</span><b>'+riskLabel(z.derived?.risk)+' · '+pct(z.derived?.risk)+'</b></div><div class="fact"><span>Horizon</span><b>'+esc(z.timeHorizon||'—')+'</b></div></div>'+
+  '<div class="reasons">'+reasons.map(r=>'<span>'+esc(r)+'</span>').join('')+'</div>'+
+  '<div class="actions"><button class="main" onclick="openZone(\''+esc(z.id)+'\')">Analyse complète</button><button onclick="focusZone(\''+esc(z.id)+'\')">Voir sur la carte</button></div></article>';
+}
+function renderZones(){
+  const list=filtered();
+  document.getElementById('zoneList').innerHTML=list.length?list.map(z=>zoneCard(z)).join(''):'<div class="loading">Aucune zone ne correspond à ces filtres.</div>';
+  document.getElementById('listMeta').textContent=list.length+' zone(s) · classement recalculé à partir des données actuelles';
+  renderMap(list);
+}
+function focusZone(id){
+  const z=zones.find(x=>x.id===id);if(!z?.center)return;
+  map.setView([z.center.lat,z.center.lng],14);
+  const m=markers.find(m=>{const p=m.getLatLng();return Math.abs(p.lat-z.center.lat)<.001&&Math.abs(p.lng-z.center.lng)<.001});if(m)m.openTooltip();
+}
+window.focusZone=focusZone;
+function topCard(label,id){
+  const z=zones.find(x=>x.id===id);if(!z)return '';
+  return '<button class="topcard" onclick="openZone(\''+esc(z.id)+'\')"><small>'+esc(label)+'</small><h3>'+esc(z.name)+'</h3><p>'+esc((z.reasons||[])[0]||'Analyse disponible')+'</p><div class="topscore"><strong>'+pct(z.derived?.urbanUpside)+'</strong><span>Urban Upside</span></div></button>';
+}
+function renderTop(){
+  const t=payload.topOpportunityIds||{};
+  const cards=[
+    ['BEST VALUE',t.bestValue],['BEST 5-YEAR TRANSFORMATION',t.bestFiveYearTransformation],['BEST LONG-TERM TRANSFORMATION',t.bestLongTermTransformation],
+    ['BEST EU-INSTITUTIONAL EXPOSURE',t.bestEuInstitutionalExposure],['BEST TRANSPORT-LED OPPORTUNITY',t.bestTransportLed],['BEST VALUE NEAR CITY CENTRE',t.bestValueNearCentre]
+  ].map(x=>topCard(x[0],x[1])).join('');
+  document.getElementById('topGrid').innerHTML=cards||'<div class="loading">Données insuffisantes.</div>';
+}
+function renderCoverage(){
+  document.getElementById('coverage').innerHTML=(payload.municipalities||[]).map(m=>'<div class="communechip"><b>'+esc(m.name)+'</b><span>'+Number(m.askingPricePerM2).toLocaleString('fr-BE')+' €/m² proxy</span></div>').join('');
+}
+function renderEmerging(){
+  const e=payload.emergingAreas||[];
+  document.getElementById('emerging').innerHTML=e.length?e.map(x=>'<b>'+esc(x.name)+'</b> · confidence '+pct(x.discovery?.confidence)+'/100').join('<br>'):'<b>Aucune nouvelle zone n’a encore franchi le seuil automatique.</b><br>Le moteur conserve néanmoins les 19 communes dans la base de surveillance et peut promouvoir une nouvelle zone dès que plusieurs signaux vérifiés convergent.';
+}
+function scoreLine(label,v){
+  return '<div class="scoreline"><div><span>'+esc(label)+'</span><b>'+pct(v)+'</b></div><div class="bar"><i style="width:'+pct(v)+'%"></i></div></div>';
+}
+function openZone(id){
+  const z=zones.find(x=>x.id===id);if(!z)return;
+  const sm=sourceMap(),sources=(z.sourceIds||[]).map(id=>sm[id]).filter(Boolean);
+  const dims=[
+    ['Current Value',z.derived?.currentValue],['Future Catalysts',z.derived?.futureCatalysts],['Execution Confidence',z.derived?.executionConfidence],['Risk',z.derived?.risk],
+    ['Value Score',z.scores?.valueScore],['Price Momentum',z.scores?.priceMomentum],['Urban Transformation',z.scores?.urbanTransformation],['Transport',z.scores?.transportScore],
+    ['Employment Gravity',z.scores?.employmentGravity],['EU Institutional Impact',z.scores?.euInstitutionalImpact],['Green/Public Space',z.scores?.greenPublicSpaceImpact],
+    ['Housing Supply',z.scores?.housingSupply],['Commercial Revitalisation',z.scores?.commercialRevitalisation],['Demographic Momentum',z.scores?.demographicMomentum],
+    ['Rental Demand',z.scores?.rentalDemand],['Affordability',z.scores?.affordability],['Repricing Gap',z.scores?.repricingGap]
+  ].filter(x=>Number.isFinite(Number(x[1])));
+  const projects=(z.projects||[]).map(p=>'<div class="project"><b>'+esc(p.name)+'</b><span class="stage">'+esc(p.stage)+'</span><p>'+esc((p.facts||[]).join(' · '))+'</p><p>Execution weight '+stageTone(p.stage)+'/100 · last update '+esc(p.lastUpdate||'—')+'</p></div>').join('');
+  const src=sources.map(s=>'<a href="'+esc(s.url)+'" target="_blank" rel="noopener"><b>'+esc(s.name)+'</b><small>'+esc(s.type)+' · '+esc(s.geographicalLevel)+' · '+esc(s.date)+'</small></a>').join('');
+  const note=z.institutionalWatch?'<div class="note"><b>EU_INSTITUTIONAL_IMPACT guardrail:</b> '+esc(z.institutionalWatch.rule)+'</div>':'';
+  const excluded=(z.excludedCatalysts||[]).length?'<div class="note"><b>Excluded catalyst:</b> '+esc(z.excludedCatalysts.join(' · '))+'</div>':'';
+  document.getElementById('drawerBody').innerHTML='<div class="draw-eyebrow">'+(z.status==='REFERENCE_ONLY'?'EUROPEAN CORE':'STRATEGIC BRUSSELS · CLUSTER '+esc(z.cluster))+'</div><h2 id="drawerTitle">'+esc(z.name)+'</h2><p class="drawsub">'+esc((z.microzones||[]).join(' · '))+'</p>'+
+  '<div class="bigscore"><div class="big"><span>ARGUS URBAN UPSIDE</span><strong>'+pct(z.derived?.urbanUpside)+'/100</strong></div><div class="big"><span>TIME HORIZON</span><strong>'+esc(z.timeHorizon||'—')+'</strong></div><div class="big"><span>Indicative price</span><strong>'+priceText(z)+'</strong></div><div class="big"><span>Data completeness</span><strong>'+pct(z.derived?.dataCompleteness)+'/100</strong></div></div>'+
+  '<h3>Independent indicators</h3><div class="scoregrid">'+dims.map(x=>scoreLine(x[0],x[1])).join('')+'</div>'+
+  '<h3>Why it matters</h3><div class="reasons">'+(z.reasons||[]).map(r=>'<span>'+esc(r)+'</span>').join('')+'</div>'+
+  '<h3>Risks / counter-case</h3><p style="color:var(--muted);font-size:.8rem">'+esc((z.risks||[]).join(' · '))+'</p>'+note+excluded+
+  '<h3>Projects & execution</h3>'+projects+'<h3>Sources</h3><div class="sources">'+src+'</div>';
+  const back=document.getElementById('drawerBack');back.classList.add('open');back.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+}
+window.openZone=openZone;
+function closeDrawer(){const b=document.getElementById('drawerBack');b.classList.remove('open');b.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+document.getElementById('drawerClose').onclick=closeDrawer;
+document.getElementById('drawerBack').addEventListener('click',e=>{if(e.target.id==='drawerBack')closeDrawer()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
+document.getElementById('q').addEventListener('input',e=>{filters.q=e.target.value;renderZones()});
+document.getElementById('horizon').addEventListener('change',e=>{filters.horizon=e.target.value;renderZones()});
+document.getElementById('risk').addEventListener('change',e=>{filters.risk=e.target.value;renderZones()});
+document.getElementById('enhancedOnly').addEventListener('click',e=>{filters.enhanced=!filters.enhanced;e.currentTarget.classList.toggle('active',filters.enhanced);renderZones()});
+
+initMap();
+fetch('/api/strategic-brussels',{cache:'no-store'}).then(r=>r.json()).then(j=>{
+  if(!j.ok)throw new Error(j.error||'API unavailable');
+  payload=j;zones=j.zones||[];
+  document.getElementById('kMunicipalities').textContent=(j.coverage?.municipalities||19)+'/19';
+  document.getElementById('kZones').textContent=j.coverage?.enhancedZones||0;
+  document.getElementById('kUpside').textContent=Math.round(Math.max(...zones.filter(z=>z.status!=='REFERENCE_ONLY').map(z=>z.derived?.urbanUpside||0)))+'/100';
+  document.getElementById('kEmerging').textContent=(j.emergingAreas||[]).length;
+  document.getElementById('kUpdated').textContent=fmtDate(j.updatedAt);
+  renderTop();renderZones();renderCoverage();renderEmerging();
+  const core=zones.find(z=>z.status==='REFERENCE_ONLY');document.getElementById('europeanCore').innerHTML=core?zoneCard(core,true):'<div class="loading">Benchmark indisponible.</div>';
+}).catch(e=>{
+  document.getElementById('zoneList').innerHTML='<div class="loading">Strategic Brussels indisponible : '+esc(e.message)+'</div>';
+  document.getElementById('topGrid').innerHTML='<div class="loading">Données indisponibles.</div>';
+});
+</script>
+</body>
+</html>
