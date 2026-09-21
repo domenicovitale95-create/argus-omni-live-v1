@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21T22:15:00+02:00",
+  "updatedAt": "2026-09-21T22:25:00+02:00",
   "profile": {
     "category": "building",
     "maxPurchasePrice": 400000,
@@ -8,10 +8,46 @@
   },
   "opportunities": [
     {
-      "id": "ixelles-c21-3033b",
+      "id": "schaerbeek-eugene-smits-64",
       "status": "ARGUS_1",
-      "verdict": "ARGUS #1 — À AUDITER EN PRIORITÉ",
-      "score": 91,
+      "verdict": "ARGUS #1 — MEILLEUR DOSSIER GLOBAL À AUDITER",
+      "score": 94,
+      "title": "Immeuble de rapport — 3 unités reconnues",
+      "location": "Rue Eugène Smits 64, 1030 Schaerbeek",
+      "exactAddress": "Rue Eugène Smits 64, 1030 Schaerbeek, Belgique",
+      "addressStatus": "Adresse exacte publiée",
+      "area": 180,
+      "price": 399000,
+      "recognizedUnits": 3,
+      "unitsText": "3 unités reconnues",
+      "peb": "F / G / G",
+      "condition": "À rafraîchir / à rénover selon l’annonce",
+      "meters": "Compteurs séparés annoncés",
+      "rent": 2000,
+      "grossYield": 6.02,
+      "strengths": [
+        "3 unités explicitement reconnues",
+        "compteurs séparés",
+        "180 m²",
+        "loyer actuel ±2.000 €/mois",
+        "jardin 73 m²",
+        "panneaux solaires",
+        "double vitrage PVC"
+      ],
+      "risks": [
+        "PEB F/G/G",
+        "travaux/rafraîchissement à chiffrer",
+        "électricité : attestation non fournie",
+        "prix annoncé 'faire offre à partir de 399.000 €'"
+      ],
+      "source": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1030/schaerbeek/rbw86202",
+      "verified": "2026-09-21"
+    },
+    {
+      "id": "ixelles-c21-3033b",
+      "status": "SHORTLIST",
+      "verdict": "EXCELLENT PLAN B — 2 UNITÉS RECONNUES",
+      "score": 90,
       "title": "Maison de rapport — 2 duplex 1ch reconnus",
       "location": "1050 Ixelles — entre Place Fernand Cocq et Place Flagey",
       "exactAddress": null,
@@ -25,8 +61,19 @@
       "meters": "Compteurs séparés annoncés",
       "rent": null,
       "grossYield": null,
-      "strengths": ["2 unités explicitement reconnues", "Ixelles / Flagey-Fernand Cocq", "compteurs séparés", "état immédiatement habitable", "PEB meilleur que la majorité des immeubles < 400 k€ observés"],
-      "risks": ["Seulement 2 unités reconnues, pas 3", "adresse exacte non publiée", "loyers réels et baux à obtenir", "renseignements urbanistiques complets à obtenir avant offre"],
+      "strengths": [
+        "2 unités explicitement reconnues",
+        "Ixelles / Flagey-Fernand Cocq",
+        "compteurs séparés",
+        "état immédiatement habitable",
+        "PEB meilleur que la majorité des immeubles < 400 k€ observés"
+      ],
+      "risks": [
+        "Seulement 2 unités reconnues, pas 3",
+        "adresse exacte non publiée",
+        "loyers réels et baux à obtenir",
+        "renseignements urbanistiques complets à obtenir avant offre"
+      ],
       "source": "https://www.century21.be/fr/properiete/a-vendre/maison/ixelles/fFgMcaABjVTO4imlyTny",
       "verified": "2026-09-21"
     },
@@ -49,8 +96,18 @@
       "rent": 2800,
       "potentialRent": 4250,
       "grossYield": 8.42,
-      "strengths": ["270 m²", "3 unités annoncées", "loyer actuel ± 2.800 €/mois", "fort potentiel locatif annoncé"],
-      "risks": ["Le caractère officiellement reconnu des 3 unités n’est pas confirmé dans l’annonce", "adresse exacte non publiée", "PEB G sur un niveau", "potentiel à 4.250 €/mois = projection de l’annonceur"],
+      "strengths": [
+        "270 m²",
+        "3 unités annoncées",
+        "loyer actuel ± 2.800 €/mois",
+        "fort potentiel locatif annoncé"
+      ],
+      "risks": [
+        "Le caractère officiellement reconnu des 3 unités n’est pas confirmé dans l’annonce",
+        "adresse exacte non publiée",
+        "PEB G sur un niveau",
+        "potentiel à 4.250 €/mois = projection de l’annonceur"
+      ],
       "source": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/bruxelles/1020/21855880",
       "verified": "2026-09-21"
     },
@@ -72,8 +129,18 @@
       "meters": "Local compteurs présent",
       "rent": null,
       "grossYield": null,
-      "strengths": ["adresse exacte", "3 unités annoncées", "180 m²", "proximité Liedts / Gare du Nord"],
-      "risks": ["reconnaissance urbanistique des 3 unités à vérifier", "PEB G", "rénovation", "sanitaires à compléter"],
+      "strengths": [
+        "adresse exacte",
+        "3 unités annoncées",
+        "180 m²",
+        "proximité Liedts / Gare du Nord"
+      ],
+      "risks": [
+        "reconnaissance urbanistique des 3 unités à vérifier",
+        "PEB G",
+        "rénovation",
+        "sanitaires à compléter"
+      ],
       "source": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1030/schaerbeek/vbe35650",
       "verified": "2026-09-21"
     },
@@ -95,8 +162,17 @@
       "meters": "À confirmer",
       "rent": null,
       "grossYield": null,
-      "strengths": ["5 appartements annoncés", "adresse exacte", "prix sous 400 k€"],
-      "risks": ["bien sous option", "reconnaissance urbanistique non démontrée", "PEB non communiqué", "surface affichée à contrôler"],
+      "strengths": [
+        "5 appartements annoncés",
+        "adresse exacte",
+        "prix sous 400 k€"
+      ],
+      "risks": [
+        "bien sous option",
+        "reconnaissance urbanistique non démontrée",
+        "PEB non communiqué",
+        "surface affichée à contrôler"
+      ],
       "source": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1000/bruxelles/vbe34074",
       "verified": "2026-09-21"
     },
@@ -118,8 +194,17 @@
       "meters": "À confirmer",
       "rent": null,
       "grossYield": null,
-      "strengths": ["Ixelles", "PEB E-", "177 m²", "adresse exacte"],
-      "risks": ["bien sous option", "plusieurs unités non reconnues dans la fiche", "division soumise à autorisations"],
+      "strengths": [
+        "Ixelles",
+        "PEB E-",
+        "177 m²",
+        "adresse exacte"
+      ],
+      "risks": [
+        "bien sous option",
+        "plusieurs unités non reconnues dans la fiche",
+        "division soumise à autorisations"
+      ],
       "source": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1050/ixelles/vbe06421",
       "verified": "2026-09-21"
     },
@@ -141,32 +226,18 @@
       "meters": "Électricité non conforme",
       "rent": null,
       "grossYield": null,
-      "strengths": ["Uccle", "dossier notarial et documents disponibles", "adresse exacte"],
-      "risks": ["mise à prix, pas prix final", "PEB G", "électricité non conforme", "enchère peut dépasser 400 k€"],
+      "strengths": [
+        "Uccle",
+        "dossier notarial et documents disponibles",
+        "adresse exacte"
+      ],
+      "risks": [
+        "mise à prix, pas prix final",
+        "PEB G",
+        "électricité non conforme",
+        "enchère peut dépasser 400 k€"
+      ],
       "source": "https://immo.notaris.be/fr/une-maison-de-rapport/a-vendre/43-avenue-coghen-1180-uccle/185863",
-      "verified": "2026-09-21"
-    },
-    {
-      "id": "schaerbeek-eugene-smits-64",
-      "status": "RECHECK",
-      "verdict": "3 UNITÉS RECONNUES — STATUT CONTRADICTOIRE",
-      "score": 0,
-      "title": "Immeuble de rapport — 3 unités reconnues",
-      "location": "Rue Eugène Smits 64, 1030 Schaerbeek",
-      "exactAddress": "Rue Eugène Smits 64, 1030 Schaerbeek, Belgique",
-      "addressStatus": "Adresse exacte publiée",
-      "area": 180,
-      "price": 399000,
-      "recognizedUnits": 3,
-      "unitsText": "3 unités reconnues",
-      "peb": "F / G / G",
-      "condition": "À rafraîchir",
-      "meters": "Compteurs séparés annoncés",
-      "rent": 2000,
-      "grossYield": 6.02,
-      "strengths": ["3 unités reconnues", "compteurs séparés", "jardin", "panneaux solaires", "loyer ±2.000 €/mois"],
-      "risks": ["Immoweb indique VENDU alors qu’une autre fiche reste accessible", "PEB F/G/G", "statut à revalider avant toute visite"],
-      "source": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1030/schaerbeek/rbw86202",
       "verified": "2026-09-21"
     }
   ]
