@@ -60,7 +60,7 @@ export function classifyListingAvailability({title='',description='',html='',str
   }
 
   const forSaleSignal=['à vendre','a vendre','te koop','for sale'].some(s=>head.includes(s));
-  const tenantedSale=/\b(?:vendu(?:e)?\s+lou[ée]e?|verkocht\s+verhuurd|sold\s+(?:tenanted|with tenant))\b/i.test(head);
+  const tenantedSale=['vendu loué','vendue louée','vendu loue','vendue louee','verkocht verhuurd','sold tenanted','sold with tenant'].some(s=>head.includes(s));
   if(forSaleSignal&&tenantedSale){
     return {status:'ACTIVE',reason:'tenanted_sale_signal'};
   }
