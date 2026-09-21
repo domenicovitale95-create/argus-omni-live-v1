@@ -1,13 +1,7 @@
-import {readFile} from 'node:fs/promises';
-import path from 'node:path';
+import strategicData from '../data/strategic-brussels.json' with { type: 'json' };
+import strategicSnapshot from '../data/strategic-watch-snapshot.json' with { type: 'json' };
 import {rankZones,topOpportunityBuckets,detectEmergingAreas} from '../lib/strategic-brussels.js';
 
-async function loadJson(name,fallback=null){
-  try{return JSON.parse(await readFile(path.join(process.cwd(),'data',name),'utf8'))}
-  catch(e){if(fallback!==null)return fallback;throw e}
-}
-async function loadData(){return await loadJson('strategic-brussels.json')}
-async function loadSnapshot(){return await loadJson('strategic-watch-snapshot.json',{generatedAt:null,signals:[],candidates:[],feeds:[],errors:[]})}
 function slimZone(z){
   return {
     id:z.id,cluster:z.cluster,name:z.name,communes:z.communes,microzones:z.microzones,center:z.center,status:z.status,
@@ -20,8 +14,8 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','public, max-age=0, s-maxage=900, stale-while-revalidate=3600');
   if(req.method!=='GET')return res.status(405).json({ok:false,error:'GET required'});
   try{
-    const data=await loadData();
-    const snapshot=await loadSnapshot();
+    const data=strategicData;
+    const snapshot=strategicSnapshot||{generatedAt:null,signals:[],candidates:[],feeds:[],errors:[]};
     const benchmarks={regionAskingPricePerM2:data.methodology.marketBenchmark.regionAskingPricePerM2};
     const ranked=rankZones(data.zones,benchmarks);
     const buckets=topOpportunityBuckets(data.zones,benchmarks);
