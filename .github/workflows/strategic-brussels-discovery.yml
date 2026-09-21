@@ -6,7 +6,6 @@ on:
     paths:
       - 'scripts/strategic-discovery.mjs'
       - 'data/strategic-discovery-feeds.json'
-      - 'data/strategic-neighborhoods.json'
       - '.github/workflows/strategic-brussels-discovery.yml'
   workflow_dispatch:
     inputs:
