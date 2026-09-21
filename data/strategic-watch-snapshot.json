@@ -1,9 +1,1428 @@
 {
-  "version": 1,
-  "mode": "bootstrap",
-  "generatedAt": "2026-09-21T22:55:00+02:00",
-  "feeds": [],
-  "signals": [],
-  "errors": [],
-  "candidates": []
+  "version": 2,
+  "mode": "weekly",
+  "generatedAt": "2026-09-21T20:30:04.519Z",
+  "feeds": [
+    {
+      "id": "perspective",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques",
+      "ok": true,
+      "fingerprint": "55ca2bac11964183",
+      "links": 175
+    },
+    {
+      "id": "citydev",
+      "url": "https://www.citydev.brussels/fr/projets",
+      "ok": false,
+      "error": "fetch failed"
+    },
+    {
+      "id": "sau",
+      "url": "https://sau.brussels/fr/projets",
+      "ok": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "mobility",
+      "url": "https://mobilite-mobiliteit.brussels/fr/projets",
+      "ok": false,
+      "error": "fetch failed"
+    },
+    {
+      "id": "environment",
+      "url": "https://environment.brussels/citoyen",
+      "ok": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "commission-buildings",
+      "url": "https://commission.europa.eu/get-involved/visit-european-commission/buildings-commission-and-executive-agencies-brussels_en",
+      "ok": true,
+      "fingerprint": "1ee8a103925ca3b3",
+      "links": 167
+    },
+    {
+      "id": "port",
+      "url": "https://port.brussels/fr/actualites",
+      "ok": true,
+      "fingerprint": "13f052538a23b91d",
+      "links": 93
+    }
+  ],
+  "signals": [
+    {
+      "id": "cd3f8a60ed0a8fb1",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/gare-de-louest",
+      "title": "Gare de l&#039;Ouest",
+      "categories": [
+        "transport"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "86b3dd5d09f71cf8",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/contrats-ecole",
+      "title": "Contrats École",
+      "categories": [
+        "school"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "2621658d54f6f612",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/contrats-ecole/ecole-ndeg1",
+      "title": "École n°1",
+      "categories": [
+        "school"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "bb266658da71c2c0",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/enjeux-urbains/logement/permis-logement",
+      "title": "Permis logement",
+      "categories": [
+        "major_permit"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "a2ffa6d7517ddb9a",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/enjeux-urbains/logement/projets-de-logements-publics",
+      "title": "Projets de logements publics",
+      "categories": [
+        "housing"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "7ccd5dd79d0efbb7",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/enjeux-urbains/ecole-0",
+      "title": "École",
+      "categories": [
+        "school"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "28188625478643e9",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://beecole.brussels/fr/toolbox",
+      "title": "Toolbox école",
+      "categories": [
+        "school"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "1b53a0219d8792b3",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/enjeux-urbains/economie-urbaine/commerces",
+      "title": "Commerces",
+      "categories": [
+        "commercial_centrality"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "69a26d679c7dafb4",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/enjeux-urbains/metropolisation",
+      "title": "Métropolisation",
+      "categories": [
+        "transport"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "3ae2ffaf99a3ab7e",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/enjeux-urbains/metropolisation/projets-metropolitains",
+      "title": "Projets métropolitains",
+      "categories": [
+        "transport"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "d9cea89cf34b6c90",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/outils-de-planification/plans-et-programmes-dinitiative-regionale/pad/tableau-de-bord-des-pad",
+      "title": "Tableau de bord des PAD&#039;s",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "a4981fe644a09e0f",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/outils-de-planification/plans-et-programmes-dinitiative-regionale/ce/tableau-de-bord-des-contrats-ecole",
+      "title": "Tableau de bord des Contrats École",
+      "categories": [
+        "school"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "0c6ce8bb5be690c6",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/plans-reglements/plans-et-programmes-dinitiative-regionale/pad/tableau-de-bord-des-pad",
+      "title": "Tableau de bord complet des PAD",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "344f731eb4fec56a",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/bordet-defense/pad-defense",
+      "title": "PAD - Défense",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": {
+        "id": "bordet-defense",
+        "name": "Bordet / Défense / Evere Nord",
+        "known": true,
+        "strategic": true
+      },
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "b9e7f414d09b277d",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/casernes-dixelles-usquare/pad-casernes-dixelles-usquare",
+      "title": "PAD - Casernes d&#039;Ixelles - Usquare",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": {
+        "id": null,
+        "name": "Ixelles",
+        "known": false,
+        "municipality": "Ixelles"
+      },
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "a8f1ea3efbd16d3b",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/delta-herrmann-debroux/pad-herrmann-debroux",
+      "title": "PAD - Herrmann-Debroux",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": {
+        "id": "delta-herrmann",
+        "name": "Delta / Demey / Herrmann-Debroux",
+        "known": true,
+        "strategic": true
+      },
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "678c0a395bb97dc0",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/gare-de-louest/pad-gare-de-louest",
+      "title": "PAD - Gare de l&#039;Ouest",
+      "categories": [
+        "masterplan",
+        "transport"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "18392ded8d7d941c",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/gare-de-louest/cru-3-gare-de-louest",
+      "title": "CRU 3 - Gare de l&#039;Ouest",
+      "categories": [
+        "transport"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "54ab1de6842f712c",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/heysel/pad-heysel",
+      "title": "PAD - Heysel",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "56e0edf3eebedbe0",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/heyvaert-porte-de-ninove/pad-heyvaert",
+      "title": "PAD - Heyvaert",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": {
+        "id": "heyvaert-ninove",
+        "name": "Heyvaert / Porte de Ninove / Cureghem Nord",
+        "known": true,
+        "strategic": true
+      },
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "19d562bb39f5c802",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/heyvaert-porte-de-ninove/pad-porte-de-ninove",
+      "title": "PAD - Porte de Ninove",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": {
+        "id": "heyvaert-ninove",
+        "name": "Heyvaert / Porte de Ninove / Cureghem Nord",
+        "known": true,
+        "strategic": true
+      },
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "c24e81d68b3dfa51",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/josaphat/pad-josaphat",
+      "title": "PAD - Josaphat",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "5edf6b9ab7bb58ce",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/quartier-midi/cru-7-autour-de-la-gare-du-midi",
+      "title": "CRU 7 - Autour de la Gare du Midi",
+      "categories": [
+        "transport"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "3d089414f5543c33",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/reyers/pad-mediaparkbrussels",
+      "title": "PAD - mediapark.brussels",
+      "categories": [
+        "masterplan",
+        "park"
+      ],
+      "stage": "ANNOUNCED",
+      "area": {
+        "id": "reyers-mediapark",
+        "name": "Reyers / Mediapark / Diamant",
+        "known": true,
+        "strategic": true
+      },
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "5072d31840891d53",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/territoire-nord/pad-max-maximilien-vergote",
+      "title": "PAD - Max (Maximilien-Vergote)",
+      "categories": [
+        "masterplan"
+      ],
+      "stage": "ANNOUNCED",
+      "area": {
+        "id": "north-maximilien",
+        "name": "Quartier Nord / Maximilien / Bolivar",
+        "known": true,
+        "strategic": true
+      },
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "2e07c6634808b3d7",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/autres-territoires-suivis/campus-de-la-plaine",
+      "title": "Campus de la Plaine",
+      "categories": [
+        "school"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "c0059da45ef2b22c",
+      "feedId": "commission-buildings",
+      "feedName": "European Commission buildings",
+      "url": "https://commission.europa.eu/about/service-standards-and-principles/modernising-european-commission_en",
+      "title": "Modernising the European Commission",
+      "categories": [
+        "eu_institution"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "d7779a5fef78d96e",
+      "feedId": "commission-buildings",
+      "feedName": "European Commission buildings",
+      "url": "https://commission.europa.eu/topics/financial-services_en",
+      "title": "Financial services",
+      "categories": [
+        "commercial_centrality"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "40c02cb1c452e63b",
+      "feedId": "commission-buildings",
+      "feedName": "European Commission buildings",
+      "url": "https://commission.europa.eu/topics/education-and-training_en",
+      "title": "Education and training",
+      "categories": [
+        "transport"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "9824dd568b44eb38",
+      "feedId": "commission-buildings",
+      "feedName": "European Commission buildings",
+      "url": "https://commission.europa.eu/resources/european-commission-visual-identity_en",
+      "title": "European Commission visual identity",
+      "categories": [
+        "eu_institution"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "856a7df2b380d195",
+      "feedId": "commission-buildings",
+      "feedName": "European Commission buildings",
+      "url": "https://commission.europa.eu/get-involved/social-media-connect-european-commission_en",
+      "title": "European Commission on social media",
+      "categories": [
+        "eu_institution"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "e392d3ac425376b2",
+      "feedId": "commission-buildings",
+      "feedName": "European Commission buildings",
+      "url": "https://european-union.europa.eu/contact-eu/social-media-channels_en",
+      "title": "Other networks",
+      "categories": [
+        "public_investment"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "5d2f3b34ddd311c8",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/business/offre-de-services-vers-une-economie-circulaire",
+      "title": "Offre de services",
+      "categories": [
+        "commercial_centrality"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "03a1c9ff3b2a24ba",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/navigation/river-information-services-ris",
+      "title": "River Information Services (RIS)",
+      "categories": [
+        "commercial_centrality"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "1b16c014d3c2f78a",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/a-propos/mobilite-et-environnement",
+      "title": "Mobilité et environnement",
+      "categories": [
+        "transport"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "ffb98a4d1d984a16",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/une-nouvelle-cartographie-pour-faciliter-le-transport-fluvial-de-materiaux-a-bruxelles",
+      "title": "Publié le 05/03/26 Une nouvelle cartographie pour faciliter le transport fluvial de matériaux à Bruxelles Le transport et l’évacuation de matériaux de construction représentent des volumes importants dans la Région bruxe",
+      "categories": [
+        "public_investment"
+      ],
+      "stage": "UNDER_CONSTRUCTION",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "3ab0ab8c9dbacedc",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/et-si-votre-prochain-chantier-passait-par-le-canal",
+      "title": "Publié le 14/09/26 Et si votre prochain chantier passait par le canal ? À l’occasion de la visite de l’ADEB (Association des Entrepreneurs Belges de Grands Travaux) au Port de Bruxelles, pas moins de 35 professionnels de",
+      "categories": [
+        "public_investment"
+      ],
+      "stage": "DELIVERED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "09083ab7c4e98905",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/stabilisation-du-quai-du-hainaut-travaux-de-nuit-du-11-au-13-aout",
+      "title": "Publié le 08/08/25 Stabilisation du quai du Hainaut : travaux de nuit du 11 au 13 août Dans le cadre du chantier de sécurisation du quai du Hainaut, une opération de bétonnage en continu est prévue du lundi 11 août à 7h ",
+      "categories": [
+        "public_investment"
+      ],
+      "stage": "UNDER_CONSTRUCTION",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "40a4044a73e5311d",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/prolongation-du-chantier-de-stabilisation-temporaire-du-quai-du-hainaut",
+      "title": "Publié le 03/07/25 Prolongation du chantier de stabilisation temporaire du quai du Hainaut La durée des travaux de stabilisation temporaire du quai du Hainaut, entamés fin avril par le Port de Bruxelles, dépassera les dé",
+      "categories": [
+        "public_investment"
+      ],
+      "stage": "DELIVERED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "e1c277487527564d",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/debut-des-travaux-de-stabilisation-temporaire-du-quai-du-hainaut",
+      "title": "Publié le 28/04/25 Début des travaux de stabilisation temporaire du quai du Hainaut Ce lundi 28 avril, le Port de Bruxelles a entamé les travaux de stabilisation temporaire du quai du Hainaut. Ce chantier a été confié à ",
+      "categories": [
+        "public_investment"
+      ],
+      "stage": "UNDER_CONSTRUCTION",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "8879355026514238",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/affaissement-de-voirie-quai-leon-monnoyer-debut-des-travaux-dexcavation",
+      "title": "Publié le 14/06/24 Affaissement de voirie quai Léon Monnoyer : début des travaux d’excavation Les travaux d’excavation du quai Léon Monnoyer ont commencé après la mise en service d’une nouvelle connexion, par Elia, pour ",
+      "categories": [
+        "public_investment"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "4c11dd19867de09d",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/le-pont-de-buda-est-a-nouveau-operationnel",
+      "title": "Publié le 07/06/24 Le pont de Buda est à nouveau opérationnel Le pont de Buda a été rouvert à la circulation routière et fluviale ce 8 juin 2024 après la fin des travaux d’installation du tablier du pont rénové, qui ont ",
+      "categories": [
+        "public_investment"
+      ],
+      "stage": "DELIVERED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "9583714ba6ae0aff",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/installation-de-plus-de-200-m2-supplementaires-de-radeaux-vegetalises",
+      "title": "Publié le 23/04/24 Installation de plus de 200 m2 supplémentaires de radeaux végétalisés Des élèves des écoles primaires de l’Allée verte et du Tivoli ont participé ce mardi 23 avril à la construction des nouveaux radeau",
+      "categories": [
+        "school"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "bd5e00041d1d623d",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/pont-de-buda-remise-en-service-prevue-debut-juin",
+      "title": "Publié le 18/03/24 Pont de Buda, remise en service prévue début juin Le pont de Buda devrait être remis en service et pleinement opérationnel la première semaine du mois de juin 2024. En effet, les travaux de réfection d",
+      "categories": [
+        "public_investment"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    },
+    {
+      "id": "a9db63475c772f2d",
+      "feedId": "port",
+      "feedName": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites/affaissement-de-voirie-quai-leon-monnoyer-etat-de-la-situation-et-travaux-en-cours",
+      "title": "Publié le 29/02/24 Affaissement de voirie quai Léon Monnoyer : état de la situation et travaux en cours Le jeudi 4 janvier, un affaissement de voirie a été constaté sur le quai Léon Monnoyer, au nord du pont Van Praet. L",
+      "categories": [
+        "transport",
+        "public_investment"
+      ],
+      "stage": "UNDER_CONSTRUCTION",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-21T20:30:04.519Z"
+    }
+  ],
+  "errors": [
+    {
+      "feedId": "monitoring-districts",
+      "error": "fetch failed"
+    },
+    {
+      "feedId": "citydev",
+      "error": "fetch failed"
+    },
+    {
+      "feedId": "sau",
+      "error": "HTTP 404"
+    },
+    {
+      "feedId": "mobility",
+      "error": "fetch failed"
+    },
+    {
+      "feedId": "environment",
+      "error": "HTTP 404"
+    }
+  ],
+  "neighborhoodRegistry": {
+    "ok": false,
+    "count": 0,
+    "error": "fetch failed"
+  },
+  "candidates": [
+    {
+      "key": "UNRESOLVED",
+      "area": null,
+      "signalCount": 38,
+      "independentSources": 3,
+      "categories": [
+        "transport",
+        "school",
+        "major_permit",
+        "housing",
+        "commercial_centrality",
+        "masterplan",
+        "eu_institution",
+        "public_investment"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "cd3f8a60ed0a8fb1",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/gare-de-louest",
+          "title": "Gare de l&#039;Ouest",
+          "categories": [
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "86b3dd5d09f71cf8",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/contrats-ecole",
+          "title": "Contrats École",
+          "categories": [
+            "school"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "2621658d54f6f612",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/contrats-ecole/ecole-ndeg1",
+          "title": "École n°1",
+          "categories": [
+            "school"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "bb266658da71c2c0",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/enjeux-urbains/logement/permis-logement",
+          "title": "Permis logement",
+          "categories": [
+            "major_permit"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "a2ffa6d7517ddb9a",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/enjeux-urbains/logement/projets-de-logements-publics",
+          "title": "Projets de logements publics",
+          "categories": [
+            "housing"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "7ccd5dd79d0efbb7",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/enjeux-urbains/ecole-0",
+          "title": "École",
+          "categories": [
+            "school"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "28188625478643e9",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://beecole.brussels/fr/toolbox",
+          "title": "Toolbox école",
+          "categories": [
+            "school"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "1b53a0219d8792b3",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/enjeux-urbains/economie-urbaine/commerces",
+          "title": "Commerces",
+          "categories": [
+            "commercial_centrality"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "69a26d679c7dafb4",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/enjeux-urbains/metropolisation",
+          "title": "Métropolisation",
+          "categories": [
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "3ae2ffaf99a3ab7e",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/enjeux-urbains/metropolisation/projets-metropolitains",
+          "title": "Projets métropolitains",
+          "categories": [
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "d9cea89cf34b6c90",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/outils-de-planification/plans-et-programmes-dinitiative-regionale/pad/tableau-de-bord-des-pad",
+          "title": "Tableau de bord des PAD&#039;s",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "a4981fe644a09e0f",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/outils-de-planification/plans-et-programmes-dinitiative-regionale/ce/tableau-de-bord-des-contrats-ecole",
+          "title": "Tableau de bord des Contrats École",
+          "categories": [
+            "school"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "0c6ce8bb5be690c6",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/plans-reglements/plans-et-programmes-dinitiative-regionale/pad/tableau-de-bord-des-pad",
+          "title": "Tableau de bord complet des PAD",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "678c0a395bb97dc0",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/gare-de-louest/pad-gare-de-louest",
+          "title": "PAD - Gare de l&#039;Ouest",
+          "categories": [
+            "masterplan",
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "18392ded8d7d941c",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/gare-de-louest/cru-3-gare-de-louest",
+          "title": "CRU 3 - Gare de l&#039;Ouest",
+          "categories": [
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "54ab1de6842f712c",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/heysel/pad-heysel",
+          "title": "PAD - Heysel",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "c24e81d68b3dfa51",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/josaphat/pad-josaphat",
+          "title": "PAD - Josaphat",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "5edf6b9ab7bb58ce",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/quartier-midi/cru-7-autour-de-la-gare-du-midi",
+          "title": "CRU 7 - Autour de la Gare du Midi",
+          "categories": [
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "2e07c6634808b3d7",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/autres-territoires-suivis/campus-de-la-plaine",
+          "title": "Campus de la Plaine",
+          "categories": [
+            "school"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "c0059da45ef2b22c",
+          "feedId": "commission-buildings",
+          "feedName": "European Commission buildings",
+          "url": "https://commission.europa.eu/about/service-standards-and-principles/modernising-european-commission_en",
+          "title": "Modernising the European Commission",
+          "categories": [
+            "eu_institution"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "d7779a5fef78d96e",
+          "feedId": "commission-buildings",
+          "feedName": "European Commission buildings",
+          "url": "https://commission.europa.eu/topics/financial-services_en",
+          "title": "Financial services",
+          "categories": [
+            "commercial_centrality"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "40c02cb1c452e63b",
+          "feedId": "commission-buildings",
+          "feedName": "European Commission buildings",
+          "url": "https://commission.europa.eu/topics/education-and-training_en",
+          "title": "Education and training",
+          "categories": [
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "9824dd568b44eb38",
+          "feedId": "commission-buildings",
+          "feedName": "European Commission buildings",
+          "url": "https://commission.europa.eu/resources/european-commission-visual-identity_en",
+          "title": "European Commission visual identity",
+          "categories": [
+            "eu_institution"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "856a7df2b380d195",
+          "feedId": "commission-buildings",
+          "feedName": "European Commission buildings",
+          "url": "https://commission.europa.eu/get-involved/social-media-connect-european-commission_en",
+          "title": "European Commission on social media",
+          "categories": [
+            "eu_institution"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "e392d3ac425376b2",
+          "feedId": "commission-buildings",
+          "feedName": "European Commission buildings",
+          "url": "https://european-union.europa.eu/contact-eu/social-media-channels_en",
+          "title": "Other networks",
+          "categories": [
+            "public_investment"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "5d2f3b34ddd311c8",
+          "feedId": "port",
+          "feedName": "Port de Bruxelles",
+          "url": "https://port.brussels/fr/business/offre-de-services-vers-une-economie-circulaire",
+          "title": "Offre de services",
+          "categories": [
+            "commercial_centrality"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "03a1c9ff3b2a24ba",
+          "feedId": "port",
+          "feedName": "Port de Bruxelles",
+          "url": "https://port.brussels/fr/navigation/river-information-services-ris",
+          "title": "River Information Services (RIS)",
+          "categories": [
+            "commercial_centrality"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "1b16c014d3c2f78a",
+          "feedId": "port",
+          "feedName": "Port de Bruxelles",
+          "url": "https://port.brussels/fr/a-propos/mobilite-et-environnement",
+          "title": "Mobilité et environnement",
+          "categories": [
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "ffb98a4d1d984a16",
+          "feedId": "port",
+          "feedName": "Port de Bruxelles",
+          "url": "https://port.brussels/fr/actualites/une-nouvelle-cartographie-pour-faciliter-le-transport-fluvial-de-materiaux-a-bruxelles",
+          "title": "Publié le 05/03/26 Une nouvelle cartographie pour faciliter le transport fluvial de matériaux à Bruxelles Le transport et l’évacuation de matériaux de construction représentent des volumes importants dans la Région bruxe",
+          "categories": [
+            "public_investment"
+          ],
+          "stage": "UNDER_CONSTRUCTION",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "3ab0ab8c9dbacedc",
+          "feedId": "port",
+          "feedName": "Port de Bruxelles",
+          "url": "https://port.brussels/fr/actualites/et-si-votre-prochain-chantier-passait-par-le-canal",
+          "title": "Publié le 14/09/26 Et si votre prochain chantier passait par le canal ? À l’occasion de la visite de l’ADEB (Association des Entrepreneurs Belges de Grands Travaux) au Port de Bruxelles, pas moins de 35 professionnels de",
+          "categories": [
+            "public_investment"
+          ],
+          "stage": "DELIVERED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        }
+      ]
+    },
+    {
+      "key": "heyvaert-ninove",
+      "area": {
+        "id": "heyvaert-ninove",
+        "name": "Heyvaert / Porte de Ninove / Cureghem Nord",
+        "known": true,
+        "strategic": true
+      },
+      "signalCount": 2,
+      "independentSources": 1,
+      "categories": [
+        "masterplan"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "56e0edf3eebedbe0",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/heyvaert-porte-de-ninove/pad-heyvaert",
+          "title": "PAD - Heyvaert",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": "heyvaert-ninove",
+            "name": "Heyvaert / Porte de Ninove / Cureghem Nord",
+            "known": true,
+            "strategic": true
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        },
+        {
+          "id": "19d562bb39f5c802",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/heyvaert-porte-de-ninove/pad-porte-de-ninove",
+          "title": "PAD - Porte de Ninove",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": "heyvaert-ninove",
+            "name": "Heyvaert / Porte de Ninove / Cureghem Nord",
+            "known": true,
+            "strategic": true
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        }
+      ]
+    },
+    {
+      "key": "bordet-defense",
+      "area": {
+        "id": "bordet-defense",
+        "name": "Bordet / Défense / Evere Nord",
+        "known": true,
+        "strategic": true
+      },
+      "signalCount": 1,
+      "independentSources": 1,
+      "categories": [
+        "masterplan"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "344f731eb4fec56a",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/bordet-defense/pad-defense",
+          "title": "PAD - Défense",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": "bordet-defense",
+            "name": "Bordet / Défense / Evere Nord",
+            "known": true,
+            "strategic": true
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        }
+      ]
+    },
+    {
+      "key": "Ixelles",
+      "area": {
+        "id": null,
+        "name": "Ixelles",
+        "known": false,
+        "municipality": "Ixelles"
+      },
+      "signalCount": 1,
+      "independentSources": 1,
+      "categories": [
+        "masterplan"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "b9e7f414d09b277d",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/casernes-dixelles-usquare/pad-casernes-dixelles-usquare",
+          "title": "PAD - Casernes d&#039;Ixelles - Usquare",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": null,
+            "name": "Ixelles",
+            "known": false,
+            "municipality": "Ixelles"
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        }
+      ]
+    },
+    {
+      "key": "delta-herrmann",
+      "area": {
+        "id": "delta-herrmann",
+        "name": "Delta / Demey / Herrmann-Debroux",
+        "known": true,
+        "strategic": true
+      },
+      "signalCount": 1,
+      "independentSources": 1,
+      "categories": [
+        "masterplan"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "a8f1ea3efbd16d3b",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/delta-herrmann-debroux/pad-herrmann-debroux",
+          "title": "PAD - Herrmann-Debroux",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": "delta-herrmann",
+            "name": "Delta / Demey / Herrmann-Debroux",
+            "known": true,
+            "strategic": true
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        }
+      ]
+    },
+    {
+      "key": "reyers-mediapark",
+      "area": {
+        "id": "reyers-mediapark",
+        "name": "Reyers / Mediapark / Diamant",
+        "known": true,
+        "strategic": true
+      },
+      "signalCount": 1,
+      "independentSources": 1,
+      "categories": [
+        "masterplan",
+        "park"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "3d089414f5543c33",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/reyers/pad-mediaparkbrussels",
+          "title": "PAD - mediapark.brussels",
+          "categories": [
+            "masterplan",
+            "park"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": "reyers-mediapark",
+            "name": "Reyers / Mediapark / Diamant",
+            "known": true,
+            "strategic": true
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        }
+      ]
+    },
+    {
+      "key": "north-maximilien",
+      "area": {
+        "id": "north-maximilien",
+        "name": "Quartier Nord / Maximilien / Bolivar",
+        "known": true,
+        "strategic": true
+      },
+      "signalCount": 1,
+      "independentSources": 1,
+      "categories": [
+        "masterplan"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "5072d31840891d53",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/territoire-nord/pad-max-maximilien-vergote",
+          "title": "PAD - Max (Maximilien-Vergote)",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": "north-maximilien",
+            "name": "Quartier Nord / Maximilien / Bolivar",
+            "known": true,
+            "strategic": true
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-21T20:30:04.519Z"
+        }
+      ]
+    }
+  ]
 }
