@@ -156,7 +156,7 @@ export function extractListing(html,url){
   const availability=classifyListingAvailability({title,description,html,structuredAvailability});
   return {title,description,canonical,source:new URL(url).hostname,price,currency,address,city,postalCode,surface,bedrooms,bathrooms,epc,type,image,availabilityStatus:availability.status,availabilityReason:availability.reason};
 }
-async function fetchHtml(url,timeoutMs=12000){
+export async function fetchHtml(url,timeoutMs=12000){
   const ctrl=new AbortController(); const timer=setTimeout(()=>ctrl.abort(),timeoutMs);
   try{
     const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{
@@ -169,6 +169,13 @@ async function fetchHtml(url,timeoutMs=12000){
     return {html:html.length>1800000?html.slice(0,1800000):html,url:r.url||url};
   }finally{clearTimeout(timer)}
 }
+export async function fetchListingStatus(url,timeoutMs=12000){
+  const u=new URL(String(url||'').trim());
+  if(!['http:','https:'].includes(u.protocol))throw new Error('URL invalide');
+  if(!hostAllowed(u.hostname))throw new Error('Site non supporté');
+  const page=await fetchHtml(u.toString(),timeoutMs);
+  return extractListing(page.html,page.url);
+}
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   res.setHeader('Access-Control-Allow-Origin','*');
@@ -180,8 +187,7 @@ export default async function handler(req,res){
     const u=new URL(String(raw.url||'').trim());
     if(!['http:','https:'].includes(u.protocol))throw new Error('URL invalide');
     if(!hostAllowed(u.hostname))return res.status(400).json({ok:false,error:'Site non encore supporté',supportedDomains:ALLOWED_DOMAINS});
-    const page=await fetchHtml(u.toString());
-    const data=extractListing(page.html,page.url);
+    const data=await fetchListingStatus(u.toString());
     const completeness=['price','surface','type'].filter(k=>data[k]!=null&&data[k]!=='unknown').length;
     return res.status(200).json({ok:true,data,meta:{fetchedAt:new Date().toISOString(),completeness,notice:'Les champs sont extraits automatiquement du contenu public de l’annonce. Vérifiez-les avant toute décision.'}});
   }catch(e){
