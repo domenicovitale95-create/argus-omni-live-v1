@@ -2,10 +2,12 @@ import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 import {rankZones,topOpportunityBuckets,detectEmergingAreas} from '../lib/strategic-brussels.js';
 
-async function loadData(){
-  const p=path.join(process.cwd(),'data','strategic-brussels.json');
-  return JSON.parse(await readFile(p,'utf8'));
+async function loadJson(name,fallback=null){
+  try{return JSON.parse(await readFile(path.join(process.cwd(),'data',name),'utf8'))}
+  catch(e){if(fallback!==null)return fallback;throw e}
 }
+async function loadData(){return await loadJson('strategic-brussels.json')}
+async function loadSnapshot(){return await loadJson('strategic-watch-snapshot.json',{generatedAt:null,signals:[],candidates:[],feeds:[],errors:[]})}
 function slimZone(z){
   return {
     id:z.id,cluster:z.cluster,name:z.name,communes:z.communes,microzones:z.microzones,center:z.center,status:z.status,
@@ -19,10 +21,16 @@ export default async function handler(req,res){
   if(req.method!=='GET')return res.status(405).json({ok:false,error:'GET required'});
   try{
     const data=await loadData();
+    const snapshot=await loadSnapshot();
     const benchmarks={regionAskingPricePerM2:data.methodology.marketBenchmark.regionAskingPricePerM2};
     const ranked=rankZones(data.zones,benchmarks);
     const buckets=topOpportunityBuckets(data.zones,benchmarks);
     const emerging=detectEmergingAreas(data.discovery?.candidates||[]);
+    const reviewCandidates=(snapshot.candidates||[]).filter(c=>c.qualifiesForReview).map(c=>({
+      key:c.key,area:c.area,signalCount:c.signalCount,independentSources:c.independentSources,categories:c.categories,
+      promotionBlocked:!c.area||c.area.known===true||!c.area.id,
+      reason:!c.area?'geography_unresolved':c.area.known===true?'already_tracked_zone':!c.area.id?'microzone_resolution_required':null
+    }));
     const q=String(req.query?.zone||'').trim();
     if(q){
       const zone=ranked.find(z=>z.id===q);
@@ -38,6 +46,8 @@ export default async function handler(req,res){
       zones:ranked.map(slimZone),
       topOpportunityIds:bucketIds,
       emergingAreas:emerging,
+      discoveryReviewCandidates:reviewCandidates,
+      discoverySnapshot:{generatedAt:snapshot.generatedAt,mode:snapshot.mode,feedStatus:snapshot.feeds,errors:snapshot.errors,signalCount:(snapshot.signals||[]).length},
       discovery:data.discovery,
       sources:data.sources
     });
