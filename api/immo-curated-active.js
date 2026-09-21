@@ -1,3 +1,4 @@
+import {requestQuery} from './_request-query.js';
 import apartments from '../data/immo-opportunities.json' with { type: 'json' };
 import buildings from '../data/immo-building-opportunities.json' with { type: 'json' };
 import {fetchListingStatus,isUnavailableListing} from './immo-listing-scan.js';
@@ -35,7 +36,7 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','public, max-age=0, s-maxage=900, stale-while-revalidate=900');
   if(req.method!=='GET')return res.status(405).json({ok:false,error:'GET required'});
 
-  const category=String(req.query?.category||'apartment')==='building'?'building':'apartment';
+  const category=String(requestQuery(req).category||'apartment')==='building'?'building':'apartment';
   const data=category==='building'?buildings:apartments;
   const checked=await verifyAll(data.opportunities||[]);
   const active=checked.filter(x=>x.keep).map(x=>x.item);
