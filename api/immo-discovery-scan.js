@@ -1,4 +1,4 @@
-import {extractListing,hostAllowed} from './immo-listing-scan.js';
+import {extractListing,hostAllowed,isUnavailableListing} from './immo-listing-scan.js';
 
 const APARTMENT_SOURCES=[
   {id:'immoweb',name:'Immoweb',url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\/fr\/annonce\//i},
@@ -77,6 +77,7 @@ function keyFor(x){
   return [x.address||x.city||'',x.price||'',x.surface||'',x.bedrooms??''].join('|').toLowerCase();
 }
 function eligible(x,maxPrice,category){
+  if(isUnavailableListing(x))return false;
   const price=Number(x.price),surface=Number(x.surface);
   if(!Number.isFinite(price)||price<40000||price>maxPrice)return false;
   if(Number.isFinite(surface)&&(surface<12||surface>800))return false;
@@ -86,7 +87,7 @@ function eligible(x,maxPrice,category){
   return type!=='unknown'||/(appartement|apartment|flat|studio|duplex|penthouse|kot\b)/i.test(text);
 }
 async function scanSource(source,maxPrice,category){
-  const started=Date.now(),status={id:source.id,name:source.name,url:source.url,reachable:false,linksFound:0,listingsParsed:0,eligible:0,error:null,durationMs:0};
+  const started=Date.now(),status={id:source.id,name:source.name,url:source.url,reachable:false,linksFound:0,listingsParsed:0,eligible:0,excludedUnavailable:0,error:null,durationMs:0};
   try{
     const page=await fetchText(source.url);status.reachable=true;
     const links=linksFrom(page.text,page.url,source);status.linksFound=links.length;
@@ -99,7 +100,7 @@ async function scanSource(source,maxPrice,category){
           return {...row,canonical,category,discoveredFrom:source.id,discoveredAt:new Date().toISOString()};
         }catch{return null}
       }));
-      for(const row of got)if(row){status.listingsParsed++;if(eligible(row,maxPrice,category)){status.eligible++;rows.push(row)}}
+      for(const row of got)if(row){status.listingsParsed++;if(isUnavailableListing(row)){status.excludedUnavailable++;continue}if(eligible(row,maxPrice,category)){status.eligible++;rows.push(row)}}
     }
     status.durationMs=Date.now()-started;return {status,rows};
   }catch(e){
@@ -108,7 +109,7 @@ async function scanSource(source,maxPrice,category){
 }
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
-  if(req.method==='GET')return res.status(200).json({ok:true,service:'ARGUS IMMO multi-source discovery',version:'1.3',categories:['apartment','building']});
+  if(req.method==='GET')return res.status(200).json({ok:true,service:'ARGUS IMMO multi-source discovery',version:'1.4',categories:['apartment','building']});
   if(req.method!=='POST')return res.status(405).json({ok:false,error:'POST required'});
   try{
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});
@@ -125,7 +126,7 @@ export default async function handler(req,res){
       sourceStatus:results.map(r=>r.status),
       totals:{sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length,linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),listingsParsed:results.reduce((n,r)=>n+r.status.listingsParsed,0),eligibleAfterDedup:listings.length},
       listings,
-      notice:'ARGUS reports only sources actually reached. A blocked or timed-out source is never counted as covered.'
+      notice:'ARGUS reports only sources actually reached. SOLD/VENDU/VERKOCHT and removed listings are excluded before deduplication, ranking and map display.'
     });
   }catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
 }
