@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
 import data from '../data/strategic-brussels.json' with { type: 'json' };
-import {PROJECT_STAGE_SCORE,rankZones,topOpportunityBuckets,derivedIndicators} from '../lib/strategic-brussels.js';
+import neighborhoods from '../data/strategic-neighborhoods.json' with { type: 'json' };
+import {PROJECT_STAGE_SCORE,rankZones,topOpportunityBuckets,derivedIndicators,deriveMarketScores,completeness} from '../lib/strategic-brussels.js';
 
 assert.equal(data.municipalities.length,19,'Strategic Brussels must cover all 19 municipalities');
 assert.equal(new Set(data.municipalities.map(x=>x.name)).size,19,'Municipality names must be unique');
+assert.ok(neighborhoods.source?.wfsUrl,'Official Monitoring neighbourhood registry needs a WFS source');
+assert.equal(neighborhoods.source?.geographicalLevel,'neighbourhood');
 
 const sourceMap=new Map((data.sources||[]).map(s=>[s.id,s]));
 for(const s of data.sources||[]){
@@ -26,6 +29,9 @@ const core=data.zones.find(z=>z.id==='european-core');
 assert.equal(core?.status,'REFERENCE_ONLY','European Core must remain a benchmark, not a catch-up candidate');
 const josaphat=data.zones.find(z=>z.id==='josaphat');
 assert.ok(josaphat?.projects?.some(p=>p.stage==='PLANNED'),'Josaphat must keep its lower execution stage');
+const missingMomentum=deriveMarketScores(josaphat,{regionAskingPricePerM2:data.methodology.marketBenchmark.regionAskingPricePerM2});
+assert.equal(missingMomentum.priceMomentum,undefined,'Null momentum must remain missing, never become a neutral 50');
+assert.ok(completeness(josaphat,{regionAskingPricePerM2:data.methodology.marketBenchmark.regionAskingPricePerM2})<100,'Missing 1/3/5-year momentum must reduce data completeness');
 
 const benchmarks={regionAskingPricePerM2:data.methodology.marketBenchmark.regionAskingPricePerM2};
 const ranked=rankZones(data.zones,benchmarks);

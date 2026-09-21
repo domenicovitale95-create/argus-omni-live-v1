@@ -1,6 +1,12 @@
 name: Strategic Brussels Discovery
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/strategic-discovery.mjs'
+      - 'data/strategic-discovery-feeds.json'
+      - '.github/workflows/strategic-brussels-discovery.yml'
   workflow_dispatch:
     inputs:
       mode:
@@ -50,12 +56,12 @@ jobs:
       - name: Commit snapshot if changed
         shell: bash
         run: |
-          if [ -z "$(git status --porcelain -- data/strategic-watch-snapshot.json)" ]; then
+          if [ -z "$(git status --porcelain -- data/strategic-watch-snapshot.json data/strategic-neighborhoods.json)" ]; then
             echo "No strategic discovery change."
             exit 0
           fi
           git config user.name "argus-strategic-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/strategic-watch-snapshot.json
+          git add data/strategic-watch-snapshot.json data/strategic-neighborhoods.json
           git commit -m "data(strategic): refresh Brussels discovery snapshot"
           git push
