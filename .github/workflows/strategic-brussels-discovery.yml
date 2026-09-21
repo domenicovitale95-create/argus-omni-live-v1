@@ -50,7 +50,7 @@ jobs:
       - name: Commit snapshot if changed
         shell: bash
         run: |
-          if git diff --quiet -- data/strategic-watch-snapshot.json; then
+          if [ -z "$(git status --porcelain -- data/strategic-watch-snapshot.json)" ]; then
             echo "No strategic discovery change."
             exit 0
           fi
