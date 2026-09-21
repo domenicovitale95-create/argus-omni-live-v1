@@ -59,6 +59,12 @@ export function classifyListingAvailability({title='',description='',html='',str
     return {status:'SOLD',reason:'structured_availability'};
   }
 
+  const forSaleSignal=['à vendre','a vendre','te koop','for sale'].some(s=>head.includes(s));
+  const tenantedSale=/\b(?:vendu(?:e)?\s+lou[ée]e?|verkocht\s+verhuurd|sold\s+(?:tenanted|with tenant))\b/i.test(head);
+  if(forSaleSignal&&tenantedSale){
+    return {status:'ACTIVE',reason:'tenanted_sale_signal'};
+  }
+
   const explicitSold=[
     /\bce bien (?:est |a été )?vendu\b/,
     /\bbien (?:est |a été |déjà )vendu\b/,
@@ -111,7 +117,7 @@ export function classifyListingAvailability({title='',description='',html='',str
     return {status:'OPTION',reason:'option_signal'};
   }
 
-  if(['à vendre','a vendre','te koop','for sale'].some(s=>head.includes(s))){
+  if(forSaleSignal){
     return {status:'ACTIVE',reason:'for_sale_signal'};
   }
   return {status:'UNKNOWN',reason:'no_reliable_availability_signal'};
