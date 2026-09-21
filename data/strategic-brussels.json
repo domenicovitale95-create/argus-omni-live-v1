@@ -1,0 +1,1198 @@
+{
+  "version": 1,
+  "updatedAt": "2026-09-21T22:45:00+02:00",
+  "methodology": {
+    "name": "ARGUS STRATEGIC BRUSSELS",
+    "scope": "All 19 municipalities of the Brussels-Capital Region. Priority clusters receive enhanced monitoring only.",
+    "antiHype": true,
+    "rankingStored": false,
+    "scoreEngine": "lib/strategic-brussels.js",
+    "marketBenchmark": {
+      "regionAskingPricePerM2": 3580,
+      "source": "https://estimios.be/prix-immobilier/",
+      "sourceType": "commercial_market_snapshot",
+      "date": "2026-08",
+      "geographicalLevel": "Brussels-Capital Region / municipality proxy",
+      "note": "Asking-price median proxy, not transaction price. Used only for relative VALUE/AFFORDABILITY until a finer official series is available."
+    },
+    "projectStages": [
+      "ANNOUNCED",
+      "PLANNED",
+      "APPROVED",
+      "PERMITTED",
+      "UNDER_CONSTRUCTION",
+      "DELIVERED"
+    ],
+    "horizons": {
+      "short": "0–3 years",
+      "medium": "3–7 years",
+      "long": "7–15 years"
+    }
+  },
+  "municipalities": [
+    {
+      "name": "Anderlecht",
+      "askingPricePerM2": 2780
+    },
+    {
+      "name": "Auderghem",
+      "askingPricePerM2": 4410
+    },
+    {
+      "name": "Berchem-Sainte-Agathe",
+      "askingPricePerM2": 2820
+    },
+    {
+      "name": "Bruxelles-Ville",
+      "askingPricePerM2": 3950
+    },
+    {
+      "name": "Etterbeek",
+      "askingPricePerM2": 4250
+    },
+    {
+      "name": "Evere",
+      "askingPricePerM2": 3520
+    },
+    {
+      "name": "Forest",
+      "askingPricePerM2": 3360
+    },
+    {
+      "name": "Ganshoren",
+      "askingPricePerM2": 2760
+    },
+    {
+      "name": "Ixelles",
+      "askingPricePerM2": 4750
+    },
+    {
+      "name": "Jette",
+      "askingPricePerM2": 2820
+    },
+    {
+      "name": "Koekelberg",
+      "askingPricePerM2": 2620
+    },
+    {
+      "name": "Molenbeek-Saint-Jean",
+      "askingPricePerM2": 2620
+    },
+    {
+      "name": "Saint-Gilles",
+      "askingPricePerM2": 3700
+    },
+    {
+      "name": "Saint-Josse-ten-Noode",
+      "askingPricePerM2": 3280
+    },
+    {
+      "name": "Schaerbeek",
+      "askingPricePerM2": 3180
+    },
+    {
+      "name": "Uccle",
+      "askingPricePerM2": 4160
+    },
+    {
+      "name": "Watermael-Boitsfort",
+      "askingPricePerM2": 4150
+    },
+    {
+      "name": "Woluwe-Saint-Lambert",
+      "askingPricePerM2": 4240
+    },
+    {
+      "name": "Woluwe-Saint-Pierre",
+      "askingPricePerM2": 4240
+    }
+  ],
+  "sources": [
+    {
+      "id": "market-estimios",
+      "name": "Estimios — municipal asking-price snapshot",
+      "url": "https://estimios.be/prix-immobilier/",
+      "date": "2026-08",
+      "geographicalLevel": "municipality",
+      "type": "commercial_secondary"
+    },
+    {
+      "id": "statbel-2025",
+      "name": "Statbel — Prix de l’immobilier 2025",
+      "url": "https://statbel.fgov.be/fr/nouvelles/prix-de-limmobilier-2025",
+      "date": "2026-05",
+      "geographicalLevel": "municipality",
+      "type": "official_market"
+    },
+    {
+      "id": "citygate2",
+      "name": "citydev.brussels — CityGate II / Petite Île",
+      "url": "https://consult.citydev.brussels/fr/projet/citygate-ii-petit-ile",
+      "date": "2026-09-21",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "gareouest",
+      "name": "perspective.brussels — Gare de l’Ouest",
+      "url": "https://perspective.brussels/fr/actualites/gare-de-louest-un-nouveau-quartier-fera-revivre-la-friche-ferroviaire",
+      "date": "2021-09-22",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "tour-taxis",
+      "name": "perspective.brussels — Tour & Taxis",
+      "url": "https://perspective.brussels/fr/node/583",
+      "date": "2026-09-21",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "kanal",
+      "name": "KANAL — ouverture 28.11.2026",
+      "url": "https://kanal.brussels/fr/contenu/kanal-ouvre-le-281126",
+      "date": "2026-01-28",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "heyvaert",
+      "name": "perspective.brussels — PAD Heyvaert",
+      "url": "https://perspective.brussels/fr/projets/territoire-du-canal/heyvaert",
+      "date": "2026-09-21",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "sennette",
+      "name": "perspective.brussels — CRU Heyvaert-Poincaré",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/heyvaert-porte-de-ninove/cru-5-heyvaert-poincare",
+      "date": "2026-09-21",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "max",
+      "name": "perspective.brussels — PAD Max / Maximilien-Vergote",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/territoire-nord/pad-max-maximilien-vergote",
+      "date": "2026-09-21",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "ec-buildings",
+      "name": "European Commission — Brussels buildings",
+      "url": "https://commission.europa.eu/get-involved/visit-european-commission/buildings-commission-and-executive-agencies-brussels_en",
+      "date": "2026-09-21",
+      "geographicalLevel": "building",
+      "type": "official_institution"
+    },
+    {
+      "id": "ercea",
+      "name": "European Commission — ERCEA Covent Garden",
+      "url": "https://commission.europa.eu/about/departments-and-executive-agencies/european-research-council-executive-agency_en",
+      "date": "2026-08-26",
+      "geographicalLevel": "building",
+      "type": "official_institution"
+    },
+    {
+      "id": "mediapark",
+      "name": "perspective.brussels — PAD Mediapark",
+      "url": "https://perspective.brussels/fr/node/606",
+      "date": "2026-09-21",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "josaphat",
+      "name": "perspective.brussels — PAD Josaphat",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/josaphat/pad-josaphat",
+      "date": "2026-09-21",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "defense",
+      "name": "perspective.brussels — PAD Défense",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/bordet-defense/pad-defense",
+      "date": "2026-09-21",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "delta",
+      "name": "perspective.brussels — Delta Herrmann-Debroux",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques/delta-herrmann-debroux",
+      "date": "2026-09-21",
+      "geographicalLevel": "project",
+      "type": "official_project"
+    },
+    {
+      "id": "eucore",
+      "name": "European Commission — Berlaymont / Commission buildings",
+      "url": "https://commission.europa.eu/about/contact/press-services/press-room_en",
+      "date": "2026-09-21",
+      "geographicalLevel": "institutional_core",
+      "type": "official_institution"
+    }
+  ],
+  "zones": [
+    {
+      "id": "biestebroeck-citygate",
+      "cluster": 1,
+      "name": "Biestebroeck / Petite Île / Cureghem Sud",
+      "communes": [
+        "Anderlecht"
+      ],
+      "microzones": [
+        "Bassin de Biestebroeck",
+        "Petite Île",
+        "Cureghem Sud",
+        "CityGate",
+        "Deux Gares",
+        "rue des Goujons",
+        "axe Canal–Midi"
+      ],
+      "center": {
+        "lat": 50.8248,
+        "lng": 4.3174
+      },
+      "status": "ENHANCED_WATCH",
+      "market": {
+        "askingPricePerM2": 2780,
+        "priceLevel": "municipality_proxy",
+        "priceMomentum": {
+          "oneYear": 1.5,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios",
+          "statbel-2025"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 91,
+        "transportScore": 79,
+        "employmentGravity": 72,
+        "euInstitutionalImpact": 18,
+        "greenPublicSpaceImpact": 72,
+        "housingSupply": 91,
+        "commercialRevitalisation": 76,
+        "demographicMomentum": 68,
+        "rentalDemand": 72,
+        "repricingGap": 84,
+        "riskScore": 58
+      },
+      "projects": [
+        {
+          "name": "CityGate II / Petite Île",
+          "stage": "PERMITTED",
+          "significance": 2,
+          "sourceId": "citygate2",
+          "facts": [
+            "~364 logements",
+            "écoles",
+            "~16.000 m² activités économiques",
+            "espaces publics"
+          ],
+          "lastUpdate": "2026-09-21"
+        }
+      ],
+      "penalties": {
+        "alreadyPricedIn": 24,
+        "speculativeProject": 20,
+        "overSupply": 18,
+        "structuralNegativeFactors": 58
+      },
+      "horizons": {
+        "short": 61,
+        "medium": 91,
+        "long": 86
+      },
+      "timeHorizon": "MEDIUM/LONG",
+      "reasons": [
+        "Large public-led mixed-use transformation",
+        "Low municipal price proxy",
+        "Canal–Midi accessibility and productive-city investment"
+      ],
+      "risks": [
+        "Industrial nuisances / soil legacy",
+        "Execution timing",
+        "Street-by-street quality varies strongly"
+      ],
+      "sourceIds": [
+        "citygate2",
+        "market-estimios",
+        "statbel-2025"
+      ]
+    },
+    {
+      "id": "gare-ouest",
+      "cluster": 2,
+      "name": "Gare de l’Ouest / Osseghem / Beekkant",
+      "communes": [
+        "Molenbeek-Saint-Jean"
+      ],
+      "microzones": [
+        "Gare de l’Ouest",
+        "Osseghem",
+        "Beekkant",
+        "friche ferroviaire"
+      ],
+      "center": {
+        "lat": 50.8488,
+        "lng": 4.3216
+      },
+      "status": "ENHANCED_WATCH",
+      "market": {
+        "askingPricePerM2": 2620,
+        "priceLevel": "municipality_proxy",
+        "priceMomentum": {
+          "oneYear": null,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios",
+          "statbel-2025"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 88,
+        "transportScore": 96,
+        "employmentGravity": 74,
+        "euInstitutionalImpact": 22,
+        "greenPublicSpaceImpact": 90,
+        "housingSupply": 79,
+        "commercialRevitalisation": 72,
+        "demographicMomentum": 68,
+        "rentalDemand": 77,
+        "repricingGap": 88,
+        "riskScore": 51
+      },
+      "projects": [
+        {
+          "name": "PAD Gare de l’Ouest",
+          "stage": "APPROVED",
+          "significance": 2,
+          "sourceId": "gareouest",
+          "facts": [
+            "13 ha friche ferroviaire",
+            "logements abordables",
+            "grand parc évolutif",
+            "équipements"
+          ],
+          "lastUpdate": "2021-09-22"
+        }
+      ],
+      "penalties": {
+        "alreadyPricedIn": 18,
+        "speculativeProject": 27,
+        "overSupply": 12,
+        "structuralNegativeFactors": 51
+      },
+      "horizons": {
+        "short": 54,
+        "medium": 88,
+        "long": 93
+      },
+      "timeHorizon": "MEDIUM/LONG",
+      "reasons": [
+        "Exceptional multimodal connectivity",
+        "Approved large redevelopment framework",
+        "Large value gap vs regional asking-price proxy"
+      ],
+      "risks": [
+        "Long implementation horizon",
+        "Large-site phasing risk",
+        "Immediate urban environment remains uneven"
+      ],
+      "sourceIds": [
+        "gareouest",
+        "market-estimios",
+        "statbel-2025"
+      ]
+    },
+    {
+      "id": "maritime-tour-taxis",
+      "cluster": 3,
+      "name": "Maritime / Tour & Taxis / Ribaucourt",
+      "communes": [
+        "Molenbeek-Saint-Jean",
+        "Bruxelles-Ville"
+      ],
+      "microzones": [
+        "Tour & Taxis",
+        "Maritime",
+        "Ribaucourt",
+        "Sainctelette",
+        "Yser",
+        "canal Bruxelles-Nord"
+      ],
+      "center": {
+        "lat": 50.8667,
+        "lng": 4.3471
+      },
+      "status": "ENHANCED_WATCH",
+      "market": {
+        "askingPricePerM2": 3285,
+        "priceLevel": "multi_commune_proxy",
+        "priceMomentum": {
+          "oneYear": null,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 90,
+        "transportScore": 84,
+        "employmentGravity": 84,
+        "euInstitutionalImpact": 48,
+        "greenPublicSpaceImpact": 89,
+        "housingSupply": 78,
+        "commercialRevitalisation": 91,
+        "demographicMomentum": 74,
+        "rentalDemand": 86,
+        "repricingGap": 68,
+        "riskScore": 38
+      },
+      "projects": [
+        {
+          "name": "Tour & Taxis reconversion",
+          "stage": "DELIVERED",
+          "significance": 1.5,
+          "sourceId": "tour-taxis",
+          "facts": [
+            "45 ha site",
+            "heritage reuse",
+            "canal adjacency"
+          ],
+          "lastUpdate": "2026-09-21"
+        },
+        {
+          "name": "KANAL–Centre Pompidou",
+          "stage": "UNDER_CONSTRUCTION",
+          "significance": 1.4,
+          "sourceId": "kanal",
+          "facts": [
+            "opening scheduled 28 Nov 2026",
+            "museum at Sainctelette"
+          ],
+          "lastUpdate": "2026-01-28"
+        }
+      ],
+      "penalties": {
+        "alreadyPricedIn": 52,
+        "speculativeProject": 6,
+        "overSupply": 16,
+        "structuralNegativeFactors": 38
+      },
+      "horizons": {
+        "short": 86,
+        "medium": 84,
+        "long": 76
+      },
+      "timeHorizon": "SHORT/MEDIUM",
+      "reasons": [
+        "Major catalysts already delivered or near delivery",
+        "Strong centrality and rental demand",
+        "Old residential stock may lag premium new-build pricing"
+      ],
+      "risks": [
+        "New-build premium already priced in",
+        "Micro-zone dispersion between premium and older stock",
+        "Traffic/canal edges on some streets"
+      ],
+      "sourceIds": [
+        "tour-taxis",
+        "kanal",
+        "market-estimios"
+      ]
+    },
+    {
+      "id": "heyvaert-ninove",
+      "cluster": 4,
+      "name": "Heyvaert / Porte de Ninove / Cureghem Nord",
+      "communes": [
+        "Molenbeek-Saint-Jean",
+        "Anderlecht",
+        "Bruxelles-Ville"
+      ],
+      "microzones": [
+        "Heyvaert",
+        "Porte de Ninove",
+        "Cureghem Nord",
+        "Abattoirs",
+        "Parc de la Sennette"
+      ],
+      "center": {
+        "lat": 50.8429,
+        "lng": 4.3315
+      },
+      "status": "ENHANCED_WATCH",
+      "market": {
+        "askingPricePerM2": 3117,
+        "priceLevel": "multi_commune_proxy",
+        "priceMomentum": {
+          "oneYear": null,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 86,
+        "transportScore": 82,
+        "employmentGravity": 79,
+        "euInstitutionalImpact": 25,
+        "greenPublicSpaceImpact": 88,
+        "housingSupply": 71,
+        "commercialRevitalisation": 76,
+        "demographicMomentum": 73,
+        "rentalDemand": 79,
+        "repricingGap": 81,
+        "riskScore": 62
+      },
+      "projects": [
+        {
+          "name": "PAD Heyvaert",
+          "stage": "APPROVED",
+          "significance": 1.7,
+          "sourceId": "heyvaert",
+          "facts": [
+            "approved planning framework",
+            "industrial-to-mixed transformation"
+          ],
+          "lastUpdate": "2026-09-21"
+        },
+        {
+          "name": "Parc de la Sennette / CRU Heyvaert-Poincaré",
+          "stage": "APPROVED",
+          "significance": 1.4,
+          "sourceId": "sennette",
+          "facts": [
+            "new green axis",
+            "housing/productive activities/equipment"
+          ],
+          "lastUpdate": "2026-09-21"
+        }
+      ],
+      "penalties": {
+        "alreadyPricedIn": 26,
+        "speculativeProject": 22,
+        "overSupply": 12,
+        "structuralNegativeFactors": 62
+      },
+      "horizons": {
+        "short": 58,
+        "medium": 87,
+        "long": 88
+      },
+      "timeHorizon": "MEDIUM/LONG",
+      "reasons": [
+        "Approved planning transformation",
+        "New green/public-space spine",
+        "Immediate proximity to Pentagon with a repricing gap"
+      ],
+      "risks": [
+        "Very high street-level heterogeneity",
+        "Pollution / legacy industrial uses",
+        "Public-space execution timing"
+      ],
+      "sourceIds": [
+        "heyvaert",
+        "sennette",
+        "market-estimios"
+      ]
+    },
+    {
+      "id": "north-maximilien",
+      "cluster": 5,
+      "name": "Quartier Nord / Maximilien / Bolivar",
+      "communes": [
+        "Bruxelles-Ville",
+        "Saint-Josse-ten-Noode",
+        "Schaerbeek"
+      ],
+      "microzones": [
+        "Gare du Nord",
+        "Simon Bolivar",
+        "Albert II",
+        "Maximilien",
+        "Héliport",
+        "chaussée d’Anvers",
+        "Rogier",
+        "nord Pentagone",
+        "connexion Tour & Taxis"
+      ],
+      "center": {
+        "lat": 50.8617,
+        "lng": 4.3571
+      },
+      "status": "ENHANCED_WATCH",
+      "market": {
+        "askingPricePerM2": 3470,
+        "priceLevel": "multi_commune_proxy",
+        "priceMomentum": {
+          "oneYear": null,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 78,
+        "transportScore": 94,
+        "employmentGravity": 96,
+        "euInstitutionalImpact": 74,
+        "greenPublicSpaceImpact": 82,
+        "housingSupply": 68,
+        "commercialRevitalisation": 75,
+        "demographicMomentum": 66,
+        "rentalDemand": 88,
+        "repricingGap": 72,
+        "riskScore": 64
+      },
+      "projects": [
+        {
+          "name": "PAD Max / Maximilien-Vergote",
+          "stage": "PLANNED",
+          "significance": 1.8,
+          "sourceId": "max",
+          "facts": [
+            "PAD in progress",
+            "metropolitan park objective",
+            "mixed-use transformation"
+          ],
+          "lastUpdate": "2026-09-21"
+        },
+        {
+          "name": "ERCEA at Covent Garden / Rogier",
+          "stage": "DELIVERED",
+          "significance": 0.8,
+          "sourceId": "ercea",
+          "facts": [
+            "EU executive agency address at Place Rogier 16"
+          ],
+          "lastUpdate": "2026-08-26"
+        }
+      ],
+      "institutionalWatch": {
+        "confirmationRequired": true,
+        "terms": [
+          "North Light",
+          "future Commission regrouping",
+          "new executive-agency moves",
+          "large EU administrative leases"
+        ],
+        "rule": "Do not add catalyst points without a Commission/EU procurement/official building source."
+      },
+      "penalties": {
+        "alreadyPricedIn": 34,
+        "speculativeProject": 42,
+        "overSupply": 20,
+        "structuralNegativeFactors": 64
+      },
+      "horizons": {
+        "short": 72,
+        "medium": 83,
+        "long": 82
+      },
+      "timeHorizon": "SHORT/MEDIUM",
+      "reasons": [
+        "Exceptional employment and transport gravity",
+        "Confirmed EU executive-agency presence at Rogier",
+        "Large public-realm transformation potential"
+      ],
+      "risks": [
+        "PAD Max still in progress",
+        "Office-district vacancy / mono-function legacy",
+        "Strong street-by-street safety and liveability differences"
+      ],
+      "sourceIds": [
+        "max",
+        "ercea",
+        "ec-buildings",
+        "market-estimios"
+      ]
+    },
+    {
+      "id": "reyers-mediapark",
+      "cluster": 6,
+      "name": "Reyers / Mediapark / Diamant",
+      "communes": [
+        "Schaerbeek",
+        "Evere"
+      ],
+      "microzones": [
+        "Reyers",
+        "Mediapark",
+        "Diamant",
+        "Schaerbeek/Evere edge"
+      ],
+      "center": {
+        "lat": 50.8551,
+        "lng": 4.4054
+      },
+      "status": "ENHANCED_WATCH",
+      "market": {
+        "askingPricePerM2": 3350,
+        "priceLevel": "multi_commune_proxy",
+        "priceMomentum": {
+          "oneYear": null,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 94,
+        "transportScore": 86,
+        "employmentGravity": 89,
+        "euInstitutionalImpact": 48,
+        "greenPublicSpaceImpact": 94,
+        "housingSupply": 95,
+        "commercialRevitalisation": 84,
+        "demographicMomentum": 76,
+        "rentalDemand": 82,
+        "repricingGap": 62,
+        "riskScore": 34
+      },
+      "projects": [
+        {
+          "name": "PAD Mediapark",
+          "stage": "APPROVED",
+          "significance": 2,
+          "sourceId": "mediapark",
+          "facts": [
+            "~1,400 homes",
+            "~20,000 m² media activities",
+            "~10 ha public park"
+          ],
+          "lastUpdate": "2026-09-21"
+        },
+        {
+          "name": "RTBF/VRT new headquarters",
+          "stage": "UNDER_CONSTRUCTION",
+          "significance": 1.5,
+          "sourceId": "mediapark",
+          "facts": [
+            "permits granted 2021/2022",
+            "construction started"
+          ],
+          "lastUpdate": "2026-09-21"
+        }
+      ],
+      "penalties": {
+        "alreadyPricedIn": 46,
+        "speculativeProject": 8,
+        "overSupply": 34,
+        "structuralNegativeFactors": 34
+      },
+      "horizons": {
+        "short": 78,
+        "medium": 93,
+        "long": 91
+      },
+      "timeHorizon": "MEDIUM/LONG",
+      "reasons": [
+        "Approved large mixed-use plan",
+        "Media employment cluster with construction underway",
+        "Large new public park and housing programme"
+      ],
+      "risks": [
+        "Large future housing supply",
+        "New-build pricing can absorb part of upside",
+        "Transformation stretches toward 2040"
+      ],
+      "sourceIds": [
+        "mediapark",
+        "market-estimios"
+      ]
+    },
+    {
+      "id": "josaphat",
+      "cluster": 7,
+      "name": "Josaphat / Gare d’Evere",
+      "communes": [
+        "Schaerbeek",
+        "Evere"
+      ],
+      "microzones": [
+        "friche Josaphat",
+        "Gare d’Evere",
+        "Schaerbeek/Evere edge"
+      ],
+      "center": {
+        "lat": 50.8696,
+        "lng": 4.3987
+      },
+      "status": "ENHANCED_WATCH",
+      "market": {
+        "askingPricePerM2": 3350,
+        "priceLevel": "multi_commune_proxy",
+        "priceMomentum": {
+          "oneYear": null,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 83,
+        "transportScore": 78,
+        "employmentGravity": 70,
+        "euInstitutionalImpact": 32,
+        "greenPublicSpaceImpact": 90,
+        "housingSupply": 89,
+        "commercialRevitalisation": 65,
+        "demographicMomentum": 71,
+        "rentalDemand": 73,
+        "repricingGap": 70,
+        "riskScore": 58
+      },
+      "projects": [
+        {
+          "name": "PAD Josaphat",
+          "stage": "PLANNED",
+          "significance": 2,
+          "sourceId": "josaphat",
+          "facts": [
+            "PAD still in progress",
+            "mixed sustainable district",
+            "public green space"
+          ],
+          "lastUpdate": "2026-09-21"
+        }
+      ],
+      "penalties": {
+        "alreadyPricedIn": 31,
+        "speculativeProject": 68,
+        "overSupply": 31,
+        "structuralNegativeFactors": 58
+      },
+      "horizons": {
+        "short": 35,
+        "medium": 68,
+        "long": 87
+      },
+      "timeHorizon": "LONG",
+      "reasons": [
+        "Large strategic site",
+        "Green-space and mixed-district potential",
+        "Rail accessibility"
+      ],
+      "risks": [
+        "Low execution certainty today",
+        "Planning/permitting timeline",
+        "High dependence on one large project"
+      ],
+      "sourceIds": [
+        "josaphat",
+        "market-estimios"
+      ]
+    },
+    {
+      "id": "bordet-defense",
+      "cluster": 8,
+      "name": "Bordet / Défense / Evere Nord",
+      "communes": [
+        "Evere",
+        "Bruxelles-Ville"
+      ],
+      "microzones": [
+        "Bordet",
+        "quartier Défense",
+        "Evere nord",
+        "avenue Léopold III"
+      ],
+      "center": {
+        "lat": 50.8783,
+        "lng": 4.4121
+      },
+      "status": "ENHANCED_WATCH",
+      "market": {
+        "askingPricePerM2": 3735,
+        "priceLevel": "multi_commune_proxy",
+        "priceMomentum": {
+          "oneYear": 7,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 91,
+        "transportScore": 81,
+        "employmentGravity": 86,
+        "euInstitutionalImpact": 41,
+        "greenPublicSpaceImpact": 94,
+        "housingSupply": 84,
+        "commercialRevitalisation": 72,
+        "demographicMomentum": 73,
+        "rentalDemand": 79,
+        "repricingGap": 58,
+        "riskScore": 46
+      },
+      "projects": [
+        {
+          "name": "PAD Défense",
+          "stage": "APPROVED",
+          "significance": 2,
+          "sourceId": "defense",
+          "facts": [
+            "90 ha plan perimeter",
+            "new urban districts",
+            "large landscape park",
+            "economic activities"
+          ],
+          "lastUpdate": "2026-09-21"
+        }
+      ],
+      "excludedCatalysts": [
+        "Metro 3 extension to Bordet — no catalyst points until financing/restart is officially confirmed"
+      ],
+      "penalties": {
+        "alreadyPricedIn": 41,
+        "speculativeProject": 24,
+        "overSupply": 24,
+        "structuralNegativeFactors": 46
+      },
+      "horizons": {
+        "short": 55,
+        "medium": 82,
+        "long": 94
+      },
+      "timeHorizon": "MEDIUM/LONG",
+      "reasons": [
+        "Approved 90 ha redevelopment framework",
+        "Strong employment axis toward airport/NATO area",
+        "Large green-corridor component"
+      ],
+      "risks": [
+        "Very long phasing",
+        "Transport assumptions must exclude unconfirmed Metro 3 extension",
+        "Price starting point higher than west/canal zones"
+      ],
+      "sourceIds": [
+        "defense",
+        "market-estimios"
+      ]
+    },
+    {
+      "id": "delta-herrmann",
+      "cluster": 9,
+      "name": "Delta / Demey / Herrmann-Debroux",
+      "communes": [
+        "Auderghem",
+        "Watermael-Boitsfort"
+      ],
+      "microzones": [
+        "Delta",
+        "Demey",
+        "Herrmann-Debroux",
+        "Beaulieu",
+        "avenue du Triomphe"
+      ],
+      "center": {
+        "lat": 50.8155,
+        "lng": 4.4202
+      },
+      "status": "ENHANCED_WATCH",
+      "market": {
+        "askingPricePerM2": 4280,
+        "priceLevel": "multi_commune_proxy",
+        "priceMomentum": {
+          "oneYear": null,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 88,
+        "transportScore": 90,
+        "employmentGravity": 88,
+        "euInstitutionalImpact": 62,
+        "greenPublicSpaceImpact": 84,
+        "housingSupply": 68,
+        "commercialRevitalisation": 76,
+        "demographicMomentum": 58,
+        "rentalDemand": 84,
+        "repricingGap": 39,
+        "riskScore": 36
+      },
+      "projects": [
+        {
+          "name": "PAD Delta-Herrmann-Debroux",
+          "stage": "APPROVED",
+          "significance": 2,
+          "sourceId": "delta",
+          "facts": [
+            "approved 2022",
+            "E411 urban-boulevard transformation",
+            "public-space and green improvements"
+          ],
+          "lastUpdate": "2026-09-21"
+        }
+      ],
+      "penalties": {
+        "alreadyPricedIn": 69,
+        "speculativeProject": 23,
+        "overSupply": 12,
+        "structuralNegativeFactors": 36
+      },
+      "horizons": {
+        "short": 57,
+        "medium": 84,
+        "long": 88
+      },
+      "timeHorizon": "MEDIUM/LONG",
+      "reasons": [
+        "Approved structural redevelopment",
+        "Excellent transport/employment access",
+        "Strong liveability improvement potential"
+      ],
+      "risks": [
+        "High current price baseline",
+        "Part of quality already priced in",
+        "Complex road-infrastructure transformation"
+      ],
+      "sourceIds": [
+        "delta",
+        "market-estimios"
+      ]
+    },
+    {
+      "id": "european-core",
+      "cluster": "EUROPEAN_CORE",
+      "name": "European Core",
+      "communes": [
+        "Bruxelles-Ville",
+        "Etterbeek",
+        "Ixelles"
+      ],
+      "microzones": [
+        "Schuman",
+        "rue de la Loi",
+        "Arts-Loi",
+        "Maelbeek",
+        "quartier Léopold",
+        "place du Luxembourg",
+        "rue Wiertz",
+        "Merode",
+        "Montgomery"
+      ],
+      "center": {
+        "lat": 50.8432,
+        "lng": 4.3828
+      },
+      "status": "REFERENCE_ONLY",
+      "market": {
+        "askingPricePerM2": 4317,
+        "priceLevel": "multi_commune_proxy",
+        "priceMomentum": {
+          "oneYear": null,
+          "threeYear": null,
+          "fiveYear": null
+        },
+        "marketSources": [
+          "market-estimios"
+        ]
+      },
+      "scores": {
+        "urbanTransformation": 61,
+        "transportScore": 96,
+        "employmentGravity": 100,
+        "euInstitutionalImpact": 100,
+        "greenPublicSpaceImpact": 55,
+        "housingSupply": 46,
+        "commercialRevitalisation": 87,
+        "demographicMomentum": 55,
+        "rentalDemand": 96,
+        "repricingGap": 24,
+        "riskScore": 22
+      },
+      "projects": [
+        {
+          "name": "European Commission institutional core",
+          "stage": "DELIVERED",
+          "significance": 2,
+          "sourceId": "eucore",
+          "facts": [
+            "Berlaymont at Rue de la Loi 200",
+            "Commission buildings concentrated in Brussels"
+          ],
+          "lastUpdate": "2026-09-21"
+        }
+      ],
+      "penalties": {
+        "alreadyPricedIn": 88,
+        "speculativeProject": 0,
+        "overSupply": 8,
+        "structuralNegativeFactors": 22
+      },
+      "horizons": {
+        "short": 83,
+        "medium": 78,
+        "long": 72
+      },
+      "timeHorizon": "REFERENCE",
+      "reasons": [
+        "Reference institutional rental market",
+        "Exceptional employment and transport gravity",
+        "Benchmark for EU-linked demand"
+      ],
+      "risks": [
+        "High price baseline",
+        "Limited repricing gap",
+        "Not a catch-up zone"
+      ],
+      "sourceIds": [
+        "eucore",
+        "ec-buildings",
+        "market-estimios"
+      ]
+    }
+  ],
+  "discovery": {
+    "coverageRule": "Every municipality stays in the base scan even if it has no enhanced-watch cluster.",
+    "autoAddThreshold": {
+      "strongSignals": 3,
+      "distinctCategories": 2,
+      "confidence": 60
+    },
+    "signalTypes": [
+      "major_permit",
+      "masterplan",
+      "transport",
+      "corporate_headquarters",
+      "eu_institution",
+      "public_investment",
+      "park",
+      "school",
+      "rehabilitation",
+      "price_transaction_shift",
+      "population_shift",
+      "commercial_centrality"
+    ],
+    "candidates": []
+  }
+}
