@@ -1,5 +1,6 @@
 import strategicData from '../data/strategic-brussels.json' with { type: 'json' };
 import strategicSnapshot from '../data/strategic-watch-snapshot.json' with { type: 'json' };
+import strategicNeighborhoods from '../data/strategic-neighborhoods.json' with { type: 'json' };
 import {rankZones,topOpportunityBuckets,detectEmergingAreas} from '../lib/strategic-brussels.js';
 
 function slimZone(z){
@@ -19,7 +20,20 @@ export default async function handler(req,res){
     const benchmarks={regionAskingPricePerM2:data.methodology.marketBenchmark.regionAskingPricePerM2};
     const ranked=rankZones(data.zones,benchmarks);
     const buckets=topOpportunityBuckets(data.zones,benchmarks);
-    const emerging=detectEmergingAreas(data.discovery?.candidates||[]);
+    const staticEmerging=detectEmergingAreas(data.discovery?.candidates||[]);
+    const snapshotEmerging=(snapshot.candidates||[]).filter(c=>
+      c.qualifiesForReview&&c.area?.neighborhood===true&&c.area?.known!==true&&c.area?.id
+    ).map(c=>({
+      id:c.area.id,name:c.area.name,center:c.area.center||null,status:'NEW_EMERGING_AREA',
+      discovery:{
+        strongSignals:c.signalCount,
+        independentSources:c.independentSources,
+        categories:c.categories,
+        confidence:Math.min(100,Math.round(c.signalCount*8+c.independentSources*14+(c.categories?.length||0)*10))
+      }
+    }));
+    const emerging=[...staticEmerging,...snapshotEmerging]
+      .sort((a,b)=>(b.discovery?.confidence||0)-(a.discovery?.confidence||0));
     const reviewCandidates=(snapshot.candidates||[]).filter(c=>c.qualifiesForReview).map(c=>({
       key:c.key,area:c.area,signalCount:c.signalCount,independentSources:c.independentSources,categories:c.categories,
       promotionBlocked:!c.area||c.area.known===true||!c.area.id,
@@ -35,13 +49,14 @@ export default async function handler(req,res){
     const bucketIds=Object.fromEntries(Object.entries(buckets).map(([k,v])=>[k,v?.id||null]));
     return res.status(200).json({
       ok:true,updatedAt:data.updatedAt,methodology:data.methodology,
-      coverage:{municipalities:data.municipalities.length,municipalityNames:data.municipalities.map(x=>x.name),enhancedZones:data.zones.filter(x=>x.status==='ENHANCED_WATCH').length},
+      coverage:{municipalities:data.municipalities.length,municipalityNames:data.municipalities.map(x=>x.name),neighborhoods:strategicNeighborhoods.count||0,neighborhoodRegistryStatus:strategicNeighborhoods.status||'UNKNOWN',enhancedZones:data.zones.filter(x=>x.status==='ENHANCED_WATCH').length},
       municipalities:data.municipalities,
       zones:ranked.map(slimZone),
       topOpportunityIds:bucketIds,
       emergingAreas:emerging,
       discoveryReviewCandidates:reviewCandidates,
-      discoverySnapshot:{generatedAt:snapshot.generatedAt,mode:snapshot.mode,feedStatus:snapshot.feeds,errors:snapshot.errors,signalCount:(snapshot.signals||[]).length},
+      discoverySnapshot:{generatedAt:snapshot.generatedAt,mode:snapshot.mode,feedStatus:snapshot.feeds,errors:snapshot.errors,signalCount:(snapshot.signals||[]).length,neighborhoodRegistry:snapshot.neighborhoodRegistry||null},
+      neighborhoodRegistry:{updatedAt:strategicNeighborhoods.updatedAt,status:strategicNeighborhoods.status,count:strategicNeighborhoods.count,source:strategicNeighborhoods.source},
       discovery:data.discovery,
       sources:data.sources
     });
