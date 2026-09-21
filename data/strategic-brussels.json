@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-21T22:45:00+02:00",
+  "updatedAt": "2026-09-21T23:05:00+02:00",
   "methodology": {
     "name": "ARGUS STRATEGIC BRUSSELS",
     "scope": "All 19 municipalities of the Brussels-Capital Region. Priority clusters receive enhanced monitoring only.",
@@ -263,7 +263,7 @@
         "askingPricePerM2": 2780,
         "priceLevel": "municipality_proxy",
         "priceMomentum": {
-          "oneYear": 1.5,
+          "oneYear": null,
           "threeYear": null,
           "fiveYear": null
         },
@@ -928,7 +928,7 @@
         "askingPricePerM2": 3735,
         "priceLevel": "multi_commune_proxy",
         "priceMomentum": {
-          "oneYear": 7,
+          "oneYear": null,
           "threeYear": null,
           "fiveYear": null
         },
