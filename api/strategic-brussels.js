@@ -1,3 +1,4 @@
+import {requestQuery} from './_request-query.js';
 import strategicData from '../data/strategic-brussels.json' with { type: 'json' };
 import strategicSnapshot from '../data/strategic-watch-snapshot.json' with { type: 'json' };
 import strategicNeighborhoods from '../data/strategic-neighborhoods.json' with { type: 'json' };
@@ -39,7 +40,7 @@ export default async function handler(req,res){
       promotionBlocked:!c.area||c.area.known===true||!c.area.id,
       reason:!c.area?'geography_unresolved':c.area.known===true?'already_tracked_zone':!c.area.id?'microzone_resolution_required':null
     }));
-    const q=String(req.query?.zone||'').trim();
+    const q=String(requestQuery(req).zone||'').trim();
     if(q){
       const zone=ranked.find(z=>z.id===q);
       if(!zone)return res.status(404).json({ok:false,error:'Zone not found'});
