@@ -194,6 +194,9 @@
     },
     "api/tactical-backfill.js": {
       "maxDuration": 120
+    },
+    "api/immo-discovery-scan.js": {
+      "maxDuration": 120
     }
   }
 }
