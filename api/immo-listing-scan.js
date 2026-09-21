@@ -111,7 +111,7 @@ export function classifyListingAvailability({title='',description='',html='',str
     return {status:'OPTION',reason:'option_signal'};
   }
 
-  if(/\b(?:à vendre|a vendre|te koop|for sale)\b/i.test(head)){
+  if(['à vendre','a vendre','te koop','for sale'].some(s=>head.includes(s))){
     return {status:'ACTIVE',reason:'for_sale_signal'};
   }
   return {status:'UNKNOWN',reason:'no_reliable_availability_signal'};
