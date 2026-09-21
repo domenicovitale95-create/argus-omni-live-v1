@@ -1,6 +1,6 @@
 import {extractListing,hostAllowed} from './immo-listing-scan.js';
 
-const DISCOVERY_SOURCES=[
+const APARTMENT_SOURCES=[
   {id:'immoweb',name:'Immoweb',url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\/fr\/annonce\//i},
   {id:'immovlan',name:'Immovlan',url:'https://immovlan.be/fr/immobilier/appartement/a-vendre?maxprice=150000&regions=bruxelles-region',match:/\/fr\/detail\//i},
   {id:'zimmo',name:'Zimmo',url:'https://www.zimmo.be/fr/bruxelles/a-vendre/appartement',match:/(a-vendre|te-koop|for-sale)/i},
@@ -12,14 +12,19 @@ const DISCOVERY_SOURCES=[
   {id:'properstar',name:'Properstar',url:'https://www.properstar.be/belgique/bruxelles/acheter/appartement/plus-recents',match:/\/annonce\/\d+/i}
 ];
 
-const MAX_LINKS_PER_SOURCE=16;
+const BUILDING_SOURCES=[
+  {id:'immoweb-building',name:'Immoweb · immeubles',url:'https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?maxprice=400000',match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i},
+  {id:'immovlan-building',name:'Immovlan · immeubles',url:'https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?maxprice=400000&provinces=bruxelles',match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i}
+];
+
+const MAX_LINKS_PER_SOURCE=20;
 const FETCH_TIMEOUT=7000;
 
 async function fetchText(url){
   const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),FETCH_TIMEOUT);
   try{
     const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{
-      'user-agent':'Mozilla/5.0 (compatible; ArgusImmoDiscovery/1.2; +https://argus-omni-live.vercel.app/immo-opportunities)',
+      'user-agent':'Mozilla/5.0 (compatible; ArgusImmoDiscovery/1.3; +https://argus-omni-live.vercel.app/immo-opportunities)',
       'accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=0.9,nl;q=0.8,en;q=0.7'
     }});
     if(!r.ok)throw new Error('HTTP '+r.status);
@@ -29,17 +34,12 @@ async function fetchText(url){
     return {url:r.url||url,text:text.slice(0,2200000)};
   }finally{clearTimeout(timer)}
 }
-function normalizedHost(value=''){
-  try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}
-}
+function normalizedHost(value=''){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 function likelyDetailUrl(u,source){
   const sourceHost=normalizedHost(source.url),candidateHost=u.hostname.toLowerCase().replace(/^www\./,'');
   if(candidateHost!==sourceHost)return false;
-
   const p=u.pathname.toLowerCase().replace(/\/+$/,'');
-  const search=p+u.search.toLowerCase();
-  if(!source.match.test(search))return false;
-
+  if(!source.match.test(p+u.search.toLowerCase()))return false;
   if(/\/(chercher|recherche|search)(\/|$)/i.test(p))return false;
   if(source.id==='victoire'&&/^\/fr\/a-vendre\/all(?:\/|$)/i.test(p))return false;
   if(source.id==='zimmo'&&/^\/fr\/[^/]+\/a-vendre\/appartement(?:\/|$)/i.test(p))return false;
@@ -50,11 +50,10 @@ function likelyDetailUrl(u,source){
   if(source.id==='era'&&!/\/fr\/a-vendre\/[^/]+\/appartement\/.+/i.test(p))return false;
   if(source.id==='weinvest'&&!/\/fr-be\/property\/for-sale\/[^/]+\/apartment\/\d+/i.test(p))return false;
   if(source.id==='properstar'&&!/\/annonce\/\d+/i.test(p))return false;
-
-  const segments=p.split('/').filter(Boolean);
-  if(segments.length<3)return false;
+  if(source.id==='immoweb-building'&&!/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i.test(p))return false;
+  if(source.id==='immovlan-building'&&!/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i.test(p))return false;
   if(/[?&](?:page|sort|view|offset)=/i.test(u.search))return false;
-  return true;
+  return p.split('/').filter(Boolean).length>=3;
 }
 function linksFrom(html,base,source){
   const out=[],seen=new Set(),re=/<a\b[^>]*href=["']([^"'#]+)["'][^>]*>/gi;
@@ -62,8 +61,7 @@ function linksFrom(html,base,source){
   while((m=re.exec(html))){
     try{
       const u=new URL(m[1],base);
-      if(!['http:','https:'].includes(u.protocol)||!hostAllowed(u.hostname))continue;
-      if(!likelyDetailUrl(u,source))continue;
+      if(!['http:','https:'].includes(u.protocol)||!hostAllowed(u.hostname)||!likelyDetailUrl(u,source))continue;
       u.hash='';
       const key=u.toString();
       if(seen.has(key))continue;
@@ -78,72 +76,56 @@ function keyFor(x){
   if(canonical)return canonical;
   return [x.address||x.city||'',x.price||'',x.surface||'',x.bedrooms??''].join('|').toLowerCase();
 }
-function eligible(x,maxPrice){
+function eligible(x,maxPrice,category){
   const price=Number(x.price),surface=Number(x.surface);
   if(!Number.isFinite(price)||price<40000||price>maxPrice)return false;
-  if(Number.isFinite(surface)&&(surface<12||surface>300))return false;
-  const type=String(x.type||'unknown');
+  if(Number.isFinite(surface)&&(surface<12||surface>800))return false;
+  const type=String(x.type||'unknown'),text=(String(x.title||'')+' '+String(x.description||'')).toLowerCase();
+  if(category==='building')return type==='building'||/(immeuble de rapport|immeuble à appartements|maison de rapport|investment property|opbrengsteigendom)/i.test(text);
   if(!['apartment','studio','unknown'].includes(type))return false;
-  const title=String(x.title||'').toLowerCase();
-  const description=String(x.description||'').toLowerCase();
-  if(type==='unknown'&&!/(appartement|apartment|flat|studio|duplex|penthouse|kot\b)/i.test(title+' '+description))return false;
-  return true;
+  return type!=='unknown'||/(appartement|apartment|flat|studio|duplex|penthouse|kot\b)/i.test(text);
 }
-async function scanSource(source,maxPrice){
-  const started=Date.now();
-  const status={id:source.id,name:source.name,url:source.url,reachable:false,linksFound:0,listingsParsed:0,eligible:0,error:null,durationMs:0};
+async function scanSource(source,maxPrice,category){
+  const started=Date.now(),status={id:source.id,name:source.name,url:source.url,reachable:false,linksFound:0,listingsParsed:0,eligible:0,error:null,durationMs:0};
   try{
     const page=await fetchText(source.url);status.reachable=true;
     const links=linksFrom(page.text,page.url,source);status.linksFound=links.length;
     const rows=[];
     for(let i=0;i<links.length;i+=4){
-      const batch=links.slice(i,i+4);
-      const got=await Promise.all(batch.map(async url=>{
+      const got=await Promise.all(links.slice(i,i+4).map(async url=>{
         try{
-          const p=await fetchText(url);
-          const row=extractListing(p.text,p.url);
-          const canonical=String(row.canonical||p.url);
+          const p=await fetchText(url),row=extractListing(p.text,p.url),canonical=String(row.canonical||p.url);
           if(canonical&&normalizedHost(canonical)!==normalizedHost(source.url))return null;
-          return {...row,canonical,discoveredFrom:source.id,discoveredAt:new Date().toISOString()};
+          return {...row,canonical,category,discoveredFrom:source.id,discoveredAt:new Date().toISOString()};
         }catch{return null}
       }));
-      for(const row of got)if(row){status.listingsParsed++;if(eligible(row,maxPrice)){status.eligible++;rows.push(row)}}
+      for(const row of got)if(row){status.listingsParsed++;if(eligible(row,maxPrice,category)){status.eligible++;rows.push(row)}}
     }
-    status.durationMs=Date.now()-started;
-    return {status,rows};
+    status.durationMs=Date.now()-started;return {status,rows};
   }catch(e){
-    status.error=e?.name==='AbortError'?'timeout':String(e?.message||e);
-    status.durationMs=Date.now()-started;
-    return {status,rows:[]};
+    status.error=e?.name==='AbortError'?'timeout':String(e?.message||e);status.durationMs=Date.now()-started;return {status,rows:[]};
   }
 }
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
-  if(req.method==='GET')return res.status(200).json({ok:true,service:'ARGUS IMMO multi-source discovery',version:'1.2',sources:DISCOVERY_SOURCES.map(({id,name,url})=>({id,name,url}))});
+  if(req.method==='GET')return res.status(200).json({ok:true,service:'ARGUS IMMO multi-source discovery',version:'1.3',categories:['apartment','building']});
   if(req.method!=='POST')return res.status(405).json({ok:false,error:'POST required'});
   try{
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});
-    const maxPrice=Math.max(50000,Math.min(1000000,Number(raw.maxPrice)||150000));
-    const results=await Promise.all(DISCOVERY_SOURCES.map(s=>scanSource(s,maxPrice)));
+    const category=raw.category==='building'?'building':'apartment';
+    const defaultMax=category==='building'?400000:150000;
+    const maxPrice=Math.max(50000,Math.min(1000000,Number(raw.maxPrice)||defaultMax));
+    const sources=category==='building'?BUILDING_SOURCES:APARTMENT_SOURCES;
+    const results=await Promise.all(sources.map(s=>scanSource(s,maxPrice,category)));
     const map=new Map();
     for(const r of results)for(const row of r.rows){const k=keyFor(row);if(k&&!map.has(k))map.set(k,row)}
     const listings=[...map.values()].sort((a,b)=>(Number(a.price)||Infinity)-(Number(b.price)||Infinity));
     return res.status(200).json({
-      ok:true,
-      scannedAt:new Date().toISOString(),
-      maxPrice,
+      ok:true,category,scannedAt:new Date().toISOString(),maxPrice,
       sourceStatus:results.map(r=>r.status),
-      totals:{
-        sourcesConfigured:DISCOVERY_SOURCES.length,
-        sourcesReached:results.filter(r=>r.status.reachable).length,
-        linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),
-        listingsParsed:results.reduce((n,r)=>n+r.status.listingsParsed,0),
-        eligibleAfterDedup:listings.length
-      },
+      totals:{sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length,linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),listingsParsed:results.reduce((n,r)=>n+r.status.listingsParsed,0),eligibleAfterDedup:listings.length},
       listings,
       notice:'ARGUS reports only sources actually reached. A blocked or timed-out source is never counted as covered.'
     });
-  }catch(e){
-    return res.status(500).json({ok:false,error:String(e?.message||e)});
-  }
+  }catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
 }
