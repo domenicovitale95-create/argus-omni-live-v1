@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "updatedAt": "2026-09-21",
+  "feeds": [
+    {
+      "id": "perspective",
+      "name": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/poles-strategiques",
+      "type": "official_planning",
+      "priority": 1
+    },
+    {
+      "id": "citydev",
+      "name": "citydev.brussels",
+      "url": "https://www.citydev.brussels/fr/projets",
+      "type": "official_development",
+      "priority": 1
+    },
+    {
+      "id": "sau",
+      "name": "SAU / MSI",
+      "url": "https://sau.brussels/fr/projets",
+      "type": "official_development",
+      "priority": 1
+    },
+    {
+      "id": "mobility",
+      "name": "Bruxelles Mobilité",
+      "url": "https://mobilite-mobiliteit.brussels/fr/projets",
+      "type": "official_transport",
+      "priority": 1
+    },
+    {
+      "id": "environment",
+      "name": "Bruxelles Environnement",
+      "url": "https://environment.brussels/citoyen",
+      "type": "official_environment",
+      "priority": 1
+    },
+    {
+      "id": "commission-buildings",
+      "name": "European Commission buildings",
+      "url": "https://commission.europa.eu/get-involved/visit-european-commission/buildings-commission-and-executive-agencies-brussels_en",
+      "type": "official_eu",
+      "priority": 1
+    },
+    {
+      "id": "port",
+      "name": "Port de Bruxelles",
+      "url": "https://port.brussels/fr/actualites",
+      "type": "official_port",
+      "priority": 1
+    }
+  ],
+  "signalPatterns": {
+    "major_permit": [
+      "permis",
+      "permit",
+      "vergunning",
+      "autorisation urbanistique"
+    ],
+    "masterplan": [
+      "PAD",
+      "RPA",
+      "plan d'aménagement",
+      "masterplan",
+      "schéma directeur",
+      "richtplan"
+    ],
+    "transport": [
+      "métro",
+      "metro",
+      "tram",
+      "gare",
+      "station",
+      "train",
+      "mobilité",
+      "mobility"
+    ],
+    "eu_institution": [
+      "Commission européenne",
+      "European Commission",
+      "executive agency",
+      "agence exécutive",
+      "Parlement européen",
+      "European Parliament"
+    ],
+    "public_investment": [
+      "marché public",
+      "public procurement",
+      "investissement public",
+      "chantier",
+      "travaux",
+      "works"
+    ],
+    "park": [
+      "parc",
+      "park",
+      "espace vert",
+      "green space",
+      "biodiversité"
+    ],
+    "school": [
+      "école",
+      "school",
+      "campus",
+      "crèche"
+    ],
+    "rehabilitation": [
+      "reconversion",
+      "rénovation",
+      "renovation",
+      "rehabilitation",
+      "réaménagement"
+    ],
+    "housing": [
+      "logements",
+      "housing",
+      "homes",
+      "habitat"
+    ],
+    "commercial_centrality": [
+      "commerce",
+      "commerces",
+      "horeca",
+      "retail",
+      "services"
+    ]
+  },
+  "stagePatterns": {
+    "DELIVERED": [
+      "livré",
+      "delivered",
+      "ouvert",
+      "opened",
+      "inauguré"
+    ],
+    "UNDER_CONSTRUCTION": [
+      "chantier",
+      "en construction",
+      "construction started",
+      "travaux en cours"
+    ],
+    "PERMITTED": [
+      "permis délivré",
+      "permis octroyé",
+      "permit granted",
+      "vergunning verleend"
+    ],
+    "APPROVED": [
+      "approuvé définitivement",
+      "adopté définitivement",
+      "definitively approved",
+      "approved"
+    ],
+    "PLANNED": [
+      "enquête publique",
+      "projet de PAD",
+      "project",
+      "planned",
+      "étude"
+    ],
+    "ANNOUNCED": [
+      "annoncé",
+      "announcement",
+      "announced"
+    ]
+  }
+}
