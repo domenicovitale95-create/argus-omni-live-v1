@@ -1173,6 +1173,23 @@
       ],
       "source_date": "2026-09-18",
       "outcomes": {}
+    },
+    {
+      "date": "2026-09-21",
+      "asset_id": "nasdaq",
+      "asset": "Nasdaq 100",
+      "signal": "WATCH",
+      "score": 70,
+      "price": 741.47,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +0.5%",
+        "Distance vs 200-day average: +11.8%",
+        "20-day annualised volatility: 16.4%"
+      ],
+      "source_date": "2026-09-21",
+      "outcomes": {}
     }
   ]
 }
