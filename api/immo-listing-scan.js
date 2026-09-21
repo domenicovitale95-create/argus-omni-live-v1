@@ -61,7 +61,7 @@ export function classifyListingAvailability({title='',description='',html='',str
 
   const explicitSold=[
     /\bce bien (?:est |a été )?vendu\b/,
-    /\bbien (?:déjà )?vendu\b/,
+    /\bbien (?:est |a été |déjà )vendu\b/,
     /\bpropri[ée]t[ée] (?:est )?vendue\b/,
     /\bappartement (?:est )?vendu\b/,
     /\bmaison (?:est )?vendue\b/,
