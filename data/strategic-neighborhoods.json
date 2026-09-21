@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "updatedAt": null,
+  "status": "BOOTSTRAP_PENDING",
+  "source": {
+    "name": "Monitoring des Quartiers — IBSA / perspective.brussels / UrbIS",
+    "dataset": "quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc",
+    "referenceUrl": "https://opendata.brussels.be/explore/dataset/quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc/",
+    "wfsUrl": "https://geoservices-urbis.irisnet.be/geoserver/urbisvector/wfs?version=2.0.0&request=GetFeature&typename=urbisvector:MonitoringDistricts&outputformat=json",
+    "modified": "2026-07-28",
+    "geographicalLevel": "neighbourhood",
+    "license": "CC0 1.0"
+  },
+  "count": 0,
+  "districts": []
+}
