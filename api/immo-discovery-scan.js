@@ -6,17 +6,20 @@ const DISCOVERY_SOURCES=[
   {id:'zimmo',name:'Zimmo',url:'https://www.zimmo.be/fr/bruxelles/a-vendre/appartement',match:/(a-vendre|te-koop|for-sale)/i},
   {id:'immoscoop',name:'Immoscoop',url:'https://www.immoscoop.be/fr/chercher/a-vendre/ville-de-bruxelles/appartement',match:/(a-vendre|te-koop|property|bien|pand)/i},
   {id:'century21',name:'CENTURY 21',url:'https://www.century21.be/fr/a-vendre',match:/\/fr\/properiete\/a-vendre\//i},
-  {id:'victoire',name:'Victoire-Junot',url:'https://victoire.be/fr/a-vendre/all/1?sort=price-asc&view=list',match:/(a-vendre|for-sale|te-koop|bien|property)/i}
+  {id:'victoire',name:'Victoire-Junot',url:'https://victoire.be/fr/a-vendre/all/1?sort=price-asc&view=list',match:/(a-vendre|for-sale|te-koop|bien|property)/i},
+  {id:'era',name:'ERA',url:'https://www.era.be/fr/a-vendre/bruxelles/appartement',match:/\/fr\/a-vendre\/[^/]+\/appartement\/.+/i},
+  {id:'weinvest',name:'We Invest',url:'https://weinvest.be/fr-BE/properties/for-sale/apartment/city/bruxelles',match:/\/fr-BE\/property\/for-sale\/[^/]+\/apartment\/\d+/i},
+  {id:'properstar',name:'Properstar',url:'https://www.properstar.be/belgique/bruxelles/acheter/appartement/plus-recents',match:/\/annonce\/\d+/i}
 ];
 
-const MAX_LINKS_PER_SOURCE=8;
+const MAX_LINKS_PER_SOURCE=16;
 const FETCH_TIMEOUT=7000;
 
 async function fetchText(url){
   const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),FETCH_TIMEOUT);
   try{
     const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{
-      'user-agent':'Mozilla/5.0 (compatible; ArgusImmoDiscovery/1.1; +https://argus-omni-live.vercel.app/immo-opportunities)',
+      'user-agent':'Mozilla/5.0 (compatible; ArgusImmoDiscovery/1.2; +https://argus-omni-live.vercel.app/immo-opportunities)',
       'accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=0.9,nl;q=0.8,en;q=0.7'
     }});
     if(!r.ok)throw new Error('HTTP '+r.status);
@@ -37,7 +40,6 @@ function likelyDetailUrl(u,source){
   const search=p+u.search.toLowerCase();
   if(!source.match.test(search))return false;
 
-  // Never treat search, filter, pagination or catalogue URLs as property details.
   if(/\/(chercher|recherche|search)(\/|$)/i.test(p))return false;
   if(source.id==='victoire'&&/^\/fr\/a-vendre\/all(?:\/|$)/i.test(p))return false;
   if(source.id==='zimmo'&&/^\/fr\/[^/]+\/a-vendre\/appartement(?:\/|$)/i.test(p))return false;
@@ -45,9 +47,12 @@ function likelyDetailUrl(u,source){
   if(source.id==='century21'&&!/\/fr\/properiete\/a-vendre\//i.test(p))return false;
   if(source.id==='immoweb'&&!/\/fr\/annonce\//i.test(p))return false;
   if(source.id==='immovlan'&&!/\/fr\/detail\//i.test(p))return false;
+  if(source.id==='era'&&!/\/fr\/a-vendre\/[^/]+\/appartement\/.+/i.test(p))return false;
+  if(source.id==='weinvest'&&!/\/fr-be\/property\/for-sale\/[^/]+\/apartment\/\d+/i.test(p))return false;
+  if(source.id==='properstar'&&!/\/annonce\/\d+/i.test(p))return false;
 
   const segments=p.split('/').filter(Boolean);
-  if(segments.length<4)return false;
+  if(segments.length<3)return false;
   if(/[?&](?:page|sort|view|offset)=/i.test(u.search))return false;
   return true;
 }
@@ -114,7 +119,7 @@ async function scanSource(source,maxPrice){
 }
 export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
-  if(req.method==='GET')return res.status(200).json({ok:true,service:'ARGUS IMMO multi-source discovery',version:'1.1',sources:DISCOVERY_SOURCES.map(({id,name,url})=>({id,name,url}))});
+  if(req.method==='GET')return res.status(200).json({ok:true,service:'ARGUS IMMO multi-source discovery',version:'1.2',sources:DISCOVERY_SOURCES.map(({id,name,url})=>({id,name,url}))});
   if(req.method!=='POST')return res.status(405).json({ok:false,error:'POST required'});
   try{
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});
