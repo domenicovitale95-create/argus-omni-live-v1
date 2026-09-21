@@ -48,6 +48,67 @@ function regexNum(text,patterns){
   for(const p of patterns){const m=text.match(p); if(m){const n=parseNumber(m[1]); if(n!=null)return n}}
   return null;
 }
+export function classifyListingAvailability({title='',description='',html='',structuredAvailability=''}={}){
+  const head=cleanText(title+' '+description).toLowerCase();
+  const top=cleanText(html).slice(0,45000).toLowerCase();
+  const structured=String(structuredAvailability||'').toLowerCase();
+
+  if(/soldout|discontinued|outofstock/.test(structured)){
+    return {status:'SOLD',reason:'structured_availability'};
+  }
+  const sold=[
+    /\bce bien (?:est |a été )?vendu\b/,
+    /\bbien (?:déjà )?vendu\b/,
+    /\bpropri[ée]t[ée] vendue\b/,
+    /\bappartement vendu\b/,
+    /\bmaison vendue\b/,
+    /\bimmeuble vendu\b/,
+    /\b(?:déjà )?vendu(?:e)?\s*!?\b/,
+    /\bdit pand is verkocht\b/,
+    /\bpand verkocht\b/,
+    /\bwoning verkocht\b/,
+    /\bappartement verkocht\b/,
+    /\bverkocht\s*!?\b/,
+    /\bproperty sold\b/,
+    /\balready sold\b/,
+    /\bsold property\b/,
+    /\bsold\s*!?\b/
+  ];
+  if(sold.some(r=>r.test(head))||sold.slice(0,-1).some(r=>r.test(top))){
+    return {status:'SOLD',reason:'page_sold_signal'};
+  }
+  const removed=[
+    /\bannonce (?:retir[ée]e?|supprim[ée]e?|plus disponible)\b/,
+    /\bbien (?:retir[ée] de la vente|plus disponible)\b/,
+    /\bn'est plus disponible\b/,
+    /\bniet meer beschikbaar\b/,
+    /\bannonce niet meer beschikbaar\b/,
+    /\blisting (?:removed|no longer available)\b/,
+    /\bproperty no longer available\b/
+  ];
+  if(removed.some(r=>r.test(head))||removed.some(r=>r.test(top))){
+    return {status:'REMOVED',reason:'page_removed_signal'};
+  }
+  const contract=[
+    /\bsous compromis\b/,/\bcompromis sign[ée]\b/,/\bvente conclue\b/,
+    /\bonder compromis\b/,/\bkoopovereenkomst getekend\b/,/\bsale agreed\b/,/\bunder contract\b/
+  ];
+  if(contract.some(r=>r.test(head))||contract.some(r=>r.test(top.slice(0,18000)))){
+    return {status:'UNDER_CONTRACT',reason:'contract_signal'};
+  }
+  const option=[/\bsous option\b/,/\ben option\b/,/\bin optie\b/,/\boption pending\b/];
+  if(option.some(r=>r.test(head))||option.some(r=>r.test(top.slice(0,18000)))){
+    return {status:'OPTION',reason:'option_signal'};
+  }
+  if(/\b(?:à vendre|a vendre|te koop|for sale)\b/i.test(head)){
+    return {status:'ACTIVE',reason:'for_sale_signal'};
+  }
+  return {status:'UNKNOWN',reason:'no_reliable_availability_signal'};
+}
+export function isUnavailableListing(listing={}){
+  const status=String(listing.availabilityStatus||listing.status||'').toUpperCase();
+  return ['SOLD','REMOVED','WITHDRAWN','CLOSED'].includes(status);
+}
 export function extractListing(html,url){
   const title=meta(html,'og:title')||cleanText((html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)||[])[1]||'');
   const description=meta(html,'og:description')||meta(html,'description');
@@ -55,10 +116,11 @@ export function extractListing(html,url){
   const ld=collectJsonLd(html);
   let price=parseNumber(meta(html,'product:price:amount')||meta(html,'og:price:amount'));
   let currency=meta(html,'product:price:currency')||meta(html,'og:price:currency')||'EUR';
-  let address=null,city=null,postalCode=null,surface=null,bedrooms=null,bathrooms=null,image=null;
+  let address=null,city=null,postalCode=null,surface=null,bedrooms=null,bathrooms=null,image=null,structuredAvailability='';
   for(const root of ld)walk(root,o=>{
     if(price==null&&o.offers?.price!=null)price=parseNumber(o.offers.price);
     if(o.offers?.priceCurrency)currency=o.offers.priceCurrency;
+    if(!structuredAvailability&&o.offers?.availability)structuredAvailability=String(o.offers.availability);
     if(!image&&o.image){image=Array.isArray(o.image)?o.image[0]:o.image}
     if(!address&&o.address){
       const a=o.address;
@@ -91,7 +153,8 @@ export function extractListing(html,url){
   const pebMatch=text.match(/\b(?:PEB|EPC)\s*[:\-]?\s*([A-G](?:\+|\-)?)/i);
   const epc=pebMatch?pebMatch[1].toUpperCase():null;
   const type=inferType(title+' '+description+' '+text.slice(0,20000));
-  return {title,description,canonical,source:new URL(url).hostname,price,currency,address,city,postalCode,surface,bedrooms,bathrooms,epc,type,image};
+  const availability=classifyListingAvailability({title,description,html,structuredAvailability});
+  return {title,description,canonical,source:new URL(url).hostname,price,currency,address,city,postalCode,surface,bedrooms,bathrooms,epc,type,image,availabilityStatus:availability.status,availabilityReason:availability.reason};
 }
 async function fetchHtml(url,timeoutMs=12000){
   const ctrl=new AbortController(); const timer=setTimeout(()=>ctrl.abort(),timeoutMs);
@@ -110,7 +173,7 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   res.setHeader('Access-Control-Allow-Origin','*');
   if(req.method==='OPTIONS')return res.status(204).end();
-  if(req.method==='GET')return res.status(200).json({ok:true,service:'ARGUS IMMO listing scanner',version:'1.3',supportedDomains:ALLOWED_DOMAINS,mode:'public-listing-metadata'});
+  if(req.method==='GET')return res.status(200).json({ok:true,service:'ARGUS IMMO listing scanner',version:'1.4',supportedDomains:ALLOWED_DOMAINS,mode:'public-listing-metadata'});
   if(req.method!=='POST')return res.status(405).json({ok:false,error:'POST required'});
   try{
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});
