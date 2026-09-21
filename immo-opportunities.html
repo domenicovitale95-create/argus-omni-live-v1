@@ -1,1 +1,69 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ARGUS IMMO — Opportunités</title><style>body{margin:0;background:#07111f;color:#f5f8fc;font-family:Arial,sans-serif}.wrap{max-width:1050px;margin:auto;padding:24px}a{color:#9ec8ff}.top{border-bottom:1px solid #29415e}.hero{padding:28px 0}.muted{color:#aebed1}.filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.filters button{padding:10px 13px;border-radius:10px;border:1px solid #29415e;background:#0d1b2d;color:white;font-weight:700}.filters button.active{background:#edf5ff;color:#102641}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{border:1px solid #29415e;border-radius:16px;background:#0d1b2d;padding:16px}.head{display:flex;justify-content:space-between;gap:12px}.score{background:#edf5ff;color:#102641;padding:10px;border-radius:12px;font-weight:900;height:max-content}.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:13px 0}.kpi{background:#091827;border-radius:10px;padding:10px}.kpi small{display:block;color:#aebed1}.good{color:#91dfb7}.warn{color:#f2d18d}.risk{color:#f2a7ad}.actions{display:flex;gap:10px;margin-top:12px}.actions a{padding:9px 11px;border-radius:9px;border:1px solid #365674;text-decoration:none;font-weight:700}@media(max-width:700px){.grid{grid-template-columns:1fr}}</style></head><body><div class="top"><div class="wrap"><b>ARGUS IMMO BELGIUM</b> · <a href="/immo">Scanner et analyse</a></div></div><main class="wrap"><section class="hero"><h1>Opportunités suivies</h1><p class="muted">Tous les biens retenus dans nos recherches. Les annonces hors critères, vendues ou invalidées sont retirées de la shortlist.</p><p class="muted">Règles : prix ≤ 150 k€ · budget total ≤ 180 k€ · petite copropriété prioritaire · charges faibles · travaux légers · revente liquide.</p><div class="filters"><button class="active" data-f="ALL">Tous</button><button data-f="SHORTLIST">Shortlist</button><button data-f="NEGOTIATE">À négocier</button><button data-f="WATCH">Watch</button></div><p id="updated" class="muted">Chargement…</p></section><section id="grid" class="grid"></section></main><script>let data=[],filter='ALL';const euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n||0);function render(){const list=data.filter(x=>filter==='ALL'||x.status===filter);document.getElementById('grid').innerHTML=list.map(x=>'<article class="card"><div class="head"><div><b>'+x.location+'</b><div class="muted">'+x.area+' m² · '+(x.bedrooms?x.bedrooms+' chambre':'studio')+'</div></div><div class="score">'+x.score+'/100</div></div><h3 class="'+(x.status==='SHORTLIST'?'good':x.status==='NEGOTIATE'?'warn':'risk')+'">'+x.verdict+'</h3><div class="kpis"><div class="kpi"><small>Prix</small><b>'+euro(x.price)+'</b></div><div class="kpi"><small>Coût total estimé</small><b>'+euro(x.estimatedTotalCost)+'</b></div><div class="kpi"><small>Loyer estimé</small><b>'+euro(x.estimatedRent)+'/mois</b></div><div class="kpi"><small>Rendement brut / coût total</small><b>'+String(x.grossYieldOnTotal).replace('.',',')+' %</b></div></div><p><b>PEB :</b> '+x.peb+'<br><b>Copro :</b> '+x.copro+'<br><b>Charges :</b> '+x.charges+'<br><b>Chauffage :</b> '+x.heating+'</p><p class="muted"><b>Risques :</b> '+x.risks.join(' · ')+'</p><p><b>Négociation :</b> '+x.negotiation+'</p><div class="actions"><a href="'+x.source+'">Voir annonce</a><a href="/immo#scanner">Scanner ARGUS</a></div></article>').join('')||'<p class="muted">Aucun bien dans cette catégorie.</p>'}fetch('/data/immo-opportunities.json').then(r=>r.json()).then(d=>{data=d.opportunities||[];document.getElementById('updated').textContent=data.length+' biens suivis · mise à jour '+new Date(d.updatedAt).toLocaleString('fr-BE');render()});document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-f]').forEach(z=>z.classList.remove('active'));b.classList.add('active');filter=b.dataset.f;render()});</script></body></html>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARGUS IMMO — Opportunités</title>
+<style>
+:root{--bg:#07111f;--panel:#0d1b2d;--panel2:#091827;--line:#29415e;--text:#f5f8fc;--muted:#aebed1;--blue:#9ec8ff;--green:#91dfb7;--amber:#f2d18d;--red:#f2a7ad;--paper:#edf5ff;--ink:#102641}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;line-height:1.45}.wrap{max-width:1120px;margin:auto;padding:24px}a{color:var(--blue)}.top{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(7,17,31,.96);z-index:5}.top .wrap{padding-top:16px;padding-bottom:16px}.hero{padding:28px 0 18px}.hero h1{font-size:clamp(2.2rem,7vw,4.2rem);letter-spacing:-.04em;margin:.1em 0}.muted{color:var(--muted)}.filters,.actions,.scanbar{display:flex;gap:8px;flex-wrap:wrap}.filters{margin:18px 0}.filters button,.primary,.secondary{padding:11px 14px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:white;font-weight:800;cursor:pointer}.filters button.active,.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}.primary:disabled{opacity:.6;cursor:wait}.section{margin:22px 0 36px}.sectionhead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin:0 0 12px}.sectionhead h2{margin:0;font-size:1.55rem}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card,.coverage{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:16px}.head{display:flex;justify-content:space-between;gap:12px}.score{background:var(--paper);color:var(--ink);padding:10px;border-radius:12px;font-weight:900;height:max-content}.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:13px 0}.kpi{background:var(--panel2);border-radius:10px;padding:10px}.kpi small{display:block;color:var(--muted)}.good{color:var(--green)}.warn{color:var(--amber)}.risk{color:var(--red)}.actions{margin-top:12px}.actions a{padding:9px 11px;border-radius:9px;border:1px solid #365674;text-decoration:none;font-weight:700}.marketcard h3{margin:.2em 0}.source{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:900}.statusgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.status{background:var(--panel2);border-radius:11px;padding:11px}.status b,.status span{display:block}.status span{font-size:.82rem;color:var(--muted);margin-top:3px}.ok{border-left:3px solid var(--green)}.fail{border-left:3px solid var(--red)}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#132840;color:#d7e7fa;font-size:.75rem;font-weight:800}.notice{border:1px solid #365674;background:#0b1a2c;border-radius:13px;padding:13px;margin:14px 0}.empty{padding:24px;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
+@media(max-width:760px){.grid,.statusgrid{grid-template-columns:1fr}.sectionhead{align-items:start;flex-direction:column}.wrap{padding:18px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap"><b>ARGUS IMMO BELGIUM</b> · <a href="/immo">Scanner et analyse</a></div></div>
+<main class="wrap">
+<section class="hero">
+  <p class="source">ARGUS MARKET WATCH</p>
+  <h1>Opportunités immobilières</h1>
+  <p class="muted">ARGUS sépare les biens déjà audités des nouvelles annonces détectées sur le marché. Une source bloquée ou inaccessible n'est jamais comptée comme “scannée”.</p>
+  <div class="notice"><b>Buy Box actuelle :</b> prix ≤ 150 k€ · budget total ≤ 180 k€ · petite copropriété prioritaire · charges faibles · travaux légers · revente liquide.</div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><p class="source">LIVE DISCOVERY</p><h2>Scanner le marché maintenant</h2><p class="muted">Recherche multi-source, déduplication et filtre prix. Les annonces détectées restent “À auditer” tant que les documents, charges et copropriété ne sont pas vérifiés.</p></div><button id="marketScan" class="primary">Scanner les annonces</button></div>
+  <div id="scanSummary" class="coverage"><b>Prêt à scanner.</b><span class="muted"> ARGUS affichera ici les sources réellement atteintes et les éventuels blocages.</span></div>
+  <div id="sourceStatus" class="statusgrid"></div>
+  <div id="marketGrid" class="grid" style="margin-top:12px"></div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><p class="source">CURATED</p><h2>Opportunités déjà suivies</h2><p id="updated" class="muted">Chargement…</p></div></div>
+  <div class="filters"><button class="active" data-f="ALL">Tous</button><button data-f="SHORTLIST">Shortlist</button><button data-f="NEGOTIATE">À négocier</button><button data-f="WATCH">Watch</button></div>
+  <section id="grid" class="grid"></section>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><p class="source">COVERAGE</p><h2>Sources connues par ARGUS</h2><p class="muted">Certaines sont scannées automatiquement; les autres sont déjà acceptées par le scanner d'annonce et peuvent être ajoutées au discovery par lots.</p></div></div>
+  <div id="registry" class="statusgrid"></div>
+</section>
+</main>
+<script>
+let data=[],filter='ALL';
+const euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(n)||0);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function render(){
+ const list=data.filter(x=>filter==='ALL'||x.status===filter);
+ document.getElementById('grid').innerHTML=list.map(x=>'<article class="card"><div class="head"><div><b>'+esc(x.location)+'</b><div class="muted">'+esc(x.area)+' m² · '+(x.bedrooms?esc(x.bedrooms)+' chambre':'studio')+'</div></div><div class="score">'+esc(x.score)+'/100</div></div><h3 class="'+(x.status==='SHORTLIST'?'good':x.status==='NEGOTIATE'?'warn':'risk')+'">'+esc(x.verdict)+'</h3><div class="kpis"><div class="kpi"><small>Prix</small><b>'+euro(x.price)+'</b></div><div class="kpi"><small>Coût total estimé</small><b>'+euro(x.estimatedTotalCost)+'</b></div><div class="kpi"><small>Loyer estimé</small><b>'+euro(x.estimatedRent)+'/mois</b></div><div class="kpi"><small>Rendement brut / coût total</small><b>'+esc(String(x.grossYieldOnTotal).replace('.',','))+' %</b></div></div><p><b>PEB :</b> '+esc(x.peb)+'<br><b>Copro :</b> '+esc(x.copro)+'<br><b>Charges :</b> '+esc(x.charges)+'<br><b>Chauffage :</b> '+esc(x.heating)+'</p><p class="muted"><b>Risques :</b> '+esc((x.risks||[]).join(' · '))+'</p><p><b>Négociation :</b> '+esc(x.negotiation)+'</p><div class="actions"><a href="'+esc(x.source)+'" target="_blank" rel="noopener">Voir annonce</a><a href="/immo#scanner">Scanner ARGUS</a></div></article>').join('')||'<div class="empty">Aucun bien dans cette catégorie.</div>';
+}
+function marketCard(x){
+ const meta=[x.address||x.city,x.surface?x.surface+' m²':null,x.bedrooms!=null?x.bedrooms+' ch.':null,x.epc?'PEB '+x.epc:null].filter(Boolean).join(' · ');
+ return '<article class="card marketcard"><span class="source">'+esc(x.discoveredFrom||x.source)+'</span><h3>'+esc(x.title||'Annonce immobilière')+'</h3><p class="muted">'+esc(meta||'Données partielles — ouvrir l’annonce')+'</p><div class="kpis"><div class="kpi"><small>Prix</small><b>'+euro(x.price)+'</b></div><div class="kpi"><small>Type</small><b>'+esc(x.type||'—')+'</b></div></div><span class="pill">À auditer</span><div class="actions"><a href="'+esc(x.canonical)+'" target="_blank" rel="noopener">Voir annonce</a><a href="/immo#scanner">Analyse complète</a></div></article>';
+}
+async function scanMarket(){
+ const btn=document.getElementById('marketScan'),sum=document.getElementById('scanSummary'),status=document.getElementById('sourceStatus'),grid=document.getElementById('marketGrid');
+ btn.disabled=true;btn.textContent='Scan en cours…';sum.innerHTML='<b>ARGUS interroge les sources.</b> <span class="muted">Les sites qui bloquent l’accès seront signalés.</span>';status.innerHTML='';grid.innerHTML='';
+ try{
+   const r=await fetch('/api/immo-discovery-scan',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({maxPrice:150000})});
+   const j=await r.json();if(!j.ok)throw new Error(j.error||'Scan impossible');
+   sum.innerHTML='<b>'+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes</b> · '+j.totals.linksFound+' liens détectés · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' sous 150 k€ après déduplication</b>';
+   status.innerHTML=(j.sourceStatus||[]).map(s=>'<div class="status '+(s.reachable?'ok':'fail')+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?'Atteinte · '+s.linksFound+' liens · '+s.eligible+' éligibles':'Non couverte sur ce scan · '+esc(s.error||'bloquée'))+'</span></div>').join('');
+   grid.innerHTML=(j.listings||[]).map(marketCard).join('')||'<div class="empty">Aucune annonce éligible extraite sur ce passage. Vérifiez les statuts des sources ci-dessus.</div>';
+ }catch(e){sum.innerHTML='<b class="risk">Scan interrompu.</b> <span class="muted">'+esc(e.message)+'</span>'}
+ finally{btn.disabled=false;btn.textContent='Scanner les annonces'}
+}
+fetch('/data/immo-opportunities.json').then(r=>r.json()).then(d=>{data=d.opportunities||[];document.getElementById('updated').textContent=data.length+' biens suivis · mise à jour '+new Date(d.updatedAt).toLocaleString('fr-BE');render()});
+fetch('/data/immo-sources.json').then(r=>r.json()).then(d=>{document.getElementById('registry').innerHTML=(d.sources||[]).map(s=>'<div class="status"><b>'+esc(s.name)+'</b><span>'+esc(s.category)+' · '+(s.discovery==='live'?'discovery configuré':'scanner URL supporté')+'</span></div>').join('')});
+document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-f]').forEach(z=>z.classList.remove('active'));b.classList.add('active');filter=b.dataset.f;render()});
+document.getElementById('marketScan').addEventListener('click',scanMarket);
+</script>
+</body></html>

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "updatedAt": "2026-09-21T21:30:00+02:00",
+  "principle": "Coverage is explicit: a source is never marked scanned unless ARGUS actually reached it.",
+  "sources": [
+    {"id":"immoweb","name":"Immoweb","category":"portal","host":"immoweb.be","discovery":"live","url":"https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000"},
+    {"id":"immovlan","name":"Immovlan","category":"portal","host":"immovlan.be","discovery":"live","url":"https://immovlan.be/fr/immobilier/appartement/a-vendre?maxprice=150000&regions=bruxelles-region"},
+    {"id":"zimmo","name":"Zimmo","category":"portal","host":"zimmo.be","discovery":"live","url":"https://www.zimmo.be/fr/bruxelles/a-vendre/appartement"},
+    {"id":"immoscoop","name":"Immoscoop","category":"portal","host":"immoscoop.be","discovery":"live","url":"https://www.immoscoop.be/fr/chercher/a-vendre/ville-de-bruxelles/appartement"},
+    {"id":"realo","name":"Realo","category":"portal","host":"realo.be","discovery":"direct","url":"https://www.realo.be/fr"},
+    {"id":"logic-immo","name":"Logic-Immo","category":"portal","host":"logic-immo.be","discovery":"direct","url":"https://www.logic-immo.be"},
+    {"id":"spotto","name":"Spotto","category":"portal","host":"spotto.be","discovery":"direct","url":"https://www.spotto.be"},
+    {"id":"properstar","name":"Properstar","category":"portal","host":"properstar.be","discovery":"direct","url":"https://www.properstar.be"},
+    {"id":"biddit","name":"Biddit","category":"notary-auction","host":"biddit.be","discovery":"direct","url":"https://www.biddit.be"},
+    {"id":"era","name":"ERA","category":"agency-network","host":"era.be","discovery":"direct","url":"https://www.era.be"},
+    {"id":"weinvest","name":"We Invest","category":"agency-network","host":"weinvest.be","discovery":"direct","url":"https://weinvest.be/fr-BE"},
+    {"id":"trevi","name":"TREVI","category":"agency-network","host":"trevi.be","discovery":"direct","url":"https://www.trevi.be"},
+    {"id":"latour-petit","name":"Latour & Petit","category":"agency","host":"latouretpetit.be","discovery":"direct","url":"https://latouretpetit.be"},
+    {"id":"victoire","name":"Victoire Junot","category":"agency","host":"victoire.be","discovery":"direct","url":"https://www.victoire.be/fr"},
+    {"id":"bathim","name":"Bathim","category":"agency","host":"bathim.be","discovery":"direct","url":"https://www.bathim.be"},
+    {"id":"macnash","name":"Macnash","category":"agency","host":"macnash.com","discovery":"direct","url":"https://www.macnash.com/fr"},
+    {"id":"myimmo","name":"MYIMMO","category":"agency-network","host":"myimmo.be","discovery":"direct","url":"https://www.myimmo.be"},
+    {"id":"century21","name":"CENTURY 21 Belgium","category":"agency-network","host":"century21.be","discovery":"direct","url":"https://www.century21.be/fr"}
+  ]
+}
