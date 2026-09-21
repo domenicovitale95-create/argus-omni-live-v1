@@ -136,9 +136,17 @@ async function loadCategory(next){
  const cfg=categoryCfg[category];
  document.getElementById('scanTitle').textContent=cfg.scanTitle;document.getElementById('scanText').textContent=cfg.scanText;document.getElementById('curatedTitle').textContent=cfg.curated;
  document.getElementById('scanSummary').innerHTML='<b>Prêt à scanner.</b><span class="muted"> Plafond '+euro(cfg.max)+'.</span>';document.getElementById('sourceStatus').innerHTML='';document.getElementById('marketGrid').innerHTML='';
- const r=await fetch(cfg.file,{cache:'no-store'}),d=await r.json();data=d.opportunities||[];
- document.getElementById('updated').textContent=data.length+' dossiers suivis · mise à jour '+new Date(d.updatedAt).toLocaleString('fr-BE');
- renderBest();renderCurated();renderMap();
+ try{
+   const r=await fetch('/api/immo-curated-active?category='+encodeURIComponent(category),{cache:'no-store'});
+   const d=await r.json();if(!d.ok)throw new Error(d.error||'Vérification indisponible');
+   data=d.opportunities||[];
+   const hidden=(d.counts?.excludedSoldOrRemoved||0)+(d.counts?.hiddenUnverified||0);
+   document.getElementById('updated').textContent=data.length+' annonces actuellement vérifiées'+(hidden?' · '+hidden+' masquée(s) car vendue(s), retirée(s) ou non revérifiable(s)':'')+' · contrôle '+new Date(d.checkedAt).toLocaleString('fr-BE');
+   renderBest();renderCurated();renderMap();
+ }catch(e){
+   data=[];renderBest();renderCurated();renderMap();
+   document.getElementById('updated').textContent='Vérification live indisponible — ARGUS masque la shortlist plutôt que risquer d’afficher un bien vendu.';
+ }
  setTimeout(()=>map?.invalidateSize(),80);
 }
 async function scanMarket(){
@@ -147,8 +155,8 @@ async function scanMarket(){
  try{
    const r=await fetch('/api/immo-discovery-scan',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({category,maxPrice:cfg.max})});
    const j=await r.json();if(!j.ok)throw new Error(j.error||'Scan impossible');liveListings=j.listings||[];
-   sum.innerHTML='<b>'+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes</b> · '+j.totals.linksFound+' liens · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' éligibles ≤ '+euro(cfg.max)+'</b>';
-   status.innerHTML=(j.sourceStatus||[]).map(s=>'<div class="status '+(s.reachable?'ok':'fail')+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?'Atteinte · '+s.linksFound+' liens · '+s.eligible+' éligibles':'Non couverte · '+esc(s.error||'bloquée'))+'</span></div>').join('');
+   const unavailable=(j.sourceStatus||[]).reduce((n,s)=>n+(s.excludedUnavailable||0),0);sum.innerHTML='<b>'+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes</b> · '+j.totals.linksFound+' liens · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' éligibles ≤ '+euro(cfg.max)+'</b>'+(unavailable?' · '+unavailable+' vendue(s)/retirée(s) exclue(s)':'');
+   status.innerHTML=(j.sourceStatus||[]).map(s=>'<div class="status '+(s.reachable?'ok':'fail')+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?'Atteinte · '+s.linksFound+' liens · '+s.eligible+' éligibles'+(s.excludedUnavailable?' · '+s.excludedUnavailable+' indisponible(s) exclue(s)':''):'Non couverte · '+esc(s.error||'bloquée'))+'</span></div>').join('');
    grid.innerHTML=liveListings.map(marketCard).join('')||'<div class="empty">Aucune nouvelle annonce éligible extraite sur ce passage.</div>';
    renderMap();
  }catch(e){sum.innerHTML='<b class="risk">Scan interrompu.</b> <span class="muted">'+esc(e.message)+'</span>'}

@@ -1,0 +1,29 @@
+name: ARGUS IMMO Availability Regression
+
+on:
+  pull_request:
+    paths:
+      - 'api/immo-listing-scan.js'
+      - 'api/immo-discovery-scan.js'
+      - 'api/immo-curated-active.js'
+      - 'immo-opportunities.html'
+      - 'tests/immo-availability-regression.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'api/immo-listing-scan.js'
+      - 'api/immo-discovery-scan.js'
+      - 'api/immo-curated-active.js'
+      - 'immo-opportunities.html'
+      - 'tests/immo-availability-regression.mjs'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/immo-availability-regression.mjs
