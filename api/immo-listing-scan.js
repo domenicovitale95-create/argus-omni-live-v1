@@ -49,34 +49,42 @@ function regexNum(text,patterns){
   return null;
 }
 export function classifyListingAvailability({title='',description='',html='',structuredAvailability=''}={}){
-  const head=cleanText(title+' '+description).toLowerCase();
+  const titleText=cleanText(title).toLowerCase();
+  const descText=cleanText(description).toLowerCase();
+  const head=(titleText+' '+descText).trim();
   const top=cleanText(html).slice(0,45000).toLowerCase();
   const structured=String(structuredAvailability||'').toLowerCase();
 
   if(/soldout|discontinued|outofstock/.test(structured)){
     return {status:'SOLD',reason:'structured_availability'};
   }
-  const sold=[
+
+  const explicitSold=[
     /\bce bien (?:est |a été )?vendu\b/,
     /\bbien (?:déjà )?vendu\b/,
-    /\bpropri[ée]t[ée] vendue\b/,
-    /\bappartement vendu\b/,
-    /\bmaison vendue\b/,
-    /\bimmeuble vendu\b/,
-    /\b(?:déjà )?vendu(?:e)?\s*!?\b/,
+    /\bpropri[ée]t[ée] (?:est )?vendue\b/,
+    /\bappartement (?:est )?vendu\b/,
+    /\bmaison (?:est )?vendue\b/,
+    /\bimmeuble (?:est )?vendu\b/,
     /\bdit pand is verkocht\b/,
-    /\bpand verkocht\b/,
-    /\bwoning verkocht\b/,
-    /\bappartement verkocht\b/,
-    /\bverkocht\s*!?\b/,
-    /\bproperty sold\b/,
-    /\balready sold\b/,
-    /\bsold property\b/,
-    /\bsold\s*!?\b/
+    /\bdit appartement is verkocht\b/,
+    /\bdeze woning is verkocht\b/,
+    /\bproperty (?:is |has been )?sold\b/,
+    /\bthis (?:property|home|apartment|building) is sold\b/,
+    /\balready sold\b/
   ];
-  if(sold.some(r=>r.test(head))||sold.slice(0,-1).some(r=>r.test(top))){
+  const soldBadge=/^(?:vendu(?:e)?|verkocht|sold)(?:\s*[!:\-–—].*)?$/i;
+  const soldPrefix=/^(?:vendu(?:e)?|verkocht|sold)\s*[!:\-–—|]/i;
+  if(
+    explicitSold.some(r=>r.test(head))||
+    explicitSold.some(r=>r.test(top.slice(0,22000)))||
+    soldBadge.test(cleanText(title))||
+    soldPrefix.test(cleanText(title))||
+    soldBadge.test(cleanText(description))
+  ){
     return {status:'SOLD',reason:'page_sold_signal'};
   }
+
   const removed=[
     /\bannonce (?:retir[ée]e?|supprim[ée]e?|plus disponible)\b/,
     /\bbien (?:retir[ée] de la vente|plus disponible)\b/,
@@ -89,6 +97,7 @@ export function classifyListingAvailability({title='',description='',html='',str
   if(removed.some(r=>r.test(head))||removed.some(r=>r.test(top))){
     return {status:'REMOVED',reason:'page_removed_signal'};
   }
+
   const contract=[
     /\bsous compromis\b/,/\bcompromis sign[ée]\b/,/\bvente conclue\b/,
     /\bonder compromis\b/,/\bkoopovereenkomst getekend\b/,/\bsale agreed\b/,/\bunder contract\b/
@@ -96,10 +105,12 @@ export function classifyListingAvailability({title='',description='',html='',str
   if(contract.some(r=>r.test(head))||contract.some(r=>r.test(top.slice(0,18000)))){
     return {status:'UNDER_CONTRACT',reason:'contract_signal'};
   }
+
   const option=[/\bsous option\b/,/\ben option\b/,/\bin optie\b/,/\boption pending\b/];
   if(option.some(r=>r.test(head))||option.some(r=>r.test(top.slice(0,18000)))){
     return {status:'OPTION',reason:'option_signal'};
   }
+
   if(/\b(?:à vendre|a vendre|te koop|for sale)\b/i.test(head)){
     return {status:'ACTIVE',reason:'for_sale_signal'};
   }
