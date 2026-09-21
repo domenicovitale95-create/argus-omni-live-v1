@@ -33,7 +33,7 @@ button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}
 .hero .lead{color:#c5d0dc;max-width:850px;font-size:clamp(1rem,2vw,1.22rem);margin:0}
 .guardrail{display:flex;gap:10px;align-items:flex-start;margin-top:20px;border:1px solid rgba(233,199,133,.22);background:rgba(91,69,30,.18);border-radius:15px;padding:12px 14px;color:#e5d8bd;font-size:.8rem}
 .guardrail b{color:white}
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:24px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:24px}
 .kpi{border:1px solid var(--line);background:rgba(14,27,43,.7);border-radius:14px;padding:13px 14px;min-height:80px}
 .kpi span{display:block;color:var(--muted);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;font-weight:850}
 .kpi strong{display:block;font-size:1.45rem;margin-top:7px;letter-spacing:-.04em}
@@ -59,7 +59,7 @@ button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}
 .zonehead{display:flex;justify-content:space-between;gap:13px;align-items:flex-start}
 .zone small{color:var(--blue);text-transform:uppercase;letter-spacing:.09em;font-size:.61rem;font-weight:900}.zone h3{font-size:1.02rem;margin:5px 0 3px}.zone .commune{font-size:.74rem;color:var(--muted)}
 .scorebox{text-align:right;white-space:nowrap}.scorebox strong{display:block;font-size:1.5rem;letter-spacing:-.05em}.scorebox span{display:block;color:var(--muted);font-size:.65rem}
-.zonefacts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}
+.zonefacts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:12px 0}
 .fact{background:var(--bg2);border:1px solid rgba(36,57,79,.75);border-radius:9px;padding:8px;min-width:0}.fact span{display:block;color:var(--muted);font-size:.57rem;text-transform:uppercase;letter-spacing:.06em;font-weight:850}.fact b{display:block;font-size:.79rem;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .reasons{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.reasons span{font-size:.68rem;padding:5px 7px;border-radius:999px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);color:#cfd9e3}
 .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.actions button,.actions a{height:36px;border:1px solid var(--line);background:var(--panel3);color:white;border-radius:9px;padding:0 10px;font-size:.72rem;font-weight:850;text-decoration:none;display:inline-flex;align-items:center}.actions .main{background:var(--paper);color:var(--ink);border-color:var(--paper)}
@@ -79,7 +79,7 @@ button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}
 .note{border:1px solid rgba(233,199,133,.2);background:rgba(91,69,30,.16);border-radius:11px;padding:10px;color:#decfac;font-size:.73rem;margin-top:10px}
 .loading{padding:34px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);text-align:center}
 .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#0d1b2b;color:white}.leaflet-popup-content{margin:11px 12px}.leaflet-popup-content a{color:#bcd5f2}
-@media(max-width:1050px){.workspace{grid-template-columns:1fr}.mapcard{position:relative;top:0}#map{height:560px;min-height:0}.kpis{grid-template-columns:repeat(3,1fr)}.coverage{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:1050px){.workspace{grid-template-columns:1fr}.mapcard{position:relative;top:0}#map{height:560px;min-height:0}.kpis{grid-template-columns:repeat(3,1fr)}.zonefacts{grid-template-columns:repeat(5,minmax(0,1fr))}.coverage{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:700px){.wrap{width:min(100% - 22px,1440px)}.links a{display:none}.live{display:none}.hero{padding-top:34px}.hero h1{font-size:3rem}.kpis{grid-template-columns:repeat(2,1fr)}.topgrid{grid-template-columns:1fr}.zonefacts{grid-template-columns:repeat(2,1fr)}.coverage{grid-template-columns:repeat(2,1fr)}#map{height:58vh}.drawer{padding:15px 14px 32px}.drawer h2{font-size:1.7rem}.scoregrid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -98,6 +98,7 @@ button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}
   <div class="guardrail"><b>ANTI-HYPE RULE</b><span>Les clusters initiaux ne sont pas des gagnants prédéfinis. ARGUS continue de scanner toute la Région et peut faire remonter une zone qui n’est pas dans la Watchlist. Un projet annoncé pèse beaucoup moins qu’un projet permis ou en chantier.</span></div>
   <div class="kpis">
     <div class="kpi"><span>Communes couvertes</span><strong id="kMunicipalities">19/19</strong></div>
+    <div class="kpi"><span>Quartiers officiels</span><strong id="kNeighborhoods">—</strong></div>
     <div class="kpi"><span>Zones renforcées</span><strong id="kZones">—</strong></div>
     <div class="kpi"><span>Urban Upside max</span><strong id="kUpside">—</strong></div>
     <div class="kpi"><span>Emerging areas</span><strong id="kEmerging">—</strong></div>
@@ -155,6 +156,13 @@ const sourceMap=()=>Object.fromEntries((payload?.sources||[]).map(s=>[s.id,s]));
 const pct=v=>Math.round(Number(v)||0);
 function riskLabel(v){v=Number(v)||0;return v<=40?'LOW':v<=60?'MEDIUM':'HIGH'}
 function priceText(z){const p=z.market?.askingPricePerM2;return p?Math.round(p).toLocaleString('fr-BE')+' €/m²':'N/D'}
+function momentumText(z){
+  const p=z.market?.priceMomentum||{};
+  if(p.oneYear!=null&&Number.isFinite(Number(p.oneYear)))return (Number(p.oneYear)>=0?'+':'')+Number(p.oneYear).toFixed(1).replace('.',',')+' % / 1 an';
+  if(p.threeYear!=null&&Number.isFinite(Number(p.threeYear)))return (Number(p.threeYear)>=0?'+':'')+Number(p.threeYear).toFixed(1).replace('.',',')+' % / 3 ans';
+  if(p.fiveYear!=null&&Number.isFinite(Number(p.fiveYear)))return (Number(p.fiveYear)>=0?'+':'')+Number(p.fiveYear).toFixed(1).replace('.',',')+' % / 5 ans';
+  return 'N/D';
+}
 function stageTone(stage){return {ANNOUNCED:20,PLANNED:40,APPROVED:60,PERMITTED:78,UNDER_CONSTRUCTION:90,DELIVERED:100}[stage]||0}
 function initMap(){
   if(map||!window.L)return;
@@ -192,7 +200,7 @@ function filtered(){
 function zoneCard(z,reference=false){
   const reasons=(z.reasons||[]).slice(0,3);
   return '<article class="zone '+(reference?'reference':'')+'"><div class="zonehead"><div><small>'+(reference?'EUROPEAN CORE':'CLUSTER '+esc(z.cluster))+'</small><h3>'+esc(z.name)+'</h3><div class="commune">'+esc((z.communes||[]).join(' · '))+'</div></div><div class="scorebox"><strong>'+pct(z.derived?.urbanUpside)+'</strong><span>URBAN UPSIDE</span></div></div>'+
-  '<div class="zonefacts"><div class="fact"><span>Prix indicatif</span><b>'+priceText(z)+'</b></div><div class="fact"><span>Project certainty</span><b>'+pct(z.derived?.executionConfidence)+'/100</b></div><div class="fact"><span>Risk</span><b>'+riskLabel(z.derived?.risk)+' · '+pct(z.derived?.risk)+'</b></div><div class="fact"><span>Horizon</span><b>'+esc(z.timeHorizon||'—')+'</b></div></div>'+
+  '<div class="zonefacts"><div class="fact"><span>Prix indicatif</span><b>'+priceText(z)+'</b></div><div class="fact"><span>Évolution récente</span><b>'+momentumText(z)+'</b></div><div class="fact"><span>Project certainty</span><b>'+pct(z.derived?.executionConfidence)+'/100</b></div><div class="fact"><span>Risk</span><b>'+riskLabel(z.derived?.risk)+' · '+pct(z.derived?.risk)+'</b></div><div class="fact"><span>Horizon</span><b>'+esc(z.timeHorizon||'—')+'</b></div></div>'+
   '<div class="reasons">'+reasons.map(r=>'<span>'+esc(r)+'</span>').join('')+'</div>'+
   '<div class="actions"><button class="main" onclick="openZone(\''+esc(z.id)+'\')">Analyse complète</button><button onclick="focusZone(\''+esc(z.id)+'\')">Voir sur la carte</button></div></article>';
 }
@@ -267,6 +275,7 @@ fetch('/api/strategic-brussels',{cache:'no-store'}).then(r=>r.json()).then(j=>{
   if(!j.ok)throw new Error(j.error||'API unavailable');
   payload=j;zones=j.zones||[];
   document.getElementById('kMunicipalities').textContent=(j.coverage?.municipalities||19)+'/19';
+  document.getElementById('kNeighborhoods').textContent=j.coverage?.neighborhoods?j.coverage.neighborhoods:'sync…';
   document.getElementById('kZones').textContent=j.coverage?.enhancedZones||0;
   document.getElementById('kUpside').textContent=Math.round(Math.max(...zones.filter(z=>z.status!=='REFERENCE_ONLY').map(z=>z.derived?.urbanUpside||0)))+'/100';
   document.getElementById('kEmerging').textContent=(j.emergingAreas||[]).length;
