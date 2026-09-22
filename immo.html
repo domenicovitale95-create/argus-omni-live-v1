@@ -369,7 +369,7 @@ body.show-theory-advanced .advanced-theory{display:block!important}
   <p class="lead">Le site est maintenant séparé en deux espaces très simples : <b>THÉORIE</b> pour apprendre ce qu'il faut savoir, et <b>PRATIQUE</b> pour préparer votre achat, scanner une annonce et décider quoi faire.</p>
   <div class="modehub">
    <button class="modechoice" data-view="theory"><small>01 · Théorie</small><b>Je veux comprendre</b><span>Budget, crédit, fiscalité, documents, types de biens, offre, compromis, acte et risques.</span></button>
-   <button class="modechoice active" data-view="practice"><small>02 · Pratique</small><b>Je veux passer à l'action</b><span>Plan personnalisé, scanner d'annonce, budget, parcours, score avant offre et checklist.</span></button>
+   <button class="modechoice active" data-view="practice"><small>02 · Pratique</small><b>Je veux passer à l'action</b><span>Plan personnalisé, scanner d'annonce, budget, parcours, score avant offre et liste de contrôle.</span></button>
   </div>
   <div data-zone="practice" id="practiceIntro">
   <div class="modebar">
@@ -390,12 +390,12 @@ body.show-theory-advanced .advanced-theory{display:block!important}
 
   <article class="start hidden" id="investStart">
    <p class="eyebrow">Mode investisseur</p><h2>Investissement : la priorité est le rendement net et la sécurité juridique.</h2>
-   <p>Pour un immeuble de rapport, ARGUS privilégie les unités reconnues urbanistiquement, les loyers prouvés, le cash-flow après charges et une vraie demande locative.</p>
+   <p>Pour un immeuble de rapport, ARGUS privilégie les unités reconnues urbanistiquement, les loyers prouvés, le flux net après charges et une vraie demande locative.</p>
    <div class="four">
     <div class="answer"><span>Où ?</span><b>Les 19 communes analysées · sélection par données</b></div>
     <div class="answer"><span>Quoi ?</span><b>2–4 unités reconnues</b></div>
     <div class="answer"><span>Rendement</span><b>Cible brute ≥ 6,5–7 % après négociation</b></div>
-    <div class="answer"><span>Stop</span><b>Urbanisme flou = pas d'offre</b></div>
+    <div class="answer"><span>Blocage</span><b>Urbanisme flou = pas d'offre</b></div>
    </div>
   </article>
 
@@ -485,7 +485,7 @@ body.show-theory-advanced .advanced-theory{display:block!important}
 
 <section class="section advanced-theory" id="types" data-zone="theory">
  <div class="wrap">
-  <div class="sectionhead"><div><p class="eyebrow">Type de bien</p><h2>ARGUS ne contrôle pas tous les biens de la même manière.</h2></div><p>Sélectionnez un type : la checklist et les risques changent immédiatement.</p></div>
+  <div class="sectionhead"><div><p class="eyebrow">Type de bien</p><h2>ARGUS ne contrôle pas tous les biens de la même manière.</h2></div><p>Sélectionnez un type : la liste de contrôle et les risques changent immédiatement.</p></div>
   <div class="typegrid">
    <button class="typebtn active" data-ptype="apartment"><b>🏢 Appartement</b><span>Copropriété, charges, fonds de réserve, PEB.</span></button>
    <button class="typebtn" data-ptype="house"><b>🏠 Maison</b><span>Toiture, structure, humidité, installations.</span></button>
@@ -502,7 +502,7 @@ body.show-theory-advanced .advanced-theory{display:block!important}
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Assistant personnalisé</p><h2>Répondez à 8 questions. ARGUS construit votre plan.</h2></div><p>Le résultat est volontairement prudent : il aide à préparer une recherche et un rendez-vous bancaire, pas à remplacer une décision de crédit.</p></div>
   <article class="panel wizard">
-   <div class="wizardtop"><div><h3>Votre situation</h3><p>Environ 2 minutes. Les réponses restent dans votre navigateur et servent uniquement à personnaliser le parcours.</p><span class="ioshint">Astuce GSM : les champs sont volontairement grands pour éviter le zoom automatique sur iPhone.</span></div><span class="wizardbadge">Pensé pour mobile</span></div>
+   <div class="wizardtop"><div><h3>Votre situation</h3><p>Environ 2 minutes. Les réponses restent dans votre navigateur et servent uniquement à personnaliser le parcours.</p><span class="ioshint">Astuce GSM : les champs sont volontairement grands pour éviter le zoom automatique sur iPhone.</span></div><span class="wizardbadge">Pensé pour téléphone</span></div>
    <div class="wizardgrid">
     <div class="field"><label>Votre projet</label><select id="wGoal"><option value="home">Premier achat — j'y habite</option><option value="mixed">J'y habite + je loue une partie</option><option value="invest">Investissement locatif</option></select></div>
     <div class="field"><label>Type de bien</label><select id="wType"><option value="apartment">Appartement</option><option value="house">Maison</option><option value="studio">Studio</option><option value="building">Immeuble de rapport</option><option value="new">Neuf / sur plan</option><option value="land">Terrain</option></select></div>
@@ -612,7 +612,7 @@ body.show-theory-advanced .advanced-theory{display:block!important}
     </div>
     <div class="intelgrid">
      <div class="intelbox"><span>Fiabilité du dossier</span><b id="dealConfidence">—</b><div class="confidencebar"><i id="dealConfidenceBar"></i></div></div>
-     <div class="intelbox"><span>Cash initial estimé</span><b id="dealCashNeed">—</b></div>
+     <div class="intelbox"><span>Trésorerie initiale estimée</span><b id="dealCashNeed">—</b></div>
      <div class="intelbox"><span>Compatibilité budget</span><b id="dealBudgetFit">—</b></div>
     </div>
     <div class="scanverdict" id="dealVerdict"><b id="dealVerdictTitle">—</b><span id="dealVerdictText">—</span></div>
@@ -648,7 +648,7 @@ body.show-theory-advanced .advanced-theory{display:block!important}
       </div>
      </div>
      <div class="marketpulse" id="brainMarketPulse">—</div>
-     <details class="brainmethod"><summary>Comment l’analyse ARGUS raisonne</summary><div>1. Vérifie les preuves. 2. Applique les STOP juridiques. 3. Estime valeur et marge. 4. Vérifie votre financement. 5. Mesure le risque technique. 6. Teste un scénario stressé. 7. Donne une seule prochaine action. Aucun score ne peut effacer un STOP.</div></details>
+     <details class="brainmethod"><summary>Comment l’analyse ARGUS raisonne</summary><div>1. Vérifie les preuves. 2. Applique les blocages juridiques. 3. Estime valeur et marge. 4. Vérifie votre financement. 5. Mesure le risque technique. 6. Teste un scénario stressé. 7. Donne une seule prochaine action. Aucun score ne peut effacer un blocage.</div></details>
     </div>
 
     <div class="typeguide" id="dealTypeGuide" style="margin-top:12px"></div>
@@ -664,7 +664,7 @@ body.show-theory-advanced .advanced-theory{display:block!important}
 
 <section class="section" id="parcours" data-zone="practice">
  <div class="wrap">
-  <div class="sectionhead"><div><p class="eyebrow">Le parcours complet</p><h2>Premier achat en 12 étapes.</h2></div><p>Chaque étape est fermée par défaut sur mobile. Ouvrez uniquement celle dont vous avez besoin. Cochez-la quand elle est terminée.</p></div>
+  <div class="sectionhead"><div><p class="eyebrow">Le parcours complet</p><h2>Premier achat en 12 étapes.</h2></div><p>Chaque étape est fermée par défaut sur téléphone. Ouvrez uniquement celle dont vous avez besoin. Cochez-la quand elle est terminée.</p></div>
 
   <div class="panel progressbox">
    <b>Votre progression</b>
@@ -858,7 +858,7 @@ body.show-theory-advanced .advanced-theory{display:block!important}
   <article class="panel readiness">
    <div class="readinessgrid">
     <div class="readinessitem"><span>Parcours terminé</span><b id="readyJourney">0/12</b></div>
-    <div class="readinessitem"><span>Checklist avant offre</span><b id="readyChecklist">0/14</b></div>
+    <div class="readinessitem"><span>Liste de contrôle avant offre</span><b id="readyListe de contrôle">0/14</b></div>
     <div class="readinessitem"><span>Score préparation</span><b id="offerScore">0/100</b></div>
    </div>
    <div class="offerbar"><i id="offerBar"></i></div>
@@ -869,7 +869,7 @@ body.show-theory-advanced .advanced-theory{display:block!important}
 
 <section class="section" id="check" data-zone="practice">
  <div class="wrap">
-  <div class="sectionhead"><div><p class="eyebrow">Checklist avant offre</p><h2>Si un point rouge reste inconnu, ne vous précipitez pas.</h2></div><p>Cette liste est volontairement simple à cocher sur téléphone pendant une visite ou juste avant une offre.</p></div>
+  <div class="sectionhead"><div><p class="eyebrow">Liste de contrôle avant offre</p><h2>Si un point rouge reste inconnu, ne vous précipitez pas.</h2></div><p>Cette liste est volontairement simple à cocher sur téléphone pendant une visite ou juste avant une offre.</p></div>
   <div class="grid2">
    <div class="panel" style="padding:18px"><div class="checks">
     <div class="check"><input type="checkbox" class="offercheck" id="oc1"><label for="oc1">Budget total calculé avec travaux et réserve.</label></div>
@@ -970,10 +970,10 @@ body.show-theory-advanced .advanced-theory{display:block!important}
  <div class="wrap">
   <div class="sectionhead"><div><p class="eyebrow">Sources intégrées</p><h2>La base documentaire ARGUS.</h2></div><p>Le site transforme les documents en parcours opérationnel; il ne remplace pas leur validation professionnelle.</p></div>
   <div class="grid3">
-   <article class="panel source"><b>Manuel premiers acheteurs — Belgique 2026</b><span>Budget, parcours, documents, visite, offre, compromis, fiscalité, travaux, erreurs et check-lists.</span></article>
-   <article class="panel source"><b>Guide CBC — Premier achat immobilier</b><span>Capacité de remboursement, crédit hypothécaire, taux, frais, demande de crédit et check-lists.</span></article>
+   <article class="panel source"><b>Manuel premiers acheteurs — Belgique 2026</b><span>Budget, parcours, documents, visite, offre, compromis, fiscalité, travaux, erreurs et listes de contrôle.</span></article>
+   <article class="panel source"><b>Guide CBC — Premier achat immobilier</b><span>Capacité de remboursement, crédit hypothécaire, taux, frais, demande de crédit et listes de contrôle.</span></article>
    <article class="panel source"><b>Guide expert immobilier Belgique 2026</b><span>Acheter/louer, coût total, contrôles, financement, investissement locatif et erreurs.</span></article>
-   <article class="panel source"><b>Manuel Ultime Immobilier Belgique 2026</b><span>Méthode complète, banques, crédits, travaux, négociation, scripts, check-lists et stress-tests.</span></article>
+   <article class="panel source"><b>Manuel Ultime Immobilier Belgique 2026</b><span>Méthode complète, banques, crédits, travaux, négociation, modèles de messages, listes de contrôle et tests de résistance.</span></article>
    <article class="panel source"><b>Dossier demande locative Bruxelles & Belgique 2026</b><span>Pression locative, communes, activité locative belge et lecture investisseur.</span></article>
    <article class="panel source"><b>Sources officielles citées dans les guides</b><span>Statbel, Notaire.be, SPF Finances, Bruxelles, Wallonie, Vlaanderen, autorités énergie et logement.</span></article>
   </div>
@@ -1281,7 +1281,7 @@ function runArgusBrain(ctx){
  if(hardStop){decision='BLOCAGE — risque non compensable';why='Un blocage juridique ou documentaire passe avant le prix et le rendement.';mode='BLOCAGE ABSOLU';}
  else if(notEnough){decision='DONNÉES D’ABORD — ne pas offrir';why='La valeur ou le revenu ne sont pas assez documentés pour justifier une offre.';mode='FIABILITÉ FAIBLE';}
  else if(ctx.budgetBlock){decision='PASSER POUR CE PROFIL';why='Le bien peut être bon, mais pas avec votre structure financière actuelle.';mode='COMPATIBILITÉ PERSONNELLE';}
- else if(overall>=82 && (ctx.investment?stressValue>=0:(stressValue!=null&&stressValue<=50))){decision='PRIORITÉ — approfondir puis offrir';why='Les couches prix, risques, financement et stress-test restent cohérentes.';mode='VALIDER PAR LES PREUVES';}
+ else if(overall>=82 && (ctx.investment?stressValue>=0:(stressValue!=null&&stressValue<=50))){decision='PRIORITÉ — approfondir puis offrir';why='Les couches prix, risques, financement et test de résistance restent cohérentes.';mode='VALIDER PAR LES PREUVES';}
  else if(overall>=65){decision='NÉGOCIER / SÉCURISER';why='Le dossier est intéressant mais une ou plusieurs marges doivent être améliorées.';mode='NÉGOCIER';}
  else {decision='PASSER / ATTENDRE';why='La marge de sécurité n’est pas suffisante face aux risques actuels.';mode='MARGE D’ABORD';}
 
@@ -1562,7 +1562,7 @@ function updateOfferReadiness(){
  const criticalOk=critical.every(id=>{const el=$(id);return !el||el.checked});
  if(!criticalOk)score=Math.min(score,69);
  if($('readyJourney'))$('readyJourney').textContent=journeyDone+'/'+checks.length;
- if($('readyChecklist'))$('readyChecklist').textContent=offerDone+'/'+offerChecks.length;
+ if($('readyListe de contrôle'))$('readyListe de contrôle').textContent=offerDone+'/'+offerChecks.length;
  if($('offerScore'))$('offerScore').textContent=score+'/100';
  if($('offerBar'))$('offerBar').style.width=score+'%';
  const t=$('offerStatusTitle'),s=$('offerStatusText');
