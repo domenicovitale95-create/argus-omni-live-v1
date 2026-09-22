@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-22T10:04:35.767Z",
+  "updatedAt": "2026-09-22T10:07:17.672Z",
   "status": "LIVE",
   "source": {
     "name": "Monitoring des Quartiers — IBSA / perspective.brussels / UrbIS",
     "dataset": "quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc",
     "referenceUrl": "https://opendata.brussels.be/explore/dataset/quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc/",
-    "wfsUrl": "https://geoservices-urbis.irisnet.be/geoserver/urbisvector/wfs?version=2.0.0&request=GetFeature&typename=urbisvector:MonitoringDistricts&outputformat=json",
+    "wfsUrl": "https://geoservices-urbis.irisnet.be/geoserver/urbisvector/wfs?version=2.0.0&request=GetFeature&typename=urbisvector:MonitoringDistricts&outputformat=json&srsName=EPSG:4326",
     "fallbackGeojsonUrl": "https://opendata.brussels.be/api/explore/v2.1/catalog/datasets/quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc/exports/geojson",
     "liveSource": "urbis-wfs",
     "modified": "2026-07-28",
@@ -20,8 +20,8 @@
       "name": "ALTITUDE 100",
       "nameNl": "HOOGTE 100",
       "center": {
-        "lng": 147659.8047,
-        "lat": 167283.22269999998
+        "lng": 4.33554472,
+        "lat": 50.815984295
       },
       "areaM2": 457811.396100697
     },
@@ -30,8 +30,8 @@
       "name": "ANDERLECHT CENTRE - WAYEZ",
       "nameNl": "ANDERLECHT CENTRUM - WAYEZ",
       "center": {
-        "lng": 145643.86729999998,
-        "lat": 169712.50400000002
+        "lng": 4.306911435,
+        "lat": 50.83781236
       },
       "areaM2": 730286.175345802
     },
@@ -40,8 +40,8 @@
       "name": "ANNEESSENS",
       "nameNl": "ANNEESSENS",
       "center": {
-        "lng": 148056.29725,
-        "lat": 170457.9696
+        "lng": 4.34115212,
+        "lat": 50.844524684999996
       },
       "areaM2": 442457.734139025
     },
@@ -50,8 +50,8 @@
       "name": "AUDERGHEM CENTRE",
       "nameNl": "OUDERGEM CENTRUM",
       "center": {
-        "lng": 154307.9922,
-        "lat": 167646.78590000002
+        "lng": 4.429880555,
+        "lat": 50.81924123
       },
       "areaM2": 804446.295137929
     },
@@ -60,8 +60,8 @@
       "name": "AVENUE LEOPOLD III",
       "nameNl": "LEOPOLD III LAAN",
       "center": {
-        "lng": 152923.4378,
-        "lat": 173170.0747
+        "lng": 4.4102831600000005,
+        "lat": 50.868902065
       },
       "areaM2": 1233384.33072446
     },
@@ -70,8 +70,8 @@
       "name": "BAS FOREST",
       "nameNl": "LAAG VORST",
       "center": {
-        "lng": 147159.5814,
-        "lat": 168282.8633
+        "lng": 4.32843935,
+        "lat": 50.824967650000005
       },
       "areaM2": 791975.328179689
     },
@@ -80,8 +80,8 @@
       "name": "BASILIQUE",
       "nameNl": "BASILIEK",
       "center": {
-        "lng": 146913.31540000002,
-        "lat": 172882.83165
+        "lng": 4.32490501,
+        "lat": 50.86631869
       },
       "areaM2": 804132.861943193
     },
@@ -90,8 +90,8 @@
       "name": "BEGUINAGE - DIXMUDE",
       "nameNl": "BEGIJNHOF - DIKSMUIDE",
       "center": {
-        "lng": 148663.7549,
-        "lat": 171605.0221
+        "lng": 4.349774705,
+        "lat": 50.85483793
       },
       "areaM2": 380783.267925577
     },
@@ -100,8 +100,8 @@
       "name": "BERCHEM SAINTE-AGATHE CENTRE",
       "nameNl": "SINT-AGATHA BERCHEM CENTRUM",
       "center": {
-        "lng": 144754.37780000002,
-        "lat": 172957.48804999999
+        "lng": 4.29423442,
+        "lat": 50.866973675
       },
       "areaM2": 1788248.11429158
     },
@@ -110,8 +110,8 @@
       "name": "BERCKMANS - HOTEL DES MONNAIES",
       "nameNl": "BERCKMANS - MUNTHOF",
       "center": {
-        "lng": 148747.8398,
-        "lat": 168926.57275
+        "lng": 4.350977585,
+        "lat": 50.83076101
       },
       "areaM2": 443425.031345468
     },
@@ -120,8 +120,8 @@
       "name": "BIZET - ROUE - CERIA",
       "nameNl": "BIZET - RAD - COOVI",
       "center": {
-        "lng": 144814.4142,
-        "lat": 167662.727
+        "lng": 4.295157704999999,
+        "lat": 50.819379675
       },
       "areaM2": 1787142.19871732
     },
@@ -130,8 +130,8 @@
       "name": "BOIS DE LA CAMBRE",
       "nameNl": "TER KAMERENBOS",
       "center": {
-        "lng": 150704.9829,
-        "lat": 166240.68835
+        "lng": 4.378751375,
+        "lat": 50.80661558
       },
       "areaM2": 1253030.31082054
     },
@@ -140,8 +140,8 @@
       "name": "BOIS DU LAARBEEK - POELBOS",
       "nameNl": "LAARBEEKBOS - POELBOS",
       "center": {
-        "lng": 145377.95585,
-        "lat": 174678.02215
+        "lng": 4.30307908,
+        "lat": 50.88244273
       },
       "areaM2": 1152367.40632875
     },
@@ -150,8 +150,8 @@
       "name": "BOITSFORT CENTRE",
       "nameNl": "BOSVOORDE CENTRUM",
       "center": {
-        "lng": 153611.125,
-        "lat": 165247.0104
+        "lng": 4.419976275,
+        "lat": 50.797669025000005
       },
       "areaM2": 1633847.71372256
     },
@@ -160,8 +160,8 @@
       "name": "BON AIR",
       "nameNl": "GOEDE LUCHT",
       "center": {
-        "lng": 143577.99345,
-        "lat": 169498.1667
+        "lng": 4.27758198,
+        "lat": 50.835864154999996
       },
       "areaM2": 300719.045366283
     },
@@ -170,8 +170,8 @@
       "name": "BOONDAEL",
       "nameNl": "BOONDAAL",
       "center": {
-        "lng": 151382.25780000002,
-        "lat": 166290.20275
+        "lng": 4.388364215,
+        "lat": 50.8070604
       },
       "areaM2": 1457472.70593421
     },
@@ -180,8 +180,8 @@
       "name": "BOSNIE",
       "nameNl": "BOSNIE",
       "center": {
-        "lng": 147854.0626,
-        "lat": 168626.21730000002
+        "lng": 4.338293139999999,
+        "lat": 50.828057615000006
       },
       "areaM2": 201627.060092603
     },
@@ -190,8 +190,8 @@
       "name": "BOTANIQUE",
       "nameNl": "KRUIDTUIN",
       "center": {
-        "lng": 149624.85045,
-        "lat": 171588.4646
+        "lng": 4.36342456,
+        "lat": 50.85469073
       },
       "areaM2": 63920.4124487594
     },
@@ -200,8 +200,8 @@
       "name": "BOULEVARD DE LA WOLUWE",
       "nameNl": "WOLUWELAAN",
       "center": {
-        "lng": 154753.63319999998,
-        "lat": 169720.918
+        "lng": 4.436238595,
+        "lat": 50.837884675
       },
       "areaM2": 1062080.34450854
     },
@@ -210,8 +210,8 @@
       "name": "BRUGMANN - LEPOUTRE",
       "nameNl": "BRUGMANN - LEPOUTRE",
       "center": {
-        "lng": 149192.4376,
-        "lat": 167620.34230000002
+        "lng": 4.35729087,
+        "lat": 50.819018975
       },
       "areaM2": 1287886.13244836
     },
@@ -220,8 +220,8 @@
       "name": "BUFFON",
       "nameNl": "BUFFON",
       "center": {
-        "lng": 145235.2735,
-        "lat": 170164.63679999998
+        "lng": 4.301108335,
+        "lat": 50.84187051
       },
       "areaM2": 456493.187968008
     },
@@ -230,8 +230,8 @@
       "name": "CHANT D'OISEAU",
       "nameNl": "VOGELZANG",
       "center": {
-        "lng": 153329.5234,
-        "lat": 168568.043
+        "lng": 4.41600584,
+        "lat": 50.827526715000005
       },
       "areaM2": 1568991.83877595
     },
@@ -240,8 +240,8 @@
       "name": "CHASSE",
       "nameNl": "JACHT",
       "center": {
-        "lng": 151552.53590000002,
-        "lat": 168671.5018
+        "lng": 4.3907876649999995,
+        "lat": 50.82846721
       },
       "areaM2": 1060427.60522765
     },
@@ -250,8 +250,8 @@
       "name": "CHATELAIN",
       "nameNl": "KASTELEIN",
       "center": {
-        "lng": 149426.7579,
-        "lat": 168651.01965
+        "lng": 4.3606163549999994,
+        "lat": 50.828284255
       },
       "areaM2": 659812.801802849
     },
@@ -260,8 +260,8 @@
       "name": "CHAUSSEE DE HAECHT",
       "nameNl": "HAACHTSE STEENWEG",
       "center": {
-        "lng": 150307.0001,
-        "lat": 172106.3634
+        "lng": 4.373113405,
+        "lat": 50.85934638
       },
       "areaM2": 712676.550114663
     },
@@ -270,8 +270,8 @@
       "name": "CHAUSSEE DE WAVRE - SAINT-JULIEN",
       "nameNl": "WAVERSESTEENWEG - SINT-JULIAAN",
       "center": {
-        "lng": 152992.62195,
-        "lat": 167976.09769999998
+        "lng": 4.4112221599999994,
+        "lat": 50.822209580000006
       },
       "areaM2": 1376765.18557555
     },
@@ -280,8 +280,8 @@
       "name": "CHURCHILL",
       "nameNl": "CHURCHILL",
       "center": {
-        "lng": 149128.9918,
-        "lat": 166745.0243
+        "lng": 4.35639437,
+        "lat": 50.8111497
       },
       "areaM2": 1102464.94338201
     },
@@ -290,8 +290,8 @@
       "name": "CIMETIERE D'IXELLES",
       "nameNl": "KERKHOF ELSENE",
       "center": {
-        "lng": 151735.94975,
-        "lat": 167246.16019999998
+        "lng": 4.39338467,
+        "lat": 50.81565284
       },
       "areaM2": 112266.798861195
     },
@@ -300,8 +300,8 @@
       "name": "CIMETIERE DE BRUXELLES",
       "nameNl": "KERKHOF BRUSSEL",
       "center": {
-        "lng": 153436.258,
-        "lat": 173075.28519999998
+        "lng": 4.417570120000001,
+        "lat": 50.86804654
       },
       "areaM2": 490633.171007811
     },
@@ -310,8 +310,8 @@
       "name": "CIMETIERE SAINT-GILLES",
       "nameNl": "KERKHOF SINT-GILLIS",
       "center": {
-        "lng": 147435.9766,
-        "lat": 163186.7775
+        "lng": 4.332396709999999,
+        "lat": 50.77915797
       },
       "areaM2": 238249.517654017
     },
@@ -320,8 +320,8 @@
       "name": "CINQUANTENAIRE",
       "nameNl": "JUBELPARK",
       "center": {
-        "lng": 151593.1954,
-        "lat": 170064.67680000002
+        "lng": 4.39137123,
+        "lat": 50.840990555000005
       },
       "areaM2": 384381.379940232
     },
@@ -330,8 +330,8 @@
       "name": "COLIGNON",
       "nameNl": "COLIGNON",
       "center": {
-        "lng": 150622.8907,
-        "lat": 173198.77765
+        "lng": 4.377601375,
+        "lat": 50.869166265000004
       },
       "areaM2": 776950.684174197
     },
@@ -340,8 +340,8 @@
       "name": "CONSCIENCE",
       "nameNl": "CONSCIENCE",
       "center": {
-        "lng": 152362.76645,
-        "lat": 173463.07984999998
+        "lng": 4.402322915,
+        "lat": 50.87153689
       },
       "areaM2": 490054.58396963
     },
@@ -350,8 +350,8 @@
       "name": "CUREGHEM BARA",
       "nameNl": "KUREGEM BARA",
       "center": {
-        "lng": 147450.8114,
-        "lat": 169903.57624999998
+        "lng": 4.332560775,
+        "lat": 50.8395399
       },
       "areaM2": 591459.746893704
     },
@@ -360,8 +360,8 @@
       "name": "CUREGHEM ROSEE",
       "nameNl": "KUREGEM DAUW",
       "center": {
-        "lng": 147177.01305,
-        "lat": 170489.61145
+        "lng": 4.328670555,
+        "lat": 50.844805640000004
       },
       "areaM2": 683460.593146128
     },
@@ -370,8 +370,8 @@
       "name": "CUREGHEM VETERINAIRE",
       "nameNl": "KUREGEM VEEARTSENIJ",
       "center": {
-        "lng": 146942.9581,
-        "lat": 169400.66355
+        "lng": 4.325352795000001,
+        "lat": 50.835015625
       },
       "areaM2": 670439.118807979
     },
@@ -380,8 +380,8 @@
       "name": "DAILLY",
       "nameNl": "DAILLY",
       "center": {
-        "lng": 151236.0748,
-        "lat": 171536.31040000002
+        "lng": 4.386306964999999,
+        "lat": 50.854220345
       },
       "areaM2": 882456.808511444
     },
@@ -390,8 +390,8 @@
       "name": "DANSAERT",
       "nameNl": "DANSAERT",
       "center": {
-        "lng": 148333.91425,
-        "lat": 171157.19929999998
+        "lng": 4.345093315,
+        "lat": 50.85081176
       },
       "areaM2": 532728.351185418
     },
@@ -400,8 +400,8 @@
       "name": "DELTA",
       "nameNl": "DELTA",
       "center": {
-        "lng": 152382.75225000002,
-        "lat": 167269.58755
+        "lng": 4.40256326,
+        "lat": 50.815861595
       },
       "areaM2": 254261.094090851
     },
@@ -410,8 +410,8 @@
       "name": "DIEWEG",
       "nameNl": "DIEWEG",
       "center": {
-        "lng": 148584.7188,
-        "lat": 164654.9337
+        "lng": 4.34867909,
+        "lat": 50.792358205
       },
       "areaM2": 1195246.25728793
     },
@@ -420,8 +420,8 @@
       "name": "DOMAINE ROYAL LAEKEN",
       "nameNl": "KONINKLIJK DOMEIN LAKEN",
       "center": {
-        "lng": 149457.0782,
-        "lat": 174966.62900000002
+        "lng": 4.36103692,
+        "lat": 50.885058459999996
       },
       "areaM2": 2790259.92685357
     },
@@ -430,8 +430,8 @@
       "name": "DRIES",
       "nameNl": "DRIES",
       "center": {
-        "lng": 152200.49219999998,
-        "lat": 165676.4181
+        "lng": 4.399962205,
+        "lat": 50.801538395
       },
       "areaM2": 1033797.81302449
     },
@@ -440,8 +440,8 @@
       "name": "DUCHESSE",
       "nameNl": "HERTOGIN",
       "center": {
-        "lng": 147122.9965,
-        "lat": 170960.91735
+        "lng": 4.327899395,
+        "lat": 50.849042835000006
       },
       "areaM2": 371754.088255228
     },
@@ -450,8 +450,8 @@
       "name": "ETANGS D'IXELLES",
       "nameNl": "VIJVERS VAN ELSENE",
       "center": {
-        "lng": 150275.04950000002,
-        "lat": 167808.7539
+        "lng": 4.372654245,
+        "lat": 50.820712775
       },
       "areaM2": 831273.325251472
     },
@@ -460,8 +460,8 @@
       "name": "FLAGEY - MALIBRAN",
       "nameNl": "FLAGEY - MALIBRAN",
       "center": {
-        "lng": 150430.1128,
-        "lat": 168935.8712
+        "lng": 4.374856830000001,
+        "lat": 50.830845115
       },
       "areaM2": 652736.377838367
     },
@@ -470,8 +470,8 @@
       "name": "FORET DE SOIGNES",
       "nameNl": "ZONIENWOUD",
       "center": {
-        "lng": 154358.16735,
-        "lat": 164812.418
+        "lng": 4.43056462,
+        "lat": 50.79375248
       },
       "areaM2": 17875860.7108116
     },
@@ -480,8 +480,8 @@
       "name": "FORT JACO",
       "nameNl": "FORT JACO",
       "center": {
-        "lng": 150804.74115,
-        "lat": 164737.0431
+        "lng": 4.380163255,
+        "lat": 50.793099045
       },
       "areaM2": 1287130.09484074
     },
@@ -490,8 +490,8 @@
       "name": "GANSHOREN CENTRE",
       "nameNl": "GANSHOREN CENTRUM",
       "center": {
-        "lng": 145767.51395,
-        "lat": 173689.32085000002
+        "lng": 4.30862117,
+        "lat": 50.87356452
       },
       "areaM2": 853129.305171802
     },
@@ -500,8 +500,8 @@
       "name": "GARE DE L'OUEST",
       "nameNl": "WESTSTATION",
       "center": {
-        "lng": 147141.2735,
-        "lat": 171399.5778
+        "lng": 4.32815608,
+        "lat": 50.85298542
       },
       "areaM2": 516824.571243781
     },
@@ -510,8 +510,8 @@
       "name": "GARE DE SCHAERBEEK",
       "nameNl": "SCHAARBEEK STATION",
       "center": {
-        "lng": 150841.97149999999,
-        "lat": 173961.85375
+        "lng": 4.38071538,
+        "lat": 50.8760256
       },
       "areaM2": 373794.266421826
     },
@@ -520,8 +520,8 @@
       "name": "GARE DU MIDI",
       "nameNl": "ZUIDSTATION",
       "center": {
-        "lng": 147516.7363,
-        "lat": 169353.86225
+        "lng": 4.3335013,
+        "lat": 50.834598135
       },
       "areaM2": 247497.123955997
     },
@@ -530,8 +530,8 @@
       "name": "GARE JOSAPHAT",
       "nameNl": "JOSAPHAT STATION",
       "center": {
-        "lng": 152199.31459999998,
-        "lat": 172263.00415
+        "lng": 4.399989225000001,
+        "lat": 50.860750679999995
       },
       "areaM2": 605182.66545152
     },
@@ -540,8 +540,8 @@
       "name": "GEORGES HENRI",
       "nameNl": "GEORGES HENRI",
       "center": {
-        "lng": 153151.1876,
-        "lat": 170462.9071
+        "lng": 4.41349866,
+        "lat": 50.844564975
       },
       "areaM2": 1155435.62182054
     },
@@ -550,8 +550,8 @@
       "name": "GLOBE",
       "nameNl": "GLOBE",
       "center": {
-        "lng": 147767.8204,
-        "lat": 165827.977
+        "lng": 4.337086555,
+        "lat": 50.8029022
       },
       "areaM2": 1457097.38566271
     },
@@ -560,8 +560,8 @@
       "name": "GRAND PLACE",
       "nameNl": "GROTE MARKT",
       "center": {
-        "lng": 148886.3985,
-        "lat": 170699.0509
+        "lng": 4.35293967,
+        "lat": 50.846694365
       },
       "areaM2": 386644.641476385
     },
@@ -570,8 +570,8 @@
       "name": "GRIBAUMONT",
       "nameNl": "GRIBAUMONT",
       "center": {
-        "lng": 153524.90655,
-        "lat": 169819.1837
+        "lng": 4.418796305,
+        "lat": 50.838773085
       },
       "areaM2": 1024463.20168724
     },
@@ -580,8 +580,8 @@
       "name": "HAREN",
       "nameNl": "HAREN",
       "center": {
-        "lng": 153515.53895000002,
-        "lat": 175912.46755
+        "lng": 4.418718235,
+        "lat": 50.893552915
       },
       "areaM2": 1937563.01207175
     },
@@ -590,8 +590,8 @@
       "name": "HAUT SAINT-GILLES",
       "nameNl": "HOOG SINT-GILLIS",
       "center": {
-        "lng": 148447.47720000002,
-        "lat": 168384.33234999998
+        "lng": 4.346717115000001,
+        "lat": 50.825885755
       },
       "areaM2": 763524.441162224
     },
@@ -600,8 +600,8 @@
       "name": "HEEMBEEK",
       "nameNl": "HEEMBEEK",
       "center": {
-        "lng": 151170.6172,
-        "lat": 176143.19400000002
+        "lng": 4.38539362,
+        "lat": 50.895634560000005
       },
       "areaM2": 1935572.11577609
     },
@@ -610,8 +610,8 @@
       "name": "HELMET",
       "nameNl": "HELMET",
       "center": {
-        "lng": 151305.30544999999,
-        "lat": 173850.7355
+        "lng": 4.38729701,
+        "lat": 50.87502596
       },
       "areaM2": 711717.360971905
     },
@@ -620,8 +620,8 @@
       "name": "HEYMBOSCH - AZ-JETTE",
       "nameNl": "HEYMBOSCH - AZ-JETTE",
       "center": {
-        "lng": 146134.2978,
-        "lat": 175140.675
+        "lng": 4.313813725,
+        "lat": 50.886610835
       },
       "areaM2": 1373485.31372383
     },
@@ -630,8 +630,8 @@
       "name": "HEYSEL",
       "nameNl": "HEIZEL",
       "center": {
-        "lng": 147744.08875,
-        "lat": 175935.98555
+        "lng": 4.33668866,
+        "lat": 50.893768195
       },
       "areaM2": 2794371.54602681
     },
@@ -640,8 +640,8 @@
       "name": "HOPITAL ETTERBEEK - IXELLES",
       "nameNl": "HOSPITAAL ETTERBEEK - ELSENE",
       "center": {
-        "lng": 150865.38225,
-        "lat": 168086.7051
+        "lng": 4.381033565,
+        "lat": 50.823210939999996
       },
       "areaM2": 680186.794021856
     },
@@ -650,8 +650,8 @@
       "name": "HOPITAL FRANCAIS",
       "nameNl": "FRANS HOSPITAAL",
       "center": {
-        "lng": 145954.55585,
-        "lat": 172638.6642
+        "lng": 4.31128989,
+        "lat": 50.86411733
       },
       "areaM2": 800888.553566888
     },
@@ -660,8 +660,8 @@
       "name": "HOUBA",
       "nameNl": "HOUBA",
       "center": {
-        "lng": 148129.4577,
-        "lat": 175034.9962
+        "lng": 4.34217114,
+        "lat": 50.885670525
       },
       "areaM2": 1204344.59252201
     },
@@ -670,8 +670,8 @@
       "name": "INDUSTRIE BIRMINGHAM",
       "nameNl": "INDUSTRIE BIRMINGHAM",
       "center": {
-        "lng": 146681.9797,
-        "lat": 170256.02779999998
+        "lng": 4.32164273,
+        "lat": 50.842702630000005
       },
       "areaM2": 253559.700210645
     },
@@ -680,8 +680,8 @@
       "name": "INDUSTRIE NORD",
       "nameNl": "INDUSTRIE NOORD",
       "center": {
-        "lng": 151564.23450000002,
-        "lat": 175770.97470000002
+        "lng": 4.390991125,
+        "lat": 50.892286545
       },
       "areaM2": 6661371.47718253
     },
@@ -690,8 +690,8 @@
       "name": "INDUSTRIE OTAN",
       "nameNl": "INDUSTRIE NATO",
       "center": {
-        "lng": 153793.8743,
-        "lat": 174441.44150000002
+        "lng": 4.422660935,
+        "lat": 50.880326984999996
       },
       "areaM2": 2441752.39125656
     },
@@ -700,8 +700,8 @@
       "name": "INDUSTRIE SUD",
       "nameNl": "INDUSTRIE ZUID",
       "center": {
-        "lng": 145996.01965,
-        "lat": 167443.4848
+        "lng": 4.3119319350000005,
+        "lat": 50.817417375
       },
       "areaM2": 3895481.7119933
     },
@@ -710,8 +710,8 @@
       "name": "JETTE CENTRE",
       "nameNl": "JETTE CENTRUM",
       "center": {
-        "lng": 146877.9688,
-        "lat": 174068.4805
+        "lng": 4.32439072,
+        "lat": 50.876976225
       },
       "areaM2": 966043.99153946
     },
@@ -720,8 +720,8 @@
       "name": "JOSAPHAT",
       "nameNl": "JOSAPHAT",
       "center": {
-        "lng": 151366.9767,
-        "lat": 172082.60570000001
+        "lng": 4.388166455,
+        "lat": 50.859130685
       },
       "areaM2": 442889.663138707
     },
@@ -730,8 +730,8 @@
       "name": "JOURDAN",
       "nameNl": "JOURDAN",
       "center": {
-        "lng": 150900.9375,
-        "lat": 169395.83505
+        "lng": 4.381541125,
+        "lat": 50.83497955
       },
       "areaM2": 544162.91797461
     },
@@ -740,8 +740,8 @@
       "name": "KALEVOET - MOENSBERG",
       "nameNl": "KALEVOET - MOENSBERG",
       "center": {
-        "lng": 146930.6924,
-        "lat": 164214.26059999998
+        "lng": 4.3252223,
+        "lat": 50.788393760000005
       },
       "areaM2": 2089528.67325329
     },
@@ -750,8 +750,8 @@
       "name": "KAPELLEVELD",
       "nameNl": "KAPELLEVELD",
       "center": {
-        "lng": 155859.06215,
-        "lat": 170864.5488
+        "lng": 4.45193915,
+        "lat": 50.848159640000006
       },
       "areaM2": 1901990.78648285
     },
@@ -760,8 +760,8 @@
       "name": "KARREVELD",
       "nameNl": "KARREVELD",
       "center": {
-        "lng": 146470.5416,
-        "lat": 171697.2314
+        "lng": 4.318623575,
+        "lat": 50.855659305
       },
       "areaM2": 787319.619627857
     },
@@ -770,8 +770,8 @@
       "name": "KOEKELBERG",
       "nameNl": "KOEKELBERG",
       "center": {
-        "lng": 147384.64,
-        "lat": 172173.94185
+        "lng": 4.3316071,
+        "lat": 50.859947415
       },
       "areaM2": 351568.664941767
     },
@@ -780,8 +780,8 @@
       "name": "KORENBEEK",
       "nameNl": "KORENBEEK",
       "center": {
-        "lng": 145211.03470000002,
-        "lat": 171961.14795
+        "lng": 4.3007370599999994,
+        "lat": 50.858023125
       },
       "areaM2": 757095.900586797
     },
@@ -790,8 +790,8 @@
       "name": "KRIEKENPUT - HOMBORCH - VERREWINKEL",
       "nameNl": "KRIEKENPUT - HOMBORCH - VERREWINKEL",
       "center": {
-        "lng": 148610.1172,
-        "lat": 163361.68615000002
+        "lng": 4.3490437150000005,
+        "lat": 50.780733780000006
       },
       "areaM2": 1902167.32093161
     },
@@ -800,8 +800,8 @@
       "name": "LOUISE - LONGUE HAIE",
       "nameNl": "LOUIZA - LANGEHAAG",
       "center": {
-        "lng": 149615.4519,
-        "lat": 168889.91955
+        "lng": 4.363292835,
+        "lat": 50.83043202
       },
       "areaM2": 431291.684322149
     },
@@ -810,8 +810,8 @@
       "name": "MACHTENS",
       "nameNl": "MACHTENS",
       "center": {
-        "lng": 145560.37715000001,
-        "lat": 171284.26559999998
+        "lng": 4.305709515,
+        "lat": 50.85193675
       },
       "areaM2": 1403384.26919809
     },
@@ -820,8 +820,8 @@
       "name": "MAROLLES",
       "nameNl": "MAROLLEN",
       "center": {
-        "lng": 148542.6805,
-        "lat": 169684.10725
+        "lng": 4.34806309,
+        "lat": 50.837569925
       },
       "areaM2": 644386.93234853
     },
@@ -830,8 +830,8 @@
       "name": "MARTYRS",
       "nameNl": "MARTELAARS",
       "center": {
-        "lng": 149236.32880000002,
-        "lat": 171316.04379999998
+        "lng": 4.35790754,
+        "lat": 50.85224136
       },
       "areaM2": 383526.143335188
     },
@@ -840,8 +840,8 @@
       "name": "MATONGE",
       "nameNl": "MATONGE",
       "center": {
-        "lng": 149833.68745,
-        "lat": 169419.71725
+        "lng": 4.366390985,
+        "lat": 50.835194815
       },
       "areaM2": 486244.085719764
     },
@@ -850,8 +850,8 @@
       "name": "MOLENBEEK HISTORIQUE",
       "nameNl": "HISTORISCH MOLENBEEK",
       "center": {
-        "lng": 147869.15965,
-        "lat": 171722.0893
+        "lng": 4.33848988,
+        "lat": 50.855887505
       },
       "areaM2": 722954.750568012
     },
@@ -860,8 +860,8 @@
       "name": "MOLIERE - LONGCHAMP",
       "nameNl": "MOLIERE - LONGCHAMP",
       "center": {
-        "lng": 148234.1101,
-        "lat": 167303.9358
+        "lng": 4.34369435,
+        "lat": 50.81617204
       },
       "areaM2": 544339.712360061
     },
@@ -870,8 +870,8 @@
       "name": "MONTJOIE - LANGEVELD",
       "nameNl": "MONTJOIE - LANGEVELD",
       "center": {
-        "lng": 149170.7782,
-        "lat": 166300.8946
+        "lng": 4.35698844,
+        "lat": 50.807155985
       },
       "areaM2": 1119687.54482364
     },
@@ -880,8 +880,8 @@
       "name": "MOORTEBEEK - PETERBOS",
       "nameNl": "MOORTEBEEK - PETERBOS",
       "center": {
-        "lng": 144474.0649,
-        "lat": 170583.9152
+        "lng": 4.29029372,
+        "lat": 50.845633995
       },
       "areaM2": 1095416.95968908
     },
@@ -890,8 +890,8 @@
       "name": "MUTSAARD",
       "nameNl": "MUTSAARD",
       "center": {
-        "lng": 149505.41210000002,
-        "lat": 176080.76189999998
+        "lng": 4.36172086,
+        "lat": 50.895073
       },
       "areaM2": 1387627.40991961
     },
@@ -900,8 +900,8 @@
       "name": "NEERPEDE",
       "nameNl": "NEERPEDE",
       "center": {
-        "lng": 142607.5435,
-        "lat": 168394.71575
+        "lng": 4.2638405299999995,
+        "lat": 50.82593567
       },
       "areaM2": 3952267.49990536
     },
@@ -910,8 +910,8 @@
       "name": "NOTRE-DAME AUX NEIGES",
       "nameNl": "ONZE LIEVE VROUW TER SNEEUW",
       "center": {
-        "lng": 149748.9509,
-        "lat": 171141.25565
+        "lng": 4.365187325,
+        "lat": 50.850670595
       },
       "areaM2": 299945.310970578
     },
@@ -920,8 +920,8 @@
       "name": "OBSERVATOIRE",
       "nameNl": "OBSERVATORIUM",
       "center": {
-        "lng": 149344.96879999997,
-        "lat": 165490.8675
+        "lng": 4.35945881,
+        "lat": 50.799876025
       },
       "areaM2": 1986632.67380561
     },
@@ -930,8 +930,8 @@
       "name": "PADUWA",
       "nameNl": "PADUWA",
       "center": {
-        "lng": 153303.471,
-        "lat": 172066.0486
+        "lng": 4.4156745100000006,
+        "lat": 50.858973545
       },
       "areaM2": 1154477.32495065
     },
@@ -940,8 +940,8 @@
       "name": "PAIX",
       "nameNl": "VREDE",
       "center": {
-        "lng": 152129.46665000002,
-        "lat": 174193.8732
+        "lng": 4.399010564999999,
+        "lat": 50.87810776
       },
       "areaM2": 1203234.21934994
     },
@@ -950,8 +950,8 @@
       "name": "PARC ASTRID",
       "nameNl": "ASTRIDPARK",
       "center": {
-        "lng": 145029.1797,
-        "lat": 169179.2774
+        "lng": 4.298190375000001,
+        "lat": 50.833012585
       },
       "areaM2": 164946.909979322
     },
@@ -960,8 +960,8 @@
       "name": "PARC BAUDOUIN - DIELEGEMBOS",
       "nameNl": "BOUDEWIJNPARK - DIELEGEMBOS",
       "center": {
-        "lng": 147114.5157,
-        "lat": 174901.3555
+        "lng": 4.327747305,
+        "lat": 50.88446528
       },
       "areaM2": 474222.617883803
     },
@@ -970,8 +970,8 @@
       "name": "PARC DE LA WOLUWE",
       "nameNl": "PARK VAN WOLUWE",
       "center": {
-        "lng": 154441.3126,
-        "lat": 168436.9414
+        "lng": 4.43179484,
+        "lat": 50.826342505
       },
       "areaM2": 1356159.89134637
     },
@@ -980,8 +980,8 @@
       "name": "PARC DES ETANGS",
       "nameNl": "VIJVERSPARK",
       "center": {
-        "lng": 144209.086,
-        "lat": 168333.46490000002
+        "lng": 4.2865614149999995,
+        "lat": 50.825401584999994
       },
       "areaM2": 75439.2242435409
     },
@@ -990,8 +990,8 @@
       "name": "PARC DUDEN - PARC DE FOREST",
       "nameNl": "DUDENPARK - PARK VAN VORST",
       "center": {
-        "lng": 147533.1973,
-        "lat": 167655.1583
+        "lng": 4.3337461699999995,
+        "lat": 50.819327085
       },
       "areaM2": 486535.470788289
     },
@@ -1000,8 +1000,8 @@
       "name": "PARC ELISABETH",
       "nameNl": "ELISABETHPARK",
       "center": {
-        "lng": 146716.6485,
-        "lat": 172806.4259
+        "lng": 4.32211223,
+        "lat": 50.865630475
       },
       "areaM2": 230383.316245431
     },
@@ -1010,8 +1010,8 @@
       "name": "PARC FORESTIER",
       "nameNl": "BOSPARK",
       "center": {
-        "lng": 145885.3516,
-        "lat": 170096.918
+        "lng": 4.31033425,
+        "lat": 50.841268775
       },
       "areaM2": 46647.4369395226
     },
@@ -1020,8 +1020,8 @@
       "name": "PARC JOSAPHAT",
       "nameNl": "JOSAPHATPARK",
       "center": {
-        "lng": 151344.4063,
-        "lat": 172552.8634
+        "lng": 4.387847845,
+        "lat": 50.863358205
       },
       "areaM2": 382254.721984059
     },
@@ -1030,8 +1030,8 @@
       "name": "PARC LEOPOLD",
       "nameNl": "LEOPOLDPARK",
       "center": {
-        "lng": 150627.9533,
-        "lat": 169743.94905
+        "lng": 4.377666984999999,
+        "lat": 50.838109180000004
       },
       "areaM2": 111780.879139592
     },
@@ -1040,8 +1040,8 @@
       "name": "PARC MARIE-JOSE",
       "nameNl": "MARIE-JOSEPARK",
       "center": {
-        "lng": 146480.0939,
-        "lat": 171180.41019999998
+        "lng": 4.31876687,
+        "lat": 50.851012839999996
       },
       "areaM2": 78547.1644183908
     },
@@ -1050,8 +1050,8 @@
       "name": "PARC WOLVENDAEL",
       "nameNl": "WOLVENDAELPARK",
       "center": {
-        "lng": 148323.57030000002,
-        "lat": 165467.82429999998
+        "lng": 4.3449717450000005,
+        "lat": 50.799666785
       },
       "areaM2": 156179.200520053
     },
@@ -1060,8 +1060,8 @@
       "name": "PLASKY",
       "nameNl": "PLASKY",
       "center": {
-        "lng": 151934.1485,
-        "lat": 171170.0312
+        "lng": 4.39621814,
+        "lat": 50.850925919999995
       },
       "areaM2": 503104.830469504
     },
@@ -1070,8 +1070,8 @@
       "name": "PORTE DE HAL",
       "nameNl": "HALLEPOORT",
       "center": {
-        "lng": 147982.7735,
-        "lat": 169116.6068
+        "lng": 4.340117845,
+        "lat": 50.8324673
       },
       "areaM2": 532558.410240812
     },
@@ -1080,8 +1080,8 @@
       "name": "PORTE TERVUEREN",
       "nameNl": "TERVURENSE POORT",
       "center": {
-        "lng": 152048.5782,
-        "lat": 170298.3242
+        "lng": 4.397836945,
+        "lat": 50.84308841
       },
       "areaM2": 909931.59072173
     },
@@ -1090,8 +1090,8 @@
       "name": "POTAARDE",
       "nameNl": "POTAARDE",
       "center": {
-        "lng": 144243.57025,
-        "lat": 172353.6802
+        "lng": 4.28698835,
+        "lat": 50.861540285000004
       },
       "areaM2": 652775.489073809
     },
@@ -1100,8 +1100,8 @@
       "name": "PUTDAAL",
       "nameNl": "PUTDAAL",
       "center": {
-        "lng": 155046.1657,
-        "lat": 167942.96490000002
+        "lng": 4.440362475000001,
+        "lat": 50.82189921
       },
       "areaM2": 778703.023428366
     },
@@ -1110,8 +1110,8 @@
       "name": "QUARTIER BRABANT",
       "nameNl": "BRABANTWIJK",
       "center": {
-        "lng": 149809.87175,
-        "lat": 172532.5775
+        "lng": 4.366052645,
+        "lat": 50.863177875000005
       },
       "areaM2": 782508.827860398
     },
@@ -1120,8 +1120,8 @@
       "name": "QUARTIER EUROPEEN",
       "nameNl": "EUROPAWIJK",
       "center": {
-        "lng": 150400.4688,
-        "lat": 170087.44929999998
+        "lng": 4.3744385,
+        "lat": 50.84119737
       },
       "areaM2": 969739.683524613
     },
@@ -1130,8 +1130,8 @@
       "name": "QUARTIER MARITIME",
       "nameNl": "HAVENWIJK",
       "center": {
-        "lng": 148429.97905000002,
-        "lat": 172783.88679999998
+        "lng": 4.34645018,
+        "lat": 50.865436155
       },
       "areaM2": 1738254.32715362
     },
@@ -1140,8 +1140,8 @@
       "name": "QUARTIER NORD",
       "nameNl": "NOORDWIJK",
       "center": {
-        "lng": 149514.9559,
-        "lat": 172751.6976
+        "lng": 4.361864555,
+        "lat": 50.865147475
       },
       "areaM2": 1313338.99642435
     },
@@ -1150,8 +1150,8 @@
       "name": "QUARTIER ROYAL",
       "nameNl": "KONINGSWIJK",
       "center": {
-        "lng": 149530.1888,
-        "lat": 170540.0353
+        "lng": 4.36208125,
+        "lat": 50.845265850000004
       },
       "areaM2": 701173.441516306
     },
@@ -1160,8 +1160,8 @@
       "name": "REYERS",
       "nameNl": "REYERS",
       "center": {
-        "lng": 152620.5244,
-        "lat": 171434.27730000002
+        "lng": 4.405968245,
+        "lat": 50.85329871
       },
       "areaM2": 596553.731580204
     },
@@ -1170,8 +1170,8 @@
       "name": "ROODEBEEK - CONSTELLATIONS",
       "nameNl": "ROODEBEEK - STERREBEELDEN",
       "center": {
-        "lng": 153991.62,
-        "lat": 170939.8826
+        "lng": 4.42543315,
+        "lat": 50.84884589
       },
       "areaM2": 1546693.94632078
     },
@@ -1180,8 +1180,8 @@
       "name": "SABLON",
       "nameNl": "ZAVEL",
       "center": {
-        "lng": 149205.2501,
-        "lat": 169909.8555
+        "lng": 4.35746913,
+        "lat": 50.839600245
       },
       "areaM2": 463600.348523628
     },
@@ -1190,8 +1190,8 @@
       "name": "SAINT-DENIS - NEERSTALLE",
       "nameNl": "SINT-DENIJS - NEERSTALLE",
       "center": {
-        "lng": 146379.2584,
-        "lat": 166251.852
+        "lng": 4.317386525,
+        "lat": 50.806706105
       },
       "areaM2": 808559.803978451
     },
@@ -1200,8 +1200,8 @@
       "name": "SAINT-JOB KAUWBERG",
       "nameNl": "SINT-JOB KAUWBERG",
       "center": {
-        "lng": 149306.4141,
-        "lat": 164056.69929999998
+        "lng": 4.358916025,
+        "lat": 50.786982975
       },
       "areaM2": 2175616.14678179
     },
@@ -1210,8 +1210,8 @@
       "name": "SAINT-JOSSE CENTRE",
       "nameNl": "SINT-JOOST CENTRUM",
       "center": {
-        "lng": 150430.953,
-        "lat": 171281.0932
+        "lng": 4.3748721150000005,
+        "lat": 50.851927675
       },
       "areaM2": 614016.577693136
     },
@@ -1220,8 +1220,8 @@
       "name": "SAINT-MICHEL",
       "nameNl": "SINT-MICHIEL",
       "center": {
-        "lng": 152724.7735,
-        "lat": 169180.79465
+        "lng": 4.40743412,
+        "lat": 50.833042070000005
       },
       "areaM2": 723447.471566702
     },
@@ -1230,8 +1230,8 @@
       "name": "SAINT-PAUL",
       "nameNl": "SINT-PAULUS",
       "center": {
-        "lng": 155712.9517,
-        "lat": 168838.61560000002
+        "lng": 4.449848664999999,
+        "lat": 50.82994483
       },
       "areaM2": 1785048.06725977
     },
@@ -1240,8 +1240,8 @@
       "name": "SAINT-PIERRE",
       "nameNl": "SINT-PIETER",
       "center": {
-        "lng": 151812.47645000002,
-        "lat": 169249.8751
+        "lng": 4.3944806100000005,
+        "lat": 50.83366513
       },
       "areaM2": 810620.891375619
     },
@@ -1250,8 +1250,8 @@
       "name": "SAINTE-ALIX - JOLI BOIS",
       "nameNl": "SINTE-ALEIDIS - MOOIBOS",
       "center": {
-        "lng": 156799.3417,
-        "lat": 168716.10700000002
+        "lng": 4.465255235000001,
+        "lat": 50.828832045
       },
       "areaM2": 989876.740468431
     },
@@ -1260,8 +1260,8 @@
       "name": "SCHERDEMAEL",
       "nameNl": "SCHERDEMAAL",
       "center": {
-        "lng": 144431.3985,
-        "lat": 168997.3712
+        "lng": 4.289711795,
+        "lat": 50.831367345000004
       },
       "areaM2": 1063630.01515873
     },
@@ -1270,8 +1270,8 @@
       "name": "SCHEUT",
       "nameNl": "SCHEUT",
       "center": {
-        "lng": 145828.72149999999,
-        "lat": 170396.41090000002
+        "lng": 4.30952244,
+        "lat": 50.843962454999996
       },
       "areaM2": 943247.718255464
     },
@@ -1280,8 +1280,8 @@
       "name": "SCHEUTBOS",
       "nameNl": "SCHEUTBOS",
       "center": {
-        "lng": 144585.3608,
-        "lat": 171327.94785
+        "lng": 4.29185657,
+        "lat": 50.852322985
       },
       "areaM2": 456339.47222643
     },
@@ -1290,8 +1290,8 @@
       "name": "SQUARES",
       "nameNl": "SQUARES",
       "center": {
-        "lng": 150885.1971,
-        "lat": 170800.84305
+        "lng": 4.38132143,
+        "lat": 50.847609145
       },
       "areaM2": 804723.592014703
     },
@@ -1300,8 +1300,8 @@
       "name": "STALINGRAD",
       "nameNl": "STALINGRAD",
       "center": {
-        "lng": 148409.6473,
-        "lat": 170254.34575
+        "lng": 4.346173115,
+        "lat": 50.842695315
       },
       "areaM2": 241765.527331183
     },
@@ -1310,8 +1310,8 @@
       "name": "STOCKEL",
       "nameNl": "STOKKEL",
       "center": {
-        "lng": 156102.4826,
-        "lat": 169678.66019999998
+        "lng": 4.455386904999999,
+        "lat": 50.837485845
       },
       "areaM2": 1514613.79487951
     },
@@ -1320,8 +1320,8 @@
       "name": "TERDELT",
       "nameNl": "TERDELT",
       "center": {
-        "lng": 151595.1237,
-        "lat": 172880.69640000002
+        "lng": 4.39141215,
+        "lat": 50.866304545
       },
       "areaM2": 672086.000041552
     },
@@ -1330,8 +1330,8 @@
       "name": "TRANSVAAL",
       "nameNl": "TRANSVAAL",
       "center": {
-        "lng": 154776.5704,
-        "lat": 166220.7646
+        "lng": 4.43652369,
+        "lat": 50.806417275
       },
       "areaM2": 1229099.2804911
     },
@@ -1340,8 +1340,8 @@
       "name": "TROIS TILLEULS",
       "nameNl": "DRIE LINDEN",
       "center": {
-        "lng": 153491.6641,
-        "lat": 166279.09769999998
+        "lng": 4.41828976,
+        "lat": 50.806952165
       },
       "areaM2": 1010317.08692281
     },
@@ -1350,8 +1350,8 @@
       "name": "UNIVERSITE",
       "nameNl": "UNIVERSITEITSWIJK",
       "center": {
-        "lng": 151576.9096,
-        "lat": 167594.3124
+        "lng": 4.391129375,
+        "lat": 50.818782975000005
       },
       "areaM2": 1250349.18392977
     },
@@ -1360,8 +1360,8 @@
       "name": "VAL D'OR",
       "nameNl": "GULLEDELLE",
       "center": {
-        "lng": 154550.77405,
-        "lat": 171658.93790000002
+        "lng": 4.433383505,
+        "lat": 50.85530644
       },
       "areaM2": 1649536.77943063
     },
@@ -1370,8 +1370,8 @@
       "name": "VAN VOLXEM - VAN HAELEN",
       "nameNl": "VAN VOLXEM - VAN HAELEN",
       "center": {
-        "lng": 147255.1485,
-        "lat": 167303.1759
+        "lng": 4.32980406,
+        "lat": 50.81616165
       },
       "areaM2": 841766.487888597
     },
@@ -1380,8 +1380,8 @@
       "name": "VEEWEYDE - AURORE",
       "nameNl": "VEEWEIDE - AURORE",
       "center": {
-        "lng": 145550.3907,
-        "lat": 168930.02740000002
+        "lng": 4.30559096,
+        "lat": 50.830779234999994
       },
       "areaM2": 915265.358089096
     },
@@ -1390,8 +1390,8 @@
       "name": "VIEUX LAEKEN EST",
       "nameNl": "OUD LAKEN OOST",
       "center": {
-        "lng": 148843.2657,
-        "lat": 173939.05335
+        "lng": 4.352318825,
+        "lat": 50.875819825
       },
       "areaM2": 1049548.62337363
     },
@@ -1400,8 +1400,8 @@
       "name": "VIEUX LAEKEN OUEST",
       "nameNl": "OUD LAKEN WEST",
       "center": {
-        "lng": 148178.3025,
-        "lat": 173958.24305
+        "lng": 4.34286946,
+        "lat": 50.875990709999996
       },
       "areaM2": 498164.868781328
     },
@@ -1410,8 +1410,8 @@
       "name": "VILLAS DE GANSHOREN",
       "nameNl": "VILLA'S VAN GANSHOREN",
       "center": {
-        "lng": 145452.54235,
-        "lat": 173867.2931
+        "lng": 4.304143345,
+        "lat": 50.87516038
       },
       "areaM2": 775198.040021024
     },
@@ -1420,8 +1420,8 @@
       "name": "VIVIER D'OIE",
       "nameNl": "DIESDELLE",
       "center": {
-        "lng": 150051.9688,
-        "lat": 163118.6924
+        "lng": 4.36948643,
+        "lat": 50.77855058
       },
       "areaM2": 2505833.23172035
     },
@@ -1430,8 +1430,8 @@
       "name": "VOGELENZANG - ERASME",
       "nameNl": "VOGELENZANG - ERASMUS",
       "center": {
-        "lng": 143527.1643,
-        "lat": 167202.07025
+        "lng": 4.276904845,
+        "lat": 50.815228860000005
       },
       "areaM2": 2448806.40589262
     },
@@ -1440,8 +1440,8 @@
       "name": "VOSSEGAT - ROOSENDAAL",
       "nameNl": "VOSSEGAT - ROOSENDAAL",
       "center": {
-        "lng": 147183.60210000002,
-        "lat": 166051.1134
+        "lng": 4.328792765,
+        "lat": 50.804906035
       },
       "areaM2": 1010964.3075623
     },
@@ -1450,8 +1450,8 @@
       "name": "WATERMAEL CENTRE",
       "nameNl": "WATERMAAL CENTRUM",
       "center": {
-        "lng": 152808.3221,
-        "lat": 166091.9337
+        "lng": 4.408598554999999,
+        "lat": 50.80527303
       },
       "areaM2": 1729024.38042902
     },
@@ -1460,8 +1460,8 @@
       "name": "WOESTE",
       "nameNl": "WOESTE",
       "center": {
-        "lng": 147498.35275000002,
-        "lat": 173634.62795
+        "lng": 4.333211965,
+        "lat": 50.873080275
       },
       "areaM2": 1060530.43761973
     }
