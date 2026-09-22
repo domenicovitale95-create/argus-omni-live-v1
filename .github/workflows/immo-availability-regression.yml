@@ -7,7 +7,9 @@ on:
       - 'api/immo-discovery-scan.js'
       - 'api/immo-curated-active.js'
       - 'immo-opportunities.html'
+      - 'immo-bien.html'
       - 'tests/immo-availability-regression.mjs'
+      - 'tests/immo-dossier-regression.mjs'
   push:
     branches: [main]
     paths:
@@ -15,7 +17,9 @@ on:
       - 'api/immo-discovery-scan.js'
       - 'api/immo-curated-active.js'
       - 'immo-opportunities.html'
+      - 'immo-bien.html'
       - 'tests/immo-availability-regression.mjs'
+      - 'tests/immo-dossier-regression.mjs'
 
 jobs:
   test:
@@ -27,3 +31,4 @@ jobs:
         with:
           node-version: '22'
       - run: node tests/immo-availability-regression.mjs
+      - run: node tests/immo-dossier-regression.mjs

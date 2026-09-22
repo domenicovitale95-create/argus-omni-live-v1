@@ -208,12 +208,12 @@ function card(x){
  (rs.length?'<div class="reason"><b>Points à vérifier</b><ul>'+rs.map(r=>'<li>'+esc(r)+'</li>').join('')+'</ul></div>':'')+
  '<details class="details"><summary>Voir les données complémentaires</summary><div class="inside">'+details+'<p><b>Confiance des données :</b> '+esc(conf.label)+'. Cet indicateur mesure la complétude des informations disponibles, pas la qualité du bien.</p></div></details>'+
  '<div class="comparePick"><input type="checkbox" data-compare="'+esc(x.id||sub)+'" '+(selected.has(x.id||sub)?'checked':'')+'> Ajouter à la comparaison</div>'+
- '<div class="cardActions"><a class="primaryLink" href="'+esc(x.source)+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Audit ARGUS complet</a></div></article>';
+ '<div class="cardActions"><a class="primaryLink" href="/immo-bien?id='+encodeURIComponent(x.id||'')+'&categorie='+encodeURIComponent(category)+'">Voir le dossier ARGUS</a><a href="'+esc(x.source)+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Audit complet</a></div></article>';
 }
 function renderBest(){
  const el=document.getElementById('bestSection'),x=data[0]; if(!x){el.innerHTML='';return}
  const ppm=pricePerSqm(x); const headline=category==='building'?(x.title||x.location):x.location;
- el.innerHTML='<div class="sectiontag">PRIORITÉ ACTUELLE</div><div class="priority"><div><span class="badge good">'+esc(statusLabel(x.status))+'</span><h3>'+esc(headline)+'</h3><p><b>'+euro(x.price)+'</b>'+(x.area?' · '+esc(x.area)+' m²':'')+(ppm?' · '+num(ppm)+' €/m²':'')+'</p><p>'+esc(x.verdict||'Dossier à auditer')+'</p><p><b>Point de vigilance :</b> '+esc((x.risks||[])[0]||'Vérification documentaire nécessaire')+'</p></div><div class="priorityScore"><small>Score ARGUS</small><strong>'+esc(x.score)+'/100</strong><span style="color:#c8d4e2;font-size:.8rem;margin-top:5px">Confiance données : '+completeness(x).label.toLowerCase()+'</span></div></div>';
+ el.innerHTML='<div class="sectiontag">PRIORITÉ ACTUELLE</div><div class="priority"><div><span class="badge good">'+esc(statusLabel(x.status))+'</span><h3>'+esc(headline)+'</h3><p><b>'+euro(x.price)+'</b>'+(x.area?' · '+esc(x.area)+' m²':'')+(ppm?' · '+num(ppm)+' €/m²':'')+'</p><p>'+esc(x.verdict||'Dossier à auditer')+'</p><p><b>Point de vigilance :</b> '+esc((x.risks||[])[0]||'Vérification documentaire nécessaire')+'</p><div class="cardActions"><a class="primaryLink" href="/immo-bien?id='+encodeURIComponent(x.id||'')+'&categorie='+encodeURIComponent(category)+'">Ouvrir le dossier ARGUS</a></div></div><div class="priorityScore"><small>Score ARGUS</small><strong>'+esc(x.score)+'/100</strong><span style="color:#c8d4e2;font-size:.8rem;margin-top:5px">Confiance données : '+completeness(x).label.toLowerCase()+'</span></div></div>';
 }
 function renderFilters(){
  const statuses=['ALL',...new Set(data.map(x=>x.status).filter(Boolean))];
