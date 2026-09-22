@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-21",
+  "updatedAt": "2026-09-22",
   "feeds": [
     {
       "id": "perspective",
@@ -12,14 +12,14 @@
     {
       "id": "citydev",
       "name": "citydev.brussels",
-      "url": "https://www.citydev.brussels/fr/projets",
+      "url": "https://www.citydev.brussels/fr/projets/projets-en-cours",
       "type": "official_development",
       "priority": 1
     },
     {
       "id": "sau",
       "name": "SAU / MSI",
-      "url": "https://sau.brussels/fr/projets",
+      "url": "https://sau.brussels/",
       "type": "official_development",
       "priority": 1
     },
@@ -33,7 +33,7 @@
     {
       "id": "environment",
       "name": "Bruxelles Environnement",
-      "url": "https://environment.brussels/citoyen",
+      "url": "https://environnement.brussels/citoyen/politique-regionale/rapports-des-projets-environnementaux",
       "type": "official_environment",
       "priority": 1
     },
