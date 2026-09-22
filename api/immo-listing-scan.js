@@ -58,6 +58,9 @@ export function classifyListingAvailability({title='',description='',html='',str
   if(/soldout|discontinued|outofstock/.test(structured)){
     return {status:'SOLD',reason:'structured_availability'};
   }
+  if(/instock|limitedavailability/.test(structured)){
+    return {status:'ACTIVE',reason:'structured_active_availability'};
+  }
 
   const forSaleSignal=['à vendre','a vendre','te koop','for sale'].some(s=>head.includes(s));
   const tenantedSale=['vendu loué','vendue louée','vendu loue','vendue louee','verkocht verhuurd','sold tenanted','sold with tenant'].some(s=>head.includes(s));
@@ -124,7 +127,10 @@ export function classifyListingAvailability({title='',description='',html='',str
 }
 export function isUnavailableListing(listing={}){
   const status=String(listing.availabilityStatus||listing.status||'').toUpperCase();
-  return ['SOLD','REMOVED','WITHDRAWN','CLOSED'].includes(status);
+  return ['SOLD','REMOVED','WITHDRAWN','CLOSED','UNDER_CONTRACT','OPTION'].includes(status);
+}
+export function isConfirmedActiveListing(listing={}){
+  return String(listing.availabilityStatus||listing.status||'').toUpperCase()==='ACTIVE';
 }
 export function extractListing(html,url){
   const title=meta(html,'og:title')||cleanText((html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)||[])[1]||'');
