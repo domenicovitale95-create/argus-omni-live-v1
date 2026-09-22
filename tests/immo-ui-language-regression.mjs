@@ -17,7 +17,7 @@ must(immo,/MAXIMUM ABSOLU/,'French maximum-price label missing');
 must(immo,/Fiabilité du dossier/,'Evidence-quality label missing');
 must(immo,/Les 19 communes analysées · sélection par données/,'Region-wide investment principle missing');
 must(immo,/Pas de commune gagnante par défaut/,'Fixed-ranking guardrail missing');
-mustNot(immo,/ARGUS IMMO BELGIUM|Strategic Brussels|Mobile-first|Calculer BUY \/ NEGOTIATE \/ PASS|FAIR VALUE|Target deal|ABS MAX|DATA INCOMPLETE|BUY \/ VISITE PRIORITAIRE/,'Legacy English UI labels must not return');
+mustNot(immo,/ARGUS IMMO BELGIUM|Strategic Brussels|Mobile-first|Calculer BUY \/ NEGOTIATE \/ PASS|FAIR VALUE|Target deal|ABS MAX|DATA INCOMPLETE|BUY \/ VISITE PRIORITAIRE|cash-flow|checklist|check-lists|stress-test|Cash initial estimé/,'Legacy English UI labels must not return');
 mustNot(immo,/Où je commencerais la recherche|Schaerbeek · Anderlecht · Evere en point de départ/,'Fixed commune recommendations must not return');
 
 must(strategic,/Bruxelles stratégique/,'French strategic branding missing');
@@ -31,7 +31,7 @@ must(strategic,/MOTEUR DE DÉCOUVERTE/,'Discovery-engine label must be French');
 must(strategic,/ANALYSE RÉGIONALE/,'Region-wide scan label must be French');
 must(strategic,/Certitude d’exécution/,'Execution confidence must be French');
 must(strategic,/Couverture des données/,'Data completeness must be labelled as coverage');
-mustNot(strategic,/Strategic Brussels|ANTI-HYPE RULE|Top Opportunities Now|DYNAMIC RANKING|Urban Upside Map|Click zone → dossier|European Core|New Emerging Area|DISCOVERY ENGINE|REGION-WIDE SCAN|Project certainty|Data completeness|Why it matters|Projects & execution/,'Legacy English strategic labels must not return');
+mustNot(strategic,/Strategic Brussels|ANTI-HYPE RULE|Top Opportunities Now|DYNAMIC RANKING|Urban Upside Map|Click zone → dossier|European Core|New Emerging Area|DISCOVERY ENGINE|REGION-WIDE SCAN|Project certainty|Data completeness|Why it matters|Projects & execution|Benchmark institutionnel|masterplan|clusters initiaux|cluster renforcé/,'Legacy English strategic labels must not return');
 
 for(const [name,html] of [['immo.html',immo],['strategic-brussels.html',strategic]]){
   const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].map(m=>m[1]).filter(x=>x.trim());
