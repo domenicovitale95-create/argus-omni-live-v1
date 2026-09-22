@@ -71,9 +71,12 @@ function initMap(){
 }
 function clearMap(){if(!map)return;mapMarkers.forEach(m=>map.removeLayer(m));mapMarkers=[]}
 function exactAddress(x){
- if(x.exactAddress)return x.exactAddress;
- const loc=String(x.location||x.address||'');
- return /\d/.test(loc)&&/(Bruxelles|Schaerbeek|Ixelles|Uccle|Anderlecht|Molenbeek|Saint-Josse|Etterbeek|Laeken|Watermael|Auderghem|Forest|Jette|Koekelberg|Evere|Woluwe|Ganshoren|Berchem)/i.test(loc)?loc:null;
+ const candidate=String(x.exactAddress||x.address||'').trim();
+ if(!candidate)return null;
+ const streetWord=/(rue|avenue|boulevard|chaussée|chaussee|place|square|quai|drève|dreve|allée|allee|straat|laan|steenweg|plein|weg|dreef|kade)/i;
+ const streetNumber=/(^|[,\s])\d{1,4}(?:[a-zA-Z]|\s?(?:bis|bte|bus)\s?\w+)?(?=,|\s|$)/i;
+ const brusselsPlace=/(Bruxelles|Brussel|Schaerbeek|Schaarbeek|Ixelles|Elsene|Uccle|Ukkel|Anderlecht|Molenbeek|Saint-Josse|Sint-Joost|Etterbeek|Laeken|Laken|Watermael|Watermaal|Auderghem|Oudergem|Forest|Vorst|Jette|Koekelberg|Evere|Woluwe|Ganshoren|Berchem)/i;
+ return streetWord.test(candidate)&&streetNumber.test(candidate)&&brusselsPlace.test(candidate)?candidate:null;
 }
 async function geocode(addr){
  const key='argus-geocode:'+addr;
@@ -140,8 +143,8 @@ async function loadCategory(next){
    const r=await fetch('/api/immo-curated-active?category='+encodeURIComponent(category),{cache:'no-store'});
    const d=await r.json();if(!d.ok)throw new Error(d.error||'Vérification indisponible');
    data=d.opportunities||[];
-   const hidden=(d.counts?.excludedSoldOrRemoved||0)+(d.counts?.hiddenUnverified||0);
-   document.getElementById('updated').textContent=data.length+' annonces actuellement vérifiées'+(hidden?' · '+hidden+' masquée(s) car vendue(s), retirée(s) ou non revérifiable(s)':'')+' · contrôle '+new Date(d.checkedAt).toLocaleString('fr-BE');
+   const hidden=(d.counts?.excludedUnavailable||0)+(d.counts?.hiddenUnverified||0);
+   document.getElementById('updated').textContent=data.length+' annonces actuellement vérifiées'+(hidden?' · '+hidden+' masquée(s) car indisponible(s) ou non confirmée(s) active(s)':'')+' · contrôle '+new Date(d.checkedAt).toLocaleString('fr-BE');
    renderBest();renderCurated();renderMap();
  }catch(e){
    data=[];renderBest();renderCurated();renderMap();
@@ -155,8 +158,8 @@ async function scanMarket(){
  try{
    const r=await fetch('/api/immo-discovery-scan',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({category,maxPrice:cfg.max})});
    const j=await r.json();if(!j.ok)throw new Error(j.error||'Scan impossible');liveListings=j.listings||[];
-   const unavailable=(j.sourceStatus||[]).reduce((n,s)=>n+(s.excludedUnavailable||0),0);sum.innerHTML='<b>'+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes</b> · '+j.totals.linksFound+' liens · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' éligibles ≤ '+euro(cfg.max)+'</b>'+(unavailable?' · '+unavailable+' vendue(s)/retirée(s) exclue(s)':'');
-   status.innerHTML=(j.sourceStatus||[]).map(s=>'<div class="status '+(s.reachable?'ok':'fail')+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?'Atteinte · '+s.linksFound+' liens · '+s.eligible+' éligibles'+(s.excludedUnavailable?' · '+s.excludedUnavailable+' indisponible(s) exclue(s)':''):'Non couverte · '+esc(s.error||'bloquée'))+'</span></div>').join('');
+   const unavailable=(j.sourceStatus||[]).reduce((n,s)=>n+(s.excludedUnavailable||0),0),unverified=(j.sourceStatus||[]).reduce((n,s)=>n+(s.hiddenUnverified||0),0);sum.innerHTML='<b>'+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes</b> · '+j.totals.linksFound+' liens · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' actives éligibles ≤ '+euro(cfg.max)+'</b>'+(unavailable?' · '+unavailable+' indisponible(s) exclue(s)':'')+(unverified?' · '+unverified+' non confirmée(s) masquée(s)':'');
+   status.innerHTML=(j.sourceStatus||[]).map(s=>'<div class="status '+(s.reachable?'ok':'fail')+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?'Atteinte · '+s.linksFound+' liens · '+s.eligible+' actives éligibles'+(s.excludedUnavailable?' · '+s.excludedUnavailable+' indisponible(s)':'')+(s.hiddenUnverified?' · '+s.hiddenUnverified+' non confirmée(s)':''):'Non couverte · '+esc(s.error||'bloquée'))+'</span></div>').join('');
    grid.innerHTML=liveListings.map(marketCard).join('')||'<div class="empty">Aucune nouvelle annonce éligible extraite sur ce passage.</div>';
    renderMap();
  }catch(e){sum.innerHTML='<b class="risk">Scan interrompu.</b> <span class="muted">'+esc(e.message)+'</span>'}
