@@ -100,7 +100,13 @@ function maturity(x,docs,c){
 function municipality(location){
  const s=String(location||'');
  const postal=(s.match(/\b(10\d\d|11\d\d|12\d\d)\b/)||[])[1];
- if(postal)return postal;
+ const byPostal={
+  '1000':'Bruxelles-Ville','1020':'Laeken','1030':'Schaerbeek','1040':'Etterbeek','1050':'Ixelles','1060':'Saint-Gilles',
+  '1070':'Anderlecht','1080':'Molenbeek-Saint-Jean','1081':'Koekelberg','1082':'Berchem-Sainte-Agathe','1083':'Ganshoren',
+  '1090':'Jette','1120':'Neder-Over-Heembeek','1130':'Haren','1140':'Evere','1150':'Woluwe-Saint-Pierre','1160':'Auderghem',
+  '1170':'Watermael-Boitsfort','1180':'Uccle','1190':'Forest','1200':'Woluwe-Saint-Lambert','1210':'Saint-Josse-ten-Noode'
+ };
+ if(postal&&byPostal[postal])return byPostal[postal];
  const known=['Ixelles','Schaerbeek','Saint-Josse','Anderlecht','Molenbeek','Uccle','Laeken','Etterbeek','Evere','Jette','Forest','Auderghem','Woluwe','Koekelberg','Ganshoren','Berchem','Bruxelles'];
  return known.find(n=>s.toLowerCase().includes(n.toLowerCase()))||'Bruxelles';
 }
@@ -214,7 +220,7 @@ function render(x,all,checkedAt){
    '<section class="panel"><div class="tag">06 · DOCUMENTS MANQUANTS</div><h2>Ce qu’il faut obtenir avant une offre</h2><p class="intro">La liste est générée à partir des données absentes ou à confirmer dans le dossier.</p><ul class="list">'+docs.map(d=>'<li>'+esc(d)+'</li>').join('')+'</ul></section>'+
    '<section class="panel"><div class="tag">07 · VÉRIFICATIONS OFFICIELLES</div><h2>Contrôles externes à privilégier</h2><p class="intro">Ces outils publics permettent de confronter l’annonce aux sources institutionnelles disponibles.</p><div class="officialgrid"><a class="official" href="https://www.peb-epb.brussels/certificats-certificaten/pages/index.xhtml" target="_blank" rel="noopener"><b>Registre PEB</b><span>Vérifier un certificat bruxellois</span></a><a class="official" href="https://gis.urban.brussels/brugis/" target="_blank" rel="noopener"><b>BruGIS</b><span>Contexte urbanistique et cartographique</span></a><a class="official" href="https://statbel.fgov.be/fr/themes/construction-logement/prix-de-limmobilier" target="_blank" rel="noopener"><b>Statbel</b><span>Références officielles de prix et transactions</span></a></div><div class="proofnote">ARGUS n’assimile pas automatiquement une donnée d’annonce à une donnée officielle. Lorsqu’une vérification institutionnelle n’a pas été effectuée, le dossier le signale comme point à confirmer.</div></section>'+
  '</div><aside class="side">'+
-   '<div class="sidebox"><h3>Traçabilité</h3><div class="statusrow"><span>Annonce</span><b>Confirmée active</b></div><div class="statusrow"><span>Contrôle live</span><b>'+esc(formatDate(checkedAt,true))+'</b></div><div class="statusrow"><span>Fiche ARGUS</span><b>'+esc(formatDate(x.verified))+'</b></div><div class="statusrow"><span>Source</span><b>'+esc(sourceHost(x.source))+'</b></div><div class="statusrow"><span>Identifiant</span><b>'+esc(x.id||'—')+'</b></div><div class="statusrow"><span>Couverture</span><b>'+esc(c.label)+'</b></div><div class="statusrow"><span>Score</span><b>'+esc(x.score)+'/100</b></div></div>'+
+   '<div class="sidebox"><h3>Traçabilité</h3><div class="statusrow"><span>Annonce</span><b>Confirmée active</b></div><div class="statusrow"><span>Contrôle en direct</span><b>'+esc(formatDate(checkedAt,true))+'</b></div><div class="statusrow"><span>Fiche ARGUS</span><b>'+esc(formatDate(x.verified))+'</b></div><div class="statusrow"><span>Source</span><b>'+esc(sourceHost(x.source))+'</b></div><div class="statusrow"><span>Identifiant</span><b>'+esc(x.id||'—')+'</b></div><div class="statusrow"><span>Couverture</span><b>'+esc(c.label)+'</b></div><div class="statusrow"><span>Score</span><b>'+esc(x.score)+'/100</b></div></div>'+
    '<div class="sidebox"><h3>Atouts documentés</h3><p>'+esc(strengths.length?strengths.slice(0,4).join(' · '):'Aucun atout détaillé supplémentaire n’est enregistré dans la fiche source.')+'</p></div>'+
    '<div class="sidebox"><h3>Prochaine action</h3><p>Obtenir les documents manquants, puis relancer l’analyse avant toute offre.</p><a href="/immo#scanner">Audit ARGUS complet</a></div>'+
  '</aside></div>';
