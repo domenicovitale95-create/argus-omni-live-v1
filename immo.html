@@ -1253,7 +1253,7 @@ function runArgusBrain(ctx){
  // Stress tests
  let baseValue,stressValue,severeValue,head,baseMetric,stressMetric,severeMetric;
  if(ctx.investment){
-   head='Cash-flow';
+   head='Flux net';
    const vacancyStress=ctx.rent*.85;
    const vacancySevere=ctx.rent*.70;
    const stressNoi=vacancyStress*.90-ctx.charges*1.20-ctx.fixed*1.20/12-(ctx.works*.20/24);
@@ -1276,11 +1276,11 @@ function runArgusBrain(ctx){
   return [pct(v),v<=40?'Confortable':v<=50?'Tendu':'Fragile'];
  }
 
- let decision='WAIT — compléter les preuves',why='ARGUS manque encore de données suffisamment solides pour décider.';
- let mode='EVIDENCE FIRST';
- if(hardStop){decision='STOP — risque non compensable';why='Un blocage juridique ou documentaire passe avant le prix et le rendement.';mode='HARD GATE';}
- else if(notEnough){decision='DATA FIRST — ne pas offrir';why='La valeur ou le revenu ne sont pas assez documentés pour justifier une offre.';mode='LOW CONFIDENCE';}
- else if(ctx.budgetBlock){decision='PASS POUR CE PROFIL';why='Le bien peut être bon, mais pas avec votre structure financière actuelle.';mode='PERSONAL FIT';}
+ let decision='ATTENDRE — compléter les preuves',why='ARGUS manque encore de données suffisamment solides pour décider.';
+ let mode='PREUVES D’ABORD';
+ if(hardStop){decision='BLOCAGE — risque non compensable';why='Un blocage juridique ou documentaire passe avant le prix et le rendement.';mode='BLOCAGE ABSOLU';}
+ else if(notEnough){decision='DONNÉES D’ABORD — ne pas offrir';why='La valeur ou le revenu ne sont pas assez documentés pour justifier une offre.';mode='FIABILITÉ FAIBLE';}
+ else if(ctx.budgetBlock){decision='PASSER POUR CE PROFIL';why='Le bien peut être bon, mais pas avec votre structure financière actuelle.';mode='COMPATIBILITÉ PERSONNELLE';}
  else if(overall>=82 && (ctx.investment?stressValue>=0:(stressValue!=null&&stressValue<=50))){decision='PRIORITÉ — approfondir puis offrir';why='Les couches prix, risques, financement et stress-test restent cohérentes.';mode='VALIDER PAR LES PREUVES';}
  else if(overall>=65){decision='NÉGOCIER / SÉCURISER';why='Le dossier est intéressant mais une ou plusieurs marges doivent être améliorées.';mode='NÉGOCIER';}
  else {decision='PASSER / ATTENDRE';why='La marge de sécurité n’est pas suffisante face aux risques actuels.';mode='MARGE D’ABORD';}
@@ -1313,7 +1313,7 @@ function runArgusBrain(ctx){
    $('brainRentMove').textContent=rentGap>0?('+'+euro(rentGap)+'/mois'):'Cible atteinte';
    $('brainRentMoveNote').textContent='Loyer brut mensuel nécessaire pour atteindre '+pct(ctx.targetYieldPct)+'.';
  }else{
-   $('brainRentMove').textContent='N/A';
+   $('brainRentMove').textContent='N/D';
    $('brainRentMoveNote').textContent='Pour une résidence principale, la priorité est la charge totale et la sécurité financière.';
  }
 
@@ -1402,8 +1402,8 @@ function calculateDeal(){
  if(investment){
    if(gross>=targetYieldPct){score+=12;reasons.push('Rendement brut au moins égal à la cible saisie.')}
    else{score-=10;reasons.push('Rendement brut inférieur à la cible saisie.')}
-   if(cf>=0){score+=8;reasons.push('Cash-flow estimatif non négatif après réserve de vacance/entretien.')}
-   else{score-=8;reasons.push('Cash-flow estimatif négatif avec le financement saisi.')}
+   if(cf>=0){score+=8;reasons.push('Flux net estimatif non négatif après réserve de vacance/entretien.')}
+   else{score-=8;reasons.push('Flux net estimatif négatif avec le financement saisi.')}
  }
  if(legal==='yes'){score+=10;reasons.push('Urbanisme indiqué comme confirmé.')}
  else if(legal==='unknown'){score-=15;reasons.push('Urbanisme encore à confirmer.')}
@@ -1435,7 +1435,7 @@ function calculateDeal(){
  const insufficientData=(!investment&&!localPsm)||(investment&&!rent)||confidence<55;
  $('dealResult').classList.remove('hidden');
  $('dealAsk').textContent=euro(price);$('dealFair').textContent=fairValue!=null?euro(fairValue):'À compléter';$('dealFirst').textContent=first!=null?euro(first):'À compléter';$('dealTarget').textContent=target!=null?euro(target):'À compléter';$('dealMax').textContent=absMax!=null?euro(absMax):'À compléter';
- $('dealGross').textContent=investment?pct(gross):'N/A';$('dealCashflow').textContent=investment?euro(cf)+'/mois':'N/A';$('dealPsm').textContent=psm?euro(psm)+'/m²':'—';$('dealScore').textContent=score+'/100';
+ $('dealGross').textContent=investment?pct(gross):'N/D';$('dealCashflow').textContent=investment?euro(cf)+'/mois':'N/D';$('dealPsm').textContent=psm?euro(psm)+'/m²':'—';$('dealScore').textContent=score+'/100';
  $('dealConfidence').textContent=confidence+'/100';$('dealConfidenceBar').style.width=confidence+'%';$('dealCashNeed').textContent=euro(cashNeed);$('dealBudgetFit').textContent=budgetFit;
  $('dealMissingText').textContent=missing.length?missing.join(' · '):'Aucun champ essentiel manquant dans les données saisies.';
  $('dealMissing').className='missingbox'+(missing.length?'':' good');
