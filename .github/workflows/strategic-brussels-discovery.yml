@@ -55,7 +55,7 @@ jobs:
           fi
       - name: Validate neighborhood coverage
         run: |
-          node -e "const fs=require('fs');const n=JSON.parse(fs.readFileSync('data/strategic-neighborhoods.json','utf8'));if(n.status!=='LIVE'||!Number.isInteger(n.count)||n.count<1||!Array.isArray(n.districts)||n.districts.length!==n.count){console.error('Invalid Strategic Brussels neighborhood registry', {status:n.status,count:n.count,districts:n.districts?.length});process.exit(1)}"
+          node -e "const fs=require('fs');const n=JSON.parse(fs.readFileSync('data/strategic-neighborhoods.json','utf8'));const ds=Array.isArray(n.districts)?n.districts:[];const valid=ds.filter(d=>d.center&&Number.isFinite(d.center.lat)&&Number.isFinite(d.center.lng)&&d.center.lat>=50&&d.center.lat<=51.1&&d.center.lng>=4&&d.center.lng<=5).length;const min=Math.floor(ds.length*.9);if(n.status!=='LIVE'||!Number.isInteger(n.count)||n.count<1||ds.length!==n.count||valid<min){console.error('Invalid Strategic Brussels neighborhood registry', {status:n.status,count:n.count,districts:ds.length,validCenters:valid,minValidCenters:min});process.exit(1)}"
       - name: Commit snapshot if changed
         shell: bash
         run: |
