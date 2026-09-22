@@ -9,7 +9,7 @@ const base=JSON.parse(await readFile(path.join(root,'data','strategic-brussels.j
 const neighborhoodPath=path.join(root,'data','strategic-neighborhoods.json');
 const existingNeighborhoods=JSON.parse(await readFile(neighborhoodPath,'utf8').catch(()=>JSON.stringify({districts:[]})));
 
-const DISTRICT_WFS='https://geoservices-urbis.irisnet.be/geoserver/urbisvector/wfs?version=2.0.0&request=GetFeature&typename=urbisvector:MonitoringDistricts&outputformat=json';
+const DISTRICT_WFS='https://geoservices-urbis.irisnet.be/geoserver/urbisvector/wfs?version=2.0.0&request=GetFeature&typename=urbisvector:MonitoringDistricts&outputformat=json&srsName=EPSG:4326';
 const DISTRICT_OPEN_DATA='https://opendata.brussels.be/api/explore/v2.1/catalog/datasets/quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc/exports/geojson';
 const timeout=ms=>new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms));
 const clean=s=>String(s||'').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();
@@ -44,7 +44,12 @@ function geometryCenter(geometry){
   let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
   for(const [x,y] of pts){if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y}
   if(!Number.isFinite(minX)||!Number.isFinite(minY))return null;
-  return {lng:(minX+maxX)/2,lat:(minY+maxY)/2};
+  const x=(minX+maxX)/2,y=(minY+maxY)/2;
+  // GeoJSON should be lon/lat. Some WFS servers still honor EPSG axis order
+  // and return lat/lon; normalize both forms and reject projected coordinates.
+  if(x>=4&&x<=5&&y>=50&&y<=51.1)return {lng:x,lat:y};
+  if(y>=4&&y<=5&&x>=50&&x<=51.1)return {lng:y,lat:x};
+  return null;
 }
 function prop(obj,names){
   for(const n of names)if(obj?.[n]!=null&&String(obj[n]).trim())return obj[n];
