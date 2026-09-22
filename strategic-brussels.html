@@ -241,11 +241,11 @@ function renderTop(){
   document.getElementById('topGrid').innerHTML=cards||'<div class="loading">Données insuffisantes.</div>';
 }
 function renderCoverage(){
-  document.getElementById('coverage').innerHTML=(payload.municipalities||[]).map(m=>'<div class="communechip"><b>'+esc(m.name)+'</b><span>'+Number(m.askingPricePerM2).toLocaleString('fr-BE')+' €/m² proxy</span></div>').join('');
+  document.getElementById('coverage').innerHTML=(payload.municipalities||[]).map(m=>'<div class="communechip"><b>'+esc(m.name)+'</b><span>'+Number(m.askingPricePerM2).toLocaleString('fr-BE')+' €/m² indicatif</span></div>').join('');
 }
 function renderEmerging(){
   const e=payload.emergingAreas||[];
-  document.getElementById('emerging').innerHTML=e.length?e.map(x=>'<b>'+esc(x.name)+'</b> · confidence '+pct(x.discovery?.confidence)+'/100').join('<br>'):'<b>Aucune nouvelle zone n’a encore franchi le seuil automatique.</b><br>Le moteur conserve néanmoins les 19 communes dans la base de surveillance et peut promouvoir une nouvelle zone dès que plusieurs signaux vérifiés convergent.';
+  document.getElementById('emerging').innerHTML=e.length?e.map(x=>'<b>'+esc(x.name)+'</b> · fiabilité '+pct(x.discovery?.confidence)+'/100').join('<br>'):'<b>Aucune nouvelle zone n’a encore franchi le seuil automatique.</b><br>Le moteur conserve néanmoins les 19 communes dans la base de surveillance et peut promouvoir une nouvelle zone dès que plusieurs signaux vérifiés convergent.';
 }
 function scoreLine(label,v){
   return '<div class="scoreline"><div><span>'+esc(label)+'</span><b>'+pct(v)+'</b></div><div class="bar"><i style="width:'+pct(v)+'%"></i></div></div>';
