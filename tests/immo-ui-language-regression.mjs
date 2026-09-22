@@ -31,7 +31,7 @@ must(strategic,/MOTEUR DE DÉCOUVERTE/,'Discovery-engine label must be French');
 must(strategic,/ANALYSE RÉGIONALE/,'Region-wide scan label must be French');
 must(strategic,/Certitude d’exécution/,'Execution confidence must be French');
 must(strategic,/Couverture des données/,'Data completeness must be labelled as coverage');
-mustNot(strategic,/Strategic Brussels|ANTI-HYPE RULE|Top Opportunities Now|DYNAMIC RANKING|Urban Upside Map|Click zone → dossier|European Core|New Emerging Area|DISCOVERY ENGINE|REGION-WIDE SCAN|Project certainty|Data completeness|Why it matters|Projects & execution|Benchmark institutionnel|masterplan|clusters initiaux|cluster renforcé/,'Legacy English strategic labels must not return');
+mustNot(strategic,/Strategic Brussels|ANTI-HYPE RULE|Top Opportunities Now|DYNAMIC RANKING|Urban Upside Map|Click zone → dossier|European Core|New Emerging Area|DISCOVERY ENGINE|REGION-WIDE SCAN|Project certainty|Data completeness|Why it matters|Projects & execution|Benchmark institutionnel|masterplan|clusters initiaux|cluster renforcé|€\/m² proxy| · confidence |Benchmark indisponible/,'Legacy English strategic labels must not return');
 
 for(const [name,html] of [['immo.html',immo],['strategic-brussels.html',strategic]]){
   const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].map(m=>m[1]).filter(x=>x.trim());
