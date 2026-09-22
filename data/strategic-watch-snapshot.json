@@ -1,20 +1,20 @@
 {
   "version": 2,
   "mode": "weekly",
-  "generatedAt": "2026-09-21T20:30:04.519Z",
+  "generatedAt": "2026-09-22T10:04:35.767Z",
   "feeds": [
     {
       "id": "perspective",
       "url": "https://perspective.brussels/fr/projets/poles-strategiques",
       "ok": true,
-      "fingerprint": "55ca2bac11964183",
+      "fingerprint": "8d907690f42565e9",
       "links": 175
     },
     {
       "id": "citydev",
       "url": "https://www.citydev.brussels/fr/projets",
       "ok": false,
-      "error": "fetch failed"
+      "error": "HTTP 404"
     },
     {
       "id": "sau",
@@ -25,8 +25,9 @@
     {
       "id": "mobility",
       "url": "https://mobilite-mobiliteit.brussels/fr/projets",
-      "ok": false,
-      "error": "fetch failed"
+      "ok": true,
+      "fingerprint": "daf5a130b21bd6af",
+      "links": 20
     },
     {
       "id": "environment",
@@ -62,7 +63,21 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
+    },
+    {
+      "id": "60edcf3af29e793a",
+      "feedId": "perspective",
+      "feedName": "perspective.brussels",
+      "url": "https://perspective.brussels/fr/projets/perimetres-dintervention/zone-de-renovation-urbaine-zru",
+      "title": "Zone de Revitalisation Urbaine (ZRU)",
+      "categories": [
+        "rehabilitation"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "86b3dd5d09f71cf8",
@@ -76,7 +91,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "2621658d54f6f612",
@@ -90,7 +105,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "bb266658da71c2c0",
@@ -104,7 +119,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "a2ffa6d7517ddb9a",
@@ -118,7 +133,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "7ccd5dd79d0efbb7",
@@ -132,7 +147,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "28188625478643e9",
@@ -146,7 +161,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "1b53a0219d8792b3",
@@ -160,7 +175,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "69a26d679c7dafb4",
@@ -174,7 +189,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "3ae2ffaf99a3ab7e",
@@ -188,7 +203,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "d9cea89cf34b6c90",
@@ -202,7 +217,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "a4981fe644a09e0f",
@@ -216,7 +231,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "0c6ce8bb5be690c6",
@@ -230,7 +245,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "344f731eb4fec56a",
@@ -249,7 +264,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "b9e7f414d09b277d",
@@ -268,7 +283,7 @@
         "municipality": "Ixelles"
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "a8f1ea3efbd16d3b",
@@ -287,7 +302,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "678c0a395bb97dc0",
@@ -302,7 +317,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "18392ded8d7d941c",
@@ -316,7 +331,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "54ab1de6842f712c",
@@ -328,9 +343,19 @@
         "masterplan"
       ],
       "stage": "ANNOUNCED",
-      "area": null,
+      "area": {
+        "id": "monitoring:74",
+        "name": "HEYSEL",
+        "known": false,
+        "neighborhood": true,
+        "districtId": "74",
+        "center": {
+          "lng": 147744.08875,
+          "lat": 175935.98555
+        }
+      },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "56e0edf3eebedbe0",
@@ -349,7 +374,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "19d562bb39f5c802",
@@ -368,7 +393,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "c24e81d68b3dfa51",
@@ -380,9 +405,19 @@
         "masterplan"
       ],
       "stage": "ANNOUNCED",
-      "area": null,
+      "area": {
+        "id": "monitoring:27",
+        "name": "JOSAPHAT",
+        "known": false,
+        "neighborhood": true,
+        "districtId": "27",
+        "center": {
+          "lng": 151366.9767,
+          "lat": 172082.60570000001
+        }
+      },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "5edf6b9ab7bb58ce",
@@ -394,9 +429,19 @@
         "transport"
       ],
       "stage": "ANNOUNCED",
-      "area": null,
+      "area": {
+        "id": "monitoring:804",
+        "name": "GARE DU MIDI",
+        "known": false,
+        "neighborhood": true,
+        "districtId": "804",
+        "center": {
+          "lng": 147516.7363,
+          "lat": 169353.86225
+        }
+      },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "3d089414f5543c33",
@@ -416,7 +461,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "5072d31840891d53",
@@ -435,7 +480,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "2e07c6634808b3d7",
@@ -449,7 +494,21 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
+    },
+    {
+      "id": "c500f52245394d3a",
+      "feedId": "mobility",
+      "feedName": "Bruxelles Mobilité",
+      "url": "https://mobilite-mobiliteit.brussels/fr/transport-mobilite",
+      "title": "Transport, mobilité",
+      "categories": [
+        "transport"
+      ],
+      "stage": "ANNOUNCED",
+      "area": null,
+      "sourcePriority": 1,
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "c0059da45ef2b22c",
@@ -463,7 +522,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "d7779a5fef78d96e",
@@ -477,7 +536,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "40c02cb1c452e63b",
@@ -491,7 +550,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "9824dd568b44eb38",
@@ -505,7 +564,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "856a7df2b380d195",
@@ -519,7 +578,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "e392d3ac425376b2",
@@ -533,7 +592,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "5d2f3b34ddd311c8",
@@ -547,7 +606,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "03a1c9ff3b2a24ba",
@@ -561,7 +620,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "1b16c014d3c2f78a",
@@ -575,7 +634,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "ffb98a4d1d984a16",
@@ -589,7 +648,7 @@
       "stage": "UNDER_CONSTRUCTION",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "3ab0ab8c9dbacedc",
@@ -603,7 +662,7 @@
       "stage": "DELIVERED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "09083ab7c4e98905",
@@ -617,7 +676,7 @@
       "stage": "UNDER_CONSTRUCTION",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "40a4044a73e5311d",
@@ -631,7 +690,7 @@
       "stage": "DELIVERED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "e1c277487527564d",
@@ -645,7 +704,7 @@
       "stage": "UNDER_CONSTRUCTION",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "8879355026514238",
@@ -659,7 +718,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "4c11dd19867de09d",
@@ -673,7 +732,7 @@
       "stage": "DELIVERED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "9583714ba6ae0aff",
@@ -687,7 +746,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "bd5e00041d1d623d",
@@ -701,7 +760,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     },
     {
       "id": "a9db63475c772f2d",
@@ -716,25 +775,17 @@
       "stage": "UNDER_CONSTRUCTION",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-21T20:30:04.519Z"
+      "detectedAt": "2026-09-22T10:04:35.767Z"
     }
   ],
   "errors": [
     {
-      "feedId": "monitoring-districts",
-      "error": "fetch failed"
-    },
-    {
       "feedId": "citydev",
-      "error": "fetch failed"
+      "error": "HTTP 404"
     },
     {
       "feedId": "sau",
       "error": "HTTP 404"
-    },
-    {
-      "feedId": "mobility",
-      "error": "fetch failed"
     },
     {
       "feedId": "environment",
@@ -742,18 +793,19 @@
     }
   ],
   "neighborhoodRegistry": {
-    "ok": false,
-    "count": 0,
-    "error": "fetch failed"
+    "ok": true,
+    "count": 145,
+    "updatedAt": "2026-09-22T10:04:35.767Z"
   },
   "candidates": [
     {
       "key": "UNRESOLVED",
       "area": null,
-      "signalCount": 38,
-      "independentSources": 3,
+      "signalCount": 37,
+      "independentSources": 4,
       "categories": [
         "transport",
+        "rehabilitation",
         "school",
         "major_permit",
         "housing",
@@ -776,7 +828,21 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
+        },
+        {
+          "id": "60edcf3af29e793a",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/perimetres-dintervention/zone-de-renovation-urbaine-zru",
+          "title": "Zone de Revitalisation Urbaine (ZRU)",
+          "categories": [
+            "rehabilitation"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "86b3dd5d09f71cf8",
@@ -790,7 +856,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "2621658d54f6f612",
@@ -804,7 +870,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "bb266658da71c2c0",
@@ -818,7 +884,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "a2ffa6d7517ddb9a",
@@ -832,7 +898,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "7ccd5dd79d0efbb7",
@@ -846,7 +912,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "28188625478643e9",
@@ -860,7 +926,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "1b53a0219d8792b3",
@@ -874,7 +940,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "69a26d679c7dafb4",
@@ -888,7 +954,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "3ae2ffaf99a3ab7e",
@@ -902,7 +968,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "d9cea89cf34b6c90",
@@ -916,7 +982,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "a4981fe644a09e0f",
@@ -930,7 +996,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "0c6ce8bb5be690c6",
@@ -944,7 +1010,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "678c0a395bb97dc0",
@@ -959,7 +1025,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "18392ded8d7d941c",
@@ -973,49 +1039,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
-        },
-        {
-          "id": "54ab1de6842f712c",
-          "feedId": "perspective",
-          "feedName": "perspective.brussels",
-          "url": "https://perspective.brussels/fr/projets/poles-strategiques/heysel/pad-heysel",
-          "title": "PAD - Heysel",
-          "categories": [
-            "masterplan"
-          ],
-          "stage": "ANNOUNCED",
-          "area": null,
-          "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
-        },
-        {
-          "id": "c24e81d68b3dfa51",
-          "feedId": "perspective",
-          "feedName": "perspective.brussels",
-          "url": "https://perspective.brussels/fr/projets/poles-strategiques/josaphat/pad-josaphat",
-          "title": "PAD - Josaphat",
-          "categories": [
-            "masterplan"
-          ],
-          "stage": "ANNOUNCED",
-          "area": null,
-          "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
-        },
-        {
-          "id": "5edf6b9ab7bb58ce",
-          "feedId": "perspective",
-          "feedName": "perspective.brussels",
-          "url": "https://perspective.brussels/fr/projets/poles-strategiques/quartier-midi/cru-7-autour-de-la-gare-du-midi",
-          "title": "CRU 7 - Autour de la Gare du Midi",
-          "categories": [
-            "transport"
-          ],
-          "stage": "ANNOUNCED",
-          "area": null,
-          "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "2e07c6634808b3d7",
@@ -1029,7 +1053,21 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
+        },
+        {
+          "id": "c500f52245394d3a",
+          "feedId": "mobility",
+          "feedName": "Bruxelles Mobilité",
+          "url": "https://mobilite-mobiliteit.brussels/fr/transport-mobilite",
+          "title": "Transport, mobilité",
+          "categories": [
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "c0059da45ef2b22c",
@@ -1043,7 +1081,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "d7779a5fef78d96e",
@@ -1057,7 +1095,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "40c02cb1c452e63b",
@@ -1071,7 +1109,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "9824dd568b44eb38",
@@ -1085,7 +1123,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "856a7df2b380d195",
@@ -1099,7 +1137,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "e392d3ac425376b2",
@@ -1113,7 +1151,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "5d2f3b34ddd311c8",
@@ -1127,7 +1165,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "03a1c9ff3b2a24ba",
@@ -1141,7 +1179,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "1b16c014d3c2f78a",
@@ -1155,7 +1193,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "ffb98a4d1d984a16",
@@ -1169,7 +1207,7 @@
           "stage": "UNDER_CONSTRUCTION",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "3ab0ab8c9dbacedc",
@@ -1183,7 +1221,21 @@
           "stage": "DELIVERED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
+        },
+        {
+          "id": "09083ab7c4e98905",
+          "feedId": "port",
+          "feedName": "Port de Bruxelles",
+          "url": "https://port.brussels/fr/actualites/stabilisation-du-quai-du-hainaut-travaux-de-nuit-du-11-au-13-aout",
+          "title": "Publié le 08/08/25 Stabilisation du quai du Hainaut : travaux de nuit du 11 au 13 août Dans le cadre du chantier de sécurisation du quai du Hainaut, une opération de bétonnage en continu est prévue du lundi 11 août à 7h ",
+          "categories": [
+            "public_investment"
+          ],
+          "stage": "UNDER_CONSTRUCTION",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         }
       ]
     },
@@ -1219,7 +1271,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         },
         {
           "id": "19d562bb39f5c802",
@@ -1238,7 +1290,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         }
       ]
     },
@@ -1274,7 +1326,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         }
       ]
     },
@@ -1310,7 +1362,7 @@
             "municipality": "Ixelles"
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         }
       ]
     },
@@ -1346,7 +1398,145 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
+        }
+      ]
+    },
+    {
+      "key": "monitoring:74",
+      "area": {
+        "id": "monitoring:74",
+        "name": "HEYSEL",
+        "known": false,
+        "neighborhood": true,
+        "districtId": "74",
+        "center": {
+          "lng": 147744.08875,
+          "lat": 175935.98555
+        }
+      },
+      "signalCount": 1,
+      "independentSources": 1,
+      "categories": [
+        "masterplan"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "54ab1de6842f712c",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/heysel/pad-heysel",
+          "title": "PAD - Heysel",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": "monitoring:74",
+            "name": "HEYSEL",
+            "known": false,
+            "neighborhood": true,
+            "districtId": "74",
+            "center": {
+              "lng": 147744.08875,
+              "lat": 175935.98555
+            }
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-22T10:04:35.767Z"
+        }
+      ]
+    },
+    {
+      "key": "monitoring:27",
+      "area": {
+        "id": "monitoring:27",
+        "name": "JOSAPHAT",
+        "known": false,
+        "neighborhood": true,
+        "districtId": "27",
+        "center": {
+          "lng": 151366.9767,
+          "lat": 172082.60570000001
+        }
+      },
+      "signalCount": 1,
+      "independentSources": 1,
+      "categories": [
+        "masterplan"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "c24e81d68b3dfa51",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/josaphat/pad-josaphat",
+          "title": "PAD - Josaphat",
+          "categories": [
+            "masterplan"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": "monitoring:27",
+            "name": "JOSAPHAT",
+            "known": false,
+            "neighborhood": true,
+            "districtId": "27",
+            "center": {
+              "lng": 151366.9767,
+              "lat": 172082.60570000001
+            }
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-22T10:04:35.767Z"
+        }
+      ]
+    },
+    {
+      "key": "monitoring:804",
+      "area": {
+        "id": "monitoring:804",
+        "name": "GARE DU MIDI",
+        "known": false,
+        "neighborhood": true,
+        "districtId": "804",
+        "center": {
+          "lng": 147516.7363,
+          "lat": 169353.86225
+        }
+      },
+      "signalCount": 1,
+      "independentSources": 1,
+      "categories": [
+        "transport"
+      ],
+      "qualifiesForReview": false,
+      "signals": [
+        {
+          "id": "5edf6b9ab7bb58ce",
+          "feedId": "perspective",
+          "feedName": "perspective.brussels",
+          "url": "https://perspective.brussels/fr/projets/poles-strategiques/quartier-midi/cru-7-autour-de-la-gare-du-midi",
+          "title": "CRU 7 - Autour de la Gare du Midi",
+          "categories": [
+            "transport"
+          ],
+          "stage": "ANNOUNCED",
+          "area": {
+            "id": "monitoring:804",
+            "name": "GARE DU MIDI",
+            "known": false,
+            "neighborhood": true,
+            "districtId": "804",
+            "center": {
+              "lng": 147516.7363,
+              "lat": 169353.86225
+            }
+          },
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         }
       ]
     },
@@ -1384,7 +1574,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         }
       ]
     },
@@ -1420,7 +1610,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-21T20:30:04.519Z"
+          "detectedAt": "2026-09-22T10:04:35.767Z"
         }
       ]
     }

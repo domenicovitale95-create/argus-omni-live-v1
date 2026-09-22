@@ -1,16 +1,1469 @@
 {
   "version": 1,
-  "updatedAt": null,
-  "status": "BOOTSTRAP_PENDING",
+  "updatedAt": "2026-09-22T10:04:35.767Z",
+  "status": "LIVE",
   "source": {
     "name": "Monitoring des Quartiers — IBSA / perspective.brussels / UrbIS",
     "dataset": "quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc",
     "referenceUrl": "https://opendata.brussels.be/explore/dataset/quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc/",
     "wfsUrl": "https://geoservices-urbis.irisnet.be/geoserver/urbisvector/wfs?version=2.0.0&request=GetFeature&typename=urbisvector:MonitoringDistricts&outputformat=json",
+    "fallbackGeojsonUrl": "https://opendata.brussels.be/api/explore/v2.1/catalog/datasets/quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc/exports/geojson",
+    "liveSource": "urbis-wfs",
     "modified": "2026-07-28",
     "geographicalLevel": "neighbourhood",
     "license": "CC0 1.0"
   },
-  "count": 0,
-  "districts": []
+  "count": 145,
+  "districts": [
+    {
+      "id": "46",
+      "name": "ALTITUDE 100",
+      "nameNl": "HOOGTE 100",
+      "center": {
+        "lng": 147659.8047,
+        "lat": 167283.22269999998
+      },
+      "areaM2": 457811.396100697
+    },
+    {
+      "id": "58",
+      "name": "ANDERLECHT CENTRE - WAYEZ",
+      "nameNl": "ANDERLECHT CENTRUM - WAYEZ",
+      "center": {
+        "lng": 145643.86729999998,
+        "lat": 169712.50400000002
+      },
+      "areaM2": 730286.175345802
+    },
+    {
+      "id": "10",
+      "name": "ANNEESSENS",
+      "nameNl": "ANNEESSENS",
+      "center": {
+        "lng": 148056.29725,
+        "lat": 170457.9696
+      },
+      "areaM2": 442457.734139025
+    },
+    {
+      "id": "98",
+      "name": "AUDERGHEM CENTRE",
+      "nameNl": "OUDERGEM CENTRUM",
+      "center": {
+        "lng": 154307.9922,
+        "lat": 167646.78590000002
+      },
+      "areaM2": 804446.295137929
+    },
+    {
+      "id": "84",
+      "name": "AVENUE LEOPOLD III",
+      "nameNl": "LEOPOLD III LAAN",
+      "center": {
+        "lng": 152923.4378,
+        "lat": 173170.0747
+      },
+      "areaM2": 1233384.33072446
+    },
+    {
+      "id": "50",
+      "name": "BAS FOREST",
+      "nameNl": "LAAG VORST",
+      "center": {
+        "lng": 147159.5814,
+        "lat": 168282.8633
+      },
+      "areaM2": 791975.328179689
+    },
+    {
+      "id": "70",
+      "name": "BASILIQUE",
+      "nameNl": "BASILIEK",
+      "center": {
+        "lng": 146913.31540000002,
+        "lat": 172882.83165
+      },
+      "areaM2": 804132.861943193
+    },
+    {
+      "id": "3",
+      "name": "BEGUINAGE - DIXMUDE",
+      "nameNl": "BEGIJNHOF - DIKSMUIDE",
+      "center": {
+        "lng": 148663.7549,
+        "lat": 171605.0221
+      },
+      "areaM2": 380783.267925577
+    },
+    {
+      "id": "67",
+      "name": "BERCHEM SAINTE-AGATHE CENTRE",
+      "nameNl": "SINT-AGATHA BERCHEM CENTRUM",
+      "center": {
+        "lng": 144754.37780000002,
+        "lat": 172957.48804999999
+      },
+      "areaM2": 1788248.11429158
+    },
+    {
+      "id": "41",
+      "name": "BERCKMANS - HOTEL DES MONNAIES",
+      "nameNl": "BERCKMANS - MUNTHOF",
+      "center": {
+        "lng": 148747.8398,
+        "lat": 168926.57275
+      },
+      "areaM2": 443425.031345468
+    },
+    {
+      "id": "53",
+      "name": "BIZET - ROUE - CERIA",
+      "nameNl": "BIZET - RAD - COOVI",
+      "center": {
+        "lng": 144814.4142,
+        "lat": 167662.727
+      },
+      "areaM2": 1787142.19871732
+    },
+    {
+      "id": "907",
+      "name": "BOIS DE LA CAMBRE",
+      "nameNl": "TER KAMERENBOS",
+      "center": {
+        "lng": 150704.9829,
+        "lat": 166240.68835
+      },
+      "areaM2": 1253030.31082054
+    },
+    {
+      "id": "916",
+      "name": "BOIS DU LAARBEEK - POELBOS",
+      "nameNl": "LAARBEEKBOS - POELBOS",
+      "center": {
+        "lng": 145377.95585,
+        "lat": 174678.02215
+      },
+      "areaM2": 1152367.40632875
+    },
+    {
+      "id": "103",
+      "name": "BOITSFORT CENTRE",
+      "nameNl": "BOSVOORDE CENTRUM",
+      "center": {
+        "lng": 153611.125,
+        "lat": 165247.0104
+      },
+      "areaM2": 1633847.71372256
+    },
+    {
+      "id": "56",
+      "name": "BON AIR",
+      "nameNl": "GOEDE LUCHT",
+      "center": {
+        "lng": 143577.99345,
+        "lat": 169498.1667
+      },
+      "areaM2": 300719.045366283
+    },
+    {
+      "id": "106",
+      "name": "BOONDAEL",
+      "nameNl": "BOONDAAL",
+      "center": {
+        "lng": 151382.25780000002,
+        "lat": 166290.20275
+      },
+      "areaM2": 1457472.70593421
+    },
+    {
+      "id": "49",
+      "name": "BOSNIE",
+      "nameNl": "BOSNIE",
+      "center": {
+        "lng": 147854.0626,
+        "lat": 168626.21730000002
+      },
+      "areaM2": 201627.060092603
+    },
+    {
+      "id": "902",
+      "name": "BOTANIQUE",
+      "nameNl": "KRUIDTUIN",
+      "center": {
+        "lng": 149624.85045,
+        "lat": 171588.4646
+      },
+      "areaM2": 63920.4124487594
+    },
+    {
+      "id": "93",
+      "name": "BOULEVARD DE LA WOLUWE",
+      "nameNl": "WOLUWELAAN",
+      "center": {
+        "lng": 154753.63319999998,
+        "lat": 169720.918
+      },
+      "areaM2": 1062080.34450854
+    },
+    {
+      "id": "43",
+      "name": "BRUGMANN - LEPOUTRE",
+      "nameNl": "BRUGMANN - LEPOUTRE",
+      "center": {
+        "lng": 149192.4376,
+        "lat": 167620.34230000002
+      },
+      "areaM2": 1287886.13244836
+    },
+    {
+      "id": "60",
+      "name": "BUFFON",
+      "nameNl": "BUFFON",
+      "center": {
+        "lng": 145235.2735,
+        "lat": 170164.63679999998
+      },
+      "areaM2": 456493.187968008
+    },
+    {
+      "id": "99",
+      "name": "CHANT D'OISEAU",
+      "nameNl": "VOGELZANG",
+      "center": {
+        "lng": 153329.5234,
+        "lat": 168568.043
+      },
+      "areaM2": 1568991.83877595
+    },
+    {
+      "id": "33",
+      "name": "CHASSE",
+      "nameNl": "JACHT",
+      "center": {
+        "lng": 151552.53590000002,
+        "lat": 168671.5018
+      },
+      "areaM2": 1060427.60522765
+    },
+    {
+      "id": "42",
+      "name": "CHATELAIN",
+      "nameNl": "KASTELEIN",
+      "center": {
+        "lng": 149426.7579,
+        "lat": 168651.01965
+      },
+      "areaM2": 659812.801802849
+    },
+    {
+      "id": "24",
+      "name": "CHAUSSEE DE HAECHT",
+      "nameNl": "HAACHTSE STEENWEG",
+      "center": {
+        "lng": 150307.0001,
+        "lat": 172106.3634
+      },
+      "areaM2": 712676.550114663
+    },
+    {
+      "id": "100",
+      "name": "CHAUSSEE DE WAVRE - SAINT-JULIEN",
+      "nameNl": "WAVERSESTEENWEG - SINT-JULIAAN",
+      "center": {
+        "lng": 152992.62195,
+        "lat": 167976.09769999998
+      },
+      "areaM2": 1376765.18557555
+    },
+    {
+      "id": "44",
+      "name": "CHURCHILL",
+      "nameNl": "CHURCHILL",
+      "center": {
+        "lng": 149128.9918,
+        "lat": 166745.0243
+      },
+      "areaM2": 1102464.94338201
+    },
+    {
+      "id": "701",
+      "name": "CIMETIERE D'IXELLES",
+      "nameNl": "KERKHOF ELSENE",
+      "center": {
+        "lng": 151735.94975,
+        "lat": 167246.16019999998
+      },
+      "areaM2": 112266.798861195
+    },
+    {
+      "id": "700",
+      "name": "CIMETIERE DE BRUXELLES",
+      "nameNl": "KERKHOF BRUSSEL",
+      "center": {
+        "lng": 153436.258,
+        "lat": 173075.28519999998
+      },
+      "areaM2": 490633.171007811
+    },
+    {
+      "id": "702",
+      "name": "CIMETIERE SAINT-GILLES",
+      "nameNl": "KERKHOF SINT-GILLIS",
+      "center": {
+        "lng": 147435.9766,
+        "lat": 163186.7775
+      },
+      "areaM2": 238249.517654017
+    },
+    {
+      "id": "903",
+      "name": "CINQUANTENAIRE",
+      "nameNl": "JUBELPARK",
+      "center": {
+        "lng": 151593.1954,
+        "lat": 170064.67680000002
+      },
+      "areaM2": 384381.379940232
+    },
+    {
+      "id": "23",
+      "name": "COLIGNON",
+      "nameNl": "COLIGNON",
+      "center": {
+        "lng": 150622.8907,
+        "lat": 173198.77765
+      },
+      "areaM2": 776950.684174197
+    },
+    {
+      "id": "83",
+      "name": "CONSCIENCE",
+      "nameNl": "CONSCIENCE",
+      "center": {
+        "lng": 152362.76645,
+        "lat": 173463.07984999998
+      },
+      "areaM2": 490054.58396963
+    },
+    {
+      "id": "11",
+      "name": "CUREGHEM BARA",
+      "nameNl": "KUREGEM BARA",
+      "center": {
+        "lng": 147450.8114,
+        "lat": 169903.57624999998
+      },
+      "areaM2": 591459.746893704
+    },
+    {
+      "id": "13",
+      "name": "CUREGHEM ROSEE",
+      "nameNl": "KUREGEM DAUW",
+      "center": {
+        "lng": 147177.01305,
+        "lat": 170489.61145
+      },
+      "areaM2": 683460.593146128
+    },
+    {
+      "id": "12",
+      "name": "CUREGHEM VETERINAIRE",
+      "nameNl": "KUREGEM VEEARTSENIJ",
+      "center": {
+        "lng": 146942.9581,
+        "lat": 169400.66355
+      },
+      "areaM2": 670439.118807979
+    },
+    {
+      "id": "26",
+      "name": "DAILLY",
+      "nameNl": "DAILLY",
+      "center": {
+        "lng": 151236.0748,
+        "lat": 171536.31040000002
+      },
+      "areaM2": 882456.808511444
+    },
+    {
+      "id": "2",
+      "name": "DANSAERT",
+      "nameNl": "DANSAERT",
+      "center": {
+        "lng": 148333.91425,
+        "lat": 171157.19929999998
+      },
+      "areaM2": 532728.351185418
+    },
+    {
+      "id": "802",
+      "name": "DELTA",
+      "nameNl": "DELTA",
+      "center": {
+        "lng": 152382.75225000002,
+        "lat": 167269.58755
+      },
+      "areaM2": 254261.094090851
+    },
+    {
+      "id": "114",
+      "name": "DIEWEG",
+      "nameNl": "DIEWEG",
+      "center": {
+        "lng": 148584.7188,
+        "lat": 164654.9337
+      },
+      "areaM2": 1195246.25728793
+    },
+    {
+      "id": "900",
+      "name": "DOMAINE ROYAL LAEKEN",
+      "nameNl": "KONINKLIJK DOMEIN LAKEN",
+      "center": {
+        "lng": 149457.0782,
+        "lat": 174966.62900000002
+      },
+      "areaM2": 2790259.92685357
+    },
+    {
+      "id": "105",
+      "name": "DRIES",
+      "nameNl": "DRIES",
+      "center": {
+        "lng": 152200.49219999998,
+        "lat": 165676.4181
+      },
+      "areaM2": 1033797.81302449
+    },
+    {
+      "id": "14",
+      "name": "DUCHESSE",
+      "nameNl": "HERTOGIN",
+      "center": {
+        "lng": 147122.9965,
+        "lat": 170960.91735
+      },
+      "areaM2": 371754.088255228
+    },
+    {
+      "id": "39",
+      "name": "ETANGS D'IXELLES",
+      "nameNl": "VIJVERS VAN ELSENE",
+      "center": {
+        "lng": 150275.04950000002,
+        "lat": 167808.7539
+      },
+      "areaM2": 831273.325251472
+    },
+    {
+      "id": "37",
+      "name": "FLAGEY - MALIBRAN",
+      "nameNl": "FLAGEY - MALIBRAN",
+      "center": {
+        "lng": 150430.1128,
+        "lat": 168935.8712
+      },
+      "areaM2": 652736.377838367
+    },
+    {
+      "id": "906",
+      "name": "FORET DE SOIGNES",
+      "nameNl": "ZONIENWOUD",
+      "center": {
+        "lng": 154358.16735,
+        "lat": 164812.418
+      },
+      "areaM2": 17875860.7108116
+    },
+    {
+      "id": "110",
+      "name": "FORT JACO",
+      "nameNl": "FORT JACO",
+      "center": {
+        "lng": 150804.74115,
+        "lat": 164737.0431
+      },
+      "areaM2": 1287130.09484074
+    },
+    {
+      "id": "69",
+      "name": "GANSHOREN CENTRE",
+      "nameNl": "GANSHOREN CENTRUM",
+      "center": {
+        "lng": 145767.51395,
+        "lat": 173689.32085000002
+      },
+      "areaM2": 853129.305171802
+    },
+    {
+      "id": "15",
+      "name": "GARE DE L'OUEST",
+      "nameNl": "WESTSTATION",
+      "center": {
+        "lng": 147141.2735,
+        "lat": 171399.5778
+      },
+      "areaM2": 516824.571243781
+    },
+    {
+      "id": "81",
+      "name": "GARE DE SCHAERBEEK",
+      "nameNl": "SCHAARBEEK STATION",
+      "center": {
+        "lng": 150841.97149999999,
+        "lat": 173961.85375
+      },
+      "areaM2": 373794.266421826
+    },
+    {
+      "id": "804",
+      "name": "GARE DU MIDI",
+      "nameNl": "ZUIDSTATION",
+      "center": {
+        "lng": 147516.7363,
+        "lat": 169353.86225
+      },
+      "areaM2": 247497.123955997
+    },
+    {
+      "id": "85",
+      "name": "GARE JOSAPHAT",
+      "nameNl": "JOSAPHAT STATION",
+      "center": {
+        "lng": 152199.31459999998,
+        "lat": 172263.00415
+      },
+      "areaM2": 605182.66545152
+    },
+    {
+      "id": "88",
+      "name": "GEORGES HENRI",
+      "nameNl": "GEORGES HENRI",
+      "center": {
+        "lng": 153151.1876,
+        "lat": 170462.9071
+      },
+      "areaM2": 1155435.62182054
+    },
+    {
+      "id": "116",
+      "name": "GLOBE",
+      "nameNl": "GLOBE",
+      "center": {
+        "lng": 147767.8204,
+        "lat": 165827.977
+      },
+      "areaM2": 1457097.38566271
+    },
+    {
+      "id": "1",
+      "name": "GRAND PLACE",
+      "nameNl": "GROTE MARKT",
+      "center": {
+        "lng": 148886.3985,
+        "lat": 170699.0509
+      },
+      "areaM2": 386644.641476385
+    },
+    {
+      "id": "89",
+      "name": "GRIBAUMONT",
+      "nameNl": "GRIBAUMONT",
+      "center": {
+        "lng": 153524.90655,
+        "lat": 169819.1837
+      },
+      "areaM2": 1024463.20168724
+    },
+    {
+      "id": "78",
+      "name": "HAREN",
+      "nameNl": "HAREN",
+      "center": {
+        "lng": 153515.53895000002,
+        "lat": 175912.46755
+      },
+      "areaM2": 1937563.01207175
+    },
+    {
+      "id": "47",
+      "name": "HAUT SAINT-GILLES",
+      "nameNl": "HOOG SINT-GILLIS",
+      "center": {
+        "lng": 148447.47720000002,
+        "lat": 168384.33234999998
+      },
+      "areaM2": 763524.441162224
+    },
+    {
+      "id": "77",
+      "name": "HEEMBEEK",
+      "nameNl": "HEEMBEEK",
+      "center": {
+        "lng": 151170.6172,
+        "lat": 176143.19400000002
+      },
+      "areaM2": 1935572.11577609
+    },
+    {
+      "id": "80",
+      "name": "HELMET",
+      "nameNl": "HELMET",
+      "center": {
+        "lng": 151305.30544999999,
+        "lat": 173850.7355
+      },
+      "areaM2": 711717.360971905
+    },
+    {
+      "id": "73",
+      "name": "HEYMBOSCH - AZ-JETTE",
+      "nameNl": "HEYMBOSCH - AZ-JETTE",
+      "center": {
+        "lng": 146134.2978,
+        "lat": 175140.675
+      },
+      "areaM2": 1373485.31372383
+    },
+    {
+      "id": "74",
+      "name": "HEYSEL",
+      "nameNl": "HEIZEL",
+      "center": {
+        "lng": 147744.08875,
+        "lat": 175935.98555
+      },
+      "areaM2": 2794371.54602681
+    },
+    {
+      "id": "38",
+      "name": "HOPITAL ETTERBEEK - IXELLES",
+      "nameNl": "HOSPITAAL ETTERBEEK - ELSENE",
+      "center": {
+        "lng": 150865.38225,
+        "lat": 168086.7051
+      },
+      "areaM2": 680186.794021856
+    },
+    {
+      "id": "64",
+      "name": "HOPITAL FRANCAIS",
+      "nameNl": "FRANS HOSPITAAL",
+      "center": {
+        "lng": 145954.55585,
+        "lat": 172638.6642
+      },
+      "areaM2": 800888.553566888
+    },
+    {
+      "id": "75",
+      "name": "HOUBA",
+      "nameNl": "HOUBA",
+      "center": {
+        "lng": 148129.4577,
+        "lat": 175034.9962
+      },
+      "areaM2": 1204344.59252201
+    },
+    {
+      "id": "805",
+      "name": "INDUSTRIE BIRMINGHAM",
+      "nameNl": "INDUSTRIE BIRMINGHAM",
+      "center": {
+        "lng": 146681.9797,
+        "lat": 170256.02779999998
+      },
+      "areaM2": 253559.700210645
+    },
+    {
+      "id": "800",
+      "name": "INDUSTRIE NORD",
+      "nameNl": "INDUSTRIE NOORD",
+      "center": {
+        "lng": 151564.23450000002,
+        "lat": 175770.97470000002
+      },
+      "areaM2": 6661371.47718253
+    },
+    {
+      "id": "801",
+      "name": "INDUSTRIE OTAN",
+      "nameNl": "INDUSTRIE NATO",
+      "center": {
+        "lng": 153793.8743,
+        "lat": 174441.44150000002
+      },
+      "areaM2": 2441752.39125656
+    },
+    {
+      "id": "803",
+      "name": "INDUSTRIE SUD",
+      "nameNl": "INDUSTRIE ZUID",
+      "center": {
+        "lng": 145996.01965,
+        "lat": 167443.4848
+      },
+      "areaM2": 3895481.7119933
+    },
+    {
+      "id": "72",
+      "name": "JETTE CENTRE",
+      "nameNl": "JETTE CENTRUM",
+      "center": {
+        "lng": 146877.9688,
+        "lat": 174068.4805
+      },
+      "areaM2": 966043.99153946
+    },
+    {
+      "id": "27",
+      "name": "JOSAPHAT",
+      "nameNl": "JOSAPHAT",
+      "center": {
+        "lng": 151366.9767,
+        "lat": 172082.60570000001
+      },
+      "areaM2": 442889.663138707
+    },
+    {
+      "id": "34",
+      "name": "JOURDAN",
+      "nameNl": "JOURDAN",
+      "center": {
+        "lng": 150900.9375,
+        "lat": 169395.83505
+      },
+      "areaM2": 544162.91797461
+    },
+    {
+      "id": "115",
+      "name": "KALEVOET - MOENSBERG",
+      "nameNl": "KALEVOET - MOENSBERG",
+      "center": {
+        "lng": 146930.6924,
+        "lat": 164214.26059999998
+      },
+      "areaM2": 2089528.67325329
+    },
+    {
+      "id": "92",
+      "name": "KAPELLEVELD",
+      "nameNl": "KAPELLEVELD",
+      "center": {
+        "lng": 155859.06215,
+        "lat": 170864.5488
+      },
+      "areaM2": 1901990.78648285
+    },
+    {
+      "id": "63",
+      "name": "KARREVELD",
+      "nameNl": "KARREVELD",
+      "center": {
+        "lng": 146470.5416,
+        "lat": 171697.2314
+      },
+      "areaM2": 787319.619627857
+    },
+    {
+      "id": "17",
+      "name": "KOEKELBERG",
+      "nameNl": "KOEKELBERG",
+      "center": {
+        "lng": 147384.64,
+        "lat": 172173.94185
+      },
+      "areaM2": 351568.664941767
+    },
+    {
+      "id": "65",
+      "name": "KORENBEEK",
+      "nameNl": "KORENBEEK",
+      "center": {
+        "lng": 145211.03470000002,
+        "lat": 171961.14795
+      },
+      "areaM2": 757095.900586797
+    },
+    {
+      "id": "112",
+      "name": "KRIEKENPUT - HOMBORCH - VERREWINKEL",
+      "nameNl": "KRIEKENPUT - HOMBORCH - VERREWINKEL",
+      "center": {
+        "lng": 148610.1172,
+        "lat": 163361.68615000002
+      },
+      "areaM2": 1902167.32093161
+    },
+    {
+      "id": "40",
+      "name": "LOUISE - LONGUE HAIE",
+      "nameNl": "LOUIZA - LANGEHAAG",
+      "center": {
+        "lng": 149615.4519,
+        "lat": 168889.91955
+      },
+      "areaM2": 431291.684322149
+    },
+    {
+      "id": "62",
+      "name": "MACHTENS",
+      "nameNl": "MACHTENS",
+      "center": {
+        "lng": 145560.37715000001,
+        "lat": 171284.26559999998
+      },
+      "areaM2": 1403384.26919809
+    },
+    {
+      "id": "8",
+      "name": "MAROLLES",
+      "nameNl": "MAROLLEN",
+      "center": {
+        "lng": 148542.6805,
+        "lat": 169684.10725
+      },
+      "areaM2": 644386.93234853
+    },
+    {
+      "id": "4",
+      "name": "MARTYRS",
+      "nameNl": "MARTELAARS",
+      "center": {
+        "lng": 149236.32880000002,
+        "lat": 171316.04379999998
+      },
+      "areaM2": 383526.143335188
+    },
+    {
+      "id": "36",
+      "name": "MATONGE",
+      "nameNl": "MATONGE",
+      "center": {
+        "lng": 149833.68745,
+        "lat": 169419.71725
+      },
+      "areaM2": 486244.085719764
+    },
+    {
+      "id": "16",
+      "name": "MOLENBEEK HISTORIQUE",
+      "nameNl": "HISTORISCH MOLENBEEK",
+      "center": {
+        "lng": 147869.15965,
+        "lat": 171722.0893
+      },
+      "areaM2": 722954.750568012
+    },
+    {
+      "id": "45",
+      "name": "MOLIERE - LONGCHAMP",
+      "nameNl": "MOLIERE - LONGCHAMP",
+      "center": {
+        "lng": 148234.1101,
+        "lat": 167303.9358
+      },
+      "areaM2": 544339.712360061
+    },
+    {
+      "id": "108",
+      "name": "MONTJOIE - LANGEVELD",
+      "nameNl": "MONTJOIE - LANGEVELD",
+      "center": {
+        "lng": 149170.7782,
+        "lat": 166300.8946
+      },
+      "areaM2": 1119687.54482364
+    },
+    {
+      "id": "61",
+      "name": "MOORTEBEEK - PETERBOS",
+      "nameNl": "MOORTEBEEK - PETERBOS",
+      "center": {
+        "lng": 144474.0649,
+        "lat": 170583.9152
+      },
+      "areaM2": 1095416.95968908
+    },
+    {
+      "id": "76",
+      "name": "MUTSAARD",
+      "nameNl": "MUTSAARD",
+      "center": {
+        "lng": 149505.41210000002,
+        "lat": 176080.76189999998
+      },
+      "areaM2": 1387627.40991961
+    },
+    {
+      "id": "55",
+      "name": "NEERPEDE",
+      "nameNl": "NEERPEDE",
+      "center": {
+        "lng": 142607.5435,
+        "lat": 168394.71575
+      },
+      "areaM2": 3952267.49990536
+    },
+    {
+      "id": "5",
+      "name": "NOTRE-DAME AUX NEIGES",
+      "nameNl": "ONZE LIEVE VROUW TER SNEEUW",
+      "center": {
+        "lng": 149748.9509,
+        "lat": 171141.25565
+      },
+      "areaM2": 299945.310970578
+    },
+    {
+      "id": "109",
+      "name": "OBSERVATOIRE",
+      "nameNl": "OBSERVATORIUM",
+      "center": {
+        "lng": 149344.96879999997,
+        "lat": 165490.8675
+      },
+      "areaM2": 1986632.67380561
+    },
+    {
+      "id": "86",
+      "name": "PADUWA",
+      "nameNl": "PADUWA",
+      "center": {
+        "lng": 153303.471,
+        "lat": 172066.0486
+      },
+      "areaM2": 1154477.32495065
+    },
+    {
+      "id": "79",
+      "name": "PAIX",
+      "nameNl": "VREDE",
+      "center": {
+        "lng": 152129.46665000002,
+        "lat": 174193.8732
+      },
+      "areaM2": 1203234.21934994
+    },
+    {
+      "id": "911",
+      "name": "PARC ASTRID",
+      "nameNl": "ASTRIDPARK",
+      "center": {
+        "lng": 145029.1797,
+        "lat": 169179.2774
+      },
+      "areaM2": 164946.909979322
+    },
+    {
+      "id": "917",
+      "name": "PARC BAUDOUIN - DIELEGEMBOS",
+      "nameNl": "BOUDEWIJNPARK - DIELEGEMBOS",
+      "center": {
+        "lng": 147114.5157,
+        "lat": 174901.3555
+      },
+      "areaM2": 474222.617883803
+    },
+    {
+      "id": "905",
+      "name": "PARC DE LA WOLUWE",
+      "nameNl": "PARK VAN WOLUWE",
+      "center": {
+        "lng": 154441.3126,
+        "lat": 168436.9414
+      },
+      "areaM2": 1356159.89134637
+    },
+    {
+      "id": "910",
+      "name": "PARC DES ETANGS",
+      "nameNl": "VIJVERSPARK",
+      "center": {
+        "lng": 144209.086,
+        "lat": 168333.46490000002
+      },
+      "areaM2": 75439.2242435409
+    },
+    {
+      "id": "909",
+      "name": "PARC DUDEN - PARC DE FOREST",
+      "nameNl": "DUDENPARK - PARK VAN VORST",
+      "center": {
+        "lng": 147533.1973,
+        "lat": 167655.1583
+      },
+      "areaM2": 486535.470788289
+    },
+    {
+      "id": "915",
+      "name": "PARC ELISABETH",
+      "nameNl": "ELISABETHPARK",
+      "center": {
+        "lng": 146716.6485,
+        "lat": 172806.4259
+      },
+      "areaM2": 230383.316245431
+    },
+    {
+      "id": "912",
+      "name": "PARC FORESTIER",
+      "nameNl": "BOSPARK",
+      "center": {
+        "lng": 145885.3516,
+        "lat": 170096.918
+      },
+      "areaM2": 46647.4369395226
+    },
+    {
+      "id": "901",
+      "name": "PARC JOSAPHAT",
+      "nameNl": "JOSAPHATPARK",
+      "center": {
+        "lng": 151344.4063,
+        "lat": 172552.8634
+      },
+      "areaM2": 382254.721984059
+    },
+    {
+      "id": "904",
+      "name": "PARC LEOPOLD",
+      "nameNl": "LEOPOLDPARK",
+      "center": {
+        "lng": 150627.9533,
+        "lat": 169743.94905
+      },
+      "areaM2": 111780.879139592
+    },
+    {
+      "id": "913",
+      "name": "PARC MARIE-JOSE",
+      "nameNl": "MARIE-JOSEPARK",
+      "center": {
+        "lng": 146480.0939,
+        "lat": 171180.41019999998
+      },
+      "areaM2": 78547.1644183908
+    },
+    {
+      "id": "908",
+      "name": "PARC WOLVENDAEL",
+      "nameNl": "WOLVENDAELPARK",
+      "center": {
+        "lng": 148323.57030000002,
+        "lat": 165467.82429999998
+      },
+      "areaM2": 156179.200520053
+    },
+    {
+      "id": "28",
+      "name": "PLASKY",
+      "nameNl": "PLASKY",
+      "center": {
+        "lng": 151934.1485,
+        "lat": 171170.0312
+      },
+      "areaM2": 503104.830469504
+    },
+    {
+      "id": "48",
+      "name": "PORTE DE HAL",
+      "nameNl": "HALLEPOORT",
+      "center": {
+        "lng": 147982.7735,
+        "lat": 169116.6068
+      },
+      "areaM2": 532558.410240812
+    },
+    {
+      "id": "30",
+      "name": "PORTE TERVUEREN",
+      "nameNl": "TERVURENSE POORT",
+      "center": {
+        "lng": 152048.5782,
+        "lat": 170298.3242
+      },
+      "areaM2": 909931.59072173
+    },
+    {
+      "id": "66",
+      "name": "POTAARDE",
+      "nameNl": "POTAARDE",
+      "center": {
+        "lng": 144243.57025,
+        "lat": 172353.6802
+      },
+      "areaM2": 652775.489073809
+    },
+    {
+      "id": "97",
+      "name": "PUTDAAL",
+      "nameNl": "PUTDAAL",
+      "center": {
+        "lng": 155046.1657,
+        "lat": 167942.96490000002
+      },
+      "areaM2": 778703.023428366
+    },
+    {
+      "id": "22",
+      "name": "QUARTIER BRABANT",
+      "nameNl": "BRABANTWIJK",
+      "center": {
+        "lng": 149809.87175,
+        "lat": 172532.5775
+      },
+      "areaM2": 782508.827860398
+    },
+    {
+      "id": "35",
+      "name": "QUARTIER EUROPEEN",
+      "nameNl": "EUROPAWIJK",
+      "center": {
+        "lng": 150400.4688,
+        "lat": 170087.44929999998
+      },
+      "areaM2": 969739.683524613
+    },
+    {
+      "id": "18",
+      "name": "QUARTIER MARITIME",
+      "nameNl": "HAVENWIJK",
+      "center": {
+        "lng": 148429.97905000002,
+        "lat": 172783.88679999998
+      },
+      "areaM2": 1738254.32715362
+    },
+    {
+      "id": "21",
+      "name": "QUARTIER NORD",
+      "nameNl": "NOORDWIJK",
+      "center": {
+        "lng": 149514.9559,
+        "lat": 172751.6976
+      },
+      "areaM2": 1313338.99642435
+    },
+    {
+      "id": "6",
+      "name": "QUARTIER ROYAL",
+      "nameNl": "KONINGSWIJK",
+      "center": {
+        "lng": 149530.1888,
+        "lat": 170540.0353
+      },
+      "areaM2": 701173.441516306
+    },
+    {
+      "id": "87",
+      "name": "REYERS",
+      "nameNl": "REYERS",
+      "center": {
+        "lng": 152620.5244,
+        "lat": 171434.27730000002
+      },
+      "areaM2": 596553.731580204
+    },
+    {
+      "id": "90",
+      "name": "ROODEBEEK - CONSTELLATIONS",
+      "nameNl": "ROODEBEEK - STERREBEELDEN",
+      "center": {
+        "lng": 153991.62,
+        "lat": 170939.8826
+      },
+      "areaM2": 1546693.94632078
+    },
+    {
+      "id": "7",
+      "name": "SABLON",
+      "nameNl": "ZAVEL",
+      "center": {
+        "lng": 149205.2501,
+        "lat": 169909.8555
+      },
+      "areaM2": 463600.348523628
+    },
+    {
+      "id": "118",
+      "name": "SAINT-DENIS - NEERSTALLE",
+      "nameNl": "SINT-DENIJS - NEERSTALLE",
+      "center": {
+        "lng": 146379.2584,
+        "lat": 166251.852
+      },
+      "areaM2": 808559.803978451
+    },
+    {
+      "id": "113",
+      "name": "SAINT-JOB KAUWBERG",
+      "nameNl": "SINT-JOB KAUWBERG",
+      "center": {
+        "lng": 149306.4141,
+        "lat": 164056.69929999998
+      },
+      "areaM2": 2175616.14678179
+    },
+    {
+      "id": "25",
+      "name": "SAINT-JOSSE CENTRE",
+      "nameNl": "SINT-JOOST CENTRUM",
+      "center": {
+        "lng": 150430.953,
+        "lat": 171281.0932
+      },
+      "areaM2": 614016.577693136
+    },
+    {
+      "id": "31",
+      "name": "SAINT-MICHEL",
+      "nameNl": "SINT-MICHIEL",
+      "center": {
+        "lng": 152724.7735,
+        "lat": 169180.79465
+      },
+      "areaM2": 723447.471566702
+    },
+    {
+      "id": "96",
+      "name": "SAINT-PAUL",
+      "nameNl": "SINT-PAULUS",
+      "center": {
+        "lng": 155712.9517,
+        "lat": 168838.61560000002
+      },
+      "areaM2": 1785048.06725977
+    },
+    {
+      "id": "32",
+      "name": "SAINT-PIERRE",
+      "nameNl": "SINT-PIETER",
+      "center": {
+        "lng": 151812.47645000002,
+        "lat": 169249.8751
+      },
+      "areaM2": 810620.891375619
+    },
+    {
+      "id": "95",
+      "name": "SAINTE-ALIX - JOLI BOIS",
+      "nameNl": "SINTE-ALEIDIS - MOOIBOS",
+      "center": {
+        "lng": 156799.3417,
+        "lat": 168716.10700000002
+      },
+      "areaM2": 989876.740468431
+    },
+    {
+      "id": "57",
+      "name": "SCHERDEMAEL",
+      "nameNl": "SCHERDEMAAL",
+      "center": {
+        "lng": 144431.3985,
+        "lat": 168997.3712
+      },
+      "areaM2": 1063630.01515873
+    },
+    {
+      "id": "59",
+      "name": "SCHEUT",
+      "nameNl": "SCHEUT",
+      "center": {
+        "lng": 145828.72149999999,
+        "lat": 170396.41090000002
+      },
+      "areaM2": 943247.718255464
+    },
+    {
+      "id": "914",
+      "name": "SCHEUTBOS",
+      "nameNl": "SCHEUTBOS",
+      "center": {
+        "lng": 144585.3608,
+        "lat": 171327.94785
+      },
+      "areaM2": 456339.47222643
+    },
+    {
+      "id": "29",
+      "name": "SQUARES",
+      "nameNl": "SQUARES",
+      "center": {
+        "lng": 150885.1971,
+        "lat": 170800.84305
+      },
+      "areaM2": 804723.592014703
+    },
+    {
+      "id": "9",
+      "name": "STALINGRAD",
+      "nameNl": "STALINGRAD",
+      "center": {
+        "lng": 148409.6473,
+        "lat": 170254.34575
+      },
+      "areaM2": 241765.527331183
+    },
+    {
+      "id": "94",
+      "name": "STOCKEL",
+      "nameNl": "STOKKEL",
+      "center": {
+        "lng": 156102.4826,
+        "lat": 169678.66019999998
+      },
+      "areaM2": 1514613.79487951
+    },
+    {
+      "id": "82",
+      "name": "TERDELT",
+      "nameNl": "TERDELT",
+      "center": {
+        "lng": 151595.1237,
+        "lat": 172880.69640000002
+      },
+      "areaM2": 672086.000041552
+    },
+    {
+      "id": "102",
+      "name": "TRANSVAAL",
+      "nameNl": "TRANSVAAL",
+      "center": {
+        "lng": 154776.5704,
+        "lat": 166220.7646
+      },
+      "areaM2": 1229099.2804911
+    },
+    {
+      "id": "101",
+      "name": "TROIS TILLEULS",
+      "nameNl": "DRIE LINDEN",
+      "center": {
+        "lng": 153491.6641,
+        "lat": 166279.09769999998
+      },
+      "areaM2": 1010317.08692281
+    },
+    {
+      "id": "107",
+      "name": "UNIVERSITE",
+      "nameNl": "UNIVERSITEITSWIJK",
+      "center": {
+        "lng": 151576.9096,
+        "lat": 167594.3124
+      },
+      "areaM2": 1250349.18392977
+    },
+    {
+      "id": "91",
+      "name": "VAL D'OR",
+      "nameNl": "GULLEDELLE",
+      "center": {
+        "lng": 154550.77405,
+        "lat": 171658.93790000002
+      },
+      "areaM2": 1649536.77943063
+    },
+    {
+      "id": "51",
+      "name": "VAN VOLXEM - VAN HAELEN",
+      "nameNl": "VAN VOLXEM - VAN HAELEN",
+      "center": {
+        "lng": 147255.1485,
+        "lat": 167303.1759
+      },
+      "areaM2": 841766.487888597
+    },
+    {
+      "id": "52",
+      "name": "VEEWEYDE - AURORE",
+      "nameNl": "VEEWEIDE - AURORE",
+      "center": {
+        "lng": 145550.3907,
+        "lat": 168930.02740000002
+      },
+      "areaM2": 915265.358089096
+    },
+    {
+      "id": "20",
+      "name": "VIEUX LAEKEN EST",
+      "nameNl": "OUD LAKEN OOST",
+      "center": {
+        "lng": 148843.2657,
+        "lat": 173939.05335
+      },
+      "areaM2": 1049548.62337363
+    },
+    {
+      "id": "19",
+      "name": "VIEUX LAEKEN OUEST",
+      "nameNl": "OUD LAKEN WEST",
+      "center": {
+        "lng": 148178.3025,
+        "lat": 173958.24305
+      },
+      "areaM2": 498164.868781328
+    },
+    {
+      "id": "68",
+      "name": "VILLAS DE GANSHOREN",
+      "nameNl": "VILLA'S VAN GANSHOREN",
+      "center": {
+        "lng": 145452.54235,
+        "lat": 173867.2931
+      },
+      "areaM2": 775198.040021024
+    },
+    {
+      "id": "111",
+      "name": "VIVIER D'OIE",
+      "nameNl": "DIESDELLE",
+      "center": {
+        "lng": 150051.9688,
+        "lat": 163118.6924
+      },
+      "areaM2": 2505833.23172035
+    },
+    {
+      "id": "54",
+      "name": "VOGELENZANG - ERASME",
+      "nameNl": "VOGELENZANG - ERASMUS",
+      "center": {
+        "lng": 143527.1643,
+        "lat": 167202.07025
+      },
+      "areaM2": 2448806.40589262
+    },
+    {
+      "id": "117",
+      "name": "VOSSEGAT - ROOSENDAAL",
+      "nameNl": "VOSSEGAT - ROOSENDAAL",
+      "center": {
+        "lng": 147183.60210000002,
+        "lat": 166051.1134
+      },
+      "areaM2": 1010964.3075623
+    },
+    {
+      "id": "104",
+      "name": "WATERMAEL CENTRE",
+      "nameNl": "WATERMAAL CENTRUM",
+      "center": {
+        "lng": 152808.3221,
+        "lat": 166091.9337
+      },
+      "areaM2": 1729024.38042902
+    },
+    {
+      "id": "71",
+      "name": "WOESTE",
+      "nameNl": "WOESTE",
+      "center": {
+        "lng": 147498.35275000002,
+        "lat": 173634.62795
+      },
+      "areaM2": 1060530.43761973
+    }
+  ]
 }
