@@ -10,6 +10,7 @@ const neighborhoodPath=path.join(root,'data','strategic-neighborhoods.json');
 const existingNeighborhoods=JSON.parse(await readFile(neighborhoodPath,'utf8').catch(()=>JSON.stringify({districts:[]})));
 
 const DISTRICT_WFS='https://geoservices-urbis.irisnet.be/geoserver/urbisvector/wfs?version=2.0.0&request=GetFeature&typename=urbisvector:MonitoringDistricts&outputformat=json';
+const DISTRICT_OPEN_DATA='https://opendata.brussels.be/api/explore/v2.1/catalog/datasets/quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc/exports/geojson';
 const timeout=ms=>new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms));
 const clean=s=>String(s||'').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();
 const abs=(href,baseUrl)=>{try{return new URL(href,baseUrl).toString()}catch{return null}};
@@ -54,11 +55,28 @@ function prop(obj,names){
   }
   return null;
 }
+async function fetchDistrictGeojson(){
+  const attempts=[
+    {id:'urbis-wfs',url:DISTRICT_WFS},
+    {id:'opendata-geojson',url:DISTRICT_OPEN_DATA}
+  ];
+  const errors=[];
+  for(const source of attempts){
+    try{
+      const r=await fetchResponse(source.url,'application/json,application/geo+json');
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      const geo=await r.json();
+      if(!Array.isArray(geo.features)||!geo.features.length)throw new Error('empty feature collection');
+      return {geo,source};
+    }catch(e){
+      errors.push(source.id+': '+String(e.message||e));
+    }
+  }
+  throw new Error(errors.join(' | '));
+}
 async function refreshNeighborhoods(snapshot){
   try{
-    const r=await fetchResponse(DISTRICT_WFS,'application/json');
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const geo=await r.json();
+    const {geo,source:liveSource}=await fetchDistrictGeojson();
     const districts=(geo.features||[]).map((f,i)=>{
       const p=f.properties||{};
       const id=String(prop(p,['mdzone','inspire_id','id'])??f.id??i);
@@ -74,7 +92,8 @@ async function refreshNeighborhoods(snapshot){
         name:'Monitoring des Quartiers — IBSA / perspective.brussels / UrbIS',
         dataset:'quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc',
         referenceUrl:'https://opendata.brussels.be/explore/dataset/quartiers-du-monitoring-des-quartiers-ibsa-perspective-rbc/',
-        wfsUrl:DISTRICT_WFS,modified:'2026-07-28',geographicalLevel:'neighbourhood',license:'CC0 1.0'
+        wfsUrl:DISTRICT_WFS,fallbackGeojsonUrl:DISTRICT_OPEN_DATA,liveSource:liveSource.id,
+        modified:'2026-07-28',geographicalLevel:'neighbourhood',license:'CC0 1.0'
       },
       count:districts.length,districts
     };
