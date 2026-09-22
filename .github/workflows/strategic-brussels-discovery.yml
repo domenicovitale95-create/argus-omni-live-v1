@@ -53,6 +53,9 @@ jobs:
           else
             node scripts/strategic-discovery.mjs
           fi
+      - name: Validate neighborhood coverage
+        run: |
+          node -e "const fs=require('fs');const n=JSON.parse(fs.readFileSync('data/strategic-neighborhoods.json','utf8'));if(n.status!=='LIVE'||!Number.isInteger(n.count)||n.count<1||!Array.isArray(n.districts)||n.districts.length!==n.count){console.error('Invalid Strategic Brussels neighborhood registry', {status:n.status,count:n.count,districts:n.districts?.length});process.exit(1)}"
       - name: Commit snapshot if changed
         shell: bash
         run: |
