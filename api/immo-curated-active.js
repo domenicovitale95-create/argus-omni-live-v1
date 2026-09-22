@@ -1,7 +1,7 @@
 import {requestQuery} from './_request-query.js';
 import apartments from '../data/immo-opportunities.json' with { type: 'json' };
 import buildings from '../data/immo-building-opportunities.json' with { type: 'json' };
-import {fetchListingStatus,isUnavailableListing} from './immo-listing-scan.js';
+import {fetchListingStatus,isUnavailableListing,isConfirmedActiveListing} from './immo-listing-scan.js';
 
 const MAX_CONCURRENCY=4;
 const TIMEOUT_MS=9000;
@@ -12,10 +12,11 @@ async function verifyOne(item){
   try{
     const live=await fetchListingStatus(source,TIMEOUT_MS);
     const unavailable=isUnavailableListing(live);
+    const confirmedActive=isConfirmedActiveListing(live);
     return {
       item:{...item,liveAvailability:live.availabilityStatus||'UNKNOWN',liveCheckedAt:new Date().toISOString()},
       status:live.availabilityStatus||'UNKNOWN',
-      keep:!unavailable,
+      keep:confirmedActive&&!unavailable,
       error:null
     };
   }catch(e){
@@ -51,10 +52,10 @@ export default async function handler(req,res){
     counts:{
       sourceRecords:(data.opportunities||[]).length,
       active:active.length,
-      excludedSoldOrRemoved:excluded.filter(x=>['SOLD','REMOVED'].includes(x.status)).length,
-      hiddenUnverified:excluded.filter(x=>x.status==='UNVERIFIED').length
+      excludedUnavailable:excluded.filter(x=>['SOLD','REMOVED','WITHDRAWN','CLOSED','UNDER_CONTRACT','OPTION'].includes(x.status)).length,
+      hiddenUnverified:excluded.filter(x=>['UNKNOWN','UNVERIFIED'].includes(x.status)).length
     },
     opportunities:active,
-    notice:'ARGUS hides SOLD/VENDU/VERKOCHT and removed listings. If a curated source cannot be reverified, the listing is hidden until verification succeeds.'
+    notice:'ARGUS displays a curated listing only when its source is explicitly confirmed ACTIVE. Sold, removed, under-contract, option and unverifiable listings stay hidden.'
   });
 }
