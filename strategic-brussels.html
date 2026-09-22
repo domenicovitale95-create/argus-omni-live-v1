@@ -293,7 +293,7 @@ fetch('/api/strategic-brussels',{cache:'no-store'}).then(r=>r.json()).then(j=>{
   document.getElementById('kEmerging').textContent=(j.emergingAreas||[]).length;
   document.getElementById('kUpdated').textContent=fmtDate(j.updatedAt);
   renderTop();renderZones();renderCoverage();renderEmerging();
-  const core=zones.find(z=>z.status==='REFERENCE_ONLY');document.getElementById('europeanCore').innerHTML=core?zoneCard(core,true):'<div class="loading">Benchmark indisponible.</div>';
+  const core=zones.find(z=>z.status==='REFERENCE_ONLY');document.getElementById('europeanCore').innerHTML=core?zoneCard(core,true):'<div class="loading">Référence indisponible.</div>';
 }).catch(e=>{
   document.getElementById('zoneList').innerHTML='<div class="loading">Bruxelles stratégique indisponible : '+esc(e.message)+'</div>';
   document.getElementById('topGrid').innerHTML='<div class="loading">Données indisponibles.</div>';
