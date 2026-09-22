@@ -32,6 +32,13 @@ a{color:inherit}.wrap{max-width:1140px;margin:auto;padding:0 22px}.top{position:
 .statusrow{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #e6ebf0;font-size:.8rem}.statusrow:last-child{border-bottom:0}.statusrow span{color:var(--muted)}.statusrow b{text-align:right}
 .empty{background:#fff;border:1px dashed #c8d2dd;border-radius:16px;padding:26px;text-align:center;color:var(--muted)}.empty h2{color:var(--ink);margin:0 0 8px}.empty a{display:inline-block;margin-top:12px;padding:10px 12px;border-radius:10px;background:#173a5f;color:#fff;text-decoration:none;font-weight:850}
 .footer{margin-top:38px;padding:26px 0 80px;border-top:1px solid var(--line);color:#748196;font-size:.76rem}
+
+.auditstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 18px}.audititem{background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px 12px}.audititem small{display:block;color:var(--muted);font-size:.65rem;text-transform:uppercase;letter-spacing:.055em;font-weight:850}.audititem b{display:block;margin-top:3px;font-size:.88rem}.audititem span{display:block;margin-top:2px;color:#758399;font-size:.72rem}
+.compbadge{display:inline-flex;border-radius:999px;padding:4px 7px;font-size:.65rem;font-weight:900;white-space:nowrap}.compbadge.high{background:var(--greenBg);color:var(--green)}.compbadge.mid{background:var(--amberBg);color:var(--amber)}.compbadge.low{background:#eef2f6;color:#617184}
+.marketref{margin-top:12px;padding:12px;border:1px solid #dce4ed;border-radius:12px;background:#f8fafc}.marketref b{display:block;font-size:.88rem}.marketref span{display:block;margin-top:4px;color:var(--muted);font-size:.78rem}
+.officialgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}.official{border:1px solid #dce3eb;border-radius:12px;padding:11px;background:#f8fafc;text-decoration:none}.official b{display:block;font-size:.84rem;color:#183f67}.official span{display:block;color:var(--muted);font-size:.72rem;margin-top:3px}
+.proofnote{margin-top:12px;padding:11px;border-radius:11px;background:#f8fafc;border:1px solid #e1e7ee;color:#5b6d82;font-size:.78rem}
+@media(max-width:700px){.auditstrip,.officialgrid{grid-template-columns:1fr}}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.side{position:static;grid-template-columns:repeat(2,1fr)}.heroGrid{grid-template-columns:1fr}.scorebox{max-width:180px}.summary{grid-template-columns:repeat(2,1fr)}.nav{display:none}}
 @media(max-width:560px){.wrap{padding:0 16px}.summary,.grid2,.side{grid-template-columns:1fr}.hero{padding-top:18px}.scorebox{width:100%;max-width:none;display:grid;grid-template-columns:1fr auto;align-items:center;text-align:left}.scorebox strong{font-size:1.8rem;margin:0}.scorebox span{grid-column:1/-1}.actions a{flex:1}}
 </style>
@@ -57,17 +64,38 @@ const labels={ARGUS_1:'Priorité ARGUS',SHORTLIST:'À étudier',WATCH:'À survei
 const statusLabel=s=>labels[s]||s||'À auditer';
 const tone=s=>(s==='ARGUS_1'||s==='SHORTLIST')?'good':(s==='WATCH'||s==='NEGOTIATE'||s==='OPTION'||s==='AUCTION')?'warn':'neutral';
 const ppm=x=>x.area&&x.price?Math.round(x.price/x.area):null;
-function completeness(x){
+function coverage(x){
  const vals=category==='building'
   ?[x.price,x.area,x.peb,x.recognizedUnits??x.unitsText,x.meters,x.condition,x.grossYield??x.rent,x.verified,x.exactAddress??x.addressStatus]
   :[x.price,x.area,x.peb,x.charges,x.copro,x.heating,x.electricity,x.verified,x.estimatedRent];
- const filled=vals.filter(v=>v!==null&&v!==undefined&&String(v).trim()!==''&&!/à confirmer|non communiqué/i.test(String(v))).length;
+ const filled=vals.filter(v=>v!==null&&v!==undefined&&String(v).trim()!==''&&!/à confirmer|non communiqué|inconnue/i.test(String(v))).length;
  const ratio=filled/vals.length,level=ratio>=.75?3:ratio>=.5?2:1;
  return {ratio,level,label:level===3?'Élevée':level===2?'Moyenne':'Faible'};
 }
-function confidence(x){
- const c=completeness(x);
- return '<div class="confidence"><span>Confiance des données <small>· mesure de complétude</small></span><div style="display:flex;gap:8px;align-items:center"><div class="dots">'+[1,2,3].map(i=>'<i class="dot '+(i<=c.level?'on':'')+'"></i>').join('')+'</div><b>'+c.label+'</b></div></div>';
+function coverageWidget(x){
+ const c=coverage(x);
+ return '<div class="confidence"><span>Couverture des données <small>· part des champs clés renseignés</small></span><div style="display:flex;gap:8px;align-items:center"><div class="dots">'+[1,2,3].map(i=>'<i class="dot '+(i<=c.level?'on':'')+'"></i>').join('')+'</div><b>'+c.label+'</b></div></div>';
+}
+function formatDate(value,withTime=false){
+ if(!value)return 'Non disponible';
+ const d=new Date(value); if(Number.isNaN(d.getTime()))return String(value);
+ return withTime?d.toLocaleString('fr-BE',{dateStyle:'short',timeStyle:'short'}):d.toLocaleDateString('fr-BE');
+}
+function freshness(value){
+ if(!value)return {label:'Inconnue',detail:'Date de fiche absente'};
+ const d=new Date(value); if(Number.isNaN(d.getTime()))return {label:'Inconnue',detail:'Date non interprétable'};
+ const days=Math.max(0,Math.floor((Date.now()-d.getTime())/86400000));
+ if(days<=7)return {label:'Récente',detail:days===0?'mise à jour aujourd’hui':'mise à jour il y a '+days+' j'};
+ if(days<=30)return {label:'À rafraîchir',detail:'mise à jour il y a '+days+' j'};
+ return {label:'Ancienne',detail:'mise à jour il y a '+days+' j'};
+}
+function sourceHost(url){
+ try{return new URL(url).hostname.replace(/^www\./,'')}catch{return 'Source non identifiée'}
+}
+function maturity(x,docs,c){
+ if(c.ratio>=.75&&docs.length<=3)return {label:'Bien documenté',detail:docs.length+' vérification(s) restante(s)'};
+ if(c.ratio>=.5)return {label:'À compléter',detail:docs.length+' point(s) documentaire(s) à obtenir'};
+ return {label:'Dossier incomplet',detail:docs.length+' point(s) documentaire(s) à obtenir'};
 }
 function municipality(location){
  const s=String(location||'');
@@ -100,20 +128,40 @@ function missingDocs(x){
 function fact(label,value,nature){
  return '<div class="fact"><small>'+esc(label)+'</small><b>'+esc(value??'À confirmer')+'</b><em>'+esc(nature||'Donnée publiée ou disponible')+'</em></div>';
 }
+function postalCode(location){
+ return (String(location||'').match(/\b(10\d\d|11\d\d|12\d\d)\b/)||[])[1]||null;
+}
+function comparableScore(x,y){
+ let score=0;
+ const px=postalCode(x.location||x.exactAddress),py=postalCode(y.location||y.exactAddress);
+ if(px&&py&&px===py)score+=40;
+ else if(municipality(x.location)===municipality(y.location))score+=28;
+ if(x.area&&y.area){
+   const diff=Math.abs(x.area-y.area)/Math.max(x.area,y.area);
+   score+=diff<=.10?25:diff<=.20?18:diff<=.35?10:0;
+ }
+ if(category==='apartment'){
+   if((x.bedrooms??0)===(y.bedrooms??0))score+=18;
+ }else{
+   if(x.recognizedUnits!=null&&y.recognizedUnits!=null&&x.recognizedUnits===y.recognizedUnits)score+=18;
+ }
+ const gx=String(x.peb||'').trim().charAt(0).toUpperCase(),gy=String(y.peb||'').trim().charAt(0).toUpperCase();
+ if(gx&&gy&&gx===gy)score+=7;
+ return Math.min(100,score);
+}
+function comparableLabel(score){return score>=75?'Forte':score>=55?'Moyenne':'Faible'}
+function median(values){
+ const a=values.filter(Number.isFinite).sort((x,y)=>x-y);if(!a.length)return null;
+ const m=Math.floor(a.length/2);return a.length%2?a[m]:Math.round((a[m-1]+a[m])/2);
+}
 function comparisonRows(x,all){
- const others=all.filter(y=>y.id!==x.id && y.price && y.area);
- const targetPpm=ppm(x);
- others.sort((a,b)=>{
-   const sameA=municipality(a.location)===municipality(x.location)?0:1;
-   const sameB=municipality(b.location)===municipality(x.location)?0:1;
-   if(sameA!==sameB)return sameA-sameB;
-   if(targetPpm)return Math.abs(ppm(a)-targetPpm)-Math.abs(ppm(b)-targetPpm);
-   return Math.abs(a.price-x.price)-Math.abs(b.price-x.price);
- });
- return others.slice(0,3);
+ return all.filter(y=>y.id!==x.id&&y.price&&y.area)
+   .map(y=>({item:y,score:comparableScore(x,y)}))
+   .sort((a,b)=>b.score-a.score)
+   .slice(0,3);
 }
 function render(x,all,checkedAt){
- const c=completeness(x),priceM=ppm(x),comps=comparisonRows(x,all),riskItems=(x.risks||[]),strengths=(x.strengths||[]);
+ const c=coverage(x),priceM=ppm(x),comps=comparisonRows(x,all),riskItems=(x.risks||[]),strengths=(x.strengths||[]);
  const title=category==='building'?(x.title||'Immeuble de rapport'):(x.bedrooms?x.bedrooms+' chambre · '+x.area+' m²':'Studio · '+x.area+' m²');
  const locality=x.location||x.exactAddress||'Localisation à confirmer';
  const valueFacts=category==='building'
@@ -140,28 +188,33 @@ function render(x,all,checkedAt){
   :[
     ['PEB',x.peb||'À confirmer'],['Charges',x.charges||'À confirmer'],['Copropriété',x.copro||'À confirmer'],['Chauffage',x.heating||'À confirmer'],['Électricité',x.electricity||'À confirmer']
    ];
- const docs=missingDocs(x);
+ const docs=missingDocs(x),fresh=freshness(x.verified),mature=maturity(x,docs,c);
+ const reliable=comps.filter(z=>z.score>=55),panelMedian=median(reliable.map(z=>ppm(z.item)));
+ const panelGap=panelMedian&&priceM?Math.round(((priceM-panelMedian)/panelMedian)*100):null;
  document.title='ARGUS IMMO — '+title;
  document.getElementById('app').innerHTML=
- '<section class="hero"><div class="heroGrid"><div><p class="eyebrow">DOSSIER ARGUS · BIEN CONFIRMÉ ACTIF</p><h1>'+esc(title)+'</h1><p class="sub">'+esc(locality)+'</p><div class="badges"><span class="badge '+tone(x.status)+'">'+esc(statusLabel(x.status))+'</span><span class="badge neutral">Vérifié '+esc(x.verified||'récemment')+'</span><span class="badge neutral">Données : '+esc(c.label.toLowerCase())+'</span></div><div class="actions"><a class="primary" href="'+esc(x.source)+'" target="_blank" rel="noopener">Voir l’annonce originale</a><a href="/immo#scanner">Relancer un audit complet</a></div></div><div class="scorebox"><div><small>Score ARGUS</small><strong>'+esc(x.score)+'/100</strong></div><span>Le score ne remplace pas la vérification documentaire.</span></div></div></section>'+
- '<div class="alert"><strong>Lecture ARGUS</strong><p>'+esc(x.verdict||'Dossier à analyser')+' Les inconnues restent affichées comme telles : ARGUS ne transforme pas une donnée manquante en hypothèse favorable.</p></div>'+
+ '<section class="hero"><div class="heroGrid"><div><p class="eyebrow">DOSSIER ARGUS · BIEN CONFIRMÉ ACTIF</p><h1>'+esc(title)+'</h1><p class="sub">'+esc(locality)+'</p><div class="badges"><span class="badge '+tone(x.status)+'">'+esc(statusLabel(x.status))+'</span><span class="badge neutral">Annonce active · contrôle '+esc(formatDate(checkedAt,true))+'</span><span class="badge neutral">Fiche · '+esc(formatDate(x.verified))+'</span><span class="badge neutral">Couverture : '+esc(c.label.toLowerCase())+'</span></div><div class="actions"><a class="primary" href="'+esc(x.source)+'" target="_blank" rel="noopener">Voir l’annonce originale</a><a href="/immo#scanner">Relancer un audit complet</a></div></div><div class="scorebox"><div><small>Score ARGUS</small><strong>'+esc(x.score)+'/100</strong></div><span>Le score ne remplace pas la vérification documentaire.</span></div></div></section>'+
+ '<div class="alert"><strong>Lecture ARGUS · '+esc(mature.label)+'</strong><p>'+esc(x.verdict||'Dossier à analyser')+' '+esc(mature.detail)+'. Les inconnues restent affichées comme telles : ARGUS ne transforme pas une donnée manquante en hypothèse favorable.</p></div>'+
+ '<div class="auditstrip"><div class="audititem"><small>Disponibilité</small><b>Confirmée active</b><span>Contrôle '+esc(formatDate(checkedAt,true))+'</span></div><div class="audititem"><small>Fraîcheur de la fiche</small><b>'+esc(fresh.label)+'</b><span>'+esc(fresh.detail)+'</span></div><div class="audititem"><small>Couverture</small><b>'+esc(c.label)+'</b><span>'+Math.round(c.ratio*100)+' % des champs clés</span></div></div>'+
  '<section class="summary">'+
    '<div class="metric"><small>Prix</small><b>'+euro(x.price)+'</b><span>Prix affiché</span></div>'+
    '<div class="metric"><small>Prix au m²</small><b>'+(priceM?num(priceM)+' €':'—')+'</b><span>'+(priceM?'Calcul sur surface disponible':'Surface insuffisante')+'</span></div>'+
    '<div class="metric"><small>PEB</small><b>'+esc(x.peb||'—')+'</b><span>Performance énergétique</span></div>'+
-   '<div class="metric"><small>Confiance données</small><b>'+esc(c.label)+'</b><span>'+Math.round(c.ratio*100)+' % des champs clés renseignés</span></div>'+
+   '<div class="metric"><small>Couverture des données</small><b>'+esc(c.label)+'</b><span>'+Math.round(c.ratio*100)+' % des champs clés renseignés</span></div>'+
  '</section>'+
  '<div class="layout"><div class="main">'+
    '<section class="panel"><div class="tag">01 · VALEUR</div><h2>Ce que les chiffres disent</h2><p class="intro">Les faits publiés sont séparés des estimations ARGUS.</p><div class="grid2">'+valueFacts.map(v=>fact(v[0],v[1],v[2])).join('')+'</div></section>'+
    '<section class="panel"><div class="tag">02 · RISQUES</div><h2>Ce qui peut invalider le dossier</h2><p class="intro">Priorité aux points qui doivent être documentés avant toute décision.</p><ul class="list risklist">'+(riskItems.length?riskItems.map(r=>'<li>'+esc(r)+'</li>').join(''):'<li>Aucun risque détaillé n’est encore documenté dans la fiche source. Cela ne signifie pas qu’il n’existe aucun risque.</li>')+'</ul></section>'+
-   '<section class="panel"><div class="tag">03 · DONNÉES</div><h2>Faits disponibles et inconnues</h2><p class="intro">Une donnée inconnue reste « à confirmer ».</p><div class="grid2">'+dataFacts.map(v=>fact(v[0],v[1],'Donnée source / dossier')).join('')+'</div>'+confidence(x)+'</section>'+
+   '<section class="panel"><div class="tag">03 · DONNÉES</div><h2>Faits disponibles et inconnues</h2><p class="intro">Une donnée inconnue reste « à confirmer ».</p><div class="grid2">'+dataFacts.map(v=>fact(v[0],v[1],'Donnée source / dossier')).join('')+'</div>'+coverageWidget(x)+'</section>'+
    '<section class="panel"><div class="tag">04 · QUARTIER</div><h2>Contexte local séparé du bien</h2><p class="intro">ARGUS ne confond pas la qualité intrinsèque du bien avec le potentiel futur de sa micro-zone.</p><div class="grid2">'+fact('Zone détectée',municipality(locality),'Déduite uniquement de la localisation publiée')+fact('Analyse urbaine','Voir Bruxelles stratégique','Module distinct')+'</div><div class="actions"><a href="/strategic-brussels">Ouvrir Bruxelles stratégique</a></div></section>'+
-   '<section class="panel"><div class="tag">05 · COMPARABLES</div><h2>Comparables disponibles dans la sélection active</h2><p class="intro">Il ne s’agit pas d’une expertise notariale : seuls les biens actifs actuellement connus d’ARGUS sont comparés.</p>'+
-     (comps.length?'<div class="tableWrap"><table class="table"><thead><tr><th>Bien</th><th>Prix</th><th>Surface</th><th>€/m²</th><th>PEB</th><th>Score</th></tr></thead><tbody>'+comps.map(y=>'<tr><td>'+esc(y.location||y.title||'Bien')+'</td><td>'+euro(y.price)+'</td><td>'+(y.area?esc(y.area)+' m²':'—')+'</td><td>'+(ppm(y)?num(ppm(y))+' €':'—')+'</td><td>'+esc(y.peb||'—')+'</td><td>'+esc(y.score)+'/100</td></tr>').join('')+'</tbody></table></div>':'<div class="empty" style="margin-top:13px">Pas assez de biens actifs comparables dans la sélection actuelle.</div>')+
+   '<section class="panel"><div class="tag">05 · COMPARABLES</div><h2>Panel comparable ARGUS</h2><p class="intro">Chaque comparable reçoit une pertinence selon la localisation, la surface, la typologie et le PEB. Les prix ci-dessous sont des prix affichés d’annonces actives, pas des prix de transaction.</p>'+
+     (comps.length?'<div class="tableWrap"><table class="table"><thead><tr><th>Bien</th><th>Pertinence</th><th>Prix</th><th>Surface</th><th>€/m²</th><th>PEB</th></tr></thead><tbody>'+comps.map(z=>{const y=z.item,l=comparableLabel(z.score),cls=z.score>=75?'high':z.score>=55?'mid':'low';return '<tr><td>'+esc(y.location||y.title||'Bien')+'</td><td><span class="compbadge '+cls+'">'+esc(l)+'</span></td><td>'+euro(y.price)+'</td><td>'+(y.area?esc(y.area)+' m²':'—')+'</td><td>'+(ppm(y)?num(ppm(y))+' €':'—')+'</td><td>'+esc(y.peb||'—')+'</td></tr>'}).join('')+'</tbody></table></div>':'<div class="empty" style="margin-top:13px">Aucun bien actif utilisable comme point de comparaison.</div>')+
+     '<div class="marketref"><b>'+((reliable.length>=2&&panelMedian)?'Médiane du panel pertinent : '+num(panelMedian)+' €/m²':'Panel insuffisant pour calculer une médiane fiable')+'</b><span>'+((reliable.length>=2&&panelMedian&&panelGap!=null)?'Écart du bien par rapport à cette médiane : '+(panelGap>0?'+':'')+panelGap+' %. ':'')+'Cette référence interne ne constitue pas une estimation de valeur de marché.</span></div>'+
    '</section>'+
    '<section class="panel"><div class="tag">06 · DOCUMENTS MANQUANTS</div><h2>Ce qu’il faut obtenir avant une offre</h2><p class="intro">La liste est générée à partir des données absentes ou à confirmer dans le dossier.</p><ul class="list">'+docs.map(d=>'<li>'+esc(d)+'</li>').join('')+'</ul></section>'+
+   '<section class="panel"><div class="tag">07 · VÉRIFICATIONS OFFICIELLES</div><h2>Contrôles externes à privilégier</h2><p class="intro">Ces outils publics permettent de confronter l’annonce aux sources institutionnelles disponibles.</p><div class="officialgrid"><a class="official" href="https://www.peb-epb.brussels/certificats-certificaten/" target="_blank" rel="noopener"><b>Registre PEB</b><span>Vérifier un certificat bruxellois</span></a><a class="official" href="https://gis.urban.brussels/brugis/" target="_blank" rel="noopener"><b>BruGIS</b><span>Contexte urbanistique et cartographique</span></a><a class="official" href="https://statbel.fgov.be/fr/themes/construction-logement/prix-de-limmobilier" target="_blank" rel="noopener"><b>Statbel</b><span>Références officielles de prix et transactions</span></a></div><div class="proofnote">ARGUS n’assimile pas automatiquement une donnée d’annonce à une donnée officielle. Lorsqu’une vérification institutionnelle n’a pas été effectuée, le dossier le signale comme point à confirmer.</div></section>'+
  '</div><aside class="side">'+
-   '<div class="sidebox"><h3>État de vérification</h3><div class="statusrow"><span>Annonce</span><b>Confirmée active</b></div><div class="statusrow"><span>Contrôle</span><b>'+esc(checkedAt?new Date(checkedAt).toLocaleString('fr-BE'):'Récent')+'</b></div><div class="statusrow"><span>Données</span><b>'+esc(c.label)+'</b></div><div class="statusrow"><span>Score</span><b>'+esc(x.score)+'/100</b></div></div>'+
+   '<div class="sidebox"><h3>Traçabilité</h3><div class="statusrow"><span>Annonce</span><b>Confirmée active</b></div><div class="statusrow"><span>Contrôle live</span><b>'+esc(formatDate(checkedAt,true))+'</b></div><div class="statusrow"><span>Fiche ARGUS</span><b>'+esc(formatDate(x.verified))+'</b></div><div class="statusrow"><span>Source</span><b>'+esc(sourceHost(x.source))+'</b></div><div class="statusrow"><span>Identifiant</span><b>'+esc(x.id||'—')+'</b></div><div class="statusrow"><span>Couverture</span><b>'+esc(c.label)+'</b></div><div class="statusrow"><span>Score</span><b>'+esc(x.score)+'/100</b></div></div>'+
    '<div class="sidebox"><h3>Atouts documentés</h3><p>'+esc(strengths.length?strengths.slice(0,4).join(' · '):'Aucun atout détaillé supplémentaire n’est enregistré dans la fiche source.')+'</p></div>'+
    '<div class="sidebox"><h3>Prochaine action</h3><p>Obtenir les documents manquants, puis relancer l’analyse avant toute offre.</p><a href="/immo#scanner">Audit ARGUS complet</a></div>'+
  '</aside></div>';
