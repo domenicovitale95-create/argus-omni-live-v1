@@ -160,7 +160,7 @@ async function renderMap(){
  document.getElementById('mapNote').textContent=bounds.length+' annonce(s) positionnée(s) avec adresse exacte publiée.'+(unique.length>bounds.length?' '+(unique.length-bounds.length)+' adresse(s) non géocodée(s).':'');
 }
 
-function completeness(x){
+function coverage(x){
  const vals=category==='building'
   ?[x.price,x.area,x.peb,x.recognizedUnits??x.unitsText,x.meters,x.condition,x.grossYield??x.rent,x.verified,x.exactAddress??x.addressStatus]
   :[x.price,x.area,x.peb,x.charges,x.copro,x.heating,x.electricity,x.verified,x.estimatedRent];
@@ -169,11 +169,11 @@ function completeness(x){
  return {ratio,label:ratio>=.75?'Élevée':ratio>=.5?'Moyenne':'Faible',level:ratio>=.75?3:ratio>=.5?2:1};
 }
 function confidenceHtml(x){
- const c=completeness(x);return '<div class="conf"><span>Confiance des données <small>· complétude, pas qualité du bien</small></span><div style="display:flex;align-items:center;gap:8px"><div class="dots">'+[1,2,3].map(i=>'<i class="dot '+(i<=c.level?'on':'')+'"></i>').join('')+'</div><b>'+c.label+'</b></div></div>';
+ const c=coverage(x);return '<div class="conf"><span>Couverture des données <small>· champs clés renseignés, pas qualité du bien</small></span><div style="display:flex;align-items:center;gap:8px"><div class="dots">'+[1,2,3].map(i=>'<i class="dot '+(i<=c.level?'on':'')+'"></i>').join('')+'</div><b>'+c.label+'</b></div></div>';
 }
 function pricePerSqm(x){return x.area&&x.price?Math.round(x.price/x.area):null}
 function apartmentReasons(x){
- const out=[]; if(x.price<=cfg.apartment.max)out.push('Prix dans la cadre d’achat défini.');
+ const out=[]; if(x.price<=cfg.apartment.max)out.push('Prix dans le cadre d’achat défini.');
  if(/petite copro/i.test(String(x.copro||'')))out.push('Petite copropriété indiquée dans les données disponibles.');
  if(x.grossYieldOnTotal)out.push('Rendement brut estimé : '+String(x.grossYieldOnTotal).replace('.',',')+' %.');
  if(/conforme/i.test(String(x.electricity||'')))out.push('Conformité électrique annoncée dans la source.');
@@ -183,7 +183,7 @@ function buildingReasons(x){return (x.strengths||[]).slice(0,3)}
 function risks(x){return (x.risks||[]).slice(0,4)}
 
 function card(x){
- const isBuilding=category==='building',ppm=pricePerSqm(x),reasons=isBuilding?buildingReasons(x):apartmentReasons(x),rs=risks(x),conf=completeness(x);
+ const isBuilding=category==='building',ppm=pricePerSqm(x),reasons=isBuilding?buildingReasons(x):apartmentReasons(x),rs=risks(x),conf=coverage(x);
  const title=isBuilding?(x.title||'Immeuble de rapport'):(x.bedrooms?x.bedrooms+' chambre · '+(x.area||'—')+' m²':'Studio · '+(x.area||'—')+' m²');
  const sub=x.location||x.address||'Localisation à confirmer';
  const kpis=isBuilding
@@ -206,14 +206,14 @@ function card(x){
  confidenceHtml(x)+
  '<div class="reason"><b>Pourquoi ARGUS le suit</b><ul>'+(reasons.length?reasons.map(r=>'<li>'+esc(r)+'</li>').join(''):'<li>Dossier conservé dans la sélection, mais les facteurs détaillés restent à confirmer.</li>')+'</ul></div>'+
  (rs.length?'<div class="reason"><b>Points à vérifier</b><ul>'+rs.map(r=>'<li>'+esc(r)+'</li>').join('')+'</ul></div>':'')+
- '<details class="details"><summary>Voir les données complémentaires</summary><div class="inside">'+details+'<p><b>Confiance des données :</b> '+esc(conf.label)+'. Cet indicateur mesure la complétude des informations disponibles, pas la qualité du bien.</p></div></details>'+
+ '<details class="details"><summary>Voir les données complémentaires</summary><div class="inside">'+details+'<p><b>Couverture des données :</b> '+esc(conf.label)+'. Cet indicateur mesure uniquement la couverture des informations disponibles, pas la qualité du bien ni la fiabilité de chaque source.</p></div></details>'+
  '<div class="comparePick"><input type="checkbox" data-compare="'+esc(x.id||sub)+'" '+(selected.has(x.id||sub)?'checked':'')+'> Ajouter à la comparaison</div>'+
  '<div class="cardActions"><a class="primaryLink" href="/immo-bien?id='+encodeURIComponent(x.id||'')+'&categorie='+encodeURIComponent(category)+'">Voir le dossier ARGUS</a><a href="'+esc(x.source)+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Audit complet</a></div></article>';
 }
 function renderBest(){
  const el=document.getElementById('bestSection'),x=data[0]; if(!x){el.innerHTML='';return}
  const ppm=pricePerSqm(x); const headline=category==='building'?(x.title||x.location):x.location;
- el.innerHTML='<div class="sectiontag">PRIORITÉ ACTUELLE</div><div class="priority"><div><span class="badge good">'+esc(statusLabel(x.status))+'</span><h3>'+esc(headline)+'</h3><p><b>'+euro(x.price)+'</b>'+(x.area?' · '+esc(x.area)+' m²':'')+(ppm?' · '+num(ppm)+' €/m²':'')+'</p><p>'+esc(x.verdict||'Dossier à auditer')+'</p><p><b>Point de vigilance :</b> '+esc((x.risks||[])[0]||'Vérification documentaire nécessaire')+'</p><div class="cardActions"><a class="primaryLink" href="/immo-bien?id='+encodeURIComponent(x.id||'')+'&categorie='+encodeURIComponent(category)+'">Ouvrir le dossier ARGUS</a></div></div><div class="priorityScore"><small>Score ARGUS</small><strong>'+esc(x.score)+'/100</strong><span style="color:#c8d4e2;font-size:.8rem;margin-top:5px">Confiance données : '+completeness(x).label.toLowerCase()+'</span></div></div>';
+ el.innerHTML='<div class="sectiontag">PRIORITÉ ACTUELLE</div><div class="priority"><div><span class="badge good">'+esc(statusLabel(x.status))+'</span><h3>'+esc(headline)+'</h3><p><b>'+euro(x.price)+'</b>'+(x.area?' · '+esc(x.area)+' m²':'')+(ppm?' · '+num(ppm)+' €/m²':'')+'</p><p>'+esc(x.verdict||'Dossier à auditer')+'</p><p><b>Point de vigilance :</b> '+esc((x.risks||[])[0]||'Vérification documentaire nécessaire')+'</p><div class="cardActions"><a class="primaryLink" href="/immo-bien?id='+encodeURIComponent(x.id||'')+'&categorie='+encodeURIComponent(category)+'">Ouvrir le dossier ARGUS</a></div></div><div class="priorityScore"><small>Score ARGUS</small><strong>'+esc(x.score)+'/100</strong><span style="color:#c8d4e2;font-size:.8rem;margin-top:5px">Couverture : '+coverage(x).label.toLowerCase()+'</span></div></div>';
 }
 function renderFilters(){
  const statuses=['ALL',...new Set(data.map(x=>x.status).filter(Boolean))];
@@ -277,7 +277,7 @@ function renderCompare(){
  const list=data.filter(x=>selected.has(x.id||x.location)); if(list.length<2)return;
  const rows=[
   ['Prix',x=>euro(x.price)],['Surface',x=>x.area?x.area+' m²':'—'],['Prix/m²',x=>pricePerSqm(x)?num(pricePerSqm(x))+' €/m²':'—'],['PEB',x=>x.peb||'—'],
-  ['Score ARGUS',x=>(x.score??'—')+'/100'],['Confiance données',x=>completeness(x).label],['Statut',x=>statusLabel(x.status)],
+  ['Score ARGUS',x=>(x.score??'—')+'/100'],['Confiance données',x=>coverage(x).label],['Statut',x=>statusLabel(x.status)],
   ...(category==='building'?[['Unités',x=>x.recognizedUnits!=null?x.recognizedUnits+' reconnues':(x.unitsText||'—')],['Rendement brut',x=>x.grossYield?String(x.grossYield).replace('.',',')+' %':'—']]:[['Charges',x=>x.charges||'—'],['Copropriété',x=>x.copro||'—'],['Rendement brut',x=>x.grossYieldOnTotal?String(x.grossYieldOnTotal).replace('.',',')+' %':'—']])
  ];
  document.getElementById('compareContent').innerHTML='<table class="compareTable"><thead><tr><th>Critère</th>'+list.map(x=>'<th>'+esc(category==='building'?(x.title||x.location):x.location)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr><th>'+esc(r[0])+'</th>'+list.map(x=>'<td>'+esc(r[1](x))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
