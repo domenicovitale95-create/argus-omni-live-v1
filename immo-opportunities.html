@@ -277,7 +277,7 @@ function renderCompare(){
  const list=data.filter(x=>selected.has(x.id||x.location)); if(list.length<2)return;
  const rows=[
   ['Prix',x=>euro(x.price)],['Surface',x=>x.area?x.area+' m²':'—'],['Prix/m²',x=>pricePerSqm(x)?num(pricePerSqm(x))+' €/m²':'—'],['PEB',x=>x.peb||'—'],
-  ['Score ARGUS',x=>(x.score??'—')+'/100'],['Confiance données',x=>coverage(x).label],['Statut',x=>statusLabel(x.status)],
+  ['Score ARGUS',x=>(x.score??'—')+'/100'],['Couverture des données',x=>coverage(x).label],['Statut',x=>statusLabel(x.status)],
   ...(category==='building'?[['Unités',x=>x.recognizedUnits!=null?x.recognizedUnits+' reconnues':(x.unitsText||'—')],['Rendement brut',x=>x.grossYield?String(x.grossYield).replace('.',',')+' %':'—']]:[['Charges',x=>x.charges||'—'],['Copropriété',x=>x.copro||'—'],['Rendement brut',x=>x.grossYieldOnTotal?String(x.grossYieldOnTotal).replace('.',',')+' %':'—']])
  ];
  document.getElementById('compareContent').innerHTML='<table class="compareTable"><thead><tr><th>Critère</th>'+list.map(x=>'<th>'+esc(category==='building'?(x.title||x.location):x.location)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr><th>'+esc(r[0])+'</th>'+list.map(x=>'<td>'+esc(r[1](x))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
