@@ -1,6 +1,6 @@
 {
   "asset_id": "emerging",
-  "generated_at": "2026-09-22T09:50:51.717324+00:00",
+  "generated_at": "2026-09-22T14:40:31.989393+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -484,8 +484,8 @@
       "price": 67.02
     },
     {
-      "date": "2026-09-21",
-      "price": 68.83
+      "date": "2026-09-22",
+      "price": 68.87
     }
   ]
 }
