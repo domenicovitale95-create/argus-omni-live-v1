@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111d">
-<title>Strategic Brussels — ARGUS IMMO</title>
-<meta name="description" content="ARGUS Strategic Brussels: urban transformation, infrastructure, EU institutions and long-term value across all 19 municipalities of Brussels.">
+<title>Bruxelles stratégique — ARGUS IMMO</title>
+<meta name="description" content="ARGUS IMMO — Bruxelles stratégique : transformation urbaine, infrastructures, institutions européennes et potentiel à long terme dans les 19 communes de Bruxelles.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
 :root{
@@ -86,60 +86,60 @@ button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}
 </head>
 <body>
 <header class="top"><div class="wrap nav">
-  <a class="brand" href="/immo-opportunities"><span class="mark">A</span><span><strong>ARGUS IMMO</strong><span>Strategic Brussels</span></span></a>
-  <nav class="links"><a href="/immo-opportunities">Opportunités</a><a class="active" href="/strategic-brussels">Strategic Brussels</a><a href="/immo#scanner">Scanner</a><span class="live"><span class="dot"></span>19 communes sous surveillance</span></nav>
+  <a class="brand" href="/immo-opportunities"><span class="mark">A</span><span><strong>ARGUS IMMO</strong><span>Bruxelles stratégique</span></span></a>
+  <nav class="links"><a href="/immo-opportunities">Opportunités</a><a class="active" href="/strategic-brussels">Bruxelles stratégique</a><a href="/immo#scanner">Scanner</a><span class="live"><span class="dot"></span>19 communes sous surveillance</span></nav>
 </div></header>
 
 <main class="wrap">
 <section class="hero">
-  <div class="eyebrow"><span class="dot"></span> Urban transformation · Infrastructure · EU institutions · Long-term value</div>
-  <h1>Strategic<br>Brussels.</h1>
+  <div class="eyebrow"><span class="dot"></span> Transformation urbaine · Infrastructures · Institutions européennes · Valeur à long terme</div>
+  <h1>Bruxelles<br>stratégique.</h1>
   <p class="lead">Un laboratoire de surveillance renforcée pour détecter les micro-zones où le prix actuel peut ne pas encore refléter une amélioration structurelle réelle, financée et mesurable.</p>
-  <div class="guardrail"><b>ANTI-HYPE RULE</b><span>Les clusters initiaux ne sont pas des gagnants prédéfinis. ARGUS continue de scanner toute la Région et peut faire remonter une zone qui n’est pas dans la Watchlist. Un projet annoncé pèse beaucoup moins qu’un projet permis ou en chantier.</span></div>
+  <div class="guardrail"><b>RÈGLE ANTI-EMBALLEMENT</b><span>Les clusters initiaux ne sont pas des gagnants prédéfinis. ARGUS continue de scanner toute la Région et peut faire remonter une zone qui n’est pas dans la liste de surveillance. Un projet annoncé pèse beaucoup moins qu’un projet permis ou en chantier.</span></div>
   <div class="kpis">
     <div class="kpi"><span>Communes couvertes</span><strong id="kMunicipalities">19/19</strong></div>
     <div class="kpi"><span>Quartiers officiels</span><strong id="kNeighborhoods">—</strong></div>
     <div class="kpi"><span>Zones renforcées</span><strong id="kZones">—</strong></div>
-    <div class="kpi"><span>Urban Upside max</span><strong id="kUpside">—</strong></div>
-    <div class="kpi"><span>Emerging areas</span><strong id="kEmerging">—</strong></div>
-    <div class="kpi"><span>Data update</span><strong id="kUpdated">—</strong></div>
+    <div class="kpi"><span>Potentiel urbain max</span><strong id="kUpside">—</strong></div>
+    <div class="kpi"><span>Nouvelles zones</span><strong id="kEmerging">—</strong></div>
+    <div class="kpi"><span>Mise à jour</span><strong id="kUpdated">—</strong></div>
   </div>
 </section>
 
 <section class="section">
-  <div class="sectionhead"><div><h2>Top Opportunities Now</h2><p>Les catégories sont recalculées par le moteur à chaque mise à jour. Aucun quartier n’est codé en dur comme “#1”.</p></div><span class="badge">DYNAMIC RANKING</span></div>
+  <div class="sectionhead"><div><h2>Meilleures opportunités actuelles</h2><p>Les catégories sont recalculées par le moteur à chaque mise à jour. Aucun quartier n’est codé en dur comme “#1”.</p></div><span class="badge">CLASSEMENT DYNAMIQUE</span></div>
   <div id="topGrid" class="topgrid"><div class="loading">Calcul du classement…</div></div>
 </section>
 
 <section class="section">
-  <div class="sectionhead"><div><h2>Carte stratégique de Bruxelles</h2><p>Les scores synthétisent valeur actuelle, catalyseurs, certitude d’exécution et risques. La carte ne remplace jamais l’analyse micro-locale.</p></div><span id="mapLegend" class="badge">Urban Upside · 0–100</span></div>
+  <div class="sectionhead"><div><h2>Carte stratégique de Bruxelles</h2><p>Les scores synthétisent valeur actuelle, catalyseurs, certitude d’exécution et risques. La carte ne remplace jamais l’analyse micro-locale.</p></div><span id="mapLegend" class="badge">Potentiel urbain · 0–100</span></div>
   <div class="workspace">
     <div>
       <div class="toolbar">
         <label class="search"><input id="q" type="search" placeholder="Quartier, micro-zone, commune…"></label>
-        <select id="horizon" class="select"><option value="">Tous horizons</option><option value="SHORT">Short term</option><option value="MEDIUM">Medium term</option><option value="LONG">Long term</option></select>
-        <select id="risk" class="select"><option value="">Tous risques</option><option value="low">Risk ≤ 40</option><option value="medium">Risk ≤ 60</option><option value="high">Risk > 60</option></select>
-        <button id="enhancedOnly" class="filter active">Watchlist renforcée</button>
+        <select id="horizon" class="select"><option value="">Tous horizons</option><option value="SHORT">Court terme</option><option value="MEDIUM">Horizon moyen</option><option value="LONG">Long terme</option></select>
+        <select id="risk" class="select"><option value="">Tous risques</option><option value="low">Risque ≤ 40</option><option value="medium">Risque ≤ 60</option><option value="high">Risque > 60</option></select>
+        <button id="enhancedOnly" class="filter active">Surveillance renforcée</button>
       </div>
-      <div class="sectionhead" style="margin-top:16px"><div><h2 id="listTitle">ARGUS Strategic Watchlist</h2><p id="listMeta">Chargement…</p></div></div>
+      <div class="sectionhead" style="margin-top:16px"><div><h2 id="listTitle">Surveillance stratégique ARGUS</h2><p id="listMeta">Chargement…</p></div></div>
       <div id="zoneList" class="zonelist"><div class="loading">Chargement des zones…</div></div>
     </div>
-    <aside class="mapcard"><div class="maphead"><div><strong>Urban Upside Map</strong><span id="mapMeta">Calcul dynamique</span></div><span class="badge">Click zone → dossier</span></div><div id="map"></div></aside>
+    <aside class="mapcard"><div class="maphead"><div><strong>Carte du potentiel urbain</strong><span id="mapMeta">Calcul dynamique</span></div><span class="badge">Cliquer sur une zone → dossier</span></div><div id="map"></div></aside>
   </div>
 </section>
 
 <section class="section">
-  <div class="sectionhead"><div><h2>European Core</h2><p>Benchmark institutionnel historique : Schuman, Loi, Léopold, Luxembourg, Arts-Loi, Maelbeek, Merode et Montgomery. Il sert de référence, pas de zone de rattrapage automatique.</p></div><span class="badge">REFERENCE BENCHMARK</span></div>
+  <div class="sectionhead"><div><h2>Cœur européen</h2><p>Benchmark institutionnel historique : Schuman, Loi, Léopold, Luxembourg, Arts-Loi, Maelbeek, Merode et Montgomery. Il sert de référence, pas de zone de rattrapage automatique.</p></div><span class="badge">RÉFÉRENCE</span></div>
   <div id="europeanCore"></div>
 </section>
 
 <section class="section">
-  <div class="sectionhead"><div><h2>New Emerging Area</h2><p>Une zone hors Watchlist n’apparaît ici que si plusieurs signaux objectifs convergent : permis, masterplan, transport, investissement public, emploi, espace vert, démographie ou changement de marché.</p></div><span class="badge">DISCOVERY ENGINE</span></div>
+  <div class="sectionhead"><div><h2>Nouvelle zone émergente</h2><p>Une zone hors surveillance renforcée n’apparaît ici que si plusieurs signaux objectifs convergent : permis, masterplan, transport, investissement public, emploi, espace vert, démographie ou changement de marché.</p></div><span class="badge">MOTEUR DE DÉCOUVERTE</span></div>
   <div id="emerging" class="emerging">Analyse en cours…</div>
 </section>
 
 <section class="section">
-  <div class="sectionhead"><div><h2>19 communes : couverture de base</h2><p>Même sans cluster renforcé, aucune commune n’est exclue du moteur de découverte.</p></div><span class="badge">REGION-WIDE SCAN</span></div>
+  <div class="sectionhead"><div><h2>19 communes : couverture de base</h2><p>Même sans cluster renforcé, aucune commune n’est exclue du moteur de découverte.</p></div><span class="badge">ANALYSE RÉGIONALE</span></div>
   <div id="coverage" class="coverage"></div>
 </section>
 </main>
@@ -154,7 +154,19 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const fmtDate=v=>{try{return new Intl.DateTimeFormat('fr-BE',{day:'2-digit',month:'short',year:'2-digit'}).format(new Date(v))}catch{return '—'}};
 const sourceMap=()=>Object.fromEntries((payload?.sources||[]).map(s=>[s.id,s]));
 const pct=v=>Math.round(Number(v)||0);
-function riskLabel(v){v=Number(v)||0;return v<=40?'LOW':v<=60?'MEDIUM':'HIGH'}
+function riskLabel(v){v=Number(v)||0;return v<=40?'FAIBLE':v<=60?'MOYEN':'ÉLEVÉ'}
+function horizonLabel(v){
+  return String(v||'—').replaceAll('SHORT','COURT TERME').replaceAll('MEDIUM','MOYEN TERME').replaceAll('LONG','LONG TERME').replaceAll('REFERENCE','RÉFÉRENCE');
+}
+function stageLabel(v){
+  return {ANNOUNCED:'ANNONCÉ',PLANNED:'PLANIFIÉ',APPROVED:'APPROUVÉ',PERMITTED:'AUTORISÉ',UNDER_CONSTRUCTION:'EN CHANTIER',DELIVERED:'LIVRÉ'}[v]||String(v||'—');
+}
+function sourceTypeLabel(v){
+  return {commercial_secondary:'source commerciale secondaire',official_market:'marché officiel',official_project:'projet officiel',official_institution:'institution officielle'}[v]||String(v||'—');
+}
+function geoLabel(v){
+  return {municipality:'commune',project:'projet',building:'bâtiment',institutional_core:'cœur institutionnel'}[v]||String(v||'—');
+}
 function priceText(z){const p=z.market?.askingPricePerM2;return p?Math.round(p).toLocaleString('fr-BE')+' €/m²':'N/D'}
 function momentumText(z){
   const p=z.market?.priceMomentum||{};
@@ -180,7 +192,7 @@ function renderMap(list){
   list.forEach(z=>{
     if(!z.center)return;
     const m=L.circleMarker([z.center.lat,z.center.lng],markerStyle(z)).addTo(map);
-    m.bindTooltip('<b>'+esc(z.name)+'</b><br>Urban Upside '+pct(z.derived?.urbanUpside)+'/100<br>'+esc(z.timeHorizon||''));
+    m.bindTooltip('<b>'+esc(z.name)+'</b><br>Potentiel urbain '+pct(z.derived?.urbanUpside)+'/100<br>'+esc(horizonLabel(z.timeHorizon)));
     m.on('click',()=>openZone(z.id));markers.push(m);b.push([z.center.lat,z.center.lng]);
   });
   if(b.length)map.fitBounds(b,{padding:[26,26],maxZoom:13});
@@ -199,8 +211,8 @@ function filtered(){
 }
 function zoneCard(z,reference=false){
   const reasons=(z.reasons||[]).slice(0,3);
-  return '<article class="zone '+(reference?'reference':'')+'"><div class="zonehead"><div><small>'+(reference?'EUROPEAN CORE':'CLUSTER '+esc(z.cluster))+'</small><h3>'+esc(z.name)+'</h3><div class="commune">'+esc((z.communes||[]).join(' · '))+'</div></div><div class="scorebox"><strong>'+pct(z.derived?.urbanUpside)+'</strong><span>URBAN UPSIDE</span></div></div>'+
-  '<div class="zonefacts"><div class="fact"><span>Prix indicatif</span><b>'+priceText(z)+'</b></div><div class="fact"><span>Évolution récente</span><b>'+momentumText(z)+'</b></div><div class="fact"><span>Project certainty</span><b>'+pct(z.derived?.executionConfidence)+'/100</b></div><div class="fact"><span>Risk</span><b>'+riskLabel(z.derived?.risk)+' · '+pct(z.derived?.risk)+'</b></div><div class="fact"><span>Horizon</span><b>'+esc(z.timeHorizon||'—')+'</b></div></div>'+
+  return '<article class="zone '+(reference?'reference':'')+'"><div class="zonehead"><div><small>'+(reference?'CŒUR EUROPÉEN':'GROUPE '+esc(z.cluster))+'</small><h3>'+esc(z.name)+'</h3><div class="commune">'+esc((z.communes||[]).join(' · '))+'</div></div><div class="scorebox"><strong>'+pct(z.derived?.urbanUpside)+'</strong><span>POTENTIEL URBAIN</span></div></div>'+
+  '<div class="zonefacts"><div class="fact"><span>Prix indicatif</span><b>'+priceText(z)+'</b></div><div class="fact"><span>Évolution récente</span><b>'+momentumText(z)+'</b></div><div class="fact"><span>Certitude d’exécution</span><b>'+pct(z.derived?.executionConfidence)+'/100</b></div><div class="fact"><span>Risque</span><b>'+riskLabel(z.derived?.risk)+' · '+pct(z.derived?.risk)+'</b></div><div class="fact"><span>Horizon</span><b>'+esc(horizonLabel(z.timeHorizon))+'</b></div></div>'+
   '<div class="reasons">'+reasons.map(r=>'<span>'+esc(r)+'</span>').join('')+'</div>'+
   '<div class="actions"><button class="main" onclick="openZone(\''+esc(z.id)+'\')">Analyse complète</button><button onclick="focusZone(\''+esc(z.id)+'\')">Voir sur la carte</button></div></article>';
 }
@@ -218,13 +230,13 @@ function focusZone(id){
 window.focusZone=focusZone;
 function topCard(label,id){
   const z=zones.find(x=>x.id===id);if(!z)return '';
-  return '<button class="topcard" onclick="openZone(\''+esc(z.id)+'\')"><small>'+esc(label)+'</small><h3>'+esc(z.name)+'</h3><p>'+esc((z.reasons||[])[0]||'Analyse disponible')+'</p><div class="topscore"><strong>'+pct(z.derived?.urbanUpside)+'</strong><span>Urban Upside</span></div></button>';
+  return '<button class="topcard" onclick="openZone(\''+esc(z.id)+'\')"><small>'+esc(label)+'</small><h3>'+esc(z.name)+'</h3><p>'+esc((z.reasons||[])[0]||'Analyse disponible')+'</p><div class="topscore"><strong>'+pct(z.derived?.urbanUpside)+'</strong><span>Potentiel urbain</span></div></button>';
 }
 function renderTop(){
   const t=payload.topOpportunityIds||{};
   const cards=[
-    ['BEST VALUE',t.bestValue],['BEST 5-YEAR TRANSFORMATION',t.bestFiveYearTransformation],['BEST LONG-TERM TRANSFORMATION',t.bestLongTermTransformation],
-    ['BEST EU-INSTITUTIONAL EXPOSURE',t.bestEuInstitutionalExposure],['BEST TRANSPORT-LED OPPORTUNITY',t.bestTransportLed],['BEST VALUE NEAR CITY CENTRE',t.bestValueNearCentre]
+    ['MEILLEURE VALEUR',t.bestValue],['MEILLEURE TRANSFORMATION À 5 ANS',t.bestFiveYearTransformation],['MEILLEURE TRANSFORMATION À LONG TERME',t.bestLongTermTransformation],
+    ['MEILLEURE EXPOSITION AUX INSTITUTIONS UE',t.bestEuInstitutionalExposure],['MEILLEURE OPPORTUNITÉ LIÉE AUX TRANSPORTS',t.bestTransportLed],['MEILLEURE VALEUR PRÈS DU CENTRE',t.bestValueNearCentre]
   ].map(x=>topCard(x[0],x[1])).join('');
   document.getElementById('topGrid').innerHTML=cards||'<div class="loading">Données insuffisantes.</div>';
 }
@@ -242,22 +254,22 @@ function openZone(id){
   const z=zones.find(x=>x.id===id);if(!z)return;
   const sm=sourceMap(),sources=(z.sourceIds||[]).map(id=>sm[id]).filter(Boolean);
   const dims=[
-    ['Current Value',z.derived?.currentValue],['Future Catalysts',z.derived?.futureCatalysts],['Execution Confidence',z.derived?.executionConfidence],['Risk',z.derived?.risk],
-    ['Value Score',z.scores?.valueScore],['Price Momentum',z.scores?.priceMomentum],['Urban Transformation',z.scores?.urbanTransformation],['Transport',z.scores?.transportScore],
-    ['Employment Gravity',z.scores?.employmentGravity],['EU Institutional Impact',z.scores?.euInstitutionalImpact],['Green/Public Space',z.scores?.greenPublicSpaceImpact],
-    ['Housing Supply',z.scores?.housingSupply],['Commercial Revitalisation',z.scores?.commercialRevitalisation],['Demographic Momentum',z.scores?.demographicMomentum],
-    ['Rental Demand',z.scores?.rentalDemand],['Affordability',z.scores?.affordability],['Repricing Gap',z.scores?.repricingGap]
+    ['Valeur actuelle',z.derived?.currentValue],['Catalyseurs futurs',z.derived?.futureCatalysts],['Certitude d’exécution',z.derived?.executionConfidence],['Risque',z.derived?.risk],
+    ['Score de valeur',z.scores?.valueScore],['Dynamique des prix',z.scores?.priceMomentum],['Transformation urbaine',z.scores?.urbanTransformation],['Transport',z.scores?.transportScore],
+    ['Attractivité de l’emploi',z.scores?.employmentGravity],['Impact institutionnel UE',z.scores?.euInstitutionalImpact],['Espaces verts / publics',z.scores?.greenPublicSpaceImpact],
+    ['Offre de logements',z.scores?.housingSupply],['Revitalisation commerciale',z.scores?.commercialRevitalisation],['Dynamique démographique',z.scores?.demographicMomentum],
+    ['Demande locative',z.scores?.rentalDemand],['Accessibilité',z.scores?.affordability],['Écart de revalorisation',z.scores?.repricingGap]
   ].filter(x=>Number.isFinite(Number(x[1])));
   const projects=(z.projects||[]).map(p=>'<div class="project"><b>'+esc(p.name)+'</b><span class="stage">'+esc(p.stage)+'</span><p>'+esc((p.facts||[]).join(' · '))+'</p><p>Execution weight '+stageTone(p.stage)+'/100 · last update '+esc(p.lastUpdate||'—')+'</p></div>').join('');
-  const src=sources.map(s=>'<a href="'+esc(s.url)+'" target="_blank" rel="noopener"><b>'+esc(s.name)+'</b><small>'+esc(s.type)+' · '+esc(s.geographicalLevel)+' · '+esc(s.date)+'</small></a>').join('');
-  const note=z.institutionalWatch?'<div class="note"><b>EU_INSTITUTIONAL_IMPACT guardrail:</b> '+esc(z.institutionalWatch.rule)+'</div>':'';
-  const excluded=(z.excludedCatalysts||[]).length?'<div class="note"><b>Excluded catalyst:</b> '+esc(z.excludedCatalysts.join(' · '))+'</div>':'';
-  document.getElementById('drawerBody').innerHTML='<div class="draw-eyebrow">'+(z.status==='REFERENCE_ONLY'?'EUROPEAN CORE':'STRATEGIC BRUSSELS · CLUSTER '+esc(z.cluster))+'</div><h2 id="drawerTitle">'+esc(z.name)+'</h2><p class="drawsub">'+esc((z.microzones||[]).join(' · '))+'</p>'+
-  '<div class="bigscore"><div class="big"><span>ARGUS URBAN UPSIDE</span><strong>'+pct(z.derived?.urbanUpside)+'/100</strong></div><div class="big"><span>TIME HORIZON</span><strong>'+esc(z.timeHorizon||'—')+'</strong></div><div class="big"><span>Indicative price</span><strong>'+priceText(z)+'</strong></div><div class="big"><span>Data completeness</span><strong>'+pct(z.derived?.dataCompleteness)+'/100</strong></div></div>'+
-  '<h3>Independent indicators</h3><div class="scoregrid">'+dims.map(x=>scoreLine(x[0],x[1])).join('')+'</div>'+
-  '<h3>Why it matters</h3><div class="reasons">'+(z.reasons||[]).map(r=>'<span>'+esc(r)+'</span>').join('')+'</div>'+
-  '<h3>Risks / counter-case</h3><p style="color:var(--muted);font-size:.8rem">'+esc((z.risks||[]).join(' · '))+'</p>'+note+excluded+
-  '<h3>Projects & execution</h3>'+projects+'<h3>Sources</h3><div class="sources">'+src+'</div>';
+  const src=sources.map(s=>'<a href="'+esc(s.url)+'" target="_blank" rel="noopener"><b>'+esc(s.name)+'</b><small>'+esc(sourceTypeLabel(s.type))+' · '+esc(geoLabel(s.geographicalLevel))+' · '+esc(s.date)+'</small></a>').join('');
+  const note=z.institutionalWatch?'<div class="note"><b>Garde-fou institutionnel UE :</b> '+esc(z.institutionalWatch.rule)+'</div>':'';
+  const excluded=(z.excludedCatalysts||[]).length?'<div class="note"><b>Catalyseur exclu :</b> '+esc(z.excludedCatalysts.join(' · '))+'</div>':'';
+  document.getElementById('drawerBody').innerHTML='<div class="draw-eyebrow">'+(z.status==='REFERENCE_ONLY'?'CŒUR EUROPÉEN':'BRUXELLES STRATÉGIQUE · GROUPE '+esc(z.cluster))+'</div><h2 id="drawerTitle">'+esc(z.name)+'</h2><p class="drawsub">'+esc((z.microzones||[]).join(' · '))+'</p>'+
+  '<div class="bigscore"><div class="big"><span>POTENTIEL URBAIN ARGUS</span><strong>'+pct(z.derived?.urbanUpside)+'/100</strong></div><div class="big"><span>HORIZON</span><strong>'+esc(horizonLabel(z.timeHorizon))+'</strong></div><div class="big"><span>Prix indicatif</span><strong>'+priceText(z)+'</strong></div><div class="big"><span>Couverture des données</span><strong>'+pct(z.derived?.dataCompleteness)+'/100</strong></div></div>'+
+  '<h3>Indicateurs indépendants</h3><div class="scoregrid">'+dims.map(x=>scoreLine(x[0],x[1])).join('')+'</div>'+
+  '<h3>Pourquoi cette zone compte</h3><div class="reasons">'+(z.reasons||[]).map(r=>'<span>'+esc(r)+'</span>').join('')+'</div>'+
+  '<h3>Risques / scénario contraire</h3><p style="color:var(--muted);font-size:.8rem">'+esc((z.risks||[]).join(' · '))+'</p>'+note+excluded+
+  '<h3>Projets & exécution</h3>'+projects+'<h3>Sources</h3><div class="sources">'+src+'</div>';
   const back=document.getElementById('drawerBack');back.classList.add('open');back.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
 }
 window.openZone=openZone;
@@ -283,7 +295,7 @@ fetch('/api/strategic-brussels',{cache:'no-store'}).then(r=>r.json()).then(j=>{
   renderTop();renderZones();renderCoverage();renderEmerging();
   const core=zones.find(z=>z.status==='REFERENCE_ONLY');document.getElementById('europeanCore').innerHTML=core?zoneCard(core,true):'<div class="loading">Benchmark indisponible.</div>';
 }).catch(e=>{
-  document.getElementById('zoneList').innerHTML='<div class="loading">Strategic Brussels indisponible : '+esc(e.message)+'</div>';
+  document.getElementById('zoneList').innerHTML='<div class="loading">Bruxelles stratégique indisponible : '+esc(e.message)+'</div>';
   document.getElementById('topGrid').innerHTML='<div class="loading">Données indisponibles.</div>';
 });
 </script>
