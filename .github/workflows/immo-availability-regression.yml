@@ -8,8 +8,11 @@ on:
       - 'api/immo-curated-active.js'
       - 'immo-opportunities.html'
       - 'immo-bien.html'
+      - 'immo.html'
+      - 'strategic-brussels.html'
       - 'tests/immo-availability-regression.mjs'
       - 'tests/immo-dossier-regression.mjs'
+      - 'tests/immo-ui-language-regression.mjs'
   push:
     branches: [main]
     paths:
@@ -18,8 +21,11 @@ on:
       - 'api/immo-curated-active.js'
       - 'immo-opportunities.html'
       - 'immo-bien.html'
+      - 'immo.html'
+      - 'strategic-brussels.html'
       - 'tests/immo-availability-regression.mjs'
       - 'tests/immo-dossier-regression.mjs'
+      - 'tests/immo-ui-language-regression.mjs'
 
 jobs:
   test:
@@ -32,3 +38,4 @@ jobs:
           node-version: '22'
       - run: node tests/immo-availability-regression.mjs
       - run: node tests/immo-dossier-regression.mjs
+      - run: node tests/immo-ui-language-regression.mjs
