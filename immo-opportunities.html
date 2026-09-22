@@ -43,7 +43,7 @@ a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 22px}.top{position:
 <body>
 <header class="top"><div class="wrap topin">
   <a class="brand" href="/immo-opportunities"><span class="brandmark">A</span><span><b>ARGUS IMMO</b><small>Bruxelles · décision immobilière</small></span></a>
-  <nav class="nav"><a class="active" href="/immo-opportunities">Opportunités</a><a href="/immo">Analyse complète</a><a href="/strategic-brussels">Strategic Brussels</a></nav>
+  <nav class="nav"><a class="active" href="/immo-opportunities">Opportunités</a><a href="/immo">Analyse complète</a><a href="/strategic-brussels">Bruxelles stratégique</a></nav>
 </div></header>
 
 <section class="hero"><div class="wrap">
@@ -59,7 +59,7 @@ a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 22px}.top{position:
       <div class="stat"><span>Annonces vérifiées</span><b id="statActive">—</b><small>Actives uniquement</small></div>
       <div class="stat"><span>Dernier contrôle</span><b id="statCheck">—</b><small>Vérification de disponibilité</small></div>
       <div class="stat"><span>Annonces masquées</span><b id="statHidden">—</b><small>Indisponibles ou non confirmées</small></div>
-      <div class="stat"><span>Buy Box active</span><b id="statBox">≤ 150 k€</b><small id="statBoxText">Studios & appartements</small></div>
+      <div class="stat"><span>Cadre d’achat actif</span><b id="statBox">≤ 150 k€</b><small id="statBoxText">Studios & appartements</small></div>
     </div>
   </section>
 
@@ -75,7 +75,7 @@ a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 22px}.top{position:
 
   <section class="section" style="padding-top:0">
     <div class="sectionhead">
-      <div><div class="sectiontag">SHORTLIST ARGUS</div><h2 id="curatedTitle">Biens à étudier</h2><p id="updated">Chargement…</p></div>
+      <div><div class="sectiontag">SÉLECTION ARGUS</div><h2 id="curatedTitle">Biens à étudier</h2><p id="updated">Chargement…</p></div>
       <div class="toolbar"><button class="tool" id="showMap">Afficher la carte</button><button class="tool accent" id="marketScan">Scanner maintenant</button></div>
     </div>
     <div id="statusFilters" class="filters"></div>
@@ -84,13 +84,13 @@ a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 22px}.top{position:
 
   <section class="section" style="padding-top:0">
     <div class="strategic">
-      <div><div class="sectiontag">CONTEXTE URBAIN</div><h3>Le bien est une chose. La micro-zone en est une autre.</h3><p>Consultez séparément les infrastructures, transformations urbaines et signaux de long terme dans Strategic Brussels.</p></div>
-      <a href="/strategic-brussels">Ouvrir Strategic Brussels</a>
+      <div><div class="sectiontag">CONTEXTE URBAIN</div><h3>Le bien est une chose. La micro-zone en est une autre.</h3><p>Consultez séparément les infrastructures, transformations urbaines et signaux de long terme dans Bruxelles stratégique.</p></div>
+      <a href="/strategic-brussels">Ouvrir Bruxelles stratégique</a>
     </div>
   </section>
 
   <section class="section" id="liveScan">
-    <div class="sectionhead"><div><div class="sectiontag">DÉCOUVERTE LIVE</div><h2 id="scanTitle">Scanner studios & appartements</h2><p id="scanText">Recherche multi-source avec déduplication et exclusion des annonces non confirmées actives.</p></div></div>
+    <div class="sectionhead"><div><div class="sectiontag">DÉCOUVERTE EN DIRECT</div><h2 id="scanTitle">Scanner studios & appartements</h2><p id="scanText">Recherche multi-source avec déduplication et exclusion des annonces non confirmées actives.</p></div></div>
     <div class="scanbox">
       <div id="scanSummary" class="coverage"><b>Prêt à scanner.</b> Les sources bloquées ou inaccessibles seront signalées.</div>
       <div id="sourceStatus" class="statusgrid"></div>
@@ -173,7 +173,7 @@ function confidenceHtml(x){
 }
 function pricePerSqm(x){return x.area&&x.price?Math.round(x.price/x.area):null}
 function apartmentReasons(x){
- const out=[]; if(x.price<=cfg.apartment.max)out.push('Prix dans la Buy Box définie.');
+ const out=[]; if(x.price<=cfg.apartment.max)out.push('Prix dans la cadre d’achat défini.');
  if(/petite copro/i.test(String(x.copro||'')))out.push('Petite copropriété indiquée dans les données disponibles.');
  if(x.grossYieldOnTotal)out.push('Rendement brut estimé : '+String(x.grossYieldOnTotal).replace('.',',')+' %.');
  if(/conforme/i.test(String(x.electricity||'')))out.push('Conformité électrique annoncée dans la source.');
@@ -204,7 +204,7 @@ function card(x){
  '<div class="priceLine"><span class="price">'+euro(x.price)+'</span><span class="sqm">'+(ppm?num(ppm)+' €/m²':'€/m² non calculable')+'</span></div>'+
  '<div class="kpis">'+kpis.map(k=>'<div class="kpi"><small>'+esc(k[0])+'</small><b>'+esc(k[1])+'</b></div>').join('')+'</div>'+
  confidenceHtml(x)+
- '<div class="reason"><b>Pourquoi ARGUS le suit</b><ul>'+(reasons.length?reasons.map(r=>'<li>'+esc(r)+'</li>').join(''):'<li>Dossier conservé dans la shortlist, mais les facteurs détaillés restent à confirmer.</li>')+'</ul></div>'+
+ '<div class="reason"><b>Pourquoi ARGUS le suit</b><ul>'+(reasons.length?reasons.map(r=>'<li>'+esc(r)+'</li>').join(''):'<li>Dossier conservé dans la sélection, mais les facteurs détaillés restent à confirmer.</li>')+'</ul></div>'+
  (rs.length?'<div class="reason"><b>Points à vérifier</b><ul>'+rs.map(r=>'<li>'+esc(r)+'</li>').join('')+'</ul></div>':'')+
  '<details class="details"><summary>Voir les données complémentaires</summary><div class="inside">'+details+'<p><b>Confiance des données :</b> '+esc(conf.label)+'. Cet indicateur mesure la complétude des informations disponibles, pas la qualité du bien.</p></div></details>'+
  '<div class="comparePick"><input type="checkbox" data-compare="'+esc(x.id||sub)+'" '+(selected.has(x.id||sub)?'checked':'')+'> Ajouter à la comparaison</div>'+
@@ -247,7 +247,7 @@ async function loadCategory(next){
    data=d.opportunities||[];hiddenCount=(d.counts?.excludedUnavailable||0)+(d.counts?.hiddenUnverified||0);checkedAt=d.checkedAt||null;
    document.getElementById('updated').textContent=data.length+' annonce(s) active(s) vérifiée(s) · '+hiddenCount+' masquée(s) car indisponible(s) ou non confirmée(s) · contrôle '+(checkedAt?new Date(checkedAt).toLocaleString('fr-BE'):'récent');
  }catch(e){
-   data=[];hiddenCount=0;checkedAt=null;document.getElementById('updated').textContent='Vérification live indisponible — ARGUS masque la shortlist plutôt que risquer d’afficher un bien vendu.';
+   data=[];hiddenCount=0;checkedAt=null;document.getElementById('updated').textContent='Vérification live indisponible — ARGUS masque la sélection plutôt que risquer d’afficher un bien vendu.';
  }
  renderBest();renderCurated();updateStats();
 }
