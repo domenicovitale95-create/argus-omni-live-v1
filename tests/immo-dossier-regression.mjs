@@ -16,5 +16,14 @@ assert.match(dossier,/04 · QUARTIER/,'Neighborhood section missing');
 assert.match(dossier,/05 · COMPARABLES/,'Comparables section missing');
 assert.match(dossier,/06 · DOCUMENTS MANQUANTS/,'Missing-documents section missing');
 assert.doesNotMatch(dossier,/Buy Box|Strategic Brussels|LIVE DISCOVERY/i,'Visible dossier labels must remain French');
+assert.match(dossier,/Couverture des données/,'Data coverage must be explicit and distinct from quality');
+assert.match(dossier,/Fraîcheur de la fiche/,'Data freshness must be visible');
+assert.match(dossier,/Traçabilité/,'Source traceability must be visible');
+assert.match(dossier,/Pertinence/,'Comparable relevance must be visible');
+assert.match(dossier,/Registre PEB/,'Official PEB verification link missing');
+assert.match(dossier,/BruGIS/,'Official urban planning verification link missing');
+assert.match(dossier,/Statbel/,'Official market reference link missing');
+assert.doesNotMatch(opportunities,/Confiance des données|Confiance données/,'Opportunity cards must not misuse confidence for completeness');
+assert.match(opportunities,/Couverture des données/,'Opportunity cards must label completeness as data coverage');
 
 console.log(JSON.stringify({ok:true,dossier:true},null,2));
