@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {classifyListingAvailability,isUnavailableListing} from '../api/immo-listing-scan.js';
+import {classifyListingAvailability,isUnavailableListing,isConfirmedActiveListing} from '../api/immo-listing-scan.js';
 
 const cases=[
   [{title:'VENDU - Appartement 2 chambres'},'SOLD'],
@@ -9,6 +9,7 @@ const cases=[
   [{description:'Dit pand is verkocht.'},'SOLD'],
   [{description:'This property has been sold.'},'SOLD'],
   [{structuredAvailability:'https://schema.org/SoldOut'},'SOLD'],
+  [{structuredAvailability:'https://schema.org/InStock'},'ACTIVE'],
   [{description:"Cette annonce n'est plus disponible."},'REMOVED'],
   [{description:'Sous option - visites suspendues'},'OPTION'],
   [{description:'Sous compromis'},'UNDER_CONTRACT'],
@@ -21,11 +22,15 @@ for(const [input,expected] of cases){
   assert.equal(got.status,expected,JSON.stringify({input,got,expected}));
 }
 
-for(const status of ['SOLD','REMOVED','WITHDRAWN','CLOSED']){
+for(const status of ['SOLD','REMOVED','WITHDRAWN','CLOSED','OPTION','UNDER_CONTRACT']){
   assert.equal(isUnavailableListing({availabilityStatus:status}),true,status+' must be hidden');
 }
-for(const status of ['ACTIVE','OPTION','UNDER_CONTRACT','UNKNOWN']){
-  assert.equal(isUnavailableListing({availabilityStatus:status}),false,status+' must not be treated as sold');
+for(const status of ['ACTIVE','UNKNOWN']){
+  assert.equal(isUnavailableListing({availabilityStatus:status}),false,status+' is not an explicit unavailable state');
+}
+assert.equal(isConfirmedActiveListing({availabilityStatus:'ACTIVE'}),true,'ACTIVE must be displayable');
+for(const status of ['SOLD','REMOVED','WITHDRAWN','CLOSED','OPTION','UNDER_CONTRACT','UNKNOWN','UNVERIFIED']){
+  assert.equal(isConfirmedActiveListing({availabilityStatus:status}),false,status+' must never be displayable as confirmed active');
 }
 
 console.log(JSON.stringify({ok:true,cases:cases.length},null,2));
