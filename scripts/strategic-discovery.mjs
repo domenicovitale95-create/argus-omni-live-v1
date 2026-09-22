@@ -72,6 +72,9 @@ async function fetchDistrictGeojson(){
       if(!r.ok)throw new Error('HTTP '+r.status);
       const geo=await r.json();
       if(!Array.isArray(geo.features)||!geo.features.length)throw new Error('empty feature collection');
+      const validCenters=geo.features.filter(f=>geometryCenter(f.geometry)).length;
+      const minValid=Math.floor(geo.features.length*.9);
+      if(validCenters<minValid)throw new Error('invalid/non-WGS84 coordinates: '+validCenters+'/'+geo.features.length);
       return {geo,source};
     }catch(e){
       errors.push(source.id+': '+String(e.message||e));
