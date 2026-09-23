@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-23T20:10:49.585954+00:00",
+  "generated_at": "2026-09-23T23:35:25.966671+00:00",
   "data_quality": {
     "fresh_series": 18,
     "total_series": 18,
@@ -70,7 +70,7 @@
       },
       {
         "event": "Emerging markets moved",
-        "move": -1.61,
+        "move": -1.63,
         "why_it_matters": "EM risk appetite and global growth sensitivity changed.",
         "affected_assets": [
           "emerging"
@@ -78,7 +78,7 @@
       },
       {
         "event": "Europe moved",
-        "move": -1.37,
+        "move": -1.38,
         "why_it_matters": "European equity risk/reward shifted relative to the US.",
         "affected_assets": [
           "europe"
@@ -256,11 +256,11 @@
       "provider": "YAHOO"
     },
     "sp500": {
-      "price": 767.83,
+      "price": 767.81,
       "date": "2026-09-23",
       "ret_1d": -0.72,
       "ret_1m": 0.57,
-      "ret_3m": 4.72,
+      "ret_3m": 4.71,
       "ret_6m": 17.55,
       "ret_1y": 15.14,
       "vol_20d_ann": 10.87,
@@ -304,15 +304,15 @@
     "europe": {
       "price": 88.01,
       "date": "2026-09-23",
-      "ret_1d": -1.37,
-      "ret_1m": -5.07,
+      "ret_1d": -1.38,
+      "ret_1m": -5.08,
       "ret_3m": 0.98,
-      "ret_6m": 8.61,
-      "ret_1y": 11.23,
-      "vol_20d_ann": 12.11,
+      "ret_6m": 8.6,
+      "ret_1y": 11.22,
+      "vol_20d_ann": 12.12,
       "sma_200": 87.42,
-      "distance_200dma": 0.68,
-      "drawdown_52w": -5.55,
+      "distance_200dma": 0.67,
+      "drawdown_52w": -5.56,
       "max_drawdown": -41.57,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/VGK?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-23",
@@ -325,17 +325,17 @@
       "provider": "YAHOO"
     },
     "emerging": {
-      "price": 67.72,
+      "price": 67.71,
       "date": "2026-09-23",
-      "ret_1d": -1.61,
-      "ret_1m": 0.89,
-      "ret_3m": 0.82,
-      "ret_6m": 18.16,
-      "ret_1y": 27.75,
-      "vol_20d_ann": 21.49,
+      "ret_1d": -1.63,
+      "ret_1m": 0.88,
+      "ret_3m": 0.8,
+      "ret_6m": 18.15,
+      "ret_1y": 27.73,
+      "vol_20d_ann": 21.51,
       "sma_200": 62.48,
-      "distance_200dma": 8.39,
-      "drawdown_52w": -4.9,
+      "distance_200dma": 8.38,
+      "drawdown_52w": -4.92,
       "max_drawdown": -41.46,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/EEM?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-23",
@@ -512,11 +512,11 @@
   "macro": {
     "us10y": {
       "price": 4.96,
-      "date": "2026-09-21",
-      "ret_1d": -0.05,
-      "ret_1m": 0.27,
-      "last_update": "2026-09-21",
-      "delay_days": 2,
+      "date": "2026-09-22",
+      "ret_1d": 0.0,
+      "ret_1m": 0.22,
+      "last_update": "2026-09-22",
+      "delay_days": 1,
       "fresh": true,
       "label": "US 10Y Treasury Yield",
       "unit": "%",
@@ -524,12 +524,12 @@
       "data_type": "OBSERVED"
     },
     "us2y": {
-      "price": 4.76,
-      "date": "2026-09-21",
-      "ret_1d": 0.0,
-      "ret_1m": 0.57,
-      "last_update": "2026-09-21",
-      "delay_days": 2,
+      "price": 4.71,
+      "date": "2026-09-22",
+      "ret_1d": -0.05,
+      "ret_1m": 0.47,
+      "last_update": "2026-09-22",
+      "delay_days": 1,
       "fresh": true,
       "label": "US 2Y Treasury Yield",
       "unit": "%",
