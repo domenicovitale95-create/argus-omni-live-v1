@@ -31,3 +31,47 @@ jobs:
         run: npm install --ignore-scripts --no-audit --no-fund
       - name: Check training settlement fairness and UI states
         run: node tests/training-bets-settlement-regression.mjs
+
+
+  production-reconcile:
+    needs: regression
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
+    steps:
+      - name: Reconcile overdue training results with verified provider data
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="${ARGUS_BASE_URL:-https://argus-omni-live.vercel.app}"
+          if [ -z "${CRON_SECRET:-}" ]; then
+            echo "::error::CRON_SECRET is not configured."
+            exit 1
+          fi
+
+          before="$(curl --fail-with-body --silent --show-error --max-time 60 "${BASE}/api/training-bets")"
+          echo "${before}" | jq -e '.summary | has("overdueOpen")' >/dev/null
+
+          curl --fail-with-body --silent --show-error --max-time 240 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "${BASE}/api/training-bets-cron" > /tmp/training-reconcile.json
+
+          jq '{
+            summary,
+            run: {
+              captured: .run.captured,
+              settled: .run.settled,
+              settledLedger: .run.settledLedger,
+              settledProvider: .run.settledProvider,
+              providerCalls: .run.providerCalls,
+              providerSettlementReason: .run.providerSettlementReason,
+              providerSettlementDates: .run.providerSettlementDates,
+              providerSettlementError: .run.providerSettlementError
+            },
+            settlementProbe
+          }' /tmp/training-reconcile.json
+
+          after="$(curl --fail-with-body --silent --show-error --max-time 60 "${BASE}/api/training-bets")"
+          echo "${after}" | jq '{summary, settlementProbe}'
