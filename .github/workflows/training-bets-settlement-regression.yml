@@ -37,6 +37,7 @@ jobs:
     needs: regression
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       ARGUS_BASE_URL: ${{ secrets.ARGUS_BASE_URL }}
       CRON_SECRET: ${{ secrets.CRON_SECRET }}
@@ -51,8 +52,19 @@ jobs:
             exit 1
           fi
 
-          before="$(curl --fail-with-body --silent --show-error --max-time 60 "${BASE}/api/training-bets")"
-          echo "${before}" | jq -e '.summary | has("overdueOpen")' >/dev/null
+          ready=0
+          for attempt in $(seq 1 120); do
+            before="$(curl --fail-with-body --silent --show-error --max-time 60 "${BASE}/api/training-bets")"
+            if echo "${before}" | jq -e '.version == "TRAINING-BETS-3"' >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 5
+          done
+          if [ "${ready}" -ne 1 ]; then
+            echo "::error::TRAINING-BETS-3 was not serving in production."
+            exit 1
+          fi
 
           curl --fail-with-body --silent --show-error --max-time 240 \
             -H "Authorization: Bearer ${CRON_SECRET}" \
@@ -66,6 +78,8 @@ jobs:
               settledLedger: .run.settledLedger,
               settledProvider: .run.settledProvider,
               providerCalls: .run.providerCalls,
+              providerFixtureLookups: .run.providerFixtureLookups,
+              providerRescheduled: .run.providerRescheduled,
               providerSettlementReason: .run.providerSettlementReason,
               providerSettlementDates: .run.providerSettlementDates,
               providerSettlementError: .run.providerSettlementError
