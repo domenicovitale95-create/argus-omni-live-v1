@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {classifyListingAvailability,isUnavailableListing,isConfirmedActiveListing} from '../api/immo-listing-scan.js';
-import {buildSourcePageUrls,detectCriticalLegalRisks,linksFrom} from '../api/immo-discovery-scan.js';
+import {buildSourcePageUrls,detectCriticalLegalRisks,linksFrom,evaluateEligibility} from '../api/immo-discovery-scan.js';
 
 const cases=[
   [{title:'VENDU - Appartement 2 chambres'},'SOLD'],
@@ -62,6 +62,22 @@ assert.match(embeddedLinks[0],/21861941/,'Known-style Immoweb listing id must su
 assert.ok(
   detectCriticalLegalRisks({html:'<p>Combles aménagées en infraction urbanistique et non régularisables.</p>'}).includes('NON_REGULARISABLE'),
   'Legal risks appearing only in full page HTML must still be detected'
+);
+
+assert.deepEqual(
+  evaluateEligibility({availabilityStatus:'UNKNOWN',price:119000,surface:37,type:'studio'},150000,'apartment'),
+  {eligible:false,review:true,reason:'ACTIVE_STATUS_UNCONFIRMED'},
+  'A discovered listing with unconfirmed active status must be retained for verification'
+);
+assert.deepEqual(
+  evaluateEligibility({availabilityStatus:'ACTIVE',price:null,surface:37,type:'studio'},150000,'apartment'),
+  {eligible:false,review:true,reason:'PRICE_NOT_PARSED'},
+  'A discovered listing with an unparsed price must not silently disappear'
+);
+assert.deepEqual(
+  evaluateEligibility({availabilityStatus:'ACTIVE',price:170000,surface:37,type:'studio'},150000,'apartment'),
+  {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'},
+  'A confirmed out-of-box listing may be excluded explicitly'
 );
 
 console.log(JSON.stringify({ok:true,cases:cases.length,paginationPages:pages.length,legalRiskRegression:true},null,2));
