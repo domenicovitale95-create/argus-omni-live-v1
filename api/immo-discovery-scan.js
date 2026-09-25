@@ -19,9 +19,8 @@ const BUILDING_SOURCES=[
 ];
 
 const MAX_LINKS_PER_PAGE=24;
-const MAX_LINKS_PER_SOURCE=72;
 const DEFAULT_SOURCE_PAGES=1;
-const DETAIL_CONCURRENCY=6;
+const DETAIL_CONCURRENCY=8;
 const FETCH_TIMEOUT=7000;
 
 async function fetchText(url){
@@ -114,9 +113,12 @@ function eligible(x,maxPrice,category){
   return type!=='unknown'||/(appartement|apartment|flat|studio|duplex|penthouse|kot\b)/i.test(text);
 }
 async function scanSource(source,maxPrice,category){
-  const started=Date.now(),status={id:source.id,name:source.name,url:source.url,reachable:false,pagesConfigured:Number(source.pages)||1,pagesReached:0,linksFound:0,listingsParsed:0,eligible:0,hardStops:0,excludedUnavailable:0,hiddenUnverified:0,error:null,pageErrors:[],durationMs:0};
+  const pagesConfigured=Math.max(1,Math.min(10,Number(source.pages)||DEFAULT_SOURCE_PAGES));
+  const linkBudget=pagesConfigured*MAX_LINKS_PER_PAGE;
+  const started=Date.now(),status={id:source.id,name:source.name,url:source.url,reachable:false,pagesConfigured,pagesReached:0,linksFound:0,listingsParsed:0,eligible:0,hardStops:0,excludedUnavailable:0,hiddenUnverified:0,coverageComplete:false,stoppedBecause:null,error:null,pageErrors:[],durationMs:0};
   try{
     const seenLinks=new Set(),links=[];
+    let exhausted=false;
     for(const pageUrl of buildSourcePageUrls(source)){
       try{
         const page=await fetchText(pageUrl);status.reachable=true;status.pagesReached++;
@@ -125,9 +127,10 @@ async function scanSource(source,maxPrice,category){
         for(const link of pageLinks){
           if(seenLinks.has(link))continue;
           seenLinks.add(link);links.push(link);added++;
-          if(links.length>=MAX_LINKS_PER_SOURCE)break;
+          if(links.length>=linkBudget)break;
         }
-        if(links.length>=MAX_LINKS_PER_SOURCE||added===0)break;
+        if(added===0){exhausted=true;status.stoppedBecause='no_new_results';break}
+        if(links.length>=linkBudget){status.stoppedBecause='configured_page_limit';break}
       }catch(e){
         status.pageErrors.push({page:pageUrl,error:e?.name==='AbortError'?'timeout':String(e?.message||e)});
         if(!status.reachable)throw e;
@@ -135,6 +138,8 @@ async function scanSource(source,maxPrice,category){
       }
     }
     status.linksFound=links.length;
+    status.coverageComplete=exhausted||status.pagesReached>=pagesConfigured;
+    if(!status.stoppedBecause&&status.coverageComplete)status.stoppedBecause=exhausted?'no_new_results':'configured_pages_scanned';
     const rows=[];
     for(let i=0;i<links.length;i+=DETAIL_CONCURRENCY){
       const got=await Promise.all(links.slice(i,i+DETAIL_CONCURRENCY).map(async url=>{
@@ -178,7 +183,7 @@ export default async function handler(req,res){
     return res.status(200).json({
       ok:true,category,scannedAt:new Date().toISOString(),maxPrice,
       sourceStatus:results.map(r=>r.status),
-      totals:{sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length,pagesReached:results.reduce((n,r)=>n+(r.status.pagesReached||0),0),linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),listingsParsed:results.reduce((n,r)=>n+r.status.listingsParsed,0),eligibleAfterDedup:listings.length,hardStops:listings.filter(x=>x.decisionGate==='HARD_STOP').length},
+      totals:{sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length,sourcesComplete:results.filter(r=>r.status.coverageComplete).length,pagesReached:results.reduce((n,r)=>n+(r.status.pagesReached||0),0),linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),listingsParsed:results.reduce((n,r)=>n+r.status.listingsParsed,0),eligibleAfterDedup:listings.length,hardStops:listings.filter(x=>x.decisionGate==='HARD_STOP').length},
       listings,
       notice:'ARGUS reports only sources actually reached. Only listings explicitly confirmed ACTIVE are eligible; sold, removed, under-contract, option and unverifiable listings are excluded before deduplication, ranking and map display.'
     });
