@@ -228,7 +228,10 @@ function renderCurated(){
 function marketCard(x){
  const ppm=x.surface&&x.price?Math.round(x.price/x.surface):null;
  const meta=[x.address||x.city,x.surface?x.surface+' m²':null,x.bedrooms!=null?x.bedrooms+' ch.':null,x.epc?'PEB '+x.epc:null].filter(Boolean).join(' · ');
- return '<article class="card marketcard"><div class="statusline"><span class="badge neutral">'+esc(x.discoveredFrom||x.source||'Source')+'</span><span class="badge warn">À auditer</span></div><h3>'+esc(x.title||'Annonce immobilière')+'</h3><div class="loc">'+esc(meta||'Données partielles — ouvrir l’annonce')+'</div><div class="priceLine"><span class="price">'+euro(x.price)+'</span><span class="sqm">'+(ppm?num(ppm)+' €/m²':'')+'</span></div><div class="cardActions"><a class="primaryLink" href="'+esc(x.canonical)+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Analyse complète</a></div></article>';
+ const hard=x.decisionGate==='HARD_STOP'||(x.criticalLegalRisks||[]).length>0;
+ const riskLabels={URBANISM_INFRACTION:'Infraction urbanistique',NON_REGULARISABLE:'Non régularisable',UNPERMITTED:'Usage/travaux sans permis',UNRECOGNIZED_UNIT:'Unité ou division non reconnue',NL_URBANISM:'Problème urbanistique signalé'};
+ const riskBlock=hard?'<div class="reason"><b>Blocage critique ARGUS</b><ul>'+(x.criticalLegalRisks||[]).map(code=>'<li>'+esc(riskLabels[code]||code)+'</li>').join('')+'</ul></div>':'';
+ return '<article class="card marketcard"><div class="statusline"><span class="badge neutral">'+esc(x.discoveredFrom||x.source||'Source')+'</span><span class="badge '+(hard?'risk':'warn')+'">'+(hard?'HARD STOP · URBANISME':'À auditer')+'</span></div><h3>'+esc(x.title||'Annonce immobilière')+'</h3><div class="loc">'+esc(meta||'Données partielles — ouvrir l’annonce')+'</div><div class="priceLine"><span class="price">'+euro(x.price)+'</span><span class="sqm">'+(ppm?num(ppm)+' €/m²':'')+'</span></div>'+riskBlock+'<div class="cardActions"><a class="primaryLink" href="'+esc(x.canonical)+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Analyse complète</a></div></article>';
 }
 function updateStats(){
  document.getElementById('statActive').textContent=data.length;
@@ -258,8 +261,8 @@ async function scanMarket(){
  try{
    const r=await fetch('/api/immo-discovery-scan',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({category,maxPrice:cfg[category].max})}),j=await r.json(); if(!j.ok)throw new Error(j.error||'Scan impossible');
    liveListings=j.listings||[];const unavailable=(j.sourceStatus||[]).reduce((n,s)=>n+(s.excludedUnavailable||0),0),unverified=(j.sourceStatus||[]).reduce((n,s)=>n+(s.hiddenUnverified||0),0);
-   sum.innerHTML='<b>'+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes</b> · '+j.totals.linksFound+' liens · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' actives éligibles</b>'+(unavailable?' · '+unavailable+' indisponible(s) exclue(s)':'')+(unverified?' · '+unverified+' non confirmée(s) masquée(s)':'');
-   status.innerHTML=(j.sourceStatus||[]).map(s=>'<div class="status '+(s.reachable?'ok':'fail')+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?'Atteinte · '+s.linksFound+' liens · '+s.eligible+' actives éligibles':'Non couverte · '+esc(s.error||'bloquée'))+'</span></div>').join('');
+   sum.innerHTML='<b>'+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes</b> · '+(j.totals.pagesReached||0)+' page(s) parcourue(s) · '+j.totals.linksFound+' liens · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' actives éligibles</b>'+(j.totals.hardStops?' · '+j.totals.hardStops+' HARD STOP urbanisme':'')+(unavailable?' · '+unavailable+' indisponible(s) exclue(s)':'')+(unverified?' · '+unverified+' non confirmée(s) masquée(s)':'');
+   status.innerHTML=(j.sourceStatus||[]).map(s=>'<div class="status '+(s.reachable?'ok':'fail')+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?'Atteinte · '+(s.pagesReached||1)+' page(s) · '+s.linksFound+' liens · '+s.eligible+' actives éligibles'+(s.hardStops?' · '+s.hardStops+' HARD STOP':''):'Non couverte · '+esc(s.error||'bloquée'))+'</span></div>').join('');
    grid.innerHTML=liveListings.map(marketCard).join('')||'<div class="empty">Aucune nouvelle annonce éligible extraite sur ce passage.</div>';
  }catch(e){sum.innerHTML='<b style="color:#b42318">Scan interrompu.</b> '+esc(e.message)}
  finally{btns.forEach(b=>{b.disabled=false;b.textContent=b.dataset.label||'Scanner maintenant'})}
