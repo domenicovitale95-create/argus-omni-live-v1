@@ -1360,6 +1360,57 @@
       ],
       "source_date": "2026-09-23",
       "outcomes": {}
+    },
+    {
+      "date": "2026-09-25",
+      "asset_id": "sp500",
+      "asset": "S&P 500",
+      "signal": "ATTRACTIVE",
+      "score": 73,
+      "price": 767.81,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +4.7%",
+        "Distance vs 200-day average: +7.0%",
+        "20-day annualised volatility: 10.9%"
+      ],
+      "source_date": "2026-09-23",
+      "outcomes": {}
+    },
+    {
+      "date": "2026-09-25",
+      "asset_id": "global_equity",
+      "asset": "Global Equities",
+      "signal": "ATTRACTIVE",
+      "score": 72,
+      "price": 160.22,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +3.7%",
+        "Distance vs 200-day average: +6.3%",
+        "20-day annualised volatility: 12.1%"
+      ],
+      "source_date": "2026-09-23",
+      "outcomes": {}
+    },
+    {
+      "date": "2026-09-25",
+      "asset_id": "nasdaq",
+      "asset": "Nasdaq 100",
+      "signal": "WATCH",
+      "score": 71,
+      "price": 741.21,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +4.3%",
+        "Distance vs 200-day average: +11.6%",
+        "20-day annualised volatility: 16.3%"
+      ],
+      "source_date": "2026-09-23",
+      "outcomes": {}
     }
   ]
 }
