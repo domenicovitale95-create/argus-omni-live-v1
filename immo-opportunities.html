@@ -29,7 +29,7 @@ a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 22px}.top{position:
 .reason{margin-top:12px;border-top:1px solid #e5eaf0;padding-top:12px}.reason b{font-size:.84rem}.reason ul{margin:7px 0 0;padding-left:18px;color:#536277;font-size:.82rem}.reason li{margin:4px 0}
 .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.cardActions a,.cardActions button{border:1px solid #cfd8e3;background:#fff;color:#173a5f;text-decoration:none;border-radius:10px;padding:9px 11px;font-weight:850;font-size:.82rem;cursor:pointer}.cardActions a.primaryLink{background:#173a5f;color:#fff;border-color:#173a5f}.comparePick{display:flex;align-items:center;gap:7px;margin-top:12px;color:#516277;font-size:.8rem}.comparePick input{width:17px;height:17px;accent-color:#173a5f}
 .details{margin-top:11px;border:1px solid #e0e6ed;border-radius:11px;background:#fbfcfd}.details summary{cursor:pointer;padding:10px 11px;font-weight:850;font-size:.8rem}.details .inside{padding:0 11px 11px;color:#536277;font-size:.81rem}.details p{margin:6px 0}
-.scanbox,.mapbox,.strategic{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.coverage{padding:12px 13px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8ef;color:#516277}.statusgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.status{border-radius:11px;padding:11px;background:#f8fafc;border:1px solid #e2e8ef}.status b,.status span{display:block}.status span{color:var(--muted);font-size:.78rem;margin-top:3px}.status.ok{border-left:3px solid #2e8b62}.status.fail{border-left:3px solid #c45449}.marketGrid{margin-top:12px}.marketcard .price{font-size:1.25rem}.muted{color:var(--muted)}
+.scanbox,.mapbox,.strategic{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.coverage{padding:12px 13px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8ef;color:#516277}.statusgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.status{border-radius:11px;padding:11px;background:#f8fafc;border:1px solid #e2e8ef}.status b,.status span{display:block}.status span{color:var(--muted);font-size:.78rem;margin-top:3px}.status.ok{border-left:3px solid #2e8b62}.status.partial{border-left:3px solid #c28a16}.status.fail{border-left:3px solid #c45449}.marketGrid{margin-top:12px}.marketcard .price{font-size:1.25rem}.muted{color:var(--muted)}
 .mapWrap{display:none;margin-top:12px}.mapWrap.open{display:block}#map{height:480px;border-radius:14px;background:#e9eef4}.map-note{color:var(--muted);font-size:.82rem;margin:9px 0 0}
 .strategic{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px}.strategic h3{margin:0;font-size:1.25rem}.strategic p{margin:5px 0 0;color:var(--muted)}.strategic a{text-decoration:none;background:var(--navy);color:#fff;border-radius:11px;padding:10px 13px;font-weight:850}
 .comparebar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:1200;background:var(--navy);color:#fff;border-radius:14px;padding:10px 12px;display:none;align-items:center;gap:12px;box-shadow:0 16px 38px rgba(0,0,0,.28)}.comparebar.show{display:flex}.comparebar span{font-size:.85rem}.comparebar button{border:0;background:#fff;color:var(--navy);border-radius:9px;padding:8px 10px;font-weight:900;cursor:pointer}
@@ -95,6 +95,11 @@ a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 22px}.top{position:
       <div id="scanSummary" class="coverage"><b>Prêt à scanner.</b> Les sources bloquées ou inaccessibles seront signalées.</div>
       <div id="sourceStatus" class="statusgrid"></div>
       <div id="marketGrid" class="grid marketGrid"></div>
+      <div id="reviewQueueWrap" style="display:none;margin-top:18px">
+        <div class="sectiontag">À VÉRIFIER · NON CONFIRMÉ</div>
+        <p class="muted" style="margin:6px 0 10px">Ces annonces ont été découvertes mais ARGUS n'a pas pu confirmer automatiquement leur disponibilité. Elles ne sont pas classées comme opportunités tant que ce point n'est pas vérifié.</p>
+        <div id="reviewGrid" class="grid marketGrid"></div>
+      </div>
     </div>
   </section>
 
@@ -225,13 +230,16 @@ function renderCurated(){
  document.getElementById('grid').innerHTML=list.map(card).join('')||'<div class="empty">Aucun bien actif et vérifié dans cette catégorie.</div>';
  renderFilters();bindCompareChecks();
 }
-function marketCard(x){
+function marketCard(x,unverified=false){
  const ppm=x.surface&&x.price?Math.round(x.price/x.surface):null;
  const meta=[x.address||x.city,x.surface?x.surface+' m²':null,x.bedrooms!=null?x.bedrooms+' ch.':null,x.epc?'PEB '+x.epc:null].filter(Boolean).join(' · ');
  const hard=x.decisionGate==='HARD_STOP'||(x.criticalLegalRisks||[]).length>0;
  const riskLabels={URBANISM_INFRACTION:'Infraction urbanistique',NON_REGULARISABLE:'Non régularisable',UNPERMITTED:'Usage/travaux sans permis',UNRECOGNIZED_UNIT:'Unité ou division non reconnue',NL_URBANISM:'Problème urbanistique signalé'};
  const riskBlock=hard?'<div class="reason"><b>Blocage critique ARGUS</b><ul>'+(x.criticalLegalRisks||[]).map(code=>'<li>'+esc(riskLabels[code]||code)+'</li>').join('')+'</ul></div>':'';
- return '<article class="card marketcard"><div class="statusline"><span class="badge neutral">'+esc(x.discoveredFrom||x.source||'Source')+'</span><span class="badge '+(hard?'risk':'warn')+'">'+(hard?'HARD STOP · URBANISME':'À auditer')+'</span></div><h3>'+esc(x.title||'Annonce immobilière')+'</h3><div class="loc">'+esc(meta||'Données partielles — ouvrir l’annonce')+'</div><div class="priceLine"><span class="price">'+euro(x.price)+'</span><span class="sqm">'+(ppm?num(ppm)+' €/m²':'')+'</span></div>'+riskBlock+'<div class="cardActions"><a class="primaryLink" href="'+esc(x.canonical)+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Analyse complète</a></div></article>';
+ const label=unverified?'ACTIVITÉ À CONFIRMER':(hard?'HARD STOP · URBANISME':'À auditer');
+ const tone=unverified?'warn':(hard?'risk':'warn');
+ const detailFail=x.reviewReason==='DETAIL_FETCH_FAILED'?'<div class="reason"><b>Lecture automatique incomplète</b><ul><li>ARGUS a trouvé le lien mais n’a pas pu lire complètement la fiche. Vérification manuelle nécessaire.</li></ul></div>':'';
+ return '<article class="card marketcard"><div class="statusline"><span class="badge neutral">'+esc(x.discoveredFrom||x.source||'Source')+'</span><span class="badge '+tone+'">'+label+'</span></div><h3>'+esc(x.title||'Annonce immobilière à vérifier')+'</h3><div class="loc">'+esc(meta||'Données partielles — ouvrir l’annonce')+'</div>'+(x.price?'<div class="priceLine"><span class="price">'+euro(x.price)+'</span><span class="sqm">'+(ppm?num(ppm)+' €/m²':'')+'</span></div>':'')+riskBlock+detailFail+'<div class="cardActions"><a class="primaryLink" href="'+esc(x.canonical)+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Analyse complète</a></div></article>';
 }
 function updateStats(){
  document.getElementById('statActive').textContent=data.length;
@@ -244,7 +252,7 @@ async function loadCategory(next){
  category=next;filter='ALL';liveListings=[];selected.clear();updateCompareBar();
  document.querySelectorAll('[data-category]').forEach(b=>b.classList.toggle('active',b.dataset.category===category));
  document.getElementById('scanTitle').textContent=cfg[category].scanTitle;document.getElementById('scanText').textContent=cfg[category].scanText;document.getElementById('curatedTitle').textContent=cfg[category].curated;
- document.getElementById('scanSummary').innerHTML='<b>Prêt à scanner.</b> Plafond '+euro(cfg[category].max)+'.';document.getElementById('sourceStatus').innerHTML='';document.getElementById('marketGrid').innerHTML='';
+ document.getElementById('scanSummary').innerHTML='<b>Prêt à scanner.</b> Plafond '+euro(cfg[category].max)+'.';document.getElementById('sourceStatus').innerHTML='';document.getElementById('marketGrid').innerHTML='';document.getElementById('reviewGrid').innerHTML='';document.getElementById('reviewQueueWrap').style.display='none';
  try{
    const r=await fetch('/api/immo-curated-active?category='+encodeURIComponent(category),{cache:'no-store'}),d=await r.json(); if(!d.ok)throw new Error(d.error||'Vérification indisponible');
    data=d.opportunities||[];hiddenCount=(d.counts?.excludedUnavailable||0)+(d.counts?.hiddenUnverified||0);checkedAt=d.checkedAt||null;
@@ -260,10 +268,13 @@ async function scanMarket(){
  document.getElementById('liveScan').scrollIntoView({behavior:'smooth',block:'start'});
  try{
    const r=await fetch('/api/immo-discovery-scan',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({category,maxPrice:cfg[category].max})}),j=await r.json(); if(!j.ok)throw new Error(j.error||'Scan impossible');
-   liveListings=j.listings||[];const unavailable=(j.sourceStatus||[]).reduce((n,s)=>n+(s.excludedUnavailable||0),0),unverified=(j.sourceStatus||[]).reduce((n,s)=>n+(s.hiddenUnverified||0),0);
-   sum.innerHTML='<b>'+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes</b> · '+(j.totals.pagesReached||0)+' page(s) parcourue(s) · '+j.totals.linksFound+' liens · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' actives éligibles</b>'+(j.totals.hardStops?' · '+j.totals.hardStops+' HARD STOP urbanisme':'')+(unavailable?' · '+unavailable+' indisponible(s) exclue(s)':'')+(unverified?' · '+unverified+' non confirmée(s) masquée(s)':'');
-   status.innerHTML=(j.sourceStatus||[]).map(s=>'<div class="status '+(s.reachable?'ok':'fail')+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?'Atteinte · '+(s.pagesReached||1)+' page(s) · '+s.linksFound+' liens · '+s.eligible+' actives éligibles'+(s.hardStops?' · '+s.hardStops+' HARD STOP':''):'Non couverte · '+esc(s.error||'bloquée'))+'</span></div>').join('');
-   grid.innerHTML=liveListings.map(marketCard).join('')||'<div class="empty">Aucune nouvelle annonce éligible extraite sur ce passage.</div>';
+   liveListings=j.listings||[];const reviewQueue=j.reviewQueue||[],unavailable=(j.sourceStatus||[]).reduce((n,s)=>n+(s.excludedUnavailable||0),0),unverified=(j.sourceStatus||[]).reduce((n,s)=>n+(s.hiddenUnverified||0),0),detailFails=j.totals?.detailFetchFailed||0;
+   const coverageComplete=Boolean(j.coverage?.complete);
+   sum.innerHTML='<b>'+(coverageComplete?'Couverture complète':'Couverture partielle')+'</b> · '+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes · '+(j.totals.sourcesComplete||0)+' complètement parcourue(s) · '+(j.totals.pagesReached||0)+' page(s) · '+j.totals.linksFound+' liens · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' actives éligibles</b>'+(reviewQueue.length?' · '+reviewQueue.length+' à vérifier':'')+(j.totals.hardStops?' · '+j.totals.hardStops+' HARD STOP urbanisme':'')+(unavailable?' · '+unavailable+' indisponible(s) exclue(s)':'')+(detailFails?' · '+detailFails+' lecture(s) échouée(s)':'');
+   status.innerHTML=(j.sourceStatus||[]).map(s=>{const cls=!s.reachable?'fail':s.coverageComplete?'ok':'partial';const coverage=s.coverageComplete?'couverture complète':'couverture partielle';return '<div class="status '+cls+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?coverage+' · '+(s.pagesReached||1)+' page(s) · '+s.linksFound+' liens · '+s.eligible+' actives éligibles'+(s.reviewQueue?' · '+s.reviewQueue+' à vérifier':'')+(s.detailFetchFailed?' · '+s.detailFetchFailed+' lecture(s) échouée(s)':'')+(s.hardStops?' · '+s.hardStops+' HARD STOP':''):'Non couverte · '+esc(s.error||'bloquée'))+'</span></div>'}).join('');
+   grid.innerHTML=liveListings.map(x=>marketCard(x,false)).join('')||'<div class="empty">Aucune nouvelle annonce active confirmée extraite sur ce passage.</div>';
+   document.getElementById('reviewQueueWrap').style.display=reviewQueue.length?'block':'none';
+   document.getElementById('reviewGrid').innerHTML=reviewQueue.map(x=>marketCard(x,true)).join('');
  }catch(e){sum.innerHTML='<b style="color:#b42318">Scan interrompu.</b> '+esc(e.message)}
  finally{btns.forEach(b=>{b.disabled=false;b.textContent=b.dataset.label||'Scanner maintenant'})}
 }
