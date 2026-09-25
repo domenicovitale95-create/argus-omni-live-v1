@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {classifyListingAvailability,isUnavailableListing,isConfirmedActiveListing} from '../api/immo-listing-scan.js';
+import {buildSourcePageUrls,detectCriticalLegalRisks} from '../api/immo-discovery-scan.js';
 
 const cases=[
   [{title:'VENDU - Appartement 2 chambres'},'SOLD'],
@@ -33,4 +34,20 @@ for(const status of ['SOLD','REMOVED','WITHDRAWN','CLOSED','OPTION','UNDER_CONTR
   assert.equal(isConfirmedActiveListing({availabilityStatus:status}),false,status+' must never be displayable as confirmed active');
 }
 
-console.log(JSON.stringify({ok:true,cases:cases.length},null,2));
+const pages=buildSourcePageUrls({url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000',pages:6});
+assert.equal(pages.length,6,'Immoweb pagination must cover all configured pages');
+assert.equal(new URL(pages[0]).searchParams.get('page'),null,'First results page must stay canonical');
+assert.equal(new URL(pages[5]).searchParams.get('page'),'6','Last configured Immoweb page must be scanned');
+
+assert.deepEqual(
+  detectCriticalLegalRisks({description:'Combles aménagés en infraction urbanistique et non régularisables.'}),
+  ['URBANISM_INFRACTION','NON_REGULARISABLE'],
+  'Critical urban-planning language must trigger an ARGUS hard stop'
+);
+assert.deepEqual(
+  detectCriticalLegalRisks({title:'Studio à vendre',description:'Situation urbanistique conforme.'}),
+  [],
+  'Normal compliant listing must not receive a legal hard stop'
+);
+
+console.log(JSON.stringify({ok:true,cases:cases.length,paginationPages:pages.length,legalRiskRegression:true},null,2));
