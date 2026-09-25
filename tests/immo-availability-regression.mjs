@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {classifyListingAvailability,isUnavailableListing,isConfirmedActiveListing} from '../api/immo-listing-scan.js';
-import {buildSourcePageUrls,detectCriticalLegalRisks} from '../api/immo-discovery-scan.js';
+import {buildSourcePageUrls,detectCriticalLegalRisks,linksFrom} from '../api/immo-discovery-scan.js';
 
 const cases=[
   [{title:'VENDU - Appartement 2 chambres'},'SOLD'],
@@ -48,6 +48,20 @@ assert.deepEqual(
   detectCriticalLegalRisks({title:'Studio à vendre',description:'Situation urbanistique conforme.'}),
   [],
   'Normal compliant listing must not receive a legal hard stop'
+);
+
+const embeddedHtml='<script>window.__DATA__={\"url\":\"\\/fr\\/annonce\\/studio\\/a-vendre\\/evere\\/1140\\/21861941?s=s_XL\"}</script>';
+const embeddedLinks=linksFrom(
+  embeddedHtml,
+  'https://www.immoweb.be/fr/recherche/studio/a-vendre/bruxelles/arrondissement?maxprice=150000',
+  {id:'immoweb-studio',url:'https://www.immoweb.be/fr/recherche/studio/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\\/fr\\/annonce\\//i}
+);
+assert.equal(embeddedLinks.length,1,'Immoweb hydrated JSON listing routes must be discovered');
+assert.match(embeddedLinks[0],/21861941/,'Known-style Immoweb listing id must survive embedded-link extraction');
+
+assert.ok(
+  detectCriticalLegalRisks({html:'<p>Combles aménagées en infraction urbanistique et non régularisables.</p>'}).includes('NON_REGULARISABLE'),
+  'Legal risks appearing only in full page HTML must still be detected'
 );
 
 console.log(JSON.stringify({ok:true,cases:cases.length,paginationPages:pages.length,legalRiskRegression:true},null,2));
