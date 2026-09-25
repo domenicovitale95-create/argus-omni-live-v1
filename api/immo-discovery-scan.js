@@ -128,18 +128,23 @@ function keyFor(x){
   }
   return [x.address||x.city||'',x.price||'',x.surface||'',x.bedrooms??''].join('|').toLowerCase();
 }
-function basicEligible(x,maxPrice,category){
-  if(isUnavailableListing(x))return false;
+export function evaluateEligibility(x,maxPrice,category){
+  if(isUnavailableListing(x))return {eligible:false,review:false,reason:'EXPLICITLY_UNAVAILABLE'};
   const price=Number(x.price),surface=Number(x.surface);
-  if(!Number.isFinite(price)||price<40000||price>maxPrice)return false;
-  if(Number.isFinite(surface)&&(surface<12||surface>800))return false;
   const type=String(x.type||'unknown'),text=(String(x.title||'')+' '+String(x.description||'')).toLowerCase();
-  if(category==='building')return type==='building'||/(immeuble de rapport|immeuble à appartements|maison de rapport|investment property|opbrengsteigendom)/i.test(text);
-  if(!['apartment','studio','unknown'].includes(type))return false;
-  return type!=='unknown'||/(appartement|apartment|flat|studio|duplex|penthouse|kot\b)/i.test(text);
+  const categoryMatch=category==='building'
+    ? type==='building'||/(immeuble de rapport|immeuble à appartements|maison de rapport|investment property|opbrengsteigendom)/i.test(text)
+    : ['apartment','studio'].includes(type)||/(appartement|apartment|flat|studio|duplex|penthouse|kot\b)/i.test(text);
+  if(Number.isFinite(price)&&(price<40000||price>maxPrice))return {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'};
+  if(Number.isFinite(surface)&&(surface<12||surface>800))return {eligible:false,review:false,reason:'IMPLAUSIBLE_SURFACE'};
+  if(!categoryMatch&&type!=='unknown')return {eligible:false,review:false,reason:'WRONG_PROPERTY_TYPE'};
+  if(!Number.isFinite(price))return {eligible:false,review:true,reason:'PRICE_NOT_PARSED'};
+  if(!categoryMatch)return {eligible:false,review:true,reason:'TYPE_NOT_CONFIRMED'};
+  if(!isConfirmedActiveListing(x))return {eligible:false,review:true,reason:'ACTIVE_STATUS_UNCONFIRMED'};
+  return {eligible:true,review:false,reason:'ELIGIBLE'};
 }
 function eligible(x,maxPrice,category){
-  return isConfirmedActiveListing(x)&&basicEligible(x,maxPrice,category);
+  return evaluateEligibility(x,maxPrice,category).eligible;
 }
 async function scanSource(source,maxPrice,category){
   const pagesConfigured=Math.max(1,Math.min(MAX_SOURCE_PAGES,Number(source.pages)||DEFAULT_SOURCE_PAGES));
@@ -192,15 +197,14 @@ async function scanSource(source,maxPrice,category){
         const row=item.row;
         status.listingsParsed++;
         if(isUnavailableListing(row)){status.excludedUnavailable++;continue}
-        if(!isConfirmedActiveListing(row)){
-          status.hiddenUnverified++;
-          if(basicEligible(row,maxPrice,category)){
-            status.reviewQueue++;
-            review.push({...row,reviewReason:'ACTIVE_STATUS_UNCONFIRMED'});
-          }
+        const gate=evaluateEligibility(row,maxPrice,category);
+        if(!isConfirmedActiveListing(row))status.hiddenUnverified++;
+        if(gate.review){
+          status.reviewQueue++;
+          review.push({...row,reviewReason:gate.reason});
           continue;
         }
-        if(eligible(row,maxPrice,category)){
+        if(gate.eligible){
           status.eligible++;
           if(row.decisionGate==='HARD_STOP')status.hardStops++;
           rows.push(row);
