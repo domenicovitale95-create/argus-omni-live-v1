@@ -34,7 +34,14 @@ async function verifyAll(items=[]){
 }
 
 export default async function handler(req,res){
-  res.setHeader('Cache-Control','public, max-age=0, s-maxage=900, stale-while-revalidate=900');
+  // This endpoint performs live source checks. Never let browser/CDN caches turn
+  // an explicit refresh into a stale 15-minute response.
+  res.setHeader('Cache-Control','private, no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('CDN-Cache-Control','no-store');
+  res.setHeader('Vercel-CDN-Cache-Control','no-store');
+  res.setHeader('Pragma','no-cache');
+  res.setHeader('Expires','0');
+
   if(req.method!=='GET')return res.status(405).json({ok:false,error:'GET required'});
 
   const category=String(requestQuery(req).category||'apartment')==='building'?'building':'apartment';
@@ -49,6 +56,7 @@ export default async function handler(req,res){
     updatedAt:data.updatedAt,
     checkedAt:new Date().toISOString(),
     failClosed:true,
+    cachePolicy:'NO_STORE_LIVE_CHECK',
     counts:{
       sourceRecords:(data.opportunities||[]).length,
       active:active.length,
