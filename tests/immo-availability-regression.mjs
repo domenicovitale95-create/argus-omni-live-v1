@@ -79,5 +79,10 @@ assert.deepEqual(
   {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'},
   'A confirmed out-of-box listing may be excluded explicitly'
 );
+assert.deepEqual(
+  evaluateEligibility({availabilityStatus:'ACTIVE',price:145000,surface:42,type:'apartment',epc:'G',peb:'G'},150000,'apartment'),
+  {eligible:true,review:false,reason:'ELIGIBLE'},
+  'PEB G must remain eligible for ARGUS discovery and analysis; it is a risk factor, not an exclusion rule'
+);
 
-console.log(JSON.stringify({ok:true,cases:cases.length,paginationPages:pages.length,legalRiskRegression:true},null,2));
+console.log(JSON.stringify({ok:true,cases:cases.length,paginationPages:pages.length,legalRiskRegression:true,pebGEligible:true},null,2));
