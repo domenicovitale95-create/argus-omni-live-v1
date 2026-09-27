@@ -1,310 +1,68 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1728">
 <title>ARGUS IMMO — Opportunités</title>
-<meta name="description" content="ARGUS IMMO — sélection, vérification et comparaison d'opportunités immobilières à Bruxelles.">
+<meta name="description" content="ARGUS IMMO — sélection et catalogue des annonces immobilières encore disponibles à Bruxelles.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
-:root{
-  --navy:#0b1728;--navy2:#14243a;--ink:#122033;--muted:#64748b;--line:#d9e1ea;--paper:#f5f7fa;--white:#fff;
-  --blue:#235fa7;--blue2:#eaf2fb;--green:#18794e;--greenBg:#eaf7f0;--amber:#9a6700;--amberBg:#fff6d8;--red:#b42318;--redBg:#fff0ee;
-  --shadow:0 10px 30px rgba(15,23,42,.08);--radius:18px
-}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.45}
-a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 22px}.top{position:sticky;top:0;z-index:1000;background:rgba(11,23,40,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.1)}
-.topin{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}.brandmark{width:36px;height:36px;border-radius:10px;background:#fff;color:var(--navy);display:grid;place-items:center;font-weight:950}.brand b{display:block;letter-spacing:.045em}.brand small{display:block;color:#9fb0c7;font-size:.73rem}.nav{display:flex;gap:6px}.nav a{color:#d9e5f2;text-decoration:none;padding:9px 11px;border-radius:10px;font-size:.82rem;font-weight:800}.nav a:hover,.nav a.active{background:#1a2d47;color:#fff}
-.hero{background:linear-gradient(135deg,var(--navy),#122944);color:#fff;padding:54px 0 34px}.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:#9fc7f5;margin:0 0 10px}.hero h1{font-size:clamp(2.2rem,6vw,4.2rem);letter-spacing:-.05em;line-height:1;margin:0;max-width:840px}.hero .lead{max-width:720px;color:#c6d4e5;font-size:1.05rem;margin:16px 0 0}
-.heroactions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.btn{border:0;border-radius:12px;padding:11px 14px;min-height:44px;font:inherit;font-weight:850;cursor:pointer}.btn.primary{background:#fff;color:var(--navy)}.btn.ghost{background:transparent;color:#fff;border:1px solid #416181}.btn.soft{background:var(--blue2);color:#164f8e}.btn:disabled{opacity:.55;cursor:wait}
-.summary{margin-top:-18px;position:relative;z-index:2}.summarygrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px;box-shadow:var(--shadow)}.stat span{display:block;color:var(--muted);font-size:.72rem;font-weight:850;text-transform:uppercase;letter-spacing:.06em}.stat b{display:block;font-size:1.25rem;margin-top:4px}.stat small{display:block;color:var(--muted);margin-top:2px}
-.section{padding:34px 0}.sectionhead{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:14px}.sectionhead h2{margin:0;font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.035em}.sectionhead p{margin:5px 0 0;color:var(--muted);max-width:680px}.sectiontag{font-size:.7rem;text-transform:uppercase;letter-spacing:.11em;color:var(--blue);font-weight:900}
-.modebar{display:flex;gap:8px;flex-wrap:wrap}.mode{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:10px 14px;font-weight:850;cursor:pointer}.mode.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.priority{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow);display:grid;grid-template-columns:1.5fr .5fr;gap:18px}.priority h3{font-size:1.55rem;margin:4px 0}.priority p{margin:5px 0;color:var(--muted)}.priorityScore{background:var(--navy);color:#fff;border-radius:16px;padding:18px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}.priorityScore small{color:#b8c7d8;text-transform:uppercase;font-weight:850;letter-spacing:.06em}.priorityScore strong{font-size:2rem;margin-top:4px}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tool{border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 12px;font-weight:800;color:var(--ink);cursor:pointer}.tool:hover{border-color:#a9b7c7}.tool.accent{background:var(--navy);color:#fff;border-color:var(--navy)}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}.filters button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-weight:800;color:#42536a;cursor:pointer}.filters button.active{background:#e8eef5;color:var(--ink);border-color:#bdc9d6}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 4px 18px rgba(15,23,42,.045)}.card:hover{border-color:#bdc8d4}.cardTop{display:flex;justify-content:space-between;gap:14px}.cardTitle{min-width:0}.statusline{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 8px;font-size:.68rem;font-weight:900}.badge.good{background:var(--greenBg);color:var(--green)}.badge.warn{background:var(--amberBg);color:var(--amber)}.badge.risk{background:var(--redBg);color:var(--red)}.badge.neutral{background:#edf1f5;color:#516277}.card h3{font-size:1.06rem;margin:8px 0 3px}.loc{color:var(--muted);font-size:.87rem}.score{flex:0 0 auto;background:#edf3f9;color:#153a62;border-radius:12px;padding:9px 10px;font-weight:950}.score small{display:block;font-size:.58rem;text-transform:uppercase;letter-spacing:.05em}.score b{font-size:1.06rem}
-.priceLine{display:flex;align-items:baseline;gap:8px;margin-top:13px}.price{font-size:1.55rem;font-weight:950;letter-spacing:-.03em}.sqm{color:var(--muted);font-size:.82rem}
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:13px 0}.kpi{border:1px solid #e2e8ef;background:#f8fafc;border-radius:11px;padding:10px}.kpi small{display:block;color:var(--muted);font-size:.67rem;text-transform:uppercase;font-weight:850}.kpi b{display:block;margin-top:3px;font-size:.91rem}
-.conf{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f8fafc;border:1px solid #e2e8ef;border-radius:11px;padding:10px 11px;margin-top:8px}.conf span{font-size:.8rem;color:var(--muted)}.conf b{font-size:.82rem}.dots{display:flex;gap:3px}.dot{width:8px;height:8px;border-radius:50%;background:#d7dee7}.dot.on{background:#2b6cb0}
-.reason{margin-top:12px;border-top:1px solid #e5eaf0;padding-top:12px}.reason b{font-size:.84rem}.reason ul{margin:7px 0 0;padding-left:18px;color:#536277;font-size:.82rem}.reason li{margin:4px 0}
-.cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.cardActions a,.cardActions button{border:1px solid #cfd8e3;background:#fff;color:#173a5f;text-decoration:none;border-radius:10px;padding:9px 11px;font-weight:850;font-size:.82rem;cursor:pointer}.cardActions a.primaryLink{background:#173a5f;color:#fff;border-color:#173a5f}.comparePick{display:flex;align-items:center;gap:7px;margin-top:12px;color:#516277;font-size:.8rem}.comparePick input{width:17px;height:17px;accent-color:#173a5f}
-.details{margin-top:11px;border:1px solid #e0e6ed;border-radius:11px;background:#fbfcfd}.details summary{cursor:pointer;padding:10px 11px;font-weight:850;font-size:.8rem}.details .inside{padding:0 11px 11px;color:#536277;font-size:.81rem}.details p{margin:6px 0}
-.scanbox,.mapbox,.strategic{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.coverage{padding:12px 13px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8ef;color:#516277}.statusgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.status{border-radius:11px;padding:11px;background:#f8fafc;border:1px solid #e2e8ef}.status b,.status span{display:block}.status span{color:var(--muted);font-size:.78rem;margin-top:3px}.status.ok{border-left:3px solid #2e8b62}.status.partial{border-left:3px solid #c28a16}.status.fail{border-left:3px solid #c45449}.marketGrid{margin-top:12px}.marketcard .price{font-size:1.25rem}.muted{color:var(--muted)}
-.mapWrap{display:none;margin-top:12px}.mapWrap.open{display:block}#map{height:480px;border-radius:14px;background:#e9eef4}.map-note{color:var(--muted);font-size:.82rem;margin:9px 0 0}
-.strategic{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px}.strategic h3{margin:0;font-size:1.25rem}.strategic p{margin:5px 0 0;color:var(--muted)}.strategic a{text-decoration:none;background:var(--navy);color:#fff;border-radius:11px;padding:10px 13px;font-weight:850}
-.comparebar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:1200;background:var(--navy);color:#fff;border-radius:14px;padding:10px 12px;display:none;align-items:center;gap:12px;box-shadow:0 16px 38px rgba(0,0,0,.28)}.comparebar.show{display:flex}.comparebar span{font-size:.85rem}.comparebar button{border:0;background:#fff;color:var(--navy);border-radius:9px;padding:8px 10px;font-weight:900;cursor:pointer}
-.modal{position:fixed;inset:0;background:rgba(7,16,28,.62);z-index:1300;display:none;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.dialog{width:min(1050px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:18px;padding:18px}.dialogTop{display:flex;justify-content:space-between;align-items:center;gap:12px}.dialogTop h3{margin:0}.close{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 10px;cursor:pointer}.compareTable{width:100%;border-collapse:collapse;margin-top:14px}.compareTable th,.compareTable td{padding:10px;border-bottom:1px solid #e3e8ef;text-align:left;vertical-align:top;font-size:.82rem}.compareTable th{color:#536277;background:#f8fafc;position:sticky;top:0}
-.empty{padding:22px;border:1px dashed #c9d3df;border-radius:14px;color:var(--muted);background:#fff}
-.footer{padding:28px 0 110px;color:#758399;font-size:.78rem;border-top:1px solid var(--line)}
-@media(max-width:860px){.summarygrid{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.priority{grid-template-columns:1fr}.statusgrid{grid-template-columns:1fr}.nav{display:none}.kpis{grid-template-columns:repeat(2,1fr)}.strategic{grid-template-columns:1fr}.wrap{padding:0 16px}.hero{padding-top:42px}.comparebar{width:calc(100% - 24px);justify-content:space-between}}
-@media(max-width:520px){.summarygrid{grid-template-columns:1fr 1fr}.stat{padding:12px}.stat b{font-size:1.05rem}.kpis{grid-template-columns:1fr 1fr}.price{font-size:1.35rem}.score{padding:8px}.section{padding:28px 0}}
+:root{--navy:#0b1728;--navy2:#14243a;--ink:#122033;--muted:#64748b;--line:#d9e1ea;--paper:#f5f7fa;--white:#fff;--blue:#235fa7;--blue2:#eaf2fb;--green:#18794e;--greenBg:#eaf7f0;--amber:#9a6700;--amberBg:#fff6d8;--red:#b42318;--redBg:#fff0ee;--shadow:0 10px 30px rgba(15,23,42,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.45}.wrap{max-width:1180px;margin:auto;padding:0 22px}a{color:inherit}.top{position:sticky;top:0;z-index:1000;background:rgba(11,23,40,.97);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.1)}.topin{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}.brandmark{width:36px;height:36px;border-radius:10px;background:#fff;color:var(--navy);display:grid;place-items:center;font-weight:950}.brand b{display:block;letter-spacing:.045em}.brand small{display:block;color:#9fb0c7;font-size:.73rem}.nav{display:flex;gap:6px}.nav a{color:#d9e5f2;text-decoration:none;padding:9px 11px;border-radius:10px;font-size:.82rem;font-weight:800}.nav a:hover,.nav a.active{background:#1a2d47;color:#fff}
+.hero{background:linear-gradient(135deg,var(--navy),#122944);color:#fff;padding:48px 0 42px}.eyebrow,.tag{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;font-weight:900}.eyebrow{color:#9fc7f5;margin:0 0 9px}.hero h1{font-size:clamp(2.15rem,6vw,4.1rem);letter-spacing:-.05em;line-height:1;margin:0;max-width:850px}.hero p.lead{max-width:760px;color:#c6d4e5;font-size:1.03rem;margin:15px 0 0}.heroactions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.btn,.tool,.mode,.viewtab,.sort{border:1px solid var(--line);border-radius:11px;padding:10px 13px;font:inherit;font-weight:850;cursor:pointer;background:#fff;color:var(--ink)}.btn.primary,.tool.accent{background:#fff;color:var(--navy);border-color:#fff}.btn.ghost{background:transparent;color:#fff;border-color:#496783;text-decoration:none}.btn:disabled,.tool:disabled{opacity:.55;cursor:wait}
+.tabswrap{margin-top:-20px;position:relative;z-index:3}.viewtabs{background:#fff;border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr;gap:6px}.viewtab{border:0;min-height:52px;text-align:left;background:transparent}.viewtab small{display:block;color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em}.viewtab b{display:block;margin-top:2px}.viewtab.active{background:var(--navy);color:#fff}.viewtab.active small{color:#b8c7d8}
+.summary{padding:18px 0 0}.summarygrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:0 5px 20px rgba(15,23,42,.05)}.stat span{display:block;color:var(--muted);font-size:.69rem;font-weight:850;text-transform:uppercase;letter-spacing:.055em}.stat b{display:block;font-size:1.18rem;margin-top:4px}.stat small{display:block;color:var(--muted);font-size:.73rem;margin-top:2px}
+.section{padding:30px 0}.head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:13px}.head h2{margin:0;font-size:clamp(1.45rem,3vw,2rem);letter-spacing:-.035em}.head p{margin:5px 0 0;color:var(--muted);max-width:720px}.tag{color:var(--blue)}.modebar,.toolbar,.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.mode{border-radius:999px}.mode.active,.sort.active{background:var(--navy);color:#fff;border-color:var(--navy)}.toolbar{justify-content:flex-end}.tool{background:#fff}.tool.accent{background:var(--navy);color:#fff;border-color:var(--navy)}.search{min-height:42px;border:1px solid var(--line);border-radius:11px;padding:9px 11px;min-width:220px;font:inherit;background:#fff}.filters{margin:12px 0}.filter{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-weight:800;color:#42536a;cursor:pointer}.filter.active{background:#e8eef5;color:var(--ink);border-color:#bdc9d6}
+.notice{padding:12px 13px;border:1px solid #d5e0ec;background:#fff;border-radius:12px;color:#516277;margin:0 0 14px}.notice.good{border-left:4px solid var(--green)}.notice.warn{border-left:4px solid #c28a16}.notice.bad{border-left:4px solid var(--red)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 4px 18px rgba(15,23,42,.045)}.card:hover{border-color:#b9c6d4}.cardTop{display:flex;justify-content:space-between;gap:13px}.statusline{display:flex;gap:6px;flex-wrap:wrap}.badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 8px;font-size:.66rem;font-weight:900}.badge.good{background:var(--greenBg);color:var(--green)}.badge.warn{background:var(--amberBg);color:var(--amber)}.badge.risk{background:var(--redBg);color:var(--red)}.badge.neutral{background:#edf1f5;color:#516277}.card h3{font-size:1.08rem;margin:8px 0 3px}.loc{color:var(--muted);font-size:.87rem}.score{flex:0 0 auto;background:#edf3f9;color:#153a62;border-radius:12px;padding:8px 10px;text-align:center}.score small{display:block;font-size:.56rem;text-transform:uppercase;font-weight:850}.score b{display:block;font-size:1rem}.priceLine{display:flex;gap:8px;align-items:baseline;margin-top:13px}.price{font-size:1.48rem;font-weight:950;letter-spacing:-.03em}.sqm{color:var(--muted);font-size:.81rem}.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.kpi{border:1px solid #e2e8ef;background:#f8fafc;border-radius:11px;padding:9px}.kpi small{display:block;color:var(--muted);font-size:.64rem;text-transform:uppercase;font-weight:850}.kpi b{display:block;margin-top:3px;font-size:.88rem}.timeline{margin-top:11px;padding-top:10px;border-top:1px solid #e6ebf0;color:#66758a;font-size:.78rem;display:flex;gap:12px;flex-wrap:wrap}.reason{margin-top:10px;color:#536277;font-size:.8rem}.reason b{color:var(--ink)}.reason ul{margin:5px 0 0;padding-left:18px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}.actions a{border:1px solid #cfd8e3;background:#fff;color:#173a5f;text-decoration:none;border-radius:10px;padding:8px 10px;font-weight:850;font-size:.8rem}.actions a.primary{background:#173a5f;color:#fff;border-color:#173a5f}.pick{display:flex;gap:7px;align-items:center;margin-top:12px;color:#516277;font-size:.8rem}.pick input{width:17px;height:17px;accent-color:#173a5f}.empty{padding:24px;border:1px dashed #c9d3df;border-radius:14px;color:var(--muted);background:#fff;grid-column:1/-1}
+.best{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;grid-template-columns:1fr auto;gap:16px;box-shadow:var(--shadow)}.best h3{font-size:1.4rem;margin:7px 0 4px}.best p{margin:4px 0;color:var(--muted)}.bestscore{min-width:120px;border-radius:15px;background:var(--navy);color:#fff;display:grid;place-items:center;padding:18px;text-align:center}.bestscore span{display:block;font-size:.66rem;text-transform:uppercase;color:#b8c7d8}.bestscore b{display:block;font-size:1.8rem}.hidden{display:none!important}
+.mapbox{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}.mapwrap{display:none;margin-top:12px}.mapwrap.open{display:block}#map{height:430px;border-radius:13px;background:#e9eef4}.mapnote{color:var(--muted);font-size:.8rem;margin:8px 0 0}.comparebar{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:1200;background:var(--navy);color:#fff;border-radius:14px;padding:10px 12px;display:none;align-items:center;gap:12px;box-shadow:0 16px 38px rgba(0,0,0,.28)}.comparebar.show{display:flex}.comparebar button{border:0;background:#fff;color:var(--navy);border-radius:9px;padding:8px 10px;font-weight:900}.modal{position:fixed;inset:0;background:rgba(7,16,28,.65);z-index:1300;display:none;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.dialog{width:min(1050px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:18px;padding:18px}.dialogtop{display:flex;justify-content:space-between;align-items:center}.dialogtop h3{margin:0}.close{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 10px}.comparetable{width:100%;border-collapse:collapse;margin-top:14px}.comparetable th,.comparetable td{padding:10px;border-bottom:1px solid #e3e8ef;text-align:left;font-size:.8rem}.comparetable th{background:#f8fafc;color:#536277}.footer{padding:28px 0 100px;color:#758399;font-size:.78rem;border-top:1px solid var(--line)}
+@media(max-width:860px){.nav{display:none}.grid{grid-template-columns:1fr}.summarygrid{grid-template-columns:repeat(2,1fr)}.head{display:block}.toolbar{justify-content:flex-start;margin-top:11px}.best{grid-template-columns:1fr}.bestscore{min-width:0}.wrap{padding:0 15px}.hero{padding-top:38px}.search{width:100%}.comparebar{width:calc(100% - 24px);justify-content:space-between}}
+@media(max-width:520px){.viewtab{padding:9px}.viewtab b{font-size:.9rem}.viewtab small{font-size:.59rem}.summarygrid{grid-template-columns:1fr 1fr}.stat{padding:11px}.stat b{font-size:1rem}.kpis{grid-template-columns:1fr 1fr}.price{font-size:1.32rem}.section{padding:25px 0}.hero h1{font-size:2.45rem}}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap topin">
-  <a class="brand" href="/immo-opportunities"><span class="brandmark">A</span><span><b>ARGUS IMMO</b><small>Bruxelles · décision immobilière</small></span></a>
-  <nav class="nav"><a class="active" href="/immo-opportunities">Opportunités</a><a href="/immo">Analyse complète</a><a href="/strategic-brussels">Bruxelles stratégique</a></nav>
-</div></header>
-
-<section class="hero"><div class="wrap">
-  <p class="eyebrow">ARGUS IMMO · OPPORTUNITÉS VÉRIFIÉES</p>
-  <h1>Décider plus vite. Vérifier davantage.</h1>
-  <p class="lead">ARGUS filtre les annonces actives, sépare les faits des inconnues et vous montre d’abord ce qui mérite réellement votre attention.</p>
-  <div class="heroactions"><button id="marketScanHero" class="btn primary">Scanner le marché</button><a href="/immo#scanner" class="btn ghost" style="text-decoration:none">Analyser une annonce</a></div>
-</div></section>
-
+<header class="top"><div class="wrap topin"><a class="brand" href="/immo-opportunities"><span class="brandmark">A</span><span><b>ARGUS IMMO</b><small>Bruxelles · décision immobilière</small></span></a><nav class="nav"><a class="active" href="/immo-opportunities">Opportunités</a><a href="/immo">Analyse complète</a><a href="/strategic-brussels">Bruxelles stratégique</a></nav></div></header>
+<section class="hero"><div class="wrap"><p class="eyebrow">ARGUS IMMO · MARCHÉ ACTIF</p><h1>Les meilleures opportunités. Et tout le marché enregistré.</h1><p class="lead">La sélection ARGUS reste exigeante. Le nouvel onglet « Toutes les propositions » conserve séparément les annonces découvertes dont la disponibilité est encore confirmée.</p><div class="heroactions"><button id="refreshHero" class="btn primary">Actualiser le marché</button><a class="btn ghost" href="/immo#scanner">Analyser une annonce</a></div></div></section>
 <main class="wrap">
-  <section class="summary" aria-label="Résumé">
-    <div class="summarygrid">
-      <div class="stat"><span>Annonces vérifiées</span><b id="statActive">—</b><small>Actives uniquement</small></div>
-      <div class="stat"><span>Dernier contrôle</span><b id="statCheck">—</b><small>Vérification de disponibilité</small></div>
-      <div class="stat"><span>Annonces masquées</span><b id="statHidden">—</b><small>Indisponibles ou non confirmées</small></div>
-      <div class="stat"><span>Cadre d’achat actif</span><b id="statBox">≤ 150 k€</b><small id="statBoxText">Studios & appartements</small></div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="sectionhead"><div><div class="sectiontag">CHOISIR LE MARCHÉ</div><h2>Deux analyses, deux logiques.</h2><p>ARGUS ne mélange pas un appartement de rendement avec un immeuble de rapport.</p></div></div>
-    <div class="modebar">
-      <button class="mode active" data-category="apartment">Studios & appartements · ≤ 150 k€</button>
-      <button class="mode" data-category="building">Immeubles de rapport · ≤ 400 k€</button>
-    </div>
-  </section>
-
-  <section id="bestSection" class="section" style="padding-top:0"></section>
-
-  <section class="section" style="padding-top:0">
-    <div class="sectionhead">
-      <div><div class="sectiontag">SÉLECTION ARGUS</div><h2 id="curatedTitle">Biens à étudier</h2><p id="updated">Chargement…</p></div>
-      <div class="toolbar"><button class="tool" id="showMap">Afficher la carte</button><button class="tool accent" id="marketScan">Scanner maintenant</button></div>
-    </div>
-    <div id="statusFilters" class="filters"></div>
-    <section id="grid" class="grid"></section>
-  </section>
-
-  <section class="section" style="padding-top:0">
-    <div class="strategic">
-      <div><div class="sectiontag">CONTEXTE URBAIN</div><h3>Le bien est une chose. La micro-zone en est une autre.</h3><p>Consultez séparément les infrastructures, transformations urbaines et signaux de long terme dans Bruxelles stratégique.</p></div>
-      <a href="/strategic-brussels">Ouvrir Bruxelles stratégique</a>
-    </div>
-  </section>
-
-  <section class="section" id="liveScan">
-    <div class="sectionhead"><div><div class="sectiontag">DÉCOUVERTE EN DIRECT</div><h2 id="scanTitle">Scanner studios & appartements</h2><p id="scanText">Recherche multi-source avec déduplication et exclusion des annonces non confirmées actives.</p></div></div>
-    <div class="scanbox">
-      <div id="scanSummary" class="coverage"><b>Prêt à scanner.</b> Les sources bloquées ou inaccessibles seront signalées.</div>
-      <div id="sourceStatus" class="statusgrid"></div>
-      <div id="marketGrid" class="grid marketGrid"></div>
-      <div id="reviewQueueWrap" style="display:none;margin-top:18px">
-        <div class="sectiontag">À VÉRIFIER · NON CONFIRMÉ</div>
-        <p class="muted" style="margin:6px 0 10px">Ces annonces ont été découvertes mais ARGUS n'a pas pu confirmer automatiquement leur disponibilité. Elles ne sont pas classées comme opportunités tant que ce point n'est pas vérifié.</p>
-        <div id="reviewGrid" class="grid marketGrid"></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="mapSection">
-    <div class="sectionhead"><div><div class="sectiontag">CARTE</div><h2>Uniquement les adresses réellement publiées</h2><p>ARGUS n’invente jamais l’adresse d’un bien lorsque l’agence la masque.</p></div></div>
-    <div class="mapbox">
-      <button class="tool" id="toggleMapInside">Afficher / masquer la carte</button>
-      <div id="mapWrap" class="mapWrap"><div id="map"></div><p id="mapNote" class="map-note">Chargement des adresses…</p></div>
-    </div>
-  </section>
+<section class="tabswrap"><div class="viewtabs"><button class="viewtab active" data-view="curated"><small>01 · Décision</small><b>Sélection ARGUS</b></button><button class="viewtab" data-view="all"><small>02 · Marché enregistré</small><b>Toutes les propositions</b></button></div></section>
+<section class="summary"><div class="summarygrid"><div class="stat"><span id="statLabel">Annonces actives</span><b id="statActive">—</b><small id="statActiveNote">Disponibilité vérifiée</small></div><div class="stat"><span>Dernier contrôle</span><b id="statCheck">—</b><small id="statCheckDate">—</small></div><div class="stat"><span>Masquées / retirées</span><b id="statHidden">—</b><small>Indisponibles ou non confirmées</small></div><div class="stat"><span>Cadre actuel</span><b id="statBox">≤ 150 k€</b><small id="statBoxText">Studios & appartements</small></div></div></section>
+<section class="section"><div class="head"><div><div class="tag">MARCHÉ</div><h2>Choisir la catégorie</h2><p>ARGUS garde séparés le premier achat et l’immeuble de rapport.</p></div></div><div class="modebar"><button class="mode active" data-category="apartment">Studios & appartements · ≤ 150 k€</button><button class="mode" data-category="building">Immeubles de rapport · ≤ 400 k€</button></div></section>
+<section id="bestSection" class="section" style="padding-top:0"></section>
+<section class="section" style="padding-top:0"><div class="head"><div><div class="tag" id="sectionTag">SÉLECTION ARGUS</div><h2 id="sectionTitle">Biens à étudier en priorité</h2><p id="updated">Chargement…</p></div><div class="toolbar"><input id="search" class="search" type="search" placeholder="Commune, rue, source…"><button id="mapBtn" class="tool">Carte</button><button id="refresh" class="tool accent">Actualiser</button></div></div><div id="sorts" class="filters hidden"><button class="sort active" data-sort="newest">Plus récents</button><button class="sort" data-sort="priceAsc">Prix ↑</button><button class="sort" data-sort="priceDesc">Prix ↓</button></div><div id="statusFilters" class="filters"></div><div id="notice" class="notice good">ARGUS affiche uniquement les annonces dont la disponibilité est confirmée lors du dernier contrôle.</div><section id="grid" class="grid"></section></section>
+<section class="section" id="mapSection"><div class="head"><div><div class="tag">CARTE</div><h2>Adresses réellement publiées</h2><p>ARGUS n’invente jamais une adresse lorsque l’agence la masque.</p></div></div><div class="mapbox"><div id="mapWrap" class="mapwrap"><div id="map"></div><p id="mapNote" class="mapnote">Chargement…</p></div></div></section>
 </main>
-
 <div id="compareBar" class="comparebar"><span id="compareCount">0 bien sélectionné</span><button id="openCompare">Comparer</button></div>
-<div id="compareModal" class="modal" role="dialog" aria-modal="true" aria-label="Comparaison de biens">
-  <div class="dialog"><div class="dialogTop"><h3>Comparer les biens</h3><button id="closeCompare" class="close">Fermer</button></div><div id="compareContent"></div></div>
-</div>
-
-<footer class="footer"><div class="wrap">ARGUS IMMO distingue les données publiées, les estimations et les informations à confirmer. Une analyse ne remplace pas les documents officiels, le notaire ni les vérifications urbanistiques.</div></footer>
-
+<div id="compareModal" class="modal"><div class="dialog"><div class="dialogtop"><h3>Comparer les biens</h3><button id="closeCompare" class="close">Fermer</button></div><div id="compareContent"></div></div></div>
+<footer class="footer"><div class="wrap">ARGUS IMMO distingue sélection prioritaire et catalogue général. Une annonce peut disparaître du catalogue dès que sa disponibilité n’est plus confirmée. Les documents officiels, le notaire et les vérifications urbanistiques restent déterminants.</div></footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
-let category='apartment',data=[],filter='ALL',liveListings=[],map,mapMarkers=[],checkedAt=null,hiddenCount=0;
-const selected=new Set();
-const euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(n)||0);
-const num=n=>new Intl.NumberFormat('fr-BE',{maximumFractionDigits:0}).format(Number(n)||0);
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const cfg={
- apartment:{max:150000,scanTitle:'Scanner studios & appartements',scanText:'Recherche multi-source sous 150.000 €, avec déduplication et exclusion des annonces non confirmées actives.',curated:'Studios & appartements à étudier'},
- building:{max:400000,scanTitle:'Scanner les immeubles de rapport',scanText:'Recherche dédiée sous 400.000 €, avec attention particulière à l’urbanisme, aux unités reconnues, aux compteurs et aux loyers.',curated:'Immeubles de rapport à étudier'}
-};
-const statusLabel=s=>({ARGUS_1:'Priorité ARGUS',SHORTLIST:'À étudier',WATCH:'À surveiller',NEGOTIATE:'À négocier',OPTION:'Sous option',AUCTION:'Vente publique'}[s]||s||'À auditer');
-const statusTone=s=>(s==='ARGUS_1'||s==='SHORTLIST')?'good':(s==='WATCH'||s==='NEGOTIATE'||s==='OPTION'||s==='AUCTION')?'warn':'neutral';
-
-function initMap(){
- if(map||!window.L)return;
- map=L.map('map').setView([50.8503,4.3517],12);
- L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
-}
-function clearMap(){if(!map)return;mapMarkers.forEach(m=>map.removeLayer(m));mapMarkers=[]}
-function exactAddress(x){
- const candidate=String(x.exactAddress||x.address||'').trim(); if(!candidate)return null;
- const streetWord=/(rue|avenue|boulevard|chaussée|chaussee|place|square|quai|drève|dreve|allée|allee|straat|laan|steenweg|plein|weg|dreef|kade)/i;
- const streetNumber=/(^|[,\s])\d{1,4}(?:[a-zA-Z]|\s?(?:bis|bte|bus)\s?\w+)?(?=,|\s|$)/i;
- const brusselsPlace=/(Bruxelles|Brussel|Schaerbeek|Schaarbeek|Ixelles|Elsene|Uccle|Ukkel|Anderlecht|Molenbeek|Saint-Josse|Sint-Joost|Etterbeek|Laeken|Laken|Watermael|Watermaal|Auderghem|Oudergem|Forest|Vorst|Jette|Koekelberg|Evere|Woluwe|Ganshoren|Berchem)/i;
- return streetWord.test(candidate)&&streetNumber.test(candidate)&&brusselsPlace.test(candidate)?candidate:null;
-}
-async function geocode(addr){
- const key='argus-geocode:'+addr; try{const c=JSON.parse(localStorage.getItem(key)||'null');if(c&&Date.now()-c.t<2592000000)return c}catch{}
- const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=be&q='+encodeURIComponent(addr),{headers:{'Accept-Language':'fr-BE,fr;q=0.9'}});
- const j=await r.json(); if(!j[0])return null; const out={lat:+j[0].lat,lon:+j[0].lon,t:Date.now()}; try{localStorage.setItem(key,JSON.stringify(out))}catch{} return out;
-}
-async function renderMap(){
- initMap();clearMap();
- const candidates=[...data,...liveListings].map(x=>({x,addr:exactAddress(x)})).filter(z=>z.addr),unique=[],seen=new Set();
- for(const z of candidates){if(!seen.has(z.addr)){seen.add(z.addr);unique.push(z)}}
- document.getElementById('mapNote').textContent=unique.length?unique.length+' adresse(s) exacte(s) publiée(s) à positionner…':'Aucune adresse exacte publiée dans cette sélection.';
- const bounds=[];
- for(let i=0;i<unique.length;i++){const z=unique[i];let g=null;try{g=await geocode(z.addr)}catch{}
-   if(g){const m=L.marker([g.lat,g.lon]).addTo(map).bindPopup('<b>'+esc(z.x.title||z.x.location||'Annonce')+'</b><br>'+esc(z.addr)+'<br>'+euro(z.x.price));mapMarkers.push(m);bounds.push([g.lat,g.lon])}
-   if(i<unique.length-1)await new Promise(r=>setTimeout(r,1050));
- }
- if(bounds.length)map.fitBounds(bounds,{padding:[28,28],maxZoom:15});
- document.getElementById('mapNote').textContent=bounds.length+' annonce(s) positionnée(s) avec adresse exacte publiée.'+(unique.length>bounds.length?' '+(unique.length-bounds.length)+' adresse(s) non géocodée(s).':'');
-}
-
-function coverage(x){
- const vals=category==='building'
-  ?[x.price,x.area,x.peb,x.recognizedUnits??x.unitsText,x.meters,x.condition,x.grossYield??x.rent,x.verified,x.exactAddress??x.addressStatus]
-  :[x.price,x.area,x.peb,x.charges,x.copro,x.heating,x.electricity,x.verified,x.estimatedRent];
- const filled=vals.filter(v=>v!==null&&v!==undefined&&String(v).trim()!==''&&!/à confirmer|non communiqué/i.test(String(v))).length;
- const ratio=filled/vals.length;
- return {ratio,label:ratio>=.75?'Élevée':ratio>=.5?'Moyenne':'Faible',level:ratio>=.75?3:ratio>=.5?2:1};
-}
-function confidenceHtml(x){
- const c=coverage(x);return '<div class="conf"><span>Couverture des données <small>· champs clés renseignés, pas qualité du bien</small></span><div style="display:flex;align-items:center;gap:8px"><div class="dots">'+[1,2,3].map(i=>'<i class="dot '+(i<=c.level?'on':'')+'"></i>').join('')+'</div><b>'+c.label+'</b></div></div>';
-}
-function pricePerSqm(x){return x.area&&x.price?Math.round(x.price/x.area):null}
-function apartmentReasons(x){
- const out=[]; if(x.price<=cfg.apartment.max)out.push('Prix dans le cadre d’achat défini.');
- if(/petite copro/i.test(String(x.copro||'')))out.push('Petite copropriété indiquée dans les données disponibles.');
- if(x.grossYieldOnTotal)out.push('Rendement brut estimé : '+String(x.grossYieldOnTotal).replace('.',',')+' %.');
- if(/conforme/i.test(String(x.electricity||'')))out.push('Conformité électrique annoncée dans la source.');
- return out.slice(0,3);
-}
-function buildingReasons(x){return (x.strengths||[]).slice(0,3)}
-function risks(x){return (x.risks||[]).slice(0,4)}
-
-function card(x){
- const isBuilding=category==='building',ppm=pricePerSqm(x),reasons=isBuilding?buildingReasons(x):apartmentReasons(x),rs=risks(x),conf=coverage(x);
- const title=isBuilding?(x.title||'Immeuble de rapport'):(x.bedrooms?x.bedrooms+' chambre · '+(x.area||'—')+' m²':'Studio · '+(x.area||'—')+' m²');
- const sub=x.location||x.address||'Localisation à confirmer';
- const kpis=isBuilding
-  ?[
-    ['Unités',x.recognizedUnits!=null?x.recognizedUnits+' reconnues':(x.unitsText||'À confirmer')],
-    ['PEB',x.peb||'À confirmer'],
-    ['Rendement',x.grossYield?String(x.grossYield).replace('.',',')+' %':'À calculer']
-   ]
-  :[
-    ['PEB',x.peb||'À confirmer'],
-    ['Charges',x.charges||'À confirmer'],
-    ['Rendement',x.grossYieldOnTotal?String(x.grossYieldOnTotal).replace('.',',')+' %':'À calculer']
-   ];
- const details=isBuilding
-  ?'<p><b>Compteurs :</b> '+esc(x.meters||'À confirmer')+'</p><p><b>État :</b> '+esc(x.condition||'À confirmer')+'</p><p><b>Adresse :</b> '+esc(x.exactAddress||x.addressStatus||'Non publiée')+'</p>'
-  :'<p><b>Copropriété :</b> '+esc(x.copro||'À confirmer')+'</p><p><b>Chauffage :</b> '+esc(x.heating||'À confirmer')+'</p><p><b>Électricité :</b> '+esc(x.electricity||'À confirmer')+'</p>';
- return '<article class="card"><div class="cardTop"><div class="cardTitle"><div class="statusline"><span class="badge '+statusTone(x.status)+'">'+esc(statusLabel(x.status))+'</span><span class="badge neutral">Vérifié '+esc(x.verified||'récemment')+'</span></div><h3>'+esc(title)+'</h3><div class="loc">'+esc(sub)+'</div></div><div class="score"><small>Score ARGUS</small><b>'+esc(x.score)+'/100</b></div></div>'+
- '<div class="priceLine"><span class="price">'+euro(x.price)+'</span><span class="sqm">'+(ppm?num(ppm)+' €/m²':'€/m² non calculable')+'</span></div>'+
- '<div class="kpis">'+kpis.map(k=>'<div class="kpi"><small>'+esc(k[0])+'</small><b>'+esc(k[1])+'</b></div>').join('')+'</div>'+
- confidenceHtml(x)+
- '<div class="reason"><b>Pourquoi ARGUS le suit</b><ul>'+(reasons.length?reasons.map(r=>'<li>'+esc(r)+'</li>').join(''):'<li>Dossier conservé dans la sélection, mais les facteurs détaillés restent à confirmer.</li>')+'</ul></div>'+
- (rs.length?'<div class="reason"><b>Points à vérifier</b><ul>'+rs.map(r=>'<li>'+esc(r)+'</li>').join('')+'</ul></div>':'')+
- '<details class="details"><summary>Voir les données complémentaires</summary><div class="inside">'+details+'<p><b>Couverture des données :</b> '+esc(conf.label)+'. Cet indicateur mesure uniquement la couverture des informations disponibles, pas la qualité du bien ni la fiabilité de chaque source.</p></div></details>'+
- '<div class="comparePick"><input type="checkbox" data-compare="'+esc(x.id||sub)+'" '+(selected.has(x.id||sub)?'checked':'')+'> Ajouter à la comparaison</div>'+
- '<div class="cardActions"><a class="primaryLink" href="/immo-bien?id='+encodeURIComponent(x.id||'')+'&categorie='+encodeURIComponent(category)+'">Voir le dossier ARGUS</a><a href="'+esc(x.source)+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Audit complet</a></div></article>';
-}
-function renderBest(){
- const el=document.getElementById('bestSection'),x=data[0]; if(!x){el.innerHTML='';return}
- const ppm=pricePerSqm(x); const headline=category==='building'?(x.title||x.location):x.location;
- el.innerHTML='<div class="sectiontag">PRIORITÉ ACTUELLE</div><div class="priority"><div><span class="badge good">'+esc(statusLabel(x.status))+'</span><h3>'+esc(headline)+'</h3><p><b>'+euro(x.price)+'</b>'+(x.area?' · '+esc(x.area)+' m²':'')+(ppm?' · '+num(ppm)+' €/m²':'')+'</p><p>'+esc(x.verdict||'Dossier à auditer')+'</p><p><b>Point de vigilance :</b> '+esc((x.risks||[])[0]||'Vérification documentaire nécessaire')+'</p><div class="cardActions"><a class="primaryLink" href="/immo-bien?id='+encodeURIComponent(x.id||'')+'&categorie='+encodeURIComponent(category)+'">Ouvrir le dossier ARGUS</a></div></div><div class="priorityScore"><small>Score ARGUS</small><strong>'+esc(x.score)+'/100</strong><span style="color:#c8d4e2;font-size:.8rem;margin-top:5px">Couverture : '+coverage(x).label.toLowerCase()+'</span></div></div>';
-}
-function renderFilters(){
- const statuses=['ALL',...new Set(data.map(x=>x.status).filter(Boolean))];
- document.getElementById('statusFilters').innerHTML=statuses.map(s=>'<button class="'+(s===filter?'active':'')+'" data-f="'+esc(s)+'">'+(s==='ALL'?'Tous':esc(statusLabel(s)))+'</button>').join('');
- document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{filter=b.dataset.f;renderCurated()});
-}
-function renderCurated(){
- const list=data.filter(x=>filter==='ALL'||x.status===filter);
- document.getElementById('grid').innerHTML=list.map(card).join('')||'<div class="empty">Aucun bien actif et vérifié dans cette catégorie.</div>';
- renderFilters();bindCompareChecks();
-}
-function marketCard(x,unverified=false){
- const ppm=x.surface&&x.price?Math.round(x.price/x.surface):null;
- const meta=[x.address||x.city,x.surface?x.surface+' m²':null,x.bedrooms!=null?x.bedrooms+' ch.':null,x.epc?'PEB '+x.epc:null].filter(Boolean).join(' · ');
- const hard=x.decisionGate==='HARD_STOP'||(x.criticalLegalRisks||[]).length>0;
- const riskLabels={URBANISM_INFRACTION:'Infraction urbanistique',NON_REGULARISABLE:'Non régularisable',UNPERMITTED:'Usage/travaux sans permis',UNRECOGNIZED_UNIT:'Unité ou division non reconnue',NL_URBANISM:'Problème urbanistique signalé'};
- const riskBlock=hard?'<div class="reason"><b>Blocage critique ARGUS</b><ul>'+(x.criticalLegalRisks||[]).map(code=>'<li>'+esc(riskLabels[code]||code)+'</li>').join('')+'</ul></div>':'';
- const label=unverified?'ACTIVITÉ À CONFIRMER':(hard?'HARD STOP · URBANISME':'À auditer');
- const tone=unverified?'warn':(hard?'risk':'warn');
- const detailFail=x.reviewReason==='DETAIL_FETCH_FAILED'?'<div class="reason"><b>Lecture automatique incomplète</b><ul><li>ARGUS a trouvé le lien mais n’a pas pu lire complètement la fiche. Vérification manuelle nécessaire.</li></ul></div>':'';
- return '<article class="card marketcard"><div class="statusline"><span class="badge neutral">'+esc(x.discoveredFrom||x.source||'Source')+'</span><span class="badge '+tone+'">'+label+'</span></div><h3>'+esc(x.title||'Annonce immobilière à vérifier')+'</h3><div class="loc">'+esc(meta||'Données partielles — ouvrir l’annonce')+'</div>'+(x.price?'<div class="priceLine"><span class="price">'+euro(x.price)+'</span><span class="sqm">'+(ppm?num(ppm)+' €/m²':'')+'</span></div>':'')+riskBlock+detailFail+'<div class="cardActions"><a class="primaryLink" href="'+esc(x.canonical)+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Analyse complète</a></div></article>';
-}
-function updateStats(){
- document.getElementById('statActive').textContent=data.length;
- document.getElementById('statHidden').textContent=hiddenCount;
- document.getElementById('statCheck').textContent=checkedAt?new Date(checkedAt).toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'}):'—';
- document.getElementById('statBox').textContent='≤ '+num(cfg[category].max/1000)+' k€';
- document.getElementById('statBoxText').textContent=category==='building'?'Immeubles de rapport':'Studios & appartements';
-}
-async function loadCategory(next){
- category=next;filter='ALL';liveListings=[];selected.clear();updateCompareBar();
- document.querySelectorAll('[data-category]').forEach(b=>b.classList.toggle('active',b.dataset.category===category));
- document.getElementById('scanTitle').textContent=cfg[category].scanTitle;document.getElementById('scanText').textContent=cfg[category].scanText;document.getElementById('curatedTitle').textContent=cfg[category].curated;
- document.getElementById('scanSummary').innerHTML='<b>Prêt à scanner.</b> Plafond '+euro(cfg[category].max)+'.';document.getElementById('sourceStatus').innerHTML='';document.getElementById('marketGrid').innerHTML='';document.getElementById('reviewGrid').innerHTML='';document.getElementById('reviewQueueWrap').style.display='none';
- try{
-   const r=await fetch('/api/immo-curated-active?category='+encodeURIComponent(category),{cache:'no-store'}),d=await r.json(); if(!d.ok)throw new Error(d.error||'Vérification indisponible');
-   data=d.opportunities||[];hiddenCount=(d.counts?.excludedUnavailable||0)+(d.counts?.hiddenUnverified||0);checkedAt=d.checkedAt||null;
-   document.getElementById('updated').textContent=data.length+' annonce(s) active(s) vérifiée(s) · '+hiddenCount+' masquée(s) car indisponible(s) ou non confirmée(s) · contrôle '+(checkedAt?new Date(checkedAt).toLocaleString('fr-BE'):'récent');
- }catch(e){
-   data=[];hiddenCount=0;checkedAt=null;document.getElementById('updated').textContent='Vérification live indisponible — ARGUS masque la sélection plutôt que risquer d’afficher un bien vendu.';
- }
- renderBest();renderCurated();updateStats();
-}
-async function scanMarket(){
- const btns=[document.getElementById('marketScan'),document.getElementById('marketScanHero')],sum=document.getElementById('scanSummary'),status=document.getElementById('sourceStatus'),grid=document.getElementById('marketGrid');
- btns.forEach(b=>{b.disabled=true;b.dataset.label=b.textContent;b.textContent='Scan en cours…'});sum.innerHTML='<b>ARGUS interroge les sources.</b>';status.innerHTML='';grid.innerHTML='';
- document.getElementById('liveScan').scrollIntoView({behavior:'smooth',block:'start'});
- try{
-   const r=await fetch('/api/immo-discovery-scan',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({category,maxPrice:cfg[category].max})}),j=await r.json(); if(!j.ok)throw new Error(j.error||'Scan impossible');
-   liveListings=j.listings||[];const reviewQueue=j.reviewQueue||[],unavailable=(j.sourceStatus||[]).reduce((n,s)=>n+(s.excludedUnavailable||0),0),unverified=(j.sourceStatus||[]).reduce((n,s)=>n+(s.hiddenUnverified||0),0),detailFails=j.totals?.detailFetchFailed||0;
-   const coverageComplete=Boolean(j.coverage?.complete);
-   sum.innerHTML='<b>'+(coverageComplete?'Couverture complète':'Couverture partielle')+'</b> · '+j.totals.sourcesReached+'/'+j.totals.sourcesConfigured+' sources atteintes · '+(j.totals.sourcesComplete||0)+' complètement parcourue(s) · '+(j.totals.pagesReached||0)+' page(s) · '+j.totals.linksFound+' liens · '+j.totals.listingsParsed+' annonces lues · <b>'+j.totals.eligibleAfterDedup+' actives éligibles</b>'+(reviewQueue.length?' · '+reviewQueue.length+' à vérifier':'')+(j.totals.hardStops?' · '+j.totals.hardStops+' HARD STOP urbanisme':'')+(unavailable?' · '+unavailable+' indisponible(s) exclue(s)':'')+(detailFails?' · '+detailFails+' lecture(s) échouée(s)':'');
-   status.innerHTML=(j.sourceStatus||[]).map(s=>{const cls=!s.reachable?'fail':s.coverageComplete?'ok':'partial';const coverage=s.coverageComplete?'couverture complète':'couverture partielle';return '<div class="status '+cls+'"><b>'+esc(s.name)+'</b><span>'+(s.reachable?coverage+' · '+(s.pagesReached||1)+' page(s) · '+s.linksFound+' liens · '+s.eligible+' actives éligibles'+(s.reviewQueue?' · '+s.reviewQueue+' à vérifier':'')+(s.detailFetchFailed?' · '+s.detailFetchFailed+' lecture(s) échouée(s)':'')+(s.hardStops?' · '+s.hardStops+' HARD STOP':''):'Non couverte · '+esc(s.error||'bloquée'))+'</span></div>'}).join('');
-   grid.innerHTML=liveListings.map(x=>marketCard(x,false)).join('')||'<div class="empty">Aucune nouvelle annonce active confirmée extraite sur ce passage.</div>';
-   document.getElementById('reviewQueueWrap').style.display=reviewQueue.length?'block':'none';
-   document.getElementById('reviewGrid').innerHTML=reviewQueue.map(x=>marketCard(x,true)).join('');
- }catch(e){sum.innerHTML='<b style="color:#b42318">Scan interrompu.</b> '+esc(e.message)}
- finally{btns.forEach(b=>{b.disabled=false;b.textContent=b.dataset.label||'Scanner maintenant'})}
-}
-function bindCompareChecks(){
- document.querySelectorAll('[data-compare]').forEach(cb=>cb.onchange=()=>{
-   const id=cb.dataset.compare;if(cb.checked){if(selected.size>=4){cb.checked=false;alert('Vous pouvez comparer jusqu’à 4 biens.');return}selected.add(id)}else selected.delete(id);updateCompareBar();
- });
-}
-function updateCompareBar(){
- const bar=document.getElementById('compareBar'),n=selected.size;document.getElementById('compareCount').textContent=n+' bien'+(n>1?'s':'')+' sélectionné'+(n>1?'s':'');
- bar.classList.toggle('show',n>=2);
-}
-function renderCompare(){
- const list=data.filter(x=>selected.has(x.id||x.location)); if(list.length<2)return;
- const rows=[
-  ['Prix',x=>euro(x.price)],['Surface',x=>x.area?x.area+' m²':'—'],['Prix/m²',x=>pricePerSqm(x)?num(pricePerSqm(x))+' €/m²':'—'],['PEB',x=>x.peb||'—'],
-  ['Score ARGUS',x=>(x.score??'—')+'/100'],['Couverture des données',x=>coverage(x).label],['Statut',x=>statusLabel(x.status)],
-  ...(category==='building'?[['Unités',x=>x.recognizedUnits!=null?x.recognizedUnits+' reconnues':(x.unitsText||'—')],['Rendement brut',x=>x.grossYield?String(x.grossYield).replace('.',',')+' %':'—']]:[['Charges',x=>x.charges||'—'],['Copropriété',x=>x.copro||'—'],['Rendement brut',x=>x.grossYieldOnTotal?String(x.grossYieldOnTotal).replace('.',',')+' %':'—']])
- ];
- document.getElementById('compareContent').innerHTML='<table class="compareTable"><thead><tr><th>Critère</th>'+list.map(x=>'<th>'+esc(category==='building'?(x.title||x.location):x.location)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr><th>'+esc(r[0])+'</th>'+list.map(x=>'<td>'+esc(r[1](x))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
- document.getElementById('compareModal').classList.add('open');
-}
-function toggleMap(){
- const w=document.getElementById('mapWrap');w.classList.toggle('open');if(w.classList.contains('open')){renderMap();setTimeout(()=>map?.invalidateSize(),100);document.getElementById('mapSection').scrollIntoView({behavior:'smooth',block:'start'})}
-}
-document.querySelectorAll('[data-category]').forEach(b=>b.addEventListener('click',()=>loadCategory(b.dataset.category)));
-document.getElementById('marketScan').addEventListener('click',scanMarket);document.getElementById('marketScanHero').addEventListener('click',scanMarket);
-document.getElementById('showMap').addEventListener('click',toggleMap);document.getElementById('toggleMapInside').addEventListener('click',toggleMap);
-document.getElementById('openCompare').addEventListener('click',renderCompare);document.getElementById('closeCompare').addEventListener('click',()=>document.getElementById('compareModal').classList.remove('open'));
-document.getElementById('compareModal').addEventListener('click',e=>{if(e.target.id==='compareModal')e.currentTarget.classList.remove('open')});
-loadCategory('apartment');
+let view='curated',category='apartment',data=[],filter='ALL',sort='newest',checkedAt=null,hiddenCount=0,map,mapMarkers=[];const selected=new Set();
+const cfg={apartment:{max:150000,name:'Studios & appartements'},building:{max:400000,name:'Immeubles de rapport'}};
+const euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(n)||0);const num=n=>new Intl.NumberFormat('fr-BE',{maximumFractionDigits:0}).format(Number(n)||0);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const statusLabel=s=>({ARGUS_1:'Priorité ARGUS',SHORTLIST:'À étudier',WATCH:'À surveiller',NEGOTIATE:'À négocier',OPTION:'Sous option',AUCTION:'Vente publique'}[s]||s||'À auditer');const statusTone=s=>(s==='ARGUS_1'||s==='SHORTLIST')?'good':(s==='WATCH'||s==='NEGOTIATE')?'warn':'neutral';
+function when(value,withDate=false){if(!value)return '—';const d=new Date(value);if(Number.isNaN(d.getTime()))return String(value);return withDate?d.toLocaleString('fr-BE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):d.toLocaleTimeString('fr-BE',{hour:'2-digit',minute:'2-digit'})}
+function isNew(x){const t=new Date(x.firstSeenAt||x.discoveredAt||0).getTime();return t&&Date.now()-t<48*3600000}
+function key(x){return String(x.catalogKey||x.id||x.canonical||x.source||x.location||x.address||Math.random())}
+function ppm(x){const a=Number(x.area??x.surface),p=Number(x.price);return a&&p?Math.round(p/a):null}
+function title(x){if(category==='building')return x.title||'Immeuble de rapport';const a=Number(x.area??x.surface);if(x.title&&view==='all')return x.title;return x.bedrooms?x.bedrooms+' chambre · '+(a||'—')+' m²':'Studio · '+(a||'—')+' m²'}
+function sourceUrl(x){return x.canonical||x.source||'#'}
+function risks(x){return Array.isArray(x.risks)?x.risks:[]}
+function card(x){const psm=ppm(x),id=key(x),active=view==='all',hard=x.decisionGate==='HARD_STOP'||(x.criticalLegalRisks||[]).length>0;const loc=x.location||x.address||x.city||'Localisation à confirmer';const area=x.area??x.surface;const score=Number.isFinite(Number(x.score))?'<div class="score"><small>Score</small><b>'+esc(x.score)+'/100</b></div>':'';const badges=active?'<span class="badge good">AVAILABLE · ACTIF</span>'+(isNew(x)?'<span class="badge good">NOUVEAU</span>':'')+(hard?'<span class="badge risk">HARD STOP</span>':''):'<span class="badge '+statusTone(x.status)+'">'+esc(statusLabel(x.status))+'</span>';
+ const kpis=category==='building'?[['Unités',x.recognizedUnits!=null?x.recognizedUnits+' reconnues':(x.unitsText||'À confirmer')],['PEB',x.peb||x.epc||'À confirmer'],['Rendement',x.grossYield?String(x.grossYield).replace('.',',')+' %':'À calculer']]:[['PEB',x.peb||x.epc||'À confirmer'],['Surface',area?area+' m²':'À confirmer'],['Prix/m²',psm?num(psm)+' €':'À calculer']];
+ const timeline=active?'<div class="timeline"><span>Détecté : <b>'+when(x.firstSeenAt||x.discoveredAt,true)+'</b></span><span>Vérifié : <b>'+when(x.lastVerifiedAt,true)+'</b></span></div>':'';const rs=risks(x).slice(0,2);return '<article class="card"><div class="cardTop"><div><div class="statusline">'+badges+'</div><h3>'+esc(title(x))+'</h3><div class="loc">'+esc(loc)+'</div></div>'+score+'</div><div class="priceLine"><span class="price">'+euro(x.price)+'</span><span class="sqm">'+(psm?num(psm)+' €/m²':'')+'</span></div><div class="kpis">'+kpis.map(k=>'<div class="kpi"><small>'+esc(k[0])+'</small><b>'+esc(k[1])+'</b></div>').join('')+'</div>'+timeline+(rs.length?'<div class="reason"><b>Points à vérifier</b><ul>'+rs.map(r=>'<li>'+esc(r)+'</li>').join('')+'</ul></div>':'')+'<label class="pick"><input type="checkbox" data-pick="'+esc(id)+'" '+(selected.has(id)?'checked':'')+'> Ajouter à la comparaison</label><div class="actions">'+(!active&&x.id?'<a class="primary" href="/immo-bien?id='+encodeURIComponent(x.id)+'&categorie='+encodeURIComponent(category)+'">Dossier ARGUS</a>':'')+'<a class="primary" href="'+esc(sourceUrl(x))+'" target="_blank" rel="noopener">Voir l’annonce</a><a href="/immo#scanner">Audit complet</a></div></article>'}
+function renderBest(){const el=document.getElementById('bestSection');if(view!=='curated'||!data.length){el.innerHTML='';return}const x=data[0];el.innerHTML='<div class="tag">PRIORITÉ ACTUELLE</div><div class="best"><div><span class="badge good">'+esc(statusLabel(x.status))+'</span><h3>'+esc(x.location||x.title||'Bien prioritaire')+'</h3><p><b>'+euro(x.price)+'</b>'+(x.area?' · '+esc(x.area)+' m²':'')+'</p><p>'+esc(x.verdict||'Dossier à auditer')+'</p></div><div class="bestscore"><div><span>Score ARGUS</span><b>'+esc(x.score??'—')+'/100</b></div></div></div>'}
+function apply(){let list=[...data];const q=document.getElementById('search').value.trim().toLowerCase();if(q)list=list.filter(x=>[x.title,x.location,x.address,x.city,x.discoveredFrom,x.canonical,x.source].some(v=>String(v||'').toLowerCase().includes(q)));if(view==='curated'&&filter!=='ALL')list=list.filter(x=>x.status===filter);if(view==='all'){if(sort==='priceAsc')list.sort((a,b)=>(Number(a.price)||Infinity)-(Number(b.price)||Infinity));else if(sort==='priceDesc')list.sort((a,b)=>(Number(b.price)||0)-(Number(a.price)||0));else list.sort((a,b)=>new Date(b.firstSeenAt||b.discoveredAt||0)-new Date(a.firstSeenAt||a.discoveredAt||0))}document.getElementById('grid').innerHTML=list.map(card).join('')||'<div class="empty">Aucune annonce active correspondant à ces critères.</div>';bindPicks()}
+function renderFilters(){const box=document.getElementById('statusFilters');if(view!=='curated'){box.innerHTML='';return}const s=['ALL',...new Set(data.map(x=>x.status).filter(Boolean))];box.innerHTML=s.map(v=>'<button class="filter '+(v===filter?'active':'')+'" data-filter="'+esc(v)+'">'+(v==='ALL'?'Tous':esc(statusLabel(v)))+'</button>').join('');box.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;renderFilters();apply()})}
+function updateStats(){document.getElementById('statActive').textContent=data.length;document.getElementById('statCheck').textContent=when(checkedAt);document.getElementById('statCheckDate').textContent=checkedAt?new Date(checkedAt).toLocaleDateString('fr-BE'):'Aucun contrôle';document.getElementById('statHidden').textContent=hiddenCount;document.getElementById('statBox').textContent='≤ '+num(cfg[category].max/1000)+' k€';document.getElementById('statBoxText').textContent=cfg[category].name;document.getElementById('statLabel').textContent=view==='all'?'Catalogue disponible':'Sélection active';document.getElementById('statActiveNote').textContent=view==='all'?'Enregistrées + encore actives':'Shortlist vérifiée'}
+async function load(){selected.clear();updateCompare();document.getElementById('grid').innerHTML='<div class="empty">Chargement des disponibilités…</div>';document.getElementById('search').value='';filter='ALL';try{if(view==='curated'){const r=await fetch('/api/immo-curated-active?category='+category,{cache:'no-store'}),j=await r.json();if(!j.ok)throw new Error(j.error||'Vérification indisponible');data=j.opportunities||[];checkedAt=j.checkedAt||null;hiddenCount=(j.counts?.excludedUnavailable||0)+(j.counts?.hiddenUnverified||0);document.getElementById('updated').textContent=data.length+' bien(s) retenu(s) · contrôle live '+when(checkedAt,true);document.getElementById('notice').className='notice good';document.getElementById('notice').textContent='Sélection exigeante : seules les opportunités retenues par ARGUS et encore confirmées actives sont visibles.'}else{const r=await fetch('/api/immo-active-catalog?category='+category,{cache:'no-store'}),j=await r.json();if(!j.ok)throw new Error(j.error||'Catalogue indisponible');data=j.listings||[];checkedAt=j.refreshedAt||null;hiddenCount=Number(j.counts?.quarantined)||0;document.getElementById('updated').textContent=data.length+' annonce(s) enregistrée(s) et encore disponible(s) · dernière revalidation '+when(checkedAt,true);document.getElementById('notice').className='notice '+(j.ready?'good':'warn');document.getElementById('notice').textContent=j.ready?'Toutes les propositions = marché mémorisé par ARGUS. Une annonce disparaît automatiquement si elle est vendue, retirée, sous option ou si son activité ne peut plus être confirmée.':'Premier catalogue pas encore généré : lancez « Actualiser ».'}}}catch(e){data=[];checkedAt=null;hiddenCount=0;document.getElementById('updated').textContent='Données live indisponibles.';document.getElementById('notice').className='notice bad';document.getElementById('notice').textContent='ARGUS masque les données plutôt que d’afficher une disponibilité non vérifiée : '+e.message}document.getElementById('sorts').classList.toggle('hidden',view!=='all');document.getElementById('sectionTag').textContent=view==='all'?'TOUTES LES PROPOSITIONS':'SÉLECTION ARGUS';document.getElementById('sectionTitle').textContent=view==='all'?'Toutes les annonces enregistrées encore disponibles':'Biens à étudier en priorité';renderBest();renderFilters();updateStats();apply()}
+async function refresh(){const buttons=[document.getElementById('refresh'),document.getElementById('refreshHero')];buttons.forEach(b=>{b.disabled=true;b.dataset.old=b.textContent;b.textContent='Actualisation…'});document.getElementById('notice').className='notice warn';document.getElementById('notice').textContent='ARGUS rescane les sources puis revalide le catalogue enregistré.';try{const r=await fetch('/api/immo-catalog-refresh?category='+category,{method:'POST',cache:'no-store'}),j=await r.json();if(!j.ok)throw new Error(j.error||'Actualisation impossible');view='all';document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));await load()}catch(e){document.getElementById('notice').className='notice bad';document.getElementById('notice').textContent='Actualisation interrompue : '+e.message}finally{buttons.forEach(b=>{b.disabled=false;b.textContent=b.dataset.old||'Actualiser'})}}
+function bindPicks(){document.querySelectorAll('[data-pick]').forEach(c=>c.onchange=()=>{const id=c.dataset.pick;if(c.checked){if(selected.size>=4){c.checked=false;alert('Maximum 4 biens.');return}selected.add(id)}else selected.delete(id);updateCompare()})}
+function updateCompare(){const b=document.getElementById('compareBar');document.getElementById('compareCount').textContent=selected.size+' bien(s) sélectionné(s)';b.classList.toggle('show',selected.size>=2)}
+function compare(){const list=data.filter(x=>selected.has(key(x)));if(list.length<2)return;const rows=[['Prix',x=>euro(x.price)],['Surface',x=>(x.area??x.surface)?(x.area??x.surface)+' m²':'—'],['Prix/m²',x=>ppm(x)?num(ppm(x))+' €/m²':'—'],['PEB',x=>x.peb||x.epc||'—'],['Localisation',x=>x.location||x.address||x.city||'—'],['Disponibilité',x=>view==='all'?'ACTIVE':statusLabel(x.status)]];document.getElementById('compareContent').innerHTML='<table class="comparetable"><thead><tr><th>Critère</th>'+list.map(x=>'<th>'+esc(title(x))+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr><th>'+esc(r[0])+'</th>'+list.map(x=>'<td>'+esc(r[1](x))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';document.getElementById('compareModal').classList.add('open')}
+function exactAddress(x){const a=String(x.exactAddress||x.address||'').trim();return /\d/.test(a)&&/(Bruxelles|Brussel|Schaerbeek|Ixelles|Anderlecht|Molenbeek|Saint-Josse|Etterbeek|Evere|Jette|Forest|Uccle|Woluwe|Auderghem|Koekelberg|Ganshoren|Berchem|Watermael)/i.test(a)?a:null}
+async function geocode(a){const k='argusgeo:'+a;try{const c=JSON.parse(localStorage.getItem(k)||'null');if(c&&Date.now()-c.t<2592000000)return c}catch{}const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=be&q='+encodeURIComponent(a),{headers:{'Accept-Language':'fr-BE,fr;q=.9'}}),j=await r.json();if(!j[0])return null;const g={lat:+j[0].lat,lon:+j[0].lon,t:Date.now()};try{localStorage.setItem(k,JSON.stringify(g))}catch{}return g}
+async function toggleMap(){const w=document.getElementById('mapWrap');w.classList.toggle('open');if(!w.classList.contains('open'))return;if(!map){map=L.map('map').setView([50.8503,4.3517],12);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map)}mapMarkers.forEach(m=>map.removeLayer(m));mapMarkers=[];const candidates=data.map(x=>({x,a:exactAddress(x)})).filter(z=>z.a),bounds=[];document.getElementById('mapNote').textContent=candidates.length+' adresse(s) exacte(s) à positionner…';for(let i=0;i<candidates.length;i++){let g=null;try{g=await geocode(candidates[i].a)}catch{}if(g){const m=L.marker([g.lat,g.lon]).addTo(map).bindPopup('<b>'+esc(title(candidates[i].x))+'</b><br>'+esc(candidates[i].a)+'<br>'+euro(candidates[i].x.price));mapMarkers.push(m);bounds.push([g.lat,g.lon])}if(i<candidates.length-1)await new Promise(r=>setTimeout(r,1050))}if(bounds.length)map.fitBounds(bounds,{padding:[25,25],maxZoom:15});document.getElementById('mapNote').textContent=bounds.length+' annonce(s) positionnée(s) à partir d’adresses publiées.';setTimeout(()=>map.invalidateSize(),100)}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('active',x===b));load()});document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{category=b.dataset.category;document.querySelectorAll('[data-category]').forEach(x=>x.classList.toggle('active',x===b));load()});document.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{sort=b.dataset.sort;document.querySelectorAll('[data-sort]').forEach(x=>x.classList.toggle('active',x===b));apply()});document.getElementById('search').oninput=apply;document.getElementById('refresh').onclick=refresh;document.getElementById('refreshHero').onclick=refresh;document.getElementById('mapBtn').onclick=toggleMap;document.getElementById('openCompare').onclick=compare;document.getElementById('closeCompare').onclick=()=>document.getElementById('compareModal').classList.remove('open');document.getElementById('compareModal').onclick=e=>{if(e.target.id==='compareModal')e.currentTarget.classList.remove('open')};load();
 </script>
 </body></html>
