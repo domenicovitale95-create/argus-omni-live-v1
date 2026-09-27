@@ -1,4 +1,4 @@
-import {fetchListingStatus,isUnavailableListing,isConfirmedActiveListing} from './immo-listing-scan.js';
+import {fetchHtml,extractListing,isUnavailableListing,isConfirmedActiveListing} from './immo-listing-scan.js';
 import {linksFrom,buildSourcePageUrls} from './immo-discovery-scan.js';
 
 const APARTMENT_SOURCES=[
@@ -23,7 +23,7 @@ const SEARCH_TIMEOUT=7000,DETAIL_TIMEOUT=8500,DETAIL_CONCURRENCY=12,MAX_LINKS_PE
 async function fetchSearch(url){
   const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),SEARCH_TIMEOUT);
   try{
-    const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{'user-agent':'Mozilla/5.0 (compatible; ArgusImmoCatalog/2.0; +https://argus-omni-live.vercel.app/immo-opportunities)','accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=.9,nl;q=.8,en;q=.7'}});
+    const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{'user-agent':'Mozilla/5.0 (compatible; ArgusImmoCatalog/2.1; +https://argus-omni-live.vercel.app/immo-opportunities)','accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=.9,nl;q=.8,en;q=.7'}});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const ct=r.headers.get('content-type')||'';if(!ct.includes('text/html'))throw new Error('not HTML');
     return {url:r.url||url,text:(await r.text()).slice(0,2200000)};
@@ -40,6 +40,35 @@ function correctedType(row={},url='',category='apartment'){
   if(/appartement|apartment|\bflat\b|duplex|penthouse/.test(head)||/\/appartement(?:\/|$)|\/apartment(?:\/|$)/.test(path))return 'apartment';
   if(['apartment','studio'].includes(row.type))return row.type;
   return 'unknown';
+}
+function amount(raw=''){
+  const digits=String(raw).replace(/[^0-9]/g,'');
+  const n=Number(digits);return Number.isFinite(n)?n:null;
+}
+function euroAmount(text=''){
+  const s=String(text).replace(/&nbsp;|&#160;/gi,' ').replace(/\u202f|\u00a0/g,' ');
+  const patterns=[
+    /(?:prix|prijs|price)\s*[:\-]?\s*(?:€\s*)?([0-9][0-9 .,'’\u00a0\u202f]{3,})\s*€/i,
+    /(?:€\s*)([0-9][0-9 .,'’\u00a0\u202f]{3,})/i,
+    /([0-9][0-9 .,'’\u00a0\u202f]{3,})\s*€/i
+  ];
+  for(const re of patterns){const m=s.match(re);if(m){const n=amount(m[1]);if(n>=40000&&n<=5000000)return n}}
+  return null;
+}
+function correctedPrice(row={},html='',maxPrice=150000){
+  const titleTag=(String(html).match(/<title[^>]*>([\s\S]*?)<\/title>/i)||[])[1]||'';
+  const ogTitle=(String(html).match(/<meta[^>]+(?:property|name)=["']og:title["'][^>]+content=["']([^"']*)["']/i)||[])[1]||'';
+  for(const text of [titleTag,ogTitle,row.title,row.description]){
+    const n=euroAmount(text);if(n!=null)return n;
+  }
+  const head=String(html).slice(0,220000);
+  const jsonPatterns=[
+    /"price"\s*:\s*"?([0-9]{4,8})"?/i,
+    /"mainPrice"\s*:\s*"?([0-9]{4,8})"?/i,
+    /"transactionPrice"\s*:\s*"?([0-9]{4,8})"?/i
+  ];
+  for(const re of jsonPatterns){const m=head.match(re);if(m){const n=Number(m[1]);if(n>=40000&&n<=Math.max(5000000,maxPrice*20))return n}}
+  const n=Number(row.price);return Number.isFinite(n)?n:null;
 }
 function keyFor(x={}){
   const raw=String(x.canonical||'').trim();
@@ -60,7 +89,9 @@ async function scanSource(source,category,maxPrice){
     status.linksFound=links.length;
     const rows=[];
     for(let i=0;i<links.length;i+=DETAIL_CONCURRENCY){
-      const batch=await Promise.all(links.slice(i,i+DETAIL_CONCURRENCY).map(async url=>{try{return {url,row:await fetchListingStatus(url,DETAIL_TIMEOUT)}}catch(e){return {url,error:String(e?.message||e)}}}));
+      const batch=await Promise.all(links.slice(i,i+DETAIL_CONCURRENCY).map(async url=>{
+        try{const page=await fetchHtml(url,DETAIL_TIMEOUT);return {url:page.url||url,html:page.html,row:extractListing(page.html,page.url||url)}}catch(e){return {url,error:String(e?.message||e)}}
+      }));
       for(const item of batch){
         if(item.error){status.detailFailed++;continue}
         status.detailsRead++;const row=item.row;
@@ -68,9 +99,9 @@ async function scanSource(source,category,maxPrice){
         if(!isConfirmedActiveListing(row)){status.unverified++;continue}
         const type=correctedType(row,item.url,category);
         if(type==='unknown'){status.typeRejected++;continue}
-        const price=Number(row.price);
+        const price=correctedPrice(row,item.html,maxPrice);
         if(!Number.isFinite(price)||price<40000||price>maxPrice){status.outsidePrice++;continue}
-        rows.push({...row,type,category,canonical:String(row.canonical||item.url),discoveredFrom:source.id,discoveredAt:new Date().toISOString(),availabilityStatus:'ACTIVE'});status.activeEligible++;
+        rows.push({...row,price,type,category,canonical:String(row.canonical||item.url),discoveredFrom:source.id,discoveredAt:new Date().toISOString(),availabilityStatus:'ACTIVE'});status.activeEligible++;
       }
     }
     return {status,rows};
@@ -83,6 +114,6 @@ export default async function handler(req,res){
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});const category=raw.category==='building'?'building':'apartment';const maxPrice=Math.max(50000,Math.min(1000000,Number(raw.maxPrice)||(category==='building'?400000:150000)));const sources=category==='building'?BUILDING_SOURCES:APARTMENT_SOURCES;
     const results=await Promise.all(sources.map(s=>scanSource(s,category,maxPrice))),map=new Map();for(const r of results)for(const row of r.rows){const k=keyFor(row);if(k&&!map.has(k))map.set(k,row)}
     const listings=[...map.values()].sort((a,b)=>Number(a.price)-Number(b.price));
-    return res.status(200).json({ok:true,category,scannedAt:new Date().toISOString(),maxPrice,sourceStatus:results.map(r=>r.status),coverage:{complete:results.every(r=>r.status.reachable&&!r.status.error),sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length},totals:{linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),detailsRead:results.reduce((n,r)=>n+r.status.detailsRead,0),eligibleAfterDedup:listings.length,unavailable:results.reduce((n,r)=>n+r.status.unavailable,0),unverified:results.reduce((n,r)=>n+r.status.unverified,0),outsidePrice:results.reduce((n,r)=>n+r.status.outsidePrice,0),typeRejected:results.reduce((n,r)=>n+r.status.typeRejected,0),detailFailed:results.reduce((n,r)=>n+r.status.detailFailed,0)},listings,notice:'Catalogue scanner: type inferred from listing title/URL before portal-wide page text; only explicitly ACTIVE listings inside the price box are returned.'});
+    return res.status(200).json({ok:true,category,scannedAt:new Date().toISOString(),maxPrice,sourceStatus:results.map(r=>r.status),coverage:{complete:results.every(r=>r.status.reachable&&!r.status.error),sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length},totals:{linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),detailsRead:results.reduce((n,r)=>n+r.status.detailsRead,0),eligibleAfterDedup:listings.length,unavailable:results.reduce((n,r)=>n+r.status.unavailable,0),unverified:results.reduce((n,r)=>n+r.status.unverified,0),outsidePrice:results.reduce((n,r)=>n+r.status.outsidePrice,0),typeRejected:results.reduce((n,r)=>n+r.status.typeRejected,0),detailFailed:results.reduce((n,r)=>n+r.status.detailFailed,0)},listings,notice:'Catalogue scanner 2.1: listing type comes from title/URL and portal prices are recovered from the listing title/structured page data before applying the price box.'});
   }catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
 }
