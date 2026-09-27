@@ -364,7 +364,7 @@ export default async function handler(req,res){
   }
   if(req.method!=='GET')return res.status(405).json({ok:false,error:'GET o POST richiesto'});
   const saved=await readJsonFresh(STORE_PATH,null);
-  if(saved?.listings?.length)return res.status(200).json(saved);
+  if(saved?.version>=2&&saved?.listings?.length)return res.status(200).json(saved);
   const listings=mergeListings(seed.listings||[]);
   return res.status(200).json({
     ok:true,version:2,scope:'Sicilia orientale · Mar Ionio',criteria:seed.criteria,
