@@ -4,6 +4,10 @@
   "trailingSlash": false,
   "ignoreCommand": "node scripts/vercel-ignore-build.cjs",
   "github": {"autoJobCancelation": true},
+  "redirects": [
+    {"source": "/argus-immo", "destination": "/immo-opportunities", "permanent": false},
+    {"source": "/immo-opportunities.html", "destination": "/immo-opportunities", "permanent": false}
+  ],
   "headers": [
     {"source": "/", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]},
     {"source": "/index.html", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]},
