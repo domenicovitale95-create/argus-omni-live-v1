@@ -1,2 +1,2 @@
-ARGUS production deployment refresh — 2026-09-01T09:54:00Z
-Purpose: activate the existing Vercel Blob OIDC connection for Production and Preview after storage recovery.
+ARGUS production deployment refresh — 2026-09-27
+Purpose: retrigger production deployment after ARGUS IMMO mobile listing-render fix ffdbdad.
