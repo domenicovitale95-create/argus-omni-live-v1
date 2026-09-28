@@ -1,7 +1,7 @@
 {
   "version": 2,
   "mode": "weekly",
-  "generatedAt": "2026-09-22T10:07:17.672Z",
+  "generatedAt": "2026-09-28T11:40:31.006Z",
   "feeds": [
     {
       "id": "perspective",
@@ -14,7 +14,7 @@
       "id": "citydev",
       "url": "https://www.citydev.brussels/fr/projets/projets-en-cours",
       "ok": true,
-      "fingerprint": "af2f482de2a6cdd6",
+      "fingerprint": "5363ce413007ae00",
       "links": 79
     },
     {
@@ -28,7 +28,7 @@
       "id": "mobility",
       "url": "https://mobilite-mobiliteit.brussels/fr/projets",
       "ok": true,
-      "fingerprint": "cbc721177d723e1a",
+      "fingerprint": "a8684094b2320961",
       "links": 20
     },
     {
@@ -42,14 +42,14 @@
       "id": "commission-buildings",
       "url": "https://commission.europa.eu/get-involved/visit-european-commission/buildings-commission-and-executive-agencies-brussels_en",
       "ok": true,
-      "fingerprint": "1ee8a103925ca3b3",
-      "links": 167
+      "fingerprint": "d4e4464938aac1d2",
+      "links": 166
     },
     {
       "id": "port",
       "url": "https://port.brussels/fr/actualites",
       "ok": true,
-      "fingerprint": "13f052538a23b91d",
+      "fingerprint": "bfe96fad2b832d7e",
       "links": 93
     }
   ],
@@ -66,21 +66,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
-    },
-    {
-      "id": "60edcf3af29e793a",
-      "feedId": "perspective",
-      "feedName": "perspective.brussels",
-      "url": "https://perspective.brussels/fr/projets/perimetres-dintervention/zone-de-renovation-urbaine-zru",
-      "title": "Zone de Revitalisation Urbaine (ZRU)",
-      "categories": [
-        "rehabilitation"
-      ],
-      "stage": "ANNOUNCED",
-      "area": null,
-      "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "86b3dd5d09f71cf8",
@@ -94,7 +80,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "2621658d54f6f612",
@@ -108,7 +94,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "bb266658da71c2c0",
@@ -122,7 +108,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "a2ffa6d7517ddb9a",
@@ -136,7 +122,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "7ccd5dd79d0efbb7",
@@ -150,7 +136,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "28188625478643e9",
@@ -164,7 +150,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "1b53a0219d8792b3",
@@ -178,7 +164,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "69a26d679c7dafb4",
@@ -192,7 +178,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "3ae2ffaf99a3ab7e",
@@ -206,7 +192,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "d9cea89cf34b6c90",
@@ -220,7 +206,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "a4981fe644a09e0f",
@@ -234,7 +220,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "0c6ce8bb5be690c6",
@@ -248,7 +234,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "344f731eb4fec56a",
@@ -267,7 +253,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "b9e7f414d09b277d",
@@ -286,7 +272,7 @@
         "municipality": "Ixelles"
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "a8f1ea3efbd16d3b",
@@ -305,7 +291,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "678c0a395bb97dc0",
@@ -320,7 +306,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "18392ded8d7d941c",
@@ -334,7 +320,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "54ab1de6842f712c",
@@ -358,7 +344,7 @@
         }
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "56e0edf3eebedbe0",
@@ -377,7 +363,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "19d562bb39f5c802",
@@ -396,7 +382,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "c24e81d68b3dfa51",
@@ -420,7 +406,7 @@
         }
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "5edf6b9ab7bb58ce",
@@ -444,7 +430,7 @@
         }
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "3d089414f5543c33",
@@ -464,7 +450,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "5072d31840891d53",
@@ -483,7 +469,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "2e07c6634808b3d7",
@@ -497,7 +483,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "0575fcce4b6b55bc",
@@ -511,7 +497,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "09a1c45acbc0fb1e",
@@ -525,7 +511,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "23a6c008fab446f9",
@@ -539,7 +525,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "881d5103d18e2bb8",
@@ -553,7 +539,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "153f1d54e04c310a",
@@ -567,7 +553,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "369301888c7f4cac",
@@ -581,7 +567,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "146acf464604b8bd",
@@ -595,7 +581,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "99dd89d437da5d18",
@@ -610,7 +596,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "46b7cd555b699d6c",
@@ -624,7 +610,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "f1c4b25aa93db349",
@@ -643,7 +629,7 @@
         "strategic": true
       },
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "c500f52245394d3a",
@@ -657,7 +643,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "5ee1694b0d77cb3d",
@@ -671,7 +657,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "05f3622df5541c63",
@@ -685,7 +671,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "6a856a71e8abb900",
@@ -700,7 +686,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "953f47eb99033640",
@@ -714,7 +700,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "acfddf4ac47715ea",
@@ -728,7 +714,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "34f60dc6a90470bf",
@@ -742,21 +728,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
-    },
-    {
-      "id": "c0059da45ef2b22c",
-      "feedId": "commission-buildings",
-      "feedName": "European Commission buildings",
-      "url": "https://commission.europa.eu/about/service-standards-and-principles/modernising-european-commission_en",
-      "title": "Modernising the European Commission",
-      "categories": [
-        "eu_institution"
-      ],
-      "stage": "ANNOUNCED",
-      "area": null,
-      "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "d7779a5fef78d96e",
@@ -770,7 +742,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "40c02cb1c452e63b",
@@ -784,7 +756,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "9824dd568b44eb38",
@@ -798,7 +770,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "856a7df2b380d195",
@@ -812,7 +784,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "e392d3ac425376b2",
@@ -826,7 +798,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "5d2f3b34ddd311c8",
@@ -840,7 +812,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "03a1c9ff3b2a24ba",
@@ -854,7 +826,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "1b16c014d3c2f78a",
@@ -868,7 +840,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "ffb98a4d1d984a16",
@@ -882,7 +854,7 @@
       "stage": "UNDER_CONSTRUCTION",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "3ab0ab8c9dbacedc",
@@ -896,7 +868,7 @@
       "stage": "DELIVERED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "09083ab7c4e98905",
@@ -910,7 +882,7 @@
       "stage": "UNDER_CONSTRUCTION",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "40a4044a73e5311d",
@@ -924,7 +896,7 @@
       "stage": "DELIVERED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "e1c277487527564d",
@@ -938,7 +910,7 @@
       "stage": "UNDER_CONSTRUCTION",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "8879355026514238",
@@ -952,7 +924,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "4c11dd19867de09d",
@@ -966,7 +938,7 @@
       "stage": "DELIVERED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "9583714ba6ae0aff",
@@ -980,7 +952,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "bd5e00041d1d623d",
@@ -994,7 +966,7 @@
       "stage": "ANNOUNCED",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     },
     {
       "id": "a9db63475c772f2d",
@@ -1009,24 +981,23 @@
       "stage": "UNDER_CONSTRUCTION",
       "area": null,
       "sourcePriority": 1,
-      "detectedAt": "2026-09-22T10:07:17.672Z"
+      "detectedAt": "2026-09-28T11:40:31.006Z"
     }
   ],
   "errors": [],
   "neighborhoodRegistry": {
     "ok": true,
     "count": 145,
-    "updatedAt": "2026-09-22T10:07:17.672Z"
+    "updatedAt": "2026-09-28T11:40:31.006Z"
   },
   "candidates": [
     {
       "key": "UNRESOLVED",
       "area": null,
-      "signalCount": 52,
+      "signalCount": 50,
       "independentSources": 7,
       "categories": [
         "transport",
-        "rehabilitation",
         "school",
         "major_permit",
         "housing",
@@ -1050,21 +1021,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
-        },
-        {
-          "id": "60edcf3af29e793a",
-          "feedId": "perspective",
-          "feedName": "perspective.brussels",
-          "url": "https://perspective.brussels/fr/projets/perimetres-dintervention/zone-de-renovation-urbaine-zru",
-          "title": "Zone de Revitalisation Urbaine (ZRU)",
-          "categories": [
-            "rehabilitation"
-          ],
-          "stage": "ANNOUNCED",
-          "area": null,
-          "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "86b3dd5d09f71cf8",
@@ -1078,7 +1035,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "2621658d54f6f612",
@@ -1092,7 +1049,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "bb266658da71c2c0",
@@ -1106,7 +1063,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "a2ffa6d7517ddb9a",
@@ -1120,7 +1077,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "7ccd5dd79d0efbb7",
@@ -1134,7 +1091,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "28188625478643e9",
@@ -1148,7 +1105,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "1b53a0219d8792b3",
@@ -1162,7 +1119,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "69a26d679c7dafb4",
@@ -1176,7 +1133,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "3ae2ffaf99a3ab7e",
@@ -1190,7 +1147,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "d9cea89cf34b6c90",
@@ -1204,7 +1161,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "a4981fe644a09e0f",
@@ -1218,7 +1175,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "0c6ce8bb5be690c6",
@@ -1232,7 +1189,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "678c0a395bb97dc0",
@@ -1247,7 +1204,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "18392ded8d7d941c",
@@ -1261,7 +1218,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "2e07c6634808b3d7",
@@ -1275,7 +1232,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "0575fcce4b6b55bc",
@@ -1289,7 +1246,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "09a1c45acbc0fb1e",
@@ -1303,7 +1260,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "23a6c008fab446f9",
@@ -1317,7 +1274,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "881d5103d18e2bb8",
@@ -1331,7 +1288,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "153f1d54e04c310a",
@@ -1345,7 +1302,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "369301888c7f4cac",
@@ -1359,7 +1316,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "146acf464604b8bd",
@@ -1373,7 +1330,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "99dd89d437da5d18",
@@ -1388,7 +1345,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "46b7cd555b699d6c",
@@ -1402,7 +1359,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "c500f52245394d3a",
@@ -1416,7 +1373,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "5ee1694b0d77cb3d",
@@ -1430,7 +1387,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "05f3622df5541c63",
@@ -1444,7 +1401,7 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "6a856a71e8abb900",
@@ -1459,7 +1416,21 @@
           "stage": "ANNOUNCED",
           "area": null,
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
+        },
+        {
+          "id": "953f47eb99033640",
+          "feedId": "environment",
+          "feedName": "Bruxelles Environnement",
+          "url": "https://environnement.brussels/citoyen/services-et-demandes/trouver-un-professionnel-agree-ou-enregistre",
+          "title": "Trouver un professionnel agréé ou enregistré",
+          "categories": [
+            "commercial_centrality"
+          ],
+          "stage": "ANNOUNCED",
+          "area": null,
+          "sourcePriority": 1,
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     },
@@ -1497,7 +1468,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "f1c4b25aa93db349",
@@ -1516,7 +1487,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     },
@@ -1552,7 +1523,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         },
         {
           "id": "19d562bb39f5c802",
@@ -1571,7 +1542,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     },
@@ -1607,7 +1578,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     },
@@ -1643,7 +1614,7 @@
             "municipality": "Ixelles"
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     },
@@ -1679,7 +1650,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     },
@@ -1725,7 +1696,7 @@
             }
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     },
@@ -1771,7 +1742,7 @@
             }
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     },
@@ -1817,7 +1788,7 @@
             }
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     },
@@ -1853,7 +1824,7 @@
             "strategic": true
           },
           "sourcePriority": 1,
-          "detectedAt": "2026-09-22T10:07:17.672Z"
+          "detectedAt": "2026-09-28T11:40:31.006Z"
         }
       ]
     }
