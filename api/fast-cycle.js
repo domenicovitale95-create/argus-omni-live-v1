@@ -11,6 +11,7 @@ const STATE='argus/health/fast-cycle.json';
 const ACTIVE_LOCK_MS=4*60*1000;
 const CALL_TIMEOUT_MS=50000;
 const RUN_BUDGET_MS=100000;
+const PRIMARY_CADENCE_MINUTES=30;
 
 function secret(){return String(process.env.CRON_SECRET||'').trim()}
 function authorized(req){const s=secret();return !s||req.headers.authorization===`Bearer ${s}`}
@@ -30,7 +31,7 @@ function sourceOf(req){
 }
 function livePaperDue(source,now=new Date()){
   if(source!=='VERCEL_CRON')return true;
-  const minute=now.getUTCMinutes(),offset=((minute-2)%15+15)%15;
+  const minute=now.getUTCMinutes(),offset=((minute-2)%PRIMARY_CADENCE_MINUTES+PRIMARY_CADENCE_MINUTES)%PRIMARY_CADENCE_MINUTES;
   return offset<=2;
 }
 function summarize(body={}){
@@ -143,7 +144,7 @@ export default async function handler(req,res){
     status:failures.length?'DEGRADED':'HEALTHY',jobs:results.length,failures:failures.length,networkFallbacks:fallbacks.length,results,
     pushSkipped:!(process.env.VAPID_PUBLIC_KEY&&process.env.VAPID_PRIVATE_KEY),
     livePaperSettlementDue:dueLivePaperSettlement,
-    policy:{primaryScheduler:'VERCEL_CRON',primaryCadenceMinutes:15,backupScheduler:'GITHUB_CONDITIONAL',backupHealthCheckMinutes:30,inProcessSubjobs:true,networkFallbackOnLocalException:true,currentCycleAttestationRequired:true,bankrollFailClosedOnCycleAmbiguity:true,livePaperSettlementInProcess:true,livePaperSettlementCadenceMinutes:15,livePaperProviderPolicy:'ZERO_WHEN_IDLE; DUE_OPEN_FIXTURES_ONLY; MAX_2_PER_RUN; 30_MIN_RECHECK',providerCallsAddedByOrchestrator:0,subjobsPreserveOwnProviderPolicies:true,automaticRealWagering:false}
+    policy:{primaryScheduler:'VERCEL_CRON',primaryCadenceMinutes:PRIMARY_CADENCE_MINUTES,backupScheduler:'GITHUB_CONDITIONAL',backupHealthCheckMinutes:30,inProcessSubjobs:true,networkFallbackOnLocalException:true,currentCycleAttestationRequired:true,bankrollFailClosedOnCycleAmbiguity:true,livePaperSettlementInProcess:true,livePaperSettlementCadenceMinutes:PRIMARY_CADENCE_MINUTES,livePaperProviderPolicy:'ZERO_WHEN_IDLE; DUE_OPEN_FIXTURES_ONLY; MAX_2_PER_RUN; 30_MIN_RECHECK',providerCallsAddedByOrchestrator:0,subjobsPreserveOwnProviderPolicies:true,automaticRealWagering:false}
   };
   try{await writeJson(STATE,state)}catch(error){return res.status(503).json({...state,status:'CRITICAL',error:`FAST_CYCLE_HEALTH_PERSIST_FAILED: ${error?.message||'unknown'}`})}
   return res.status(failures.length?207:200).json(state);
