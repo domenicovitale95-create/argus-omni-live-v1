@@ -1,6 +1,6 @@
 {
   "asset_id": "cash_proxy",
-  "generated_at": "2026-09-29T06:47:06.850248+00:00",
+  "generated_at": "2026-09-29T13:58:12.972380+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -484,7 +484,7 @@
       "price": 91.66
     },
     {
-      "date": "2026-09-28",
+      "date": "2026-09-29",
       "price": 91.63
     }
   ]
