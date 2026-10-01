@@ -1,17 +1,12 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-01T02:01:07.490982+00:00",
+  "generated_at": "2026-10-01T08:43:56.663262+00:00",
   "data_quality": {
-    "fresh_series": 17,
+    "fresh_series": 18,
     "total_series": 18,
-    "coverage_pct": 94,
+    "coverage_pct": 100,
     "state": "STRONG",
-    "errors": [
-      {
-        "series": "global_equity",
-        "error": "Stooq: insufficient history for acwi.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
-      }
-    ],
+    "errors": [],
     "rules": [
       "No synthetic price fabrication",
       "Stale fallback explicitly labelled",
@@ -81,7 +76,7 @@
       },
       {
         "event": "Global equities moved",
-        "move": -0.44,
+        "move": -0.43,
         "why_it_matters": "Broad risk appetite changed across global stocks.",
         "affected_assets": [
           "global_equity"
@@ -111,6 +106,27 @@
         "data_date": "2026-09-30"
       },
       {
+        "asset_id": "global_equity",
+        "asset": "Global Equities",
+        "ucits_candidate": "VWCE",
+        "score": 71,
+        "action": "WATCH",
+        "conviction": "Medium",
+        "horizon": "Years",
+        "why": [
+          "3-month momentum: +1.7%",
+          "Distance vs 200-day average: +5.0%",
+          "20-day annualised volatility: 12.4%"
+        ],
+        "risks": [
+          "Earnings, rates or risk-premium shocks can cause material drawdowns."
+        ],
+        "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
+        "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
+        "evidence_quality": "Strong",
+        "data_date": "2026-09-30"
+      },
+      {
         "asset_id": "emerging",
         "asset": "Emerging Markets",
         "ucits_candidate": null,
@@ -130,27 +146,6 @@
         "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
         "evidence_quality": "Strong",
         "data_date": "2026-09-30"
-      },
-      {
-        "asset_id": "nasdaq",
-        "asset": "Nasdaq 100",
-        "ucits_candidate": "EQQX",
-        "score": 70,
-        "action": "WATCH",
-        "conviction": "Medium",
-        "horizon": "Years",
-        "why": [
-          "3-month momentum: +2.0%",
-          "Distance vs 200-day average: +10.9%",
-          "20-day annualised volatility: 15.2%"
-        ],
-        "risks": [
-          "Earnings, rates or risk-premium shocks can cause material drawdowns."
-        ],
-        "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
-        "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
-        "evidence_quality": "Strong",
-        "data_date": "2026-09-30"
       }
     ],
     "no_forced_recommendation": true
@@ -161,6 +156,13 @@
       "label": "S&P 500",
       "score": 72,
       "status": "ATTRACTIVE",
+      "evidence": "Strong"
+    },
+    {
+      "id": "global_equity",
+      "label": "Global Equities",
+      "score": 71,
+      "status": "WATCH",
       "evidence": "Strong"
     },
     {
@@ -229,29 +231,27 @@
   ],
   "market": {
     "global_equity": {
-      "price": 158.76,
+      "price": 158.77,
       "date": "2026-09-30",
-      "ret_1d": -0.44,
+      "ret_1d": -0.43,
       "ret_1m": -1.19,
-      "ret_3m": 1.69,
+      "ret_3m": 1.7,
       "ret_6m": 14.74,
-      "ret_1y": 15.31,
-      "vol_20d_ann": 12.42,
+      "ret_1y": 15.32,
+      "vol_20d_ann": 12.41,
       "sma_200": 151.23,
       "distance_200dma": 4.98,
-      "drawdown_52w": -2.29,
+      "drawdown_52w": -2.28,
       "max_drawdown": -33.53,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/ACWI?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
-      "data_type": "STALE_LAST_KNOWN_GOOD",
-      "fresh": false,
+      "delay_days": 1,
+      "data_type": "OBSERVED_PROXY",
+      "fresh": true,
       "label": "Global Equities",
       "asset_class": "EQUITY",
       "proxy_symbol": "acwi.us",
-      "provider": "YAHOO",
-      "fallback": true,
-      "error": "Stooq: insufficient history for acwi.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
+      "provider": "YAHOO"
     },
     "sp500": {
       "price": 762.63,
@@ -589,10 +589,25 @@
   },
   "scores": {
     "global_equity": {
-      "score": null,
-      "status": "DATA INSUFFICIENT",
-      "evidence": "Weak",
-      "coverage": 100
+      "score": 71,
+      "status": "WATCH",
+      "evidence": "Strong",
+      "coverage": 100,
+      "components": {
+        "momentum": 55,
+        "trend": 85,
+        "risk": 84,
+        "entry": 78,
+        "macro": 52
+      },
+      "methodology": {
+        "momentum": 30,
+        "trend": 25,
+        "risk": 20,
+        "entry_quality": 15,
+        "macro_overlay": 10
+      },
+      "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
     },
     "sp500": {
       "score": 72,
