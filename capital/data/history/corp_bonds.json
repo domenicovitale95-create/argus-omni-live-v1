@@ -1,6 +1,6 @@
 {
   "asset_id": "corp_bonds",
-  "generated_at": "2026-10-01T08:43:56.663262+00:00",
+  "generated_at": "2026-10-01T16:18:05.365270+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -482,6 +482,10 @@
     {
       "date": "2026-09-30",
       "price": 102.18
+    },
+    {
+      "date": "2026-10-01",
+      "price": 101.935
     }
   ]
 }
