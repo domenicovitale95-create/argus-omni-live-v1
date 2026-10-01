@@ -11,6 +11,7 @@ function normalizedText(x={}){
   const raw=[
     x.title,x.description,x.location,x.address,x.city,x.copropriete,x.copropriété,
     x.coOwnership,x.buildingInfo,x.unitsText,x.urbanism,x.urbanisme,x.legalStatus,
+    x.condition,x.state,x.habitability,x.permit,x.permitStatus,x.unitStatus,
     ...(Array.isArray(x.risks)?x.risks:[]),
     ...(Array.isArray(x.criticalLegalRisks)?x.criticalLegalRisks:[])
   ].filter(Boolean).join(' ');
@@ -60,9 +61,31 @@ export function hasNonRegularisableUrbanism(x={}){
   return /\bnon[ -]?regularisable?s?\b|\bimpossible\s+(?:a|de)\s+regulariser\b|\bregularisation\s+impossible\b|\bne\s+peut\s+pas\s+etre\s+regularise\b|\bniet\s+regulariseerbaar\b|\bniet\s+te\s+regulariseren\b|\bregularisatie\s+onmogelijk\b|\bcannot\s+be\s+regulari[sz]ed\b|\bnot\s+regulari[sz]able\b|\bnon_regularisable\b/i.test(s);
 }
 
+export function hasHabitabilityOrInsalubrityBlock(x={}){
+  const s=normalizedText(x);
+  return /\barrete\s+d[' ]?insalubrite\s+(?:en\s+vigueur|actif)\b|\bfait\s+l[' ]objet\s+d[' ]un\s+arrete\s+d[' ]insalubrite\b|\bimmeuble\s+inhabitable\b|\bbien\s+inhabitable\b|\bdeclare\s+inhabitable\b|\bonbewoonbaar\b|\bonbewoonbaar\s+verklaard\b|\buninhabitable\b/i.test(s);
+}
+
+export function hasHeavyRenovationBlock(x={}){
+  const s=normalizedText(x);
+  return /\bimportants?\s+travaux\s+(?:de\s+)?renovation\b|\bgros\s+travaux\b|\brenovation\s+(?:totale|complete|lourde)\b|\ba\s+renover\s+(?:entierement|completement)\b|\bvolledig\s+te\s+renoveren\b|\btotal\s+renovation\b|\bmajor\s+renovation\b/i.test(s);
+}
+
+export function isCollectiveStudentHousingWithoutIndependentUnits(x={},category='apartment'){
+  if(category!=='building'&&String(x.category||'').toLowerCase()!=='building')return false;
+  const s=normalizedText(x);
+  const collective=/\bhabitat\s+collectif\b|\blogement\s+collectif\b|\bchambres?\s+etudiantes?\b|\bstudentenkamers?\b|\bstudent\s+rooms?\b/i.test(s);
+  if(!collective)return false;
+  const explicitIndependent=/\b(?:appartements?|logements?|unites?)\s+(?:autonomes?|independants?|reconnus?|autorises?|reguliers?)\b|\b(?:3|trois)\s+(?:appartements?|logements?|unites?)\s+(?:reconnus?|autorises?|autonomes?|independants?)\b|\bzelfstandige\s+wooneenheden\b|\bindependent\s+(?:apartments?|units?)\b/i.test(s);
+  return !explicitIndependent;
+}
+
 export function userExclusionReasons(x={},category='apartment'){
   const reasons=[];
   if(hasNonRegularisableUrbanism(x))reasons.push('URBANISM_NON_REGULARISABLE');
+  if(hasHabitabilityOrInsalubrityBlock(x))reasons.push('INSALUBRITY_OR_UNINHABITABLE');
+  if(hasHeavyRenovationBlock(x))reasons.push('HEAVY_RENOVATION');
+  if(isCollectiveStudentHousingWithoutIndependentUnits(x,category))reasons.push('COLLECTIVE_STUDENT_HOUSING_NOT_INDEPENDENT_UNITS');
   if(isLargeCopropriete(x,category))reasons.push('LARGE_COPROPRIETE');
   return reasons;
 }
