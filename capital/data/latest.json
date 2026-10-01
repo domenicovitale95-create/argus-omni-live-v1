@@ -1,12 +1,17 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-09-30T22:56:06.304047+00:00",
+  "generated_at": "2026-10-01T02:01:07.490982+00:00",
   "data_quality": {
-    "fresh_series": 18,
+    "fresh_series": 17,
     "total_series": 18,
-    "coverage_pct": 100,
+    "coverage_pct": 94,
     "state": "STRONG",
-    "errors": [],
+    "errors": [
+      {
+        "series": "global_equity",
+        "error": "Stooq: insufficient history for acwi.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
+      }
+    ],
     "rules": [
       "No synthetic price fabrication",
       "Stale fallback explicitly labelled",
@@ -106,27 +111,6 @@
         "data_date": "2026-09-30"
       },
       {
-        "asset_id": "global_equity",
-        "asset": "Global Equities",
-        "ucits_candidate": "VWCE",
-        "score": 71,
-        "action": "WATCH",
-        "conviction": "Medium",
-        "horizon": "Years",
-        "why": [
-          "3-month momentum: +1.7%",
-          "Distance vs 200-day average: +5.0%",
-          "20-day annualised volatility: 12.4%"
-        ],
-        "risks": [
-          "Earnings, rates or risk-premium shocks can cause material drawdowns."
-        ],
-        "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
-        "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
-        "evidence_quality": "Strong",
-        "data_date": "2026-09-30"
-      },
-      {
         "asset_id": "emerging",
         "asset": "Emerging Markets",
         "ucits_candidate": null,
@@ -146,6 +130,27 @@
         "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
         "evidence_quality": "Strong",
         "data_date": "2026-09-30"
+      },
+      {
+        "asset_id": "nasdaq",
+        "asset": "Nasdaq 100",
+        "ucits_candidate": "EQQX",
+        "score": 70,
+        "action": "WATCH",
+        "conviction": "Medium",
+        "horizon": "Years",
+        "why": [
+          "3-month momentum: +2.0%",
+          "Distance vs 200-day average: +10.9%",
+          "20-day annualised volatility: 15.2%"
+        ],
+        "risks": [
+          "Earnings, rates or risk-premium shocks can cause material drawdowns."
+        ],
+        "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
+        "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
+        "evidence_quality": "Strong",
+        "data_date": "2026-09-30"
       }
     ],
     "no_forced_recommendation": true
@@ -156,13 +161,6 @@
       "label": "S&P 500",
       "score": 72,
       "status": "ATTRACTIVE",
-      "evidence": "Strong"
-    },
-    {
-      "id": "global_equity",
-      "label": "Global Equities",
-      "score": 71,
-      "status": "WATCH",
       "evidence": "Strong"
     },
     {
@@ -246,12 +244,14 @@
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/ACWI?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
       "delay_days": 0,
-      "data_type": "OBSERVED_PROXY",
-      "fresh": true,
+      "data_type": "STALE_LAST_KNOWN_GOOD",
+      "fresh": false,
       "label": "Global Equities",
       "asset_class": "EQUITY",
       "proxy_symbol": "acwi.us",
-      "provider": "YAHOO"
+      "provider": "YAHOO",
+      "fallback": true,
+      "error": "Stooq: insufficient history for acwi.us: 0 | Yahoo: HTTP Error 429: Too Many Requests"
     },
     "sp500": {
       "price": 762.63,
@@ -268,7 +268,7 @@
       "max_drawdown": -34.1,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "S&P 500",
@@ -291,7 +291,7 @@
       "max_drawdown": -35.62,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/QQQ?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Nasdaq 100",
@@ -314,7 +314,7 @@
       "max_drawdown": -41.57,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/VGK?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "European Equities",
@@ -337,7 +337,7 @@
       "max_drawdown": -41.46,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/EEM?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Emerging Markets",
@@ -360,7 +360,7 @@
       "max_drawdown": -45.3,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/SMH?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Semiconductors",
@@ -383,7 +383,7 @@
       "max_drawdown": -26.4,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/GLD?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Gold",
@@ -406,7 +406,7 @@
       "max_drawdown": -27.72,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/IEF?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "US Treasuries 7-10Y",
@@ -429,7 +429,7 @@
       "max_drawdown": -29.37,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/LQD?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Investment Grade Bonds",
@@ -452,7 +452,7 @@
       "max_drawdown": -0.7,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/BIL?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "US T-Bills",
@@ -475,7 +475,7 @@
       "max_drawdown": -37.56,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Microsoft",
@@ -498,7 +498,7 @@
       "max_drawdown": -66.36,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "NVIDIA",
@@ -514,7 +514,7 @@
       "ret_1d": 0.02,
       "ret_1m": 0.53,
       "last_update": "2026-09-29",
-      "delay_days": 1,
+      "delay_days": 2,
       "fresh": true,
       "label": "US 10Y Treasury Yield",
       "unit": "%",
@@ -527,7 +527,7 @@
       "ret_1d": -0.03,
       "ret_1m": 0.55,
       "last_update": "2026-09-29",
-      "delay_days": 1,
+      "delay_days": 2,
       "fresh": true,
       "label": "US 2Y Treasury Yield",
       "unit": "%",
@@ -540,7 +540,7 @@
       "ret_1d": -0.19,
       "ret_1m": 7.51,
       "last_update": "2026-09-29",
-      "delay_days": 1,
+      "delay_days": 2,
       "fresh": true,
       "label": "VIX",
       "unit": "index",
@@ -553,7 +553,7 @@
       "ret_1d": -0.18,
       "ret_1m": 1.59,
       "last_update": "2026-09-25",
-      "delay_days": 5,
+      "delay_days": 6,
       "fresh": true,
       "label": "Broad US Dollar Index",
       "unit": "index",
@@ -566,7 +566,7 @@
       "ret_1d": 0.0,
       "ret_1m": 0.25,
       "last_update": "2026-09-30",
-      "delay_days": 0,
+      "delay_days": 1,
       "fresh": true,
       "label": "ECB Deposit Facility Rate",
       "unit": "%",
@@ -574,11 +574,11 @@
       "data_type": "OBSERVED"
     },
     "btc": {
-      "price": 83636.7,
-      "date": "2026-09-29",
-      "ret_1d": 0.18,
-      "ret_1m": 6.48,
-      "last_update": "2026-09-29",
+      "price": 83482.51,
+      "date": "2026-09-30",
+      "ret_1d": -0.18,
+      "ret_1m": 6.61,
+      "last_update": "2026-09-30",
       "delay_days": 1,
       "fresh": true,
       "label": "Bitcoin / USD",
@@ -589,25 +589,10 @@
   },
   "scores": {
     "global_equity": {
-      "score": 71,
-      "status": "WATCH",
-      "evidence": "Strong",
-      "coverage": 100,
-      "components": {
-        "momentum": 55,
-        "trend": 85,
-        "risk": 84,
-        "entry": 78,
-        "macro": 52
-      },
-      "methodology": {
-        "momentum": 30,
-        "trend": 25,
-        "risk": 20,
-        "entry_quality": 15,
-        "macro_overlay": 10
-      },
-      "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
+      "score": null,
+      "status": "DATA INSUFFICIENT",
+      "evidence": "Weak",
+      "coverage": 100
     },
     "sp500": {
       "score": 72,
