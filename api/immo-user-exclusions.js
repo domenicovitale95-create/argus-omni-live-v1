@@ -12,6 +12,7 @@ function normalizedText(x={}){
     x.title,x.description,x.location,x.address,x.city,x.copropriete,x.copropriété,
     x.coOwnership,x.buildingInfo,x.unitsText,x.urbanism,x.urbanisme,x.legalStatus,
     x.condition,x.state,x.habitability,x.permit,x.permitStatus,x.unitStatus,
+    x.canonical,x.source,x.url,x.listingUrl,x.provider,x.platform,x.saleType,x.priceType,
     ...(Array.isArray(x.risks)?x.risks:[]),
     ...(Array.isArray(x.criticalLegalRisks)?x.criticalLegalRisks:[])
   ].filter(Boolean).join(' ');
@@ -55,6 +56,18 @@ export function isLargeCopropriete(x={},category='apartment'){
   return units!==null&&units>=LARGE_COPRO_THRESHOLD;
 }
 
+export function hasAuctionOrStartingPriceStructure(x={}){
+  const s=normalizedText(x);
+  return /\bbiddit(?:\.be)?\b|\bvente\s+(?:publique|aux?\s+encheres?)\b|\b(?:aux?\s+)?encheres?\b|\badjudication\b|\bopenbare\s+verkoop\b|\b(?:public\s+)?auction\b|\bmise\s+a\s+prix\b|\bprix\s+de\s+depart\b|\binstelprijs\b|\bstartprijs\b|\bstartbod\b|\bopbod\b|\bstarting\s+bid\b|\breserve\s+price\b/i.test(s);
+}
+
+export function hasExplicitUrbanismInfraction(x={}){
+  const s=normalizedText(x);
+  const explicitNoInfraction=/\b(?:aucune|sans)\s+infractions?\s+urbanistiques?\b|\bpas\s+d[' ]?infractions?\s+urbanistiques?\b|\babsence\s+d[' ]?infractions?\s+urbanistiques?\b|\bgeen\s+stedenbouwkundige\s+overtredingen?\b|\bno\s+(?:urban\s+planning|planning|urbanism)\s+(?:violation|infraction)s?\b/i.test(s);
+  if(explicitNoInfraction)return false;
+  return /\binfractions?\s+urbanistiques?\b|\bstedenbouwkundige\s+overtredingen?\b|\bbouwovertredingen?\b|\b(?:urban\s+planning|planning)\s+violations?\b|\burbanism\s+infractions?\b/i.test(s);
+}
+
 export function hasNonRegularisableUrbanism(x={}){
   const s=normalizedText(x);
   if(/\b(?:aucune|sans)\s+infraction\s+urbanistique\b|\bgeen\s+stedenbouwkundige\s+overtreding\b/.test(s))return false;
@@ -82,7 +95,9 @@ export function isCollectiveStudentHousingWithoutIndependentUnits(x={},category=
 
 export function userExclusionReasons(x={},category='apartment'){
   const reasons=[];
-  if(hasNonRegularisableUrbanism(x))reasons.push('URBANISM_NON_REGULARISABLE');
+  if(hasAuctionOrStartingPriceStructure(x))reasons.push('AUCTION_OR_STARTING_PRICE');
+  if(hasExplicitUrbanismInfraction(x))reasons.push('EXPLICIT_URBANISM_INFRACTION');
+  else if(hasNonRegularisableUrbanism(x))reasons.push('URBANISM_NON_REGULARISABLE');
   if(hasHabitabilityOrInsalubrityBlock(x))reasons.push('INSALUBRITY_OR_UNINHABITABLE');
   if(hasHeavyRenovationBlock(x))reasons.push('HEAVY_RENOVATION');
   if(isCollectiveStudentHousingWithoutIndependentUnits(x,category))reasons.push('COLLECTIVE_STUDENT_HOUSING_NOT_INDEPENDENT_UNITS');
