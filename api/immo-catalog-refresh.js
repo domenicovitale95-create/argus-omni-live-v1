@@ -2,11 +2,12 @@ import {readJsonFresh,writeJson} from './_report-store.js';
 import {fetchListingStatus,isUnavailableListing,isConfirmedActiveListing} from './immo-listing-scan.js';
 import {isBrusselsListing,hasDeferredPriceStructure} from './immo-region.js';
 import {isUserExcludedListing,userExclusionReasons} from './immo-user-exclusions.js';
+import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE,matchesBuildingCriteria,enrichBuildingCriteria} from './immo-building-criteria.js';
 import apartments from '../data/immo-opportunities.json' with {type:'json'};
 import buildings from '../data/immo-building-opportunities.json' with {type:'json'};
 
 const PATHS={apartment:'argus/immo/active-catalog-apartment.json',building:'argus/immo/active-catalog-building.json'};
-const MAX={apartment:150000,building:400000};
+const MAX={apartment:150000,building:BUILDING_MAX_PRICE};
 const VERIFY_CONCURRENCY=8,VERIFY_TIMEOUT_MS=8500;
 
 function listingKey(x={}){
@@ -17,12 +18,13 @@ function listingKey(x={}){
 function finiteValue(v){if(v===null||v===undefined||String(v).trim()==='')return null;const n=Number(v);return Number.isFinite(n)?n:null}
 function normalize(x={},category,origin='discovery'){
   const canonical=String(x.canonical||x.source||'').trim(),surface=finiteValue(x.surface??x.area),price=finiteValue(x.price);
-  return {...x,category,canonical,source:canonical||x.source||'',surface:surface??x.surface??x.area??null,area:surface??x.area??x.surface??null,epc:x.epc||x.peb||null,peb:x.peb||x.epc||null,address:x.address||x.location||x.city||null,location:x.location||x.address||x.city||null,price:price??x.price??null,catalogOrigin:x.catalogOrigin||origin};
+  const row={...x,category,canonical,source:canonical||x.source||'',surface:surface??x.surface??x.area??null,area:surface??x.area??x.surface??null,epc:x.epc||x.peb||null,peb:x.peb||x.epc||null,address:x.address||x.location||x.city||null,location:x.location||x.address||x.city||null,price:price??x.price??null,catalogOrigin:x.catalogOrigin||origin};
+  return category==='building'?enrichBuildingCriteria(row):row;
 }
 function curated(category){const source=category==='building'?buildings:apartments;return (source.opportunities||[]).map(x=>normalize(x,category,'curated'))}
 function baseUrl(req){const proto=String(req.headers?.['x-forwarded-proto']||'https').split(',')[0].trim()||'https',host=String(req.headers?.['x-forwarded-host']||req.headers?.host||'argus-omni-live.vercel.app').split(',')[0].trim();return `${proto}://${host}`}
 async function discovery(req,category){
-  const r=await fetch(baseUrl(req)+'/api/immo-market-catalog-scan',{method:'POST',headers:{'content-type':'application/json','user-agent':'ARGUS-Immo-Catalog/2.3'},body:JSON.stringify({category,maxPrice:MAX[category]}),signal:AbortSignal.timeout(285000)}),j=await r.json().catch(()=>({}));
+  const r=await fetch(baseUrl(req)+'/api/immo-market-catalog-scan',{method:'POST',headers:{'content-type':'application/json','user-agent':'ARGUS-Immo-Catalog/2.4'},body:JSON.stringify({category,maxPrice:MAX[category],minPrice:category==='building'?BUILDING_MIN_PRICE:40000}),signal:AbortSignal.timeout(285000)}),j=await r.json().catch(()=>({}));
   if(!r.ok||!j.ok)throw new Error(j.error||`CATALOG_SCAN_HTTP_${r.status}`);return j;
 }
 function mergeLive(candidate,live,canonical){
@@ -41,6 +43,12 @@ async function verifyOne(candidate,alreadyConfirmed=false){
   try{const live=await fetchListingStatus(canonical,VERIFY_TIMEOUT_MS),item=mergeLive(candidate,live,canonical);if(isUnavailableListing(live))return {keep:false,reason:live.availabilityStatus||'UNAVAILABLE',item};if(!isConfirmedActiveListing(live))return {keep:false,reason:live.availabilityStatus||'UNVERIFIED',item};return {keep:true,reason:'ACTIVE',item:{...item,availabilityStatus:'ACTIVE'}}}catch(e){return {keep:false,reason:'VERIFY_FAILED',error:String(e?.message||e),item:candidate}}
 }
 async function verifyAll(candidates,confirmedKeys){const out=[];for(let i=0;i<candidates.length;i+=VERIFY_CONCURRENCY){out.push(...await Promise.all(candidates.slice(i,i+VERIFY_CONCURRENCY).map(x=>verifyOne(x,confirmedKeys.has(listingKey(x))))))}return out}
+function inCategoryScope(x,category){
+  if(!isBrusselsListing(x,x.canonical||x.source)||hasDeferredPriceStructure(x))return false;
+  if(category==='building')return matchesBuildingCriteria(x);
+  const p=finiteValue(x.price);return p===null||p<=MAX.apartment;
+}
+function excludedByPersonalRules(x,category){return category==='building'?false:isUserExcludedListing(x,category)}
 
 async function refreshCategory(req,category){
   const now=new Date().toISOString(),previous=await readJsonFresh(PATHS[category],{category,listings:[],quarantine:[]});let scan=null,scanError=null;try{scan=await discovery(req,category)}catch(e){scanError=String(e?.message||e)}
@@ -49,16 +57,16 @@ async function refreshCategory(req,category){
   for(const x of curatedRows){const k=listingKey(x);merged.set(k,{...(merged.get(k)||{}),...x})}
   for(const x of discovered){const k=listingKey(x);merged.set(k,{...(merged.get(k)||{}),...x})}
   const mergedValues=[...merged.values()];
-  const scopeCandidates=mergedValues.filter(x=>{const p=finiteValue(x.price);return (p===null||p<=MAX[category])&&isBrusselsListing(x,x.canonical||x.source)&&!hasDeferredPriceStructure(x)});
-  const excludedByUser=scopeCandidates.filter(x=>isUserExcludedListing(x,category));
-  const candidates=scopeCandidates.filter(x=>!isUserExcludedListing(x,category));
+  const scopeCandidates=mergedValues.filter(x=>inCategoryScope(x,category));
+  const excludedByUser=scopeCandidates.filter(x=>excludedByPersonalRules(x,category));
+  const candidates=scopeCandidates.filter(x=>!excludedByPersonalRules(x,category));
   const checked=await verifyAll(candidates,confirmedKeys),active=[],quarantine=[];
   for(const x of excludedByUser){const k=listingKey(x);quarantine.push({...normalize(x,category,x.catalogOrigin||'saved'),catalogKey:k,lastCheckedAt:now,hiddenReason:userExclusionReasons(x,category).join('+')||'USER_EXCLUSION'});}
   for(const result of checked){const k=listingKey(result.item),old=(previous?.listings||[]).find(x=>listingKey(x)===k);if(result.keep){active.push({...normalize(result.item,category,result.item.catalogOrigin||'saved'),catalogKey:k,firstSeenAt:old?.firstSeenAt||result.item.firstSeenAt||now,lastSeenAt:confirmedKeys.has(k)?now:(old?.lastSeenAt||result.item.lastSeenAt||now),lastVerifiedAt:now,availabilityStatus:'ACTIVE'})}else{quarantine.push({...normalize(result.item,category,result.item.catalogOrigin||'saved'),catalogKey:k,firstSeenAt:old?.firstSeenAt||result.item.firstSeenAt||now,lastSeenAt:old?.lastSeenAt||result.item.lastSeenAt||null,lastCheckedAt:now,hiddenReason:result.reason,verifyError:result.error||null})}}
   active.sort((a,b)=>(finiteValue(a.price)??Infinity)-(finiteValue(b.price)??Infinity));const newlyDiscovered=discovered.filter(x=>!previousKeys.has(listingKey(x))).length;
-  const payload={version:4,category,refreshedAt:now,maxPrice:MAX[category],marketScope:'BRUSSELS_CAPITAL_REGION',scanError,discovery:{scannedAt:scan?.scannedAt||null,coverage:scan?.coverage||null,totals:scan?.totals||null,sourceStatus:scan?.sourceStatus||[]},counts:{active:active.length,quarantined:quarantine.length,newlyDiscovered,discoveredThisRun:discovered.length,previouslySaved:(previous?.listings||[]).length,purgedOutsideScope:Math.max(0,merged.size-scopeCandidates.length),purgedUserCriteria:excludedByUser.length},listings:active,quarantine};await writeJson(PATHS[category],payload);return payload;
+  const payload={version:5,category,refreshedAt:now,minPrice:category==='building'?BUILDING_MIN_PRICE:null,maxPrice:MAX[category],marketScope:category==='building'?'AUDERGHEM_IXELLES_UCCLE_FOREST_WATERMAEL_BOITSFORT':'BRUSSELS_CAPITAL_REGION',sort:category==='building'?'PRICE_ASC':'PRICE_ASC',scanError,discovery:{scannedAt:scan?.scannedAt||null,coverage:scan?.coverage||null,totals:scan?.totals||null,sourceStatus:scan?.sourceStatus||[]},counts:{active:active.length,quarantined:quarantine.length,newlyDiscovered,discoveredThisRun:discovered.length,previouslySaved:(previous?.listings||[]).length,purgedOutsideScope:Math.max(0,merged.size-scopeCandidates.length),purgedUserCriteria:excludedByUser.length},listings:active,quarantine};await writeJson(PATHS[category],payload);return payload;
 }
 export default async function handler(req,res){
   res.setHeader('Cache-Control','private, no-store, no-cache, must-revalidate, max-age=0');res.setHeader('CDN-Cache-Control','no-store');res.setHeader('Vercel-CDN-Cache-Control','no-store');if(!['GET','POST'].includes(req.method))return res.status(405).json({ok:false,error:'GET or POST required'});
-  try{const q=new URL(req.url||'/',baseUrl(req)).searchParams,requested=q.get('category'),categories=requested==='apartment'||requested==='building'?[requested]:['apartment','building'],refreshed=await Promise.all(categories.map(c=>refreshCategory(req,c)));return res.status(200).json({ok:true,refreshedAt:new Date().toISOString(),categories:refreshed.map(x=>({category:x.category,refreshedAt:x.refreshedAt,counts:x.counts,scanError:x.scanError,coverage:x.discovery?.coverage||null,marketScope:x.marketScope}))})}catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
+  try{const q=new URL(req.url||'/',baseUrl(req)).searchParams,requested=q.get('category'),categories=requested==='apartment'||requested==='building'?[requested]:['apartment','building'],refreshed=await Promise.all(categories.map(c=>refreshCategory(req,c)));return res.status(200).json({ok:true,refreshedAt:new Date().toISOString(),categories:refreshed.map(x=>({category:x.category,refreshedAt:x.refreshedAt,counts:x.counts,scanError:x.scanError,coverage:x.discovery?.coverage||null,marketScope:x.marketScope,minPrice:x.minPrice,maxPrice:x.maxPrice,sort:x.sort}))})}catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
 }
