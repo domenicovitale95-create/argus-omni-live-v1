@@ -99,8 +99,8 @@ async function scanSource(source,category,maxPrice,minPrice){
         status.detailsRead++;let row=item.row;
         if(isUnavailableListing(row)){status.unavailable++;continue}
         if(!isConfirmedActiveListing(row)){status.unverified++;continue}
-        if(!isBrusselsListing(row,item.url)){status.outsideRegion++;continue}
-        if(hasDeferredPriceStructure(row)){status.deferredPrice++;continue}
+        if(category!=='building'&&!isBrusselsListing(row,item.url)){status.outsideRegion++;continue}
+        if(category!=='building'&&hasDeferredPriceStructure(row)){status.deferredPrice++;continue}
         const type=correctedType(row,item.url,category);
         if(type==='unknown'){status.typeRejected++;continue}
         const price=correctedPrice(row,item.html,maxPrice);
