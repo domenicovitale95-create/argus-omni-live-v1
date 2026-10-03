@@ -1,6 +1,7 @@
 import {fetchHtml,extractListing,isUnavailableListing,isConfirmedActiveListing} from './immo-listing-scan.js';
 import {linksFrom,buildSourcePageUrls} from './immo-discovery-scan.js';
 import {isBrusselsListing,hasDeferredPriceStructure} from './immo-region.js';
+import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE,matchesBuildingCriteria,enrichBuildingCriteria} from './immo-building-criteria.js';
 
 const APARTMENT_SOURCES=[
   {id:'immoweb-apartment',name:'Immoweb · appartements',url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\/fr\/annonce\//i,pages:20},
@@ -16,15 +17,15 @@ const APARTMENT_SOURCES=[
   {id:'properstar',name:'Properstar',url:'https://www.properstar.be/belgique/bruxelles/acheter/appartement/plus-recents',match:/\/annonce\/\d+/i}
 ];
 const BUILDING_SOURCES=[
-  {id:'immoweb-building',name:'Immoweb · immeubles',url:'https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?maxprice=400000',match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
-  {id:'immovlan-building',name:'Immovlan · immeubles',url:'https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?maxprice=400000&provinces=bruxelles',match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20}
+  {id:'immoweb-building',name:'Immoweb · immeubles',url:`https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?minprice=${BUILDING_MIN_PRICE}&maxprice=${BUILDING_MAX_PRICE}`,match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
+  {id:'immovlan-building',name:'Immovlan · immeubles',url:`https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?minprice=${BUILDING_MIN_PRICE}&maxprice=${BUILDING_MAX_PRICE}&provinces=bruxelles`,match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20}
 ];
 const SEARCH_TIMEOUT=7000,DETAIL_TIMEOUT=8500,DETAIL_CONCURRENCY=12,MAX_LINKS_PER_SOURCE=1000;
 
 async function fetchSearch(url){
   const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),SEARCH_TIMEOUT);
   try{
-    const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{'user-agent':'Mozilla/5.0 (compatible; ArgusImmoCatalog/2.2; +https://argus-omni-live.vercel.app/immo-opportunities)','accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=.9,nl;q=.8,en;q=.7'}});
+    const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{'user-agent':'Mozilla/5.0 (compatible; ArgusImmoCatalog/2.4; +https://argus-omni-live.vercel.app/immo-opportunities)','accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=.9,nl;q=.8,en;q=.7'}});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const ct=r.headers.get('content-type')||'';if(!ct.includes('text/html'))throw new Error('not HTML');
     return {url:r.url||url,text:(await r.text()).slice(0,2200000)};
@@ -76,8 +77,8 @@ function keyFor(x={}){
   if(raw){try{const u=new URL(raw);const host=u.hostname.toLowerCase().replace(/^www\./,'');const id=u.pathname.match(/\/(\d+)\/?$/);if(host==='immoweb.be'&&id)return 'immoweb:'+id[1];for(const k of [...u.searchParams.keys()])if(/^utm_/i.test(k)||['s','source','ref','tracking'].includes(k.toLowerCase()))u.searchParams.delete(k);u.hash='';return u.toString().replace(/\/$/,'').toLowerCase()}catch{return raw.toLowerCase()}}
   return [x.address||x.city||'',x.price||'',x.surface||'',x.bedrooms??''].join('|').toLowerCase();
 }
-async function scanSource(source,category,maxPrice){
-  const status={id:source.id,name:source.name,reachable:false,pagesReached:0,linksFound:0,detailsRead:0,activeEligible:0,unavailable:0,unverified:0,outsideRegion:0,deferredPrice:0,outsidePrice:0,typeRejected:0,detailFailed:0,error:null};
+async function scanSource(source,category,maxPrice,minPrice){
+  const status={id:source.id,name:source.name,reachable:false,pagesReached:0,linksFound:0,detailsRead:0,activeEligible:0,unavailable:0,unverified:0,outsideRegion:0,deferredPrice:0,outsidePrice:0,typeRejected:0,criteriaRejected:0,detailFailed:0,error:null};
   const links=[],seen=new Set();
   try{
     for(const pageUrl of buildSourcePageUrls(source)){
@@ -95,7 +96,7 @@ async function scanSource(source,category,maxPrice){
       }));
       for(const item of batch){
         if(item.error){status.detailFailed++;continue}
-        status.detailsRead++;const row=item.row;
+        status.detailsRead++;let row=item.row;
         if(isUnavailableListing(row)){status.unavailable++;continue}
         if(!isConfirmedActiveListing(row)){status.unverified++;continue}
         if(!isBrusselsListing(row,item.url)){status.outsideRegion++;continue}
@@ -103,8 +104,13 @@ async function scanSource(source,category,maxPrice){
         const type=correctedType(row,item.url,category);
         if(type==='unknown'){status.typeRejected++;continue}
         const price=correctedPrice(row,item.html,maxPrice);
-        if(!Number.isFinite(price)||price<40000||price>maxPrice){status.outsidePrice++;continue}
-        rows.push({...row,price,type,category,canonical:String(row.canonical||item.url),discoveredFrom:source.id,discoveredAt:new Date().toISOString(),availabilityStatus:'ACTIVE'});status.activeEligible++;
+        if(!Number.isFinite(price)||price<minPrice||price>maxPrice){status.outsidePrice++;continue}
+        row={...row,price,type,category,canonical:String(row.canonical||item.url),discoveredFrom:source.id,discoveredAt:new Date().toISOString(),availabilityStatus:'ACTIVE'};
+        if(category==='building'){
+          row=enrichBuildingCriteria(row);
+          if(!matchesBuildingCriteria(row)){status.criteriaRejected++;continue}
+        }
+        rows.push(row);status.activeEligible++;
       }
     }
     return {status,rows};
@@ -114,9 +120,9 @@ export default async function handler(req,res){
   res.setHeader('Cache-Control','no-store');
   if(req.method!=='POST')return res.status(405).json({ok:false,error:'POST required'});
   try{
-    const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});const category=raw.category==='building'?'building':'apartment';const maxPrice=Math.max(50000,Math.min(1000000,Number(raw.maxPrice)||(category==='building'?400000:150000)));const sources=category==='building'?BUILDING_SOURCES:APARTMENT_SOURCES;
-    const results=await Promise.all(sources.map(s=>scanSource(s,category,maxPrice))),map=new Map();for(const r of results)for(const row of r.rows){const k=keyFor(row);if(k&&!map.has(k))map.set(k,row)}
+    const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});const category=raw.category==='building'?'building':'apartment';const defaultMax=category==='building'?BUILDING_MAX_PRICE:150000;const defaultMin=category==='building'?BUILDING_MIN_PRICE:40000;const maxPrice=Math.max(defaultMin,Math.min(1500000,Number(raw.maxPrice)||defaultMax));const minPrice=Math.max(40000,Math.min(maxPrice,Number(raw.minPrice)||defaultMin));const sources=category==='building'?BUILDING_SOURCES:APARTMENT_SOURCES;
+    const results=await Promise.all(sources.map(s=>scanSource(s,category,maxPrice,minPrice))),map=new Map();for(const r of results)for(const row of r.rows){const k=keyFor(row);if(k&&!map.has(k))map.set(k,row)}
     const listings=[...map.values()].sort((a,b)=>Number(a.price)-Number(b.price));
-    return res.status(200).json({ok:true,category,scannedAt:new Date().toISOString(),maxPrice,sourceStatus:results.map(r=>r.status),coverage:{complete:results.every(r=>r.status.reachable&&!r.status.error),sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length},totals:{linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),detailsRead:results.reduce((n,r)=>n+r.status.detailsRead,0),eligibleAfterDedup:listings.length,unavailable:results.reduce((n,r)=>n+r.status.unavailable,0),unverified:results.reduce((n,r)=>n+r.status.unverified,0),outsideRegion:results.reduce((n,r)=>n+r.status.outsideRegion,0),deferredPrice:results.reduce((n,r)=>n+r.status.deferredPrice,0),outsidePrice:results.reduce((n,r)=>n+r.status.outsidePrice,0),typeRejected:results.reduce((n,r)=>n+r.status.typeRejected,0),detailFailed:results.reduce((n,r)=>n+r.status.detailFailed,0)},listings,notice:'Catalogue scanner 2.2: Brussels-Capital perimeter is enforced before ranking; deferred-price/annuity structures are excluded; listing type and portal prices are revalidated before price-box filtering.'});
+    return res.status(200).json({ok:true,category,scannedAt:new Date().toISOString(),minPrice,maxPrice,sourceStatus:results.map(r=>r.status),coverage:{complete:results.every(r=>r.status.reachable&&!r.status.error),sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length},totals:{linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),detailsRead:results.reduce((n,r)=>n+r.status.detailsRead,0),eligibleAfterDedup:listings.length,unavailable:results.reduce((n,r)=>n+r.status.unavailable,0),unverified:results.reduce((n,r)=>n+r.status.unverified,0),outsideRegion:results.reduce((n,r)=>n+r.status.outsideRegion,0),deferredPrice:results.reduce((n,r)=>n+r.status.deferredPrice,0),outsidePrice:results.reduce((n,r)=>n+r.status.outsidePrice,0),typeRejected:results.reduce((n,r)=>n+r.status.typeRejected,0),criteriaRejected:results.reduce((n,r)=>n+r.status.criteriaRejected,0),detailFailed:results.reduce((n,r)=>n+r.status.detailFailed,0)},listings,notice:category==='building'?'Catalogue immeubles: Auderghem, Ixelles, Uccle, Forest, Watermael-Boitsfort; Saint-Gilles exclu; 3 à 6 appartements; 600 k€ à 1,2 M€; tri prix croissant.':'Catalogue scanner appartements.'});
   }catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
 }
