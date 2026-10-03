@@ -1,7 +1,7 @@
 import {fetchHtml,extractListing,isUnavailableListing,isConfirmedActiveListing} from './immo-listing-scan.js';
 import {linksFrom,buildSourcePageUrls} from './immo-discovery-scan.js';
 import {isBrusselsListing,hasDeferredPriceStructure} from './immo-region.js';
-import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE,matchesBuildingCriteria,enrichBuildingCriteria} from './immo-building-criteria.js';
+import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE,matchesBuildingCriteria,enrichBuildingCriteria,buildingZone,buildingUnitCount} from './immo-building-criteria.js';
 
 const APARTMENT_SOURCES=[
   {id:'immoweb-apartment',name:'Immoweb · appartements',url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\/fr\/annonce\//i,pages:20},
@@ -25,7 +25,7 @@ const SEARCH_TIMEOUT=7000,DETAIL_TIMEOUT=8500,DETAIL_CONCURRENCY=12,MAX_LINKS_PE
 async function fetchSearch(url){
   const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),SEARCH_TIMEOUT);
   try{
-    const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{'user-agent':'Mozilla/5.0 (compatible; ArgusImmoCatalog/2.4; +https://argus-omni-live.vercel.app/immo-opportunities)','accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=.9,nl;q=.8,en;q=.7'}});
+    const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{'user-agent':'Mozilla/5.0 (compatible; ArgusImmoCatalog/2.5; +https://argus-omni-live.vercel.app/immo-opportunities)','accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=.9,nl;q=.8,en;q=.7'}});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const ct=r.headers.get('content-type')||'';if(!ct.includes('text/html'))throw new Error('not HTML');
     return {url:r.url||url,text:(await r.text()).slice(0,2200000)};
@@ -72,13 +72,37 @@ function correctedPrice(row={},html='',maxPrice=150000){
   for(const re of jsonPatterns){const m=head.match(re);if(m){const n=Number(m[1]);if(n>=40000&&n<=Math.max(5000000,maxPrice*20))return n}}
   const n=Number(row.price);return Number.isFinite(n)?n:null;
 }
+function decodedPageText(html=''){
+  return String(html)
+    .replace(/\\u([0-9a-fA-F]{4})/g,(_,h)=>String.fromCharCode(parseInt(h,16)))
+    .replace(/\\n|\\r|\\t/g,' ')
+    .replace(/&nbsp;|&#160;|\u00a0/gi,' ')
+    .replace(/&amp;/gi,'&').replace(/&#39;|&apos;/gi,"'").replace(/&quot;/gi,'"')
+    .replace(/<[^>]*>/g,' ').replace(/\s+/g,' ')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+}
+function inferredBuildingUnits(html='',row={}){
+  const existing=buildingUnitCount(row);if(existing!==null)return existing;
+  const text=decodedPageText(html).slice(0,900000);
+  const patterns=[
+    /\b([3-6])\s*(?:appartements?|logements?|unites?|units?|wooneenheden)\b/i,
+    /\b(?:immeuble|batiment|gebouw|building)[^.!?]{0,160}\b([3-6])\s*(?:appartements?|logements?|unites?|units?|wooneenheden)\b/i,
+    /\b(?:compose|composee|comprend|comprenant|divise|divisee|reparti|repartie)[^.!?]{0,60}\b([3-6])\s*(?:appartements?|logements?|unites?)\b/i,
+    /\b(?:trois|quatre|cinq|six)\s*(?:appartements?|logements?|unites?)\b/i,
+    /\b(?:drie|vier|vijf|zes)\s*(?:appartementen|woningen|wooneenheden)\b/i,
+    /\b(?:three|four|five|six)\s*(?:apartments?|units?)\b/i
+  ];
+  const words={trois:3,quatre:4,cinq:5,six:6,drie:3,vier:4,vijf:5,zes:6,three:3,four:4,five:5};
+  for(const re of patterns){const m=text.match(re);if(m){if(m[1])return Number(m[1]);const token=(m[0].match(/trois|quatre|cinq|six|drie|vier|vijf|zes|three|four|five/i)||[])[0];if(token&&words[token.toLowerCase()])return words[token.toLowerCase()];}}
+  return null;
+}
 function keyFor(x={}){
   const raw=String(x.canonical||'').trim();
   if(raw){try{const u=new URL(raw);const host=u.hostname.toLowerCase().replace(/^www\./,'');const id=u.pathname.match(/\/(\d+)\/?$/);if(host==='immoweb.be'&&id)return 'immoweb:'+id[1];for(const k of [...u.searchParams.keys()])if(/^utm_/i.test(k)||['s','source','ref','tracking'].includes(k.toLowerCase()))u.searchParams.delete(k);u.hash='';return u.toString().replace(/\/$/,'').toLowerCase()}catch{return raw.toLowerCase()}}
   return [x.address||x.city||'',x.price||'',x.surface||'',x.bedrooms??''].join('|').toLowerCase();
 }
 async function scanSource(source,category,maxPrice,minPrice){
-  const status={id:source.id,name:source.name,reachable:false,pagesReached:0,linksFound:0,detailsRead:0,activeEligible:0,unavailable:0,unverified:0,outsideRegion:0,deferredPrice:0,outsidePrice:0,typeRejected:0,criteriaRejected:0,detailFailed:0,error:null};
+  const status={id:source.id,name:source.name,reachable:false,pagesReached:0,linksFound:0,detailsRead:0,activeEligible:0,unavailable:0,unverified:0,outsideRegion:0,deferredPrice:0,outsidePrice:0,typeRejected:0,criteriaRejected:0,zoneRejected:0,unitCountRejected:0,detailFailed:0,error:null};
   const links=[],seen=new Set();
   try{
     for(const pageUrl of buildSourcePageUrls(source)){
@@ -107,7 +131,12 @@ async function scanSource(source,category,maxPrice,minPrice){
         if(!Number.isFinite(price)||price<minPrice||price>maxPrice){status.outsidePrice++;continue}
         row={...row,price,type,category,canonical:String(row.canonical||item.url),discoveredFrom:source.id,discoveredAt:new Date().toISOString(),availabilityStatus:'ACTIVE'};
         if(category==='building'){
+          const inferredUnits=inferredBuildingUnits(item.html,row);
+          if(inferredUnits!==null)row={...row,numberOfUnits:inferredUnits};
           row=enrichBuildingCriteria(row);
+          const zone=buildingZone(row),units=buildingUnitCount(row);
+          if(zone===null)status.zoneRejected++;
+          else if(units===null||units<3||units>6)status.unitCountRejected++;
           if(!matchesBuildingCriteria(row)){status.criteriaRejected++;continue}
         }
         rows.push(row);status.activeEligible++;
@@ -123,6 +152,6 @@ export default async function handler(req,res){
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});const category=raw.category==='building'?'building':'apartment';const defaultMax=category==='building'?BUILDING_MAX_PRICE:150000;const defaultMin=category==='building'?BUILDING_MIN_PRICE:40000;const maxPrice=Math.max(defaultMin,Math.min(1500000,Number(raw.maxPrice)||defaultMax));const minPrice=Math.max(40000,Math.min(maxPrice,Number(raw.minPrice)||defaultMin));const sources=category==='building'?BUILDING_SOURCES:APARTMENT_SOURCES;
     const results=await Promise.all(sources.map(s=>scanSource(s,category,maxPrice,minPrice))),map=new Map();for(const r of results)for(const row of r.rows){const k=keyFor(row);if(k&&!map.has(k))map.set(k,row)}
     const listings=[...map.values()].sort((a,b)=>Number(a.price)-Number(b.price));
-    return res.status(200).json({ok:true,category,scannedAt:new Date().toISOString(),minPrice,maxPrice,sourceStatus:results.map(r=>r.status),coverage:{complete:results.every(r=>r.status.reachable&&!r.status.error),sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length},totals:{linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),detailsRead:results.reduce((n,r)=>n+r.status.detailsRead,0),eligibleAfterDedup:listings.length,unavailable:results.reduce((n,r)=>n+r.status.unavailable,0),unverified:results.reduce((n,r)=>n+r.status.unverified,0),outsideRegion:results.reduce((n,r)=>n+r.status.outsideRegion,0),deferredPrice:results.reduce((n,r)=>n+r.status.deferredPrice,0),outsidePrice:results.reduce((n,r)=>n+r.status.outsidePrice,0),typeRejected:results.reduce((n,r)=>n+r.status.typeRejected,0),criteriaRejected:results.reduce((n,r)=>n+r.status.criteriaRejected,0),detailFailed:results.reduce((n,r)=>n+r.status.detailFailed,0)},listings,notice:category==='building'?'Catalogue immeubles: Auderghem, Ixelles, Uccle, Forest, Watermael-Boitsfort; Saint-Gilles exclu; 3 à 6 appartements; 600 k€ à 1,2 M€; tri prix croissant.':'Catalogue scanner appartements.'});
+    return res.status(200).json({ok:true,category,scannedAt:new Date().toISOString(),minPrice,maxPrice,sourceStatus:results.map(r=>r.status),coverage:{complete:results.every(r=>r.status.reachable&&!r.status.error),sourcesConfigured:sources.length,sourcesReached:results.filter(r=>r.status.reachable).length},totals:{linksFound:results.reduce((n,r)=>n+r.status.linksFound,0),detailsRead:results.reduce((n,r)=>n+r.status.detailsRead,0),eligibleAfterDedup:listings.length,unavailable:results.reduce((n,r)=>n+r.status.unavailable,0),unverified:results.reduce((n,r)=>n+r.status.unverified,0),outsideRegion:results.reduce((n,r)=>n+r.status.outsideRegion,0),deferredPrice:results.reduce((n,r)=>n+r.status.deferredPrice,0),outsidePrice:results.reduce((n,r)=>n+r.status.outsidePrice,0),typeRejected:results.reduce((n,r)=>n+r.status.typeRejected,0),criteriaRejected:results.reduce((n,r)=>n+r.status.criteriaRejected,0),zoneRejected:results.reduce((n,r)=>n+r.status.zoneRejected,0),unitCountRejected:results.reduce((n,r)=>n+r.status.unitCountRejected,0),detailFailed:results.reduce((n,r)=>n+r.status.detailFailed,0)},listings,notice:category==='building'?'Catalogue immeubles: Auderghem, Ixelles, Uccle, Forest, Watermael-Boitsfort; Saint-Gilles exclu; 3 à 6 appartements; 600 k€ à 1,2 M€; tri prix croissant.':'Catalogue scanner appartements.'});
   }catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
 }
