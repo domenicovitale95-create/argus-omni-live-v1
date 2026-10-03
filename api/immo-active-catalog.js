@@ -1,6 +1,7 @@
 import {readJsonFresh} from './_report-store.js';
 import {isBrusselsListing,hasDeferredPriceStructure} from './immo-region.js';
 import {isUserExcludedListing} from './immo-user-exclusions.js';
+import {matchesBuildingCriteria,enrichBuildingCriteria} from './immo-building-criteria.js';
 
 const PATHS={
   apartment:'argus/immo/active-catalog-apartment.json',
@@ -8,6 +9,7 @@ const PATHS={
 };
 
 function normalizeCategory(value){return value==='building'?'building':'apartment'}
+function price(x){const n=Number(x?.price);return Number.isFinite(n)?n:Infinity}
 
 export default async function handler(req,res){
   res.setHeader('Cache-Control','private, no-store, no-cache, must-revalidate, max-age=0');
@@ -20,20 +22,29 @@ export default async function handler(req,res){
     const data=await readJsonFresh(PATHS[category],null);
     if(!data)return res.status(200).json({ok:true,category,ready:false,refreshedAt:null,counts:{active:0,quarantined:0},listings:[],notice:'Le catalogue persistant sera disponible après le premier rafraîchissement automatique.'});
     const storedActive=(data.listings||[]).filter(x=>String(x.availabilityStatus||'').toUpperCase()==='ACTIVE');
-    const scopeEligible=storedActive.filter(x=>isBrusselsListing(x,x.canonical||x.source)&&!hasDeferredPriceStructure(x));
-    const listings=scopeEligible.filter(x=>!isUserExcludedListing(x,category));
-    const filteredOutsideScope=Math.max(0,storedActive.length-scopeEligible.length);
-    const filteredUserCriteria=Math.max(0,scopeEligible.length-listings.length);
+    let listings,filteredOutsideScope=0,filteredUserCriteria=0;
+    if(category==='building'){
+      const enriched=storedActive.map(enrichBuildingCriteria);
+      listings=enriched.filter(matchesBuildingCriteria).sort((a,b)=>price(a)-price(b));
+      filteredOutsideScope=Math.max(0,storedActive.length-listings.length);
+    }else{
+      const scopeEligible=storedActive.filter(x=>isBrusselsListing(x,x.canonical||x.source)&&!hasDeferredPriceStructure(x));
+      listings=scopeEligible.filter(x=>!isUserExcludedListing(x,'apartment'));
+      filteredOutsideScope=Math.max(0,storedActive.length-scopeEligible.length);
+      filteredUserCriteria=Math.max(0,scopeEligible.length-listings.length);
+    }
     return res.status(200).json({
       ok:true,
       ready:true,
       category,
       refreshedAt:data.refreshedAt||null,
+      minPrice:data.minPrice||null,
       maxPrice:data.maxPrice||null,
+      criteria:category==='building'?{zones:['Auderghem','Ixelles','Uccle','Forest','Watermael-Boitsfort'],excludedZones:['Saint-Gilles'],apartments:[3,4,5,6],minPrice:600000,maxPrice:1200000,sort:'price_asc'}:null,
       counts:{...(data.counts||{}),active:listings.length,filteredOutsideScope,filteredUserCriteria},
       discovery:data.discovery||null,
       listings,
-      notice:'Catalogue ARGUS persistant limité à Bruxelles-Capitale : seules les annonces actives, dans la région, sans structure de prix différé et conformes aux exclusions personnelles ARGUS sont affichées.'
+      notice:category==='building'?'Catalogue immeubles filtré uniquement sur les nouveaux critères et trié par prix croissant.':'Catalogue ARGUS appartements actif.'
     });
   }catch(e){
     return res.status(500).json({ok:false,error:String(e?.message||e)});
