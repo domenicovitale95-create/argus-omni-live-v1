@@ -13,19 +13,25 @@ const APARTMENT_SOURCES=[
   {id:'century21',name:'CENTURY 21',url:'https://www.century21.be/fr/a-vendre',match:/\/fr\/properiete\/a-vendre\//i},
   {id:'victoire',name:'Victoire-Junot',url:'https://victoire.be/fr/a-vendre/all/1?sort=price-asc&view=list',match:/(a-vendre|for-sale|te-koop|bien|property)/i},
   {id:'era',name:'ERA',url:'https://www.era.be/fr/a-vendre/bruxelles/appartement',match:/\/fr\/a-vendre\/[^/]+\/appartement\/.+/i},
+  {id:'era-chatelain',name:'ERA Châtelain',url:'https://www.era.be/fr/a-vendre?broker_id=6000159',match:/\/fr\/a-vendre\/[^/]+\/(?:appartement|studio|penthouse|duplex|loft)\/.+/i,pages:20},
+  {id:'oralis-sales',name:'Oralis Real Estate',url:'https://oralis.be/fr/a-vendre',match:/\/(?:fr|en|nl)\/property\/for-sale\/[^/]+\/[^/]+\/\d+/i,pages:20},
+  {id:'oralis-home',name:'Oralis Real Estate · sélection',url:'https://oralis.be/fr',match:/\/(?:fr|en|nl)\/property\/for-sale\/[^/]+\/[^/]+\/\d+/i},
   {id:'weinvest',name:'We Invest',url:'https://weinvest.be/fr-BE/properties/for-sale/apartment/city/bruxelles',match:/\/fr-BE\/property\/for-sale\/[^/]+\/apartment\/\d+/i},
   {id:'properstar',name:'Properstar',url:'https://www.properstar.be/belgique/bruxelles/acheter/appartement/plus-recents',match:/\/annonce\/\d+/i}
 ];
 const BUILDING_SOURCES=[
   {id:'immoweb-building',name:'Immoweb · immeubles',url:`https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?minprice=${BUILDING_MIN_PRICE}&maxprice=${BUILDING_MAX_PRICE}`,match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
-  {id:'immovlan-building',name:'Immovlan · immeubles',url:`https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?minprice=${BUILDING_MIN_PRICE}&maxprice=${BUILDING_MAX_PRICE}&provinces=bruxelles`,match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20}
+  {id:'immovlan-building',name:'Immovlan · immeubles',url:`https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?minprice=${BUILDING_MIN_PRICE}&maxprice=${BUILDING_MAX_PRICE}&provinces=bruxelles`,match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20},
+  {id:'era-chatelain-building',name:'ERA Châtelain · immeubles',url:'https://www.era.be/fr/a-vendre?broker_id=6000159',match:/\/fr\/a-vendre\/[^/]+\/(?:immeuble|immeuble-de-rapport|maison|autre)\/.+/i,pages:20},
+  {id:'oralis-building',name:'Oralis Real Estate · immeubles',url:'https://oralis.be/fr/a-vendre',match:/\/(?:fr|en|nl)\/property\/for-sale\/[^/]+\/[^/]+\/\d+/i,pages:20},
+  {id:'oralis-building-home',name:'Oralis Real Estate · sélection immeubles',url:'https://oralis.be/fr',match:/\/(?:fr|en|nl)\/property\/for-sale\/[^/]+\/[^/]+\/\d+/i}
 ];
 const SEARCH_TIMEOUT=7000,DETAIL_TIMEOUT=8500,DETAIL_CONCURRENCY=12,MAX_LINKS_PER_SOURCE=1000;
 
 async function fetchSearch(url){
   const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),SEARCH_TIMEOUT);
   try{
-    const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{'user-agent':'Mozilla/5.0 (compatible; ArgusImmoCatalog/2.5; +https://argus-omni-live.vercel.app/immo-opportunities)','accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=.9,nl;q=.8,en;q=.7'}});
+    const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{'user-agent':'Mozilla/5.0 (compatible; ArgusImmoCatalog/2.6; +https://argus-omni-live.vercel.app/immo-opportunities)','accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=.9,nl;q=.8,en;q=.7'}});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const ct=r.headers.get('content-type')||'';if(!ct.includes('text/html'))throw new Error('not HTML');
     return {url:r.url||url,text:(await r.text()).slice(0,2200000)};
@@ -39,7 +45,7 @@ function correctedType(row={},url='',category='apartment'){
     return row.type==='building'?'building':'unknown';
   }
   if(/\bstudio\b|\bkot\b/.test(head)||/\/studio(?:\/|$)/.test(path))return 'studio';
-  if(/appartement|apartment|\bflat\b|duplex|penthouse/.test(head)||/\/appartement(?:\/|$)|\/apartment(?:\/|$)/.test(path))return 'apartment';
+  if(/appartement|apartment|\bflat\b|duplex|penthouse/.test(head)||/\/appartement(?:\/|$)|\/apartment(?:\/|$)|\/flat(?:\/|$)/.test(path))return 'apartment';
   if(['apartment','studio'].includes(row.type))return row.type;
   return 'unknown';
 }
@@ -60,15 +66,9 @@ function euroAmount(text=''){
 function correctedPrice(row={},html='',maxPrice=150000){
   const titleTag=(String(html).match(/<title[^>]*>([\s\S]*?)<\/title>/i)||[])[1]||'';
   const ogTitle=(String(html).match(/<meta[^>]+(?:property|name)=["']og:title["'][^>]+content=["']([^"']*)["']/i)||[])[1]||'';
-  for(const text of [titleTag,ogTitle,row.title,row.description]){
-    const n=euroAmount(text);if(n!=null)return n;
-  }
+  for(const text of [titleTag,ogTitle,row.title,row.description]){const n=euroAmount(text);if(n!=null)return n}
   const head=String(html).slice(0,220000);
-  const jsonPatterns=[
-    /"price"\s*:\s*"?([0-9]{4,8})"?/i,
-    /"mainPrice"\s*:\s*"?([0-9]{4,8})"?/i,
-    /"transactionPrice"\s*:\s*"?([0-9]{4,8})"?/i
-  ];
+  const jsonPatterns=[/"price"\s*:\s*"?([0-9]{4,8})"?/i,/"mainPrice"\s*:\s*"?([0-9]{4,8})"?/i,/"transactionPrice"\s*:\s*"?([0-9]{4,8})"?/i];
   for(const re of jsonPatterns){const m=head.match(re);if(m){const n=Number(m[1]);if(n>=40000&&n<=Math.max(5000000,maxPrice*20))return n}}
   const n=Number(row.price);return Number.isFinite(n)?n:null;
 }
@@ -93,7 +93,7 @@ function inferredBuildingUnits(html='',row={}){
     /\b(?:three|four|five|six)\s*(?:apartments?|units?)\b/i
   ];
   const words={trois:3,quatre:4,cinq:5,six:6,drie:3,vier:4,vijf:5,zes:6,three:3,four:4,five:5};
-  for(const re of patterns){const m=text.match(re);if(m){if(m[1])return Number(m[1]);const token=(m[0].match(/trois|quatre|cinq|six|drie|vier|vijf|zes|three|four|five/i)||[])[0];if(token&&words[token.toLowerCase()])return words[token.toLowerCase()];}}
+  for(const re of patterns){const m=text.match(re);if(m){if(m[1])return Number(m[1]);const token=(m[0].match(/trois|quatre|cinq|six|drie|vier|vijf|zes|three|four|five/i)||[])[0];if(token&&words[token.toLowerCase()])return words[token.toLowerCase()]}}
   return null;
 }
 function keyFor(x={}){
@@ -115,9 +115,7 @@ async function scanSource(source,category,maxPrice,minPrice){
     status.linksFound=links.length;
     const rows=[];
     for(let i=0;i<links.length;i+=DETAIL_CONCURRENCY){
-      const batch=await Promise.all(links.slice(i,i+DETAIL_CONCURRENCY).map(async url=>{
-        try{const page=await fetchHtml(url,DETAIL_TIMEOUT);return {url:page.url||url,html:page.html,row:extractListing(page.html,page.url||url)}}catch(e){return {url,error:String(e?.message||e)}}
-      }));
+      const batch=await Promise.all(links.slice(i,i+DETAIL_CONCURRENCY).map(async url=>{try{const page=await fetchHtml(url,DETAIL_TIMEOUT);return {url:page.url||url,html:page.html,row:extractListing(page.html,page.url||url)}}catch(e){return {url,error:String(e?.message||e)}}}));
       for(const item of batch){
         if(item.error){status.detailFailed++;continue}
         status.detailsRead++;let row=item.row;
@@ -131,12 +129,9 @@ async function scanSource(source,category,maxPrice,minPrice){
         if(!Number.isFinite(price)||price<minPrice||price>maxPrice){status.outsidePrice++;continue}
         row={...row,price,type,category,canonical:String(row.canonical||item.url),discoveredFrom:source.id,discoveredAt:new Date().toISOString(),availabilityStatus:'ACTIVE'};
         if(category==='building'){
-          const inferredUnits=inferredBuildingUnits(item.html,row);
-          if(inferredUnits!==null)row={...row,numberOfUnits:inferredUnits};
-          row=enrichBuildingCriteria(row);
-          const zone=buildingZone(row),units=buildingUnitCount(row);
-          if(zone===null)status.zoneRejected++;
-          else if(units===null||units<3||units>6)status.unitCountRejected++;
+          const inferredUnits=inferredBuildingUnits(item.html,row);if(inferredUnits!==null)row={...row,numberOfUnits:inferredUnits};
+          row=enrichBuildingCriteria(row);const zone=buildingZone(row),units=buildingUnitCount(row);
+          if(zone===null)status.zoneRejected++;else if(units===null||units<3||units>6)status.unitCountRejected++;
           if(!matchesBuildingCriteria(row)){status.criteriaRejected++;continue}
         }
         rows.push(row);status.activeEligible++;
