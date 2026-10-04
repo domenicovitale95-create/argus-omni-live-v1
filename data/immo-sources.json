@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "updatedAt": "2026-09-21T21:55:00+02:00",
+  "version": 3,
+  "updatedAt": "2026-10-04T08:00:00+02:00",
   "principle": "Coverage is explicit: a source is never marked scanned unless ARGUS actually reached it.",
   "sources": [
     {"id":"immoweb","name":"Immoweb","category":"portal","host":"immoweb.be","discovery":"live","url":"https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000"},
@@ -10,6 +10,8 @@
     {"id":"properstar","name":"Properstar","category":"portal","host":"properstar.be","discovery":"live","url":"https://www.properstar.be/belgique/bruxelles/acheter/appartement/plus-recents"},
     {"id":"century21","name":"CENTURY 21 Belgium","category":"agency-network","host":"century21.be","discovery":"live","url":"https://www.century21.be/fr/a-vendre"},
     {"id":"era","name":"ERA","category":"agency-network","host":"era.be","discovery":"live","url":"https://www.era.be/fr/a-vendre/bruxelles/appartement"},
+    {"id":"era-chatelain","name":"ERA Châtelain","category":"agency","host":"era.be","discovery":"live","url":"https://www.era.be/fr/a-vendre?broker_id=6000159"},
+    {"id":"oralis","name":"Oralis Real Estate","category":"agency","host":"oralis.be","discovery":"live","url":"https://oralis.be/fr/a-vendre"},
     {"id":"weinvest","name":"We Invest","category":"agency-network","host":"weinvest.be","discovery":"live","url":"https://weinvest.be/fr-BE/properties/for-sale/apartment/city/bruxelles"},
     {"id":"victoire","name":"Victoire Junot","category":"agency","host":"victoire.be","discovery":"live","url":"https://victoire.be/fr/a-vendre/all/1?sort=price-asc&view=list"},
     {"id":"realo","name":"Realo","category":"portal","host":"realo.be","discovery":"direct","url":"https://www.realo.be/fr"},
