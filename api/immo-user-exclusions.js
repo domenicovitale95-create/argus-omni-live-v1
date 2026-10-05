@@ -24,27 +24,11 @@ function normalizedText(x={}){
 }
 
 export function detectedCoproUnits(x={}){
-  const explicit=[
-    x.coproUnits,x.coOwnershipUnits,x.coproprieteUnits,x.copropriétéUnits,
-    x.totalUnits,x.unitCount,x.numberOfUnits,x.totalLots,x.lotCount,x.numberOfLots
-  ];
-  for(const value of explicit){
-    const n=finiteNumber(value);
-    if(n!==null&&n>0)return Math.round(n);
-  }
+  const explicit=[x.coproUnits,x.coOwnershipUnits,x.coproprieteUnits,x.copropriétéUnits,x.totalUnits,x.unitCount,x.numberOfUnits,x.totalLots,x.lotCount,x.numberOfLots];
+  for(const value of explicit){const n=finiteNumber(value);if(n!==null&&n>0)return Math.round(n);}
   const s=normalizedText(x);
-  const patterns=[
-    /(?:copropriete|co-?ownership|mede-?eigendom)[^0-9]{0,45}(\d{1,3})\s*(?:lots?|unites?|units?|appartements?|apartments?|logements?)/i,
-    /(?:immeuble|residence|gebouw|building)[^0-9]{0,45}(\d{1,3})\s*(?:lots?|unites?|units?|appartements?|apartments?|logements?)/i,
-    /(\d{1,3})\s*(?:lots?|unites?|units?|appartements?|apartments?|logements?)[^.!?]{0,55}(?:copropriete|co-?ownership|mede-?eigendom)/i
-  ];
-  for(const re of patterns){
-    const m=s.match(re);
-    if(m){
-      const n=Number(m[1]);
-      if(Number.isFinite(n)&&n>0)return n;
-    }
-  }
+  const patterns=[/(?:copropriete|co-?ownership|mede-?eigendom)[^0-9]{0,45}(\d{1,3})\s*(?:lots?|unites?|units?|appartements?|apartments?|logements?)/i,/(?:immeuble|residence|gebouw|building)[^0-9]{0,45}(\d{1,3})\s*(?:lots?|unites?|units?|appartements?|apartments?|logements?)/i,/(\d{1,3})\s*(?:lots?|unites?|units?|appartements?|apartments?|logements?)[^.!?]{0,55}(?:copropriete|co-?ownership|mede-?eigendom)/i];
+  for(const re of patterns){const m=s.match(re);if(m){const n=Number(m[1]);if(Number.isFinite(n)&&n>0)return n;}}
   return null;
 }
 
@@ -52,8 +36,7 @@ export function isLargeCopropriete(x={},category='apartment'){
   if(category==='building'||String(x.category||'').toLowerCase()==='building')return false;
   const s=normalizedText(x);
   if(/\b(?:grande|importante|vaste)\s+copropriete\b|\blarge\s+co-?ownership\b|\bgrote\s+mede-?eigendom\b/.test(s))return true;
-  const units=detectedCoproUnits(x);
-  return units!==null&&units>=LARGE_COPRO_THRESHOLD;
+  const units=detectedCoproUnits(x);return units!==null&&units>=LARGE_COPRO_THRESHOLD;
 }
 
 export function hasAuctionOrStartingPriceStructure(x={}){
@@ -99,7 +82,7 @@ export function userExclusionReasons(x={},category='apartment'){
   if(hasExplicitUrbanismInfraction(x))reasons.push('EXPLICIT_URBANISM_INFRACTION');
   else if(hasNonRegularisableUrbanism(x))reasons.push('URBANISM_NON_REGULARISABLE');
   if(hasHabitabilityOrInsalubrityBlock(x))reasons.push('INSALUBRITY_OR_UNINHABITABLE');
-  if(hasHeavyRenovationBlock(x))reasons.push('HEAVY_RENOVATION');
+  if(category!=='building'&&hasHeavyRenovationBlock(x))reasons.push('HEAVY_RENOVATION');
   if(isCollectiveStudentHousingWithoutIndependentUnits(x,category))reasons.push('COLLECTIVE_STUDENT_HOUSING_NOT_INDEPENDENT_UNITS');
   if(isLargeCopropriete(x,category))reasons.push('LARGE_COPROPRIETE');
   return reasons;
