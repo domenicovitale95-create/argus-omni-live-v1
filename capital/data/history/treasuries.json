@@ -1,6 +1,6 @@
 {
   "asset_id": "treasuries",
-  "generated_at": "2026-10-05T05:23:38.830957+00:00",
+  "generated_at": "2026-10-05T14:24:35.151315+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -484,8 +484,8 @@
       "price": 89.31
     },
     {
-      "date": "2026-10-02",
-      "price": 89.05
+      "date": "2026-10-05",
+      "price": 88.905
     }
   ]
 }
