@@ -41,7 +41,8 @@ function risks(x={}){
   if(/loue|louee|locataire|tenant|bail en cours|occupe/.test(s))out.push('Occupation / baux à auditer');
   if(/amiante|asbest/.test(s))out.push('Amiante à chiffrer');
   if(/toiture.*a refaire|roof.*replace|dak.*vernieuw/.test(s))out.push('Toiture potentiellement lourde');
-  if(!/reconnu|reconnue|urbanistique|stedenbouwkundig|regularise|autorise/.test(s))out.push('Nombre d’unités à confirmer urbanistiquement');
+  const recognized=Number(x.recognizedUnits);
+  if(!(Number.isFinite(recognized)&&recognized>0))out.push('Nombre d’unités à confirmer urbanistiquement');
   return out;
 }
 
@@ -113,6 +114,11 @@ export function analyzeFlip(x={}){
       profit:round500(profit),margin:pct(margin),stressProfit:round500(stressProfit),stressMargin:pct(stressMargin),
       maxPurchase,targetGap:round500(targetGap),score,status:status.code,statusLabel:status.label,action,
       risks:riskList,
+      confidence:{
+        urbanism:Number.isFinite(Number(x.recognizedUnits))&&Number(x.recognizedUnits)>0?'CONFIRMED':'TO_CONFIRM',
+        works:band.confidence,
+        valuation:'MODEL'
+      },
       assumptions:{acquisitionRate:ACQUISITION_RATE,holdingRate:HOLDING_RATE,exitRate:EXIT_RATE,workContingency:WORK_CONTINGENCY,targetMargin:TARGET_MARGIN,saleableFactor:pct(saleableFactor*100)}
     }
   };
