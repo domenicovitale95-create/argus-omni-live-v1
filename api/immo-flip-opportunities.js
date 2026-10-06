@@ -21,7 +21,9 @@ export default async function handler(req,res){
       ok:true,
       refreshedAt:data?.refreshedAt||null,
       methodology:flipMethodology(),
-      counts:{source:source.length,analyzed:analyzed.length,prime:analyzed.filter(x=>x.flip.status==='PRIME').length,value:analyzed.filter(x=>x.flip.status==='VALUE').length,negotiate:analyzed.filter(x=>x.flip.status==='NEGOTIATE').length,reject:analyzed.filter(x=>x.flip.status==='REJECT').length},
+      counts:{source:source.length,analyzed:analyzed.length,prime:analyzed.filter(x=>x.flip.status==='PRIME').length,value:analyzed.filter(x=>x.flip.status==='VALUE').length,negotiate:analyzed.filter(x=>x.flip.status==='NEGOTIATE').length,reject:analyzed.filter(x=>x.flip.status==='REJECT').length,new:analyzed.filter(x=>x.isNew).length,changed:analyzed.filter(x=>x.lastChangedAt).length},
+      coverage:data?.discovery?.coverage||null,
+      sourceStatus:data?.discovery?.sourceStatus||[],
       opportunities:analyzed
     });
   }catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
