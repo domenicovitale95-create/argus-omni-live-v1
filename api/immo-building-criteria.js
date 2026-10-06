@@ -72,10 +72,17 @@ export function matchesBuildingCriteria(x={}){
 export function enrichBuildingCriteria(x={}){
   const units=buildingUnitCount(x);
   const zone=buildingZone(x);
+  const explicitRecognized=Number(x.recognizedUnits);
+  const recognizedUnits=Number.isFinite(explicitRecognized)&&explicitRecognized>0?Math.round(explicitRecognized):null;
   return {
     ...x,
-    recognizedUnits:x.recognizedUnits??units,
-    unitsText:x.unitsText||(units?`${units} appartements`:'À confirmer'),
+    // Never promote an advertised/detected unit count to a legally recognized count.
+    // recognizedUnits is populated only when a source explicitly proves recognition.
+    recognizedUnits,
+    announcedUnits:x.announcedUnits??units,
+    detectedUnits:units,
+    unitsText:x.unitsText||(units?`${units} appartements annoncés`:'À confirmer'),
+    urbanismUnitStatus:recognizedUnits!==null?'CONFIRMED':'TO_CONFIRM',
     argusTargetZone:zone
   };
 }
