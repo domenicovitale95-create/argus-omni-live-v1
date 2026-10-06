@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vercel dev",
-    "postinstall": "node scripts/patch-web-push-url.mjs && node tests/immo-option-engine-regression.mjs",
+    "postinstall": "node scripts/patch-web-push-url.mjs && node tests/immo-option-engine-regression.mjs && node tests/immo-option-page-syntax.mjs",
     "test:storage": "node tests/storage-auth-regression.mjs",
     "test:market-readiness": "node tests/market-readiness-regression.mjs",
-    "test:immo-option": "node tests/immo-option-engine-regression.mjs"
+    "test:immo-option": "node tests/immo-option-engine-regression.mjs",
+    "test:immo-option-page": "node tests/immo-option-page-syntax.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",
