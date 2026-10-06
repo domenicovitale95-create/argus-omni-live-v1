@@ -132,7 +132,7 @@ export function analyzeFlip(x={}){
         urbanism:Number.isFinite(Number(x.recognizedUnits))&&Number(x.recognizedUnits)>0?'CONFIRMED':'TO_CONFIRM',
         division:'MODEL_TO_QUOTE',
         interiorWorks:'ZERO_BY_STRATEGY',
-        valuation:'MODEL'
+        valuation:'MODEL_PRIOR_ONLY'
       },
       assumptions:{acquisitionRate:ACQUISITION_RATE,holdingRate:HOLDING_RATE,exitRate:EXIT_RATE,divisionFixedReserve:DIVISION_FIXED_RESERVE,divisionPerUnitReserve:DIVISION_PER_UNIT_RESERVE,divisionContingency:DIVISION_CONTINGENCY,targetMargin:TARGET_MARGIN,saleableFactor:pct(saleableFactor*100)}
     }
@@ -143,7 +143,7 @@ export function flipMethodology(){
   return {
     name:'ARGUS SPLIT & SELL',
     objective:'Acheter un immeuble de rapport, sécuriser sa situation urbanistique et sa division en lots, puis revendre les appartements séparément sans rénovation intérieure.',
-    baseCriteria:{zones:Object.keys(ZONE_ARV),excluded:['Saint-Gilles'],units:'3–6 appartements',price:'600 k€–1,2 M€'},
+    baseCriteria:{zones:Object.keys(ZONE_ARV),excluded:['Saint-Gilles'],units:'3–6 appartements',price:'600 k€–1,4 M€'},
     strategyRules:[
       '0 € de rénovation intérieure par défaut',
       'Division juridique / copropriété / documents intégrés comme réserve séparée',
@@ -160,6 +160,6 @@ export function flipMethodology(){
       'Travaux communs lourds signalés comme risque à chiffrer séparément',
       'Prix maximum recommandé pour viser 20 % de marge sur coût total'
     ],
-    caution:'Les valeurs de revente et réserves de division sont des estimations ARGUS de tri. Les frais réels doivent être validés par notaire, géomètre/architecte et comparables de marché avant offre.'
+    caution:'Les valeurs de revente internes servent uniquement de pré-screening. Toute décision doit être recalculée avec ARGUS OPTION PRO / comparables actifs documentés, puis validée par notaire, géomètre/architecte et fiscaliste avant engagement.'
   };
 }
