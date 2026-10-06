@@ -16,6 +16,22 @@ function listingKey(x={}){
   return [x.address||x.location||x.city||'',x.price??'',x.surface??x.area??'',x.bedrooms??''].join('|').toLowerCase();
 }
 function finiteValue(v){if(v===null||v===undefined||String(v).trim()==='')return null;const n=Number(v);return Number.isFinite(n)?n:null}
+function materiallyDifferent(a,b){
+  const fields=['price','surface','area','recognizedUnits','announcedUnits','numberOfUnits','peb','epc','availabilityStatus'];
+  return fields.some(k=>String(a?.[k]??'')!==String(b?.[k]??''));
+}
+function changeSummary(old={},next={}){
+  const out=[];
+  const op=finiteValue(old.price),np=finiteValue(next.price);
+  if(op!==null&&np!==null&&op!==np)out.push({field:'price',from:op,to:np,delta:np-op});
+  const os=finiteValue(old.surface??old.area),ns=finiteValue(next.surface??next.area);
+  if(os!==null&&ns!==null&&os!==ns)out.push({field:'surface',from:os,to:ns,delta:ns-os});
+  for(const k of ['recognizedUnits','announcedUnits','numberOfUnits','peb','epc','availabilityStatus']){
+    const a=old?.[k]??null,b=next?.[k]??null;
+    if(String(a??'')!==String(b??''))out.push({field:k,from:a,to:b});
+  }
+  return out;
+}
 function normalize(x={},category,origin='discovery'){
   const canonical=String(x.canonical||x.source||'').trim(),surface=finiteValue(x.surface??x.area),price=finiteValue(x.price);
   const row={...x,category,canonical,source:canonical||x.source||'',surface:surface??x.surface??x.area??null,area:surface??x.area??x.surface??null,epc:x.epc||x.peb||null,peb:x.peb||x.epc||null,address:x.address||x.location||x.city||null,location:x.location||x.address||x.city||null,price:price??x.price??null,catalogOrigin:x.catalogOrigin||origin};
@@ -42,8 +58,31 @@ async function refreshCategory(req,category){
   const mergedValues=[...merged.values()],scopeCandidates=mergedValues.filter(x=>inCategoryScope(x,category)),excludedByUser=scopeCandidates.filter(x=>excludedByPersonalRules(x,category)),candidates=scopeCandidates.filter(x=>!excludedByPersonalRules(x,category));
   const checked=await verifyAll(candidates,confirmedKeys),active=[],quarantine=[];
   for(const x of excludedByUser){const k=listingKey(x);quarantine.push({...normalize(x,category,x.catalogOrigin||'saved'),catalogKey:k,lastCheckedAt:now,hiddenReason:userExclusionReasons(x,category).join('+')||'USER_EXCLUSION'});}
-  for(const result of checked){const k=listingKey(result.item),old=(previous?.listings||[]).find(x=>listingKey(x)===k);if(result.keep){active.push({...normalize(result.item,category,result.item.catalogOrigin||'saved'),catalogKey:k,firstSeenAt:old?.firstSeenAt||result.item.firstSeenAt||now,lastSeenAt:confirmedKeys.has(k)?now:(old?.lastSeenAt||result.item.lastSeenAt||now),lastVerifiedAt:now,availabilityStatus:'ACTIVE'})}else{quarantine.push({...normalize(result.item,category,result.item.catalogOrigin||'saved'),catalogKey:k,firstSeenAt:old?.firstSeenAt||result.item.firstSeenAt||now,lastSeenAt:old?.lastSeenAt||result.item.lastSeenAt||null,lastCheckedAt:now,hiddenReason:result.reason,verifyError:result.error||null})}}
-  active.sort((a,b)=>(finiteValue(a.price)??Infinity)-(finiteValue(b.price)??Infinity));const newlyDiscovered=discovered.filter(x=>!previousKeys.has(listingKey(x))).length;
-  const payload={version:7,category,refreshedAt:now,minPrice:category==='building'?BUILDING_MIN_PRICE:null,maxPrice:MAX[category],marketScope:category==='building'?'AUDERGHEM_IXELLES_UCCLE_FOREST_WATERMAEL_BOITSFORT':'BRUSSELS_CAPITAL_REGION',sort:'PRICE_ASC',scanError,discovery:{scannedAt:scan?.scannedAt||null,coverage:scan?.coverage||null,totals:scan?.totals||null,sourceStatus:scan?.sourceStatus||[]},counts:{active:active.length,quarantined:quarantine.length,newlyDiscovered,discoveredThisRun:discovered.length,previouslySaved:(previous?.listings||[]).length,purgedOutsideScope:Math.max(0,merged.size-scopeCandidates.length),purgedUserCriteria:excludedByUser.length},listings:active,quarantine};await writeJson(PATHS[category],payload);return payload;
+  for(const result of checked){
+    const k=listingKey(result.item),old=(previous?.listings||[]).find(x=>listingKey(x)===k);
+    if(result.keep){
+      const normalized=normalize(result.item,category,result.item.catalogOrigin||'saved');
+      const changes=old?changeSummary(old,normalized):[];
+      const changed=Boolean(old&&materiallyDifferent(old,normalized));
+      active.push({
+        ...normalized,
+        catalogKey:k,
+        firstSeenAt:old?.firstSeenAt||result.item.firstSeenAt||now,
+        lastSeenAt:confirmedKeys.has(k)?now:(old?.lastSeenAt||result.item.lastSeenAt||now),
+        lastVerifiedAt:now,
+        availabilityStatus:'ACTIVE',
+        isNew:!old,
+        lastChangedAt:changed?now:(old?.lastChangedAt||null),
+        recentChanges:changed?changes:(old?.recentChanges||[]),
+        previousPrice:changed&&changes.some(x=>x.field==='price')?finiteValue(old?.price):(old?.previousPrice??null)
+      });
+    }else{
+      quarantine.push({...normalize(result.item,category,result.item.catalogOrigin||'saved'),catalogKey:k,firstSeenAt:old?.firstSeenAt||result.item.firstSeenAt||now,lastSeenAt:old?.lastSeenAt||result.item.lastSeenAt||null,lastCheckedAt:now,hiddenReason:result.reason,verifyError:result.error||null})
+    }
+  }
+  active.sort((a,b)=>(finiteValue(a.price)??Infinity)-(finiteValue(b.price)??Infinity));
+  const newlyDiscovered=active.filter(x=>x.isNew).length;
+  const changedThisRun=active.filter(x=>x.lastChangedAt===now).length;
+  const payload={version:7,category,refreshedAt:now,minPrice:category==='building'?BUILDING_MIN_PRICE:null,maxPrice:MAX[category],marketScope:category==='building'?'AUDERGHEM_IXELLES_UCCLE_FOREST_WATERMAEL_BOITSFORT':'BRUSSELS_CAPITAL_REGION',sort:'PRICE_ASC',scanError,discovery:{scannedAt:scan?.scannedAt||null,coverage:scan?.coverage||null,totals:scan?.totals||null,sourceStatus:scan?.sourceStatus||[]},counts:{active:active.length,quarantined:quarantine.length,newlyDiscovered,changedThisRun,discoveredThisRun:discovered.length,previouslySaved:(previous?.listings||[]).length,purgedOutsideScope:Math.max(0,merged.size-scopeCandidates.length),purgedUserCriteria:excludedByUser.length},listings:active,quarantine};await writeJson(PATHS[category],payload);return payload;
 }
 export default async function handler(req,res){res.setHeader('Cache-Control','private, no-store, no-cache, must-revalidate, max-age=0');res.setHeader('CDN-Cache-Control','no-store');res.setHeader('Vercel-CDN-Cache-Control','no-store');if(!['GET','POST'].includes(req.method))return res.status(405).json({ok:false,error:'GET or POST required'});try{const q=new URL(req.url||'/',baseUrl(req)).searchParams,requested=q.get('category'),categories=requested==='apartment'||requested==='building'?[requested]:['apartment','building'],refreshed=await Promise.all(categories.map(c=>refreshCategory(req,c)));return res.status(200).json({ok:true,refreshedAt:new Date().toISOString(),categories:refreshed.map(x=>({category:x.category,refreshedAt:x.refreshedAt,counts:x.counts,scanError:x.scanError,coverage:x.discovery?.coverage||null,marketScope:x.marketScope,minPrice:x.minPrice,maxPrice:x.maxPrice,sort:x.sort}))})}catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}}
