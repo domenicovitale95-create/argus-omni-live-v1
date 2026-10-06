@@ -24,6 +24,10 @@ assert.ok(keep.cashAfterKeep>80000);
 assert.ok(keep.maxFreeKeepArea>80);
 
 
+
+const keepStress=evaluateOptionDeal({...base,keepOne:true,keepArea:65,keepPsm:0},{multExit:.90,multCost:1});
+assert.equal(keepStress.keepPsm,3600);
+
 const lotMatrix=evaluateOptionDeal({...base,keepOne:true,lots:[
   {label:'A',area:80,psm:4200,keep:false},
   {label:'B',area:75,psm:4000,keep:false},
@@ -35,6 +39,7 @@ assert.equal(lotMatrix.keepArea,70);
 assert.equal(lotMatrix.keepValue,273000);
 assert.equal(lotMatrix.totalRetail,1175500);
 assert.equal(lotMatrix.soldGross,902500);
+assert.ok(Math.abs(lotMatrix.psm-(1175500/290))<1e-9);
 assert.ok(lotMatrix.cashToKeep>0);
 
 const stress=evaluateOptionDeal(base,{multExit:.90,multCost:1.20});
