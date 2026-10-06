@@ -10,10 +10,11 @@ export function evaluateOptionDeal(input={}, multipliers={}){
   const other=n(input.other)*multCost;
   const exitRate=Math.max(0,n(input.exitRate));
   const area=Math.max(0,n(input.area));
-  const psm=Math.max(0,n(input.exitPsm)*multExit);
+  const basePsm=Math.max(0,n(input.exitPsm));
+  const psm=Math.max(0,basePsm*multExit);
   const keepOne=Boolean(input.keepOne);
   const keepArea=keepOne?Math.max(0,n(input.keepArea)):0;
-  const keepPsm=Math.max(0,(n(input.keepPsm)||psm)*multExit);
+  const keepPsm=Math.max(0,(n(input.keepPsm)||basePsm)*multExit);
   const target=Math.max(0,n(input.target));
   const taxReserve=Math.max(0,n(input.taxReserve));
   const premiumCredited=input.premiumCredited!==false;
@@ -36,6 +37,9 @@ export function evaluateOptionDeal(input={}, multipliers={}){
   const soldArea=matrixSoldArea;
   const soldGross=matrixSoldGross;
   const totalRetail=matrixTotalRetail;
+  const lotAreaTotal=useLots?lots.reduce((s,l)=>s+l.area,0):area;
+  const effectivePsm=useLots&&lotAreaTotal>0?totalRetail/lotAreaTotal:psm;
+  const effectiveSoldPsm=soldArea>0?soldGross/soldArea:effectivePsm;
   const exitCosts=soldGross*exitRate;
   const premiumEconomic=premiumCredited?0:premium;
   const fixed=legal+division+other+premiumEconomic;
@@ -51,11 +55,11 @@ export function evaluateOptionDeal(input={}, multipliers={}){
   const sellerCoverage=price?soldGross/price:0;
   const maxPrice=Math.max(0,totalRetail-fixed-exitCosts-reserve-(totalRetail*target));
   const breakEvenPsm=area>0&&1-exitRate>0?(price+fixed)/(area*(1-exitRate)):0;
-  const requiredSoldArea=psm>0&&1-exitRate>0?(price+fixed)/(psm*(1-exitRate)):Infinity;
+  const requiredSoldArea=effectiveSoldPsm>0&&1-exitRate>0?(price+fixed)/(effectiveSoldPsm*(1-exitRate)):Infinity;
   const maxFreeKeepArea=Math.max(0,area-requiredSoldArea);
 
   return {
-    price,premium,legal,division,other,exitRate,area,psm,keepArea:matrixKeepArea,keepPsm,keepValue,lots,useLots,
+    price,premium,legal,division,other,exitRate,area,psm:effectivePsm,basePsm,keepArea:matrixKeepArea,keepPsm,keepValue,lots,useLots,
     soldArea,soldGross,totalRetail,exitCosts,fixed,economicPreTax,reserve,profit,
     totalEconomicCost,margin,spread,cashPeak,cash,cashAfterKeep,cashToKeep,
     sellerCoverage,maxPrice,breakEvenPsm,maxFreeKeepArea,target,months,
