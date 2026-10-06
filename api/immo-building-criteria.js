@@ -73,7 +73,13 @@ export function enrichBuildingCriteria(x={}){
   const units=buildingUnitCount(x);
   const zone=buildingZone(x);
   const explicitRecognized=Number(x.recognizedUnits);
-  const recognizedUnits=Number.isFinite(explicitRecognized)&&explicitRecognized>0?Math.round(explicitRecognized):null;
+  const evidenceText=normalize([x.title,x.description,x.unitsText,x.urbanism,x.urbanisme,x.legalStatus].filter(Boolean).join(' '));
+  const recognitionEvidence=x.urbanismUnitStatus==='CONFIRMED'
+    ||Boolean(x.recognizedUnitsSource)
+    ||x.catalogOrigin==='curated'
+    ||/\b(?:unites?|logements?|appartements?)\s+(?:urbanistiquement\s+)?(?:reconnus?|autorises?|reguliers?|regularises?)\b/.test(evidenceText)
+    ||/\b(?:reconnu|autorise|regularise)\s+(?:comme|en)\s+\d+\s+(?:unites?|logements?|appartements?)\b/.test(evidenceText);
+  const recognizedUnits=recognitionEvidence&&Number.isFinite(explicitRecognized)&&explicitRecognized>0?Math.round(explicitRecognized):null;
   return {
     ...x,
     // Never promote an advertised/detected unit count to a legally recognized count.
