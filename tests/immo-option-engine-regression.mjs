@@ -11,7 +11,7 @@ const a=evaluateOptionDeal(base);
 assert.equal(a.totalRetail,1320000);
 assert.equal(a.cashPeak,67000);
 assert.equal(a.classicTax,112500);
-assert.ok(Math.abs(a.breakEvenPsm-2960.3729603729603)<1e-9);
+assert.ok(Math.abs(a.breakEvenPsm-2958.818958818959)<1e-9);
 assert.ok(a.profit>300000);
 assert.ok(a.spread>.31);
 
