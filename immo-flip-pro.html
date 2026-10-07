@@ -31,6 +31,9 @@
 <div class="field"><label>Cash toi</label><input id="cashUser" type="number" value="100000"></div>
 <div class="field"><label>Cash associé</label><input id="cashPartner" type="number" value="100000"></div>
 <div class="field"><label>Taxe acquisition ordinaire</label><input id="taxRate" type="text" readonly></div>
+<div class="field"><label>Taux fiscal validé override %</label><input id="taxOverride" type="number" step=".1" placeholder="vide = taux ordinaire"></div>
+<div class="field"><label>Restitution droits validée €</label><input id="taxRefund" type="number" value="0"></div>
+<div class="field"><label>Durée projet mois</label><input id="months" type="number" value="12"></div>
 </div>
 <div class="source" id="taxSource">Chargement de la fiscalité régionale…</div>
 <div class="actions" style="margin-top:12px"><button class="btn dark" id="saveBtn">Sauvegarder dossier</button><button class="btn ghost" id="newBtn">Nouveau dossier</button><button class="btn ghost" id="copyBtn">Copier résumé</button><button class="btn ghost" onclick="window.print()">Imprimer</button></div>
@@ -59,7 +62,7 @@
 <section class="section grid2">
 <div class="card"><h2>4 · Underwriting consolidé</h2><p class="sub">La valeur économique inclut le lot gardé éventuel. Les frais de vente ne s’appliquent qu’aux lots effectivement vendus.</p>
 <div class="kpis">
-<div class="kpi"><small>Droits acquisition</small><b id="tax">—</b></div>
+<div class="kpi"><small>Droits nets acquisition</small><b id="tax">—</b></div>
 <div class="kpi"><small>Valeur sortie totale</small><b id="arv">—</b></div>
 <div class="kpi"><small>Valeur lots vendus</small><b id="soldValue">—</b></div>
 <div class="kpi"><small>Valeur lot gardé</small><b id="keptValue">—</b></div>
@@ -69,6 +72,8 @@
 <div class="kpi"><small>Ratio découpe</small><b id="ratio">—</b></div>
 <div class="kpi"><small>Prix max achat</small><b id="maxBuy">—</b></div>
 <div class="kpi"><small>Prix max stress prudent</small><b id="maxBuyStress">—</b></div>
+<div class="kpi"><small>ROE annualisé</small><b id="annualRoe">—</b></div>
+<div class="kpi"><small>Profit / mois</small><b id="profitMonth">—</b></div>
 </div>
 <div id="financialVerdict" class="verdict warn">DONNÉES D’ABORD — valoriser tous les lots actifs.</div>
 <div class="decisionGrid">
@@ -123,7 +128,7 @@ function rowData(row){
 function allLots(){return Array.from(document.querySelectorAll('#lotRows tr')).map(rowData)}
 function markManualIfNeeded(el){if(el.classList.contains('lotPsm')&&document.activeElement===el){var row=el.closest('tr'),src=row.querySelector('.lotSource');if(src.value.indexOf('ARGUS ·')===0)src.value='';}}
 function market(){return bench[$('market').value]||null}
-function registrationRate(){var m=market();return m?Number(m.registrationRate)||0:0}
+function registrationRate(){var o=Number($('taxOverride').value);if(o>0)return o/100;var m=market();return m?Number(m.registrationRate)||0:0}
 function selectedLots(){return allLots().filter(function(x){return x.active&&x.area>0})}
 function lotDocumentation(l){
  var r=lotResults[l.index],auto=Boolean(r&&r.summary&&r.summary.autoValue&&l.source.indexOf('ARGUS ·')===0);
@@ -132,15 +137,15 @@ function lotDocumentation(l){
 }
 function economics(exitMult,holdMult,divisionMult,purchaseOverride){
  exitMult=exitMult==null?1:exitMult;holdMult=holdMult==null?1:holdMult;divisionMult=divisionMult==null?1:divisionMult;
- var p=purchaseOverride==null?(Number($('purchase').value)||0):purchaseOverride,other=Number($('acqOther').value)||0,division=(Number($('division').value)||0)*divisionMult,holding=(Number($('holding').value)||0)*holdMult,exitRate=(Number($('exitRate').value)||0)/100,rate=registrationRate();
+ var p=purchaseOverride==null?(Number($('purchase').value)||0):purchaseOverride,other=Number($('acqOther').value)||0,division=(Number($('division').value)||0)*divisionMult,holding=(Number($('holding').value)||0)*holdMult,exitRate=(Number($('exitRate').value)||0)/100,rate=registrationRate(),refund=Math.max(0,Number($('taxRefund').value)||0);
  var lots=selectedLots(),sold=0,kept=0,total=0;
  lots.forEach(function(l){var v=l.area*l.psm*exitMult;total+=v;if(l.mode==='KEEP')kept+=v;else sold+=v});
- var tax=p*rate,sales=sold*exitRate,allin=p+tax+other+division+holding+sales,profit=total-allin,margin=allin?profit/allin:0,ratio=allin?total/allin:0;
- return {p:p,rate:rate,tax:tax,other:other,division:division,holding:holding,exitRate:exitRate,sold:sold,kept:kept,total:total,sales:sales,allin:allin,profit:profit,margin:margin,ratio:ratio};
+ var grossTax=p*rate,refundUsed=Math.min(grossTax,refund),tax=Math.max(0,grossTax-refundUsed),sales=sold*exitRate,allin=p+tax+other+division+holding+sales,profit=total-allin,margin=allin?profit/allin:0,ratio=allin?total/allin:0;
+ return {p:p,rate:rate,grossTax:grossTax,refund:refundUsed,tax:tax,other:other,division:division,holding:holding,exitRate:exitRate,sold:sold,kept:kept,total:total,sales:sales,allin:allin,profit:profit,margin:margin,ratio:ratio};
 }
 function maxPurchase(exitMult,holdMult,divisionMult){
  var z=economics(exitMult,holdMult,divisionMult,0),target=(Number($('targetMargin').value)||20)/100,den=1+z.rate;
- return Math.max(0,(z.total/(1+target)-z.other-z.division-z.holding-z.sales)/den);
+ return Math.max(0,(z.total/(1+target)-z.other-z.division-z.holding-z.sales+Math.max(0,Number($('taxRefund').value)||0))/den);
 }
 function gateState(){
  var vals={units:$('gateUnits').value,division:$('gateDivision').value,base:$('gateBase').value,asis:$('gateAsIs').value,structure:$('gateStructure').value,occupancy:$('gateOccupancy').value};
@@ -157,7 +162,7 @@ function calc(){
  var z=economics(),prudent=economics(.95,1.25,1.10),target=(Number($('targetMargin').value)||20)/100,vs=valuationState(),gs=gateState(),mp=maxPurchase(1,1,1),mps=maxPurchase(.95,1.25,1.10);
  $('tax').textContent=euro(z.tax);$('arv').textContent=euro(z.total);$('soldValue').textContent=euro(z.sold);$('keptValue').textContent=euro(z.kept);$('allin').textContent=euro(z.allin);$('profit').textContent=euro(z.profit);$('margin').textContent=(z.margin*100).toFixed(1)+' %';$('ratio').textContent=z.ratio?z.ratio.toFixed(2)+'x':'—';$('maxBuy').textContent=euro(mp);$('maxBuyStress').textContent=euro(mps);
  var userCash=Number($('cashUser').value)||0,partnerCash=Number($('cashPartner').value)||0,external=Math.max(0,z.allin-userCash-partnerCash),distributable=z.total-external,userEnt=userCash+z.profit/2,partnerEnt=partnerCash+z.profit/2,userCashOut=Math.max(0,userEnt-z.kept),soulte=Math.max(0,z.kept-userEnt);
- $('userEntitlement').textContent=euro(userEnt);$('partnerEntitlement').textContent=euro(partnerEnt);$('userCashOut').textContent=euro(userCashOut);$('soulte').textContent=euro(soulte);
+ $('userEntitlement').textContent=euro(userEnt);$('partnerEntitlement').textContent=euro(partnerEnt);$('userCashOut').textContent=euro(userCashOut);$('soulte').textContent=euro(soulte);var months=Math.max(1,Number($('months').value)||12),equity=userCash+partnerCash,roe=equity?z.profit/equity:0,annual=(1+roe)>0?Math.pow(1+roe,12/months)-1:0;$('annualRoe').textContent=(annual*100).toFixed(1)+' %';$('profitMonth').textContent=euro(z.profit/months);
  var fv=$('financialVerdict');if(!vs.complete){fv.className='verdict warn';fv.textContent='DONNÉES D’ABORD — lots sans valeur documentée : '+vs.missing.join(', ')}else if(z.margin>=target&&prudent.margin>0){fv.className='verdict go';fv.textContent='ÉCONOMIE COMPATIBLE — marge cible atteinte; stress prudent reste positif.'}else if(z.margin>=.12){fv.className='verdict warn';fv.textContent='NÉGOCIER — prix demandé supérieur au niveau de sécurité ARGUS.'}else{fv.className='verdict stop';fv.textContent='NO GO ÉCONOMIQUE — division seule insuffisante à ce prix.'}
  var gv=$('gateVerdict');if(gs.hard){gv.className='verdict stop';gv.textContent='STOP — blocage juridique/opérationnel.'}else if(gs.unknown){gv.className='verdict warn';gv.textContent='DONNÉES D’ABORD — preuves essentielles encore inconnues.'}else{gv.className='verdict go';gv.textContent='GATES PASSÉS — sous réserve des pièces officielles.'}
  var master=$('masterVerdict');if(gs.hard){master.className='verdict stop';master.textContent='STOP — le dossier est hors stratégie, indépendamment de la marge.'}else if(gs.unknown||!vs.complete){master.className='verdict warn';master.textContent='DONNÉES D’ABORD — aucune offre ferme sur ces données.'}else if(z.margin>=target&&prudent.margin>0){master.className='verdict go';master.textContent='GO SOUS RÉSERVE NOTAIRE — '+(z.margin*100).toFixed(1)+' % de marge; prix max '+euro(mp)+'.'}else if(z.margin>=.12){master.className='verdict warn';master.textContent='NÉGOCIER — offre cible ≤ '+euro(mp)+'.'}else{master.className='verdict stop';master.textContent='NO GO — prix maximum économique '+euro(mp)+'.'}
@@ -172,7 +177,7 @@ function updateMarket(){
  var m=market();if(!m)return;
  $('micro').innerHTML='<option value="">Toute la commune / ville</option>'+(m.microZones||[]).map(function(z){return '<option value="'+z.id+'">'+z.label+'</option>'}).join('');
  $('taxRate').value=(Number(m.registrationRate||0)*100).toFixed(1)+' %';
- var ts=m.registrationSource||{};$('taxSource').innerHTML='Taux ordinaire utilisé pour le modèle · '+(ts.label||'')+' · <a href="'+(ts.url||'#')+'" target="_blank" rel="noopener">'+(ts.source||'source officielle')+'</a>. À valider selon la structure exacte.';
+ var ts=m.registrationSource||{};$('taxSource').innerHTML='Taux ordinaire · '+(ts.label||'')+' · <a href="'+(ts.url||'#')+'" target="_blank" rel="noopener">'+(ts.source||'source officielle')+'</a>. Un taux spécial ou une restitution ne doivent être encodés que s’ils ont été validés par le notaire/fiscaliste pour ce montage.';
  var o=m.officialS12026||m.officialQ12026||m.official2025,period=m.officialS12026?'S1 2026':m.officialQ12026?'T1 2026':m.official2025?'2025':'—';
  $('officialMarket').innerHTML=o?'<b>'+$('market').value+' · ventes actées</b>Médiane appartement '+euro(o.medianApartment)+(o.transactions?' · '+o.transactions+' transactions':'')+' · '+period+'.':'<b>'+$('market').value+'</b>Référence communale directe non intégrée : utiliser les comparables lot par lot et la source Statbel/be.STAT.';
  renderMarketRows();calc();autosave();
@@ -204,11 +209,11 @@ function renderComparables(l,res){
  $('comps').innerHTML=(res.comparables||[]).slice(0,8).map(function(x){return '<div class="comp"><b>'+x.location+'</b><span>'+euro(x.price)+'</span><span>'+x.area+' m²</span><span>'+num(x.pricePerSqm)+' €/m²</span><span>R'+x.relevance+' · '+x.condition+'</span><a href="'+x.canonical+'" target="_blank" rel="noopener">source</a></div>'}).join('')||'<div class="muted">Aucun comparable utilisable.</div>';
 }
 function snapshot(){
- var data={version:4,projectName:$('projectName').value,market:$('market').value,micro:$('micro').value,purchase:$('purchase').value,acqOther:$('acqOther').value,division:$('division').value,holding:$('holding').value,exitRate:$('exitRate').value,targetMargin:$('targetMargin').value,cashUser:$('cashUser').value,cashPartner:$('cashPartner').value,gates:{units:$('gateUnits').value,division:$('gateDivision').value,base:$('gateBase').value,asis:$('gateAsIs').value,structure:$('gateStructure').value,occupancy:$('gateOccupancy').value},lots:allLots().map(function(l){return {active:l.active,name:l.name,mode:l.mode,area:l.area,beds:l.beds,floor:l.floor,condition:l.condition,exterior:l.exterior,elevator:l.elevator,psm:l.psm,source:l.source}}),savedAt:new Date().toISOString()};return data;
+ var data={version:5,projectName:$('projectName').value,market:$('market').value,micro:$('micro').value,purchase:$('purchase').value,acqOther:$('acqOther').value,division:$('division').value,holding:$('holding').value,exitRate:$('exitRate').value,targetMargin:$('targetMargin').value,cashUser:$('cashUser').value,cashPartner:$('cashPartner').value,taxOverride:$('taxOverride').value,taxRefund:$('taxRefund').value,months:$('months').value,gates:{units:$('gateUnits').value,division:$('gateDivision').value,base:$('gateBase').value,asis:$('gateAsIs').value,structure:$('gateStructure').value,occupancy:$('gateOccupancy').value},lots:allLots().map(function(l){return {active:l.active,name:l.name,mode:l.mode,area:l.area,beds:l.beds,floor:l.floor,condition:l.condition,exterior:l.exterior,elevator:l.elevator,psm:l.psm,source:l.source}}),savedAt:new Date().toISOString()};return data;
 }
 function autosave(){try{localStorage.setItem(storageKey,JSON.stringify(snapshot()))}catch(e){}}
 function loadSnapshot(data){
- if(!data)return;['projectName','purchase','acqOther','division','holding','exitRate','targetMargin','cashUser','cashPartner'].forEach(function(id){if(data[id]!=null)$(id).value=data[id]});
+ if(!data)return;['projectName','purchase','acqOther','division','holding','exitRate','targetMargin','cashUser','cashPartner','taxOverride','taxRefund','months'].forEach(function(id){if(data[id]!=null)$(id).value=data[id]});
  if(data.market&&bench[data.market])$('market').value=data.market;updateMarket();if(data.micro)$('micro').value=data.micro;
  if(data.gates){$('gateUnits').value=data.gates.units||'unknown';$('gateDivision').value=data.gates.division||'unknown';$('gateBase').value=data.gates.base||'unknown';$('gateAsIs').value=data.gates.asis||'unknown';$('gateStructure').value=data.gates.structure||'unknown';$('gateOccupancy').value=data.gates.occupancy||'unknown'}
  if(Array.isArray(data.lots)){var rows=Array.from(document.querySelectorAll('#lotRows tr'));data.lots.slice(0,6).forEach(function(l,i){var r=rows[i];r.querySelector('.lotActive').checked=Boolean(l.active);r.querySelector('.lotName').value=l.name||('Lot '+(i+1));r.querySelector('.lotMode').value=l.mode||'SELL';r.querySelector('.lotArea').value=l.area||'';r.querySelector('.lotBeds').value=l.beds==null?'':l.beds;r.querySelector('.lotFloor').value=l.floor==null?'':l.floor;r.querySelector('.lotCondition').value=l.condition||'BON_ETAT';r.querySelector('.lotExterior').value=l.exterior==null?'':l.exterior?'1':'0';r.querySelector('.lotElevator').value=l.elevator==null?'':l.elevator?'1':'0';r.querySelector('.lotPsm').value=l.psm||'';r.querySelector('.lotSource').value=l.source||''})}
