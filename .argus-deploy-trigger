@@ -1,2 +1,4 @@
 ARGUS production deployment refresh — 2026-09-27
 Purpose: retrigger production deployment after ARGUS IMMO mobile listing-render fix ffdbdad.
+split-sell-sync=2026-10-07T16:25Z
+features=lot-level,quality-comps,regional-tax,portfolio,price-ladder,regional-docs,regression
