@@ -2,66 +2,237 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#071422"><title>ARGUS FLIP PRO — Achat · Division · Revente en l’état</title>
+<meta name="theme-color" content="#071422"><meta http-equiv="Cache-Control" content="no-store">
+<title>ARGUS FLIP PRO — Underwriting lot par lot</title>
 <style>
-:root{--navy:#071422;--navy2:#10253d;--ink:#142236;--muted:#66768b;--paper:#f3f6f9;--line:#d9e2eb;--green:#12734a;--blue:#235fa7;--amber:#946200;--red:#b42318;--greenbg:#eaf7f0;--amberbg:#fff6d8;--redbg:#fff0ee}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif;line-height:1.45}.wrap{max-width:1240px;margin:auto;padding:0 18px}.top{position:sticky;top:0;z-index:20;background:rgba(7,20,34,.98);border-bottom:1px solid rgba(255,255,255,.08)}.topin{min-height:62px;display:flex;align-items:center;justify-content:space-between}.brand{color:white;text-decoration:none;font-weight:950;letter-spacing:.04em}.nav{display:flex;gap:8px}.nav a{color:#d9e4ef;text-decoration:none;font-size:.8rem;font-weight:800}.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:white;padding:36px 0}.eyebrow{font-size:.68rem;letter-spacing:.13em;font-weight:900;color:#9bc5f4}.hero h1{margin:7px 0 8px;font-size:clamp(2rem,5vw,3.7rem);line-height:1;letter-spacing:-.045em}.hero p{max-width:850px;color:#c7d4e3}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.chip{padding:7px 9px;border:1px solid rgba(255,255,255,.18);border-radius:999px;font-size:.72rem;font-weight:850;color:#eaf2fb}.section{padding:22px 0}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{background:white;border:1px solid var(--line);border-radius:17px;padding:16px}.card h2,.card h3{margin:0}.sub{color:var(--muted);font-size:.82rem;margin:6px 0 0}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tab{border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 12px;font-weight:900;cursor:pointer}.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}.inputs{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}.field label{display:block;color:var(--muted);font-size:.64rem;text-transform:uppercase;font-weight:900;margin-bottom:5px}.field input,.field select{width:100%;padding:10px 11px;border:1px solid #ccd8e4;border-radius:10px;background:white;font:inherit}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:13px}.kpi{background:#f8fafc;border:1px solid #e2e8ef;border-radius:12px;padding:11px}.kpi small{display:block;color:var(--muted);font-size:.61rem;text-transform:uppercase;font-weight:900}.kpi b{display:block;margin-top:4px;font-size:1.02rem}.verdict{margin-top:12px;border-radius:13px;padding:13px;font-weight:900}.go{background:var(--greenbg);color:var(--green)}.warn{background:var(--amberbg);color:var(--amber)}.stop{background:var(--redbg);color:var(--red)}.marketTable{width:100%;border-collapse:collapse;margin-top:12px}.marketTable th,.marketTable td{padding:9px;border-bottom:1px solid #e5eaf0;text-align:left;font-size:.78rem}.marketTable th{font-size:.65rem;text-transform:uppercase;color:var(--muted)}.compList{display:grid;gap:8px;margin-top:10px}.comp{display:grid;grid-template-columns:1.5fr repeat(4,.7fr);gap:8px;padding:10px;border:1px solid #e1e7ee;border-radius:11px;font-size:.76rem}.muted{color:var(--muted)}.btn{display:inline-flex;border:0;border-radius:10px;padding:10px 12px;background:var(--navy);color:#fff;font-weight:900;cursor:pointer;margin-top:10px;text-decoration:none}.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.check{padding:10px;border:1px solid #e2e8ef;background:#f8fafc;border-radius:11px;font-size:.78rem}.check input{margin-right:7px}.source{font-size:.72rem;color:var(--muted);margin-top:9px}.source a{color:#235fa7}.opp{display:grid;grid-template-columns:1fr auto;gap:10px;border-bottom:1px solid #e6ebf0;padding:10px 0}.opp:last-child{border-bottom:0}.opp b{display:block}.opp a{font-size:.76rem;font-weight:900;color:#235fa7}.rule{margin-top:12px;padding:12px;border-left:4px solid var(--navy);background:#f8fafc;border-radius:10px;font-size:.8rem}.rule b{display:block;margin-bottom:3px}
-@media(max-width:850px){.grid2{grid-template-columns:1fr}.inputs,.kpis{grid-template-columns:1fr 1fr}.checks{grid-template-columns:1fr}.comp{grid-template-columns:1fr 1fr}.nav{display:none}}@media(max-width:520px){.inputs,.kpis{grid-template-columns:1fr}.wrap{padding:0 13px}}
+:root{--navy:#071422;--navy2:#10253d;--ink:#142236;--muted:#66768b;--paper:#f3f6f9;--line:#d9e2eb;--green:#12734a;--blue:#235fa7;--amber:#946200;--red:#b42318;--greenbg:#eaf7f0;--bluebg:#edf4ff;--amberbg:#fff6d8;--redbg:#fff0ee}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif;line-height:1.42}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:sticky;top:0;z-index:50;background:rgba(7,20,34,.98);border-bottom:1px solid rgba(255,255,255,.08)}.topin{min-height:62px;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{color:#fff;text-decoration:none;font-weight:950;letter-spacing:.04em}.nav{display:flex;gap:10px}.nav a{color:#d9e4ef;text-decoration:none;font-size:.78rem;font-weight:850}.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:34px 0}.eyebrow{font-size:.66rem;letter-spacing:.14em;font-weight:900;color:#9bc5f4}.hero h1{margin:6px 0 8px;font-size:clamp(2rem,5vw,3.65rem);line-height:1;letter-spacing:-.045em}.hero p{max-width:900px;color:#c7d4e3;margin:0}.chips,.actions,.tabs{display:flex;gap:8px;flex-wrap:wrap}.chips{margin-top:15px}.chip{padding:6px 9px;border:1px solid rgba(255,255,255,.18);border-radius:999px;font-size:.7rem;font-weight:850;color:#eaf2fb}.section{padding:20px 0}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px;box-shadow:0 3px 15px rgba(15,23,42,.03)}.card h2,.card h3{margin:0}.sub{color:var(--muted);font-size:.8rem;margin:5px 0 0}.inputs{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}.field label{display:block;color:var(--muted);font-size:.61rem;text-transform:uppercase;font-weight:900;margin-bottom:5px}.field input,.field select{width:100%;min-height:40px;padding:9px 10px;border:1px solid #ccd8e4;border-radius:9px;background:#fff;font:inherit}.field input:focus,.field select:focus{outline:2px solid #b9d4f2;border-color:#7ea7d2}.btn,.tab{border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-weight:900;cursor:pointer;background:#fff;color:var(--ink);text-decoration:none}.btn.dark,.tab.active{background:var(--navy);border-color:var(--navy);color:#fff}.btn.blue{background:#173a5f;border-color:#173a5f;color:#fff}.btn.ghost{background:#f8fafc}.tabs{margin-top:12px}.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}.kpi{background:#f8fafc;border:1px solid #e2e8ef;border-radius:11px;padding:10px}.kpi small{display:block;color:var(--muted);font-size:.56rem;text-transform:uppercase;font-weight:900}.kpi b{display:block;margin-top:3px;font-size:.96rem}.verdict{border-radius:13px;padding:13px;margin-top:12px;font-weight:900}.go{background:var(--greenbg);color:var(--green)}.warn{background:var(--amberbg);color:var(--amber)}.stop{background:var(--redbg);color:var(--red)}.info{background:var(--bluebg);color:var(--blue)}.rule{margin-top:10px;padding:11px;border-left:4px solid var(--navy);background:#f8fafc;border-radius:9px;font-size:.78rem}.rule b{display:block;margin-bottom:2px}.source{font-size:.69rem;color:var(--muted);margin-top:8px}.source a{color:var(--blue)}.tableWrap{overflow:auto;margin-top:12px;border:1px solid #e1e7ee;border-radius:12px}.lotTable,.marketTable,.stressTable{width:100%;border-collapse:collapse;min-width:1120px}.lotTable th,.lotTable td,.marketTable th,.marketTable td,.stressTable th,.stressTable td{padding:8px;border-bottom:1px solid #e5eaf0;text-align:left;font-size:.72rem;vertical-align:middle}.lotTable th,.marketTable th,.stressTable th{background:#f8fafc;color:var(--muted);font-size:.59rem;text-transform:uppercase;letter-spacing:.04em}.lotTable input,.lotTable select{width:100%;min-width:70px;padding:7px;border:1px solid #d4dee8;border-radius:7px;font:inherit}.lotTable .tiny{min-width:54px}.lotTable .wide{min-width:115px}.lotTable tr:last-child td,.marketTable tr:last-child td,.stressTable tr:last-child td{border-bottom:0}.status{display:inline-flex;padding:4px 7px;border-radius:999px;font-size:.59rem;font-weight:950;white-space:nowrap}.sok{background:var(--greenbg);color:var(--green)}.swarn{background:var(--amberbg);color:var(--amber)}.sbad{background:var(--redbg);color:var(--red)}.sinfo{background:var(--bluebg);color:var(--blue)}.gates{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.gate{background:#f8fafc;border:1px solid #e2e8ef;border-radius:10px;padding:9px}.gate label{display:block;font-size:.68rem;font-weight:850;margin-bottom:5px}.gate select{width:100%;padding:8px;border:1px solid #d4dee8;border-radius:8px;background:white}.compList{display:grid;gap:7px;margin-top:10px}.comp{display:grid;grid-template-columns:1.7fr .8fr .6fr .7fr .7fr .5fr;gap:8px;border:1px solid #e2e8ef;border-radius:9px;padding:8px;font-size:.7rem;align-items:center}.comp a{color:var(--blue);font-weight:850}.opp{display:grid;grid-template-columns:1fr auto;gap:10px;border-bottom:1px solid #e6ebf0;padding:9px 0}.opp:last-child{border-bottom:0}.opp b{display:block}.opp span{color:var(--muted);font-size:.72rem}.opp a{font-size:.7rem;font-weight:900;color:var(--blue)}.decisionGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.decisionBox{border:1px solid #e2e8ef;border-radius:11px;padding:11px;background:#f8fafc}.decisionBox small{display:block;color:var(--muted);font-size:.59rem;text-transform:uppercase;font-weight:900}.decisionBox b{display:block;margin-top:3px}.muted{color:var(--muted)}.right{text-align:right}.hidden{display:none!important}
+@media(max-width:920px){.grid2{grid-template-columns:1fr}.inputs{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}.gates{grid-template-columns:1fr 1fr}.nav{display:none}.comp{grid-template-columns:1.5fr 1fr 1fr}}
+@media(max-width:560px){.wrap{padding:0 12px}.inputs,.kpis,.gates,.decisionGrid{grid-template-columns:1fr}.hero{padding:28px 0}}
+@media print{.top,.hero .chips,.actions,.btn{display:none!important}.hero{background:#fff;color:#000;padding:12px 0}.hero p{color:#444}.card{box-shadow:none;break-inside:avoid}.section{padding:8px 0}.wrap{max-width:none}}
 </style></head>
 <body>
 <header class="top"><div class="wrap topin"><a class="brand" href="/immo-opportunities">ARGUS IMMO</a><nav class="nav"><a href="/immo-opportunities">Opportunités</a><a href="/immo">Audit</a><a href="/immo-option-pro">Option Pro</a><a href="/strategic-brussels">Bruxelles stratégique</a></nav></div></header>
-<section class="hero"><div class="wrap"><div class="eyebrow">ARGUS FLIP PRO · SPLIT & SELL</div><h1>Acheter · Diviser · Revendre en l’état.</h1><p>Aucune rénovation et aucun budget travaux dans le modèle. ARGUS cherche uniquement l’écart entre le coût réel de l’immeuble entier et la valeur cumulée des appartements séparés, avec division, portage, frais de sortie et contrôle juridique.</p><div class="chips"><span class="chip">0 € rénovation</span><span class="chip">2 scénarios séparés</span><span class="chip">Comparables live</span><span class="chip">Ratio de découpe</span><span class="chip">50/50 économique</span><span class="chip">Documents / urbanisme</span></div></div></section>
+<section class="hero"><div class="wrap"><div class="eyebrow">ARGUS FLIP PRO · LOT-LEVEL UNDERWRITING</div><h1>Acheter · Diviser · Revendre en l’état.</h1><p>0 € de rénovation. Chaque futur appartement est valorisé séparément avec des comparables actifs pertinents. ARGUS n’autorise un verdict financier que lorsque les preuves juridiques et les valeurs de sortie sont suffisamment documentées.</p><div class="chips"><span class="chip">6 lots analysables</span><span class="chip">Comparables filtrés</span><span class="chip">Taxe régionale dynamique</span><span class="chip">Gates juridiques</span><span class="chip">Stress test</span><span class="chip">50/50 + soulte</span><span class="chip">Sauvegarde visite</span></div></div></section>
 <main class="wrap">
+
 <section class="section grid2">
-<div class="card"><h2>1 · Calculateur de deal</h2><p class="sub">Le bien doit être revendable en l’état. Si son état nécessite une rénovation pour rendre le deal rentable, ARGUS considère que ce n’est pas le bon montage.</p>
-<div class="tabs"><button class="tab active" data-mode="sellall">REVENDRE TOUS LES LOTS</button><button class="tab" data-mode="keepone">JE GARDE 1 APPARTEMENT</button></div>
+<div class="card"><h2>1 · Dossier & acquisition</h2><p class="sub">Les cellules du projet servent à déterminer le coût réel avant toute discussion de marge.</p>
 <div class="inputs">
-<div class="field"><label>Prix achat immeuble</label><input id="purchase" type="number" value="800000"></div>
-<div class="field"><label>Nombre lots</label><input id="units" type="number" value="4"></div>
-<div class="field"><label>Frais acquisition hors droits*</label><input id="acqOther" type="number" value="20000"></div>
-<div class="field"><label>Division / acte de base / géomètre / admin.</label><input id="division" type="number" value="30000"></div>
+<div class="field"><label>Nom / adresse dossier</label><input id="projectName" placeholder="Ex. Rue X 24"></div>
+<div class="field"><label>Marché</label><select id="market"></select></div>
+<div class="field"><label>Micro-zone</label><select id="micro"></select></div>
+<div class="field"><label>Prix demandé immeuble</label><input id="purchase" type="number" value="800000"></div>
+<div class="field"><label>Autres frais acquisition</label><input id="acqOther" type="number" value="20000"></div>
+<div class="field"><label>Division / acte de base / admin.</label><input id="division" type="number" value="30000"></div>
 <div class="field"><label>Portage / intérêts / assurances</label><input id="holding" type="number" value="45000"></div>
 <div class="field"><label>Frais de vente %</label><input id="exitRate" type="number" step=".1" value="2.5"></div>
-<div class="field"><label>Surface revendable totale m²</label><input id="sellable" type="number" value="330"></div>
-<div class="field"><label>Prix sortie documenté €/m²</label><input id="exitPsm" type="number" value="0" placeholder="via comparables"></div>
-<div class="field"><label>Marge cible %</label><input id="targetMargin" type="number" step=".5" value="20"></div>
-<div class="field keep"><label>Surface lot gardé m²</label><input id="keepArea" type="number" value="55"></div>
-<div class="field keep"><label>Valeur €/m² lot gardé</label><input id="keepPsm" type="number" value="0"></div>
+<div class="field"><label>Marge cible % coût</label><input id="targetMargin" type="number" step=".5" value="20"></div>
+<div class="field"><label>Cash toi</label><input id="cashUser" type="number" value="100000"></div>
+<div class="field"><label>Cash associé</label><input id="cashPartner" type="number" value="100000"></div>
+<div class="field"><label>Taxe acquisition ordinaire</label><input id="taxRate" type="text" readonly></div>
 </div>
-<div class="kpis"><div class="kpi"><small>Droits 12,5%</small><b id="tax">—</b></div><div class="kpi"><small>Coût total all-in</small><b id="allin">—</b></div><div class="kpi"><small>Valeur économique sortie</small><b id="arv">—</b></div><div class="kpi"><small>Ratio de découpe</small><b id="splitRatio">—</b></div><div class="kpi"><small>Bénéfice projet</small><b id="profit">—</b></div><div class="kpi"><small>Marge / coût</small><b id="margin">—</b></div><div class="kpi"><small>Prix max achat</small><b id="maxBuy">—</b></div><div class="kpi"><small>Part bénéfice 50%</small><b id="half">—</b></div><div class="kpi keep"><small>Valeur lot gardé</small><b id="keepValue">—</b></div><div class="kpi keep"><small>Soulte éventuelle</small><b id="soulte">—</b></div></div>
-<div id="verdict" class="verdict warn">Compléter le prix de sortie documenté.</div>
-<div class="rule"><b>Règle absolue</b>Le modèle n’accepte aucune création de valeur par rénovation. Les seuls coûts ajoutés sont les frais indispensables à l’acquisition, à la division/copropriété, au portage et à la revente.</div>
-<div class="source">*Droits d’enregistrement bruxellois calculés à 12,5 % séparément. Source : <a href="https://fiscalite.brussels/fr/droits-d-enregistrement" target="_blank" rel="noopener">Bruxelles Fiscalité</a>.</div>
+<div class="source" id="taxSource">Chargement de la fiscalité régionale…</div>
+<div class="actions" style="margin-top:12px"><button class="btn dark" id="saveBtn">Sauvegarder dossier</button><button class="btn ghost" id="newBtn">Nouveau dossier</button><button class="btn ghost" id="copyBtn">Copier résumé</button><button class="btn ghost" onclick="window.print()">Imprimer</button></div>
 </div>
-<div class="card"><h2>2 · Prix de sortie documenté</h2><p class="sub">Choisis la commune, le micro-quartier et la taille d’un lot. ARGUS cherche des appartements actifs comparables vendables dans leur état actuel. Les prix affichés restent distincts des prix actés Statbel.</p>
-<div class="inputs" style="grid-template-columns:1fr 1fr"><div class="field"><label>Commune</label><select id="commune"></select></div><div class="field"><label>Micro-quartier</label><select id="micro"></select></div><div class="field"><label>Surface lot type</label><input id="compArea" type="number" value="75"></div><div class="field"><label>Chambres</label><input id="compBeds" type="number" value="2"></div></div>
-<button class="btn" id="loadComps">CHARGER LES COMPARABLES</button><div id="official" class="source"></div><div id="compSummary" class="verdict warn">Comparables non chargés.</div><div id="comps" class="compList"></div>
-</div></section>
-<section class="section grid2">
-<div class="card"><h2>3 · Stress test sans travaux</h2><p class="sub">On stresse uniquement ce qui peut réellement bouger dans ton montage : prix de sortie, durée de portage et frais de division.</p>
-<table class="marketTable"><thead><tr><th>Scénario</th><th>Sortie</th><th>Portage</th><th>Division</th><th>Marge</th></tr></thead><tbody id="stressRows"></tbody></table></div>
-<div class="card"><h2>4 · Références officielles</h2><p class="sub">Contrôle macro : prix réellement actés. Ils ne sont jamais convertis artificiellement en €/m².</p><table class="marketTable"><thead><tr><th>Commune</th><th>Médiane appart. S1 2026</th><th>Transactions</th></tr></thead><tbody id="marketRows"></tbody></table><div class="source">Source officielle : Statbel, 1er semestre 2026.</div></div>
+<div class="card"><h2>2 · Gates juridiques & opérationnels</h2><p class="sub">Un blocage juridique passe avant toute rentabilité. ARGUS ne compense jamais un STOP par une marge élevée.</p>
+<div class="gates">
+<div class="gate"><label>Unités officiellement reconnues</label><select id="gateUnits"><option value="unknown">À confirmer</option><option value="yes">Confirmées</option><option value="no">Non / incohérentes</option></select></div>
+<div class="gate"><label>Division / vente par lots possible</label><select id="gateDivision"><option value="unknown">À confirmer</option><option value="yes">Confirmée / faisable</option><option value="no">Impossible / bloquée</option></select></div>
+<div class="gate"><label>Acte de base / copropriété</label><select id="gateBase"><option value="unknown">À préparer / confirmer</option><option value="yes">Prêt / faisable</option><option value="no">Blocage</option></select></div>
+<div class="gate"><label>Vendable en l’état</label><select id="gateAsIs"><option value="unknown">À confirmer</option><option value="yes">Oui</option><option value="no">Non — rénovation nécessaire</option></select></div>
+<div class="gate"><label>Structure / gros communs</label><select id="gateStructure"><option value="unknown">À confirmer</option><option value="no">Pas de blocage connu</option><option value="yes">Problème lourd</option></select></div>
+<div class="gate"><label>Occupation</label><select id="gateOccupancy"><option value="unknown">À confirmer</option><option value="vacant">Libre / compatible</option><option value="managed">Occupé mais sortie maîtrisée</option><option value="blocked">Occupation bloquante</option></select></div>
+</div>
+<div id="gateVerdict" class="verdict warn">DONNÉES D’ABORD — compléter les preuves juridiques.</div>
+</div>
 </section>
+
+<section class="section">
+<div class="card"><h2>3 · Valorisation des futurs lots</h2><p class="sub">Active uniquement les lots réellement vendables. Le prix retenu peut venir d’ARGUS si le panel est suffisamment robuste, ou être saisi manuellement à condition de documenter la source.</p>
+<div class="tableWrap"><table class="lotTable"><thead><tr><th>Actif</th><th>Lot</th><th>Sortie</th><th>Surface m²</th><th>Ch.</th><th>Étage</th><th>État</th><th>Ext.</th><th>Asc.</th><th>Nb comps</th><th>Qualité</th><th>€/m² retenu</th><th>Valeur</th><th>Source / preuve</th></tr></thead><tbody id="lotRows"></tbody></table></div>
+<div class="actions" style="margin-top:12px"><button class="btn dark" id="analyzeLots">Analyser tous les lots actifs</button><button class="btn ghost" id="clearValues">Effacer valorisations</button></div>
+<div id="lotNotice" class="verdict info">Aucun lot analysé.</div>
+</div>
+</section>
+
 <section class="section grid2">
-<div class="card"><h2>5 · Opportunités immeubles actives</h2><p class="sub">Premier tri des immeubles correspondant au périmètre ARGUS. Le calcul final se fait ici avec les comparables propres aux futurs lots.</p><div id="opps">Chargement…</div></div>
-<div class="card"><h2>6 · Check visite express</h2><p class="sub">Un défaut nécessitant une rénovation pour rendre les appartements revendables = mauvais montage pour cette stratégie.</p><div class="checks">
-<label class="check"><input type="checkbox">Nombre d’unités reconnu</label><label class="check"><input type="checkbox">Plans / RU cohérents</label><label class="check"><input type="checkbox">Division juridiquement faisable</label><label class="check"><input type="checkbox">Acte de base possible / adaptable</label><label class="check"><input type="checkbox">Compteurs individualisés ou documentés</label><label class="check"><input type="checkbox">Électricité documentée par lot</label><label class="check"><input type="checkbox">PEB par unité</label><label class="check"><input type="checkbox">Baux / occupation vérifiés</label><label class="check"><input type="checkbox">Accès aux lots cohérent</label><label class="check"><input type="checkbox">État vendable en l’état</label><label class="check"><input type="checkbox">Aucun défaut structurel bloquant</label><label class="check"><input type="checkbox">Aucune infraction explicite</label>
+<div class="card"><h2>4 · Underwriting consolidé</h2><p class="sub">La valeur économique inclut le lot gardé éventuel. Les frais de vente ne s’appliquent qu’aux lots effectivement vendus.</p>
+<div class="kpis">
+<div class="kpi"><small>Droits acquisition</small><b id="tax">—</b></div>
+<div class="kpi"><small>Valeur sortie totale</small><b id="arv">—</b></div>
+<div class="kpi"><small>Valeur lots vendus</small><b id="soldValue">—</b></div>
+<div class="kpi"><small>Valeur lot gardé</small><b id="keptValue">—</b></div>
+<div class="kpi"><small>Coût total all-in</small><b id="allin">—</b></div>
+<div class="kpi"><small>Bénéfice économique</small><b id="profit">—</b></div>
+<div class="kpi"><small>Marge / coût</small><b id="margin">—</b></div>
+<div class="kpi"><small>Ratio découpe</small><b id="ratio">—</b></div>
+<div class="kpi"><small>Prix max achat</small><b id="maxBuy">—</b></div>
+<div class="kpi"><small>Prix max stress prudent</small><b id="maxBuyStress">—</b></div>
+</div>
+<div id="financialVerdict" class="verdict warn">DONNÉES D’ABORD — valoriser tous les lots actifs.</div>
+<div class="decisionGrid">
+<div class="decisionBox"><small>Droit économique toi</small><b id="userEntitlement">—</b></div>
+<div class="decisionBox"><small>Droit économique associé</small><b id="partnerEntitlement">—</b></div>
+<div class="decisionBox"><small>Cash toi après lot gardé</small><b id="userCashOut">—</b></div>
+<div class="decisionBox"><small>Soulte éventuelle à verser</small><b id="soulte">—</b></div>
+</div>
+</div>
+<div class="card"><h2>5 · Décision ARGUS</h2><p class="sub">La décision combine preuves, valorisation et marge. Aucun signal financier ne peut lever un blocage juridique.</p>
+<div id="masterVerdict" class="verdict warn">DONNÉES D’ABORD</div>
+<div class="rule"><b>GO</b>Gates propres + tous les lots documentés + marge cible atteinte + scénario prudent encore positif.</div>
+<div class="rule"><b>NÉGOCIER</b>Dossier juridiquement compatible mais prix demandé supérieur au prix maximum ARGUS.</div>
+<div class="rule"><b>STOP</b>Blocage juridique, rénovation nécessaire, problème structurel lourd, occupation bloquante ou économie structurellement insuffisante.</div>
+<div class="rule"><b>DONNÉES D’ABORD</b>Au moins une preuve essentielle ou une valeur de lot manque.</div>
+</div>
+</section>
+
+<section class="section grid2">
+<div class="card"><h2>6 · Stress test sans travaux</h2><p class="sub">La sensibilité porte uniquement sur la sortie, le portage et les frais de division.</p><div class="tableWrap"><table class="stressTable"><thead><tr><th>Scénario</th><th>Prix lots</th><th>Portage</th><th>Division</th><th>Marge</th><th>Profit</th><th>Prix max achat</th></tr></thead><tbody id="stressRows"></tbody></table></div></div>
+<div class="card"><h2>7 · Référence officielle du marché</h2><p class="sub">Contrôle macro des ventes actées. Ce n’est jamais un prix au m² de sortie.</p><div id="officialMarket" class="rule">Sélectionner un marché.</div><table class="marketTable" style="min-width:0"><thead><tr><th>Marché</th><th>Période</th><th>Médiane appart.</th><th>Transactions</th></tr></thead><tbody id="marketRows"></tbody></table></div>
+</section>
+
+<section class="section grid2">
+<div class="card"><h2>8 · Comparables du dernier lot analysé</h2><p class="sub" id="compTitle">Aucun lot sélectionné.</p><div id="comps" class="compList"></div></div>
+<div class="card"><h2>9 · Opportunités immeubles actives</h2><p class="sub">Pré-screening uniquement : aucune rentabilité n’est calculée avant l’underwriting des lots.</p><div id="opps">Chargement…</div></div>
+</section>
+
+<section class="section grid2">
+<div class="card"><h2>10 · Documents avant engagement</h2><div class="gates">
+<div class="gate">Renseignements urbanistiques + affectation + nombre d’unités</div><div class="gate">Titre / servitudes / situation hypothécaire</div><div class="gate">Plans / permis / éventuelles régularisations</div><div class="gate">Acte de base ou projet d’acte de base</div><div class="gate">PEB de chaque unité</div><div class="gate">Contrôles électriques</div><div class="gate">Compteurs / répartition des charges</div><div class="gate">Baux / garanties / conditions d’occupation</div><div class="gate">Précompte / RC / données cadastrales</div>
 </div></div>
-</section>
-<section class="section grid2">
-<div class="card"><h2>7 · Documents avant offre</h2><div class="checks"><div class="check">Renseignements urbanistiques + affectation + nombre d’unités</div><div class="check">Titre / servitudes / acte de base existant</div><div class="check">Plans existants / permis / régularisations</div><div class="check">PEB de chaque unité</div><div class="check">Contrôles électriques</div><div class="check">Baux enregistrés + garanties + occupation</div><div class="check">Situation compteurs / individualisation</div><div class="check">Précompte / RC / données cadastrales</div><div class="check">Sinistres / assurances / éléments structurels connus</div></div></div>
-<div class="card"><h2>8 · Formule ARGUS</h2><p class="sub">La décision tient sur une formule simple, puis sur la qualité des preuves.</p><div class="rule"><b>Valeur économique de sortie</b>Somme de la valeur documentée de chaque appartement revendu + valeur de marché du lot conservé éventuel.</div><div class="rule"><b>Coût total</b>Prix d’achat + droits + autres frais d’acquisition + division/admin + portage + frais de vente.</div><div class="rule"><b>Ratio de découpe</b>Valeur économique de sortie ÷ coût total. Au-dessus de 1,20x, le deal atteint environ 20 % de marge sur coût avant fiscalité de structure.</div></div>
+<div class="card"><h2>11 · Règles du moteur</h2><div class="rule"><b>0 € rénovation</b>La valeur doit exister dans l’état actuel du lot.</div><div class="rule"><b>Pas de moyenne communale inventée</b>Le prix de sortie vient du panel de comparables propre au lot.</div><div class="rule"><b>Panel robuste</b>ARGUS exige au moins 3 comparables et un score de qualité suffisant pour auto-remplir le €/m².</div><div class="rule"><b>Manuel = sourcé</b>Un €/m² saisi manuellement n’est considéré documenté que si une source est indiquée.</div></div>
 </section>
 </main>
+
 <script>
-const $=id=>document.getElementById(id),euro=n=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(n)||0);
-let mode='sellall',bench=null;
-function values(multExit=1,multHolding=1,multDivision=1){const p=+$('purchase').value||0,other=+$('acqOther').value||0,d=(+$('division').value||0)*multDivision,h=(+$('holding').value||0)*multHolding,er=(+$('exitRate').value||0)/100,psm=(+$('exitPsm').value||0)*multExit,sa=+$('sellable').value||0,ka=+$('keepArea').value||0,kpsm=(+$('keepPsm').value||psm)*multExit,tax=p*.125,keep=mode==='keepone'?ka*kpsm:0,soldArea=mode==='keepone'?Math.max(0,sa-ka):sa,gross=soldArea*psm,exit=gross*er,arv=gross+keep,allin=p+tax+other+d+h+exit,profit=arv-allin,margin=allin?profit/allin:0;return {p,other,d,h,er,psm,sa,ka,kpsm,tax,keep,soldArea,gross,exit,arv,allin,profit,margin,ratio:allin?arv/allin:0}}
-function calc(){const z=values(),target=(+$('targetMargin').value||20)/100,fixedOther=z.other+z.d+z.h+z.exit,maxPurchase=Math.max(0,(z.arv/(1+target)-fixedOther)/1.125),economicRight=Math.max(0,z.profit)/2,soulte=mode==='keepone'?Math.max(0,z.keep-economicRight):0;$('tax').textContent=euro(z.tax);$('allin').textContent=euro(z.allin);$('arv').textContent=euro(z.arv);$('splitRatio').textContent=z.ratio?z.ratio.toFixed(2)+'x':'—';$('profit').textContent=euro(z.profit);$('margin').textContent=(z.margin*100).toFixed(1)+' %';$('maxBuy').textContent=euro(maxPurchase);$('half').textContent=euro(z.profit/2);$('keepValue').textContent=euro(z.keep);$('soulte').textContent=euro(soulte);const v=$('verdict');if(!z.psm||!z.sa){v.className='verdict warn';v.textContent='DONNÉES D’ABORD — prix de sortie ou surface revendable non documenté.'}else if(z.margin>=target){v.className='verdict go';v.textContent='GO SOUS RÉSERVE DOCUMENTAIRE — objectif de marge atteint sans rénovation.'}else if(z.margin>=.12){v.className='verdict warn';v.textContent='NÉGOCIER — l’écart achat / revente séparée est encore trop faible.'}else{v.className='verdict stop';v.textContent='NO GO — la division seule ne crée pas assez de valeur.'}renderStress()}
-function renderStress(){const scenarios=[['Base',1,1,1],['Prudent',.95,1.25,1.10],['Stress fort',.90,1.50,1.20]];$('stressRows').innerHTML=scenarios.map(s=>{const z=values(s[1],s[2],s[3]);return '<tr><td>'+s[0]+'</td><td>'+Math.round(s[1]*100)+' %</td><td>'+Math.round(s[2]*100)+' %</td><td>'+Math.round(s[3]*100)+' %</td><td><b>'+(z.margin*100).toFixed(1)+' %</b></td></tr>'}).join('')}
-document.querySelectorAll('input').forEach(x=>x.addEventListener('input',calc));document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.keep').forEach(x=>x.style.display=mode==='keepone'?'block':'none');calc()});
-async function init(){const j=await fetch('/api/immo-market-benchmarks?x='+Date.now()).then(r=>r.json());bench=j.communes||{};$('commune').innerHTML=Object.keys(bench).map(x=>'<option>'+x+'</option>').join('');changeCommune();$('marketRows').innerHTML=Object.entries(bench).filter(([k,v])=>v.officialS12026).map(([k,v])=>'<tr><td>'+k+'</td><td>'+euro(v.officialS12026.medianApartment)+'</td><td>'+v.officialS12026.transactions+'</td></tr>').join('')||'<tr><td colspan="3">Données non chargées</td></tr>';fetch('/api/immo-flip-opportunities?x='+Date.now()).then(r=>r.json()).then(j=>{$('opps').innerHTML=(j.opportunities||[]).slice(0,8).map(x=>'<div class="opp"><div><b>'+euro(x.price)+' · '+(x.flip?.zone||'')+'</b><span class="muted">'+(x.flip?.units||'—')+' lots · '+(x.flip?.area||'—')+' m²</span></div><a href="'+(x.canonical||x.source||'#')+'" target="_blank" rel="noopener">ANNONCE</a></div>').join('')||'Aucune opportunité active confirmée.'}).catch(()=>{$('opps').textContent='Catalogue indisponible.'})}
-function changeCommune(){const c=bench[$('commune').value];$('micro').innerHTML='<option value="">Toute la commune</option>'+((c?.microZones||[]).map(z=>'<option value="'+z.id+'">'+z.label+'</option>').join(''));const o=c?.officialS12026;$('official').textContent=o?'Statbel S1 2026 : médiane '+euro(o.medianApartment)+' · '+o.transactions+' ventes actées.':'Référence communale à compléter via be.STAT + comparables.'}
-$('commune').addEventListener('change',changeCommune);$('loadComps').onclick=async()=>{const c=$('commune').value,m=$('micro').value,a=$('compArea').value,b=$('compBeds').value,s=$('compSummary');s.className='verdict warn';s.textContent='Recherche des comparables…';$('comps').innerHTML='';try{const j=await fetch('/api/immo-exit-comps?commune='+encodeURIComponent(c)+'&micro='+encodeURIComponent(m)+'&surface='+encodeURIComponent(a)+'&chambres='+encodeURIComponent(b)+'&x='+Date.now()).then(r=>r.json());if(!j.ok)throw new Error(j.error);const z=j.summary||{};s.textContent=z.count>=3?'Panel '+z.confidence+' · '+z.count+' comparables · médiane demandée '+Math.round(z.median||0).toLocaleString('fr-BE')+' €/m²':'DONNÉES D’ABORD — moins de 3 comparables utilisables.';s.className='verdict '+(z.count>=6?'go':z.count>=3?'warn':'stop');if(z.count>=3){$('exitPsm').value=z.median||0;if(mode==='keepone'&&!+$('keepPsm').value)$('keepPsm').value=z.median||0;calc()}$('comps').innerHTML=(j.comparables||[]).map(x=>'<div class="comp"><b>'+x.location+'</b><span>'+euro(x.price)+'</span><span>'+x.area+' m²</span><span>'+x.pricePerSqm.toLocaleString('fr-BE')+' €/m²</span><a href="'+x.canonical+'" target="_blank" rel="noopener">source</a></div>').join('')||'<div class="muted">Aucun comparable utilisable.</div>'}catch(e){s.className='verdict stop';s.textContent='Comparables indisponibles : '+e.message}};
-document.querySelectorAll('.keep').forEach(x=>x.style.display='none');calc();init();
-</script></body></html>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)},euro=function(n){return new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(n)||0)},num=function(n){return new Intl.NumberFormat('fr-BE',{maximumFractionDigits:0}).format(Number(n)||0)};
+var bench={},lotResults={},storageKey='argusFlipProV4';
+var query=new URLSearchParams(location.search);
+var CONDITIONS=[['BON_ETAT','Bon état / vendable'],['A_RAFRAICHIR','À rafraîchir'],['A_RENOVER','À rénover (hors stratégie si nécessaire à la vente)'],['RENOVE','Rénové'],['NON_CONFIRME','État non confirmé']];
+function lotTemplate(i){
+ return '<tr data-lot="'+i+'"><td><input class="lotActive tiny" type="checkbox" '+(i<4?'checked':'')+'></td><td><input class="lotName wide" value="Lot '+(i+1)+'"></td><td><select class="lotMode"><option value="SELL">VENDRE</option><option value="KEEP">GARDER</option></select></td><td><input class="lotArea tiny" type="number" value="'+(i<4?[80,80,80,80][i]:'')+'"></td><td><input class="lotBeds tiny" type="number" value="2"></td><td><input class="lotFloor tiny" type="number" value="'+i+'"></td><td><select class="lotCondition">'+CONDITIONS.map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>'}).join('')+'</select></td><td><select class="lotExterior"><option value="">?</option><option value="1">Oui</option><option value="0">Non</option></select></td><td><select class="lotElevator"><option value="">?</option><option value="1">Oui</option><option value="0">Non</option></select></td><td class="lotCompCount">—</td><td class="lotQuality">—</td><td><input class="lotPsm wide" type="number" placeholder="€/m²"></td><td class="lotValue">—</td><td><input class="lotSource wide" placeholder="ARGUS ou source manuelle"></td></tr>';
+}
+function buildLots(){$('lotRows').innerHTML=Array.from({length:6},function(_,i){return lotTemplate(i)}).join('');document.querySelectorAll('#lotRows input,#lotRows select').forEach(function(x){x.addEventListener('input',function(){markManualIfNeeded(x);calc();autosave()})})}
+function rowData(row){
+ var q=function(s){return row.querySelector(s)},ext=q('.lotExterior').value,elev=q('.lotElevator').value;
+ return {row:row,index:Number(row.dataset.lot),active:q('.lotActive').checked,name:q('.lotName').value||('Lot '+(Number(row.dataset.lot)+1)),mode:q('.lotMode').value,area:Number(q('.lotArea').value)||0,beds:Number(q('.lotBeds').value),floor:q('.lotFloor').value===''?null:Number(q('.lotFloor').value),condition:q('.lotCondition').value,exterior:ext===''?null:ext==='1',elevator:elev===''?null:elev==='1',psm:Number(q('.lotPsm').value)||0,source:q('.lotSource').value.trim()};
+}
+function allLots(){return Array.from(document.querySelectorAll('#lotRows tr')).map(rowData)}
+function markManualIfNeeded(el){if(el.classList.contains('lotPsm')&&document.activeElement===el){var row=el.closest('tr'),src=row.querySelector('.lotSource');if(src.value.indexOf('ARGUS ·')===0)src.value='';}}
+function market(){return bench[$('market').value]||null}
+function registrationRate(){var m=market();return m?Number(m.registrationRate)||0:0}
+function selectedLots(){return allLots().filter(function(x){return x.active&&x.area>0})}
+function lotDocumentation(l){
+ var r=lotResults[l.index],auto=Boolean(r&&r.summary&&r.summary.autoValue&&l.source.indexOf('ARGUS ·')===0);
+ var manual=l.psm>0&&l.source.length>=8&&!auto;
+ return {documented:auto||manual,auto:auto,manual:manual};
+}
+function economics(exitMult,holdMult,divisionMult,purchaseOverride){
+ exitMult=exitMult==null?1:exitMult;holdMult=holdMult==null?1:holdMult;divisionMult=divisionMult==null?1:divisionMult;
+ var p=purchaseOverride==null?(Number($('purchase').value)||0):purchaseOverride,other=Number($('acqOther').value)||0,division=(Number($('division').value)||0)*divisionMult,holding=(Number($('holding').value)||0)*holdMult,exitRate=(Number($('exitRate').value)||0)/100,rate=registrationRate();
+ var lots=selectedLots(),sold=0,kept=0,total=0;
+ lots.forEach(function(l){var v=l.area*l.psm*exitMult;total+=v;if(l.mode==='KEEP')kept+=v;else sold+=v});
+ var tax=p*rate,sales=sold*exitRate,allin=p+tax+other+division+holding+sales,profit=total-allin,margin=allin?profit/allin:0,ratio=allin?total/allin:0;
+ return {p:p,rate:rate,tax:tax,other:other,division:division,holding:holding,exitRate:exitRate,sold:sold,kept:kept,total:total,sales:sales,allin:allin,profit:profit,margin:margin,ratio:ratio};
+}
+function maxPurchase(exitMult,holdMult,divisionMult){
+ var z=economics(exitMult,holdMult,divisionMult,0),target=(Number($('targetMargin').value)||20)/100,den=1+z.rate;
+ return Math.max(0,(z.total/(1+target)-z.other-z.division-z.holding-z.sales)/den);
+}
+function gateState(){
+ var vals={units:$('gateUnits').value,division:$('gateDivision').value,base:$('gateBase').value,asis:$('gateAsIs').value,structure:$('gateStructure').value,occupancy:$('gateOccupancy').value};
+ var hard=vals.units==='no'||vals.division==='no'||vals.base==='no'||vals.asis==='no'||vals.structure==='yes'||vals.occupancy==='blocked';
+ var unknown=vals.units==='unknown'||vals.division==='unknown'||vals.base==='unknown'||vals.asis==='unknown'||vals.structure==='unknown'||vals.occupancy==='unknown';
+ return {vals:vals,hard:hard,unknown:unknown};
+}
+function valuationState(){
+ var lots=selectedLots();if(!lots.length)return {complete:false,count:0,missing:['aucun lot actif']};
+ var missing=[];lots.forEach(function(l){if(!lotDocumentation(l).documented)missing.push(l.name)});
+ return {complete:missing.length===0,count:lots.length,missing:missing};
+}
+function calc(){
+ var z=economics(),prudent=economics(.95,1.25,1.10),target=(Number($('targetMargin').value)||20)/100,vs=valuationState(),gs=gateState(),mp=maxPurchase(1,1,1),mps=maxPurchase(.95,1.25,1.10);
+ $('tax').textContent=euro(z.tax);$('arv').textContent=euro(z.total);$('soldValue').textContent=euro(z.sold);$('keptValue').textContent=euro(z.kept);$('allin').textContent=euro(z.allin);$('profit').textContent=euro(z.profit);$('margin').textContent=(z.margin*100).toFixed(1)+' %';$('ratio').textContent=z.ratio?z.ratio.toFixed(2)+'x':'—';$('maxBuy').textContent=euro(mp);$('maxBuyStress').textContent=euro(mps);
+ var userCash=Number($('cashUser').value)||0,partnerCash=Number($('cashPartner').value)||0,external=Math.max(0,z.allin-userCash-partnerCash),distributable=z.total-external,userEnt=userCash+z.profit/2,partnerEnt=partnerCash+z.profit/2,userCashOut=Math.max(0,userEnt-z.kept),soulte=Math.max(0,z.kept-userEnt);
+ $('userEntitlement').textContent=euro(userEnt);$('partnerEntitlement').textContent=euro(partnerEnt);$('userCashOut').textContent=euro(userCashOut);$('soulte').textContent=euro(soulte);
+ var fv=$('financialVerdict');if(!vs.complete){fv.className='verdict warn';fv.textContent='DONNÉES D’ABORD — lots sans valeur documentée : '+vs.missing.join(', ')}else if(z.margin>=target&&prudent.margin>0){fv.className='verdict go';fv.textContent='ÉCONOMIE COMPATIBLE — marge cible atteinte; stress prudent reste positif.'}else if(z.margin>=.12){fv.className='verdict warn';fv.textContent='NÉGOCIER — prix demandé supérieur au niveau de sécurité ARGUS.'}else{fv.className='verdict stop';fv.textContent='NO GO ÉCONOMIQUE — division seule insuffisante à ce prix.'}
+ var gv=$('gateVerdict');if(gs.hard){gv.className='verdict stop';gv.textContent='STOP — blocage juridique/opérationnel.'}else if(gs.unknown){gv.className='verdict warn';gv.textContent='DONNÉES D’ABORD — preuves essentielles encore inconnues.'}else{gv.className='verdict go';gv.textContent='GATES PASSÉS — sous réserve des pièces officielles.'}
+ var master=$('masterVerdict');if(gs.hard){master.className='verdict stop';master.textContent='STOP — le dossier est hors stratégie, indépendamment de la marge.'}else if(gs.unknown||!vs.complete){master.className='verdict warn';master.textContent='DONNÉES D’ABORD — aucune offre ferme sur ces données.'}else if(z.margin>=target&&prudent.margin>0){master.className='verdict go';master.textContent='GO SOUS RÉSERVE NOTAIRE — '+(z.margin*100).toFixed(1)+' % de marge; prix max '+euro(mp)+'.'}else if(z.margin>=.12){master.className='verdict warn';master.textContent='NÉGOCIER — offre cible ≤ '+euro(mp)+'.'}else{master.className='verdict stop';master.textContent='NO GO — prix maximum économique '+euro(mp)+'.'}
+ renderStress();updateLotValues();return {z:z,prudent:prudent,mp:mp,mps:mps,gs:gs,vs:vs,userEnt:userEnt,partnerEnt:partnerEnt,userCashOut:userCashOut,soulte:soulte,distributable:distributable};
+}
+function renderStress(){
+ var cases=[['Base',1,1,1],['Prudent',.95,1.25,1.10],['Stress fort',.90,1.50,1.20],['Stress extrême',.85,1.75,1.30]];
+ $('stressRows').innerHTML=cases.map(function(s){var z=economics(s[1],s[2],s[3]),mp=maxPurchase(s[1],s[2],s[3]);return '<tr><td>'+s[0]+'</td><td>'+Math.round(s[1]*100)+' %</td><td>'+Math.round(s[2]*100)+' %</td><td>'+Math.round(s[3]*100)+' %</td><td><b>'+((z.margin||0)*100).toFixed(1)+' %</b></td><td>'+euro(z.profit)+'</td><td>'+euro(mp)+'</td></tr>'}).join('');
+}
+function updateLotValues(){allLots().forEach(function(l){l.row.querySelector('.lotValue').textContent=l.active&&l.area&&l.psm?euro(l.area*l.psm):'—'})}
+function updateMarket(){
+ var m=market();if(!m)return;
+ $('micro').innerHTML='<option value="">Toute la commune / ville</option>'+(m.microZones||[]).map(function(z){return '<option value="'+z.id+'">'+z.label+'</option>'}).join('');
+ $('taxRate').value=(Number(m.registrationRate||0)*100).toFixed(1)+' %';
+ var ts=m.registrationSource||{};$('taxSource').innerHTML='Taux ordinaire utilisé pour le modèle · '+(ts.label||'')+' · <a href="'+(ts.url||'#')+'" target="_blank" rel="noopener">'+(ts.source||'source officielle')+'</a>. À valider selon la structure exacte.';
+ var o=m.officialS12026||m.officialQ12026||m.official2025,period=m.officialS12026?'S1 2026':m.officialQ12026?'T1 2026':m.official2025?'2025':'—';
+ $('officialMarket').innerHTML=o?'<b>'+$('market').value+' · ventes actées</b>Médiane appartement '+euro(o.medianApartment)+(o.transactions?' · '+o.transactions+' transactions':'')+' · '+period+'.':'<b>'+$('market').value+'</b>Référence communale directe non intégrée : utiliser les comparables lot par lot et la source Statbel/be.STAT.';
+ renderMarketRows();calc();autosave();
+}
+function renderMarketRows(){
+ var rows=[];Object.keys(bench).forEach(function(name){var m=bench[name],o=m.officialS12026||m.officialQ12026;if(o)rows.push('<tr><td>'+name+'</td><td>'+(m.officialS12026?'S1 2026':'T1 2026')+'</td><td>'+euro(o.medianApartment)+'</td><td>'+(o.transactions||'—')+'</td></tr>')});
+ $('marketRows').innerHTML=rows.join('');
+}
+async function analyzeLot(l){
+ if(!l.active||!l.area)return null;
+ var params=new URLSearchParams({commune:$('market').value,micro:$('micro').value,surface:String(l.area),chambres:String(isFinite(l.beds)?l.beds:''),condition:l.condition,pages:'6'});
+ if(l.floor!=null)params.set('etage',String(l.floor));if(l.exterior!=null)params.set('exterieur',l.exterior?'1':'0');if(l.elevator!=null)params.set('ascenseur',l.elevator?'1':'0');
+ var res=await fetch('/api/immo-exit-comps?'+params.toString()+'&x='+Date.now()).then(function(r){return r.json()});
+ if(!res.ok)throw new Error(res.error||'Comparables indisponibles');
+ lotResults[l.index]=res;
+ var row=l.row,sum=res.summary||{},count=sum.count||0,q=sum.qualityScore||0;
+ row.querySelector('.lotCompCount').textContent=count;row.querySelector('.lotQuality').innerHTML='<span class="status '+(sum.autoValue?'sok':count>=3?'swarn':'sbad')+'">'+(sum.confidence||'FAIBLE')+' '+q+'/100</span>';
+ if(sum.autoValue&&sum.recommendedPsm){row.querySelector('.lotPsm').value=Math.round(sum.recommendedPsm);row.querySelector('.lotSource').value='ARGUS · '+count+' comps · Q'+q+' · '+new Date(res.checkedAt).toLocaleDateString('fr-BE')}
+ else{row.querySelector('.lotSource').value='ARGUS INSUFFISANT · '+count+' comps · Q'+q}
+ return res;
+}
+async function analyzeAll(){
+ var lots=selectedLots();$('lotNotice').className='verdict info';$('lotNotice').textContent='Analyse de '+lots.length+' lot(s)…';var errors=[];
+ for(var i=0;i<lots.length;i++){try{var res=await analyzeLot(lots[i]);renderComparables(lots[i],res)}catch(e){errors.push(lots[i].name+': '+e.message)}}
+ calc();autosave();var vs=valuationState();$('lotNotice').className='verdict '+(vs.complete?'go':'warn');$('lotNotice').textContent=vs.complete?'Tous les lots actifs ont une valeur documentée.':errors.length?errors.join(' · '):'Certains lots nécessitent davantage de preuves ou un prix manuel sourcé.';
+}
+function renderComparables(l,res){
+ if(!res)return;$('compTitle').textContent=l.name+' · '+l.area+' m² · '+l.beds+' ch. · '+((res.summary||{}).confidence||'');
+ $('comps').innerHTML=(res.comparables||[]).slice(0,8).map(function(x){return '<div class="comp"><b>'+x.location+'</b><span>'+euro(x.price)+'</span><span>'+x.area+' m²</span><span>'+num(x.pricePerSqm)+' €/m²</span><span>R'+x.relevance+' · '+x.condition+'</span><a href="'+x.canonical+'" target="_blank" rel="noopener">source</a></div>'}).join('')||'<div class="muted">Aucun comparable utilisable.</div>';
+}
+function snapshot(){
+ var data={version:4,projectName:$('projectName').value,market:$('market').value,micro:$('micro').value,purchase:$('purchase').value,acqOther:$('acqOther').value,division:$('division').value,holding:$('holding').value,exitRate:$('exitRate').value,targetMargin:$('targetMargin').value,cashUser:$('cashUser').value,cashPartner:$('cashPartner').value,gates:{units:$('gateUnits').value,division:$('gateDivision').value,base:$('gateBase').value,asis:$('gateAsIs').value,structure:$('gateStructure').value,occupancy:$('gateOccupancy').value},lots:allLots().map(function(l){return {active:l.active,name:l.name,mode:l.mode,area:l.area,beds:l.beds,floor:l.floor,condition:l.condition,exterior:l.exterior,elevator:l.elevator,psm:l.psm,source:l.source}}),savedAt:new Date().toISOString()};return data;
+}
+function autosave(){try{localStorage.setItem(storageKey,JSON.stringify(snapshot()))}catch(e){}}
+function loadSnapshot(data){
+ if(!data)return;['projectName','purchase','acqOther','division','holding','exitRate','targetMargin','cashUser','cashPartner'].forEach(function(id){if(data[id]!=null)$(id).value=data[id]});
+ if(data.market&&bench[data.market])$('market').value=data.market;updateMarket();if(data.micro)$('micro').value=data.micro;
+ if(data.gates){$('gateUnits').value=data.gates.units||'unknown';$('gateDivision').value=data.gates.division||'unknown';$('gateBase').value=data.gates.base||'unknown';$('gateAsIs').value=data.gates.asis||'unknown';$('gateStructure').value=data.gates.structure||'unknown';$('gateOccupancy').value=data.gates.occupancy||'unknown'}
+ if(Array.isArray(data.lots)){var rows=Array.from(document.querySelectorAll('#lotRows tr'));data.lots.slice(0,6).forEach(function(l,i){var r=rows[i];r.querySelector('.lotActive').checked=Boolean(l.active);r.querySelector('.lotName').value=l.name||('Lot '+(i+1));r.querySelector('.lotMode').value=l.mode||'SELL';r.querySelector('.lotArea').value=l.area||'';r.querySelector('.lotBeds').value=l.beds==null?'':l.beds;r.querySelector('.lotFloor').value=l.floor==null?'':l.floor;r.querySelector('.lotCondition').value=l.condition||'BON_ETAT';r.querySelector('.lotExterior').value=l.exterior==null?'':l.exterior?'1':'0';r.querySelector('.lotElevator').value=l.elevator==null?'':l.elevator?'1':'0';r.querySelector('.lotPsm').value=l.psm||'';r.querySelector('.lotSource').value=l.source||''})}
+ calc();
+}
+function copySummary(){
+ var r=calc(),name=$('projectName').value||'Dossier ARGUS',lines=[name,'Marché: '+$('market').value+' / '+($('micro').selectedOptions[0]?.text||''),'Prix demandé: '+euro(r.z.p),'Valeur lots: '+euro(r.z.total),'Coût all-in: '+euro(r.z.allin),'Bénéfice: '+euro(r.z.profit),'Marge: '+(r.z.margin*100).toFixed(1)+' %','Ratio découpe: '+r.z.ratio.toFixed(2)+'x','Prix max ARGUS: '+euro(r.mp),'Prix max prudent: '+euro(r.mps),'Verdict: '+$('masterVerdict').textContent];
+ navigator.clipboard&&navigator.clipboard.writeText(lines.join('\n')).then(function(){$('copyBtn').textContent='Résumé copié ✓';setTimeout(function(){$('copyBtn').textContent='Copier résumé'},1500)});
+}
+function clearValues(){Array.from(document.querySelectorAll('#lotRows tr')).forEach(function(r){r.querySelector('.lotPsm').value='';r.querySelector('.lotSource').value='';r.querySelector('.lotCompCount').textContent='—';r.querySelector('.lotQuality').textContent='—'});lotResults={};$('comps').innerHTML='';$('compTitle').textContent='Aucun lot sélectionné.';calc();autosave()}
+function newProject(){try{localStorage.removeItem(storageKey)}catch(e){};location.href='/immo-flip-pro'}
+async function init(){
+ buildLots();
+ var j=await fetch('/api/immo-market-benchmarks?x='+Date.now()).then(function(r){return r.json()});bench=j.communes||{};$('market').innerHTML=Object.keys(bench).map(function(x){return '<option value="'+x+'">'+x+'</option>'}).join('');
+ if(query.get('commune')&&bench[query.get('commune')])$('market').value=query.get('commune');if(query.get('price'))$('purchase').value=query.get('price');
+ updateMarket();
+ var saved=null;try{saved=JSON.parse(localStorage.getItem(storageKey)||'null')}catch(e){};if(saved&&!query.toString())loadSnapshot(saved);
+ if(query.get('units')){var nLots=Math.min(6,Math.max(1,Number(query.get('units'))||4));Array.from(document.querySelectorAll('#lotRows tr')).forEach(function(r,i){r.querySelector('.lotActive').checked=i<nLots})}
+ document.querySelectorAll('main input,main select').forEach(function(x){x.addEventListener('input',function(){calc();autosave()})});
+ $('market').addEventListener('change',updateMarket);$('analyzeLots').onclick=analyzeAll;$('clearValues').onclick=clearValues;$('saveBtn').onclick=function(){autosave();$('saveBtn').textContent='Sauvegardé ✓';setTimeout(function(){$('saveBtn').textContent='Sauvegarder dossier'},1300)};$('newBtn').onclick=newProject;$('copyBtn').onclick=copySummary;
+ fetch('/api/immo-flip-opportunities?x='+Date.now()).then(function(r){return r.json()}).then(function(j){$('opps').innerHTML=(j.opportunities||[]).slice(0,8).map(function(x){var f=x.flip||{};return '<div class="opp"><div><b>'+euro(x.price)+' · '+(f.zone||'')+'</b><span>'+((f.statusLabel||'').replace(/[🟢🟠🔴]/g,''))+' · '+(f.units||'—')+' unités · pré-score '+(f.score||0)+'</span></div><a href="'+(x.canonical||x.source||'#')+'" target="_blank" rel="noopener">ANNONCE</a></div>'}).join('')||'Aucune opportunité active confirmée.'}).catch(function(){$('opps').textContent='Catalogue indisponible.'});
+ calc();
+}
+init();
+})();
+</script>
+</body></html>
