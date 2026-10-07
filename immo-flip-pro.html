@@ -106,7 +106,7 @@
 </section>
 
 <section class="section grid2">
-<div class="card"><h2>10 · Documents avant engagement</h2><div class="gates">
+<div class="card"><h2>10 · Documents avant engagement</h2><div id="regionalDocs" class="rule"><b>Checklist régionale</b>Sélectionner un marché.</div><div class="gates">
 <div class="gate">Renseignements urbanistiques + affectation + nombre d’unités</div><div class="gate">Titre / servitudes / situation hypothécaire</div><div class="gate">Plans / permis / éventuelles régularisations</div><div class="gate">Acte de base ou projet d’acte de base</div><div class="gate">PEB de chaque unité</div><div class="gate">Contrôles électriques</div><div class="gate">Compteurs / répartition des charges</div><div class="gate">Baux / garanties / conditions d’occupation</div><div class="gate">Précompte / RC / données cadastrales</div>
 </div></div>
 <div class="card"><h2>11 · Règles du moteur</h2><div class="rule"><b>0 € rénovation</b>La valeur doit exister dans l’état actuel du lot.</div><div class="rule"><b>Pas de moyenne communale inventée</b>Le prix de sortie vient du panel de comparables propre au lot.</div><div class="rule"><b>Panel robuste</b>ARGUS exige au moins 3 comparables et un score de qualité suffisant pour auto-remplir le €/m².</div><div class="rule"><b>Manuel = sourcé</b>Un €/m² saisi manuellement n’est considéré documenté que si une source est indiquée.</div></div>
@@ -183,7 +183,33 @@ function updateMarket(){
  var ts=m.registrationSource||{};$('taxSource').innerHTML='Taux ordinaire · '+(ts.label||'')+' · <a href="'+(ts.url||'#')+'" target="_blank" rel="noopener">'+(ts.source||'source officielle')+'</a>. Un taux spécial ou une restitution ne doivent être encodés que s’ils ont été validés par le notaire/fiscaliste pour ce montage.';
  var o=m.officialS12026||m.officialQ12026||m.official2025,period=m.officialS12026?'S1 2026':m.officialQ12026?'T1 2026':m.official2025?'2025':'—';
  $('officialMarket').innerHTML=o?'<b>'+$('market').value+' · ventes actées</b>Médiane appartement '+euro(o.medianApartment)+(o.transactions?' · '+o.transactions+' transactions':'')+' · '+period+'.':'<b>'+$('market').value+'</b>Référence communale directe non intégrée : utiliser les comparables lot par lot et la source Statbel/be.STAT.';
- renderMarketRows();calc();autosave();
+ renderMarketRows();renderRegionalDocs();calc();autosave();
+}
+function renderRegionalDocs(){
+ var m=market();if(!m)return;var items=[];
+ if(m.region==='BRUSSELS'){
+  items=[
+   '<a href="https://environnement.brussels/citoyen/reglementation-et-inspection/obligations-et-autorisations/le-certificat-peb-dun-logement-en-region-bruxelloise" target="_blank" rel="noopener">PEB valide par logement avant mise en vente</a>',
+   '<a href="https://environnement.brussels/citoyen/reglementation-et-inspection/obligations-et-autorisations/attestation-du-sol-informations-et-obligations" target="_blank" rel="noopener">Attestation du sol</a>',
+   '<a href="https://be.brussels/fr/logement/location/bail-dhabitation" target="_blank" rel="noopener">Occupation / baux</a> — si bail de résidence principale ≥9 ans et locataire domicilié, vérifier le droit de préférence',
+   'Renseignements urbanistiques, acte de base, PEB et électricité propres à chaque lot'
+  ];
+ }else if(m.region==='FLANDERS'){
+  items=[
+   '<a href="https://www.vlaanderen.be/bodemattest" target="_blank" rel="noopener">Bodemattest</a> pour chaque transfert',
+   '<a href="https://www.vlaanderen.be/asbestattest" target="_blank" rel="noopener">Asbestattest</a> pour les lots concernés si bâtiment antérieur à 2001',
+   '<a href="https://www.vlaanderen.be/asbestattest-voor-gemene-delen-van-een-appartementsgebouw" target="_blank" rel="noopener">Asbestattest des parties communes</a> selon les obligations applicables',
+   '<a href="https://www.vlaanderen.be/bouwen-wonen-en-energie/energieprestatiecertificaten-epcs/epc-van-de-gemeenschappelijke-delen-van-een-appartementsgebouw" target="_blank" rel="noopener">EPC communs</a> + EPC du lot',
+   'Contrôle électrique, urbanisme, acte de base et PID lorsque requis'
+  ];
+ }else{
+  items=[
+   '<a href="https://wallonie.be/fr/demarches/vendreacheterlouer-obtenir-un-certificat-peb" target="_blank" rel="noopener">Certificat PEB avant mise en vente</a>',
+   'Renseignements urbanistiques, titre/servitudes, contrôle électrique et documents propres à chaque lot',
+   'Vérifier avec le notaire les pièces régionales supplémentaires selon le bien et son historique'
+  ];
+ }
+ $('regionalDocs').innerHTML='<b>Checklist '+m.region+'</b>'+items.map(function(x){return '<div style="margin-top:5px">• '+x+'</div>'}).join('');
 }
 function renderMarketRows(){
  var rows=[];Object.keys(bench).forEach(function(name){var m=bench[name],o=m.officialS12026||m.officialQ12026;if(o)rows.push('<tr><td>'+name+'</td><td>'+(m.officialS12026?'S1 2026':'T1 2026')+'</td><td>'+euro(o.medianApartment)+'</td><td>'+(o.transactions||'—')+'</td></tr>')});
