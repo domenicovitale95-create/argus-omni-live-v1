@@ -20,6 +20,7 @@ export function evaluateOptionDeal(input={}, multipliers={}){
   const premiumCredited=input.premiumCredited!==false;
   const cash=Math.max(0,n(input.cash));
   const months=Math.max(0,n(input.months));
+  const classicTaxRate=Math.max(0,n(input.classicTaxRate)||.125);
 
   const lotInput=Array.isArray(input.lots)?input.lots:[];
   const lots=lotInput.map((lot,index)=>{
@@ -63,6 +64,6 @@ export function evaluateOptionDeal(input={}, multipliers={}){
     soldArea,soldGross,totalRetail,exitCosts,fixed,economicPreTax,reserve,profit,
     totalEconomicCost,margin,spread,cashPeak,cash,cashAfterKeep,cashToKeep,
     sellerCoverage,maxPrice,breakEvenPsm,maxFreeKeepArea,target,months,
-    classicTax:price*.125
+    classicTaxRate,classicTax:price*classicTaxRate
   };
 }
