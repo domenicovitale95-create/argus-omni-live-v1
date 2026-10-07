@@ -127,7 +127,7 @@ function registrationRate(){var m=market();return m?Number(m.registrationRate)||
 function selectedLots(){return allLots().filter(function(x){return x.active&&x.area>0})}
 function lotDocumentation(l){
  var r=lotResults[l.index],auto=Boolean(r&&r.summary&&r.summary.autoValue&&l.source.indexOf('ARGUS ·')===0);
- var manual=l.psm>0&&l.source.length>=8&&!auto;
+ var manual=l.psm>0&&l.source.length>=8&&!auto&&l.source.indexOf('ARGUS')!==0;
  return {documented:auto||manual,auto:auto,manual:manual};
 }
 function economics(exitMult,holdMult,divisionMult,purchaseOverride){
@@ -227,7 +227,7 @@ async function init(){
  updateMarket();
  var saved=null;try{saved=JSON.parse(localStorage.getItem(storageKey)||'null')}catch(e){};if(saved&&!query.toString())loadSnapshot(saved);
  if(query.get('units')){var nLots=Math.min(6,Math.max(1,Number(query.get('units'))||4));Array.from(document.querySelectorAll('#lotRows tr')).forEach(function(r,i){r.querySelector('.lotActive').checked=i<nLots})}
- document.querySelectorAll('main input,main select').forEach(function(x){x.addEventListener('input',function(){calc();autosave()})});
+ document.querySelectorAll('main input,main select').forEach(function(x){x.addEventListener('input',function(){if(x.classList.contains('lotMode')&&x.value==='KEEP'){document.querySelectorAll('.lotMode').forEach(function(y){if(y!==x)y.value='SELL'})}calc();autosave()})});
  $('market').addEventListener('change',updateMarket);$('analyzeLots').onclick=analyzeAll;$('clearValues').onclick=clearValues;$('saveBtn').onclick=function(){autosave();$('saveBtn').textContent='Sauvegardé ✓';setTimeout(function(){$('saveBtn').textContent='Sauvegarder dossier'},1300)};$('newBtn').onclick=newProject;$('copyBtn').onclick=copySummary;
  fetch('/api/immo-flip-opportunities?x='+Date.now()).then(function(r){return r.json()}).then(function(j){$('opps').innerHTML=(j.opportunities||[]).slice(0,8).map(function(x){var f=x.flip||{};return '<div class="opp"><div><b>'+euro(x.price)+' · '+(f.zone||'')+'</b><span>'+((f.statusLabel||'').replace(/[🟢🟠🔴]/g,''))+' · '+(f.units||'—')+' unités · pré-score '+(f.score||0)+'</span></div><a href="'+(x.canonical||x.source||'#')+'" target="_blank" rel="noopener">ANNONCE</a></div>'}).join('')||'Aucune opportunité active confirmée.'}).catch(function(){$('opps').textContent='Catalogue indisponible.'});
  calc();
