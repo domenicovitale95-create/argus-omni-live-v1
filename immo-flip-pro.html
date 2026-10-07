@@ -36,7 +36,9 @@
 <div class="field"><label>Durée projet mois</label><input id="months" type="number" value="12"></div>
 </div>
 <div class="source" id="taxSource">Chargement de la fiscalité régionale…</div>
-<div class="actions" style="margin-top:12px"><button class="btn dark" id="saveBtn">Sauvegarder dossier</button><button class="btn ghost" id="newBtn">Nouveau dossier</button><button class="btn ghost" id="copyBtn">Copier résumé</button><button class="btn ghost" onclick="window.print()">Imprimer</button></div>
+<div class="actions" style="margin-top:12px"><button class="btn dark" id="saveBtn">Sauvegarder dossier</button><button class="btn ghost" id="newBtn">Nouveau dossier</button><button class="btn ghost" id="copyBtn">Copier résumé</button><button class="btn ghost" id="exportBtn">Exporter JSON</button><button class="btn ghost" onclick="window.print()">Imprimer</button></div>
+<div class="inputs" style="grid-template-columns:2fr 1fr 1fr;margin-top:10px"><div class="field"><label>Dossiers sauvegardés sur cet appareil</label><select id="savedDeals"><option value="">Aucun dossier</option></select></div><div class="field"><label>&nbsp;</label><button class="btn ghost" id="loadDeal" style="width:100%">Charger</button></div><div class="field"><label>&nbsp;</label><button class="btn ghost" id="deleteDeal" style="width:100%">Supprimer</button></div></div>
+<div class="source">Les dossiers sont conservés localement dans ce navigateur. L’export JSON permet d’archiver ou transférer une fiche sans exposer les données sur un serveur.</div>
 </div>
 <div class="card"><h2>2 · Gates juridiques & opérationnels</h2><p class="sub">Un blocage juridique passe avant toute rentabilité. ARGUS ne compense jamais un STOP par une marge élevée.</p>
 <div class="gates">
@@ -82,6 +84,7 @@
 <div class="decisionBox"><small>Cash toi après lot gardé</small><b id="userCashOut">—</b></div>
 <div class="decisionBox"><small>Soulte éventuelle à verser</small><b id="soulte">—</b></div>
 </div>
+<div class="decisionGrid"><div class="decisionBox"><small>Plafond conservateur</small><b id="priceConservative">—</b></div><div class="decisionBox"><small>Prix cible prudent</small><b id="priceTarget">—</b></div><div class="decisionBox"><small>Maximum absolu</small><b id="priceAbsolute">—</b></div><div class="decisionBox"><small>Baisse requise vers cible</small><b id="discountNeeded">—</b></div></div>
 </div>
 <div class="card"><h2>5 · Décision ARGUS</h2><p class="sub">La décision combine preuves, valorisation et marge. Aucun signal financier ne peut lever un blocage juridique.</p>
 <div id="masterVerdict" class="verdict warn">DONNÉES D’ABORD</div>
@@ -114,7 +117,7 @@
 (function(){
 'use strict';
 var $=function(id){return document.getElementById(id)},euro=function(n){return new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(n)||0)},num=function(n){return new Intl.NumberFormat('fr-BE',{maximumFractionDigits:0}).format(Number(n)||0)};
-var bench={},lotResults={},storageKey='argusFlipProV4';
+var bench={},lotResults={},storageKey='argusFlipProV5',portfolioKey='argusFlipDealsV1';
 var query=new URLSearchParams(location.search);
 var CONDITIONS=[['BON_ETAT','Bon état / vendable'],['A_RAFRAICHIR','À rafraîchir'],['A_RENOVER','À rénover (hors stratégie si nécessaire à la vente)'],['RENOVE','Rénové'],['NON_CONFIRME','État non confirmé']];
 function lotTemplate(i){
@@ -159,14 +162,14 @@ function valuationState(){
  return {complete:missing.length===0,count:lots.length,missing:missing};
 }
 function calc(){
- var z=economics(),prudent=economics(.95,1.25,1.10),target=(Number($('targetMargin').value)||20)/100,vs=valuationState(),gs=gateState(),mp=maxPurchase(1,1,1),mps=maxPurchase(.95,1.25,1.10);
+ var z=economics(),prudent=economics(.95,1.25,1.10),target=(Number($('targetMargin').value)||20)/100,vs=valuationState(),gs=gateState(),mp=maxPurchase(1,1,1),mps=maxPurchase(.95,1.25,1.10),mcons=maxPurchase(.90,1.50,1.20);
  $('tax').textContent=euro(z.tax);$('arv').textContent=euro(z.total);$('soldValue').textContent=euro(z.sold);$('keptValue').textContent=euro(z.kept);$('allin').textContent=euro(z.allin);$('profit').textContent=euro(z.profit);$('margin').textContent=(z.margin*100).toFixed(1)+' %';$('ratio').textContent=z.ratio?z.ratio.toFixed(2)+'x':'—';$('maxBuy').textContent=euro(mp);$('maxBuyStress').textContent=euro(mps);
  var userCash=Number($('cashUser').value)||0,partnerCash=Number($('cashPartner').value)||0,external=Math.max(0,z.allin-userCash-partnerCash),distributable=z.total-external,userEnt=userCash+z.profit/2,partnerEnt=partnerCash+z.profit/2,userCashOut=Math.max(0,userEnt-z.kept),soulte=Math.max(0,z.kept-userEnt);
- $('userEntitlement').textContent=euro(userEnt);$('partnerEntitlement').textContent=euro(partnerEnt);$('userCashOut').textContent=euro(userCashOut);$('soulte').textContent=euro(soulte);var months=Math.max(1,Number($('months').value)||12),equity=userCash+partnerCash,roe=equity?z.profit/equity:0,annual=(1+roe)>0?Math.pow(1+roe,12/months)-1:0;$('annualRoe').textContent=(annual*100).toFixed(1)+' %';$('profitMonth').textContent=euro(z.profit/months);
+ $('userEntitlement').textContent=euro(userEnt);$('partnerEntitlement').textContent=euro(partnerEnt);$('userCashOut').textContent=euro(userCashOut);$('soulte').textContent=euro(soulte);$('priceConservative').textContent=euro(mcons);$('priceTarget').textContent=euro(mps);$('priceAbsolute').textContent=euro(mp);$('discountNeeded').textContent=euro(Math.max(0,z.p-mps));var months=Math.max(1,Number($('months').value)||12),equity=userCash+partnerCash,roe=equity?z.profit/equity:0,annual=(1+roe)>0?Math.pow(1+roe,12/months)-1:0;$('annualRoe').textContent=(annual*100).toFixed(1)+' %';$('profitMonth').textContent=euro(z.profit/months);
  var fv=$('financialVerdict');if(!vs.complete){fv.className='verdict warn';fv.textContent='DONNÉES D’ABORD — lots sans valeur documentée : '+vs.missing.join(', ')}else if(z.margin>=target&&prudent.margin>0){fv.className='verdict go';fv.textContent='ÉCONOMIE COMPATIBLE — marge cible atteinte; stress prudent reste positif.'}else if(z.margin>=.12){fv.className='verdict warn';fv.textContent='NÉGOCIER — prix demandé supérieur au niveau de sécurité ARGUS.'}else{fv.className='verdict stop';fv.textContent='NO GO ÉCONOMIQUE — division seule insuffisante à ce prix.'}
  var gv=$('gateVerdict');if(gs.hard){gv.className='verdict stop';gv.textContent='STOP — blocage juridique/opérationnel.'}else if(gs.unknown){gv.className='verdict warn';gv.textContent='DONNÉES D’ABORD — preuves essentielles encore inconnues.'}else{gv.className='verdict go';gv.textContent='GATES PASSÉS — sous réserve des pièces officielles.'}
  var master=$('masterVerdict');if(gs.hard){master.className='verdict stop';master.textContent='STOP — le dossier est hors stratégie, indépendamment de la marge.'}else if(gs.unknown||!vs.complete){master.className='verdict warn';master.textContent='DONNÉES D’ABORD — aucune offre ferme sur ces données.'}else if(z.margin>=target&&prudent.margin>0){master.className='verdict go';master.textContent='GO SOUS RÉSERVE NOTAIRE — '+(z.margin*100).toFixed(1)+' % de marge; prix max '+euro(mp)+'.'}else if(z.margin>=.12){master.className='verdict warn';master.textContent='NÉGOCIER — offre cible ≤ '+euro(mp)+'.'}else{master.className='verdict stop';master.textContent='NO GO — prix maximum économique '+euro(mp)+'.'}
- renderStress();updateLotValues();return {z:z,prudent:prudent,mp:mp,mps:mps,gs:gs,vs:vs,userEnt:userEnt,partnerEnt:partnerEnt,userCashOut:userCashOut,soulte:soulte,distributable:distributable};
+ renderStress();updateLotValues();return {z:z,prudent:prudent,mp:mp,mps:mps,mcons:mcons,gs:gs,vs:vs,userEnt:userEnt,partnerEnt:partnerEnt,userCashOut:userCashOut,soulte:soulte,distributable:distributable};
 }
 function renderStress(){
  var cases=[['Base',1,1,1],['Prudent',.95,1.25,1.10],['Stress fort',.90,1.50,1.20],['Stress extrême',.85,1.75,1.30]];
@@ -212,6 +215,14 @@ function snapshot(){
  var data={version:5,projectName:$('projectName').value,market:$('market').value,micro:$('micro').value,purchase:$('purchase').value,acqOther:$('acqOther').value,division:$('division').value,holding:$('holding').value,exitRate:$('exitRate').value,targetMargin:$('targetMargin').value,cashUser:$('cashUser').value,cashPartner:$('cashPartner').value,taxOverride:$('taxOverride').value,taxRefund:$('taxRefund').value,months:$('months').value,gates:{units:$('gateUnits').value,division:$('gateDivision').value,base:$('gateBase').value,asis:$('gateAsIs').value,structure:$('gateStructure').value,occupancy:$('gateOccupancy').value},lots:allLots().map(function(l){return {active:l.active,name:l.name,mode:l.mode,area:l.area,beds:l.beds,floor:l.floor,condition:l.condition,exterior:l.exterior,elevator:l.elevator,psm:l.psm,source:l.source}}),savedAt:new Date().toISOString()};return data;
 }
 function autosave(){try{localStorage.setItem(storageKey,JSON.stringify(snapshot()))}catch(e){}}
+function readPortfolio(){try{return JSON.parse(localStorage.getItem(portfolioKey)||'{}')||{}}catch(e){return {}}}
+function writePortfolio(p){try{localStorage.setItem(portfolioKey,JSON.stringify(p||{}))}catch(e){};renderSavedDeals()}
+function dealId(data){var base=String(data.projectName||'').trim();return base?base.toLowerCase().replace(/[^a-z0-9à-ÿ]+/gi,'-').replace(/^-|-$/g,''):('deal-'+Date.now())}
+function saveNamedDeal(){var data=snapshot(),p=readPortfolio(),id=dealId(data);data.id=id;data.savedAt=new Date().toISOString();p[id]=data;writePortfolio(p);try{localStorage.setItem(storageKey,JSON.stringify(data))}catch(e){};return id}
+function renderSavedDeals(){var p=readPortfolio(),keys=Object.keys(p).sort(function(a,b){return String(p[b].savedAt||'').localeCompare(String(p[a].savedAt||''))});$('savedDeals').innerHTML='<option value="">'+(keys.length?'Choisir un dossier…':'Aucun dossier')+'</option>'+keys.map(function(k){var d=p[k];return '<option value="'+k+'">'+(d.projectName||k)+' · '+(d.market||'')+' · '+new Date(d.savedAt||Date.now()).toLocaleDateString('fr-BE')+'</option>'}).join('')}
+function loadNamedDeal(){var id=$('savedDeals').value,p=readPortfolio();if(id&&p[id]){loadSnapshot(p[id]);try{localStorage.setItem(storageKey,JSON.stringify(p[id]))}catch(e){}}}
+function deleteNamedDeal(){var id=$('savedDeals').value;if(!id)return;var p=readPortfolio();delete p[id];writePortfolio(p)}
+function exportDeal(){var data=snapshot(),blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a'),name=(data.projectName||'argus-deal').replace(/[^a-z0-9-_]+/gi,'-');a.href=URL.createObjectURL(blob);a.download=name+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
 function loadSnapshot(data){
  if(!data)return;['projectName','purchase','acqOther','division','holding','exitRate','targetMargin','cashUser','cashPartner','taxOverride','taxRefund','months'].forEach(function(id){if(data[id]!=null)$(id).value=data[id]});
  if(data.market&&bench[data.market])$('market').value=data.market;updateMarket();if(data.micro)$('micro').value=data.micro;
@@ -220,7 +231,7 @@ function loadSnapshot(data){
  calc();
 }
 function copySummary(){
- var r=calc(),name=$('projectName').value||'Dossier ARGUS',lines=[name,'Marché: '+$('market').value+' / '+($('micro').selectedOptions[0]?.text||''),'Prix demandé: '+euro(r.z.p),'Valeur lots: '+euro(r.z.total),'Coût all-in: '+euro(r.z.allin),'Bénéfice: '+euro(r.z.profit),'Marge: '+(r.z.margin*100).toFixed(1)+' %','Ratio découpe: '+r.z.ratio.toFixed(2)+'x','Prix max ARGUS: '+euro(r.mp),'Prix max prudent: '+euro(r.mps),'Verdict: '+$('masterVerdict').textContent];
+ var r=calc(),name=$('projectName').value||'Dossier ARGUS',lines=[name,'Marché: '+$('market').value+' / '+($('micro').selectedOptions[0]?.text||''),'Prix demandé: '+euro(r.z.p),'Valeur lots: '+euro(r.z.total),'Coût all-in: '+euro(r.z.allin),'Bénéfice: '+euro(r.z.profit),'Marge: '+(r.z.margin*100).toFixed(1)+' %','Ratio découpe: '+r.z.ratio.toFixed(2)+'x','Plafond conservateur: '+euro(r.mcons),'Prix cible prudent: '+euro(r.mps),'Maximum absolu: '+euro(r.mp),'Baisse requise: '+euro(Math.max(0,r.z.p-r.mps)),'Verdict: '+$('masterVerdict').textContent];
  navigator.clipboard&&navigator.clipboard.writeText(lines.join('\n')).then(function(){$('copyBtn').textContent='Résumé copié ✓';setTimeout(function(){$('copyBtn').textContent='Copier résumé'},1500)});
 }
 function clearValues(){Array.from(document.querySelectorAll('#lotRows tr')).forEach(function(r){r.querySelector('.lotPsm').value='';r.querySelector('.lotSource').value='';r.querySelector('.lotCompCount').textContent='—';r.querySelector('.lotQuality').textContent='—'});lotResults={};$('comps').innerHTML='';$('compTitle').textContent='Aucun lot sélectionné.';calc();autosave()}
@@ -233,7 +244,7 @@ async function init(){
  var saved=null;try{saved=JSON.parse(localStorage.getItem(storageKey)||'null')}catch(e){};if(saved&&!query.toString())loadSnapshot(saved);
  if(query.get('units')){var nLots=Math.min(6,Math.max(1,Number(query.get('units'))||4));Array.from(document.querySelectorAll('#lotRows tr')).forEach(function(r,i){r.querySelector('.lotActive').checked=i<nLots})}
  document.querySelectorAll('main input,main select').forEach(function(x){x.addEventListener('input',function(){if(x.classList.contains('lotMode')&&x.value==='KEEP'){document.querySelectorAll('.lotMode').forEach(function(y){if(y!==x)y.value='SELL'})}calc();autosave()})});
- $('market').addEventListener('change',updateMarket);$('analyzeLots').onclick=analyzeAll;$('clearValues').onclick=clearValues;$('saveBtn').onclick=function(){autosave();$('saveBtn').textContent='Sauvegardé ✓';setTimeout(function(){$('saveBtn').textContent='Sauvegarder dossier'},1300)};$('newBtn').onclick=newProject;$('copyBtn').onclick=copySummary;
+ $('market').addEventListener('change',updateMarket);$('analyzeLots').onclick=analyzeAll;$('clearValues').onclick=clearValues;$('saveBtn').onclick=function(){saveNamedDeal();$('saveBtn').textContent='Sauvegardé ✓';setTimeout(function(){$('saveBtn').textContent='Sauvegarder dossier'},1300)};$('newBtn').onclick=newProject;$('copyBtn').onclick=copySummary;$('exportBtn').onclick=exportDeal;$('loadDeal').onclick=loadNamedDeal;$('deleteDeal').onclick=deleteNamedDeal;renderSavedDeals();
  fetch('/api/immo-flip-opportunities?x='+Date.now()).then(function(r){return r.json()}).then(function(j){$('opps').innerHTML=(j.opportunities||[]).slice(0,8).map(function(x){var f=x.flip||{};return '<div class="opp"><div><b>'+euro(x.price)+' · '+(f.zone||'')+'</b><span>'+((f.statusLabel||'').replace(/[🟢🟠🔴]/g,''))+' · '+(f.units||'—')+' unités · pré-score '+(f.score||0)+'</span></div><a href="'+(x.canonical||x.source||'#')+'" target="_blank" rel="noopener">ANNONCE</a></div>'}).join('')||'Aucune opportunité active confirmée.'}).catch(function(){$('opps').textContent='Catalogue indisponible.'});
  calc();
 }
