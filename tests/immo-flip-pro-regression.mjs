@@ -13,6 +13,10 @@ assert.match(page,/analyzeAll/,'Lot comparable analyzer missing');
 assert.match(page,/taxOverride/,'Validated tax override missing');
 assert.match(page,/taxRefund/,'Validated tax refund missing');
 assert.match(page,/localStorage/,'Visit dossier persistence missing');
+assert.match(page,/portfolioKey/,'Multi-deal visit portfolio missing');
+assert.match(page,/priceConservative/,'Stress-derived conservative price missing');
+assert.match(page,/priceTarget/,'Prudent target price missing');
+assert.match(page,/regionalDocs/,'Regional due-diligence checklist missing');
 assert.match(page,/0 € de rénovation/,'No-renovation strategy must be explicit');
 
 assert.doesNotMatch(engine,/ZONE_ARV/,'Synthetic commune ARV bands must never return');
