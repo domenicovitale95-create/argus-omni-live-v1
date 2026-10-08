@@ -42,7 +42,7 @@ export default async function handler(req,res){
       refreshedAt:data.refreshedAt||null,
       minPrice:data.minPrice||null,
       maxPrice:data.maxPrice||null,
-      criteria:category==='building'?{zones:BRUSSELS_COMMUNES.map(c=>c.name),sectors:['NORD','SUD'],apartments:[3,4,5,6],minPrice:600000,maxPrice:1400000,sort:'price_asc'}:null,
+      criteria:category==='building'?{zones:BRUSSELS_COMMUNES.map(c=>c.name),sectors:['NORD','SUD'],apartments:'3+',minPrice:40000,maxPrice:1400000,sort:'price_asc'}:null,
       counts:{...(data.counts||{}),active:listings.length,filteredOutsideScope,filteredUserCriteria},
       discovery:data.discovery||null,
       listings,
