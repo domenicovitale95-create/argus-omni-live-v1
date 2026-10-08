@@ -76,8 +76,8 @@ assert.deepEqual(
 );
 assert.deepEqual(
   evaluateEligibility({availabilityStatus:'ACTIVE',price:170000,surface:37,type:'studio'},150000,'apartment'),
-  {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'},
-  'A confirmed out-of-box listing may be excluded explicitly'
+  {eligible:false,review:false,reason:'STUDIO_EXCLUDED'},
+  'A confirmed out-of-box studio remains excluded by property type'
 );
 assert.deepEqual(
   evaluateEligibility({availabilityStatus:'ACTIVE',price:145000,surface:42,type:'apartment',epc:'G',peb:'G'},150000,'apartment'),
