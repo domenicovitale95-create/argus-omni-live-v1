@@ -62,5 +62,7 @@ async function syncBridge(password){
 }
 $('bridgeLogin').addEventListener('submit',ev=>{ev.preventDefault();syncBridge($('bridgePassword').value)});
 $('csv').addEventListener('change',async ev=>{const file=ev.target.files?.[0];if(!file)return;try{const visits=visitsFromCSV(await file.text());localStorage.setItem(key,JSON.stringify(visits));renderVisits()}catch(e){$('visitnotice').textContent='Import impossible : '+e.message}ev.target.value=''});renderVisits();syncBridge();
+setInterval(()=>{if(document.visibilityState==='visible'&&!$('bridgeLogin').hidden)return;if(document.visibilityState==='visible')syncBridge()},300000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&$('bridgeLogin').hidden)syncBridge()});
 })();
 </script></body></html>
