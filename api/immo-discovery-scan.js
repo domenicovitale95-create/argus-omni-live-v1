@@ -2,9 +2,7 @@ import {extractListing,hostAllowed,isUnavailableListing,isConfirmedActiveListing
 
 const APARTMENT_SOURCES=[
   {id:'immoweb-apartment',name:'Immoweb · appartements',url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\/fr\/annonce\//i,pages:20},
-  {id:'immoweb-studio',name:'Immoweb · studios',url:'https://www.immoweb.be/fr/recherche/studio/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\/fr\/annonce\//i,pages:20},
   {id:'immovlan-apartment',name:'Immovlan · appartements',url:'https://immovlan.be/fr/immobilier/appartement/a-vendre?maxprice=150000&regions=bruxelles-region',match:/\/fr\/detail\//i,pages:20},
-  {id:'immovlan-studio',name:'Immovlan · studios',url:'https://immovlan.be/fr/immobilier/appartement/a-vendre?propertysubtypes=studio&regions=bruxelles-region',match:/\/fr\/detail\//i,pages:20},
   {id:'zimmo',name:'Zimmo',url:'https://www.zimmo.be/fr/bruxelles/a-vendre/appartement',match:/(a-vendre|te-koop|for-sale)/i,pages:20},
   {id:'immoscoop',name:'Immoscoop',url:'https://www.immoscoop.be/fr/chercher/a-vendre/ville-de-bruxelles/appartement',match:/(a-vendre|te-koop|property|bien|pand)/i},
   {id:'century21',name:'CENTURY 21',url:'https://www.century21.be/fr/a-vendre',match:/\/fr\/properiete\/a-vendre\//i},
@@ -134,9 +132,10 @@ export function evaluateEligibility(x,maxPrice,category){
   const type=String(x.type||'unknown'),text=(String(x.title||'')+' '+String(x.description||'')).toLowerCase();
   const categoryMatch=category==='building'
     ? type==='building'||/(immeuble de rapport|immeuble à appartements|maison de rapport|investment property|opbrengsteigendom)/i.test(text)
-    : ['apartment','studio'].includes(type)||/(appartement|apartment|flat|studio|duplex|penthouse|kot\b)/i.test(text);
+    : type==='apartment'||/(appartement|apartment|flat|duplex|penthouse)/i.test(text);
   if(Number.isFinite(price)&&(price<40000||price>maxPrice))return {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'};
   if(Number.isFinite(surface)&&(surface<12||surface>800))return {eligible:false,review:false,reason:'IMPLAUSIBLE_SURFACE'};
+  if(category!=='building'&&(type==='studio'||/\b(studio|kot)\b/i.test(String(x.title||''))))return {eligible:false,review:false,reason:'STUDIO_EXCLUDED'};
   if(!categoryMatch&&type!=='unknown')return {eligible:false,review:false,reason:'WRONG_PROPERTY_TYPE'};
   if(!Number.isFinite(price))return {eligible:false,review:true,reason:'PRICE_NOT_PARSED'};
   if(!categoryMatch)return {eligible:false,review:true,reason:'TYPE_NOT_CONFIRMED'};
@@ -229,7 +228,7 @@ export default async function handler(req,res){
   try{
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});
     const category=raw.category==='building'?'building':'apartment';
-    const defaultMax=category==='building'?400000:150000;
+    const defaultMax=category==='building'?1400000:150000;
     const maxPrice=Math.max(50000,Math.min(1000000,Number(raw.maxPrice)||defaultMax));
     const sources=category==='building'?BUILDING_SOURCES:APARTMENT_SOURCES;
     const results=await Promise.all(sources.map(s=>scanSource(s,maxPrice,category)));
