@@ -58,16 +58,16 @@ export default async function handler(req,res){
     let source,selected,filteredUserCriteria=0;
     if(category==='building'){
       const eligible=stored.map(enrichBuildingCriteria).filter(matchesBuildingCriteria);
-      source=eligible.length?eligible:fallback('building');
+      source=eligible;
       selected=source.map(enrichBuilding).sort((a,b)=>(number(a.price)??Infinity)-(number(b.price)??Infinity)).slice(0,LIMIT.building);
     }else{
       const activeCandidates=stored.filter(x=>number(x.price)!==null&&number(x.price)<=MAX.apartment&&isBrusselsListing(x,x.canonical||x.source));
       const catalogListings=activeCandidates.filter(x=>!hardExcludedApartment(x));
       filteredUserCriteria=Math.max(0,activeCandidates.length-catalogListings.length);
-      source=catalogListings.length?catalogListings:fallback('apartment');
+      source=catalogListings;
       selected=source.map(enrichApartment).sort((a,b)=>b.score-a.score||(number(a.price)??Infinity)-(number(b.price)??Infinity)).slice(0,LIMIT.apartment);
     }
-    const checkedAt=catalog?.refreshedAt||new Date().toISOString(),quarantineCount=Number(catalog?.counts?.quarantined)||0;
-    return res.status(200).json({ok:true,category,updatedAt:checkedAt,checkedAt,failClosed:true,cachePolicy:'NO_STORE_LIVE_CATALOG',selectionMode:(catalog?.listings||[]).length?'DYNAMIC_LIVE_CATALOG':'STATIC_FALLBACK',criteria:category==='building'?{zones:BRUSSELS_COMMUNES.map(c=>c.name),sectors:['NORD','SUD'],apartments:[3,4,5,6],minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,counts:{sourceRecords:source.length,active:selected.length,excludedUnavailable:quarantineCount,hiddenUnverified:Math.max(0,source.length-selected.length),filteredUserCriteria},opportunities:selected,notice:category==='building'?'Immeubles de rapport : 19 communes de Bruxelles, NORD/SUD, 3 à 6 appartements, 600 k€ à 1,4 M€.':'Sélection ARGUS appartements.'});
+    const checkedAt=catalog?.refreshedAt||null,quarantineCount=Number(catalog?.counts?.quarantined)||0;
+    return res.status(200).json({ok:true,category,updatedAt:checkedAt,checkedAt,failClosed:true,cachePolicy:'NO_STORE_LIVE_CATALOG',selectionMode:catalog?.refreshedAt?'DYNAMIC_LIVE_CATALOG':'AWAITING_VERIFIED_REFRESH',criteria:category==='building'?{zones:BRUSSELS_COMMUNES.map(c=>c.name),sectors:['NORD','SUD'],apartments:[3,4,5,6],minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,counts:{sourceRecords:source.length,active:selected.length,excludedUnavailable:quarantineCount,hiddenUnverified:Math.max(0,source.length-selected.length),filteredUserCriteria},opportunities:selected,notice:category==='building'?'Immeubles de rapport : 19 communes de Bruxelles, NORD/SUD, 3 à 6 appartements, 600 k€ à 1,4 M€.':'Sélection ARGUS appartements.'});
   }catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
 }
