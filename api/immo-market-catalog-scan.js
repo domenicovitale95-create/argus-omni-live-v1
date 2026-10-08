@@ -18,7 +18,7 @@ const APARTMENT_SOURCES=[
   {id:'oralis-home',name:'Oralis Real Estate · sélection',url:'https://oralis.be/fr',match:/\/(?:fr|en|nl)\/property\/for-sale\/[^/]+\/[^/]+\/\d+/i},
   {id:'weinvest',name:'We Invest',url:'https://weinvest.be/fr-BE/properties/for-sale/apartment/city/bruxelles',match:/\/fr-BE\/property\/for-sale\/[^/]+\/apartment\/\d+/i},
   {id:'properstar',name:'Properstar',url:'https://www.properstar.be/belgique/bruxelles/acheter/appartement/plus-recents',match:/\/annonce\/\d+/i},
-  ...BRUSSELS_COMMUNES.map(c=>({id:'immoweb-apartment-commune-'+c.postcodes[0],name:'Immoweb appartements · '+c.name,url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/'+c.slug+'/'+c.postcodes[0]+'?maxprice=150000',match:/\/fr\/annonce\//i,pages:1}))
+  ...BRUSSELS_COMMUNES.flatMap(c=>c.postcodes.map(pc=>({id:'immoweb-apartment-commune-'+pc,name:'Immoweb appartements · '+c.name,url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/'+c.slug+'/'+pc+'?maxprice=150000',match:/\/fr\/annonce\//i,pages:1})))
 ]; 
 const BUILDING_SOURCES=[
   {id:'immoweb-building',name:'Immoweb · immeubles',url:`https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?minprice=${BUILDING_MIN_PRICE}&maxprice=${BUILDING_MAX_PRICE}`,match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
@@ -27,7 +27,7 @@ const BUILDING_SOURCES=[
   {id:'era-chatelain-building',name:'ERA Châtelain · immeubles',url:'https://www.era.be/fr/a-vendre?broker_id=6000159',match:/\/fr\/a-vendre\/[^/]+\/(?:immeuble|immeuble-de-rapport|maison|autre)\/.+/i,pages:20},
   {id:'oralis-building',name:'Oralis Real Estate · immeubles',url:'https://oralis.be/fr/a-vendre',match:/\/(?:fr|en|nl)\/property\/for-sale\/[^/]+\/[^/]+\/\d+/i,pages:20},
   {id:'oralis-building-home',name:'Oralis Real Estate · sélection immeubles',url:'https://oralis.be/fr',match:/\/(?:fr|en|nl)\/property\/for-sale\/[^/]+\/[^/]+\/\d+/i},
-  ...BRUSSELS_COMMUNES.map(c=>({id:'immoweb-building-commune-'+c.postcodes[0],name:'Immoweb immeubles · '+c.name,url:'https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/'+c.slug+'/'+c.postcodes[0]+'?minprice='+BUILDING_MIN_PRICE+'&maxprice='+BUILDING_MAX_PRICE,match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:1}))
+  ...BRUSSELS_COMMUNES.flatMap(c=>c.postcodes.map(pc=>({id:'immoweb-building-commune-'+pc,name:'Immoweb immeubles · '+c.name,url:'https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/'+c.slug+'/'+pc+'?minprice='+BUILDING_MIN_PRICE+'&maxprice='+BUILDING_MAX_PRICE,match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:1})))
 ]; 
 const SEARCH_TIMEOUT=7000,DETAIL_TIMEOUT=8500,DETAIL_CONCURRENCY=12,MAX_LINKS_PER_SOURCE=1000;
 async function fetchSearch(url){const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),SEARCH_TIMEOUT);try{const r=await fetch(url,{redirect:'follow',signal:ctrl.signal,headers:{'user-agent':'Mozilla/5.0 (compatible; ArgusImmoCatalog/2.7; +https://argus-omni-live.vercel.app/immo-opportunities)','accept':'text/html,application/xhtml+xml','accept-language':'fr-BE,fr;q=.9,nl;q=.8,en;q=.7'}});if(!r.ok)throw new Error('HTTP '+r.status);const ct=r.headers.get('content-type')||'';if(!ct.includes('text/html'))throw new Error('not HTML');return {url:r.url||url,text:(await r.text()).slice(0,2200000)}}finally{clearTimeout(timer)}}
