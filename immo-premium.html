@@ -4,8 +4,8 @@
 const e=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=x=>Number(x).toLocaleString('fr-BE',{style:'currency',currency:'EUR',maximumFractionDigits:0});
 const url=x=>{try{const u=new URL(x,location.origin);return /^https?:$/.test(u.protocol)?u.href:'#'}catch{return '#'}};
-function norm(s){return String(s||'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/\\b(avenue|av\\.?|rue|boulevard|bd\\.?|chaussee|ch\\.?|place|square|straat|laan)\\b/g,'').replace(/[^a-z0-9]/g,'')}
-function propertyId(u){try{const m=new URL(u).pathname.match(/\\b(2[0-9]{7})\\b/);return m?.[1]||''}catch{return ''}}
+function norm(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(avenue|av\.?|rue|boulevard|bd\.?|chaussee|ch\.?|place|square|straat|laan)\b/g,'').replace(/[^a-z0-9]/g,'')}
+function propertyId(u){try{const m=new URL(u).pathname.match(/\b(2[0-9]{7})\b/);return m?.[1]||''}catch{return ''}}
 function bridgeMatch(x){
  const listing=propertyId(x.canonical||x.source);
  const address=norm(x.address||'');
