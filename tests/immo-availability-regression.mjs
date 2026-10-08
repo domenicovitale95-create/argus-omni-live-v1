@@ -54,7 +54,7 @@ const embeddedHtml='<script>window.__DATA__={\"url\":\"\\/fr\\/annonce\\/studio\
 const embeddedLinks=linksFrom(
   embeddedHtml,
   'https://www.immoweb.be/fr/recherche/studio/a-vendre/bruxelles/arrondissement?maxprice=150000',
-  {id:'immoweb-studio',url:'https://www.immoweb.be/fr/recherche/studio/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\\/fr\\/annonce\\//i}
+  {id:'immoweb-studio',url:'https://www.immoweb.be/fr/recherche/studio/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\/fr\/annonce\//i}
 );
 assert.equal(embeddedLinks.length,1,'Immoweb hydrated JSON listing routes must be discovered');
 assert.match(embeddedLinks[0],/21861941/,'Known-style Immoweb listing id must survive embedded-link extraction');
