@@ -128,14 +128,14 @@ function keyFor(x){
 }
 export function evaluateEligibility(x,maxPrice,category){
   if(isUnavailableListing(x))return {eligible:false,review:false,reason:'EXPLICITLY_UNAVAILABLE'};
-  const price=Number(x.price),surface=Number(x.surface);
+  const price=x.price===null||x.price===undefined||String(x.price).trim()===''?NaN:Number(x.price),surface=Number(x.surface);
   const type=String(x.type||'unknown'),text=(String(x.title||'')+' '+String(x.description||'')).toLowerCase();
   const categoryMatch=category==='building'
     ? type==='building'||/(immeuble de rapport|immeuble à appartements|maison de rapport|investment property|opbrengsteigendom)/i.test(text)
     : type==='apartment'||/(appartement|apartment|flat|duplex|penthouse)/i.test(text);
+  if(category!=='building'&&(type==='studio'||/\b(studio|kot)\b/i.test(String(x.title||''))))return {eligible:false,review:false,reason:'STUDIO_EXCLUDED'};
   if(Number.isFinite(price)&&(price<40000||price>maxPrice))return {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'};
   if(Number.isFinite(surface)&&(surface<12||surface>800))return {eligible:false,review:false,reason:'IMPLAUSIBLE_SURFACE'};
-  if(category!=='building'&&(type==='studio'||/\b(studio|kot)\b/i.test(String(x.title||''))))return {eligible:false,review:false,reason:'STUDIO_EXCLUDED'};
   if(!categoryMatch&&type!=='unknown')return {eligible:false,review:false,reason:'WRONG_PROPERTY_TYPE'};
   if(!Number.isFinite(price))return {eligible:false,review:true,reason:'PRICE_NOT_PARSED'};
   if(!categoryMatch)return {eligible:false,review:true,reason:'TYPE_NOT_CONFIRMED'};
