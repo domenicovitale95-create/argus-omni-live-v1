@@ -40,7 +40,7 @@ function qualityEvidence(x={},recognized,units){
   if(!technical)missing.push('Rapport technique sans travaux importants');
   if(!energy)missing.push('Certificats PEB A–D vérifiables');
   const score=(legal?30:0)+(docs?20:0)+(electricity?15:0)+(technical?15:0)+(energy?15:0)+(newListing?5:0);
-  return {legal,docs,electricity,technical,energy,newListing,complete,missing,score,proofLevel:complete?'DOCUMENTS_COMPLETS':'À_VÉRIFIER'};
+  return {legal,docs,electricity,technical,energy,newListing,complete,missing,score,proofLevel:complete?'PREUVES_DÉCLARÉES_À_AUDITER':'À_VÉRIFIER'};
 }
 
 export function analyzeFlip(x={}){
@@ -49,7 +49,7 @@ export function analyzeFlip(x={}){
   const score=Math.round(clamp(quality.score-(signals.review.length*5)-(signals.hard.length*25),0,100));
   let status='DOCUMENTS_FIRST',label='🟠 À VÉRIFIER',action='Demander les pièces officielles avant de qualifier le bien.';
   if(signals.hard.length){status='STOP';label='🔴 STOP';action='Écarter jusqu’à résolution documentée du blocage.'}
-  else if(quality.complete&&!signals.review.length){status='READY';label='🟢 DOSSIER PREMIUM VÉRIFIÉ';action='Contrôler les pièces et lancer la valorisation lot par lot.'}
+  else if(quality.complete&&!signals.review.length){status='READY';label='🟢 CANDIDAT PREMIUM · PIÈCES À CONTRÔLER';action='Contrôler les pièces et lancer la valorisation lot par lot.'}
   const missing=quality.missing.slice();
   if(recognized===null)missing.push('preuve officielle du nombre d’unités reconnues');
   if(!addressKnown(x))missing.push('adresse exacte');
@@ -81,7 +81,7 @@ export function flipMethodology(){
       'Unité reconnue et division juridiquement sécurisable avant décision',
       'Les travaux lourds explicitement nécessaires font sortir le bien de cette stratégie'
     ],
-    statuses:{READY:'Pièces officielles et contrôles techniques positifs renseignés',DOCUMENTS_FIRST:'Preuves manquantes : le bien ne peut pas être déclaré conforme',STOP:'Blocage explicite ou bien hors stratégie'},
+    statuses:{READY:'Pièces déclarées disponibles : contrôle humain indispensable',DOCUMENTS_FIRST:'Preuves manquantes : le bien ne peut pas être déclaré conforme',STOP:'Blocage explicite ou bien hors stratégie'},
     caution:'Le pré-screening n’est pas une expertise de valeur. La rentabilité est calculée uniquement dans ARGUS FLIP PRO avec les lots et leurs comparables.'
   };
 }
