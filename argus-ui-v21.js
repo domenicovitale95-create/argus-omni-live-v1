@@ -17,7 +17,7 @@
     if(!root||root.dataset.v21==='1')return;
     root.dataset.v21='1';
     root.innerHTML=`
-      <div class="v21-daynav" aria-label="Match day"><span class="v21-daylabel">TODAY · THE SHORTLIST</span><time>${fmtDate()}</time></div>
+      <div class="v21-daynav" aria-label="Match day"><span class="v21-daylabel">TODAY · CURRENT MATCHES</span><time>${fmtDate()}</time></div>
       <div class="v2-status-strip">
         <div><span>Prime picks</span><strong id="v2Prime">0</strong></div>
         <div><span>Good value</span><strong id="v2Value">0</strong></div>
@@ -25,7 +25,7 @@
         <span id="v2NoBet" hidden>0</span>
       </div>
       <div class="v2-best-line"><span>What stands out</span><strong id="v2Best">Nothing checked yet</strong><small id="v2Updated">—</small></div>
-      <div class="v2-filterbar" role="tablist"><button data-v2-filter="signals" class="active">Worth a look</button><button data-v2-filter="prime">Prime</button><button data-v2-filter="value">Value</button><button data-v2-filter="watch">Wait</button><button data-v2-filter="all">All matches</button></div>`;
+      <div class="v2-filterbar" role="tablist"><button data-v2-filter="all" class="active">All matches</button><button data-v2-filter="live">● Live</button><button data-v2-filter="signals">Worth a look</button><button data-v2-filter="prime">Prime</button><button data-v2-filter="value">Value</button><button data-v2-filter="watch">Wait</button><button data-v2-filter="past">Finished</button></div>`;
     qa('[data-v2-filter]',root).forEach(btn=>btn.addEventListener('click',()=>{
       if(typeof state==='undefined')return;
       state.filter=btn.dataset.v2Filter;
