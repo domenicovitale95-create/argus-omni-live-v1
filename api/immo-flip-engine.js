@@ -43,14 +43,34 @@ function qualityEvidence(x={},recognized,units){
   return {legal,docs,electricity,technical,energy,newListing,complete,missing,score,proofLevel:complete?'PREUVES_DÉCLARÉES_À_AUDITER':'À_VÉRIFIER'};
 }
 
+function verifiedPremium(x,quality,units,recognized,signals,price){
+ const approved=v=>['VERIFIED','CONFIRMED','COMPLIANT','CONFORME','VALIDATED','VALIDÉ','VALIDEE'].includes(String(v||'').toUpperCase());
+ const check=(ok,reason)=>ok?null:reason;
+ const missing=[
+ check(Number(price)>0&&Number(price)<=1400000,'Prix valide, maximum 1 400 000 €'),
+ check(units>=3&&recognized===units,'Au moins 3 logements officiellement reconnus, identiques aux lots proposés'),
+ check(quality.legal&&approved(x.urbanismVerificationStatus),'Renseignements urbanistiques, permis et situation de droit contrôlés'),
+ check(quality.docs&&approved(x.approvedPlansVerificationStatus),'Plans autorisés et conformité de la configuration actuelle contrôlés'),
+ check(quality.electricity,'Rapports RGIE conformes pour les unités concernées'),
+ check(quality.energy,'Certificats PEB vérifiés, classe A à D par logement'),
+ check(quality.technical,'Expertise technique attestant absence de travaux lourds'),
+ check(approved(x.titleLegalVerificationStatus)&&Boolean(x.titleDeedDocumentUrl),'Titre, charges, servitudes et droits réels vérifiés'),
+ check(approved(x.saleByLotsLegalStatus)&&Boolean(x.saleByLotsNotaryDocumentUrl),'Vente par lots, copropriété et option croisée validées par notaire'),
+ check(approved(x.tenancyLegalStatus),'Baux, occupation et éventuels droits de préférence vérifiés'),
+ check(approved(x.environmentLegalStatus),'Sol et obligations environnementales applicables vérifiés'),
+ check(approved(x.fireSafetyLegalStatus),'Sécurité incendie et prescriptions applicables vérifiées'),
+ check(signals.hard.length===0&&signals.review.length===0,'Aucune alerte juridique, technique ou locative non résolue')
+ ].filter(Boolean);
+ return {verified:missing.length===0,missing};
+}
 export function analyzeFlip(x={}){
-  const price=num(x.price),area=num(x.area??x.surface),units=buildingUnitCount(x),zone=buildingZone(x),recognized=recognizedUnits(x),signals=criticalSignals(x),quality=qualityEvidence(x,recognizedUnits(x),units);
+  const price=num(x.price),area=num(x.area??x.surface),units=buildingUnitCount(x),zone=buildingZone(x),recognized=recognizedUnits(x),signals=criticalSignals(x),quality=qualityEvidence(x,recognizedUnits(x),units),legal=verifiedPremium(x,quality,units,recognized,signals,price);
   if(!price||!units||!zone)return {...x,flipReady:false,flipReason:'Données de base insuffisantes pour le pré-screening'};
   const score=Math.round(clamp(quality.score-(signals.review.length*5)-(signals.hard.length*25),0,100));
   let status='DOCUMENTS_FIRST',label='🟠 À VÉRIFIER',action='Demander les pièces officielles avant de qualifier le bien.';
   if(signals.hard.length){status='STOP';label='🔴 STOP';action='Écarter jusqu’à résolution documentée du blocage.'}
-  else if(quality.complete&&!signals.review.length){status='READY';label='🟢 CANDIDAT PREMIUM · PIÈCES À CONTRÔLER';action='Contrôler les pièces et lancer la valorisation lot par lot.'}
-  const missing=quality.missing.slice();
+  else if(legal.verified){status='READY';label='🟢 CONFORMITÉ DOCUMENTÉE · CONTRÔLÉE';action='Valider les derniers paramètres économiques et contractuels avant décision.'}
+  const missing=[...new Set([...quality.missing,...legal.missing])];
   if(recognized===null)missing.push('preuve officielle du nombre d’unités reconnues');
   if(!addressKnown(x))missing.push('adresse exacte');
   if(!area)missing.push('surface exploitable / plans');
@@ -63,7 +83,7 @@ export function analyzeFlip(x={}){
       strategyLabel:'DIVISER & REVENDRE EN L’ÉTAT · 0 € RÉNOVATION',
       valuationRequired:true,valuationSource:'LOT_LEVEL_LIVE_COMPARABLES_ONLY',
       zone,units,recognizedUnits:recognized,area,pricePerSqm:area?Math.round(price/area):null,
-      score,status,statusLabel:label,action,quality,
+      score,status,statusLabel:label,action,quality,legal,verifiedPremium:legal.verified,
       blockers:signals.hard,risks:signals.review,missing,
       profit:null,margin:null,stressMargin:null,maxPurchase:null,arv:null,
       note:"Aucune valeur de sortie, marge ou prix maximum n'est calculé au pré-screening. Ces chiffres ne deviennent disponibles qu'après valorisation des lots par comparables documentés dans ARGUS FLIP PRO."
@@ -81,7 +101,7 @@ export function flipMethodology(){
       'Unité reconnue et division juridiquement sécurisable avant décision',
       'Les travaux lourds explicitement nécessaires font sortir le bien de cette stratégie'
     ],
-    statuses:{READY:'Pièces déclarées disponibles : contrôle humain indispensable',DOCUMENTS_FIRST:'Preuves manquantes : le bien ne peut pas être déclaré conforme',STOP:'Blocage explicite ou bien hors stratégie'},
+    statuses:{READY:'Conformité documentée et vérifiée, sous réserve de validité des attestations',DOCUMENTS_FIRST:'Preuves manquantes : le bien ne peut pas être déclaré conforme',STOP:'Blocage explicite ou bien hors stratégie'},
     caution:'Le pré-screening n’est pas une expertise de valeur. La rentabilité est calculée uniquement dans ARGUS FLIP PRO avec les lots et leurs comparables.'
   };
 }
