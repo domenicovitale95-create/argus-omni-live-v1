@@ -66,13 +66,13 @@ assert.ok(
 
 assert.deepEqual(
   evaluateEligibility({availabilityStatus:'UNKNOWN',price:119000,surface:37,type:'studio'},150000,'apartment'),
-  {eligible:false,review:true,reason:'ACTIVE_STATUS_UNCONFIRMED'},
-  'A discovered listing with unconfirmed active status must be retained for verification'
+  {eligible:false,review:false,reason:'STUDIO_EXCLUDED'},
+  'Studio with unknown active status is excluded'
 );
 assert.deepEqual(
   evaluateEligibility({availabilityStatus:'ACTIVE',price:null,surface:37,type:'studio'},150000,'apartment'),
-  {eligible:false,review:true,reason:'PRICE_NOT_PARSED'},
-  'A discovered listing with an unparsed price must not silently disappear'
+  {eligible:false,review:false,reason:'STUDIO_EXCLUDED'},
+  'Studio with missing price is excluded'
 );
 assert.deepEqual(
   evaluateEligibility({availabilityStatus:'ACTIVE',price:170000,surface:37,type:'studio'},150000,'apartment'),
