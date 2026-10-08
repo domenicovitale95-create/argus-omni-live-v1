@@ -7,9 +7,7 @@ import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE,matchesBuildingCriteria,enrichBuil
 
 const APARTMENT_SOURCES=[
   {id:'immoweb-apartment',name:'Immoweb · appartements',url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\/fr\/annonce\//i,pages:20},
-  {id:'immoweb-studio',name:'Immoweb · studios',url:'https://www.immoweb.be/fr/recherche/studio/a-vendre/bruxelles/arrondissement?maxprice=150000',match:/\/fr\/annonce\//i,pages:20},
   {id:'immovlan-apartment',name:'Immovlan · appartements',url:'https://immovlan.be/fr/immobilier/appartement/a-vendre?maxprice=150000&regions=bruxelles-region',match:/\/fr\/detail\//i,pages:20},
-  {id:'immovlan-studio',name:'Immovlan · studios',url:'https://immovlan.be/fr/immobilier/appartement/a-vendre?propertysubtypes=studio&regions=bruxelles-region&maxprice=150000',match:/\/fr\/detail\//i,pages:20},
   {id:'zimmo',name:'Zimmo',url:'https://www.zimmo.be/fr/bruxelles/a-vendre/appartement',match:/(a-vendre|te-koop|for-sale)/i,pages:20},
   {id:'immoscoop',name:'Immoscoop',url:'https://www.immoscoop.be/fr/chercher/a-vendre/ville-de-bruxelles/appartement',match:/(a-vendre|te-koop|property|bien|pand)/i},
   {id:'century21',name:'CENTURY 21',url:'https://www.century21.be/fr/a-vendre',match:/\/fr\/properiete\/a-vendre\//i},
