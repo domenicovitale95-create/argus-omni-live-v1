@@ -23,24 +23,34 @@ function recognizedUnits(x={}){
   return Number.isFinite(v)&&v>0?Math.round(v):null;
 }
 function addressKnown(x={}){return Boolean(String(x.exactAddress||x.address||'').trim())}
-export function analyzeFlip(x={}){
-  const price=num(x.price),area=num(x.area??x.surface),units=buildingUnitCount(x),zone=buildingZone(x),recognized=recognizedUnits(x),signals=criticalSignals(x);
-  if(!price||!units||!zone)return {...x,flipReady:false,flipReason:'Données de base insuffisantes pour le pré-screening'};
-  let score=35;
-  if(area)score+=10;
-  if(units>=3&&units<=6)score+=10;
-  if(recognized!==null&&recognized===units)score+=20;
-  else if(recognized!==null)score-=20;
-  if(addressKnown(x))score+=8;
-  if(x.peb||x.epc)score+=5;
-  if(!signals.review.length)score+=7;
-  score-=signals.review.length*5;
-  score-=signals.hard.length*25;
-  score=Math.round(clamp(score,0,100));
-  let status='READY',label='🟢 READY FOR UNDERWRITING',action='Valoriser chaque futur lot dans ARGUS FLIP PRO.';
-  if(signals.hard.length){status='STOP';label='🔴 STOP';action='Écarter tant que le blocage n’est pas juridiquement levé.'}
-  else if(recognized===null||recognized!==units||signals.review.length){status='DOCUMENTS_FIRST';label='🟠 DOCUMENTS FIRST';action='Obtenir les preuves manquantes avant toute valorisation finale.'}
+function explicitPositive(v){return ['CONFIRMED','VERIFIED','COMPLIANT','CONFORME','OK','VALID'].includes(String(v||'').toUpperCase())}
+function qualityEvidence(x={},recognized,units){
+  const legal=recognized!==null&&recognized===units&&Boolean(x.recognizedUnitsSource||x.urbanismDocumentUrl||x.urbanismEvidenceUrl);
+  const docs=Boolean(x.urbanismDocumentUrl||x.urbanismEvidenceUrl)&&Boolean(x.plansDocumentUrl||x.legalPlansUrl);
+  const electricity=explicitPositive(x.electricityStatus||x.electricalComplianceStatus)&&Boolean(x.electricityReportUrl||x.electricalCertificateUrl);
+  const technical=explicitPositive(x.technicalInspectionStatus||x.buildingConditionStatus)&&Boolean(x.technicalReportUrl||x.inspectionReportUrl);
+  const peb=String(x.peb||x.epc||'').toUpperCase().match(/\\b[A-G](?:\\+|-)??\\b/);
+  const energy=Boolean(peb&&'ABCD'.includes(peb[0][0])&&Boolean(x.pebCertificateUrl||x.epcCertificateUrl));
+  const newListing=Boolean(x.isNew);
+  const complete=legal&&docs&&electricity&&technical&&energy;
   const missing=[];
+  if(!legal)missing.push('Renseignements urbanistiques officiels et unités reconnues');
+  if(!docs)missing.push('Plans légaux et documents urbanistiques');
+  if(!electricity)missing.push('Rapport RGIE conforme');
+  if(!technical)missing.push('Rapport technique sans travaux importants');
+  if(!energy)missing.push('Certificats PEB A–D vérifiables');
+  const score=(legal?30:0)+(docs?20:0)+(electricity?15:0)+(technical?15:0)+(energy?15:0)+(newListing?5:0);
+  return {legal,docs,electricity,technical,energy,newListing,complete,missing,score,proofLevel:complete?'DOCUMENTS_COMPLETS':'À_VÉRIFIER'};
+}
+
+export function analyzeFlip(x={}){
+  const price=num(x.price),area=num(x.area??x.surface),units=buildingUnitCount(x),zone=buildingZone(x),recognized=recognizedUnits(x),signals=criticalSignals(x),quality=qualityEvidence(x,recognizedUnits(x),units);
+  if(!price||!units||!zone)return {...x,flipReady:false,flipReason:'Données de base insuffisantes pour le pré-screening'};
+  const score=Math.round(clamp(quality.score-(signals.review.length*5)-(signals.hard.length*25),0,100));
+  let status='DOCUMENTS_FIRST',label='🟠 À VÉRIFIER',action='Demander les pièces officielles avant de qualifier le bien.';
+  if(signals.hard.length){status='STOP';label='🔴 STOP';action='Écarter jusqu’à résolution documentée du blocage.'}
+  else if(quality.complete&&!signals.review.length){status='READY';label='🟢 DOSSIER PREMIUM VÉRIFIÉ';action='Contrôler les pièces et lancer la valorisation lot par lot.'}
+  const missing=quality.missing.slice();
   if(recognized===null)missing.push('preuve officielle du nombre d’unités reconnues');
   if(!addressKnown(x))missing.push('adresse exacte');
   if(!area)missing.push('surface exploitable / plans');
@@ -53,7 +63,7 @@ export function analyzeFlip(x={}){
       strategyLabel:'DIVISER & REVENDRE EN L’ÉTAT · 0 € RÉNOVATION',
       valuationRequired:true,valuationSource:'LOT_LEVEL_LIVE_COMPARABLES_ONLY',
       zone,units,recognizedUnits:recognized,area,pricePerSqm:area?Math.round(price/area):null,
-      score,status,statusLabel:label,action,
+      score,status,statusLabel:label,action,quality,
       blockers:signals.hard,risks:signals.review,missing,
       profit:null,margin:null,stressMargin:null,maxPurchase:null,arv:null,
       note:"Aucune valeur de sortie, marge ou prix maximum n'est calculé au pré-screening. Ces chiffres ne deviennent disponibles qu'après valorisation des lots par comparables documentés dans ARGUS FLIP PRO."
@@ -71,7 +81,7 @@ export function flipMethodology(){
       'Unité reconnue et division juridiquement sécurisable avant décision',
       'Les travaux lourds explicitement nécessaires font sortir le bien de cette stratégie'
     ],
-    statuses:{READY:'Dossier suffisamment propre pour lancer l’underwriting lot par lot',DOCUMENTS_FIRST:'Données juridiques ou techniques à obtenir',STOP:'Blocage explicite ou bien hors stratégie'},
+    statuses:{READY:'Pièces officielles et contrôles techniques positifs renseignés',DOCUMENTS_FIRST:'Preuves manquantes : le bien ne peut pas être déclaré conforme',STOP:'Blocage explicite ou bien hors stratégie'},
     caution:'Le pré-screening n’est pas une expertise de valeur. La rentabilité est calculée uniquement dans ARGUS FLIP PRO avec les lots et leurs comparables.'
   };
 }
