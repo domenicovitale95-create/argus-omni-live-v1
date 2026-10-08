@@ -18,17 +18,17 @@ function visitsFromCSV(raw){const rows=parseCSV(raw),idx=rows.findIndex(r=>r[0]?
 let remoteVisits=null;
 function parseBridgeDate(text){
  const s=String(text||'').trim().toLowerCase();
- let m=s.match(/(\\d{1,2})\\/(\\d{1,2})\\/(\\d{4})/);
+ let m=s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
  if(m)return m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');
  const names=['janv','févr','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
- m=s.match(/(\\d{1,2})\\s+([a-zéûîô.]+)\\s+(\\d{4})/);
+ m=s.match(/(\d{1,2})\s+([a-zéûîô.]+)\s+(\d{4})/);
  if(m){const n=names.findIndex(x=>m[2].startsWith(x));if(n>=0)return m[3]+'-'+String(n+1).padStart(2,'0')+'-'+m[1].padStart(2,'0')}
  return '';
 }
 function fromBridgeRows(rows){
  return rows.map(r=>{
   const date=parseBridgeDate(r.date)||parseBridgeDate(r.source);
-  const hour=String(r.hour||'').match(/\\d{1,2}[:h]\\d{0,2}(?:\\s*[-–]\\s*\\d{1,2}[:h]\\d{0,2})?/i)?.[0]||String(r.source||'').match(/\\d{1,2}h\\d{0,2}/i)?.[0]||'';
+  const hour=String(r.hour||'').match(/\d{1,2}[:h]\d{0,2}(?:\s*[-–]\s*\d{1,2}[:h]\d{0,2})?/i)?.[0]||String(r.source||'').match(/\d{1,2}h\d{0,2}/i)?.[0]||'';
   const visited=/visite effectuée|visite réalisée/i.test(r.source||'');
   return {id:r.id,name:r.name,agency:r.agency,date,hour,action:r.action,status:visited?'Visité':date?'À visiter':'À confirmer',calendar:r.calendar||''};
  });
@@ -42,7 +42,7 @@ function renderVisits(){
  const list=future.concat(past);
  $('visits').innerHTML=list.length?list.map(v=>{
  const d=v.date?new Date(v.date+'T12:00:00'):null;
- const cal=v.calendar&&/^https:\\/\\/www\\.google\\.com\\/calendar\\//.test(v.calendar)?'<a href="'+escape(v.calendar)+'" target="_blank" rel="noopener noreferrer" style="font-size:12px">Calendrier ↗</a>':'';
+ const cal=v.calendar&&/^https:\/\/www\.google\.com\/calendar\//.test(v.calendar)?'<a href="'+escape(v.calendar)+'" target="_blank" rel="noopener noreferrer" style="font-size:12px">Calendrier ↗</a>':'';
  return '<article class="visit"><div class="date">'+(d?d.getDate():'—')+'<small>'+(d?months[d.getMonth()]:'VISITE')+'</small></div><div><h3>'+escape(v.name)+'</h3><p><b>'+escape(v.hour||'Heure à confirmer')+'</b> · '+escape(v.agency||v.id)+'</p><p><span class="pill '+(v.status==='Visité'?'done':'')+'">'+escape(v.status)+'</span></p><p>'+escape(v.action||'Prochaine action à préciser')+'</p>'+cal+'</div></article>'
  }).join(''):'<div class="empty">Aucune visite à venir dans BRIDGE.</div>';
 }
