@@ -33,6 +33,17 @@ function sheetRows(values){
  calendar:get(r,'LIEN CALENDRIER')
  }));
 }
+function buildingRows(values){
+ const i=values.findIndex(r=>r[0]==='ID'&&r.some(c=>String(c).includes('IMMEUBLE / ADRESSE')));
+ if(i<0)return [];
+ const headers=values[i].map(c=>String(c||'').trim().toUpperCase());
+ const get=(r,name)=>{const j=headers.indexOf(name);return j<0?'':String(r[j]||'').trim()};
+ return values.slice(i+1).filter(r=>/^BR-[0-9]+$/i.test(String(r[0]||'').trim())).map(r=>({
+ id:get(r,'ID'),address:get(r,'IMMEUBLE / ADRESSE'),commune:get(r,'COMMUNE'),
+ price:get(r,'PRIX (€)'),stage:get(r,'ÉTAPE'),listingUrl:get(r,'LIEN ANNONCE'),
+ urbanism:get(r,'URBANISME'),peb:get(r,'PEB'),appointment:get(r,'RENDEZ-VOUS (SOURCE)')
+ }));
+}
 async function googleAccessToken(){
  const email=process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
  const key=(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY||'').replace(/\\n/g,'\n');
