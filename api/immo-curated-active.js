@@ -1,3 +1,5 @@
+import {BRUSSELS_COMMUNES,brusselsGeography} from './immo-brussels-zones.js';
+import {isStudioListing} from './immo-property-type.js';
 import {readJsonFresh} from './_report-store.js';
 import {isBrusselsListing,hasDeferredPriceStructure} from './immo-region.js';
 import {isUserExcludedListing} from './immo-user-exclusions.js';
@@ -16,7 +18,7 @@ function number(v){if(v===null||v===undefined||String(v).trim()==='')return null
 function text(x={}){return [x.title,x.description,x.location,x.address,x.city,x.peb,x.epc,x.heating,x.charges].filter(Boolean).join(' ').toLowerCase()}
 function pebBand(x={}){const raw=String(x.peb||x.epc||'').trim().toUpperCase();const m=raw.match(/\b([A-G])(?:\+|-)?\b/);return m?m[1]:null}
 function pricePerSqm(x={}){const p=number(x.price),a=number(x.area??x.surface);return p&&a?Math.round(p/a):null}
-function hardExcludedApartment(x={}){const s=text(x);return hasDeferredPriceStructure(x)||isUserExcludedListing(x,'apartment')||/appartement de service|residence services|résidence services|serviceflat/.test(s)}
+function hardExcludedApartment(x={}){const s=text(x);return isStudioListing(x)||hasDeferredPriceStructure(x)||isUserExcludedListing(x,'apartment')||/appartement de service|residence services|résidence services|serviceflat/.test(s)}
 function locationBonus(x={}){const s=text(x);if(/saint-josse|sint-joost|ribaucourt|maritime|tour\s*&?\s*taxis|molenbeek|anderlecht|bruxelles|brussel/.test(s))return 4;return 0}
 function scoreApartment(x={}){
   const p=number(x.price),a=number(x.area??x.surface),psm=pricePerSqm(x),peb=pebBand(x),s=text(x);let score=48;
@@ -37,7 +39,7 @@ function risksForApartment(x={}){
   return out.slice(0,3);
 }
 function statusFor(score){if(score>=82)return 'ARGUS_1';if(score>=72)return 'SHORTLIST';return 'WATCH'}
-function enrichApartment(x){const score=scoreApartment(x),status=statusFor(score),verdict=status==='ARGUS_1'?'PRIORITÉ ARGUS — AUDIT À LANCER':status==='SHORTLIST'?'À ÉTUDIER — BON RAPPORT POTENTIEL':'À SURVEILLER — VÉRIFICATIONS NÉCESSAIRES';return {...x,score,status,verdict,risks:[...(Array.isArray(x.risks)?x.risks:[]),...risksForApartment(x)].filter((v,i,a)=>v&&a.indexOf(v)===i),selectionSource:'LIVE_CATALOG'}}
+function enrichApartment(x){const score=scoreApartment(x),status=statusFor(score),verdict=status==='ARGUS_1'?'PRIORITÉ ARGUS — AUDIT À LANCER':status==='SHORTLIST'?'À ÉTUDIER — BON RAPPORT POTENTIEL':'À SURVEILLER — VÉRIFICATIONS NÉCESSAIRES';return {...brusselsGeography(x),score,status,verdict,risks:[...(Array.isArray(x.risks)?x.risks:[]),...risksForApartment(x)].filter((v,i,a)=>v&&a.indexOf(v)===i),selectionSource:'LIVE_CATALOG'}}
 function enrichBuilding(x){return {...enrichBuildingCriteria(x),selectionSource:'LIVE_CATALOG',status:'ACTIVE',verdict:'CORRESPOND AUX CRITÈRES IMMEUBLE DE RAPPORT'}}
 function fallback(category){
   const data=category==='building'?buildingsFallback:apartmentsFallback;
@@ -66,6 +68,6 @@ export default async function handler(req,res){
       selected=source.map(enrichApartment).sort((a,b)=>b.score-a.score||(number(a.price)??Infinity)-(number(b.price)??Infinity)).slice(0,LIMIT.apartment);
     }
     const checkedAt=catalog?.refreshedAt||new Date().toISOString(),quarantineCount=Number(catalog?.counts?.quarantined)||0;
-    return res.status(200).json({ok:true,category,updatedAt:checkedAt,checkedAt,failClosed:true,cachePolicy:'NO_STORE_LIVE_CATALOG',selectionMode:(catalog?.listings||[]).length?'DYNAMIC_LIVE_CATALOG':'STATIC_FALLBACK',criteria:category==='building'?{zones:['Auderghem','Ixelles','Uccle','Forest','Watermael-Boitsfort'],excludedZones:['Saint-Gilles'],apartments:[3,4,5,6],minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,counts:{sourceRecords:source.length,active:selected.length,excludedUnavailable:quarantineCount,hiddenUnverified:Math.max(0,source.length-selected.length),filteredUserCriteria},opportunities:selected,notice:category==='building'?'Immeubles de rapport: uniquement Auderghem, Ixelles, Uccle, Forest et Watermael-Boitsfort; Saint-Gilles exclu; 3 à 6 appartements; 600 k€ à 1,4 M€; tri du moins cher au plus cher.':'Sélection ARGUS appartements.'});
+    return res.status(200).json({ok:true,category,updatedAt:checkedAt,checkedAt,failClosed:true,cachePolicy:'NO_STORE_LIVE_CATALOG',selectionMode:(catalog?.listings||[]).length?'DYNAMIC_LIVE_CATALOG':'STATIC_FALLBACK',criteria:category==='building'?{zones:BRUSSELS_COMMUNES.map(c=>c.name),sectors:['NORD','SUD'],apartments:[3,4,5,6],minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,counts:{sourceRecords:source.length,active:selected.length,excludedUnavailable:quarantineCount,hiddenUnverified:Math.max(0,source.length-selected.length),filteredUserCriteria},opportunities:selected,notice:category==='building'?'Immeubles de rapport : 19 communes de Bruxelles, NORD/SUD, 3 à 6 appartements, 600 k€ à 1,4 M€.':'Sélection ARGUS appartements.'});
   }catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
 }

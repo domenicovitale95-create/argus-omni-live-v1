@@ -1,3 +1,5 @@
+import {brusselsGeography,BRUSSELS_COMMUNES} from './immo-brussels-zones.js';
+import {isStudioListing} from './immo-property-type.js';
 import {readJsonFresh} from './_report-store.js';
 import {isBrusselsListing,hasDeferredPriceStructure} from './immo-region.js';
 import {isUserExcludedListing} from './immo-user-exclusions.js';
@@ -28,8 +30,8 @@ export default async function handler(req,res){
       listings=enriched.filter(matchesBuildingCriteria).sort((a,b)=>price(a)-price(b));
       filteredOutsideScope=Math.max(0,storedActive.length-listings.length);
     }else{
-      const scopeEligible=storedActive.filter(x=>isBrusselsListing(x,x.canonical||x.source)&&!hasDeferredPriceStructure(x));
-      listings=scopeEligible.filter(x=>!isUserExcludedListing(x,'apartment'));
+      const scopeEligible=storedActive.filter(x=>isBrusselsListing(x,x.canonical||x.source)&&!hasDeferredPriceStructure(x)&&!isStudioListing(x));
+      listings=scopeEligible.filter(x=>!isUserExcludedListing(x,'apartment')).map(brusselsGeography);
       filteredOutsideScope=Math.max(0,storedActive.length-scopeEligible.length);
       filteredUserCriteria=Math.max(0,scopeEligible.length-listings.length);
     }
@@ -40,11 +42,11 @@ export default async function handler(req,res){
       refreshedAt:data.refreshedAt||null,
       minPrice:data.minPrice||null,
       maxPrice:data.maxPrice||null,
-      criteria:category==='building'?{zones:['Auderghem','Ixelles','Uccle','Forest','Watermael-Boitsfort'],excludedZones:['Saint-Gilles'],apartments:[3,4,5,6],minPrice:600000,maxPrice:1200000,sort:'price_asc'}:null,
+      criteria:category==='building'?{zones:BRUSSELS_COMMUNES.map(c=>c.name),sectors:['NORD','SUD'],apartments:[3,4,5,6],minPrice:600000,maxPrice:1400000,sort:'price_asc'}:null,
       counts:{...(data.counts||{}),active:listings.length,filteredOutsideScope,filteredUserCriteria},
       discovery:data.discovery||null,
       listings,
-      notice:category==='building'?'Catalogue immeubles filtré uniquement sur les nouveaux critères et trié par prix croissant.':'Catalogue ARGUS appartements actif.'
+      notice:category==='building'?'Immeubles : 19 communes, NORD/SUD, 3–6 logements annoncés; preuves urbanistiques à contrôler.':'Catalogue ARGUS appartements actif.'
     });
   }catch(e){
     return res.status(500).json({ok:false,error:String(e?.message||e)});

@@ -1,15 +1,10 @@
+import {BRUSSELS_COMMUNES,brusselsCommune,brusselsSector} from './immo-brussels-zones.js';
 export const BUILDING_MIN_PRICE=600000;
 export const BUILDING_MAX_PRICE=1400000;
 export const BUILDING_MIN_UNITS=3;
 export const BUILDING_MAX_UNITS=6;
 
-export const BUILDING_TARGET_ZONES=[
-  'Auderghem',
-  'Ixelles',
-  'Uccle',
-  'Forest',
-  'Watermael-Boitsfort'
-];
+export const BUILDING_TARGET_ZONES=BRUSSELS_COMMUNES.map(c=>c.name);
 
 function normalize(value=''){
   return String(value)
@@ -27,16 +22,7 @@ function listingText(x={}){
   ].filter(Boolean).join(' '));
 }
 
-export function buildingZone(x={}){
-  const s=listingText(x);
-  if(/\bsaint[- ]?gilles\b|\bsint[- ]?gillis\b|\b1060\b/.test(s))return null;
-  if(/\bauderghem\b|\boudergem\b|\b1160\b/.test(s))return 'Auderghem';
-  if(/\bixelles\b|\belsene\b|\b1050\b/.test(s))return 'Ixelles';
-  if(/\buccle\b|\bukkel\b|\b1180\b/.test(s))return 'Uccle';
-  if(/\bforest\b|\bvorst\b|\b1190\b/.test(s))return 'Forest';
-  if(/\bwatermael[- ]?boitsfort\b|\bwatermaal[- ]?bosvoorde\b|\bwatermael\b|\bwatermal\b|\b1170\b/.test(s))return 'Watermael-Boitsfort';
-  return null;
-}
+export function buildingZone(x={}){return brusselsCommune(x)?.name||null}
 
 export function buildingUnitCount(x={}){
   const explicit=[x.recognizedUnits,x.unitCount,x.numberOfUnits,x.totalUnits,x.apartmentCount,x.apartments,x.logements];
@@ -89,6 +75,8 @@ export function enrichBuildingCriteria(x={}){
     detectedUnits:units,
     unitsText:x.unitsText||(units?`${units} appartements annoncés`:'À confirmer'),
     urbanismUnitStatus:recognizedUnits!==null?'CONFIRMED':'TO_CONFIRM',
-    argusTargetZone:zone
+    argusTargetZone:zone,
+    argusCommune:zone,
+    argusSector:brusselsSector(x)
   };
 }

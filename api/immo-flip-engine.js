@@ -1,3 +1,4 @@
+import {brusselsSector} from './immo-brussels-zones.js';
 import {buildingZone,buildingUnitCount} from './immo-building-criteria.js';
 
 function num(v){const n=Number(v);return Number.isFinite(n)?n:null}
@@ -46,7 +47,7 @@ export function analyzeFlip(x={}){
   if(!(x.peb||x.epc))missing.push('PEB par unité');
   if(!x.meters)missing.push('situation des compteurs');
   return {
-    ...x,flipReady:true,
+    ...x,argusCommune:zone,argusSector:brusselsSector(x),flipReady:true,
     flip:{
       strategy:'DIVIDE_AND_RESELL_AS_IS',
       strategyLabel:'DIVISER & REVENDRE EN L’ÉTAT · 0 € RÉNOVATION',
