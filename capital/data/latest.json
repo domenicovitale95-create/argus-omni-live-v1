@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-08T08:48:37.593910+00:00",
+  "generated_at": "2026-10-08T16:21:58.528327+00:00",
   "data_quality": {
     "fresh_series": 18,
     "total_series": 18,
@@ -22,7 +22,7 @@
     "regime_confidence": "Medium",
     "components": {
       "trend_breadth": 62,
-      "momentum": 53,
+      "momentum": 51,
       "volatility": 91,
       "credit_proxy": 35,
       "rates": 61,
@@ -38,21 +38,29 @@
   },
   "today": {
     "best_opportunity": {
-      "type": "BEST CURRENT OPPORTUNITY",
-      "asset": "Global Equities",
-      "score": 72,
-      "status": "ATTRACTIVE"
+      "type": "NO CLEAR OPPORTUNITY",
+      "asset": "Patience / cash remains rational",
+      "score": 71,
+      "status": "WAIT"
     },
     "biggest_risk": {
       "title": "Rates repricing higher",
       "detail": "US 10Y yield rose 0.49 pp over ~1 month, a headwind for duration-sensitive assets.",
       "severity": "HIGH"
     },
-    "action": "ACCUMULATE GRADUALLY",
+    "action": "WAIT / REVIEW",
     "what_changed": [
       {
+        "event": "Emerging markets moved",
+        "move": -1.52,
+        "why_it_matters": "EM risk appetite and global growth sensitivity changed.",
+        "affected_assets": [
+          "emerging"
+        ]
+      },
+      {
         "event": "VIX changed",
-        "move": -3.29,
+        "move": 0.47,
         "why_it_matters": "Equity option-implied volatility changed, altering the short-term risk backdrop.",
         "affected_assets": [
           "equities",
@@ -61,27 +69,19 @@
         ]
       },
       {
-        "event": "Gold moved",
-        "move": -1.67,
-        "why_it_matters": "Safe-haven demand, real-rate expectations or USD dynamics may be shifting.",
-        "affected_assets": [
-          "gold"
-        ]
-      },
-      {
-        "event": "Emerging markets moved",
-        "move": -1.32,
-        "why_it_matters": "EM risk appetite and global growth sensitivity changed.",
-        "affected_assets": [
-          "emerging"
-        ]
-      },
-      {
         "event": "Europe moved",
-        "move": -1.18,
+        "move": -0.54,
         "why_it_matters": "European equity risk/reward shifted relative to the US.",
         "affected_assets": [
           "europe"
+        ]
+      },
+      {
+        "event": "Nasdaq moved",
+        "move": -0.45,
+        "why_it_matters": "Growth and duration-sensitive equities changed materially.",
+        "affected_assets": [
+          "nasdaq"
         ]
       }
     ],
@@ -90,35 +90,14 @@
         "asset_id": "global_equity",
         "asset": "Global Equities",
         "ucits_candidate": "VWCE",
-        "score": 72,
-        "action": "ATTRACTIVE",
-        "conviction": "Medium",
-        "horizon": "Years",
-        "why": [
-          "3-month momentum: +2.4%",
-          "Distance vs 200-day average: +5.9%",
-          "20-day annualised volatility: 12.3%"
-        ],
-        "risks": [
-          "Earnings, rates or risk-premium shocks can cause material drawdowns."
-        ],
-        "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
-        "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
-        "evidence_quality": "Strong",
-        "data_date": "2026-10-07"
-      },
-      {
-        "asset_id": "sp500",
-        "asset": "S&P 500",
-        "ucits_candidate": "SXR8",
         "score": 71,
         "action": "WATCH",
         "conviction": "Medium",
         "horizon": "Years",
         "why": [
-          "3-month momentum: +3.4%",
-          "Distance vs 200-day average: +7.7%",
-          "20-day annualised volatility: 10.3%"
+          "3-month momentum: +1.5%",
+          "Distance vs 200-day average: +5.4%",
+          "20-day annualised volatility: 12.0%"
         ],
         "risks": [
           "Earnings, rates or risk-premium shocks can cause material drawdowns."
@@ -126,7 +105,7 @@
         "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
         "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
         "evidence_quality": "Strong",
-        "data_date": "2026-10-07"
+        "data_date": "2026-10-08"
       },
       {
         "asset_id": "nasdaq",
@@ -137,9 +116,9 @@
         "conviction": "Medium",
         "horizon": "Years",
         "why": [
-          "3-month momentum: +4.8%",
-          "Distance vs 200-day average: +12.9%",
-          "20-day annualised volatility: 15.2%"
+          "3-month momentum: +4.0%",
+          "Distance vs 200-day average: +12.3%",
+          "20-day annualised volatility: 14.6%"
         ],
         "risks": [
           "Entry is extended versus the 200-day trend.",
@@ -148,7 +127,28 @@
         "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
         "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
         "evidence_quality": "Strong",
-        "data_date": "2026-10-07"
+        "data_date": "2026-10-08"
+      },
+      {
+        "asset_id": "sp500",
+        "asset": "S&P 500",
+        "ucits_candidate": "SXR8",
+        "score": 70,
+        "action": "WATCH",
+        "conviction": "Medium",
+        "horizon": "Years",
+        "why": [
+          "3-month momentum: +2.8%",
+          "Distance vs 200-day average: +7.4%",
+          "20-day annualised volatility: 10.1%"
+        ],
+        "risks": [
+          "Earnings, rates or risk-premium shocks can cause material drawdowns."
+        ],
+        "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
+        "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
+        "evidence_quality": "Strong",
+        "data_date": "2026-10-08"
       }
     ],
     "no_forced_recommendation": true
@@ -157,13 +157,6 @@
     {
       "id": "global_equity",
       "label": "Global Equities",
-      "score": 72,
-      "status": "ATTRACTIVE",
-      "evidence": "Strong"
-    },
-    {
-      "id": "sp500",
-      "label": "S&P 500",
       "score": 71,
       "status": "WATCH",
       "evidence": "Strong"
@@ -176,8 +169,8 @@
       "evidence": "Strong"
     },
     {
-      "id": "emerging",
-      "label": "Emerging Markets",
+      "id": "sp500",
+      "label": "S&P 500",
       "score": 70,
       "status": "WATCH",
       "evidence": "Strong"
@@ -190,9 +183,16 @@
       "evidence": "Moderate"
     },
     {
+      "id": "emerging",
+      "label": "Emerging Markets",
+      "score": 69,
+      "status": "WATCH",
+      "evidence": "Strong"
+    },
+    {
       "id": "semis",
       "label": "Semiconductors",
-      "score": 64,
+      "score": 63,
       "status": "WATCH",
       "evidence": "Strong"
     },
@@ -234,21 +234,21 @@
   ],
   "market": {
     "global_equity": {
-      "price": 160.71,
-      "date": "2026-10-07",
-      "ret_1d": -0.7,
-      "ret_1m": -0.26,
-      "ret_3m": 2.35,
-      "ret_6m": 11.13,
-      "ret_1y": 14.75,
-      "vol_20d_ann": 12.3,
-      "sma_200": 151.74,
-      "distance_200dma": 5.91,
-      "drawdown_52w": -1.09,
+      "price": 160.04,
+      "date": "2026-10-08",
+      "ret_1d": -0.42,
+      "ret_1m": -0.07,
+      "ret_3m": 1.5,
+      "ret_6m": 10.32,
+      "ret_1y": 14.96,
+      "vol_20d_ann": 11.98,
+      "sma_200": 151.83,
+      "distance_200dma": 5.41,
+      "drawdown_52w": -1.5,
       "max_drawdown": -33.53,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/ACWI?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Global Equities",
@@ -257,21 +257,21 @@
       "provider": "YAHOO"
     },
     "sp500": {
-      "price": 777.22,
-      "date": "2026-10-07",
-      "ret_1d": -0.24,
-      "ret_1m": 1.47,
-      "ret_3m": 3.39,
-      "ret_6m": 14.97,
-      "ret_1y": 15.72,
-      "vol_20d_ann": 10.33,
-      "sma_200": 721.99,
-      "distance_200dma": 7.65,
-      "drawdown_52w": -0.24,
+      "price": 775.77,
+      "date": "2026-10-08",
+      "ret_1d": -0.19,
+      "ret_1m": 1.75,
+      "ret_3m": 2.76,
+      "ret_6m": 14.1,
+      "ret_1y": 15.94,
+      "vol_20d_ann": 10.06,
+      "sma_200": 722.47,
+      "distance_200dma": 7.38,
+      "drawdown_52w": -0.43,
       "max_drawdown": -34.1,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "S&P 500",
@@ -280,21 +280,21 @@
       "provider": "YAHOO"
     },
     "nasdaq": {
-      "price": 757.73,
-      "date": "2026-10-07",
-      "ret_1d": -0.25,
-      "ret_1m": 5.48,
-      "ret_3m": 4.76,
-      "ret_6m": 25.02,
-      "ret_1y": 24.69,
-      "vol_20d_ann": 15.2,
-      "sma_200": 670.87,
-      "distance_200dma": 12.95,
-      "drawdown_52w": -0.25,
+      "price": 754.31,
+      "date": "2026-10-08",
+      "ret_1d": -0.45,
+      "ret_1m": 5.3,
+      "ret_3m": 3.97,
+      "ret_6m": 23.62,
+      "ret_1y": 24.78,
+      "vol_20d_ann": 14.62,
+      "sma_200": 671.55,
+      "distance_200dma": 12.32,
+      "drawdown_52w": -0.7,
       "max_drawdown": -35.62,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/QQQ?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Nasdaq 100",
@@ -303,21 +303,21 @@
       "provider": "YAHOO"
     },
     "europe": {
-      "price": 85.56,
-      "date": "2026-10-07",
-      "ret_1d": -1.18,
-      "ret_1m": -6.17,
-      "ret_3m": -3.22,
-      "ret_6m": -1.36,
-      "ret_1y": 5.5,
-      "vol_20d_ann": 13.79,
-      "sma_200": 87.68,
-      "distance_200dma": -2.42,
-      "drawdown_52w": -8.19,
+      "price": 85.1,
+      "date": "2026-10-08",
+      "ret_1d": -0.54,
+      "ret_1m": -5.66,
+      "ret_3m": -3.92,
+      "ret_6m": -1.91,
+      "ret_1y": 5.73,
+      "vol_20d_ann": 13.64,
+      "sma_200": 87.69,
+      "distance_200dma": -2.96,
+      "drawdown_52w": -8.68,
       "max_drawdown": -41.57,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/VGK?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "European Equities",
@@ -326,21 +326,21 @@
       "provider": "YAHOO"
     },
     "emerging": {
-      "price": 67.37,
-      "date": "2026-10-07",
-      "ret_1d": -1.32,
-      "ret_1m": -2.12,
-      "ret_3m": 0.88,
-      "ret_6m": 11.47,
-      "ret_1y": 23.66,
-      "vol_20d_ann": 22.62,
-      "sma_200": 63.22,
-      "distance_200dma": 6.56,
-      "drawdown_52w": -5.39,
+      "price": 66.35,
+      "date": "2026-10-08",
+      "ret_1d": -1.52,
+      "ret_1m": -3.12,
+      "ret_3m": -0.83,
+      "ret_6m": 10.06,
+      "ret_1y": 22.72,
+      "vol_20d_ann": 21.94,
+      "sma_200": 63.29,
+      "distance_200dma": 4.83,
+      "drawdown_52w": -6.83,
       "max_drawdown": -41.46,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/EEM?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Emerging Markets",
@@ -349,21 +349,21 @@
       "provider": "YAHOO"
     },
     "semis": {
-      "price": 625.03,
-      "date": "2026-10-07",
-      "ret_1d": -1.18,
-      "ret_1m": 8.94,
-      "ret_3m": 2.85,
-      "ret_6m": 47.79,
-      "ret_1y": 82.02,
-      "vol_20d_ann": 30.96,
-      "sma_200": 503.76,
-      "distance_200dma": 24.07,
-      "drawdown_52w": -6.56,
+      "price": 619.09,
+      "date": "2026-10-08",
+      "ret_1d": -0.95,
+      "ret_1m": 7.8,
+      "ret_3m": 1.32,
+      "ret_6m": 43.87,
+      "ret_1y": 83.68,
+      "vol_20d_ann": 29.54,
+      "sma_200": 505.08,
+      "distance_200dma": 22.57,
+      "drawdown_52w": -7.45,
       "max_drawdown": -45.3,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/SMH?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Semiconductors",
@@ -372,21 +372,21 @@
       "provider": "YAHOO"
     },
     "gold": {
-      "price": 375.88,
-      "date": "2026-10-07",
-      "ret_1d": -1.67,
-      "ret_1m": -5.96,
-      "ret_3m": -0.61,
-      "ret_6m": -13.5,
-      "ret_1y": 3.16,
-      "vol_20d_ann": 20.87,
-      "sma_200": 415.88,
-      "distance_200dma": -9.62,
-      "drawdown_52w": -24.2,
+      "price": 377.44,
+      "date": "2026-10-08",
+      "ret_1d": 0.42,
+      "ret_1m": -6.42,
+      "ret_3m": 0.11,
+      "ret_6m": -13.81,
+      "ret_1y": 3.05,
+      "vol_20d_ann": 20.36,
+      "sma_200": 415.77,
+      "distance_200dma": -9.22,
+      "drawdown_52w": -23.89,
       "max_drawdown": -26.4,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/GLD?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Gold",
@@ -395,21 +395,21 @@
       "provider": "YAHOO"
     },
     "treasuries": {
-      "price": 89.11,
-      "date": "2026-10-07",
-      "ret_1d": -0.02,
-      "ret_1m": -3.31,
-      "ret_3m": -4.91,
-      "ret_6m": -6.65,
-      "ret_1y": -7.29,
-      "vol_20d_ann": 6.26,
-      "sma_200": 94.36,
-      "distance_200dma": -5.57,
-      "drawdown_52w": -9.06,
+      "price": 89.19,
+      "date": "2026-10-08",
+      "ret_1d": 0.09,
+      "ret_1m": -2.95,
+      "ret_3m": -4.74,
+      "ret_6m": -6.54,
+      "ret_1y": -7.44,
+      "vol_20d_ann": 5.84,
+      "sma_200": 94.33,
+      "distance_200dma": -5.45,
+      "drawdown_52w": -8.98,
       "max_drawdown": -27.74,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/IEF?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "US Treasuries 7-10Y",
@@ -418,21 +418,21 @@
       "provider": "YAHOO"
     },
     "corp_bonds": {
-      "price": 102.1,
-      "date": "2026-10-07",
-      "ret_1d": -0.04,
-      "ret_1m": -3.2,
-      "ret_3m": -5.21,
-      "ret_6m": -6.75,
-      "ret_1y": -8.18,
-      "vol_20d_ann": 7.0,
-      "sma_200": 108.28,
-      "distance_200dma": -5.71,
-      "drawdown_52w": -9.58,
+      "price": 102.26,
+      "date": "2026-10-08",
+      "ret_1d": 0.16,
+      "ret_1m": -2.9,
+      "ret_3m": -4.84,
+      "ret_6m": -6.6,
+      "ret_1y": -8.2,
+      "vol_20d_ann": 6.49,
+      "sma_200": 108.25,
+      "distance_200dma": -5.53,
+      "drawdown_52w": -9.44,
       "max_drawdown": -29.37,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/LQD?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Investment Grade Bonds",
@@ -442,20 +442,20 @@
     },
     "cash_proxy": {
       "price": 91.46,
-      "date": "2026-10-07",
+      "date": "2026-10-08",
       "ret_1d": 0.01,
-      "ret_1m": 0.0,
-      "ret_3m": 0.0,
+      "ret_1m": 0.01,
+      "ret_3m": -0.04,
       "ret_6m": 0.01,
       "ret_1y": -0.05,
       "vol_20d_ann": 0.96,
       "sma_200": 91.51,
-      "distance_200dma": -0.06,
-      "drawdown_52w": -0.33,
+      "distance_200dma": -0.05,
+      "drawdown_52w": -0.32,
       "max_drawdown": -0.7,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/BIL?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "US T-Bills",
@@ -464,21 +464,21 @@
       "provider": "YAHOO"
     },
     "quality_stock": {
-      "price": 529.76,
-      "date": "2026-10-07",
-      "ret_1d": 0.09,
-      "ret_1m": 7.25,
-      "ret_3m": 37.83,
-      "ret_6m": 41.52,
-      "ret_1y": 0.23,
-      "vol_20d_ann": 20.61,
-      "sma_200": 433.57,
-      "distance_200dma": 22.19,
-      "drawdown_52w": -2.27,
+      "price": 530.88,
+      "date": "2026-10-08",
+      "ret_1d": 0.21,
+      "ret_1m": 7.98,
+      "ret_3m": 37.86,
+      "ret_6m": 42.3,
+      "ret_1y": 1.32,
+      "vol_20d_ann": 20.6,
+      "sma_200": 433.79,
+      "distance_200dma": 22.38,
+      "drawdown_52w": -2.06,
       "max_drawdown": -37.56,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Microsoft",
@@ -487,21 +487,21 @@
       "provider": "YAHOO"
     },
     "nvidia": {
-      "price": 237.47,
-      "date": "2026-10-07",
-      "ret_1d": -0.74,
-      "ret_1m": 5.2,
-      "ret_3m": 17.11,
-      "ret_6m": 30.42,
-      "ret_1y": 27.99,
-      "vol_20d_ann": 24.14,
-      "sma_200": 201.68,
-      "distance_200dma": 17.75,
-      "drawdown_52w": -0.74,
+      "price": 235.28,
+      "date": "2026-10-08",
+      "ret_1d": -0.92,
+      "ret_1m": 5.19,
+      "ret_3m": 11.53,
+      "ret_6m": 27.93,
+      "ret_1y": 27.15,
+      "vol_20d_ann": 22.5,
+      "sma_200": 201.95,
+      "distance_200dma": 16.5,
+      "drawdown_52w": -1.66,
       "max_drawdown": -66.36,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=10y&interval=1d&events=history&includeAdjustedClose=true",
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "NVIDIA",
@@ -538,12 +538,12 @@
       "data_type": "OBSERVED"
     },
     "vix": {
-      "price": 15.01,
-      "date": "2026-10-06",
-      "ret_1d": -3.29,
-      "ret_1m": -1.9,
-      "last_update": "2026-10-06",
-      "delay_days": 2,
+      "price": 15.08,
+      "date": "2026-10-07",
+      "ret_1d": 0.47,
+      "ret_1m": -4.07,
+      "last_update": "2026-10-07",
+      "delay_days": 1,
       "fresh": true,
       "label": "VIX",
       "unit": "index",
@@ -565,11 +565,11 @@
     },
     "ecb_deposit": {
       "price": 2.5,
-      "date": "2026-10-07",
+      "date": "2026-10-08",
       "ret_1d": 0.0,
       "ret_1m": 0.0,
-      "last_update": "2026-10-07",
-      "delay_days": 1,
+      "last_update": "2026-10-08",
+      "delay_days": 0,
       "fresh": true,
       "label": "ECB Deposit Facility Rate",
       "unit": "%",
@@ -592,8 +592,8 @@
   },
   "scores": {
     "global_equity": {
-      "score": 72,
-      "status": "ATTRACTIVE",
+      "score": 71,
+      "status": "WATCH",
       "evidence": "Strong",
       "coverage": 100,
       "components": {
@@ -613,12 +613,12 @@
       "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
     },
     "sp500": {
-      "score": 71,
+      "score": 70,
       "status": "WATCH",
       "evidence": "Strong",
       "coverage": 100,
       "components": {
-        "momentum": 60,
+        "momentum": 59,
         "trend": 85,
         "risk": 85,
         "entry": 62,
@@ -639,7 +639,7 @@
       "evidence": "Strong",
       "coverage": 100,
       "components": {
-        "momentum": 69,
+        "momentum": 68,
         "trend": 75,
         "risk": 85,
         "entry": 62,
@@ -660,7 +660,7 @@
       "evidence": "Strong",
       "coverage": 100,
       "components": {
-        "momentum": 40,
+        "momentum": 39,
         "trend": 35,
         "risk": 81,
         "entry": 78,
@@ -676,14 +676,14 @@
       "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
     },
     "emerging": {
-      "score": 70,
+      "score": 69,
       "status": "WATCH",
       "evidence": "Strong",
       "coverage": 100,
       "components": {
-        "momentum": 52,
+        "momentum": 49,
         "trend": 85,
-        "risk": 81,
+        "risk": 82,
         "entry": 78,
         "macro": 52
       },
@@ -697,14 +697,14 @@
       "note": "MODELLED score; valuation is not included unless a verified valuation feed is available."
     },
     "semis": {
-      "score": 64,
+      "score": 63,
       "status": "WATCH",
       "evidence": "Strong",
       "coverage": 100,
       "components": {
-        "momentum": 80,
+        "momentum": 76,
         "trend": 60,
-        "risk": 66,
+        "risk": 68,
         "entry": 45,
         "macro": 52
       },
@@ -725,7 +725,7 @@
       "components": {
         "momentum": 38,
         "trend": 35,
-        "risk": 71,
+        "risk": 72,
         "entry": 62,
         "macro": 44
       },
@@ -746,7 +746,7 @@
       "components": {
         "momentum": 40,
         "trend": 35,
-        "risk": 80,
+        "risk": 81,
         "entry": 62,
         "macro": 60
       },
