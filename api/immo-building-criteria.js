@@ -1,8 +1,8 @@
 import {BRUSSELS_COMMUNES,brusselsCommune,brusselsSector} from './immo-brussels-zones.js';
-export const BUILDING_MIN_PRICE=600000;
+export const BUILDING_MIN_PRICE=40000;
 export const BUILDING_MAX_PRICE=1400000;
 export const BUILDING_MIN_UNITS=3;
-export const BUILDING_MAX_UNITS=6;
+export const BUILDING_MAX_UNITS=99;
 
 export const BUILDING_TARGET_ZONES=BRUSSELS_COMMUNES.map(c=>c.name);
 
