@@ -3,6 +3,37 @@
   "timezone": "Europe/Brussels",
   "generatedAt": "2026-10-10T08:03:07+02:00",
   "method": "Recherche manuelle approfondie",
-  "stars": [],
-  "note": "Aucun bien entièrement vérifié ce jour : plusieurs annonces présentaient des documents manquants ou des divergences urbanistiques."
+  "stars": [
+    {
+      "title": "Ixelles · immeuble rénové de quatre appartements",
+      "address": "Adresse exacte non communiquée",
+      "commune": "Ixelles",
+      "price": 950000,
+      "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/ixelles/1050/21843196",
+      "unitsAnnounced": 4,
+      "unitsRecognized": null,
+      "peb": "D annoncé, 4 références de certificats citées",
+      "urbanism": "Quatre logements reconnus selon annonce, RU non examiné",
+      "condition": "Rénové et électricité conforme selon annonce, rapports non examinés",
+      "verdict": "À VÉRIFIER",
+      "why": "Meilleur dossier repéré : quatre logements présentés comme reconnus, PEB D et rénovation achevée. Prix affiché comme mise à prix; rentabilité de revente non démontrée.",
+      "proofs": [
+        "Annonce Immoweb 21843196 consultée le 10 octobre 2026",
+        "Quatre références PEB publiées, certificats non consultés"
+      ],
+      "missing": [
+        "Adresse exacte et renseignements urbanistiques officiels",
+        "Plans, acte de base et validation notariale de la vente par lots",
+        "Certificats PEB et rapports électriques",
+        "Baux et expertise technique",
+        "Mode de vente, coût total et prix de sortie des lots"
+      ],
+      "risks": [
+        "Mise à prix pouvant évoluer ou correspondre à une enchère",
+        "Conformité annoncée non prouvée",
+        "Marge de revente inconnue"
+      ]
+    }
+  ],
+  "note": "Un seul candidat à auditer, aucune pépite juridiquement certifiée. Les autres annonces examinées présentaient des travaux, des non-conformités, des écarts entre unités réelles et reconnues, ou une marge de revente trop faible."
 }
