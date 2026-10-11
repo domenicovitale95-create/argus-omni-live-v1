@@ -4,7 +4,7 @@ const ref = process.env.VERCEL_GIT_COMMIT_REF;
 const current = process.env.VERCEL_GIT_COMMIT_SHA;
 
 // Keep preview branches ignored, matching the existing project policy.
-if (ref !== 'main' && ref !== 'fix/training-nav-audit-20261011') process.exit(0);
+if (ref !== 'main') process.exit(0);
 
 // Fail open to a normal build whenever the current commit is unavailable.
 if (!current) process.exit(1);
