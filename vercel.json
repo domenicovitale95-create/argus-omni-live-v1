@@ -28,6 +28,7 @@
     {"path": "/api/shadow-settlement-cron", "schedule": "23 8 * * *"},
     {"path": "/api/daily-cron", "schedule": "53 21,22 * * *"},
     {"path": "/api/fast-cycle", "schedule": "2,32 * * * *"},
+    {"path": "/api/prediction-ledger-cron", "schedule": "12,42 * * * *"},
     {"path": "/api/autopilot", "schedule": "5 * * * *"},
     {"path": "/api/training-bets-cron", "schedule": "8 */4 * * *"},
     {"path": "/api/immo-catalog-refresh-apartment", "schedule": "12 */4 * * *"},
