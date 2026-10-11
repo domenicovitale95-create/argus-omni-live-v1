@@ -110,7 +110,7 @@ export default async function handler(req,res){
   if(previous?.status==='RUNNING'&&ageMs(previous.startedAt)<ACTIVE_LOCK_MS){
     return res.status(200).json({version:'FAST-CYCLE-4',status:'SKIPPED_IN_PROGRESS',startedAt:previous.startedAt,runId:previous.runId||null,source:sourceOf(req),policy:{duplicateExecutionSuppressed:true}});
   }
-  const startedAt=new Date().toISOString(),runId=`FAST-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,source=sourceOf(req),auth=secret()?`Bearer ${secret()}`:'',dueLivePaperSettlement=livePaperDue(source,new Date(startedAt));
+  const startedAt=new Date().toISOString(),runId=`FAST-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,source=sourceOf(req),auth=secret()?`Bearer ${secret()}`:'';
   await writeJson(STATE,{version:'FAST-CYCLE-4',runId,source,status:'RUNNING',startedAt,completedAt:null,results:[],policy:{primaryScheduler:'VERCEL_CRON',backupScheduler:'GITHUB_CONDITIONAL',currentCycleAttestationRequired:true,livePaperSettlementDue:false,automaticRealWagering:false}});
 
   // The ledger cron owns its own schedule and 105-second budget. Do not nest it in
