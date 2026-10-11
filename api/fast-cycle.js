@@ -26,11 +26,6 @@ function sourceOf(req){
   if(q==='github-manual')return'GITHUB_MANUAL';
   return'MANUAL_OR_INTERNAL';
 }
-function livePaperDue(source,now=new Date()){
-  if(source!=='VERCEL_CRON')return true;
-  const minute=now.getUTCMinutes(),offset=((minute-2)%15+15)%15;
-  return offset<=2;
-}
 function summarize(body={}){
   return{
     version:body?.version||null,
