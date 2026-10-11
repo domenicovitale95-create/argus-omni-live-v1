@@ -1,7 +1,6 @@
 import { requestQuery } from './_request-query.js';
 import { readJsonFresh, writeJson, storageReady } from './_report-store.js';
 import virtualBankroll from './virtual-bankroll-v4.js';
-import livePaperBankroll from './live-paper-bankroll.js';
 import closingOddsSnapshot from './closing-odds-snapshot.js';
 import operationalAlertBridge from './operational-alert-bridge.js';
 import alertEngine from './alert-engine.js';
@@ -26,11 +25,6 @@ function sourceOf(req){
   if(q==='github-backup')return'GITHUB_BACKUP';
   if(q==='github-manual')return'GITHUB_MANUAL';
   return'MANUAL_OR_INTERNAL';
-}
-function livePaperDue(source,now=new Date()){
-  if(source!=='VERCEL_CRON')return true;
-  const minute=now.getUTCMinutes(),offset=((minute-2)%15+15)%15;
-  return offset<=2;
 }
 function summarize(body={}){
   return{
@@ -111,15 +105,15 @@ export default async function handler(req,res){
   if(previous?.status==='RUNNING'&&ageMs(previous.startedAt)<ACTIVE_LOCK_MS){
     return res.status(200).json({version:'FAST-CYCLE-4',status:'SKIPPED_IN_PROGRESS',startedAt:previous.startedAt,runId:previous.runId||null,source:sourceOf(req),policy:{duplicateExecutionSuppressed:true}});
   }
-  const startedAt=new Date().toISOString(),runId=`FAST-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,source=sourceOf(req),auth=secret()?`Bearer ${secret()}`:'',dueLivePaperSettlement=livePaperDue(source,new Date(startedAt));
-  await writeJson(STATE,{version:'FAST-CYCLE-4',runId,source,status:'RUNNING',startedAt,completedAt:null,results:[],policy:{primaryScheduler:'VERCEL_CRON',backupScheduler:'GITHUB_CONDITIONAL',currentCycleAttestationRequired:true,livePaperSettlementDue:dueLivePaperSettlement,automaticRealWagering:false}});
+  const startedAt=new Date().toISOString(),runId=`FAST-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,source=sourceOf(req),auth=secret()?`Bearer ${secret()}`:'';
+  await writeJson(STATE,{version:'FAST-CYCLE-4',runId,source,status:'RUNNING',startedAt,completedAt:null,results:[],policy:{primaryScheduler:'VERCEL_CRON',backupScheduler:'GITHUB_CONDITIONAL',currentCycleAttestationRequired:true,livePaperSettlementDue:false,automaticRealWagering:false}});
 
   // The ledger cron owns its own schedule and 105-second budget. Do not nest it in
   // this short fast cycle: its 50-second network timeout used to starve other jobs.
   const jobs=[
     {path:'/api/virtual-bankroll?mode=run',handler:virtualBankroll,query:{mode:'run'}}
   ];
-  if(dueLivePaperSettlement)jobs.push({path:'/api/live-paper-bankroll',handler:livePaperBankroll});
+  
   jobs.push(
     {path:'/api/closing-odds-snapshot',handler:closingOddsSnapshot},
     {path:'/api/operational-alert-bridge',handler:operationalAlertBridge},
@@ -143,7 +137,7 @@ export default async function handler(req,res){
     status:failures.length?'DEGRADED':'HEALTHY',jobs:results.length,failures:failures.length,networkFallbacks:fallbacks.length,results,
     pushSkipped:!(process.env.VAPID_PUBLIC_KEY&&process.env.VAPID_PRIVATE_KEY),
     livePaperSettlementDue:dueLivePaperSettlement,
-    policy:{primaryScheduler:'VERCEL_CRON',primaryCadenceMinutes:15,backupScheduler:'GITHUB_CONDITIONAL',backupHealthCheckMinutes:30,inProcessSubjobs:true,networkFallbackOnLocalException:true,ledgerCronScheduledSeparately:true,currentCycleAttestationRequired:true,bankrollFailClosedOnCycleAmbiguity:true,livePaperSettlementInProcess:true,livePaperSettlementCadenceMinutes:15,livePaperProviderPolicy:'ZERO_WHEN_IDLE; DUE_OPEN_FIXTURES_ONLY; MAX_2_PER_RUN; 30_MIN_RECHECK',providerCallsAddedByOrchestrator:0,subjobsPreserveOwnProviderPolicies:true,automaticRealWagering:false}
+    policy:{primaryScheduler:'VERCEL_CRON',primaryCadenceMinutes:15,backupScheduler:'GITHUB_CONDITIONAL',backupHealthCheckMinutes:30,inProcessSubjobs:true,networkFallbackOnLocalException:true,ledgerCronScheduledSeparately:true,currentCycleAttestationRequired:true,bankrollFailClosedOnCycleAmbiguity:true,livePaperSettlementInProcess:false,livePaperCaptureDisabled:true,providerCallsAddedByOrchestrator:0,subjobsPreserveOwnProviderPolicies:true,automaticRealWagering:false}
   };
   try{await writeJson(STATE,state)}catch(error){return res.status(503).json({...state,status:'CRITICAL',error:`FAST_CYCLE_HEALTH_PERSIST_FAILED: ${error?.message||'unknown'}`})}
   return res.status(failures.length?207:200).json(state);

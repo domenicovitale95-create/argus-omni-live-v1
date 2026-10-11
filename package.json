@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vercel dev",
-    "postinstall": "node scripts/patch-web-push-url.mjs && node tests/immo-region-19-regression.mjs && node tests/immo-availability-regression.mjs && node tests/immo-option-engine-regression.mjs && node tests/immo-option-page-syntax.mjs && node tests/immo-flip-pro-regression.mjs && node tests/argus-training-evidence-regression.mjs",
+    "postinstall": "node scripts/patch-web-push-url.mjs && node tests/immo-region-19-regression.mjs && node tests/immo-availability-regression.mjs && node tests/immo-option-engine-regression.mjs && node tests/immo-option-page-syntax.mjs && node tests/immo-flip-pro-regression.mjs && node tests/argus-training-evidence-regression.mjs && node tests/argus-prematch-only-regression.mjs",
     "test:storage": "node tests/storage-auth-regression.mjs",
     "test:market-readiness": "node tests/market-readiness-regression.mjs",
     "test:immo-option": "node tests/immo-option-engine-regression.mjs",
     "test:immo-option-page": "node tests/immo-option-page-syntax.mjs",
-    "test:immo-flip-pro": "node tests/immo-flip-pro-regression.mjs"
+    "test:immo-flip-pro": "node tests/immo-flip-pro-regression.mjs",
+    "test:prematch": "node tests/argus-prematch-only-regression.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",
