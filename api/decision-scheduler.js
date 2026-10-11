@@ -1,4 +1,5 @@
 import { readJson, writeJson, storageReady } from './_report-store.js';
+import { prematchFixtures } from './_prematch-scope.js';
 
 const KEY='argus:intel:decision_scheduler:v1';
 const STORE_TTL=20*60;
@@ -68,13 +69,13 @@ export default async function handler(req,res){
   return res.status(200).json(previous||emptySnapshot());
  }
  if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
- const body=req.body||{},matches=Array.isArray(body.matches)?body.matches:[];
+ const body=req.body||{},matches=prematchFixtures(body.matches);
  if(!matches.length)return res.status(400).json({error:'matches required'});
  const eligibility=decisionsOf(body),portfolio=portfolioOf(body),stakes=stakesOf(body),gates=gatesOf(body),previous=await loadPrevious(),previousRows=Array.isArray(previous?.plan)?previous.plan:[],prevMap=new Map(previousRows.map(r=>[String(r.matchId),r]));
  const sourceHealth=body.sourceHealth||{},quota=body.quota||body.meta?.quota||{},profiles=body.profiles&&typeof body.profiles==='object'?body.profiles:{};
  const degraded=sourceHealth?.degraded===true||String(sourceHealth?.status||'').toUpperCase()==='DEGRADED';
  const remainingPct=quota?.remainingPct??(Number.isFinite(Number(quota?.dailyRemaining))&&Number(quota?.dailyLimit)>0?Number(quota.dailyRemaining)/Number(quota.dailyLimit)*100:100),lowQuota=n(remainingPct,100)<=20||quota?.exhausted===true;
- let nextPlan=matches.filter(m=>m&&!m.isFinished).slice(0,180).map(m=>{
+ let nextPlan=matches.slice(0,180).map(m=>{
   const id=String(m.id),decision=eligibility[id]||null,t=tier(m,decision),prev=prevMap.get(id),profile=profiles[id]||{},riskTier=String(profile?.riskTier||'').toUpperCase(),riskFlags=Array.isArray(profile?.riskFlags)?profile.riskFlags:[],p=portfolio[id]||{},stake=stakes[id]||{},gate=gates[String(m.fixtureId??m.id)]||gates[id]||{},flow=decisionFields(decision||{},p,stake,gate);let cadence=t.cadenceMinutes;
   if(riskTier==='HIGH'||riskFlags.length>=3)cadence=Math.max(cadence,120);else if(riskTier==='ELEVATED'||riskFlags.length)cadence=Math.max(cadence,30);
   if(degraded||lowQuota)cadence=Math.max(cadence,t.tier==='A'?30:120);
