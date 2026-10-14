@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { isChampionsLeague, inCompetition, competitionScope } from '../api/_prediction-competition.js';
+import { isPrematchFixture } from '../api/_prematch-scope.js';
+for(const competition of ['UEFA Champions League','Champions League','uefa champions league'])assert.equal(isChampionsLeague({competition}),true);
+for(const competition of ['UEFA Europa League','AFC Champions League','UEFA Champions League Women','Premier League'])assert.equal(isChampionsLeague({competition}),false);
+assert.equal(competitionScope('CHAMPIONS-LEAGUE'),'champions-league');
+assert.equal(competitionScope('unknown'),'all');
+assert.equal(inCompetition({competition:'Premier League'},'all'),true);
+const now=new Date(),kickoff=new Date(now.getTime()+3600000).toISOString();
+const date=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Brussels',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);
+const row=(id,competition,extra={})=>({fixtureId:id,competition,home:'Home '+id,away:'Away '+id,kickoff,status:'NS',betEligible:true,finalVerdict:'VALUE',stakeSelection:'HOME',stakeOdds:2,netConfidence:75,...extra});
+const plan={generatedAt:now.toISOString(),plan:[row(1,'UEFA Champions League'),row(2,'Premier League'),row(3,'UEFA Champions League',{isLive:true}),row(4,'UEFA Champions League',{kickoff:new Date(now.getTime()-3600000).toISOString()}),row(5,'UEFA Champions League',{betEligible:false,finalVerdict:'WATCH'})]};
+let writes=0;
+globalThis.__championsTest={competitionScope,inCompetition,isPrematchFixture,readJson:async path=>path.includes('decision-plan')?plan:{trends:[]},writeJson:async()=>writes++,storageReady:()=>true,requestQuery:r=>r.query,dedupeTrendRows:r=>r};
+let source=fs.readFileSync(new URL('../api/daily-slip.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');
+source='const {competitionScope,inCompetition,isPrematchFixture,readJson,writeJson,storageReady,requestQuery,dedupeTrendRows}=globalThis.__championsTest;\n'+source;
+const {default:handler}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+async function run(competition){let payload;const res={setHeader(){},status(s){assert.equal(s,200);return this},json(p){payload=p;return p}};await handler({method:'GET',query:{date,competition}},res);return payload}
+const cl=await run('champions-league');assert.equal(cl.eligibleCount,1);assert.equal(cl.bestSingle.fixtureId,1);assert.equal(cl.competitionCoverage.scheduledCount,2);assert.deepEqual(cl.competitionCoverage.matches.map(x=>x.fixtureId),[1,5]);assert.equal(cl.competitionCoverage.matches[1].eligible,false);assert.equal(writes,0,'filtered views must not overwrite the all-competition slip');
+const all=await run('all');assert.equal(all.eligibleCount,2);assert.equal(writes,1);
+plan.plan=[];const empty=await run('champions-league');assert.equal(empty.status,'WAIT');assert.equal(empty.bestSingle,null);assert.equal(empty.competitionCoverage.scheduledCount,0);
+delete globalThis.__championsTest;
+console.log('Champions League prediction filtering, pre-match gates and snapshot isolation: PASS');
