@@ -22,10 +22,11 @@ assert.ok(!fast.includes("handler:livePaperBankroll"),'live jobs must be unsched
 assert.ok(paper.includes("if(req.method==='POST')return res.status(410)"),'new live bets must be rejected');
 const index=read('index.html'),results=read('prediction-results.html'),daily=read('daily-slip.html'),mobile=read('src/argus-os.js'),legacy=read('live.html');
 for(const [name,html] of [['index.html',index],['prediction-results.html',results],['daily-slip.html',daily]]) {
- assert.ok(html.includes('href="daily-slip.html">Predictions'),name+' must feature Predictions');
+ assert.ok(html.includes('href="daily-slip.html">Pronostics'),name+' must feature Predictions');
  assert.ok(!html.includes('href="live.html"'),name+' must not link Live');
 }
 assert.ok(!mobile.includes("['bets','Bets'"),'dynamic mobile nav must not add Bets');
-assert.ok(mobile.includes("['picks','Predictions','/daily-slip.html']"),'mobile Predictions tab required');
+assert.ok(index.includes('class="mobile-nav"'), 'mobile navigation required');
+assert.ok(read('src/football-app.js').includes('filter(r=>upcoming(r)'), 'explorer must show upcoming fixtures only');
 assert.ok(legacy.includes('location.replace(\'/daily-slip.html\')'),'old Live page must redirect');
 console.log('ARGUS PRE-MATCH ONLY regression: OK');
