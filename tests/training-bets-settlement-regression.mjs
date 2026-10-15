@@ -63,11 +63,10 @@ const bet=(date,id)=>({fixtureId:id,kickoff:`${date}T20:00:00+02:00`,status:'OPE
 }
 
 {
-  const ui=await readFile(new URL('../training-bets.html',import.meta.url),'utf8');
-  assert.match(ui,/RESULT PENDING/);
-  assert.match(ui,/MATCH IN PROGRESS/);
-  assert.match(ui,/POSTPONED/);
-  assert.match(ui,/RESCHEDULED/);
+  const ui=await readFile(new URL('../src/football-app.js',import.meta.url),'utf8');
+  assert.match(ui,/RÉSULTAT EN ATTENTE/);
+  assert.match(ui,/REPORTÉ/);
+  assert.match(ui,/REPROGRAMMÉ/);
   assert.match(ui,/settlement\?\.finalScore/);
 }
 
