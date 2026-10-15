@@ -1,8 +1,8 @@
 {
-  "date": "2026-10-14",
+  "date": "2026-10-15",
   "timezone": "Europe/Brussels",
-  "generatedAt": "2026-10-14T08:03:18+02:00",
+  "generatedAt": "2026-10-15T07:55:10+02:00",
   "method": "Recherche manuelle approfondie",
   "stars": [],
-  "note": "Aucun nouveau bien ne satisfait suffisamment les critères de conformité, d'état et de revente sans travaux importants. Plusieurs annonces écartées pour électricité non conforme, PEB F-G, urbanisme incertain ou rénovation à prévoir."
+  "note": "Aucun nouvel immeuble retenu après vérification des annonces. Dossiers exclus pour travaux importants, urbanisme incertain, PEB faible, pièces électriques manquantes ou refus explicite de l'option croisée."
 }
