@@ -1,6 +1,6 @@
 {
   "asset_id": "semis",
-  "generated_at": "2026-10-15T09:45:52.349813+00:00",
+  "generated_at": "2026-10-15T14:51:49.693789+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -484,8 +484,8 @@
       "price": 609.0
     },
     {
-      "date": "2026-10-14",
-      "price": 564.74
+      "date": "2026-10-15",
+      "price": 550.17
     }
   ]
 }
