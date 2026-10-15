@@ -114,7 +114,7 @@ export function extractListing(html,url){
   const epc=pebMatch?pebMatch[1].toUpperCase():null;
   const type=inferType(title+' '+description+' '+text.slice(0,20000));
   const availability=classifyListingAvailability({title,description,html,structuredAvailability});
-  const mediaUrl=v=>{try{const u=new URL(typeof v==='string'?v:(v?.url||v?.contentUrl||''),url);return /^https?:$/.test(u.protocol)?u.href:null}catch{return null}};
+  const mediaUrl=v=>{const raw=typeof v==='string'?v:(v?.url||v?.contentUrl||'');if(!raw.trim())return null;try{const u=new URL(raw,url);return /^https?:$/.test(u.protocol)?u.href:null}catch{return null}};
   image=mediaUrl(image);
   const photos=[image].filter(Boolean);
   for(const root of ld)walk(root,o=>{if(o.image)for(const v of (Array.isArray(o.image)?o.image:[o.image])){const u=mediaUrl(v);if(u&&!photos.includes(u))photos.push(u)}});
