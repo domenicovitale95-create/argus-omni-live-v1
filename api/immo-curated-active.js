@@ -3,7 +3,7 @@ import {isStudioListing} from './immo-property-type.js';
 import {readJsonFresh} from './_report-store.js';
 import {isBrusselsListing,hasDeferredPriceStructure} from './immo-region.js';
 import {isUserExcludedListing} from './immo-user-exclusions.js';
-import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE,matchesBuildingCriteria,enrichBuildingCriteria} from './immo-building-criteria.js';
+import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE,matchesBuildingCriteria,enrichBuildingCriteria,BUILDING_TARGET_ZONES} from './immo-building-criteria.js';
 import apartmentsFallback from '../data/immo-opportunities.json' with {type:'json'};
 import buildingsFallback from '../data/immo-building-opportunities.json' with {type:'json'};
 
@@ -68,6 +68,6 @@ export default async function handler(req,res){
       selected=source.map(enrichApartment).sort((a,b)=>b.score-a.score||(number(a.price)??Infinity)-(number(b.price)??Infinity)).slice(0,LIMIT.apartment);
     }
     const checkedAt=catalog?.refreshedAt||null,quarantineCount=Number(catalog?.counts?.quarantined)||0;
-    return res.status(200).json({ok:true,category,updatedAt:checkedAt,checkedAt,failClosed:true,cachePolicy:'NO_STORE_LIVE_CATALOG',selectionMode:catalog?.refreshedAt?'DYNAMIC_LIVE_CATALOG':'AWAITING_VERIFIED_REFRESH',criteria:category==='building'?{zones:BRUSSELS_COMMUNES.map(c=>c.name),sectors:['NORD','SUD'],apartments:[3,4,5,6],minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,counts:{sourceRecords:source.length,active:selected.length,excludedUnavailable:quarantineCount,hiddenUnverified:Math.max(0,source.length-selected.length),filteredUserCriteria},opportunities:selected,notice:category==='building'?'Immeubles de rapport : 19 communes de Bruxelles, NORD/SUD, 3 à 6 appartements, 600 k€ à 1,4 M€.':'Sélection ARGUS appartements.'});
+    return res.status(200).json({ok:true,category,updatedAt:checkedAt,checkedAt,failClosed:true,cachePolicy:'NO_STORE_LIVE_CATALOG',selectionMode:catalog?.refreshedAt?'DYNAMIC_LIVE_CATALOG':'AWAITING_VERIFIED_REFRESH',criteria:category==='building'?{zones:BUILDING_TARGET_ZONES,sectors:['NORD','SUD'],apartments:[3,4,5,6],minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,counts:{sourceRecords:source.length,active:selected.length,excludedUnavailable:quarantineCount,hiddenUnverified:Math.max(0,source.length-selected.length),filteredUserCriteria},opportunities:selected,notice:category==='building'?'Immeubles de rapport : Sud de Bruxelles, Schaerbeek et Saint-Josse, 3 à 6 appartements, 600 k€ à 1,4 M€.':'Sélection ARGUS appartements.'});
   }catch(e){return res.status(500).json({ok:false,error:String(e?.message||e)})}
 }

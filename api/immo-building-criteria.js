@@ -4,7 +4,8 @@ export const BUILDING_MAX_PRICE=1400000;
 export const BUILDING_MIN_UNITS=3;
 export const BUILDING_MAX_UNITS=99;
 
-export const BUILDING_TARGET_ZONES=BRUSSELS_COMMUNES.map(c=>c.name);
+export const BUILDING_TARGET_COMMUNES=BRUSSELS_COMMUNES.filter(c=>c.sector==='SUD'||['Schaerbeek','Saint-Josse-ten-Noode'].includes(c.name));
+export const BUILDING_TARGET_ZONES=BUILDING_TARGET_COMMUNES.map(c=>c.name);
 
 function normalize(value=''){
   return String(value)
@@ -49,7 +50,7 @@ export function matchesBuildingCriteria(x={}){
   return Number.isFinite(price)
     && price>=BUILDING_MIN_PRICE
     && price<=BUILDING_MAX_PRICE
-    && buildingZone(x)!==null
+    && BUILDING_TARGET_ZONES.includes(buildingZone(x))
     && units!==null
     && units>=BUILDING_MIN_UNITS
     && units<=BUILDING_MAX_UNITS;

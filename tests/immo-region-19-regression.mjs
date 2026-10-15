@@ -3,7 +3,7 @@ import {BRUSSELS_COMMUNES,brusselsCommune,brusselsSector,brusselsGeography} from
 import {BUILDING_TARGET_ZONES,buildingZone,matchesBuildingCriteria} from '../api/immo-building-criteria.js';
 import {isStudioListing} from '../api/immo-property-type.js';
 assert.equal(BRUSSELS_COMMUNES.length,19);
-assert.equal(BUILDING_TARGET_ZONES.length,19);
+assert.equal(BUILDING_TARGET_ZONES.length,12);
 assert.equal(new Set(BRUSSELS_COMMUNES.map(x=>x.name)).size,19);
 assert.equal(BRUSSELS_COMMUNES.filter(x=>x.sector==='NORD').length,9);
 assert.equal(BRUSSELS_COMMUNES.filter(x=>x.sector==='SUD').length,10);
@@ -13,7 +13,7 @@ for(const commune of BRUSSELS_COMMUNES){
  assert.equal(brusselsSector(row),commune.sector);
  assert.equal(buildingZone(row),commune.name);
  assert.equal(brusselsGeography(row).argusSector,commune.sector);
- assert.equal(matchesBuildingCriteria(row),true,'In scope: '+commune.name);
+ assert.equal(matchesBuildingCriteria(row),commune.sector==='SUD'||['Schaerbeek','Saint-Josse-ten-Noode'].includes(commune.name),'In scope: '+commune.name);
 }
 assert.equal(buildingZone({city:'Saint-Gilles'}),'Saint-Gilles');
 assert.equal(brusselsCommune({postalCode:'75001',city:'Paris'}),null);

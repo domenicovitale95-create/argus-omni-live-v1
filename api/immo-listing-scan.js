@@ -20,7 +20,7 @@ function meta(html,key){
   return cleanText((html.match(re1)||html.match(re2)||[])[1]||'');
 }
 function parseNumber(v){
-  if(v==null)return null;
+  if(v==null||String(v).trim()==='')return null;
   const s=String(v).replace(/[^0-9.,]/g,'').replace(/\.(?=\d{3}(?:\D|$))/g,'').replace(',','.');
   const n=Number(s); return Number.isFinite(n)?n:null;
 }
@@ -79,14 +79,21 @@ export function isUnavailableListing(listing={}){
 export function isConfirmedActiveListing(listing={}){
   return String(listing.availabilityStatus||listing.status||'').toUpperCase()==='ACTIVE';
 }
+// Parse the listing's embedded JSON as data; never execute page scripts.
+function classifiedJson(html){
+ const marker=html.match(/window\.classified\s*=\s*/);if(!marker)return null;
+ const start=marker.index+marker[0].length;if(html[start]!=='{')return null;
+ let depth=0,quoted=false,escape=false;
+ for(let i=start;i<html.length;i++){const c=html[i];if(quoted){if(escape)escape=false;else if(c==='\\')escape=true;else if(c==='"')quoted=false;continue}if(c==='"')quoted=true;else if(c==='{')depth++;else if(c==='}'&&--depth===0){try{return JSON.parse(html.slice(start,i+1))}catch{return null}}}return null;
+}
 export function extractListing(html,url){
   const title=meta(html,'og:title')||cleanText((html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)||[])[1]||'');
-  const description=meta(html,'og:description')||meta(html,'description');
+  let description=meta(html,'og:description')||meta(html,'description');
   const canonical=cleanText((html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)||[])[1]||url);
   const ld=collectJsonLd(html);
   let price=parseNumber(meta(html,'product:price:amount')||meta(html,'og:price:amount'));
   let currency=meta(html,'product:price:currency')||meta(html,'og:price:currency')||'EUR';
-  let address=null,city=null,postalCode=null,surface=null,bedrooms=null,bathrooms=null,image=null,structuredAvailability='';
+  let address=null,city=null,postalCode=null,surface=null,bedrooms=null,bathrooms=null,image=meta(html,'og:image')||meta(html,'twitter:image')||null,structuredAvailability='';
   for(const root of ld)walk(root,o=>{
     if(price==null&&o.offers?.price!=null)price=parseNumber(o.offers.price);
     if(o.offers?.priceCurrency)currency=o.offers.priceCurrency;
@@ -107,7 +114,27 @@ export function extractListing(html,url){
   const epc=pebMatch?pebMatch[1].toUpperCase():null;
   const type=inferType(title+' '+description+' '+text.slice(0,20000));
   const availability=classifyListingAvailability({title,description,html,structuredAvailability});
-  return {title,description,canonical,source:new URL(url).hostname,price,currency,address,city,postalCode,surface,bedrooms,bathrooms,epc,type,image,availabilityStatus:availability.status,availabilityReason:availability.reason};
+  const mediaUrl=v=>{try{const u=new URL(typeof v==='string'?v:(v?.url||v?.contentUrl||''),url);return /^https?:$/.test(u.protocol)?u.href:null}catch{return null}};
+  image=mediaUrl(image);
+  const photos=[image].filter(Boolean);
+  for(const root of ld)walk(root,o=>{if(o.image)for(const v of (Array.isArray(o.image)?o.image:[o.image])){const u=mediaUrl(v);if(u&&!photos.includes(u))photos.push(u)}});
+  const documents=[];
+  const classified=classifiedJson(html),property=classified?.property||{},media=classified?.media||{};
+  if(property.description)description=cleanText(property.description);
+  if(classified){
+    price=Number(classified.transaction?.sale?.price||classified.price?.mainValue)||price;
+    const loc=property.location||{};
+    address=cleanText([loc.street,loc.postalCode,loc.locality].filter(Boolean).join(', '))||address;
+    city=loc.locality||city;postalCode=loc.postalCode||postalCode;
+    surface=property.netHabitableSurface||surface;bedrooms=property.bedroomCount??bedrooms;bathrooms=property.bathroomCount??bathrooms;
+    for(const picture of media.pictures||[]){const u=mediaUrl(picture.largeUrl||picture.extralargeUrl||picture.mediumUrl);if(u&&!photos.includes(u))photos.push(u)}
+    for(const doc of [...(Array.isArray(media.documents)?media.documents:[]),...(Array.isArray(media.floorPlans)?media.floorPlans:[]),...(Array.isArray(media.specifications)?media.specifications:[])]){const u=mediaUrl(typeof doc==='string'?doc:doc.url||doc.downloadUrl);if(u)documents.push({url:u,name:doc.name||doc.title||'Document de l’annonce'})}
+  }
+  const heatingNames={GAS:'Gaz',FUEL_OIL:'Mazout',ELECTRIC:'Électrique',PELLET:'Pellets',WOOD:'Bois'};
+  const heating=heatingNames[property.energy?.heatingType]||property.energy?.heatingType||null;
+  const outdoor=[property.hasGarden===true?'Jardin'+(property.gardenSurface?' '+property.gardenSurface+' m²':''):'',property.hasTerrace===true?'Terrasse'+(property.terraceSurface?' '+property.terraceSurface+' m²':''):''].filter(Boolean).join(' · ')||null;
+  for(const m of html.matchAll(/<a\b[^>]*href=["']([^"']+\.pdf(?:\?[^"']*)?)["'][^>]*>([\s\S]*?)<\/a>/gi)){const href=mediaUrl(m[1].replace(/&amp;/g,'&'));if(href&&!documents.some(d=>d.url===href))documents.push({url:href,name:cleanText(m[2])||'Document PDF'})}
+  return {heating,outdoor,photos:photos.slice(0,16),documents:documents.slice(0,24),title,description,canonical,source:new URL(url).hostname,price,currency,address,city,postalCode,surface,bedrooms,bathrooms,epc,type,image,availabilityStatus:availability.status,availabilityReason:availability.reason};
 }
 export async function fetchHtml(url,timeoutMs=12000){
   const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),timeoutMs);

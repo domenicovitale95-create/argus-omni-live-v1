@@ -3,7 +3,7 @@ import {isStudioListing} from './immo-property-type.js';
 import {readJsonFresh} from './_report-store.js';
 import {isBrusselsListing,hasDeferredPriceStructure} from './immo-region.js';
 import {isUserExcludedListing} from './immo-user-exclusions.js';
-import {matchesBuildingCriteria,enrichBuildingCriteria} from './immo-building-criteria.js';
+import {matchesBuildingCriteria,enrichBuildingCriteria,BUILDING_TARGET_ZONES} from './immo-building-criteria.js';
 
 const PATHS={
   apartment:'argus/immo/active-catalog-apartment.json',
@@ -42,11 +42,11 @@ export default async function handler(req,res){
       refreshedAt:data.refreshedAt||null,
       minPrice:data.minPrice||null,
       maxPrice:data.maxPrice||null,
-      criteria:category==='building'?{zones:BRUSSELS_COMMUNES.map(c=>c.name),sectors:['NORD','SUD'],apartments:'3+',minPrice:40000,maxPrice:1400000,sort:'price_asc'}:null,
+      criteria:category==='building'?{zones:BUILDING_TARGET_ZONES,sectors:['NORD','SUD'],apartments:'3+',minPrice:40000,maxPrice:1400000,sort:'price_asc'}:null,
       counts:{...(data.counts||{}),active:listings.length,filteredOutsideScope,filteredUserCriteria},
       discovery:data.discovery||null,
       listings,
-      notice:category==='building'?'Immeubles : 19 communes, NORD/SUD, 3–6 logements annoncés; preuves urbanistiques à contrôler.':'Catalogue ARGUS appartements actif.'
+      notice:category==='building'?'Immeubles : Sud de Bruxelles, Schaerbeek et Saint-Josse, 3–6 logements annoncés; preuves urbanistiques à contrôler.':'Catalogue ARGUS appartements actif.'
     });
   }catch(e){
     return res.status(500).json({ok:false,error:String(e?.message||e)});
