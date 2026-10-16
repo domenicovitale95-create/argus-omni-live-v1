@@ -1,8 +1,40 @@
 {
-  "date": "2026-10-15",
+  "date": "2026-10-16",
   "timezone": "Europe/Brussels",
-  "generatedAt": "2026-10-15T07:55:10+02:00",
+  "generatedAt": "2026-10-16T08:04:05+02:00",
   "method": "Recherche manuelle approfondie",
-  "stars": [],
-  "note": "Aucun nouvel immeuble retenu après vérification des annonces. Dossiers exclus pour travaux importants, urbanisme incertain, PEB faible, pièces électriques manquantes ou refus explicite de l'option croisée."
+  "stars": [
+    {
+      "title": "Laeken - immeuble de rapport 4 appartements",
+      "address": "Adresse exacte non publiée",
+      "commune": "Laeken",
+      "price": 815000,
+      "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/laeken/1020/21691663",
+      "unitsAnnounced": 4,
+      "unitsRecognized": null,
+      "peb": "B annoncé, certificats individuels non consultés",
+      "urbanism": "4 appartements reconnus selon l'annonce, RU officiels non consultés",
+      "condition": "Structure béton, rez annoncé excellent état, 28 panneaux solaires annoncés",
+      "verdict": "À VÉRIFIER",
+      "why": "Prix abaissé de 895 000 € à partir de 815 000 €, 332 m², 4 appartements et PEB B annoncés; marge de revente non démontrée",
+      "proofs": [
+        "Annonce Immoweb n°21691663 active et consultée le 16 octobre 2026",
+        "Prix actuel faire offre à partir de 815 000 €"
+      ],
+      "missing": [
+        "RU et plans officiels",
+        "PEB et RGIE par lot",
+        "Acte de base et faisabilité notariale",
+        "Baux et occupation",
+        "Comparables par lot",
+        "Accord vendeur pour option croisée"
+      ],
+      "risks": [
+        "Prix indicatif",
+        "Données de conformité non vérifiées",
+        "Marge de revente inconnue"
+      ]
+    }
+  ],
+  "note": "Un candidat retenu en préanalyse; aucune conformité juridique certifiée. Les autres annonces examinées présentaient des incohérences, un risque énergétique ou une marge non démontrée."
 }
