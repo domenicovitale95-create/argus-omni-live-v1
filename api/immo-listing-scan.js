@@ -93,7 +93,6 @@ export function extractListing(html,url){
   const ld=collectJsonLd(html);
   let price=parseNumber(meta(html,'product:price:amount')||meta(html,'og:price:amount'));
   let currency=meta(html,'product:price:currency')||meta(html,'og:price:currency')||'EUR';
-  let latitude=null,longitude=null,addressNumber=null,locationApproximate=null,locationSource=null;
   let address=null,city=null,postalCode=null,surface=null,bedrooms=null,bathrooms=null,image=meta(html,'og:image')||meta(html,'twitter:image')||null,structuredAvailability='';
   for(const root of ld)walk(root,o=>{
     if(price==null&&o.offers?.price!=null)price=parseNumber(o.offers.price);
@@ -101,7 +100,6 @@ export function extractListing(html,url){
     if(!structuredAvailability&&o.offers?.availability)structuredAvailability=String(o.offers.availability);
     if(!image&&o.image){image=Array.isArray(o.image)?o.image[0]:o.image}
     if(!address&&o.address){const a=o.address;address=cleanText([a.streetAddress,a.postalCode,a.addressLocality].filter(Boolean).join(', '));city=city||cleanText(a.addressLocality||'');postalCode=postalCode||cleanText(a.postalCode||'')}
-    if(latitude==null&&o.geo?.latitude!=null&&o.geo?.longitude!=null){latitude=Number(o.geo.latitude);longitude=Number(o.geo.longitude);locationSource='JSON-LD de l’annonce'}
     if(surface==null){const v=o.floorSize?.value??o.floorSize??o.area?.value??o.area;const n=parseNumber(v);if(n&&n<10000)surface=n}
     if(bedrooms==null){const n=parseNumber(o.numberOfBedrooms);if(n!=null)bedrooms=n}
     if(bathrooms==null){const n=parseNumber(o.numberOfBathroomsTotal??o.numberOfBathrooms);if(n!=null)bathrooms=n}
@@ -126,10 +124,7 @@ export function extractListing(html,url){
   if(classified){
     price=Number(classified.transaction?.sale?.price||classified.price?.mainValue)||price;
     const loc=property.location||{};
-    const street=String(loc.street||'').trim(),num=String(loc.number||'').trim();
-    addressNumber=num||null;
-    address=cleanText([street+(num&&!street.endsWith(num)?' '+num:''),loc.postalCode,loc.locality].filter(Boolean).join(', '))||address;
-    if(loc.latitude!=null&&loc.longitude!=null){latitude=Number(loc.latitude);longitude=Number(loc.longitude);locationApproximate=loc.approximated===true||loc.approximated===1;locationSource='Coordonnées publiées par Immoweb'}
+    address=cleanText([loc.street,loc.postalCode,loc.locality].filter(Boolean).join(', '))||address;
     city=loc.locality||city;postalCode=loc.postalCode||postalCode;
     surface=property.netHabitableSurface||surface;bedrooms=property.bedroomCount??bedrooms;bathrooms=property.bathroomCount??bathrooms;
     for(const picture of media.pictures||[]){const u=mediaUrl(picture.largeUrl||picture.extralargeUrl||picture.mediumUrl);if(u&&!photos.includes(u))photos.push(u)}
@@ -139,7 +134,7 @@ export function extractListing(html,url){
   const heating=heatingNames[property.energy?.heatingType]||property.energy?.heatingType||null;
   const outdoor=[property.hasGarden===true?'Jardin'+(property.gardenSurface?' '+property.gardenSurface+' m²':''):'',property.hasTerrace===true?'Terrasse'+(property.terraceSurface?' '+property.terraceSurface+' m²':''):''].filter(Boolean).join(' · ')||null;
   for(const m of html.matchAll(/<a\b[^>]*href=["']([^"']+\.pdf(?:\?[^"']*)?)["'][^>]*>([\s\S]*?)<\/a>/gi)){const href=mediaUrl(m[1].replace(/&amp;/g,'&'));if(href&&!documents.some(d=>d.url===href))documents.push({url:href,name:cleanText(m[2])||'Document PDF'})}
-  return {latitude,longitude,addressNumber,locationApproximate,locationSource,heating,outdoor,photos:photos.slice(0,16),documents:documents.slice(0,24),title,description,canonical,source:new URL(url).hostname,price,currency,address,city,postalCode,surface,bedrooms,bathrooms,epc,type,image,availabilityStatus:availability.status,availabilityReason:availability.reason};
+  return {heating,outdoor,photos:photos.slice(0,16),documents:documents.slice(0,24),title,description,canonical,source:new URL(url).hostname,price,currency,address,city,postalCode,surface,bedrooms,bathrooms,epc,type,image,availabilityStatus:availability.status,availabilityReason:availability.reason};
 }
 export async function fetchHtml(url,timeoutMs=12000){
   const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),timeoutMs);
