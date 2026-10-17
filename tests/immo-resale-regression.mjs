@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {initialProject,evaluate,analyseLot,targetLocation} from '../lib/immo-resale-engine.mjs';
+const source={canonical:'https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/uccle/1180/21791938',price:800000,announcedUnits:3,address:'Floreal 164, Uccle'};
+const data=JSON.parse(readFileSync(new URL('../data/immo-price-observations.json',import.meta.url))),t=targetLocation(source,data),p=initialProject(source);
+assert.equal(p.lots.length,3);assert.ok(p.lots.every(l=>l.area===''));assert.equal(evaluate(p,t,data).low,null);assert.equal(initialProject({canonical:'https://example.org'}).lots.length,1);
+p.lots.forEach((l,i)=>{l.area='100';l.target=String([300000,350000,400000][i]);});let e=evaluate(p,t,data);assert.equal(e.low,1050000);assert.equal(e.high,1050000);assert.equal(e.spreadLow,250000);assert.equal(e.legalReady,false);assert.equal(e.balanceLow,null);assert.match(e.next,/RU/);
+p.lots.forEach(l=>{l.legal='documented';l.evidence='RU du 1 octobre, page 3'});p.budgetComplete=true;p.costs={option:'10000',division:'15000',works:'0',selling:'20000',other:'5000'};e=evaluate(p,t,data);assert.equal(e.legalReady,true);assert.equal(e.costs,50000);assert.equal(e.balanceLow,200000);
+p.costs.works='';assert.equal(evaluate(p,t,data).balanceLow,null);p.costs.works='0';p.lots[0].evidence='';assert.equal(evaluate(p,t,data).legalReady,false);p.lots[0].legal='not-recognized';assert.match(evaluate(p,t,data).next,/non reconnu/);
+p.lots[1].target='';p.lots[1].area='';assert.equal(evaluate(p,t,data).low,null);p.lots[1].area='100';const real=analyseLot(p.lots[1],t,data);assert.ok(real.count>=5);assert.equal(real.radius,1000);assert.equal(real.manual,false);assert.ok(real.low<real.high);const hidden={...t,precision:'UNLOCATED'};assert.equal(analyseLot(p.lots[1],hidden,data).priced,false);
+p.lots[1].target='-5';assert.equal(evaluate(p,t,data).complete,false);assert.equal(evaluate(p,t,data).spreadLow,null);
+const html=readFileSync(new URL('../immo-opportunities.html',import.meta.url),'utf8'),js=readFileSync(new URL('../immo-simple.js',import.meta.url),'utf8');assert.doesNotMatch(html,/href="\/immo-m2"/);assert.match(html,/immo-resale.js/);assert.match(js,/Voir le potentiel de revente/);assert.doesNotMatch(js,/Voir sur la carte €/);const cfg=JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url)));assert.ok(cfg.redirects.some(r=>r.source==='/immo-m2'&&r.destination==='/immo-opportunities'));
+console.log('PASS: incomplete scenarios, total resale, manual prices, local apartment comparisons, cost completeness, legal evidence and retired map navigation.');
