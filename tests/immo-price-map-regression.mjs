@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {stats,observation,deduplicate,inGeometry,locate,localComparables} from '../lib/immo-price-map.mjs';
+import {extractListing} from '../api/immo-listing-scan.js';
+const rows=[1000,2000,3000,4000,10000].map((psm,i)=>({id:String(i),url:'https://example.org/'+i,price:psm*100,area:100,psm,eligible:true,precision:'ADDRESS_REPORTED',latitude:50.81+i*.0001,longitude:4.34,category:'apartment'}));
+assert.equal(stats(rows).mean,4000);assert.equal(stats(rows).median,3000);assert.equal(stats(rows).q1,2000);assert.equal(stats(rows).q3,4000);assert.equal(stats(rows.slice(0,4)).publish,false);
+assert.equal(localComparables(rows[0],[...rows,{...rows[1],id:'building',category:'building'},{...rows[2],id:'hidden',precision:'APPROXIMATE'}],500).length,4);
+const x=observation({canonical:'https://example.org/a',price:500000,surface:100,postalCode:'1180',address:'Avenue Test 10, 1180, Uccle',latitude:50.81,longitude:4.34,category:'apartment'});assert.equal(x.precision,'ADDRESS_REPORTED');assert.equal(x.psm,5000);assert.equal(observation({...x,canonical:x.url,surface:100,locationApproximate:true}).precision,'APPROXIMATE');assert.equal(observation({...x,canonical:x.url,surface:100,address:'Avenue Test, 1180, Uccle'}).precision,'APPROXIMATE');assert.equal(observation({...x,canonical:x.url,surface:0}),null);
+assert.equal(deduplicate([x,{...x,url:x.url+'?utm_source=foo'}]).rows.length,1);
+const polygon={type:'Polygon',coordinates:[[[0,0],[2,0],[2,2],[0,2],[0,0]],[[.5,.5],[1.5,.5],[1.5,1.5],[.5,1.5],[.5,.5]]]};assert.equal(inGeometry([.2,.2],polygon),true);assert.equal(inGeometry([1,1],polygon),false);
+const html='<title>Appartement à vendre</title><script>window.classified = '+JSON.stringify({transaction:{sale:{price:300000}},property:{location:{street:'Rue Test',number:'12',postalCode:'1050',locality:'Ixelles',latitude:50.82,longitude:4.36,approximated:false},netHabitableSurface:100}})+'</script>';
+const result=extractListing(html,'https://www.immoweb.be/fr/annonce/appartement/a-vendre/ixelles/1050/123456');assert.match(result.address,/Rue Test 12/);assert.equal(result.latitude,50.82);assert.equal(result.addressNumber,'12');
+const geo=JSON.parse(readFileSync(new URL('../data/geo/brussels-neighbourhoods.geojson',import.meta.url)));assert.equal(geo.features.length,145);assert.equal(locate([{...x,precision:'APPROXIMATE'}],geo)[0].neighbourhoodId,null);
+console.log('PASS: price statistics, thresholds, distance/type/precision separation, deduplication, polygons and address extraction');
