@@ -1,3 +1,4 @@
+import {BUILDING_AGENCY_SOURCES} from './immo-agency-sources.js';
 import {extractListing,hostAllowed,isUnavailableListing,isConfirmedActiveListing} from './immo-listing-scan.js';
 
 const APARTMENT_SOURCES=[
@@ -13,6 +14,7 @@ const APARTMENT_SOURCES=[
 ];
 
 const BUILDING_SOURCES=[
+  ...BUILDING_AGENCY_SOURCES,
   {id:'immoweb-building',name:'Immoweb · immeubles',url:'https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?maxprice=400000',match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
   {id:'immovlan-building',name:'Immovlan · immeubles',url:'https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?maxprice=400000&provinces=bruxelles',match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20}
 ];
@@ -56,7 +58,7 @@ function likelyDetailUrl(u,source){
   if(source.id==='immoweb-building'&&!/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i.test(p))return false;
   if(source.id==='immovlan-building'&&!/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i.test(p))return false;
   if(/[?&](?:page|sort|view|offset)=/i.test(u.search))return false;
-  return p.split('/').filter(Boolean).length>=3;
+  return p.split('/').filter(Boolean).length>=(source.minPathSegments||3);
 }
 export function linksFrom(html,base,source){
   const out=[],seen=new Set();

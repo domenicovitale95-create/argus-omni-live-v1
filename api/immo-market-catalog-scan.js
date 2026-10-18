@@ -1,3 +1,4 @@
+import {BUILDING_AGENCY_SOURCES} from './immo-agency-sources.js';
 import {BRUSSELS_COMMUNES} from './immo-brussels-zones.js';
 import {fetchHtml,extractListing,isUnavailableListing,isConfirmedActiveListing} from './immo-listing-scan.js';
 import {linksFrom,buildSourcePageUrls} from './immo-discovery-scan.js';
@@ -21,6 +22,7 @@ const APARTMENT_SOURCES=[
   ...BRUSSELS_COMMUNES.flatMap(c=>c.postcodes.map(pc=>({id:'immoweb-apartment-commune-'+pc,name:'Immoweb appartements · '+c.name,url:'https://www.immoweb.be/fr/recherche/appartement/a-vendre/'+c.slug+'/'+pc+'?maxprice=150000',match:/\/fr\/annonce\//i,pages:1})))
 ]; 
 const BUILDING_SOURCES=[
+  ...BUILDING_AGENCY_SOURCES,
   {id:'immoweb-building',name:'Immoweb · immeubles',url:`https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?minprice=${BUILDING_MIN_PRICE}&maxprice=${BUILDING_MAX_PRICE}`,match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
   {id:'immovlan-building',name:'Immovlan · immeubles',url:`https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?minprice=${BUILDING_MIN_PRICE}&maxprice=${BUILDING_MAX_PRICE}&provinces=bruxelles`,match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20},
   {id:'zimmo-building',name:'Zimmo · immeubles',url:'https://www.zimmo.be/fr/bruxelles/a-vendre/maison',match:/(a-vendre|te-koop|for-sale)/i,pages:20},

@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "updatedAt": "2026-10-04T08:00:00+02:00",
+  "version": 4,
+  "updatedAt": "2026-10-18T13:16:46.131500+00:00",
   "principle": "Coverage is explicit: a source is never marked scanned unless ARGUS actually reached it.",
   "sources": [
     {"id":"immoweb","name":"Immoweb","category":"portal","host":"immoweb.be","discovery":"live","url":"https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000"},
@@ -20,8 +20,12 @@
     {"id":"biddit","name":"Biddit","category":"notary-auction","host":"biddit.be","discovery":"direct","url":"https://www.biddit.be"},
     {"id":"trevi","name":"TREVI","category":"agency-network","host":"trevi.be","discovery":"direct","url":"https://www.trevi.be"},
     {"id":"latour-petit","name":"Latour & Petit","category":"agency","host":"latouretpetit.be","discovery":"direct","url":"https://latouretpetit.be"},
-    {"id":"bathim","name":"Bathim","category":"agency","host":"bathim.be","discovery":"direct","url":"https://www.bathim.be"},
+    {"id":"bathim","name":"Bathim","category":"agency","host":"bathim.be","discovery":"live","url":"https://www.bathim.be/fr/chercher-bien/a-vendre"},
     {"id":"macnash","name":"Macnash","category":"agency","host":"macnash.com","discovery":"direct","url":"https://www.macnash.com/fr"},
-    {"id":"myimmo","name":"MYIMMO","category":"agency-network","host":"myimmo.be","discovery":"direct","url":"https://www.myimmo.be"}
+    {"id":"myimmo","name":"MYIMMO","category":"agency-network","host":"myimmo.be","discovery":"direct","url":"https://www.myimmo.be"},
+    {"id":"revimmo","name":"Rêvimmo","category":"agency","host":"revimmo.be","discovery":"live","url":"https://revimmo.be/nos-biens-a-vendre-louer?purpose=1&region[]=5"},
+    {"id":"dewaele","name":"Dewaele","category":"agency","host":"dewaele.com","discovery":"live","url":"https://www.dewaele.com/fr/a-vendre/1000-bruxelles/immeuble-de-rapport"},
+    {"id":"century21-everone","name":"Century 21 Ever One","category":"agency","host":"agence-immobiliere.brussels","discovery":"live","url":"https://agence-immobiliere.brussels/a-vendre/"},
+    {"id":"engel-volkers","name":"Engel & Völkers Bruxelles","category":"agency","host":"engelvoelkers.com","discovery":"live","url":"https://www.engelvoelkers.com/be/fr/shops/bruxelles-centre"}
   ]
 }

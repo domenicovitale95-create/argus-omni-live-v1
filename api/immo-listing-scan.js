@@ -2,6 +2,7 @@ export const ALLOWED_DOMAINS = [
   'immoweb.be','immovlan.be','zimmo.be','realo.be','era.be','logic-immo.be',
   'immoscoop.be','spotto.be','properstar.be','biddit.be',
   'weinvest.be','trevi.be','latouretpetit.be','victoire.be','bathim.be',
+  'revimmo.be','dewaele.com','agence-immobiliere.brussels','engelvoelkers.com',
   'macnash.com','myimmo.be','century21.be','hyimmo.com','skyimmo.be','immo.notaris.be','direct-immo.be','oralis.be'
 ];
 
