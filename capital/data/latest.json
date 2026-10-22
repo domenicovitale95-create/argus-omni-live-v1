@@ -1,37 +1,12 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-22T01:25:41.359703+00:00",
+  "generated_at": "2026-10-22T07:27:40.539791+00:00",
   "data_quality": {
-    "fresh_series": 12,
+    "fresh_series": 18,
     "total_series": 18,
-    "coverage_pct": 67,
-    "state": "WEAK",
-    "errors": [
-      {
-        "series": "us10y",
-        "error": "insufficient FRED history for DGS10: 0"
-      },
-      {
-        "series": "us2y",
-        "error": "insufficient FRED history for DGS2: 0"
-      },
-      {
-        "series": "vix",
-        "error": "insufficient FRED history for VIXCLS: 0"
-      },
-      {
-        "series": "dollar",
-        "error": "insufficient FRED history for DTWEXBGS: 0"
-      },
-      {
-        "series": "ecb_deposit",
-        "error": "insufficient FRED history for ECBDFR: 0"
-      },
-      {
-        "series": "btc",
-        "error": "insufficient FRED history for CBBTCUSD: 0"
-      }
-    ],
+    "coverage_pct": 100,
+    "state": "STRONG",
+    "errors": [],
     "rules": [
       "No synthetic price fabrication",
       "Stale fallback explicitly labelled",
@@ -198,6 +173,13 @@
       "score": 70,
       "status": "WATCH",
       "evidence": "Strong"
+    },
+    {
+      "id": "cash_eur",
+      "label": "Euro Cash",
+      "score": 70,
+      "status": "WATCH",
+      "evidence": "Moderate"
     },
     {
       "id": "nasdaq",
@@ -529,34 +511,30 @@
   },
   "macro": {
     "us10y": {
-      "price": 5.15,
-      "date": "2026-10-19",
-      "ret_1d": 0.06,
-      "ret_1m": 0.21,
-      "last_update": "2026-10-19",
+      "price": 5.12,
+      "date": "2026-10-20",
+      "ret_1d": -0.03,
+      "ret_1m": 0.11,
+      "last_update": "2026-10-20",
       "delay_days": 2,
-      "fresh": false,
+      "fresh": true,
       "label": "US 10Y Treasury Yield",
       "unit": "%",
       "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10",
-      "data_type": "STALE_LAST_KNOWN_GOOD",
-      "fallback": true,
-      "error": "insufficient FRED history for DGS10: 0"
+      "data_type": "OBSERVED"
     },
     "us2y": {
-      "price": 4.77,
-      "date": "2026-10-19",
-      "ret_1d": 0.03,
-      "ret_1m": 0.1,
-      "last_update": "2026-10-19",
+      "price": 4.79,
+      "date": "2026-10-20",
+      "ret_1d": 0.02,
+      "ret_1m": 0.03,
+      "last_update": "2026-10-20",
       "delay_days": 2,
-      "fresh": false,
+      "fresh": true,
       "label": "US 2Y Treasury Yield",
       "unit": "%",
       "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2",
-      "data_type": "STALE_LAST_KNOWN_GOOD",
-      "fallback": true,
-      "error": "insufficient FRED history for DGS2: 0"
+      "data_type": "OBSERVED"
     },
     "vix": {
       "price": 17.31,
@@ -564,14 +542,12 @@
       "ret_1d": -6.13,
       "ret_1m": 16.41,
       "last_update": "2026-10-20",
-      "delay_days": 1,
-      "fresh": false,
+      "delay_days": 2,
+      "fresh": true,
       "label": "VIX",
       "unit": "index",
       "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS",
-      "data_type": "STALE_LAST_KNOWN_GOOD",
-      "fallback": true,
-      "error": "insufficient FRED history for VIXCLS: 0"
+      "data_type": "OBSERVED"
     },
     "dollar": {
       "price": 121.4,
@@ -579,14 +555,12 @@
       "ret_1d": -0.14,
       "ret_1m": 2.09,
       "last_update": "2026-10-16",
-      "delay_days": 5,
-      "fresh": false,
+      "delay_days": 6,
+      "fresh": true,
       "label": "Broad US Dollar Index",
       "unit": "index",
       "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS",
-      "data_type": "STALE_LAST_KNOWN_GOOD",
-      "fallback": true,
-      "error": "insufficient FRED history for DTWEXBGS: 0"
+      "data_type": "OBSERVED"
     },
     "ecb_deposit": {
       "price": 2.5,
@@ -594,29 +568,25 @@
       "ret_1d": 0.0,
       "ret_1m": 0.0,
       "last_update": "2026-10-21",
-      "delay_days": 0,
-      "fresh": false,
+      "delay_days": 1,
+      "fresh": true,
       "label": "ECB Deposit Facility Rate",
       "unit": "%",
       "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ECBDFR",
-      "data_type": "STALE_LAST_KNOWN_GOOD",
-      "fallback": true,
-      "error": "insufficient FRED history for ECBDFR: 0"
+      "data_type": "OBSERVED"
     },
     "btc": {
-      "price": 82850.31,
-      "date": "2026-10-20",
-      "ret_1d": 1.28,
-      "ret_1m": -0.94,
-      "last_update": "2026-10-20",
+      "price": 84133.56,
+      "date": "2026-10-21",
+      "ret_1d": 1.55,
+      "ret_1m": 0.78,
+      "last_update": "2026-10-21",
       "delay_days": 1,
-      "fresh": false,
+      "fresh": true,
       "label": "Bitcoin / USD",
       "unit": "USD",
       "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CBBTCUSD",
-      "data_type": "STALE_LAST_KNOWN_GOOD",
-      "fallback": true,
-      "error": "insufficient FRED history for CBBTCUSD: 0"
+      "data_type": "OBSERVED"
     }
   },
   "scores": {
@@ -845,10 +815,17 @@
       "note": "No stock recommendation: verified fundamentals, valuation and earnings-revision feeds are not connected yet. Price/momentum data is shown for context only."
     },
     "cash_eur": {
-      "score": null,
-      "status": "DATA INSUFFICIENT",
-      "evidence": "Weak",
-      "coverage": 0
+      "score": 70,
+      "status": "WATCH",
+      "evidence": "Moderate",
+      "coverage": 100,
+      "components": {
+        "short_rate": 70
+      },
+      "methodology": {
+        "ecb_deposit_rate_proxy": 100
+      },
+      "note": "MODELLED cash attractiveness using ECB deposit facility rate as a euro short-rate proxy; bank deposit rates may differ."
     }
   },
   "sources": {
