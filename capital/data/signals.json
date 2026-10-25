@@ -3128,6 +3128,57 @@
       ],
       "source_date": "2026-10-22",
       "outcomes": {}
+    },
+    {
+      "date": "2026-10-25",
+      "asset_id": "sp500",
+      "asset": "S&P 500",
+      "signal": "WATCH",
+      "score": 71,
+      "price": 759.97,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +2.8%",
+        "Distance vs 200-day average: +4.5%",
+        "20-day annualised volatility: 9.8%"
+      ],
+      "source_date": "2026-10-23",
+      "outcomes": {}
+    },
+    {
+      "date": "2026-10-25",
+      "asset_id": "global_equity",
+      "asset": "Global Equities",
+      "signal": "WATCH",
+      "score": 70,
+      "price": 156.8,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: +1.4%",
+        "Distance vs 200-day average: +2.7%",
+        "20-day annualised volatility: 10.4%"
+      ],
+      "source_date": "2026-10-23",
+      "outcomes": {}
+    },
+    {
+      "date": "2026-10-25",
+      "asset_id": "cash_proxy",
+      "asset": "US T-Bills",
+      "signal": "WATCH",
+      "score": 70,
+      "price": 91.63,
+      "conviction": "Medium",
+      "horizon": "Months / Years",
+      "reasoning_summary": [
+        "3-month momentum: +0.0%",
+        "Distance vs 200-day average: +0.1%",
+        "20-day annualised volatility: 1.0%"
+      ],
+      "source_date": "2026-10-23",
+      "outcomes": {}
     }
   ]
 }
