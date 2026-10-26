@@ -13,7 +13,7 @@ export const BUILDING_AGENCY_SOURCES = [
   {id:'macnash-building',name:'Macnash',url:'https://www.macnash.com/fr',match:/(?:\/bien\/|\/listing\/|\/detail\/|\/property\/|\/a-vendre\/|\/vente\/|\/nos-biens\/)[^?#]+/i,minPathSegments:3,pages:2},
   {id:'myimmo-building',name:'MYIMMO',url:'https://www.myimmo.be',match:/(?:\/bien\/|\/listing\/|\/detail\/|\/property\/|\/a-vendre\/|\/vente\/|\/nos-biens\/)[^?#]+/i,minPathSegments:3,pages:2},
   {id:'homestanding-building',name:'Homestanding',url:'https://www.homestanding.be',match:/(?:\/bien\/|\/listing\/|\/detail\/|\/property\/|\/a-vendre\/|\/vente\/|\/nos-biens\/)[^?#]+/i,minPathSegments:3,pages:2},
-  {id:'dldproperties-building',name:'DLD Properties',url:'https://www.dldproperties.be',match:/(?:\/bien\/|\/listing\/|\/detail\/|\/property\/|\/a-vendre\/|\/vente\/|\/nos-biens\/)[^?#]+/i,minPathSegments:3,pages:2},
+  {id:'dldproperties-building',name:'DLD Properties',url:'https://www.dldproperties.be',match:/(?:\/bien\/|\/listing\/|\/detail\/|\/property\/|\/a-vendre\/|\/vente\/|\/nos-biens\/)[^?#]+/i,minPathSegments:2,pages:2},
   {id:'goinvest-building',name:'GO INVEST',url:'https://www.goinvest.be',match:/(?:\/bien\/|\/listing\/|\/detail\/|\/property\/|\/a-vendre\/|\/vente\/|\/nos-biens\/)[^?#]+/i,minPathSegments:3,pages:2},
   {id:'everest-building',name:'Everest Properties',url:'https://www.everestproperties.be/fr/a-vendre',match:/(?:\/bien\/|\/listing\/|\/detail\/|\/property\/|\/a-vendre\/|\/vente\/|\/nos-biens\/)[^?#]+/i,minPathSegments:3,pages:2},
   {id:'lamaison-building',name:'La Maison',url:'https://www.lamaison.be/fr',match:/(?:\/bien\/|\/listing\/|\/detail\/|\/property\/|\/a-vendre\/|\/vente\/|\/nos-biens\/)[^?#]+/i,minPathSegments:3,pages:2},
