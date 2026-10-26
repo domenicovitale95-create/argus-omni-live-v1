@@ -1,6 +1,6 @@
 {
   "asset_id": "global_equity",
-  "generated_at": "2026-10-26T10:57:31.927939+00:00",
+  "generated_at": "2026-10-26T17:15:54.158193+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -484,8 +484,8 @@
       "price": 158.77
     },
     {
-      "date": "2026-10-23",
-      "price": 156.8
+      "date": "2026-10-26",
+      "price": 157.83
     }
   ]
 }
