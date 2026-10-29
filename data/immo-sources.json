@@ -1,31 +1,415 @@
 {
-  "version": 4,
-  "updatedAt": "2026-10-18T13:16:46.131500+00:00",
+  "version": 5,
+  "updatedAt": "2026-10-29T14:00:00+01:00",
   "principle": "Coverage is explicit: a source is never marked scanned unless ARGUS actually reached it.",
   "sources": [
-    {"id":"immoweb","name":"Immoweb","category":"portal","host":"immoweb.be","discovery":"live","url":"https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000"},
-    {"id":"immovlan","name":"Immovlan","category":"portal","host":"immovlan.be","discovery":"live","url":"https://immovlan.be/fr/immobilier/appartement/a-vendre?maxprice=150000&regions=bruxelles-region"},
-    {"id":"zimmo","name":"Zimmo","category":"portal","host":"zimmo.be","discovery":"live","url":"https://www.zimmo.be/fr/bruxelles/a-vendre/appartement"},
-    {"id":"immoscoop","name":"Immoscoop","category":"portal","host":"immoscoop.be","discovery":"live","url":"https://www.immoscoop.be/fr/chercher/a-vendre/ville-de-bruxelles/appartement"},
-    {"id":"properstar","name":"Properstar","category":"portal","host":"properstar.be","discovery":"live","url":"https://www.properstar.be/belgique/bruxelles/acheter/appartement/plus-recents"},
-    {"id":"century21","name":"CENTURY 21 Belgium","category":"agency-network","host":"century21.be","discovery":"live","url":"https://www.century21.be/fr/a-vendre"},
-    {"id":"era","name":"ERA","category":"agency-network","host":"era.be","discovery":"live","url":"https://www.era.be/fr/a-vendre/bruxelles/appartement"},
-    {"id":"era-chatelain","name":"ERA Châtelain","category":"agency","host":"era.be","discovery":"live","url":"https://www.era.be/fr/a-vendre?broker_id=6000159"},
-    {"id":"oralis","name":"Oralis Real Estate","category":"agency","host":"oralis.be","discovery":"live","url":"https://oralis.be/fr/a-vendre"},
-    {"id":"weinvest","name":"We Invest","category":"agency-network","host":"weinvest.be","discovery":"live","url":"https://weinvest.be/fr-BE/properties/for-sale/apartment/city/bruxelles"},
-    {"id":"victoire","name":"Victoire Junot","category":"agency","host":"victoire.be","discovery":"live","url":"https://victoire.be/fr/a-vendre/all/1?sort=price-asc&view=list"},
-    {"id":"realo","name":"Realo","category":"portal","host":"realo.be","discovery":"direct","url":"https://www.realo.be/fr"},
-    {"id":"logic-immo","name":"Logic-Immo","category":"portal","host":"logic-immo.be","discovery":"direct","url":"https://www.logic-immo.be"},
-    {"id":"spotto","name":"Spotto","category":"portal","host":"spotto.be","discovery":"direct","url":"https://www.spotto.be"},
-    {"id":"biddit","name":"Biddit","category":"notary-auction","host":"biddit.be","discovery":"direct","url":"https://www.biddit.be"},
-    {"id":"trevi","name":"TREVI","category":"agency-network","host":"trevi.be","discovery":"direct","url":"https://www.trevi.be"},
-    {"id":"latour-petit","name":"Latour & Petit","category":"agency","host":"latouretpetit.be","discovery":"direct","url":"https://latouretpetit.be"},
-    {"id":"bathim","name":"Bathim","category":"agency","host":"bathim.be","discovery":"live","url":"https://www.bathim.be/fr/chercher-bien/a-vendre"},
-    {"id":"macnash","name":"Macnash","category":"agency","host":"macnash.com","discovery":"direct","url":"https://www.macnash.com/fr"},
-    {"id":"myimmo","name":"MYIMMO","category":"agency-network","host":"myimmo.be","discovery":"direct","url":"https://www.myimmo.be"},
-    {"id":"revimmo","name":"Rêvimmo","category":"agency","host":"revimmo.be","discovery":"live","url":"https://revimmo.be/nos-biens-a-vendre-louer?purpose=1&region[]=5"},
-    {"id":"dewaele","name":"Dewaele","category":"agency","host":"dewaele.com","discovery":"live","url":"https://www.dewaele.com/fr/a-vendre/1000-bruxelles/immeuble-de-rapport"},
-    {"id":"century21-everone","name":"Century 21 Ever One","category":"agency","host":"agence-immobiliere.brussels","discovery":"live","url":"https://agence-immobiliere.brussels/a-vendre/"},
-    {"id":"engel-volkers","name":"Engel & Völkers Bruxelles","category":"agency","host":"engelvoelkers.com","discovery":"live","url":"https://www.engelvoelkers.com/be/fr/shops/bruxelles-centre"}
+    {
+      "id": "immoweb",
+      "name": "Immoweb",
+      "category": "portal",
+      "host": "immoweb.be",
+      "discovery": "live",
+      "url": "https://www.immoweb.be/fr/recherche/appartement/a-vendre/bruxelles/arrondissement?maxprice=150000"
+    },
+    {
+      "id": "immovlan",
+      "name": "Immovlan",
+      "category": "portal",
+      "host": "immovlan.be",
+      "discovery": "live",
+      "url": "https://immovlan.be/fr/immobilier/appartement/a-vendre?maxprice=150000&regions=bruxelles-region"
+    },
+    {
+      "id": "zimmo",
+      "name": "Zimmo",
+      "category": "portal",
+      "host": "zimmo.be",
+      "discovery": "live",
+      "url": "https://www.zimmo.be/fr/bruxelles/a-vendre/appartement"
+    },
+    {
+      "id": "immoscoop",
+      "name": "Immoscoop",
+      "category": "portal",
+      "host": "immoscoop.be",
+      "discovery": "live",
+      "url": "https://www.immoscoop.be/fr/chercher/a-vendre/ville-de-bruxelles/appartement"
+    },
+    {
+      "id": "properstar",
+      "name": "Properstar",
+      "category": "portal",
+      "host": "properstar.be",
+      "discovery": "live",
+      "url": "https://www.properstar.be/belgique/bruxelles/acheter/immeuble"
+    },
+    {
+      "id": "century21",
+      "name": "CENTURY 21 Belgium",
+      "category": "agency-network",
+      "host": "century21.be",
+      "discovery": "live",
+      "url": "https://www.century21.be/fr/a-vendre"
+    },
+    {
+      "id": "era",
+      "name": "ERA",
+      "category": "agency-network",
+      "host": "era.be",
+      "discovery": "live",
+      "url": "https://www.era.be/fr/a-vendre/bruxelles/appartement"
+    },
+    {
+      "id": "era-chatelain",
+      "name": "ERA Châtelain",
+      "category": "agency",
+      "host": "era.be",
+      "discovery": "live",
+      "url": "https://www.era.be/fr/a-vendre?broker_id=6000159"
+    },
+    {
+      "id": "oralis",
+      "name": "Oralis Real Estate",
+      "category": "agency",
+      "host": "oralis.be",
+      "discovery": "live",
+      "url": "https://oralis.be/fr/a-vendre"
+    },
+    {
+      "id": "weinvest",
+      "name": "We Invest",
+      "category": "agency-network",
+      "host": "weinvest.be",
+      "discovery": "live",
+      "url": "https://weinvest.be/fr-BE/properties/for-sale"
+    },
+    {
+      "id": "victoire",
+      "name": "Victoire Junot",
+      "category": "agency",
+      "host": "victoire.be",
+      "discovery": "live",
+      "url": "https://victoire.be/fr/a-vendre/all/1?sort=price-asc&view=list"
+    },
+    {
+      "id": "realo",
+      "name": "Realo",
+      "category": "portal",
+      "host": "realo.be",
+      "discovery": "direct",
+      "url": "https://www.realo.be/fr/search/a-vendre/bruxelles-1000"
+    },
+    {
+      "id": "logic-immo",
+      "name": "Logic-Immo",
+      "category": "portal",
+      "host": "logic-immo.be",
+      "discovery": "direct",
+      "url": "https://www.logic-immo.be"
+    },
+    {
+      "id": "spotto",
+      "name": "Spotto",
+      "category": "portal",
+      "host": "spotto.be",
+      "discovery": "direct",
+      "url": "https://www.spotto.be"
+    },
+    {
+      "id": "biddit",
+      "name": "Biddit",
+      "category": "notary-auction",
+      "host": "biddit.be",
+      "discovery": "direct",
+      "url": "https://www.biddit.be"
+    },
+    {
+      "id": "trevi",
+      "name": "TREVI",
+      "category": "agency-network",
+      "host": "trevi.be",
+      "discovery": "direct",
+      "url": "https://www.trevi.be/fr/acheter"
+    },
+    {
+      "id": "latour-petit",
+      "name": "Latour & Petit",
+      "category": "agency",
+      "host": "latouretpetit.be",
+      "discovery": "direct",
+      "url": "https://latouretpetit.be/nos-biens/vente"
+    },
+    {
+      "id": "bathim",
+      "name": "Bathim",
+      "category": "agency",
+      "host": "bathim.be",
+      "discovery": "live",
+      "url": "https://www.bathim.be/corporate/fr/chercher-bien/a-vendre"
+    },
+    {
+      "id": "macnash",
+      "name": "Macnash",
+      "category": "agency",
+      "host": "macnash.com",
+      "discovery": "direct",
+      "url": "https://www.macnash.com/fr"
+    },
+    {
+      "id": "myimmo",
+      "name": "MYIMMO",
+      "category": "agency-network",
+      "host": "myimmo.be",
+      "discovery": "direct",
+      "url": "https://www.myimmo.be/vente/"
+    },
+    {
+      "id": "revimmo",
+      "name": "Rêvimmo",
+      "category": "agency",
+      "host": "revimmo.be",
+      "discovery": "live",
+      "url": "https://revimmo.be/nos-biens-a-vendre-louer?purpose=1&region[]=5"
+    },
+    {
+      "id": "dewaele",
+      "name": "Dewaele",
+      "category": "agency",
+      "host": "dewaele.com",
+      "discovery": "live",
+      "url": "https://www.dewaele.com/fr/a-vendre/1000-bruxelles/immeuble-de-rapport"
+    },
+    {
+      "id": "century21-everone",
+      "name": "Century 21 Ever One",
+      "category": "agency",
+      "host": "agence-immobiliere.brussels",
+      "discovery": "live",
+      "url": "https://agence-immobiliere.brussels/a-vendre/"
+    },
+    {
+      "id": "engel-volkers",
+      "name": "Engel & Völkers Bruxelles",
+      "category": "agency",
+      "host": "engelvoelkers.com",
+      "discovery": "live",
+      "url": "https://www.engelvoelkers.com/be/fr/shops/woluwe"
+    },
+    {
+      "id": "fierce-building",
+      "name": "Fierce Immo",
+      "category": "agency",
+      "host": "fierceimmo.com",
+      "discovery": "live",
+      "url": "https://www.fierceimmo.com/fr/a-vendre"
+    },
+    {
+      "id": "immo20-building",
+      "name": "Immo 2.0",
+      "category": "agency",
+      "host": "immo2-0.com",
+      "discovery": "live",
+      "url": "https://immo2-0.com/buy"
+    },
+    {
+      "id": "immobpc-building",
+      "name": "Immo BPC",
+      "category": "agency",
+      "host": "immobpc.be",
+      "discovery": "live",
+      "url": "https://immobpc.be/fr/a-vendre/"
+    },
+    {
+      "id": "sothebys-building",
+      "name": "Belgium Sotheby’s Realty",
+      "category": "agency",
+      "host": "sothebysrealty.be",
+      "discovery": "live",
+      "url": "https://sothebysrealty.be/fr/immobilier/a-vendre/"
+    },
+    {
+      "id": "barnes-international-building",
+      "name": "Barnes International · Uccle",
+      "category": "agency",
+      "host": "barnes-international.com",
+      "discovery": "live",
+      "url": "https://www.barnes-international.com/fr/vente/belgique/uccle/"
+    },
+    {
+      "id": "pavimmo-building",
+      "name": "Pavimmo",
+      "category": "agency",
+      "host": "pavimmo.be",
+      "discovery": "live",
+      "url": "https://pavimmo.be/fr/biens?transaction=sale"
+    },
+    {
+      "id": "charlesimmo-building",
+      "name": "Charles Immo",
+      "category": "agency",
+      "host": "charlesimmo.be",
+      "discovery": "live",
+      "url": "https://www.charlesimmo.be/fr/a-vendre"
+    },
+    {
+      "id": "soinvest-building",
+      "name": "So Invest",
+      "category": "agency",
+      "host": "soinvest.be",
+      "discovery": "live",
+      "url": "https://www.soinvest.be/elements"
+    },
+    {
+      "id": "propertyone-building",
+      "name": "Property One",
+      "category": "agency",
+      "host": "propertyone.be",
+      "discovery": "live",
+      "url": "https://propertyone.be/fr/properties/"
+    },
+    {
+      "id": "espaceimmobrussels-building",
+      "name": "Espace Immo Brussels",
+      "category": "agency",
+      "host": "espaceimmobrussels.be",
+      "discovery": "live",
+      "url": "https://www.espaceimmobrussels.be/fr/nos-biens/a-vendre/"
+    },
+    {
+      "id": "findimmo-building",
+      "name": "Find Immo",
+      "category": "agency",
+      "host": "findimmo.be",
+      "discovery": "live",
+      "url": "https://www.findimmo.be/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "id": "fhimmobiliere-building",
+      "name": "FH Immobilière",
+      "category": "agency",
+      "host": "fhimmobiliere.be",
+      "discovery": "live",
+      "url": "https://www.fhimmobiliere.be/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "id": "barnes-brussels-building",
+      "name": "Barnes Brussels",
+      "category": "agency",
+      "host": "barnes-brussels.com",
+      "discovery": "live",
+      "url": "https://barnes-brussels.com/acheter/"
+    },
+    {
+      "id": "directimmo-building",
+      "name": "Direct Immo",
+      "category": "agency",
+      "host": "direct-immo.be",
+      "discovery": "live",
+      "url": "https://www.direct-immo.be/fr/2/chercher-bien/a-vendre"
+    },
+    {
+      "id": "balcaen-building",
+      "name": "Immo Balcaen",
+      "category": "agency",
+      "host": "immobalcaen.be",
+      "discovery": "live",
+      "url": "https://www.immobalcaen.be/"
+    },
+    {
+      "id": "clavis-building",
+      "name": "Clavis Immo",
+      "category": "agency",
+      "host": "clavisimmo.be",
+      "discovery": "live",
+      "url": "https://www.clavisimmo.be/fr/a-vendre"
+    },
+    {
+      "id": "immoschmidt-building",
+      "name": "Immo Schmidt",
+      "category": "agency",
+      "host": "immoschmidt.be",
+      "discovery": "live",
+      "url": "https://www.immoschmidt.be/ventes-belgique"
+    },
+    {
+      "id": "homestanding-building",
+      "name": "Homestanding",
+      "category": "agency",
+      "host": "homestanding.be",
+      "discovery": "live",
+      "url": "https://www.homestanding.be/a-vendre/"
+    },
+    {
+      "id": "dldproperties-building",
+      "name": "DLD Properties",
+      "category": "agency",
+      "host": "dldproperties.be",
+      "discovery": "live",
+      "url": "https://www.dldproperties.be"
+    },
+    {
+      "id": "goinvest-building",
+      "name": "GO INVEST",
+      "category": "agency",
+      "host": "go-investuccle.be",
+      "discovery": "live",
+      "url": "https://www.go-investuccle.be/"
+    },
+    {
+      "id": "everest-building",
+      "name": "Everest Properties",
+      "category": "agency",
+      "host": "everestproperties.be",
+      "discovery": "live",
+      "url": "https://www.everestproperties.be/fr/a-vendre"
+    },
+    {
+      "id": "lamaison-building",
+      "name": "La Maison",
+      "category": "agency",
+      "host": "lamaison.be",
+      "discovery": "live",
+      "url": "https://www.lamaison.be/fr"
+    },
+    {
+      "id": "vaneau-building",
+      "name": "Vaneau Lecobel",
+      "category": "agency",
+      "host": "vaneau-lecobel.be",
+      "discovery": "live",
+      "url": "https://www.vaneau-lecobel.be"
+    },
+    {
+      "id": "immo-rapport-building",
+      "name": "Immeuble-de-rapport.be",
+      "category": "agency",
+      "host": "immeuble-de-rapport.be",
+      "discovery": "live",
+      "url": "https://immeuble-de-rapport.be"
+    },
+    {
+      "id": "commerceimmo-building",
+      "name": "Commerce Immo",
+      "category": "agency",
+      "host": "commerceimmo.be",
+      "discovery": "live",
+      "url": "https://www.commerceimmo.be/fr/a-vendre/immeuble-de-rapport/"
+    },
+    {
+      "id": "expertissimmo-building",
+      "name": "Expertissimmo",
+      "category": "agency",
+      "host": "expertissimmo.eu",
+      "discovery": "live",
+      "url": "https://expertissimmo.eu/fr/biens-a-vendre"
+    },
+    {
+      "id": "househunter-building",
+      "name": "Househunter",
+      "category": "agency",
+      "host": "househunter.immo",
+      "discovery": "live",
+      "url": "https://househunter.immo/fr/a-vendre/bruxelles/immeuble-de-rapport"
+    }
   ]
 }

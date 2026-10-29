@@ -15,8 +15,8 @@ const APARTMENT_SOURCES=[
 
 const BUILDING_SOURCES=[
   ...BUILDING_AGENCY_SOURCES,
-  {id:'immoweb-building',name:'Immoweb · immeubles',url:'https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?maxprice=400000',match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
-  {id:'immovlan-building',name:'Immovlan · immeubles',url:'https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?maxprice=400000&provinces=bruxelles',match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20}
+  {id:'immoweb-building',name:'Immoweb · immeubles',url:'https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?maxprice=1400000',match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
+  {id:'immovlan-building',name:'Immovlan · immeubles',url:'https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?maxprice=1400000&provinces=bruxelles',match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20}
 ];
 
 const MAX_SOURCE_PAGES=20;
@@ -39,10 +39,26 @@ async function fetchText(url){
     return {url:r.url||url,text:text.slice(0,2200000)};
   }finally{clearTimeout(timer)}
 }
+// WHISE catalogues put their cards in a public HTML fragment endpoint.
+// Read that endpoint rather than counting an empty JavaScript shell as listings.
+export async function fetchSourcePage(source,pageUrl,fetcher=fetchText){
+  const page=await fetcher(pageUrl);
+  if(source.cms!=='whise')return page;
+  const raw=(page.text.match(/href=["']([^"']*\/List\/InfiniteScroll\?[^"']+)["']/i)||[])[1];
+  if(!raw)return page;
+  const fragment=new URL(raw.replace(/&amp;|&#0*38;|&#x0*26;/gi,'&'),page.url);
+  if(fragment.origin!==new URL(page.url).origin)throw new Error('catalog_fragment_host_mismatch');
+  const params=JSON.parse(fragment.searchParams.get('json')||'{}');
+  const pageNumber=Math.max(0,(Number(new URL(pageUrl).searchParams.get('page'))||1)-1);
+  params.PageNumber=pageNumber;params.FirstPage=pageNumber===0;params.MaxItemsPerPage=50;
+  fragment.searchParams.set('json',JSON.stringify(params));
+  const result=await fetcher(fragment.href);
+  return {...result,url:page.url};
+}
 function normalizedHost(value=''){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 function likelyDetailUrl(u,source){
   const sourceHost=normalizedHost(source.url),candidateHost=u.hostname.toLowerCase().replace(/^www\./,'');
-  if(candidateHost!==sourceHost)return false;
+  if(candidateHost!==sourceHost&&!source.allowedHosts?.includes(candidateHost))return false;
   const p=u.pathname.toLowerCase().replace(/\/+$/,'');
   if(!source.match.test(p+u.search.toLowerCase()))return false;
   if(/\/(chercher|recherche|search)(\/|$)/i.test(p))return false;
@@ -57,14 +73,15 @@ function likelyDetailUrl(u,source){
   if(source.id==='properstar'&&!/\/annonce\/\d+/i.test(p))return false;
   if(source.id==='immoweb-building'&&!/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i.test(p))return false;
   if(source.id==='immovlan-building'&&!/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i.test(p))return false;
-  if(/[?&](?:page|sort|view|offset)=/i.test(u.search))return false;
+  if(/[?&](?:page|sort|offset)=/i.test(u.search))return false;
+  if(u.searchParams.has('view')&&!(u.searchParams.get('view')==='detail'&&/^\d+$/.test(u.searchParams.get('id')||'')))return false;
   return p.split('/').filter(Boolean).length>=(source.minPathSegments||3);
 }
 export function linksFrom(html,base,source){
   const out=[],seen=new Set();
   const add=raw=>{
     try{
-      const u=new URL(raw,base);
+      const u=new URL(String(raw).replace(/&amp;|&#0*38;|&#x0*26;/gi,'&'),base);
       if(!['http:','https:'].includes(u.protocol)||!hostAllowed(u.hostname)||!likelyDetailUrl(u,source))return;
       u.hash='';
       const key=u.toString();
@@ -157,7 +174,7 @@ async function scanSource(source,maxPrice,category){
     let exhausted=false,hitSafetyCap=false;
     for(const pageUrl of buildSourcePageUrls(source)){
       try{
-        const page=await fetchText(pageUrl);
+        const page=await fetchSourcePage(source,pageUrl);
         status.reachable=true;status.pagesReached++;
         const pageLinks=linksFrom(page.text,page.url,source);
         let added=0;
@@ -182,7 +199,7 @@ async function scanSource(source,maxPrice,category){
       const got=await Promise.all(links.slice(i,i+DETAIL_CONCURRENCY).map(async url=>{
         try{
           const p=await fetchText(url),row=extractListing(p.text,p.url),canonical=String(row.canonical||p.url);
-          if(canonical&&normalizedHost(canonical)!==normalizedHost(source.url))return {error:'canonical_host_mismatch',url};
+          if(canonical&&normalizedHost(canonical)!==normalizedHost(source.url)&&!source.allowedHosts?.includes(normalizedHost(canonical)))return {error:'canonical_host_mismatch',url};
           const criticalLegalRisks=detectCriticalLegalRisks({...row,html:p.text});
           return {row:{...row,canonical,category,criticalLegalRisks,decisionGate:criticalLegalRisks.length?'HARD_STOP':'REVIEW',discoveredFrom:source.id,discoveredAt:new Date().toISOString()}};
         }catch(e){
@@ -231,7 +248,7 @@ export default async function handler(req,res){
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});
     const category=raw.category==='building'?'building':'apartment';
     const defaultMax=category==='building'?1400000:150000;
-    const maxPrice=Math.max(50000,Math.min(1000000,Number(raw.maxPrice)||defaultMax));
+    const maxPrice=Math.max(50000,Math.min(category==='building'?1400000:1000000,Number(raw.maxPrice)||defaultMax));
     const sources=category==='building'?BUILDING_SOURCES:APARTMENT_SOURCES;
     const results=await Promise.all(sources.map(s=>scanSource(s,maxPrice,category)));
     const map=new Map(),reviewMap=new Map();

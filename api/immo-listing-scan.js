@@ -1,4 +1,6 @@
 export const ALLOWED_DOMAINS = [
+  'fierceimmo.com','immo2-0.com','immobpc.be','sothebysrealty.be','century21.be','weinvest.be','victoire.be','properstar.be','barnes-international.com','realo.be','go-investuccle.be',
+  'pavimmo.be','charlesimmo.be','soinvest.be','propertyone.be','espaceimmobrussels.be','findimmo.be','fhimmobiliere.be','barnes-brussels.com','direct-immo.be','immobalcaen.be','clavisimmo.be','immoschmidt.be',
   'immoweb.be','immovlan.be','zimmo.be','realo.be','era.be','logic-immo.be',
   'immoscoop.be','spotto.be','properstar.be','biddit.be',
   'weinvest.be','trevi.be','latouretpetit.be','victoire.be','bathim.be',
