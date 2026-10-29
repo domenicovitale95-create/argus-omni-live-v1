@@ -1,0 +1,3104 @@
+{
+  "updatedAt": "2026-10-29",
+  "scope": "Agences des sources Argus, dossiers à appeler, BRIDGE actuel et contacts historiques retrouvés. Les coordonnées manquantes et échanges non établis sont explicités.",
+  "contacts": [
+    {
+      "id": "barnes",
+      "name": "BARNES Bruxelles",
+      "kind": "agency",
+      "phones": [
+        "+32 475 73 64 81",
+        "+32 2 880 15 15"
+      ],
+      "emails": [
+        "d.ahrend@barnes-international.com",
+        "brussels@barnes-international.com"
+      ],
+      "people": [
+        "Daniel Ahrend"
+      ],
+      "properties": [
+        {
+          "id": "BR-048",
+          "name": "Rue Joseph Stallaert 79 — Cavell-Molière",
+          "url": "https://www.barnes-international.com/fr/vente/belgio/uccle/ref-APM-87109881.html",
+          "stage": "Documents reçus"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.barnes-brussels.com/mentions-legales/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.barnes-international.com/fr/vente/belgique/uccle/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://barnes-brussels.com/acheter/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.barnes-international.com/fr/vente/belgio/uccle/ref-APM-87109881.html"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-048 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "contacted",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "text": "Contact confirmé par Domenico. Tous les documents reçus pour Stallaert 79 ; Brugmann 403 également mentionné dans le suivi."
+        }
+      ],
+      "notes": [
+        "Daniel Ahrend · IPI 510737. Ne pas redemander le dossier complet."
+      ],
+      "personContacts": [
+        {
+          "name": "Daniel Ahrend",
+          "phone": "+32 475 73 64 81",
+          "email": "d.ahrend@barnes-international.com",
+          "proof": "Déjà contacté · confirmé le 27/10/2026"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "brigittesalamaimmobiliere",
+      "name": "Brigitte Salama Immobilière",
+      "kind": "agency",
+      "phones": [
+        "0475 314 865",
+        "+32 2 201 82 82",
+        "+32 488 36 67 88"
+      ],
+      "emails": [
+        "brigitte@salama-immobiliere.be"
+      ],
+      "people": [
+        "Brigitte Salama"
+      ],
+      "properties": [
+        {
+          "id": "BR-039",
+          "name": "Uccle – Globe / Parvis Saint-Pierre (21935915)",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/uccle/1180/21935915",
+          "stage": "Visite planifiée"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.brigittesalama.be/fr/Contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/uccle/1180/21935915"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-039 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "contacted",
+      "history": [
+        {
+          "date": "2026-10-23",
+          "text": "RU et PEB reçus selon Domenico pour le bien 21935915."
+        },
+        {
+          "date": "2026-10-26",
+          "text": "Rendez-vous fixé à 12 h dans BRIDGE. Visite effectivement réalisée non confirmée."
+        }
+      ],
+      "notes": [
+        "0475 314 865 reste un numéro historique BRIDGE ; standard et mobile du site officiel ajoutés séparément.",
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "danieleblum",
+      "name": "Danièle Blum",
+      "kind": "unidentified",
+      "phones": [],
+      "emails": [],
+      "people": [
+        "Danièle Blum"
+      ],
+      "properties": [
+        {
+          "id": "BR-038",
+          "name": "Rue Frans Binjé 7",
+          "url": "",
+          "stage": "Visité"
+        }
+      ],
+      "sources": [
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-038 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "BRIDGE · APPELS_VISITES · BR-038 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252191"
+        }
+      ],
+      "status": "contacted",
+      "history": [
+        {
+          "date": "2026-10-19",
+          "text": "Visite de Frans Binjé 7 à 18 h. APPELS_VISITES indique « Oui » ; suivi des offres mentionné dans l’historique."
+        }
+      ],
+      "notes": [
+        "Agence, téléphone et e-mail non retrouvés. Ne pas confondre cet interlocuteur avec DBR Immo.",
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé.",
+        "Coordonnées absentes des sources consultées, recherche publique non concluante le 29/10/2026."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "floreal",
+      "name": "Floréal",
+      "kind": "unidentified",
+      "phones": [],
+      "emails": [],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-004",
+          "name": "Avenue de Floréal 164",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/uccle/1180/21791938",
+          "stage": "Offre acceptée"
+        }
+      ],
+      "sources": [
+        {
+          "label": "BRIDGE · IMMEUBLES / APPELS_VISITES · 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252191"
+        }
+      ],
+      "status": "contacted",
+      "history": [
+        {
+          "date": "2026-10-12",
+          "text": "Visite effectuée avenue de Floréal 164 selon BRIDGE."
+        },
+        {
+          "date": "2026-10-27",
+          "text": "Offre acceptée à 820 000 € selon le suivi de Domenico."
+        }
+      ],
+      "notes": [
+        "Nom, agence, téléphone et e-mail de l’interlocuteur non retrouvés dans les sources consultées."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "lamaison",
+      "name": "La Maison · Holistic Properties",
+      "kind": "agency",
+      "phones": [
+        "+32 2 669 23 03"
+      ],
+      "emails": [
+        "brussels@lamaison.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-044",
+          "name": "Rue du Printemps 8",
+          "url": "https://www.lamaison.be/fr/bien/a-vendre/maison/1050-ixelles/7905292",
+          "stage": "Documents demandés"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.lamaison.be/fr"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.lamaison.be/fr/bien/a-vendre/maison/1050-ixelles/7905292"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-044 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "contacted",
+      "history": [
+        {
+          "date": "2026-10-26",
+          "text": "Appel effectué pour rue du Printemps 8 selon BRIDGE. En attente des RU par e-mail."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "latourpetit",
+      "name": "Latour & Petit",
+      "kind": "agency",
+      "phones": [
+        "+32 2 777 19 19"
+      ],
+      "emails": [
+        "camille@latouretpetit.be"
+      ],
+      "people": [
+        "Camille Grare"
+      ],
+      "properties": [
+        {
+          "id": "BR-043",
+          "name": "Ixelles – Jourdan / Luxembourg – L&P 7840823",
+          "url": "https://latouretpetit.be/nos-biens/vente/1050-ixelles-maison-4-chambres/7840823",
+          "stage": "En analyse"
+        },
+        {
+          "id": "BR-052",
+          "name": "Rue Murillo 45 — Cinquantenaire / Linthout",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/bruxelles/1000/21916739",
+          "stage": "Écarté"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://latouretpetit.be/nos-biens/vente"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://latouretpetit.be/nos-biens/vente/1050-ixelles-maison-4-chambres/7840823"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-043 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/bruxelles/1000/21916739"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-052 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "contacted",
+      "history": [
+        {
+          "date": "2026-10-23",
+          "text": "RU reçus pour la référence 7840823 selon Domenico. Contact Camille Grare renseigné dans BRIDGE."
+        }
+      ],
+      "notes": [
+        "Le dossier 7840823 est écarté dans BRIDGE ; cela ne signifie pas que l’agence est écartée."
+      ],
+      "personContacts": [
+        {
+          "name": "Camille Grare",
+          "phone": "+32 2 777 19 19",
+          "email": "camille@latouretpetit.be",
+          "proof": "Standard agence · RU reçus le 23/10/2026"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "5bricks",
+      "name": "5Bricks",
+      "kind": "agency",
+      "phones": [
+        "+32 2 732 88 32"
+      ],
+      "emails": [
+        "contact@5bricks.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://immo.5bricks.be/p/rapport-immobiliers.html"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Présent dans le suivi historique BRIDGE. Aucun contact effectivement réalisé retrouvé pour cette agence."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "bathim",
+      "name": "Bathim",
+      "kind": "agency",
+      "phones": [
+        "+32 2 733 00 00"
+      ],
+      "emails": [
+        "info@bathim.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.bathim.be/fr/contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.bathim.be/corporate/fr/chercher-bien/a-vendre"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "belgiumsothebysrealty",
+      "name": "Belgium Sotheby’s Realty",
+      "kind": "agency",
+      "phones": [
+        "+32 2 640 08 01"
+      ],
+      "emails": [
+        "brussels@sothebysrealty.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://sothebysrealty.be/fr/about/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://sothebysrealty.be/fr/immobilier/a-vendre/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "bettencourtrealestate",
+      "name": "Bettencourt Real Estate",
+      "kind": "agency",
+      "phones": [
+        "+32 2 615 20 20",
+        "+32 471 09 40 78"
+      ],
+      "emails": [
+        "info@bettencourtrealestate.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.bettencourtrealestate.be/fr/Contact/Index/Inscription"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "century21action",
+      "name": "Century 21 Action",
+      "kind": "agency",
+      "phones": [
+        "+32 2 512 21 21"
+      ],
+      "emails": [
+        "info@century21action.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-053",
+          "name": "Ixelles — quartier Lesbroussart — Century 21 Action",
+          "url": "https://www.immoweb.be/fr/annonce/maison/a-vendre/ixelles/1050/21724896",
+          "stage": "Écarté"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/maison/a-vendre/ixelles/1050/21724896"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-053 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "century21everone",
+      "name": "Century 21 Ever One",
+      "kind": "agency",
+      "phones": [
+        "02 241 21 21"
+      ],
+      "emails": [
+        "info@century21everone.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-064",
+          "name": "Schaerbeek — Century 21 EverOne — adresse à obtenir",
+          "url": "https://agence-immobiliere.brussels/bien/immeuble-de-rapport-a-vendre-c8cf92b4/",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://agence-immobiliere.brussels/a-vendre/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://agence-immobiliere.brussels/bien/immeuble-de-rapport-a-vendre-c8cf92b4/"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-064 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.century21.be/fr/a-vendre"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Réseau CENTURY 21 également présent parmi les sources Argus ; Ever One, Action et Molière sont présentés par bureau."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "century21moliere",
+      "name": "CENTURY 21 Molière",
+      "kind": "agency",
+      "phones": [
+        "+32 2 319 47 21"
+      ],
+      "emails": [
+        "info@century21moliere.com"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://bruxelles-immo.be/fr/notre-agence/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "charlesimmo",
+      "name": "Charles Immo",
+      "kind": "agency",
+      "phones": [
+        "+32 471 72 21 44"
+      ],
+      "emails": [
+        "delphine@charlesimmo.be"
+      ],
+      "people": [
+        "Delphine"
+      ],
+      "properties": [
+        {
+          "id": "Réf. 637",
+          "name": "Ixelles · Charles Immo",
+          "url": "https://www.charlesimmo.be/fr/component/properties/?id=637&page=18&view=detail",
+          "stage": "Envoi de demande à confirmer"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.charlesimmo.be/nl/contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.charlesimmo.be/fr/a-vendre"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "2026-10-27",
+          "text": "Demande de RU, PEB et plans préparée pour la référence 637. Envoi effectif à confirmer."
+        }
+      ],
+      "notes": [],
+      "personContacts": [
+        {
+          "name": "Delphine",
+          "phone": "+32 471 72 21 44",
+          "email": "delphine@charlesimmo.be",
+          "proof": "Contact du dossier · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "clavisimmo",
+      "name": "Clavis Immo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 670 19 70"
+      ],
+      "emails": [
+        "info@clavisimmo.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.clavisimmo.be/fr/contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.clavisimmo.be/fr/a-vendre"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "coldwellbankerbrusselssouth",
+      "name": "Coldwell Banker Brussels South",
+      "kind": "agency",
+      "phones": [
+        "+32 492 87 41 29"
+      ],
+      "emails": [
+        "jessica.roeckens@coldwellbanker.be"
+      ],
+      "people": [
+        "Jessica Roeckens"
+      ],
+      "properties": [
+        {
+          "id": "BR-068",
+          "name": "Ixelles — Flagey — Coldwell Banker",
+          "url": "https://www.coldwellbankerbrussels-south.be/ixelles%2Bbru%2Bimmeuble%2Bvente%2Br33829298.html?marche=1&place_url=belgique",
+          "stage": "À contacter"
+        },
+        {
+          "id": "21927855",
+          "name": "Rue Vandenbroeck 4–6",
+          "url": "/immo-biens-a-appeler#bien-21927855",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.coldwellbankerbrussels-south.be/ixelles%2Bbru%2Bimmeuble%2Bvente%2Br33829298.html?marche=1&place_url=belgique"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-068 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "/immo-biens-a-appeler#bien-21927855"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "commerceimmo",
+      "name": "Commerce Immo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 493 29 00"
+      ],
+      "emails": [
+        "contact@commerceimmo.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.commerceimmo.be/fr/privacy-statement/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.commerceimmo.be/fr/a-vendre/immeuble-de-rapport/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "crescendimmobruxellessud",
+      "name": "Crescendimmo · Bruxelles Sud",
+      "kind": "agency",
+      "phones": [
+        "+32 2 660 50 50"
+      ],
+      "emails": [
+        "info.sud@cre.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "21919457",
+          "name": "Avenue Georges Henri 463",
+          "url": "/immo-biens-a-appeler#bien-21919457",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "/immo-biens-a-appeler#bien-21919457"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "dbrimmo",
+      "name": "DBR Immo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 375 90 20"
+      ],
+      "emails": [
+        "dbimmo77@gmail.com"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-074",
+          "name": "Schaerbeek — Bienfaiteurs / Josaphat — DBR",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/schaerbeek/1030/21924051",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/schaerbeek/1030/21924051"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-074 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/schaerbeek/1030/21924051"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Présent dans le suivi historique BRIDGE. Aucun contact effectivement réalisé retrouvé pour cette agence."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "dewaele",
+      "name": "Dewaele",
+      "kind": "agency",
+      "phones": [
+        "+32 2 223 23 23"
+      ],
+      "emails": [
+        "brussels@dewaele.com"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.dewaele.com/nl/kantoren"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.dewaele.com/fr/a-vendre/1000-bruxelles/immeuble-de-rapport"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "directimmo",
+      "name": "Direct Immo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 347 10 01"
+      ],
+      "emails": [
+        "info@direct-immo.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.direct-immo.be/fr/Contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.direct-immo.be/fr/2/chercher-bien/a-vendre"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "dldproperties",
+      "name": "DLD Properties",
+      "kind": "agency",
+      "phones": [
+        "+32 473 97 58 50",
+        "+32 2 315 16 57"
+      ],
+      "emails": [
+        "info@dldproperties.be"
+      ],
+      "people": [
+        "David Lambert"
+      ],
+      "properties": [
+        {
+          "id": "BR-045",
+          "name": "Avenue de Messidor 15",
+          "url": "https://www.dldproperties.be/listing/messidor-maison-de-rapport-3-unites-r-u-ok/",
+          "stage": "Écarté"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.dldproperties.be/contact/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.dldproperties.be"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.dldproperties.be/listing/messidor-maison-de-rapport-3-unites-r-u-ok/"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-045 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "engelvolkersuccle",
+      "name": "Engel & Völkers Uccle",
+      "kind": "agency",
+      "phones": [
+        "+32 2 880 40 21"
+      ],
+      "emails": [],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-042",
+          "name": "Place Saint-Job — 4 logements, bureau et 2 garages",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/uccle/1180/21930400",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/uccle/1180/21930400"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-042 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées."
+        }
+      ],
+      "notes": [
+        "E-mail direct non retrouvé sur la page officielle ; formulaire de contact disponible."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "engelvolkerswoluwe",
+      "name": "Engel & Völkers Woluwe",
+      "kind": "agency",
+      "phones": [
+        "+32 2 880 40 21"
+      ],
+      "emails": [],
+      "people": [],
+      "properties": [
+        {
+          "id": "21920855",
+          "name": "Rue des Atrébates 47",
+          "url": "/immo-biens-a-appeler#bien-21920855",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Standard publié · 29/10/2026",
+          "url": "https://www.engelvoelkers.com/be/en/shops/woluwe"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.engelvoelkers.com/be/fr/shops/woluwe"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées."
+        }
+      ],
+      "notes": [
+        "E-mail direct non retrouvé sur la page officielle ; formulaire de contact disponible."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "erachatelain",
+      "name": "ERA Châtelain",
+      "kind": "agency",
+      "phones": [
+        "02 535 98 98"
+      ],
+      "emails": [
+        "arthur@immochatelain.be",
+        "chatelain@era.be"
+      ],
+      "people": [
+        "Arthur Delaude",
+        "Lionel Estalrrich",
+        "Amélie Corbeau"
+      ],
+      "properties": [
+        {
+          "id": "BR-063",
+          "name": "Rue Vanderlinden 12",
+          "url": "https://www.era.be/fr/a-vendre/schaerbeek/batiment-de-rapport/immeuble-de-rapport-a-vendre-a-schaerbeek-0",
+          "stage": "À contacter"
+        },
+        {
+          "id": "BR-070",
+          "name": "Rue Gallait 116",
+          "url": "https://www.era.be/fr/a-vendre/schaerbeek/batiment-de-rapport/collignon-immeuble-de-rapport-de-3-unites-a-renover-0",
+          "stage": "À contacter"
+        },
+        {
+          "id": "era-1541340",
+          "name": "Rue du Président 70",
+          "url": "/immo-biens-a-appeler#bien-era-1541340",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.era.be/fr/era-chatelain/ixelles-chatelain"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.era.be/fr/a-vendre?broker_id=6000159"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.era.be/fr/a-vendre/schaerbeek/batiment-de-rapport/immeuble-de-rapport-a-vendre-a-schaerbeek-0"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-063 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.era.be/fr/a-vendre/schaerbeek/batiment-de-rapport/collignon-immeuble-de-rapport-de-3-unites-a-renover-0"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-070 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Équipe et e-mails nominatifs · 29/10/2026",
+          "url": "https://www.era.be/fr/era-chatelain"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.era.be/fr/a-vendre/bruxelles/appartement"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "personContacts": [
+        {
+          "name": "Arthur Delaude",
+          "phone": "+32 2 535 98 98",
+          "email": "arthur@immochatelain.be",
+          "proof": "Contact du dossier · échange non confirmé"
+        },
+        {
+          "name": "Lionel Estalrrich",
+          "phone": "+32 2 535 98 98",
+          "email": "lionel@immochatelain.be",
+          "proof": "Contact du dossier · échange non confirmé"
+        },
+        {
+          "name": "Amélie Corbeau",
+          "phone": "+32 2 705 07 00",
+          "email": "amelie@immochatelain.be",
+          "proof": "Contact du dossier · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "espaceimmobrussels",
+      "name": "Espace Immo Brussels",
+      "kind": "agency",
+      "phones": [
+        "+32 2 219 19 55"
+      ],
+      "emails": [
+        "info@espaceimmobrussels.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.espaceimmobrussels.be/fr/contact/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.espaceimmobrussels.be/fr/nos-biens/a-vendre/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "everestproperties",
+      "name": "Everest Properties",
+      "kind": "agency",
+      "phones": [
+        "0488 04 06 93",
+        "02 733 70 70"
+      ],
+      "emails": [
+        "info@everestproperties.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-047",
+          "name": "Quartier Schuman — maison unifamiliale / Everest 26795",
+          "url": "https://www.everestproperties.be/fr/a-vendre/belgique/bruxelles/quartier-schumann-maison-unifamiliale-avec-potentiel-de-rapport/26795/",
+          "stage": "Écarté"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.everestproperties.be/fr/a-vendre"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.everestproperties.be/fr/a-vendre/belgique/bruxelles/quartier-schumann-maison-unifamiliale-avec-potentiel-de-rapport/26795/"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-047 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "expertissimmo",
+      "name": "Expertissimmo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 736 67 92"
+      ],
+      "emails": [
+        "info@expertissimmo.eu"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://expertissimmo.eu/fr/contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://expertissimmo.eu/fr/biens-a-vendre"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "fhimmobiliere",
+      "name": "FH Immobilière",
+      "kind": "agency",
+      "phones": [
+        "0475 48 44 11"
+      ],
+      "emails": [
+        "info@fhimmobiliere.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-056",
+          "name": "Uccle — FH Immobilière 7917625 — adresse à obtenir",
+          "url": "https://www.fhimmobiliere.be/fr/bien/a-vendre/maison/1180-uccle/7917625",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.fhimmobiliere.be/fr/2/chercher-bien/a-vendre"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.fhimmobiliere.be/fr/bien/a-vendre/maison/1180-uccle/7917625"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-056 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "2026-10-29",
+          "text": "E-mail de demande de RU et PEB préparé. Envoi effectif à confirmer."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "fierceimmo",
+      "name": "Fierce Immo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 420 65 01"
+      ],
+      "emails": [
+        "info@fierceimmo.com"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.fierceimmo.com/fr/contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.fierceimmo.com/fr/a-vendre"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "findimmo",
+      "name": "Find Immo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 353 05 35"
+      ],
+      "emails": [
+        "info@findimmo.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.findimmo.be/fr/Contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.findimmo.be/fr/2/chercher-bien/a-vendre"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "fredimmo",
+      "name": "Fredimmo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 460 00 00",
+        "+32 470 12 30 00"
+      ],
+      "emails": [
+        "sales@fredimmo.be"
+      ],
+      "people": [
+        "Frédéric Pieters"
+      ],
+      "properties": [
+        {
+          "id": "BR-071",
+          "name": "Schaerbeek — 4 logements reconnus — Fredimmo",
+          "url": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1030/schaerbeek/vbe73866",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.fredimmo.be/fr/Contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1030/schaerbeek/vbe73866"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-071 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "gesticonseils",
+      "name": "Gesti Conseils",
+      "kind": "management",
+      "phones": [
+        "+32 2 210 01 93",
+        "+32 2 210 01 89"
+      ],
+      "emails": [
+        "edo@gesticonseils.be",
+        "asm@gesticonseils.be"
+      ],
+      "people": [
+        "Emmanuel d’Oultremont",
+        "Alexandre de Saint-Marcq"
+      ],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.gesticonseils.be/fr/gestion-immobiliere"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Le service publié porte explicitement sur la gestion d’immeubles de rapport à Bruxelles : lien pertinent avec des propriétaires d’immeubles entiers.",
+        "Autre contact publié pour le même service. À utiliser comme alternative au premier interlocuteur ; ce n’est pas un deuxième réseau indépendant."
+      ],
+      "personContacts": [
+        {
+          "name": "Emmanuel d’Oultremont",
+          "phone": "+32 2 210 01 93",
+          "email": "edo@gesticonseils.be",
+          "proof": "Contact public · échange non confirmé"
+        },
+        {
+          "name": "Alexandre de Saint-Marcq",
+          "phone": "+32 2 210 01 89",
+          "email": "asm@gesticonseils.be",
+          "proof": "Contact public · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "goinvest",
+      "name": "GO INVEST",
+      "kind": "agency",
+      "phones": [
+        "+32 2 252 01 20"
+      ],
+      "emails": [
+        "rousanna@go-invest.be"
+      ],
+      "people": [
+        "Rousanna (nom à compléter)"
+      ],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://go-investuccle.be/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.go-investuccle.be/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "grproperties",
+      "name": "GR Properties",
+      "kind": "agency",
+      "phones": [
+        "+32 493 22 08 20"
+      ],
+      "emails": [
+        "info@gr-properties.be"
+      ],
+      "people": [
+        "Gabriel Ropers"
+      ],
+      "properties": [
+        {
+          "id": "21825808",
+          "name": "Rue de l’Hôtel des Monnaies 121",
+          "url": "/immo-biens-a-appeler#bien-21825808",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "/immo-biens-a-appeler#bien-21825808"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "hetwoonburo",
+      "name": "Het Woonburo",
+      "kind": "agency",
+      "phones": [
+        "02 582 55 83",
+        "0490 199 600"
+      ],
+      "emails": [
+        "info@hetwoonburo.be"
+      ],
+      "people": [
+        "Jeroen Stevens"
+      ],
+      "properties": [
+        {
+          "id": "BR-055",
+          "name": "Place Léon Vanderkindere 6 — Molière / Longchamps",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-mixte/a-vendre/ukkel/1180/21841666",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-mixte/a-vendre/ukkel/1180/21841666"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-055 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "homehorizonimmo",
+      "name": "Home Horizon Immo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 479 67 90"
+      ],
+      "emails": [
+        "info@hhi.immo"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "21155474",
+          "name": "Rue de Wynants 27",
+          "url": "/immo-biens-a-appeler#bien-21155474",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "/immo-biens-a-appeler#bien-21155474"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "homestanding",
+      "name": "Home Standing",
+      "kind": "agency",
+      "phones": [
+        "+32 475 36 73 36"
+      ],
+      "emails": [
+        "info@homestanding.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-040",
+          "name": "Ixelles – quartier européen – commerce, bureau/studio et 4 appartements",
+          "url": "https://www.homestanding.be/propertypostname/bel-immeuble-de-rapport-a-ixelles-commerce-bureau-et-logements/",
+          "stage": "Négociation"
+        },
+        {
+          "id": "BR-041",
+          "name": "Ixelles – quartier européen – immeuble avant et maison arrière",
+          "url": "https://www.homestanding.be/propertypostname/immeuble-de-rapport-a-ixelles-en-parfait-etat-de-5-unites/",
+          "stage": "Négociation"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.homestanding.be/a-vendre/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.homestanding.be/propertypostname/bel-immeuble-de-rapport-a-ixelles-commerce-bureau-et-logements/"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-040 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.homestanding.be/propertypostname/immeuble-de-rapport-a-ixelles-en-parfait-etat-de-5-unites/"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-041 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "https://www.immoweb.be/nl/zoekertje/huis/te-huur/tervueren/3080/21768408"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "2026-10-23",
+          "text": "Suivi de deux immeubles à Ixelles et conditions de vente groupée mentionnés. APPELS_VISITES ne confirme pas l’appel."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "househunter",
+      "name": "Househunter",
+      "kind": "platform",
+      "phones": [],
+      "emails": [],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://househunter.immo/fr/a-vendre/bruxelles/immeuble-de-rapport"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "immeublederapportbe",
+      "name": "Immeuble-de-rapport.be",
+      "kind": "agency",
+      "phones": [
+        "+32 495 12 23 44"
+      ],
+      "emails": [
+        "thomas@immeuble-de-rapport.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.immeuble-de-rapport.be/contact-us"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://immeuble-de-rapport.be"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "immo20",
+      "name": "Immo 2.0",
+      "kind": "agency",
+      "phones": [
+        "+32 2 209 10 70"
+      ],
+      "emails": [
+        "office@immo2-0.com"
+      ],
+      "people": [
+        "Christo Karafilis"
+      ],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://immo2-0.com/contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://immo2-0.com/buy"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "immobalcaen",
+      "name": "Immo Balcaen",
+      "kind": "agency",
+      "phones": [
+        "+32 2 268 18 88"
+      ],
+      "emails": [
+        "info@immobalcaen.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://blog.immobalcaen.be/portes-ouvertes-a-jette-et-ganshoren/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immobalcaen.be/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "immobpc",
+      "name": "Immo BPC",
+      "kind": "agency",
+      "phones": [
+        "+32 2 420 00 28"
+      ],
+      "emails": [
+        "info@immobpc.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://immobpc.be/en/contact/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://immobpc.be/fr/a-vendre/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "immoschmidt",
+      "name": "Immo Schmidt",
+      "kind": "agency",
+      "phones": [
+        "+32 2 736 77 44"
+      ],
+      "emails": [
+        "info@immoschmidt.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.immoschmidt.be/contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoschmidt.be/ventes-belgique"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "immotime",
+      "name": "Immo-Time",
+      "kind": "agency",
+      "phones": [
+        "+32 16 41 41 00"
+      ],
+      "emails": [
+        "frederik@immo-time.be",
+        "info@immo-time.be"
+      ],
+      "people": [
+        "Frederik"
+      ],
+      "properties": [
+        {
+          "id": "BR-066",
+          "name": "Rue de Pavie 107",
+          "url": "https://immo-time.be/home-details/6014/",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://immo-time.be/contact/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://immo-time.be/home-details/6014/"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-066 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "immobilieregeorges",
+      "name": "Immobilière Georges",
+      "kind": "agency",
+      "phones": [
+        "+32 2 343 46 95"
+      ],
+      "emails": [
+        "info@immobilieregeorges.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.immobilieregeorges.be/nl/contact"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "inmgroup",
+      "name": "INM Group — Spagnolo & Manouvrier",
+      "kind": "agency",
+      "phones": [
+        "+32 67 21 99 08"
+      ],
+      "emails": [
+        "info@inmgroup.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-051",
+          "name": "Stockel — près de la place Dumon — Immoweb 21947715",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/woluwe-saint-pierre/1150/21947715",
+          "stage": "Écarté"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.inmgroup.be/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/woluwe-saint-pierre/1150/21947715"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-051 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "jjproperties",
+      "name": "J&J Properties",
+      "kind": "agency",
+      "phones": [
+        "+32 491 24 20 12"
+      ],
+      "emails": [
+        "cedric@jj-properties.be"
+      ],
+      "people": [
+        "Cédric Nobels"
+      ],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://jj-properties.be/contact"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Service dédié à l’investissement, dans une structure qui réunit vente et gestion locative. Interlocuteur pertinent pour présenter votre recherche d’immeubles entiers."
+      ],
+      "personContacts": [
+        {
+          "name": "Cédric Nobels",
+          "phone": "+32 491 24 20 12",
+          "email": "cedric@jj-properties.be",
+          "proof": "Contact public · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "jsproperties",
+      "name": "J&S Properties",
+      "kind": "agency",
+      "phones": [
+        "02 538 02 58"
+      ],
+      "emails": [],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-067",
+          "name": "Schaerbeek — Dailly / Josaphat",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/schaerbeek/1030/21559452",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/schaerbeek/1030/21559452"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-067 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "jamproperties",
+      "name": "JAM Properties",
+      "kind": "agency",
+      "phones": [
+        "+32 2 534 21 87"
+      ],
+      "emails": [
+        "info@jamproperties.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "https://www.bizique.be/jam-properties-02-534-21-87"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Présent dans le suivi historique BRIDGE. Aucun contact effectivement réalisé retrouvé pour cette agence."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "jamesrealty",
+      "name": "James Realty",
+      "kind": "agency",
+      "phones": [
+        "+32 2 218 38 38"
+      ],
+      "emails": [
+        "philippe@james-realty.com"
+      ],
+      "people": [
+        "Philippe Koelman"
+      ],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "https://www.ipi.be/agent-immobilier/philippe-koelman-105256"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Présent dans le suivi historique BRIDGE. Aucun contact effectivement réalisé retrouvé pour cette agence."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "jeanvictor",
+      "name": "JEANVICTOR",
+      "kind": "agency",
+      "phones": [
+        "+32 492 25 59 99"
+      ],
+      "emails": [
+        "immo@jeanvictor.be"
+      ],
+      "people": [
+        "Jean-Victor Leplat"
+      ],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.jeanvictor.be/contact"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Présent dans le suivi historique BRIDGE. Aucun contact effectivement réalisé retrouvé pour cette agence."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "jourj",
+      "name": "Jour J",
+      "kind": "agency",
+      "phones": [
+        "+32 2 345 00 72"
+      ],
+      "emails": [
+        "info@jour-j.be"
+      ],
+      "people": [
+        "Carine Cossu"
+      ],
+      "properties": [
+        {
+          "id": "BR-060",
+          "name": "Woluwe-Saint-Lambert — Jour J 5370CC",
+          "url": "https://www.jour-j.be/fr/annonces-immobilieres/vente/woluwe-saint-lambert/immeuble-de-rapport/5370/immeuble-de-rapport-de-3-appartements-de--88m---2-garages-cour.html",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.jour-j.be/fr/annonces-immobilieres/vente/woluwe-saint-lambert/immeuble-de-rapport/5370/immeuble-de-rapport-de-3-appartements-de--88m---2-garages-cour.html"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-060 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "mdconseil",
+      "name": "M.D. Conseil",
+      "kind": "agency",
+      "phones": [
+        "+32 2 732 29 34",
+        "+32 476 73 91 41"
+      ],
+      "emails": [
+        "dominique.maes@mdconseil.be"
+      ],
+      "people": [
+        "Dominique Maes"
+      ],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "https://www.bizique.be/nl/m-d-conseil-sa-02-732-29-34"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Présent dans le suivi historique BRIDGE. Aucun contact effectivement réalisé retrouvé pour cette agence.",
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "macnash",
+      "name": "Macnash",
+      "kind": "agency",
+      "phones": [
+        "+32 2 347 11 47"
+      ],
+      "emails": [
+        "sud@macnash.com"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.macnash.com/fr/nos-agences.aspx"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.macnash.com/fr"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Coordonnées du bureau Sud du réseau Macnash."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "mcim",
+      "name": "MCIM",
+      "kind": "agency",
+      "phones": [
+        "0473 23 64 90"
+      ],
+      "emails": [
+        "info@mcim-invest.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-061",
+          "name": "Rue d’Andenne 45 — MCIM",
+          "url": "https://jecherche.be/details-bien/36349",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://jecherche.be/details-bien/36349"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-061 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "metropoleproperties",
+      "name": "Metropole Properties",
+      "kind": "agency",
+      "phones": [
+        "02 346 64 00"
+      ],
+      "emails": [
+        "rent@metrop.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-073",
+          "name": "Ixelles — Triangle d'Or / Flagey — Metropole",
+          "url": "https://www.metrop.be/fr/bien/a-vendre/maison/1050-ixelles/7891870",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.metrop.be/fr/bien/a-vendre/maison/1050-ixelles/7891870"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-073 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "myimmo",
+      "name": "MYIMMO",
+      "kind": "network",
+      "phones": [
+        "+32 2 344 94 21"
+      ],
+      "emails": [
+        "forest@myimmo.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.myimmo.be/nos-agences/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.myimmo.be/vente/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Coordonnées du bureau Forest, vérifiées dans l’annuaire officiel du réseau."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "oralisrealestate",
+      "name": "Oralis Real Estate",
+      "kind": "agency",
+      "phones": [
+        "+32 2 533 40 40"
+      ],
+      "emails": [
+        "info@oralis.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://oralis.be/fr/Contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://oralis.be/fr/a-vendre"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "parvissimmo",
+      "name": "Parvissimmo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 344 13 10"
+      ],
+      "emails": [
+        "info@parvissimmo.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://parvissimmo.be/index.php?p=contact"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "pavimmo",
+      "name": "Pavimmo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 646 61 22",
+        "+32 472 23 16 73"
+      ],
+      "emails": [
+        "yoris@pavimmo.be"
+      ],
+      "people": [
+        "Yoris Castelvechi"
+      ],
+      "properties": [
+        {
+          "id": "BR-050",
+          "name": "Saint-Gilles — Châtelain — Pavimmo 7919789",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/saint-gilles/1060/21948034",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://pavimmo.be/fr/bien/house-saint-gilles-7919789"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://pavimmo.be/fr/biens?transaction=sale"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/saint-gilles/1060/21948034"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-050 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "personContacts": [
+        {
+          "name": "Yoris Castelvechi",
+          "phone": "+32 472 23 16 73",
+          "email": "yoris@pavimmo.be",
+          "proof": "Contact du dossier · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "propertyone",
+      "name": "Property One",
+      "kind": "agency",
+      "phones": [
+        "+32 2 376 60 66"
+      ],
+      "emails": [
+        "info@propertyone.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://propertyone.be/fr/properties/"
+        },
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "https://propertyone.be/fr/properties/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Présent dans le suivi historique BRIDGE. Aucun contact effectivement réalisé retrouvé pour cette agence."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "residency",
+      "name": "Residency",
+      "kind": "agency",
+      "phones": [
+        "+32 2 268 58 00"
+      ],
+      "emails": [
+        "contact@residency.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-072",
+          "name": "Rue Gallait 182",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/schaerbeek/1030/21906670",
+          "stage": "À contacter"
+        },
+        {
+          "id": "21848284",
+          "name": "Avenue Eugène Demolder 20",
+          "url": "/immo-biens-a-appeler#bien-21848284",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.residency.be/en/Contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/schaerbeek/1030/21906670"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-072 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "revimmo",
+      "name": "Rêvimmo",
+      "kind": "agency",
+      "phones": [
+        "+32 2 217 00 32"
+      ],
+      "emails": [
+        "brussels@revimmo.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-069",
+          "name": "Schaerbeek — Sainte-Marie — Revimmo",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/schaerbeek/1030/21243110",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://revimmo.be/nos-agences"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://revimmo.be/nos-biens-a-vendre-louer?purpose=1&region[]=5"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/schaerbeek/1030/21243110"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-069 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "serenimmo",
+      "name": "Serenimmo",
+      "kind": "agency",
+      "phones": [
+        "+32 492 83 46 13",
+        "+32 475 95 53 93"
+      ],
+      "emails": [
+        "vincent@serenimmo.be"
+      ],
+      "people": [
+        "Vincent Jeannes"
+      ],
+      "properties": [
+        {
+          "id": "BR-065",
+          "name": "Rue de Quatrecht 15",
+          "url": "https://www.serenimmo.be/fr/bien/a-vendre/maison/1030-schaerbeek/7785099",
+          "stage": "À contacter"
+        },
+        {
+          "id": "7780195",
+          "name": "Rue de la Limite 94",
+          "url": "/immo-biens-a-appeler#bien-7780195",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.serenimmo.be/fr/Contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.serenimmo.be/fr/bien/a-vendre/maison/1030-schaerbeek/7785099"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-065 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "personContacts": [
+        {
+          "name": "Vincent Jeannes",
+          "phone": "+32 492 83 46 13",
+          "email": "vincent@serenimmo.be",
+          "proof": "Contact du dossier · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "snpc",
+      "name": "SNPC",
+      "kind": "association",
+      "phones": [
+        "+32 2 512 62 87"
+      ],
+      "emails": [
+        "info@snpc-nems.be"
+      ],
+      "people": [
+        "SNPC · Accueil Bruxelles"
+      ],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.snpc-nems.be/nos-services"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Conférences et formations destinées aux propriétaires. Utile pour développer des relations ; ce n’est pas un service d’apport de biens."
+      ],
+      "personContacts": [
+        {
+          "name": "SNPC · Accueil Bruxelles",
+          "phone": "+32 2 512 62 87",
+          "email": "info@snpc-nems.be",
+          "proof": "Contact public · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "soinvest",
+      "name": "So Invest",
+      "kind": "agency",
+      "phones": [
+        "+32 485 00 40 06"
+      ],
+      "emails": [
+        "michel.staes@soinvest.be"
+      ],
+      "people": [
+        "Michel Staes"
+      ],
+      "properties": [
+        {
+          "id": "BR-049",
+          "name": "Ixelles — Cimetière d’Ixelles / ULB-VUB — ensemble mixte SO INVEST",
+          "url": "https://www.soinvest.be/elements/immeuble-mixte-haut-de-gamme",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.soinvest.be/elements"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.soinvest.be/elements/immeuble-mixte-haut-de-gamme"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-049 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "https://www.soinvest.be/elements/immeuble-mixte-haut-de-gamme"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Michel Staes désigné par Domenico. Aucun échange confirmé dans BRIDGE."
+      ],
+      "personContacts": [
+        {
+          "name": "Michel Staes",
+          "phone": "+32 485 00 40 06",
+          "email": "michel.staes@soinvest.be",
+          "proof": "Contact du dossier · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "thekeys",
+      "name": "The Keys",
+      "kind": "management",
+      "phones": [
+        "+32 2 852 71 56"
+      ],
+      "emails": [
+        "info@thekeys.be"
+      ],
+      "people": [
+        "The Keys · Service gestion locative"
+      ],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://thekeys.be/contact/"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "L’entreprise réunit gestion locative et vente à Bruxelles. Pertinence relationnelle estimée ; nom du responsable des immeubles entiers à obtenir."
+      ],
+      "personContacts": [
+        {
+          "name": "The Keys · Service gestion locative",
+          "phone": "+32 2 852 71 56",
+          "email": "info@thekeys.be",
+          "proof": "Contact public · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "trevi",
+      "name": "TREVI",
+      "kind": "network",
+      "phones": [
+        "+32 2 343 22 40"
+      ],
+      "emails": [
+        "info@trevi.be"
+      ],
+      "people": [],
+      "properties": [
+        {
+          "id": "BR-057",
+          "name": "Rue Auguste Lambiotte 57 — Place de la Patrie",
+          "url": "https://immovlan.be/fr/detail/immeuble-mixte/a-vendre/1030/schaerbeek/vbe27506",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées du groupe · 29/10/2026",
+          "url": "https://jobs.emeria.be/fr/nos-marques/"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.trevi.be/fr/acheter"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://immovlan.be/fr/detail/immeuble-mixte/a-vendre/1030/schaerbeek/vbe27506"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-057 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Coordonnées générales du réseau TREVI. Demander le service vente Bruxelles-Est pour BR-057."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "vaneaulecobel",
+      "name": "Vaneau Lecobel",
+      "kind": "agency",
+      "phones": [
+        "+32 2 346 33 55"
+      ],
+      "emails": [
+        "lecobel@vaneau-lecobel.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://www.lecobel-vaneau.be/fr/contact"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://www.vaneau-lecobel.be"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "viabilis",
+      "name": "Viabilis",
+      "kind": "agency",
+      "phones": [
+        "+32 2 646 50 00"
+      ],
+      "emails": [
+        "hello@viabilis.be",
+        "oxa@viabilis.be"
+      ],
+      "people": [
+        "Ilirjan Hoxha"
+      ],
+      "properties": [
+        {
+          "id": "BR-059",
+          "name": "Avenue du Parc 47",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/saint-gilles/1060/21937766",
+          "stage": "À contacter"
+        },
+        {
+          "id": "BR-046",
+          "name": "Avenue Van Volxem 421",
+          "url": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1190/forest/vbe77618",
+          "stage": "Écarté"
+        },
+        {
+          "id": "viabilis-7871521",
+          "name": "Rue Joseph Dekeyn 7",
+          "url": "/immo-biens-a-appeler#bien-viabilis-7871521",
+          "stage": "À appeler"
+        },
+        {
+          "id": "viabilis-7891227",
+          "name": "Place Wappers 15",
+          "url": "/immo-biens-a-appeler#bien-viabilis-7891227",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/saint-gilles/1060/21937766"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-059 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1190/forest/vbe77618"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-046 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "personContacts": [
+        {
+          "name": "Ilirjan Hoxha",
+          "phone": "+32 2 646 50 00",
+          "email": "oxa@viabilis.be",
+          "proof": "Contact du dossier · échange non confirmé"
+        }
+      ],
+      "checkedAt": "2026-10-29"
+    },
+    {
+      "id": "victoirejunot",
+      "name": "Victoire Junot",
+      "kind": "agency",
+      "phones": [
+        "+32 2 375 10 20"
+      ],
+      "emails": [
+        "info@victoire.be"
+      ],
+      "people": [],
+      "properties": [],
+      "sources": [
+        {
+          "label": "Coordonnées publiques vérifiées · 29/10/2026",
+          "url": "https://victoire.be/fr/equipe"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://victoire.be/fr/a-vendre/all/1?sort=price-asc&view=list"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "weinvestbruxellesest",
+      "name": "We Invest · Bruxelles-Est",
+      "kind": "agency",
+      "phones": [
+        "02 315 51 71",
+        "02 315 51 70"
+      ],
+      "emails": [
+        "bruxelles@weinvest.be"
+      ],
+      "people": [
+        "Matthieu Goffin"
+      ],
+      "properties": [
+        {
+          "id": "BR-062",
+          "name": "Boulevard du Souverain 79",
+          "url": "https://weinvest.be/fr-BE/property/for-sale/auderghem/house/173094",
+          "stage": "À contacter"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Site / annonce",
+          "url": "https://weinvest.be/fr-BE/property/for-sale/auderghem/house/173094"
+        },
+        {
+          "label": "BRIDGE · IMMEUBLES · BR-062 · lu le 29/10/2026",
+          "url": "https://docs.google.com/spreadsheets/d/14Nfs41fbNSmr0u7hHTDlvNncJbA8CnvIedC6EyocECc/edit#gid=859252190"
+        },
+        {
+          "label": "Site / annonce",
+          "url": "https://weinvest.be/fr-BE/properties/for-sale"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    },
+    {
+      "id": "yesproperties",
+      "name": "YES Properties",
+      "kind": "agency",
+      "phones": [
+        "+32 474 62 11 84"
+      ],
+      "emails": [
+        "maxence@yesproperties.be"
+      ],
+      "people": [
+        "Maxence Dubois"
+      ],
+      "properties": [
+        {
+          "id": "21939418",
+          "name": "Rue Le Titien 11",
+          "url": "/immo-biens-a-appeler#bien-21939418",
+          "stage": "À appeler"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Coordonnées du dossier / historique · recoupées le 29/10/2026",
+          "url": "/immo-biens-a-appeler#bien-21939418"
+        }
+      ],
+      "status": "unconfirmed",
+      "history": [
+        {
+          "date": "",
+          "text": "Aucun échange confirmé dans les sources consultées. Coordonnées disponibles pour la prospection."
+        }
+      ],
+      "notes": [
+        "Les noms sont ceux des interlocuteurs des dossiers ; seul le statut « Contact confirmé » atteste un échange retrouvé."
+      ],
+      "checkedAt": "2026-10-29",
+      "personContacts": []
+    }
+  ]
+}
