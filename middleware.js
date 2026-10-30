@@ -1,10 +1,13 @@
 import { next } from '@vercel/functions';
 
 export const config = {
-  matcher: ['/immo/:path*', '/argus-immo/:path*', '/immobilier/:path*', '/strategic-brussels/:path*', '/api/immo/:path*', '/api/bridge/:path*']
+  matcher: ['/:path*']
 };
 
 export default function middleware(request) {
+  const path = new URL(request.url).pathname.toLowerCase();
+  const protectedPath = path.startsWith('/immo') || path.startsWith('/argus-immo') || path.startsWith('/immobilier') || path.startsWith('/strategic-brussels') || path.startsWith('/api/bridge') || path.startsWith('/api/immo');
+  if (!protectedPath) return next();
   const expected = process.env.ARGUS_IMMO_PASSWORD;
   if (!expected) return new Response('Argus Immo temporarily unavailable: authentication not configured.', { status: 503, headers: { 'Cache-Control': 'no-store' } });
   const header = request.headers.get('authorization') || '';
