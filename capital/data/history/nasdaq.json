@@ -1,6 +1,6 @@
 {
   "asset_id": "nasdaq",
-  "generated_at": "2026-10-31T00:40:05.154896+00:00",
+  "generated_at": "2026-10-31T05:25:59.705183+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -484,8 +484,8 @@
       "price": 739.77
     },
     {
-      "date": "2026-10-29",
-      "price": 715.34
+      "date": "2026-10-30",
+      "price": 690.49
     }
   ]
 }
