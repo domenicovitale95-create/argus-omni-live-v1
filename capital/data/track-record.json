@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-01T19:33:16.776383+00:00",
-  "evaluated_signals": 208,
-  "hit_rate_positive_pct": 5.8,
-  "average_return_to_latest_pct": -3.27,
+  "generated_at": "2026-11-02T00:36:08.397227+00:00",
+  "evaluated_signals": 211,
+  "hit_rate_positive_pct": 5.7,
+  "average_return_to_latest_pct": -3.22,
   "note": "Early track record uses return from signal date to latest available close. Horizon-specific evaluation will populate as history accumulates."
 }
