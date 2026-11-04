@@ -36,3 +36,10 @@ assert.match(signals.coveragePanel.innerHTML,/Catalogue ancien/);
 assert.match(signals.coveragePanel.innerHTML,/couverture partielle/);
 assert.match(signals.coveragePanel.innerHTML,/&lt;unsafe&gt;/);
 console.log('PASS: date-based novelty, price drops, document validation, stale coverage and escaping');
+
+signals.renderCoverage({refreshRequired:true,sourceConfiguration:{sourcesConfigured:97,uniqueDomainsConfigured:68},discovery:{coverage:{sourcesReached:40,sourcesConfigured:72,complete:false}}});
+assert.match(signals.coveragePanel.innerHTML,/68 sites configurés/);
+assert.match(signals.coveragePanel.innerHTML,/97 points de recherche/);
+assert.match(signals.coveragePanel.innerHTML,/Nouvelles sources ou nouveaux critères/);
+assert.match(signals.coveragePanel.innerHTML,/Dernier scan : 40\/72/);
+console.log('PASS: current configuration is separate from historical scan coverage');

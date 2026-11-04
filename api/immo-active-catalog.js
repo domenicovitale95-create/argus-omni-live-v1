@@ -1,3 +1,4 @@
+import {BUILDING_SOURCES} from './immo-market-catalog-scan.js';
 import {brusselsGeography,BRUSSELS_COMMUNES} from './immo-brussels-zones.js';
 import {isStudioListing} from './immo-property-type.js';
 import {readJsonFresh} from './_report-store.js';
@@ -22,7 +23,8 @@ export default async function handler(req,res){
     const base=`https://${String(req.headers?.host||'argus-omni-live.vercel.app')}`;
     const category=normalizeCategory(new URL(req.url||'/',base).searchParams.get('category'));
     const data=await readJsonFresh(PATHS[category],null);
-    if(!data)return res.status(200).json({ok:true,category,ready:false,refreshedAt:null,counts:{active:0,quarantined:0},listings:[],notice:'Le catalogue persistant sera disponible après le premier rafraîchissement automatique.'});
+    const sourceConfiguration=category==='building'?{sourcesConfigured:BUILDING_SOURCES.length,uniqueDomainsConfigured:new Set(BUILDING_SOURCES.map(s=>new URL(s.url).hostname.replace(/^www\./,''))).size}:null;
+    if(!data)return res.status(200).json({ok:true,category,ready:false,refreshedAt:null,sourceConfiguration,refreshRequired:true,counts:{active:0,quarantined:0},listings:[],notice:'Le catalogue persistant sera disponible après le premier rafraîchissement automatique.'});
     const storedActive=(data.listings||[]).filter(x=>String(x.availabilityStatus||'').toUpperCase()==='ACTIVE');
     let listings,filteredOutsideScope=0,filteredUserCriteria=0;
     if(category==='building'){
@@ -44,6 +46,8 @@ export default async function handler(req,res){
       maxPrice:category==='building'?BUILDING_MAX_PRICE:data.maxPrice||null,
       criteria:category==='building'?{zones:BUILDING_TARGET_ZONES,sectors:['NORD','SUD'],apartments:'sans minimum',minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,
       counts:{...(data.counts||{}),active:listings.length,filteredOutsideScope,filteredUserCriteria},
+      sourceConfiguration,
+      refreshRequired:category==='building'&&(Number(data.maxPrice)!==BUILDING_MAX_PRICE||Number(data.minPrice)!==BUILDING_MIN_PRICE||data.discovery?.coverage?.sourcesConfigured!==BUILDING_SOURCES.length),
       discovery:data.discovery||null,
       listings,
       notice:category==='building'?'Immeubles de rapport : 19 communes de Bruxelles, jusqu’à 2 M€, sans minimum de logements; preuves urbanistiques à contrôler.':'Catalogue ARGUS appartements actif.'
