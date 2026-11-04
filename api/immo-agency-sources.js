@@ -1,3 +1,4 @@
+import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE} from './immo-building-criteria.js';
 
 // Direct agency catalogues: links verified against the agencies’ public routes.
 export const EXTENDED_BUILDING_SOURCES = [
@@ -30,6 +31,7 @@ export const EXTENDED_BUILDING_SOURCES = [
 // Reachability and eligible listings are reported by the scanner, never assumed.
 export const BUILDING_AGENCY_SOURCES = [
   ...EXTENDED_BUILDING_SOURCES,
+  {id:'agimo-building',name:'Agimo · immeubles',provider:'agimo',url:`https://agimo.be/?pt=house&p=${BUILDING_MIN_PRICE}-${BUILDING_MAX_PRICE}&u=1&a=21009A`,match:/./,minPathSegments:1,pages:3},
   {id:'revimmo-building',name:'Rêvimmo · immeubles',url:'https://revimmo.be/nos-biens-a-vendre-louer?purpose=1&region[]=5',match:/^\/propriete\/\d+-[^/?]+/i,minPathSegments:2,pages:3},
   {id:'dewaele-building',name:'Dewaele · immeubles',url:'https://www.dewaele.com/fr/a-vendre/1000-bruxelles/immeuble-de-rapport',match:/^\/fr\/a-vendre\/[^/]+\/immeuble-de-rapport\/[^/?]+/i,pages:3},
   {id:'bathim-building',name:'Bathim · immeubles',url:'https://www.bathim.be/fr/chercher-bien/a-vendre',match:/^\/(?:corporate\/)?fr\/bien\/a-vendre\/[^/]+\/[^/]+\/\d+/i,pages:3},

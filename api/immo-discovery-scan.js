@@ -1,3 +1,4 @@
+import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE} from './immo-building-criteria.js';
 import {BUILDING_AGENCY_SOURCES} from './immo-agency-sources.js';
 import {extractListing,hostAllowed,isUnavailableListing,isConfirmedActiveListing} from './immo-listing-scan.js';
 
@@ -42,6 +43,23 @@ async function fetchText(url){
 // WHISE catalogues put their cards in a public HTML fragment endpoint.
 // Read that endpoint rather than counting an empty JavaScript shell as listings.
 export async function fetchSourcePage(source,pageUrl,fetcher=fetchText){
+  if(source.provider==='agimo'){
+    // Use Agimo's documented public API, then verify each original agency page.
+    const api=new URL('https://api.agimo.be/api/listings');
+    const pageNumber=Math.max(1,Number(new URL(pageUrl).searchParams.get('page'))||1);
+    for(const [key,value] of Object.entries({listing_type:'buy',price_min:BUILDING_MIN_PRICE,price_max:BUILDING_MAX_PRICE,exclude_under_option:'true',limit:100,offset:(pageNumber-1)*100,sort:'newest'}))api.searchParams.set(key,String(value));
+    for(const type of ['building','house'])api.searchParams.append('property_types',type);
+    for(let n=1;n<=19;n++)api.searchParams.append('areas',String(21000+n));
+    const response=await fetch(api,{signal:AbortSignal.timeout(20000),headers:{accept:'application/json'}});
+    if(!response.ok)throw new Error('AGIMO_HTTP_'+response.status);
+    const data=await response.json();
+    if(!Array.isArray(data.items))throw new Error('AGIMO_INVALID_RESPONSE');
+    const escape=value=>String(value).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    const links=data.items.filter(item=>!item.under_option&&Number(item.price_eur)>=BUILDING_MIN_PRICE&&Number(item.price_eur)<=BUILDING_MAX_PRICE).flatMap(item=>{
+      try{const url=new URL(item.url);return url.protocol==='https:'&&hostAllowed(url.hostname)?['<a href="'+escape(url.href)+'">Annonce originale</a>']:[]}catch{return []}
+    });
+    return {url:source.url,text:links.join('\n')};
+  }
   const page=await fetcher(pageUrl);
   if(source.cms!=='whise')return page;
   const raw=(page.text.match(/href=["']([^"']*\/List\/InfiniteScroll\?[^"']+)["']/i)||[])[1];
@@ -58,6 +76,7 @@ export async function fetchSourcePage(source,pageUrl,fetcher=fetchText){
 function normalizedHost(value=''){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
 function likelyDetailUrl(u,source){
   const sourceHost=normalizedHost(source.url),candidateHost=u.hostname.toLowerCase().replace(/^www\./,'');
+  if(source.provider==='agimo')return u.protocol==='https:'&&hostAllowed(candidateHost)&&candidateHost!=='agimo.be';
   if(candidateHost!==sourceHost&&!source.allowedHosts?.includes(candidateHost))return false;
   const p=u.pathname.toLowerCase().replace(/\/+$/,'');
   if(!source.match.test(p+u.search.toLowerCase()))return false;
@@ -153,7 +172,7 @@ export function evaluateEligibility(x,maxPrice,category){
     ? type==='building'||/(immeuble de rapport|immeuble à appartements|maison de rapport|investment property|opbrengsteigendom)/i.test(text)
     : type==='apartment'||/(appartement|apartment|flat|duplex|penthouse)/i.test(text);
   if(category!=='building'&&(type==='studio'||/\b(studio|kot)\b/i.test(String(x.title||''))))return {eligible:false,review:false,reason:'STUDIO_EXCLUDED'};
-  if(Number.isFinite(price)&&(price<40000||price>maxPrice))return {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'};
+  if(Number.isFinite(price)&&(price<(category==='building'?BUILDING_MIN_PRICE:40000)||price>maxPrice))return {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'};
   if(Number.isFinite(surface)&&(surface<12||surface>800))return {eligible:false,review:false,reason:'IMPLAUSIBLE_SURFACE'};
   if(!categoryMatch&&type!=='unknown')return {eligible:false,review:false,reason:'WRONG_PROPERTY_TYPE'};
   if(!Number.isFinite(price))return {eligible:false,review:true,reason:'PRICE_NOT_PARSED'};
