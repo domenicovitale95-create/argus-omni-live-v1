@@ -46,7 +46,7 @@ export default async function handler(req,res){
       counts:{...(data.counts||{}),active:listings.length,filteredOutsideScope,filteredUserCriteria},
       discovery:data.discovery||null,
       listings,
-      notice:category==='building'?'Immeubles : Sud de Bruxelles, Schaerbeek et Saint-Josse, 3–6 logements annoncés; preuves urbanistiques à contrôler.':'Catalogue ARGUS appartements actif.'
+      notice:category==='building'?'Immeubles : 19 communes de Bruxelles, 3–6 logements annoncés; preuves urbanistiques à contrôler.':'Catalogue ARGUS appartements actif.'
     });
   }catch(e){
     return res.status(500).json({ok:false,error:String(e?.message||e)});
