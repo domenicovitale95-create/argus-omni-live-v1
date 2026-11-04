@@ -62,6 +62,7 @@
   ],
   "functions": {
     "api/live.js": {"maxDuration": 60},
+    "api/immo-map-listings.js": {"maxDuration": 120},
     "api/historical-shard-migrate.js": {"maxDuration": 300},
     "api/historical-walk-forward.js": {"maxDuration": 300},
     "api/historical-recent-backfill.js": {"maxDuration": 120},
