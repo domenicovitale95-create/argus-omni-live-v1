@@ -1,0 +1,2443 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-04",
+  "period": "25 octobre au 3 novembre 2026, avec les réponses du 4 novembre",
+  "sourceDocument": "BRIDGE_Reponses_Emails_25oct_04nov2026_FR(1).pdf",
+  "sourceLibraryId": "libfile_acffdb44564081918ec79efd98eaedce",
+  "notice": "Historique de contact, sans garantie de disponibilité ni validation urbanistique. Les originaux des emails ne sont pas hébergés publiquement.",
+  "properties": [
+    {
+      "id": "contact-01",
+      "address": "70 rue du Président",
+      "title": "70 rue du Président · Ixelles",
+      "commune": "Ixelles",
+      "reference": "21815187",
+      "responseDates": "29, 31/10 et 03/11",
+      "contactName": "Amélie Corbeau · ERA Châtelain",
+      "contactDetails": "amelie@immochatelain.be · téléphone non récupéré",
+      "emails": [
+        "amelie@immochatelain.be"
+      ],
+      "phones": [],
+      "responseSummary": "Dossier WeTransfer et « RU Président définitif.pdf ». Les RU transmis datent de 2021 ; les RU actualisés restent attendus. Visite en attente de l’accord des occupants. Un seul bien, malgré plusieurs fils de discussion.",
+      "price": 1250000,
+      "surface": 410,
+      "unitsAnnounced": 4,
+      "peb": "D à G selon unité",
+      "works": "Travaux importants",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "4 appartements + souplex à relier au rez ; 2e à rénover, 3e en casco.",
+      "urbanism": "Quatre unités annoncées. RU de 2021 reçus ; version actualisée attendue.",
+      "technical": "Des rénovations sont indiquées en 2015, 2019 et 2020. Jardin d’environ 45 m², terrasses arrière.",
+      "occupancy": "Partiellement loué ; situation exacte par bail à confirmer.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": 10,
+      "documents": [
+        "RU Président définitif.pdf (2021)",
+        "Dossier WeTransfer"
+      ],
+      "links": [
+        {
+          "label": "Annonce ERA",
+          "url": "https://www.era.be/fr/property-preview/a0iTs000009eHRZ"
+        },
+        {
+          "label": "Dossier",
+          "url": "https://we.tl/t-HK0HxHPOqTu3A1Lf"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a1a11ae06754d09"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-biens-a-appeler#bien-era-1541340"
+        }
+      ],
+      "photos": [
+        "https://www.era.be/sites/default/files/styles/media_carousel_large/public/preview-object/a00Ts00000l9Fl1IAE/Fac%CC%A7ades%20bruxelloises%20sous%20ciel%20bleu.jpg?itok=PcaNMnj8",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF8043_4_5.jpg?itok=ZplrVnW0",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF8091_2_3.jpg?itok=i53f41nl",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF8067_8_9.jpg?itok=rUFvmxMt",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF8034_5_6.jpg?itok=P50pBmeK",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF8073_4_5.jpg?itok=-EFoXpOF",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/IMG_6319.jpg?itok=GApT-wxL",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/Image%20Codex%2010%20oct.%202026%2C%2015_16_32.jpg?itok=lCZfx5ID",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF8094_5_6.jpg?itok=tTINofyP",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF8097_8_9.jpg?itok=YicccFMH",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/ERA%20Chatelain-4.jpg?itok=pzrFuKMU",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/ERA%20Chatelain-5.jpg?itok=jw7pN5y2",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6330_1_2.jpg?itok=Qck9MEPK",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6327_8_9.jpg?itok=aRgVr0PK",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6339_40_41.jpg?itok=bneggw3S",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6345_6_7.jpg?itok=9I4mO5yo",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6357_8_9.jpg?itok=DyXViCie",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6375_6_7.jpg?itok=2HWbIX8N",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6496_7_8.jpg?itok=GX7r6fWD",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6508_09_10.jpg?itok=A4qmaiRg",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6490_1_2.jpg?itok=hUR8Dr4G",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6517_8_9.jpg?itok=yX1HyFrS",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/Salle-de-bains-supplementaire.jpg?itok=qWhG7gy6",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6255_6_7.jpg?itok=jtbxeEyi",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6267_8_9.jpg?itok=uKW5fW1b",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6282_3_4.jpg?itok=R-c4G-sD",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6297_8_9.jpg?itok=QA-8dd2v",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6312_3_4.jpg?itok=jMCkgh7S",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/DSCF6306_7_8.jpg?itok=XfxSVjcQ",
+        "https://www.era.be/sites/default/files/styles/media_carousel_small/public/preview-object/a00Ts00000l9Fl1IAE/Plan_ensemble_President_70_A4_paysage.jpg?itok=-RtkZhVc"
+      ],
+      "archiveDetails": [
+        {
+          "title": "À vérifier pendant l’appel",
+          "text": "Obtenir les renseignements urbanistiques et les plans autorisés confirmant les quatre appartements. L’annonce seule ne certifie pas leur reconnaissance à 100 %. Entre-sol de ± 15 m² aménagé en studio : ne pas le compter comme cinquième logement indépendant reconnu ni lui attribuer de revenu sans preuve. Réconcilier les 370 m² annoncés avec les surfaces détaillées des appartements (270 m² au total, bases de mesure différentes). Demander les métrés privatifs. PEB G / E / E / F selon les lots : demander tous les certificats et chiffrer les améliorations énergétiques. Obtenir les baux, décomptes de charges, rapports électriques et conditions de libération ; vérifier l’acceptation d’options croisées cessibles et divisibles. Composition et loyers annoncés Étage Composition / surface PEB Loyer mensuel Sous-sol Deux pièces en enfilade, cave à vin et deux caves ; liaison au rez à vérifier — Non indiqué Rez-de-chaussée 1 chambre · 88 m² bruts PEB · cour ± 45 m² G 1 250 € Entre-sol Studio aménagé ± 15 m², cuisine et douche · statut à vérifier Non indiqué Exclu du calcul 1er étage 1 chambre · 56 m² bruts PEB · terrasse ± 12 m² E 1 250 € 2e étage 1 chambre · 56 m² bruts PEB · balcon avant E 1 250 € 3e + combles 1 chambre + bureau · ± 70 m² bruts F 1 050 €"
+        },
+        {
+          "title": "Contact et suivi",
+          "text": "Statut : À appeler Amélie Corbeau · ERA CHÂTELAIN 02 705 07 00 amelie@immochatelain.be Numéro visites dans l’annonce : 02 535 98 98 ."
+        },
+        {
+          "title": "Technique et occupation",
+          "text": "Chaudière commune au gaz, double vitrage PVC, installations électriques conformes selon ERA. Pas d’ascenseur. Revenu cadastral net annoncé : 1 792 €. Quatre appartements loués : 4 800 €/mois, soit 57 600 €/an. Rendement brut calculé au prix affiché : 4,47 %, hors frais d’achat, charges, travaux, vacance et entre-sol. Baux et encaissements à contrôler. Plus-value de revente non chiffrée : prix de sortie par lot, coûts énergétiques et faisabilité de vente séparée à documenter. 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 Source : ERA · code 1541340 · consultée le 29 octobre 2026. Données annoncées par l’agence, conformité non vérifiée sur pièces."
+        }
+      ],
+      "history": [
+        {
+          "date": "29, 31/10 et 03/11",
+          "type": "Réponse reçue",
+          "text": "Dossier WeTransfer et « RU Président définitif.pdf ». Les RU transmis datent de 2021 ; les RU actualisés restent attendus. Visite en attente de l’accord des occupants. Un seul bien, malgré plusieurs fils de discussion."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": "Photographies déjà associées à cette adresse dans les archives Argus ; disponibilité externe variable.",
+      "askingPricePerM2": 3049
+    },
+    {
+      "id": "contact-02",
+      "address": "Chaussée de Wavre 263",
+      "title": "Chaussée de Wavre 263 · Ixelles",
+      "commune": "Ixelles",
+      "reference": "7840823",
+      "responseDates": "26/10",
+      "contactName": "Camille Grare · Latour & Petit",
+      "contactDetails": "camille@latouretpetit.be · 0473 17 47 18 · 02 777 19 19",
+      "emails": [
+        "camille@latouretpetit.be"
+      ],
+      "phones": [
+        "0473 17 47 18",
+        "02 777 19 19"
+      ],
+      "responseSummary": "Réponse proposant une visite. Le fil contient déjà RU 2026, quatre fichiers PEB et deux autres PDF , envoyés le 23/10 , donc avant la période étudiée. Référence agence : 7840823.",
+      "price": 760000,
+      "surface": 295,
+      "unitsAnnounced": 4,
+      "peb": "G / E+ / D+ / G",
+      "works": "À chiffrer",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Rez commercial ±100 m² avec cour ±37 m² ; entresol studio ±35 m² ; trois appartements ±51 m².",
+      "urbanism": "Contradiction à éclaircir : quatre unités reconnues annoncées, mais description d’un commerce et de quatre logements.",
+      "technical": "Chaudières individuelles ; électricité annoncée conforme. Surface de 280 à 295 m² selon présentation.",
+      "occupancy": "Loyers annoncés hors charges ; baux à analyser.",
+      "monthlyRentAnnounced": 3310.29,
+      "bridgePriority": 9,
+      "documents": [
+        "RU 2026.pdf",
+        "PEB entresol",
+        "PEB 2e",
+        "PEB 3e",
+        "PEB complémentaire",
+        "Deux autres PDF"
+      ],
+      "links": [
+        {
+          "label": "Annonce",
+          "url": "https://latouretpetit.be/nos-biens/vente/1050-ixelles-maison-4-chambres/7840823"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a17a1994b691c1b"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-documents#documents-3"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [
+        {
+          "title": "📁 Documents reçus — 23/10/2026",
+          "text": "📄 RU 2026.pdf Reçu 📄 PEB entresol Reçu 📄 PEB 2e Reçu 📄 PEB 3e Reçu 📄 PEB complémentaire Reçu Originaux identifiés dans les e-mails. Téléchargement direct non activé avant mise en place du stockage privé. Contrôle juridique : Vérifier la destination légale de chaque niveau et les superficies privatives. Nombre d’unités légalement reconnues : vérification sur les documents originaux nécessaire."
+        }
+      ],
+      "history": [
+        {
+          "date": "26/10",
+          "type": "Réponse reçue",
+          "text": "Réponse proposant une visite. Le fil contient déjà RU 2026, quatre fichiers PEB et deux autres PDF , envoyés le 23/10 , donc avant la période étudiée. Référence agence : 7840823."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "La page d'origine renvoie maintenant404 à la consultation. Disponibilité actuelle non confirmée.",
+        "L'ancienne image source exposée par le précédent résultat renvoie elle aussi404 ; ne pas l'ajouter comme photo fonctionnelle."
+      ],
+      "uncertainties": [
+        "Conserver le dossier email historique sans affirmer une disponibilité actuelle."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "availabilityNote": "Page agence actuellement inaccessible ; disponibilité non confirmée.",
+      "askingPricePerM2": 2576
+    },
+    {
+      "id": "contact-03",
+      "address": "Quartier Saint-Boniface",
+      "title": "Quartier Saint-Boniface · Ixelles",
+      "commune": "Ixelles",
+      "reference": null,
+      "responseDates": "26/10",
+      "contactName": "Lina · Everest Properties, département commercial",
+      "contactDetails": "sales@everestproperties.be · 02 733 70 70",
+      "emails": [
+        "sales@everestproperties.be"
+      ],
+      "phones": [
+        "02 733 70 70"
+      ],
+      "responseSummary": "Dossier complet PDF et « PEB PAIX 53 ». Rue de la Paix 53 : adresse probable, non confirmée dans le PDF. Détail des baux : commerce/bureau 1 250 €, studio 550 €, duplex 1 117 €, soit 2 917 €/mois .",
+      "price": null,
+      "surface": null,
+      "unitsAnnounced": 3,
+      "peb": "E+ studio / F duplex",
+      "works": "Rénovation 2014 annoncée",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Rez bureau/commerce avec cave ; studio au 1er ±32 m² ; duplex deux chambres aux 2e/3e ±70 m².",
+      "urbanism": "Adresse probable rue de la Paix 53, à confirmer. Reconnaissance de chaque affectation à vérifier dans le dossier.",
+      "technical": "Dossier complet et PEB reçus. Ne pas confondre bail professionnel du rez et bail d’habitation.",
+      "occupancy": "Rez : bail 2026, 3 ans, 1 250 €. Studio : 550 € ; duplex du 16/05/2024 au 15/05/2027 : 1 117 €. Historique et validité des baux à examiner.",
+      "monthlyRentAnnounced": 2917,
+      "bridgePriority": 6,
+      "documents": [
+        "Dossier complet immeuble de rapport Ixelles.pdf",
+        "PEB PAIX 53.pdf"
+      ],
+      "links": [
+        {
+          "label": "Email et pièces jointes",
+          "url": "https://mail.google.com/mail/u/0/#all/1a177cc2773040da"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "26/10",
+          "type": "Réponse reçue",
+          "text": "Dossier complet PDF et « PEB PAIX 53 ». Rue de la Paix 53 : adresse probable, non confirmée dans le PDF. Détail des baux : commerce/bureau 1 250 €, studio 550 €, duplex 1 117 €, soit 2 917 €/mois ."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null
+    },
+    {
+      "id": "contact-04",
+      "address": "Avenue de la Couronne 276",
+      "title": "Avenue de la Couronne 276 · Ixelles",
+      "commune": "Ixelles",
+      "reference": "3062 B",
+      "responseDates": "02/11",
+      "contactName": "Century 21 Boondael · personne non précisée",
+      "contactDetails": "info@century21boondael.be · 02 660 21 21",
+      "emails": [
+        "info@century21boondael.be"
+      ],
+      "phones": [
+        "02 660 21 21"
+      ],
+      "responseSummary": "Bien proposé en remplacement de la référence 2969 B à Auderghem, vendue. Pièces jointes : descriptif réf. 3062 B, RU, PEB, procès-verbal électrique et deux plans de 1908 .",
+      "price": 790000,
+      "surface": 306,
+      "unitsAnnounced": 1,
+      "peb": "G · 393 kWh/m²/an",
+      "works": "Redivision soumise à autorisation",
+      "status": "Hors critères",
+      "marketStatus": "unknown",
+      "composition": "Maison de maître unifamiliale de 306 m² hors caves / 440 m² avec surfaces complémentaires selon annonce ; jardin sud-est de 235 m².",
+      "urbanism": "Maison actuellement unifamiliale selon la source ; redivision envisagée sous réserve urbanistique. Aucun nombre de logements supplémentaires acquis.",
+      "technical": "Plans I et II de 1908, contrôle électrique et PEB reçus.",
+      "occupancy": "À confirmer.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [
+        "Descriptif réf. 3062 B",
+        "RU.pdf",
+        "PEB.pdf",
+        "PV électrique.pdf",
+        "Plan I 1908.pdf",
+        "Plan II 1908.pdf"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://www.century21.be/nl/pand/te-koop/huis/ixelles/iFhsU6EBjVTO4imlGz2W"
+        },
+        {
+          "label": "Email et pièces jointes",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19b94fa6dad33b"
+        }
+      ],
+      "photos": [
+        "https://images.century21.be/eyJrZXkiOiJwcm9wZXJ0eS1hc3NldHMvaUZoc1U2RUJqVlRPNGltbEd6MlcvNDBhYWQ0OTMtNzZlNS00ZjRhLWI2ZTAtNGUyNmM5ZGM3OTlhLTAuanBnIiwiZWRpdHMiOnsianBlZyI6eyJxdWFsaXR5Ijo3NX0sInJvdGF0ZSI6bnVsbCwicmVzaXplIjp7IndpdGhvdXRFbmxhcmdlbWVudCI6dHJ1ZSwid2lkdGgiOjkwMCwiaGVpZ2h0Ijo2MDB9fSwibGFzdE1vZGlmaWVkRGF0ZSI6IjIwMjYtMTAtMTlUMDg6NTY6NTkuNjgwIn0%3D",
+        "https://images.century21.be/eyJrZXkiOiJwcm9wZXJ0eS1hc3NldHMvaUZoc1U2RUJqVlRPNGltbEd6MlcvNDBhYWQ0OTMtNzZlNS00ZjRhLWI2ZTAtNGUyNmM5ZGM3OTlhLTEuanBnIiwiZWRpdHMiOnsianBlZyI6eyJxdWFsaXR5Ijo3NX0sInJvdGF0ZSI6bnVsbCwicmVzaXplIjp7IndpdGhvdXRFbmxhcmdlbWVudCI6dHJ1ZSwid2lkdGgiOjkwMCwiaGVpZ2h0Ijo2MDB9fSwibGFzdE1vZGlmaWVkRGF0ZSI6IjIwMjYtMTAtMTlUMDg6NTc6MDEuOTc3In0%3D",
+        "https://images.century21.be/eyJrZXkiOiJwcm9wZXJ0eS1hc3NldHMvaUZoc1U2RUJqVlRPNGltbEd6MlcvNDBhYWQ0OTMtNzZlNS00ZjRhLWI2ZTAtNGUyNmM5ZGM3OTlhLTIuanBnIiwiZWRpdHMiOnsianBlZyI6eyJxdWFsaXR5Ijo3NX0sInJvdGF0ZSI6bnVsbCwicmVzaXplIjp7IndpdGhvdXRFbmxhcmdlbWVudCI6dHJ1ZSwid2lkdGgiOjkwMCwiaGVpZ2h0Ijo2MDB9fSwibGFzdE1vZGlmaWVkRGF0ZSI6IjIwMjYtMTAtMTlUMDg6NTc6MDQuMjUzIn0%3D",
+        "https://images.century21.be/eyJrZXkiOiJwcm9wZXJ0eS1hc3NldHMvaUZoc1U2RUJqVlRPNGltbEd6MlcvNDBhYWQ0OTMtNzZlNS00ZjRhLWI2ZTAtNGUyNmM5ZGM3OTlhLTMuanBnIiwiZWRpdHMiOnsianBlZyI6eyJxdWFsaXR5Ijo3NX0sInJvdGF0ZSI6bnVsbCwicmVzaXplIjp7IndpdGhvdXRFbmxhcmdlbWVudCI6dHJ1ZSwid2lkdGgiOjkwMCwiaGVpZ2h0Ijo2MDB9fSwibGFzdE1vZGlmaWVkRGF0ZSI6IjIwMjYtMTAtMTlUMDg6NTc6MDYuMzE3In0%3D"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "Bien proposé en remplacement de la référence 2969 B à Auderghem, vendue. Pièces jointes : descriptif réf. 3062 B, RU, PEB, procès-verbal électrique et deux plans de 1908 ."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Maison unifamiliale ; division non acquise"
+      ],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Référence 3062 B, adresse liée au dossier PDF reçu.",
+        "Maison de maître actuellement unifamiliale ; redivision envisagée sous réserve urbanistique.",
+        "306 m² hors caves / 440 m² annoncés avec surfaces complémentaires ; jardin 235 m² sud-est.",
+        "PEB G, 393 kWh/m²/an ; année 1908 ; disponibilité à l'acte."
+      ],
+      "uncertainties": [],
+      "photoDisclosure": "La source avertit « CERTAINES PHOTOS IA ». Les photos de galerie ne peuvent être garanties toutes non retouchées.",
+      "sourceCheckedAt": "2026-11-04",
+      "askingPricePerM2": 2582
+    },
+    {
+      "id": "contact-05",
+      "address": "Avenue de la Couronne 572",
+      "title": "Avenue de la Couronne 572 · Ixelles",
+      "commune": "Ixelles",
+      "reference": null,
+      "responseDates": "29/10, cité le 04/11",
+      "contactName": "Christine Loicq",
+      "contactDetails": "couronne472@outlook.be · autre email : christineloicq@hotmail.com",
+      "emails": [
+        "couronne472@outlook.be",
+        "christineloicq@hotmail.com"
+      ],
+      "phones": [],
+      "responseSummary": "Réponse originale citée dans le message reçu de Siham le 04/11 : transmission des RU et demande de régularisation du 3e étage via Urbex . Les pièces jointes originales ne figurent pas dans le message transféré consulté.",
+      "price": 795000,
+      "surface": 242,
+      "unitsAnnounced": 4,
+      "peb": "E à G annoncés",
+      "works": "Régularisation en cours",
+      "status": "Régularisation en cours",
+      "marketStatus": "unknown",
+      "composition": "Quatre appartements aménagés : un 1 chambre avec jardin et trois 2 chambres.",
+      "urbanism": "La propriétaire indique une demande de régularisation du 3e étage via Urbex. Nombre autorisé à vérifier.",
+      "technical": "Chaudières gaz individuelles, double vitrage ; toiture de 2015 selon annonce.",
+      "occupancy": "Quatre appartements annoncés loués.",
+      "monthlyRentAnnounced": 3500,
+      "bridgePriority": null,
+      "documents": [
+        "RU signalés dans l’email cité ; originaux non joints au transfert"
+      ],
+      "links": [
+        {
+          "label": "Annonce Immovlan",
+          "url": "https://immovlan.be/fr/detail/appartement/a-vendre/1050/ixelles/vwd18697"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a1a5f34936dbd17"
+        }
+      ],
+      "photos": [
+        "https://api-image.immovlan.be/v1/property/VWD18697/images/file-0.04955336504812946.jpg/size/800x533?mode=crop"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "29/10, cité le 04/11",
+          "type": "Réponse reçue",
+          "text": "Réponse originale citée dans le message reçu de Siham le 04/11 : transmission des RU et demande de régularisation du 3e étage via Urbex . Les pièces jointes originales ne figurent pas dans le message transféré consulté."
+        },
+        {
+          "date": "04/11/2026",
+          "type": "Actualisation du prix affiché",
+          "text": "Source Immovlan : 795 000 €, au lieu des 850 000 € repris précédemment. Régularisation du 3e étage toujours à clarifier."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Prix actuel affiché 795 000 € ; source modifiée le 25/10/2026.",
+        "Quatre appartements : un une-chambre avec jardin, trois deux-chambres. Tous loués, revenus annoncés 3 500 €/mois.",
+        "PEB E à G ; chaudières et compteurs individuels ; toiture 2015 ; construction 1939 ; RC 1 680 €."
+      ],
+      "uncertainties": [
+        "Quatre logements dans l'annonce ne prouvent pas la reconnaissance urbanistique ; régularisation du troisième étage mentionnée dans l'email de Christine."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "previousPrice": 850000,
+      "askingPricePerM2": 3285
+    },
+    {
+      "id": "contact-06",
+      "address": "Avenue Henri Jaspar 125",
+      "title": "Avenue Henri Jaspar 125 · Saint-Gilles",
+      "commune": "Saint-Gilles",
+      "reference": "d56f19f5-1e95-53f1-8d1d-2dcf68f6b761",
+      "responseDates": "02/11",
+      "contactName": "Simon Heilporn · Engel & Völkers",
+      "contactDetails": "simon.heilporn@engelvoelkers.com · 0472 09 80 42",
+      "emails": [
+        "simon.heilporn@engelvoelkers.com"
+      ],
+      "phones": [
+        "0472 09 80 42"
+      ],
+      "responseSummary": "RU, plans, cinq rapports électriques, PEB du 3e et trois liens Drive pour les autres PEB. L’agent déclare la régularisation de trois à quatre unités vendables séparément ; décision communale à confronter aux documents.",
+      "price": 1495000,
+      "surface": 508,
+      "unitsAnnounced": 4,
+      "peb": "D / E- / D- / E",
+      "works": "État de présentation favorable",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Duplex ±196 m² avec jardin ±130 m² ; appartements ±111, 108 et 93 m², ce dernier avec mezzanine.",
+      "urbanism": "Quatre unités annoncées reconnues. Agent : régularisation obtenue ; autorisation communale à confronter aux anciens RU. Acte de base annoncé en finalisation.",
+      "technical": "Environ 600 m² totaux / 508 habitables. Chaudières gaz individuelles. Autorisations pompiers annoncées obtenues.",
+      "occupancy": "Situation locative à confirmer par unité.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": 1,
+      "documents": [
+        "RU (9).pdf",
+        "Plans .pdf",
+        "PEB 3.pdf",
+        "PEB 0, 1 et 2 via Drive",
+        "ELECTROTEST 1, 2, 3, communs et RDCSS"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://www.engelvoelkers.com/be/fr/exposes/d56f19f5-1e95-53f1-8d1d-2dcf68f6b761"
+        },
+        {
+          "label": "Email et documents",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19ba012a2804f1"
+        }
+      ],
+      "photos": [
+        "https://uploadcare.engelvoelkers.com/100764fe-3614-4c1b-af7d-735f599d241b/-/format/webp/-/stretch/off/-/progressive/yes/-/scale_crop/1440x960/center/-/quality/lighter/"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "RU, plans, cinq rapports électriques, PEB du 3e et trois liens Drive pour les autres PEB. L’agent déclare la régularisation de trois à quatre unités vendables séparément ; décision communale à confronter aux documents."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Annonce : duplex 196 m², appartement 111 m², appartement 108 m² et appartement 93 m².",
+        "PEB annoncés : D, E−, D−, E.",
+        "Chaudières individuelles au gaz, jardin privatif 130 m² du duplex.",
+        "Acte de base en cours de finalisation ; division en quatre unités et accord pompiers déclarés par l'agence."
+      ],
+      "uncertainties": [],
+      "photoDisclosure": "La galerie d'origine comporte des visuels marqués « Modifié par IA ». L'image retenue correspond à la photo intérieure non marquée comme modifiée sur la page consultée.",
+      "sourceCheckedAt": "2026-11-04",
+      "totalSurface": 600,
+      "askingPricePerM2": 2943
+    },
+    {
+      "id": "contact-07",
+      "address": "Rue de l’Hôtel des Monnaies 121",
+      "title": "Rue de l’Hôtel des Monnaies 121 · Saint-Gilles",
+      "commune": "Saint-Gilles",
+      "reference": "21825808",
+      "responseDates": "30/10",
+      "contactName": "Gabriel Ropers · GR Properties",
+      "contactDetails": "info@gr-properties.be · 0493 22 08 20",
+      "emails": [
+        "info@gr-properties.be"
+      ],
+      "phones": [
+        "0493 22 08 20"
+      ],
+      "responseSummary": "Documentation par liens iCloud : PEB, plans rez/sous-sol et récapitulatif des travaux déjà effectués notamment. Téléchargements annoncés disponibles jusqu’au 29/11/2026 . Second retour proposant une visite mardi à 18 h.",
+      "price": 950000,
+      "surface": 314,
+      "unitsAnnounced": 4,
+      "peb": null,
+      "works": "Travaux importants",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Permis annoncé pour quatre logements : rez/sous-sol, 1er, 2e et duplex supérieur.",
+      "urbanism": "Permis et conditions à vérifier ; ne pas assimiler permis obtenu à travaux effectivement conformes.",
+      "technical": "L’annonce mentionne d’importants travaux de mise en conformité. Récapitulatif des travaux effectués reçu.",
+      "occupancy": "Locataires présents ; accès aux visites organisé par l’agent.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [
+        "PEB via iCloud",
+        "Plans sous-sol et rez",
+        "Travaux déjà effectués Hôtel des Monnaies 121.pdf"
+      ],
+      "links": [
+        {
+          "label": "Immoweb 21825808",
+          "url": "https://www.immoweb.be/fr/annonce/21825808"
+        },
+        {
+          "label": "Email avec téléchargements",
+          "url": "https://mail.google.com/mail/u/0/#all/1a18c4163f4ae161"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-biens-a-appeler#bien-21825808"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-documents#bien-21825808"
+        }
+      ],
+      "photos": [
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/25cb09aa9b1f323ad6e4d1d97c2127b8.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/5d83901eb8c27d0c58bfcaed92beb837.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/3076525011861a9b5873d775ce58ee2a.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/3410bf7c23a461297e690baf8868948f.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/f0df6c9d3b0304ad9efcd329d8c12647.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/29ed87ed851d6b0aa801a9fbb6e0064b.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/7b63776cff953bc918f0bde2e7ea5006.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/f4300698cb0e2a57690c4cc1636bbf64.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/536ff1db509726b3c6b9d40d38302165.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/8ffe0dff012a35678d7a9497406cbab6.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/54512438174b9e07d1e407a70409f407.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/40aae1ca04d262e094b133a22d86588e.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/27995665927565e7386561d1237f7758.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/117ea0bc40b4589d697a898c095587e2.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/f6c208d9f6a8db7971bc250d5d78d761.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/b50823f7-55fe-46e6-8579-879bafa617de/736x736/3d2a04613bdfc1c193706999611a81d9.jpg"
+      ],
+      "archiveDetails": [
+        {
+          "title": "À voir avant d’appeler",
+          "text": "Immoweb affiche désormais 895 000 €, ancien prix 950 000 €. Le descriptif mentionne encore 950 000 €. Ne pas considérer les quatre logements conformes tant que les travaux prescrits n’ont pas été vérifiés. La classe PEB extraite automatiquement était incohérente : seul le certificat permettra de trancher. Composition par étage / lot Niveau / lot Composition annoncée Surface annoncée PEB / statut Rez / sous-sol 2 chambres + bureau · jardin Non communiquée À obtenir 1er 1 chambre · terrasse Non communiquée À obtenir 2e 1 chambre Non communiquée À obtenir 3e / duplex 2 chambres · terrasse Non communiquée À obtenir"
+        },
+        {
+          "title": "État, équipements et énergie",
+          "text": "Élément Information annoncée Surface 314 m² annoncés Terrain 221 m² sur Immoweb ; à vérifier au cadastre Extérieurs Jardin 45 m² · terrasse 4 m² sur fiche secondaire État À rénover / importants travaux de conformité Vitrage / compteurs Double vitrage ; eau individuelle annoncée Électricité / chauffage PV absent de la fiche secondaire ; chauffage à confirmer"
+        },
+        {
+          "title": "Locations et revenus",
+          "text": "Fiche secondaire : non loué. Disponibilité et état d’occupation actuels à confirmer. Aucun loyer communiqué."
+        },
+        {
+          "title": "Urbanisme",
+          "text": "Permis récemment obtenu selon l’agence ; décision complète, conditions, plans, calendrier et exécution restent à examiner. Les mentions de l’annonce ne constituent pas une preuve de conformité. Les documents effectivement consultés sont identifiés dans les sources ci-dessous."
+        },
+        {
+          "title": "Contact et références",
+          "text": "Gabriel Ropers · GR Properties +32493220820 info@gr-properties.be Réf. agence : 87320809 Statut public : annonce proposée à la vente lors de la collecte ; disponibilité à confirmer par téléphone."
+        },
+        {
+          "title": "Questions prioritaires",
+          "text": "Confirmer par écrit le prix de 895 000 €. Envoyer permis complet, plans autorisés, avis SIAMU et devis des travaux. Confirmer occupation et PEB de chaque lot. Acceptez-vous des options croisées cessibles et divisibles ? Documents à obtenir et données encore manquantes Aucun PDF directement téléchargeable n’a été récupéré depuis cette annonce. Cela ne signifie pas que le vendeur n’en possède pas. RU complets et récents ; permis, plans autorisés et état actuel. PEB originaux par lot et contrôles électriques. Baux, avenants, garanties, tableau des loyers et charges. Plans cotés, surfaces privatives, communs, caves et extérieurs. Acte de base / division, titre, servitudes et dossier de copropriété s’il existe. Avis SIAMU, travaux prescrits, factures et devis disponibles. Inconnus tant que les pièces ne sont pas reçues : marge nette de revente, prix de sortie par lot, coût total de l’opération et acceptation du montage par le vendeur."
+        },
+        {
+          "title": "📁 Documents transmis — 30/10/2026",
+          "text": "📄 01 et 02_notification PU.pdf Transmis 📄 04_Siamu.pdf Transmis 📄 05_formulaires début et fin des travaux.pdf Transmis 📄 07_annexe PU.pdf Transmis 📄 Comparaison_rez_de_chaussee.pdf Transmis 📄 Comparaison_sous_sols.pdf Transmis 📄 Devis Hôtel des Monnaies 121 rez-de-chaussée.pdf Transmis 📄 Offre avec CS.pdf Transmis Documentation transmise par liens iCloud le 30/10/2026, disponibles jusqu’au 29/11/2026. Téléchargement et archivage privé à effectuer. Accéder au lien documentaire reçu Les PDF ne sont pas encore archivés dans un stockage privé ARGUS IMMO ; les liens temporaires ne constituent pas un hébergement permanent."
+        }
+      ],
+      "history": [
+        {
+          "date": "30/10",
+          "type": "Réponse reçue",
+          "text": "Documentation par liens iCloud : PEB, plans rez/sous-sol et récapitulatif des travaux déjà effectués notamment. Téléchargements annoncés disponibles jusqu’au 29/11/2026 . Second retour proposant une visite mardi à 18 h."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": "Photographies déjà associées à cette adresse dans les archives Argus ; disponibilité externe variable.",
+      "askingPricePerM2": 3025
+    },
+    {
+      "id": "contact-08",
+      "address": "Val d’Or 147",
+      "title": "Val d’Or 147 · Woluwe-Saint-Lambert",
+      "commune": "Woluwe-Saint-Lambert",
+      "reference": "21742870",
+      "responseDates": "30/10",
+      "contactName": "Émilie Conijn · Latour & Petit",
+      "contactDetails": "EmilieC@latouretpetit.be · 0488 24 33 20 · 02 777 19 19",
+      "emails": [
+        "EmilieC@latouretpetit.be"
+      ],
+      "phones": [
+        "0488 24 33 20",
+        "02 777 19 19"
+      ],
+      "responseSummary": "Adresse confirmée dans l’objet. Lien SwissTransfer envoyé en réponse à la demande de RU et de PEB. Les fichiers du transfert n’ont pas été ouverts ; leur inventaire exact reste à confirmer.",
+      "price": 740000,
+      "surface": 165,
+      "unitsAnnounced": 3,
+      "peb": null,
+      "works": "Électricité non conforme",
+      "status": "Dossier transmis",
+      "marketStatus": "unknown",
+      "composition": "Rez : garage box, local technique et trois caves. 1er : 1 chambre ±58 m², terrasse ±5 m². 2e et 3e : 1 chambre ±53 m², balcon ±1,5 m² chacun.",
+      "urbanism": "Trois unités reconnues annoncées ; RU disponibles dans le dossier transmis.",
+      "technical": "Construction 1965 ; chaudière collective gaz Elco 2006 ; double vitrage PVC 1988 ; toiture isolée refaite en 2025 (14 cm). Électricité non conforme.",
+      "occupancy": "2e et 3e appartements annoncés loués.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": 4,
+      "documents": [
+        "Dossier SwissTransfer ; contenu non inventorié"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1200/woluwe-saint-lambert/vbe52263"
+        },
+        {
+          "label": "Immoweb 21742870",
+          "url": "https://www.immoweb.be/fr/annonce/21742870"
+        },
+        {
+          "label": "Dossier",
+          "url": "https://www.swisstransfer.com/dl/01a18c4b-3d31-731f-99d7-20cf387fa291"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-documents#bien-21742870"
+        }
+      ],
+      "photos": [
+        "https://api-image.immovlan.be/v1/property/VBE52263/images/9c04a002d9394eabb784878f0bdaeeb9.jpg/size/800x533?mode=crop"
+      ],
+      "archiveDetails": [
+        {
+          "title": "📁 Documents transmis — 30/10/2026",
+          "text": "📄 Dossier de renseignements urbanistiques et certificats PEB — lien SwissTransfer Transmis Émilie Conijn · Latour & Petit · réponse du 30/10/2026. Contenu détaillé du transfert à vérifier. Accéder au lien documentaire reçu Les PDF ne sont pas encore archivés dans un stockage privé ARGUS IMMO ; les liens temporaires ne constituent pas un hébergement permanent."
+        }
+      ],
+      "history": [
+        {
+          "date": "30/10",
+          "type": "Réponse reçue",
+          "text": "Adresse confirmée dans l’objet. Lien SwissTransfer envoyé en réponse à la demande de RU et de PEB. Les fichiers du transfert n’ont pas été ouverts ; leur inventaire exact reste à confirmer."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Trois appartements une chambre : 58 m², 53 m² et 53 m² annoncés.",
+        "Rez technique : garage box et trois caves.",
+        "Chaudière collective au gaz Elco 2006 ; châssis PVC double vitrage 1988.",
+        "Électricité non conforme ; toiture refaite en 2025, isolation 14 cm.",
+        "Deuxième et troisième étages loués. Référence agence 7704085."
+      ],
+      "uncertainties": [],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "cadastralIncome": 2389,
+      "askingPricePerM2": 4485
+    },
+    {
+      "id": "contact-09",
+      "address": "Rue au Bois 77",
+      "title": "Rue au Bois 77 · Woluwe-Saint-Pierre",
+      "commune": "Woluwe-Saint-Pierre",
+      "reference": "21951400",
+      "responseDates": "01/11",
+      "contactName": "Gwen de Meeûs · TRIOR",
+      "contactDetails": "g.demeeus@trior.be · 0479 11 84 83 · 02 430 37 37",
+      "emails": [
+        "g.demeeus@trior.be"
+      ],
+      "phones": [
+        "0479 11 84 83",
+        "02 430 37 37"
+      ],
+      "responseSummary": "Pièces jointes : RU, rapport électrique, PEB, croquis et CadGIS . L’agent indique trois unités énumérées dans les RU, avec occupation actuelle unifamiliale et libération à l’acte. Visite confirmée pour le 02/11 à 15 h.",
+      "price": 715000,
+      "surface": 272,
+      "unitsAnnounced": 3,
+      "peb": null,
+      "works": "Remise en trois logements à chiffrer",
+      "status": "Sous option",
+      "marketStatus": "option",
+      "composition": "Trois plateaux d’environ 75 m² : un appartement 1 chambre et deux 2 chambres selon affectation annoncée. Usage actuel unifamilial.",
+      "urbanism": "Trois logements annoncés reconnus ; croquis et RU reçus. Faisabilité de la remise en appartements à chiffrer.",
+      "technical": "Jardin ±277 m² sud-ouest, terrasse, caves, grenier, annexe ±20 m² et stationnement.",
+      "occupancy": "Libre à l’acte selon réponse reçue. Annonce revue : sous option en attente de compromis.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": 8,
+      "documents": [
+        "RU-670-2026 - Bois 77.pdf",
+        "Rapport électrique",
+        "PEB.pdf",
+        "Croquis Bois 77.pdf",
+        "export-cadgis.pdf"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://immovlan.be/fr/detail/immeuble-mixte/a-vendre/1150/woluwe-saint-pierre/vbe85303"
+        },
+        {
+          "label": "Email et pièces jointes",
+          "url": "https://mail.google.com/mail/u/0/#all/1a198178d0790325"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-biens-a-appeler#visite-rue-au-bois-77"
+        }
+      ],
+      "photos": [
+        "https://api-image.immovlan.be/v1/property/VBE85303/images/f5618553e05c47bcbd49263daeca4002.jpg/size/800x533?mode=crop"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "01/11",
+          "type": "Réponse reçue",
+          "text": "Pièces jointes : RU, rapport électrique, PEB, croquis et CadGIS . L’agent indique trois unités énumérées dans les RU, avec occupation actuelle unifamiliale et libération à l’acte. Visite confirmée pour le 02/11 à 15 h."
+        },
+        {
+          "date": "03/11/2026 · source revue le 04/11",
+          "type": "Mise à jour de disponibilité",
+          "text": "Annonce : sous option, dans l’attente de la signature du compromis."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Sous option"
+      ],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Page actuelle : « OPTION / DANS L'ATTENTE DE LA SIGNATURE DU COMPROMIS ». Mise à jour source 03/11/2026.",
+        "Trois logements reconnus annoncés : un une-chambre et deux deux-chambres ; occupation unifamiliale actuelle.",
+        "Terrain 425 m², jardin sud-ouest de 277 m², terrasse 9 m², trois places de parking.",
+        "Année 1928 ; électricité non conforme ; énergie spécifique 289 kWh/m²/an."
+      ],
+      "uncertainties": [],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "cadastralIncome": 1912,
+      "askingPricePerM2": 2629
+    },
+    {
+      "id": "contact-10",
+      "address": "Avenue Eugène Demolder 20",
+      "title": "Avenue Eugène Demolder 20 · Schaerbeek",
+      "commune": "Schaerbeek",
+      "reference": "21848284",
+      "responseDates": "30/10",
+      "contactName": "Morgan Walraevens · Residency",
+      "contactDetails": "mwa@residency.be · 0474 38 55 00",
+      "emails": [
+        "mwa@residency.be"
+      ],
+      "phones": [
+        "0474 38 55 00"
+      ],
+      "responseSummary": "RU, trois PEB, contrôle électrique de 2006 et documents urbanistiques supplémentaires . Deux familles occupent le bien divisé en deux parties. L’agent déclare trois unités urbanistiques, avec compteurs gaz/électricité et boîtes séparés.",
+      "price": null,
+      "surface": null,
+      "unitsAnnounced": 3,
+      "peb": null,
+      "works": "À confirmer",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Occupation actuelle par deux familles ; trois unités maintenues selon l’agent.",
+      "urbanism": "Trois unités avec compteurs gaz/électricité et trois boîtes selon déclaration de Residency ; stationnement avant déclaré reconnu.",
+      "technical": "Contrôle électrique daté 2006 ; trois PEB reçus.",
+      "occupancy": "Occupé par deux frères et leurs familles selon agent.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [
+        "dossier-ru.pdf",
+        "Trois certificats PEB",
+        "Contrôle élec 2006.pdf",
+        "Document urbanistique 1975",
+        "Document complémentaire"
+      ],
+      "links": [
+        {
+          "label": "Immoweb 21848284",
+          "url": "https://www.immoweb.be/fr/annonce/21848284"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a18cc0814ab7132"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-biens-a-appeler#bien-21848284"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-documents#bien-21848284"
+        }
+      ],
+      "photos": [
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/b5a42f7944d9eda459976821d37d73eb.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/d0109d852eb36ae17bbb84a04b9f93cb.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/d66e025989cb6847cecaad47b6363b35.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/09d3fc7863c3bd0fe656b040d9da5679.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/6eb3e5c97a3ce5cb1b24734064519842.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/d0647b77edd2934bb3a0fafa3afda1c4.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/3f87d6421e5203e6184d64b6cd222a74.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/21bf06fea4ead104656c6d328ca94ae7.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/89f3b87f24f8b19daec34316f1e55afe.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/1429df7e291dafbdc5a12938b3227950.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/fa0e184d2a9da10d75ca718ae39d6d6c.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/d4801f0f63f6850740be1de3b5ee874c.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/0279cf285ec82b36e397dbd95d326236.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/a8309face7f6223a2df7de0f2ce9cef4.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/db9ac21a5e322e796fafa64c5d0332c4.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/54d7a5fc-4ed2-4eee-9d22-d3c5327a0794/736x736/b65b4dd546907c7e257acd0be21d9a72.jpg"
+      ],
+      "archiveDetails": [
+        {
+          "title": "Points à résoudre avant offre",
+          "text": "Réaménagement nécessaire pour exploiter les trois appartements. La reconnaissance est une déclaration de l’agence : obtenir les RU et les plans autorisés. Électricité indiquée non conforme dans l’annonce."
+        },
+        {
+          "title": "Composition, occupation et loyers",
+          "text": "Niveau / lot Composition annoncée Occupation / bail Ensemble actuel 6 chambres, 3 salles de bains ; 3 niveaux annoncés Occupation en maison unifamiliale Projet de 3 logements Répartition et surfaces privatives par lot non fournies Travaux, accès et équipements à chiffrer Annexes Caves, grenier, terrasse annoncée de 8 m² 1 emplacement avant reconnu selon l’agence"
+        },
+        {
+          "title": "Technique et énergie",
+          "text": "Poste Détail Construction / état 1910 ; bon état annoncé ; façade de 7 m Chauffage Gaz PEB E · 253 kWh/m²/an ; certificat 202512040000736557010 Électricité Contrôle non conforme selon annonce ; rapport et devis à obtenir Ascenseur Absent Disponibilité 1er juillet 2026 indiqué dans l’annonce : date passée, disponibilité actuelle à reconfirmer"
+        },
+        {
+          "title": "Urbanisme et pièces examinées",
+          "text": "Trois unités et un parking avant sont annoncés reconnus par RESIDENCY. Aucun RU ni plan justificatif n’a été récupéré avec cette fiche. Il faut contrôler la division autorisée, les accès, les compteurs et les éventuels permis nécessaires au réaménagement. Aucun loyer en cours ni coût de travaux documenté."
+        },
+        {
+          "title": "Contact et questions à poser",
+          "text": "RESIDENCY · réf. 7870964 / Immoweb 21848284 Demander RU récents, plans de chaque unité, rapport électrique et PEB original ; devis de remise en configuration de 3 appartements ; situation d’occupation et libération ; conformité du stationnement, toiture, humidité et compteurs. Adresse agence annoncée : avenue de l’Amarante 39, 1020 Bruxelles. Documents et sources · consultation du 29/10/2026 Aucun document technique récupéré : à réclamer à l’agence. Annonce source et photos originales ↗ Données de l’annonce sauf mention d’une pièce consultée. Surfaces PEB et surfaces commerciales annoncées ne sont pas interchangeables. Date de publication initiale non vérifiée : ce bien n’est pas présenté comme une nouveauté des dernières 48 h."
+        },
+        {
+          "title": "Points à résoudre avant offre",
+          "text": "Réaménagement nécessaire pour exploiter les trois appartements. La reconnaissance est une déclaration de l’agence : obtenir les RU et les plans autorisés. Électricité indiquée non conforme dans l’annonce."
+        },
+        {
+          "title": "Composition, occupation et loyers",
+          "text": "Niveau / lot Composition annoncée Occupation / bail Ensemble actuel 6 chambres, 3 salles de bains ; 3 niveaux annoncés Occupation en maison unifamiliale Projet de 3 logements Répartition et surfaces privatives par lot non fournies Travaux, accès et équipements à chiffrer Annexes Caves, grenier, terrasse annoncée de 8 m² 1 emplacement avant reconnu selon l’agence"
+        },
+        {
+          "title": "Technique et énergie",
+          "text": "Poste Détail Construction / état 1910 ; bon état annoncé ; façade de 7 m Chauffage Gaz PEB E · 253 kWh/m²/an ; certificat 202512040000736557010 Électricité Contrôle non conforme selon annonce ; rapport et devis à obtenir Ascenseur Absent Disponibilité 1er juillet 2026 indiqué dans l’annonce : date passée, disponibilité actuelle à reconfirmer"
+        },
+        {
+          "title": "Urbanisme et pièces examinées",
+          "text": "Trois unités et un parking avant sont annoncés reconnus par RESIDENCY. Aucun RU ni plan justificatif n’a été récupéré avec cette fiche. Il faut contrôler la division autorisée, les accès, les compteurs et les éventuels permis nécessaires au réaménagement. Aucun loyer en cours ni coût de travaux documenté."
+        },
+        {
+          "title": "Contact et questions à poser",
+          "text": "RESIDENCY · réf. 7870964 / Immoweb 21848284 Demander RU récents, plans de chaque unité, rapport électrique et PEB original ; devis de remise en configuration de 3 appartements ; situation d’occupation et libération ; conformité du stationnement, toiture, humidité et compteurs. Adresse agence annoncée : avenue de l’Amarante 39, 1020 Bruxelles. Documents et sources · consultation du 29/10/2026 Aucun document technique récupéré : à réclamer à l’agence. Annonce source et photos originales ↗ Données de l’annonce sauf mention d’une pièce consultée. Surfaces PEB et surfaces commerciales annoncées ne sont pas interchangeables. Date de publication initiale non vérifiée : ce bien n’est pas présenté comme une nouveauté des dernières 48 h."
+        },
+        {
+          "title": "📁 Documents reçus — 30/10/2026",
+          "text": "📄 dossier-ru.pdf Reçu 📄 Certificat PEB Duplex RDC-Sous-sol.pdf Reçu 📄 Certificat PEB 1er.pdf Reçu 📄 Certificat PEB Duplex 2e-3e.pdf Reçu 📄 Contrôle élec 2006.pdf Reçu 📄 Permis / archive urbanistique 1975.pdf Reçu Originaux identifiés dans les e-mails. Téléchargement direct non activé avant mise en place du stockage privé. Contrôle juridique : La composition annoncée doit être rapprochée du RU et des permis. Trois certificats PEB ne constituent pas une preuve de trois logements reconnus. Nombre d’unités légalement reconnues : vérification sur les documents originaux nécessaire. ↗ Voir l’annonce originale et toutes les photos (Immoweb)"
+        }
+      ],
+      "history": [
+        {
+          "date": "30/10",
+          "type": "Réponse reçue",
+          "text": "RU, trois PEB, contrôle électrique de 2006 et documents urbanistiques supplémentaires . Deux familles occupent le bien divisé en deux parties. L’agent déclare trois unités urbanistiques, avec compteurs gaz/électricité et boîtes séparés."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Commune de la sélection secondaire"
+      ],
+      "photoEvidence": "Photographies déjà associées à cette adresse dans les archives Argus ; disponibilité externe variable."
+    },
+    {
+      "id": "contact-11",
+      "address": "Avenue de la Brabançonne 114",
+      "title": "Avenue de la Brabançonne 114 · Schaerbeek",
+      "commune": "Schaerbeek",
+      "reference": "21684312",
+      "responseDates": "03/11",
+      "contactName": "Téo Franco · Rêvimmo ; Lamia Ghemari en copie",
+      "contactDetails": "brussels@revimmo.be · tf@revimmo.be · 02 217 00 32",
+      "emails": [
+        "brussels@revimmo.be",
+        "tf@revimmo.be"
+      ],
+      "phones": [
+        "02 217 00 32"
+      ],
+      "responseSummary": "Lien Dropbox vers la documentation en possession de l’agence. Contenu de la dossier non vérifié . Les autres questions sont transmises à Lamia Ghemari : lamia@revimmo.be .",
+      "price": 995000,
+      "surface": 388,
+      "unitsAnnounced": null,
+      "peb": null,
+      "works": "À confirmer",
+      "status": "Dossier transmis",
+      "marketStatus": "unknown",
+      "composition": "Immeuble mixte ; affectation des combles et répartition des niveaux à confirmer.",
+      "urbanism": "Question posée sur les logements légalement reconnus et le statut des combles ; réponse détaillée de l’agent encore attendue.",
+      "technical": "Dossier disponible via Dropbox ; inventaire non ouvert. Honoraires acquéreur à confirmer.",
+      "occupancy": "Baux et état locatif demandés.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [
+        "Dossier Dropbox ; inventaire non vérifié"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1030/schaerbeek/vbe42300"
+        },
+        {
+          "label": "Immoweb 21684312",
+          "url": "https://www.immoweb.be/fr/annonce/21684312"
+        },
+        {
+          "label": "Dossier Dropbox",
+          "url": "https://www.dropbox.com/scl/fo/rqah544ll5q5n4hncsjnz/AJvQnRii1q6mDORSN_FsWCk?rlkey=oa5327jjl0htr3uchtw4tbxrh&st=0j44mrp7&dl=0"
+        }
+      ],
+      "photos": [
+        "https://api-image.immovlan.be/v1/property/VBE42300/images/d28b7f126bc84d73819edfe1a07be654.jpg/size/800x533?mode=crop"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "03/11",
+          "type": "Réponse reçue",
+          "text": "Lien Dropbox vers la documentation en possession de l’agence. Contenu de la cartelle non vérifié . Les autres questions sont transmises à Lamia Ghemari : lamia@revimmo.be ."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Commune de la sélection secondaire"
+      ],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Immeuble d'angle : rez commercial et quatre appartements aménagés, dont un sous combles décrit comme locaux accessoires.",
+        "Revenus actuels annoncés environ 48 000 €/an. Chaudières gaz individuelles ; compteurs individuels et compteurs de passage pour l'eau.",
+        "Commission agence annoncée 2 % HTVA à charge de l'acquéreur.",
+        "Construction1900 ; état à rénover ; pas d'attestation électrique selon les champs source."
+      ],
+      "uncertainties": [
+        "La rentabilité et les revenus potentiels de l'annonce sont des projections commerciales. Statut de logement du sous-comble à vérifier."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "askingPricePerM2": 2564
+    },
+    {
+      "id": "contact-12",
+      "address": "Rue de la Charité 6",
+      "title": "Rue de la Charité 6 · Saint-Josse",
+      "commune": "Saint-Josse-ten-Noode",
+      "reference": "21862663",
+      "responseDates": "02/11",
+      "contactName": "Thomas Obri · Trianon Invest",
+      "contactDetails": "to@trianon-invest.be · demande initiale à info@trianon-invest.be",
+      "emails": [
+        "to@trianon-invest.be",
+        "info@trianon-invest.be"
+      ],
+      "phones": [],
+      "responseSummary": "RU, plans et quatre PEB . Électricité déclarée conforme. Trois unités reconnues mais quatre loyers annoncés, dont le 3e étage. RC : 1 422 € ; précompte : 2 426 €. Proposition de visite le 09/11 à 17 h.",
+      "price": 575000,
+      "surface": 250,
+      "unitsAnnounced": 3,
+      "peb": null,
+      "works": "Électricité déclarée conforme",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Rez/entresol ; 1er ; 2e reconnus selon agent. Un 3e étage est également loué.",
+      "urbanism": "Trois unités reconnues mais quatre loyers. Ne pas compter le 3e comme lot légal sans preuve supplémentaire.",
+      "technical": "RC non indexé : 1 422 €. Précompte annoncé : 2 426 €.",
+      "occupancy": "Rez 850 € ; 1er 735,19 € ; 2e 772,48 € ; 3e 650 €.",
+      "monthlyRentAnnounced": 3007.67,
+      "bridgePriority": null,
+      "documents": [
+        "RU266.pdf",
+        "Plans.pdf",
+        "Charité 6_0, 1, 2, 3.pdf"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://immovlan.be/fr/detail/immeuble-mixte/a-vendre/1210/saint-josse-ten-noode/vbe70959"
+        },
+        {
+          "label": "Immoweb 21862663",
+          "url": "https://www.immoweb.be/fr/annonce/21862663"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19bd79647c2bf0"
+        }
+      ],
+      "photos": [
+        "https://api-image.immovlan.be/v1/property/VBE70959/images/5da59928c83743948d0051eb260b597c.jpg/size/800x533?mode=crop"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "RU, plans et quatre PEB . Électricité déclarée conforme. Trois unités reconnues mais quatre loyers annoncés, dont le 3e étage. RC : 1 422 € ; précompte : 2 426 €. Proposition de visite le 09/11 à 17 h."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Commune de la sélection secondaire"
+      ],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Quatre logements aménagés décrits ; rez/entresol 86 m², premier 46 m², deuxième 46 m² et troisième 36 m².",
+        "Annonce : chaudières individuelles, compteurs séparés, électricité conforme et tous logements loués.",
+        "RC 1 422 € ; construction 1878 ; terrain 80 m²."
+      ],
+      "uncertainties": [
+        "L'annonce présente quatre logements mais l'email agent ne confirme que trois unités reconnues. Les surfaces détaillées totalisent 214 m², contre 250 m² annoncés."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "askingPricePerM2": 2300
+    },
+    {
+      "id": "contact-13",
+      "address": "Rue Joseph Dekeyn 7",
+      "title": "Rue Joseph Dekeyn 7 · Saint-Josse",
+      "commune": "Saint-Josse-ten-Noode",
+      "reference": "7871521",
+      "responseDates": "01/11",
+      "contactName": "M. Hoxha · Viabilis, expéditeur « oxa »",
+      "contactDetails": "oxa@viabilis.be · 0468 07 63 90",
+      "emails": [
+        "oxa@viabilis.be"
+      ],
+      "phones": [
+        "0468 07 63 90"
+      ],
+      "responseSummary": "RU et quatre fichiers PEB pour les différents niveaux. Propose un échange téléphonique. Aucune confirmation écrite de la levée de l’interdiction de louer le rez , qui faisait l’objet de votre question.",
+      "price": 500000,
+      "surface": 229,
+      "unitsAnnounced": null,
+      "peb": null,
+      "works": "À rénover",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Répartition par niveau à comparer aux RU et aux PEB reçus.",
+      "urbanism": "Question non résolue par écrit : levée de l’interdiction de louer le rez mentionnée dans la demande initiale.",
+      "technical": "RU et quatre fichiers PEB transmis. Échange téléphonique proposé.",
+      "occupancy": "Occupation et droit de location du rez à vérifier.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [
+        "Dekeyn 7 - RU.pdf",
+        "PEB sous-sol, rez, 1er et 2e/3e"
+      ],
+      "links": [
+        {
+          "label": "Annonce",
+          "url": "https://www.viabilis.be/fr/detail/7871521/vente/maison/saint-josse-ten-noode"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a198e9305dffb9a"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-biens-a-appeler#bien-viabilis-7871521"
+        }
+      ],
+      "photos": [
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/32d02d1cb46c45b698818492a87ed285.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/9677db285a0e46618da76b4fb11a64a0.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/f931d1cbff194f9986ccb063bf7276f6.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/26a0455beeea4db9906b6aa5bfa86b9d.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/08bf60a6d8ec4aef8c866c000d166eb6.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/9bb4cac8921c45c28ba6dbb9e5473643.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/1e3faf75d78041228288ea98c9522519.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/8f6b9132ce2d424cab20b7dbb750c4a3.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/3671611c75b5400fb4ecbea52bf07457.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/f06a9ac2bee8462e9422af972b0b7008.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/ac4702d166164357beed7742898d4384.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/b53bced7a0744821a1e6907eeeb84811.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/65284b0056d244098b1649dc8de8f893.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/7615c48d5c4d48b19c7f519785070b85.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/bd8b14189416470a9f1705a61b7b1194.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/15b6c3e874f94cc99e9bb8d7facbb2db.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/99e20965b75548179eccb27ba47ee851.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/299786f421234317b016ddd36dc79146.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/b71d0ca947454bcfbe5a6f35ca5bfc8e.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/d8fa6421e9da49a99863390908d81804.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/17c2d7df738c4fa1a105e0cc8dad3f29.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/0e4ad3b6b30745f08cfb5187ab92ef00.jpg",
+        "https://r2.storagewhise.eu/viabilis/Pictures/7871521/1920/ca891810746a4dfab6bcec7b4eea938e.jpg"
+      ],
+      "archiveDetails": [
+        {
+          "title": "Points à résoudre avant offre",
+          "text": "ALERTE DIRL : les RU du 21/05/2026 indiquent une interdiction de mise en location du rez-de-chaussée. L’annonce mentionne pourtant un loyer de 700 €/mois. Exiger la décision et une preuve de levée éventuelle avant de compter ce revenu."
+        },
+        {
+          "title": "Composition, occupation et loyers",
+          "text": "Niveau / lot Composition annoncée Occupation / bail Rez Séjour, cuisine, 2 chambres et douche selon annonce ; jardin 20 m² 700 €/mois annoncés ; interdiction DIRL mentionnée aux RU 1er Séjour, 1 chambre ; cuisine et douche/WC en entresol 500 €/mois annoncés 2e + 3e Duplex : séjour/cuisine, 2 chambres, salle de bains ; terrasse 6 m² annoncée Occupé par le propriétaire Annexes Grenier au 4e et caves Surfaces et affectation à contrôler"
+        },
+        {
+          "title": "Technique et énergie",
+          "text": "Poste Détail Chambres / sanitaires 5 chambres et 3 salles d’eau annoncées Énergie Gaz ; chaudières à condensation ; compteurs gaz et électricité individuels annoncés Enveloppe Double vitrage PVC ; panneaux photovoltaïques annoncés PEB Annonce : F, 300 kWh/m²/an ; PDFs distincts rez, 1er, duplex et niveau -1 à consulter Électricité Conforme selon annonce ; document DE joint, périmètre de contrôle à vérifier Précompte immobilier 1 493 €/an annoncé ; avertissement-extrait de rôle à demander"
+        },
+        {
+          "title": "Urbanisme et pièces examinées",
+          "text": "RU/132/2026 du 21/05/2026 : 3 logements licites, soit un appartement 1 chambre au rez, un appartement 1 chambre au 1er et un duplex 2 chambres aux étages supérieurs. Le rez est décrit avec 2 chambres dans l’annonce : écart à expliquer. Le document mentionne aussi la zone de protection de l’ancienne gare de Saint-Josse. Ces RU ne prouvent pas la conformité de chaque aménagement actuel."
+        },
+        {
+          "title": "Contact et questions à poser",
+          "text": "Viabilis · Ilirjan Hoxha · réf. 7871521 Demander décision DIRL, travaux imposés, coût et levée de l’interdiction ; baux, garanties, indexations et arriérés ; plans autorisés et écart du nombre de chambres au rez ; certificats PEB complets, contrôles électriques et propriété des panneaux. Disponibilité et occupation à reconfirmer. Documents et sources · consultation du 29/10/2026 Dekeyn 7 - DE.pdf ↗ Dekeyn 7 - peb - 1.pdf ↗ Dekeyn 7 - peb 0.pdf ↗ Dekeyn 7 - peb 1.pdf ↗ Dekeyn 7 - peb 2 et 3.pdf ↗ Dekeyn 7 - RU.pdf ↗ Annonce source et photos originales ↗ Données de l’annonce sauf mention d’une pièce consultée. Surfaces PEB et surfaces commerciales annoncées ne sont pas interchangeables. Date de publication initiale non vérifiée : ce bien n’est pas présenté comme une nouveauté des dernières 48 h."
+        }
+      ],
+      "history": [
+        {
+          "date": "01/11",
+          "type": "Réponse reçue",
+          "text": "RU et quatre fichiers PEB pour les différents niveaux. Propose un échange téléphonique. Aucune confirmation écrite de la levée de l’interdiction de louer le rez , qui faisait l’objet de votre question."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Commune de la sélection secondaire"
+      ],
+      "photoEvidence": "Photographies déjà associées à cette adresse dans les archives Argus ; disponibilité externe variable.",
+      "askingPricePerM2": 2183
+    },
+    {
+      "id": "contact-14",
+      "address": "Hortensia 52",
+      "title": "Hortensia 52 · Woluwe-Saint-Étienne",
+      "commune": "Woluwe-Saint-Étienne",
+      "reference": "21787123",
+      "responseDates": "02/11",
+      "contactName": "Gemma Brigitta · experte ; Yorgo Coppeaux en copie",
+      "contactDetails": "gemma.brigitta@telenet.be · 0475 41 27 85 · 02 303 83 83",
+      "emails": [
+        "gemma.brigitta@telenet.be"
+      ],
+      "phones": [
+        "0475 41 27 85",
+        "02 303 83 83"
+      ],
+      "responseSummary": "Sol, PEB des quatre appartements, urbanisme, indexations, plans du géomètre et quotités . Acte de base annoncé à signer prochainement ; contrôle amiante demandé ; électricité déclarée conforme. Propriétaire : yorgo.coppeaux89@gmail.com .",
+      "price": 1150000,
+      "surface": null,
+      "unitsAnnounced": 4,
+      "peb": "B annoncé ; à vérifier par lot",
+      "works": "Rénové en 2014 annoncé",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Quatre appartements, garage quatre voitures, deux caves communes, jardin et terrasses. Environ 85 m² par appartement selon annonce, à mesurer.",
+      "urbanism": "Informations urbanistiques et plans du géomètre reçus. Acte de base annoncé à signer prochainement. Région flamande.",
+      "technical": "Prix affiché réduit de 1 325 000 € à 1 150 000 €. Contrôle amiante demandé. Électricité déclarée conforme par experte, à confronter aux attestations.",
+      "occupancy": "Revenu brut annuel annoncé : 52 281,48 €. Un appartement est aussi proposé séparément à 329 000 € ; disponibilité de l’ensemble à confirmer.",
+      "monthlyRentAnnounced": 4356.79,
+      "bridgePriority": 3,
+      "documents": [
+        "Attestation de sol",
+        "PEB des quatre appartements",
+        "Informations urbanistiques",
+        "Indexations des quatre appartements",
+        "Plans pour acte de base",
+        "Rapport quotités",
+        "Identifications cadastrales réservées"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/zaventem/1932/21787123"
+        },
+        {
+          "label": "Immoweb 21787123",
+          "url": "https://www.immoweb.be/fr/annonce/21787123"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19ce83e55cddf9"
+        },
+        {
+          "label": "Source des photographies",
+          "url": "https://immovlan.be/fr/detail/bien-divers/a-vendre/1932/woluwe-saint-etienne/rwc43547"
+        }
+      ],
+      "photos": [
+        "https://api-image.immovlan.be/v1/property/RWC43547/images/voorgevel.jpg/size/800x533?mode=crop"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "Sol, PEB des quatre appartements, urbanisme, indexations, plans du géomètre et quotités . Acte de base annoncé à signer prochainement ; contrôle amiante demandé ; électricité déclarée conforme. Propriétaire : yorgo.coppeaux89@gmail.com ."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Prix actuel Immoweb : 1 150 000 €, ancien prix 1 325 000 €. L'annonce Immovlan conserve encore l'ancien prix.",
+        "Quatre appartements ; terrain 243 m² ; garage collectif et accès arrière.",
+        "Sources divergentes sur surfaces et revenus : vérifier les plans et les baux.",
+        "Immoweb annonce environ 52 281,48 € de revenus annuels bruts."
+      ],
+      "uncertainties": [
+        "Les sources divergent sur le nombre de places de garage, la surface et le montant du revenu locatif. Ne pas mélanger les chiffres."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "previousPrice": 1325000
+    },
+    {
+      "id": "contact-15",
+      "address": "Rue Baron Guillaume Van Hamme 7",
+      "title": "Rue Baron Guillaume Van Hamme 7 · Uccle",
+      "commune": "Uccle",
+      "reference": "21905644",
+      "responseDates": "02/11",
+      "contactName": "Virginie Vanfleteren · La Brique",
+      "contactDetails": "virginie@labrique.be · 0471 64 00 90",
+      "emails": [
+        "virginie@labrique.be"
+      ],
+      "phones": [
+        "0471 64 00 90"
+      ],
+      "responseSummary": "Liens Drive : RU, deux PEB, bail, enregistrements, état des lieux, garanties et offre type . Réponse commune aux numéros 7 et 9 : certains PEB manquent et les contrôles électriques n’ont pas été réalisés .",
+      "price": 550000,
+      "surface": 150,
+      "unitsAnnounced": 3,
+      "peb": "G · 417 kWh/m²/an",
+      "works": "Électricité à contrôler",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Rez +1 +2 : trois appartements une chambre d’environ 50 m² ; jardin au rez et caves.",
+      "urbanism": "Conformité via RU annoncée. Vérifier concordance plans, affectations et division juridique.",
+      "technical": "Construction 1959 ; sans ascenseur. Certains PEB manquants ; contrôles électriques non réalisés selon La Brique.",
+      "occupancy": "Baux, garanties, états des lieux et enregistrements transmis.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": 2,
+      "documents": [
+        "RU 7.pdf",
+        "Deux PEB",
+        "Bail du rez 2025",
+        "Preuves enregistrement",
+        "États des lieux",
+        "Garanties locatives",
+        "Offre type BVH7"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/uccle/1180/21905644"
+        },
+        {
+          "label": "Immoweb 21905644",
+          "url": "https://www.immoweb.be/fr/annonce/21905644"
+        },
+        {
+          "label": "Email et liens Drive",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19bee5a299e067"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "Liens Drive : RU, deux PEB, bail, enregistrements, état des lieux, garanties et offre type . Réponse commune aux numéros 7 et 9 : certains PEB manquent et les contrôles électriques n’ont pas été réalisés ."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Annonce : trois appartements une chambre d'environ 50 m² chacun.",
+        "Construction 1959 ; pas d'ascenseur ; caves et jardin au rez.",
+        "PEB affiché G, 417 kWh/m²/an ; chauffage indiqué électrique ; jardin de 50 m² orienté sud."
+      ],
+      "uncertainties": [
+        "Pas de photo originale récupérée via la page source. Ne pas réutiliser une photo du n°9 ou d'un appartement loué sans confirmation."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "askingPricePerM2": 3667
+    },
+    {
+      "id": "contact-16",
+      "address": "Rue Baron Guillaume Van Hamme 9",
+      "title": "Rue Baron Guillaume Van Hamme 9 · Uccle",
+      "commune": "Uccle",
+      "reference": null,
+      "responseDates": "02/11",
+      "contactName": "Virginie Vanfleteren · La Brique",
+      "contactDetails": "virginie@labrique.be · 0471 64 00 90",
+      "emails": [
+        "virginie@labrique.be"
+      ],
+      "phones": [
+        "0471 64 00 90"
+      ],
+      "responseSummary": "Immeuble voisin de six appartements. Liens Drive : RU, quatre PEB, plusieurs baux, état des lieux, garantie, enregistrement et offre type . Même réserve : PEB manquants et absence de contrôles électriques.",
+      "price": 1100000,
+      "surface": null,
+      "unitsAnnounced": 6,
+      "peb": null,
+      "works": "Électricité à contrôler",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Immeuble voisin du n°7 : six appartements annoncés.",
+      "urbanism": "RU reçus ; vérifier la reconnaissance des six unités et les conditions de revente séparée.",
+      "technical": "Quatre PEB identifiés ; certains PEB manquants. Contrôles électriques non réalisés selon agent.",
+      "occupancy": "Plusieurs baux, enregistrements, garanties et états des lieux transmis.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": 5,
+      "documents": [
+        "RU - BVH 9.pdf",
+        "Quatre PEB",
+        "Plusieurs baux",
+        "État des lieux",
+        "Garantie locative",
+        "Preuve enregistrement",
+        "Offre type BVH9"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://www.immoweb.be/fr/annonce/immeuble-a-appartements/a-vendre/uccle/1180/21905644"
+        },
+        {
+          "label": "Email commun aux deux immeubles",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19bee5a299e067"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "Immeuble voisin de six appartements. Liens Drive : RU, quatre PEB, plusieurs baux, état des lieux, garantie, enregistrement et offre type . Même réserve : PEB manquants et absence de contrôles électriques."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Le n°9 est mentionné dans l'annonce du n°7 : six appartements à 1 100 000 €."
+      ],
+      "uncertainties": [
+        "Annonce autonome et photos du n°9 non retrouvées. Ne pas utiliser les photos du n°7."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04"
+    },
+    {
+      "id": "contact-17",
+      "address": "Rue de Wynants 27",
+      "title": "Rue de Wynants 27 · Bruxelles",
+      "commune": "Bruxelles",
+      "reference": "21155474",
+      "responseDates": "04/11",
+      "contactName": "Justin Druet · Home Horizon Immo",
+      "contactDetails": "justin@hhi.immo · 02 479 67 90",
+      "emails": [
+        "justin@hhi.immo"
+      ],
+      "phones": [
+        "02 479 67 90"
+      ],
+      "responseSummary": "Six pièces jointes : RU 2023, plans et quatre fichiers « PEB test » pour le rez et les 1er, 2e et 3e étages. La dénomination « test » nécessite une clarification avant de les considérer comme définitifs.",
+      "price": 1640000,
+      "surface": 344,
+      "unitsAnnounced": 4,
+      "peb": "D- annoncé",
+      "works": "Remis à neuf annoncé",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Rez ±74 m² avec jardin ; trois appartements supérieurs ±90 m², 1 chambre et bureau ; caves sur toute la surface.",
+      "urbanism": "RU 2023 reçus ; quatre logements annoncés, reconnaissance à vérifier sur l’original.",
+      "technical": "Quatre fichiers « PEB test » reçus : caractère définitif à clarifier. Surface cumulée des niveaux annoncés à recouper.",
+      "occupancy": "Annonce indiquant disponibilité immédiate ; à reconfirmer auprès de Justin Druet.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [
+        "RU 2023.pdf",
+        "Plans.pdf",
+        "PEB test RDC, 1er, 2e et 3e"
+      ],
+      "links": [
+        {
+          "label": "Immoweb 21155474",
+          "url": "https://www.immoweb.be/fr/annonce/21155474"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a1a6a459dd41c7c"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-biens-a-appeler#bien-21155474"
+        }
+      ],
+      "photos": [
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/3feb08ae98bb1e115f8f2acef7d10927.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/5e3792442e00d30e48ccaca3cccb7031.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/0da685d9e87794c93a49f902779e40de.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/3043925d080815e8f496239f5f9171fe.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/9de5ad31acbde0a0e0e67b15acd6cf35.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/85ebd8afb12fe75ccf3f06ace7119037.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/9bb27361aaa313e64d1992c6be3d2e82.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/19f4749e0b970002a88c1ede2d840d1e.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/6649fadd56b3d4b13a53cc0486f33d14.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/8e63884e62ecb38b98944f1441ef94a5.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/f63abb20cab2aebc3ebe65da6dca4987.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/2ed7bb5c1bd6d6b7804435a8cc4248d1.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/2808e0a766d25b40c4f1ec64896fba52.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/288ecf9d7226a1ec61e2dd18a231b664.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/e33a8951ee512a855a8b2b3a5cad98d4.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/4afa3753-b378-4074-862a-cbbbdff136e4/736x736/40474fc2916114b38584e0adabc42682.jpg"
+      ],
+      "archiveDetails": [
+        {
+          "title": "À voir avant d’appeler",
+          "text": "Fiche : 3 salles de bains mais 4 douches ; demander la composition exacte. L’adresse précise est issue de la fiche Immovlan correspondante. Le prix de 1,64 M€ dépasse légèrement 1,6 M€. Composition par étage / lot Niveau / lot Composition annoncée Surface annoncée PEB / statut Rez 1 chambre · jardin ±74 m² PEB par lot à obtenir 1er 1 chambre + bureau ±90 m² D− annoncé 2e 1 chambre + bureau ±90 m² D− annoncé 3e 1 chambre + bureau ±90 m² D− annoncé"
+        },
+        {
+          "title": "État, équipements et énergie",
+          "text": "Élément Information annoncée Surface / construction 344 m² selon PEB · 1945 annoncé Jardin 30 m² annoncé Chauffage / vitrage Gaz · double vitrage Électricité Conformité annoncée sur Immovlan ; PV à obtenir Cuisine / sanitaires Cuisines équipées ; douches ; bureaux ±9 m² Ascenseur Absent selon la fiche secondaire"
+        },
+        {
+          "title": "Locations et revenus",
+          "text": "Fiche secondaire : non loué, disponibilité immédiate. À reconfirmer, cette fiche ayant été modifiée le 08/04/2026. Aucun revenu locatif communiqué."
+        },
+        {
+          "title": "Urbanisme",
+          "text": "Quatre appartements commercialisés, sans RU ni plans autorisés consultés. La rénovation annoncée ne prouve pas la reconnaissance de quatre logements. Les mentions de l’annonce ne constituent pas une preuve de conformité. Les documents effectivement consultés sont identifiés dans les sources ci-dessous."
+        },
+        {
+          "title": "Contact et références",
+          "text": "Home Horizon Immo +3224796790 info@hhi.immo Réf. agence : 7226567 Statut public : annonce proposée à la vente lors de la collecte ; disponibilité à confirmer par téléphone."
+        },
+        {
+          "title": "Questions prioritaires",
+          "text": "Confirmer disponibilité et occupation de chaque étage. Obtenir RU, plans, PEB par appartement et PV électrique. Vérifier les compteurs et les surfaces privatives. Acceptez-vous des options croisées cessibles et divisibles ? Documents à obtenir et données encore manquantes Aucun PDF directement téléchargeable n’a été récupéré depuis cette annonce. Cela ne signifie pas que le vendeur n’en possède pas. RU complets et récents ; permis, plans autorisés et état actuel. PEB originaux par lot et contrôles électriques. Baux, avenants, garanties, tableau des loyers et charges. Plans cotés, surfaces privatives, communs, caves et extérieurs. Acte de base / division, titre, servitudes et dossier de copropriété s’il existe. Avis SIAMU, travaux prescrits, factures et devis disponibles. Inconnus tant que les pièces ne sont pas reçues : marge nette de revente, prix de sortie par lot, coût total de l’opération et acceptation du montage par le vendeur."
+        }
+      ],
+      "history": [
+        {
+          "date": "04/11",
+          "type": "Réponse reçue",
+          "text": "Six pièces jointes : RU 2023, plans et quatre fichiers « PEB test » pour le rez et les 1er, 2e et 3e étages. La dénomination « test » nécessite une clarification avant de les considérer comme définitifs."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Prix au-dessus de 1 600 000 €"
+      ],
+      "photoEvidence": "Photographies déjà associées à cette adresse dans les archives Argus ; disponibilité externe variable.",
+      "askingPricePerM2": 4767
+    },
+    {
+      "id": "contact-18",
+      "address": "Rue des Deux Tours 53",
+      "title": "Rue des Deux Tours 53 · Saint-Josse",
+      "commune": "Saint-Josse-ten-Noode",
+      "reference": "21782129",
+      "responseDates": "04/11",
+      "contactName": "Manon Lumens · Century 21 Immo Dewaele",
+      "contactDetails": "co1@immodewaele.be · 0471 51 36 39 · 067 89 38 64",
+      "emails": [
+        "co1@immodewaele.be"
+      ],
+      "phones": [
+        "0471 51 36 39",
+        "067 89 38 64"
+      ],
+      "responseSummary": "Lien vers une archive ZIP et fiche descriptive. Quatre appartements déclarés reconnus, loyers de 2 380 €/mois et électricité non conforme. Contenu exact du ZIP non vérifié.",
+      "price": 615000,
+      "surface": 184,
+      "unitsAnnounced": 4,
+      "peb": "D+ à G",
+      "works": "Électricité non conforme",
+      "status": "Dossier transmis",
+      "marketStatus": "unknown",
+      "composition": "Quatre appartements d’environ 45 m² avec séjour, cuisine, chambre et salle de douche.",
+      "urbanism": "Quatre appartements reconnus selon agence ; archive ZIP transmise, non inventoriée.",
+      "technical": "Chaudières privatives ; électricité annoncée non conforme.",
+      "occupancy": "Tous loués ; revenu mensuel annoncé 2 380 €.",
+      "monthlyRentAnnounced": 2380,
+      "bridgePriority": null,
+      "documents": [
+        "Archive ZIP Omnicasa ; fichiers non inventoriés"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://www.immodewaele.be/fr/a-vendre/80629/Appartement-a-SAINT-JOSSE-TEN-NOODE?view=detailview%3Ddetail"
+        },
+        {
+          "label": "Immoweb 21782129",
+          "url": "https://www.immoweb.be/fr/annonce/21782129"
+        },
+        {
+          "label": "Email avec archive",
+          "url": "https://mail.google.com/mail/u/0/#all/1a1a61e5aecfe5c2"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "04/11",
+          "type": "Réponse reçue",
+          "text": "Lien vers une archive ZIP et fiche descriptive. Quatre appartements déclarés reconnus, loyers de 2 380 €/mois et électricité non conforme. Contenu exact du ZIP non vérifié."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Commune de la sélection secondaire"
+      ],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Quatre appartements une chambre d'environ 45 m² annoncés reconnus.",
+        "Loyers annoncés 2 380 €/mois ; tous loués.",
+        "Électricité non conforme ; PEB de D+ à G ; chauffage individuel au gaz.",
+        "Terrain 57 m² ; construction 1899 ; revenu cadastral 897 €."
+      ],
+      "uncertainties": [
+        "Page source affiche 12 photos mais les URLs de galerie ne sont pas exposées par la récupération web."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "askingPricePerM2": 3342
+    },
+    {
+      "id": "contact-19",
+      "address": "Rue John Waterloo Wilson 82",
+      "title": "Rue John Waterloo Wilson 82 · Bruxelles",
+      "commune": "Bruxelles",
+      "reference": "21815967",
+      "responseDates": "30/10",
+      "contactName": "Olivier Zwarts · 5Bricks",
+      "contactDetails": "Olivier@5bricks.be · 0490 57 49 95",
+      "emails": [
+        "Olivier@5bricks.be"
+      ],
+      "phones": [
+        "0490 57 49 95"
+      ],
+      "responseSummary": "RU du 26/10/2026, plans, deux PEB, deux attestations électriques conformes . Deux unités : triplex loué 2 500 €/mois et duplex libre. L’agent ne connaît pas de demande de division supplémentaire et la juge difficile.",
+      "price": 950000,
+      "surface": 321,
+      "unitsAnnounced": 2,
+      "peb": "D- duplex / G triplex",
+      "works": "Électricité annoncée conforme",
+      "status": "Documents reçus",
+      "marketStatus": "unknown",
+      "composition": "Duplex ±139 m² avec cour ±35 m² ; triplex ±182 m² avec balcon et terrasse.",
+      "urbanism": "Deux unités reconnues. L’agent ne connaît aucune demande de division supplémentaire et la juge difficile.",
+      "technical": "Chaudières individuelles gaz ; attestations électriques conformes jusqu’en 2042 selon intitulés des fichiers.",
+      "occupancy": "Duplex libre ; triplex loué 2 500 €/mois. Préavis de six mois à l’acte mentionné par l’agent, à examiner avec le bail.",
+      "monthlyRentAnnounced": 2500,
+      "bridgePriority": null,
+      "documents": [
+        "RU 2026 10 26.pdf",
+        "Plans architecte",
+        "PEB duplex 2026",
+        "PEB triplex 2017",
+        "Attestations électricité duplex et triplex"
+      ],
+      "links": [
+        {
+          "label": "Immoweb 21815967",
+          "url": "https://www.immoweb.be/fr/annonce/21815967"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a18ca6592a5f137"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "30/10",
+          "type": "Réponse reçue",
+          "text": "RU du 26/10/2026, plans, deux PEB, deux attestations électriques conformes . Deux unités : triplex loué 2 500 €/mois et duplex libre. L’agent ne connaît pas de demande de division supplémentaire et la juge difficile."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Moins de trois unités reconnues ou annoncées comme telles"
+      ],
+      "photoEvidence": null,
+      "askingPricePerM2": 2960
+    },
+    {
+      "id": "contact-20",
+      "address": "Rue Joseph Stallaert 79",
+      "title": "Rue Joseph Stallaert 79 · Uccle",
+      "commune": "Uccle",
+      "reference": "87109881",
+      "responseDates": "26/10",
+      "contactName": "Daniel Ahrend · Barnes",
+      "contactDetails": "d.ahrend@barnes-international.com · 0475 73 64 81 · 02 880 15 15",
+      "emails": [
+        "d.ahrend@barnes-international.com"
+      ],
+      "phones": [
+        "0475 73 64 81",
+        "02 880 15 15"
+      ],
+      "responseSummary": "Fiche de présentation réf. 87109881 , prix communiqué de 1 690 000 € , et lien SwissTransfer pour les informations demandées. Inventaire du transfert non vérifié.",
+      "price": 1690000,
+      "surface": 581,
+      "unitsAnnounced": 3,
+      "peb": "F annoncé",
+      "works": "À confirmer",
+      "status": "Dossier transmis",
+      "marketStatus": "unknown",
+      "composition": "Commerce de 117 m² ; deux appartements de 76 m² et duplex penthouse de 165 m² ; caves 103 m². Studio intégré au duplex selon source.",
+      "urbanism": "Commerce et trois appartements décrits. Studio relié au troisième étage ; reconnaissance de chaque lot à vérifier.",
+      "technical": "Chaudières gaz individuelles ; mise en conformité électrique annoncée en cours. Précompte source : 3 224,71 €.",
+      "occupancy": "À confirmer.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [
+        "Dossier SwissTransfer ; contenu non inventorié"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://barnes-brussels.com/en/property/87109881-cavell-moliere-investment-property-for-sale/"
+        },
+        {
+          "label": "Dossier",
+          "url": "https://www.swisstransfer.com/dl/01a178a8-992b-722b-abf1-e091eeed9d9a"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a178b1e1f6d44d0"
+        }
+      ],
+      "photos": [
+        "https://barnes-brussels.com/layout/uploads/2026/06/170052156.jpg"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "26/10",
+          "type": "Réponse reçue",
+          "text": "Fiche de présentation réf. 87109881 , prix communiqué de 1 690 000 € , et lien SwissTransfer pour les informations demandées. Inventaire du transfert non vérifié."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Prix au-dessus de 1 600 000 €"
+      ],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Réf. Barnes 87109881. Surface totale 581 m², cour et terrasses hors total indiqué.",
+        "Commerce 117 m² ; appartements 76 m² et 76 m² ; duplex penthouse 165 m² ; caves 103 m².",
+        "Studio relié à l'appartement du troisième étage ; trois appartements et commerce dans la configuration décrite.",
+        "Chaudières gaz individuelles ; PEB F ; conformité électrique en cours selon l'annonce.",
+        "Commerce et appartement du deuxième étage loués."
+      ],
+      "uncertainties": [],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "propertyTax": 3224.71,
+      "askingPricePerM2": 2909
+    },
+    {
+      "id": "contact-21",
+      "address": "Rue de Mot",
+      "title": "Rue de Mot · Etterbeek · réf. 7747920",
+      "commune": "Etterbeek",
+      "reference": "7747920",
+      "responseDates": "28/10",
+      "contactName": "JAM Properties",
+      "contactDetails": "info@jamproperties.be · 02 534 62 89",
+      "emails": [
+        "info@jamproperties.be"
+      ],
+      "phones": [
+        "02 534 62 89"
+      ],
+      "responseSummary": "Deux envois identiques de la description commerciale : cinq studios déclarés en ordre urbanistique et pompier, prix de 900 000 €. Aucun RU ni PEB joint. Le numéro de rue n’est pas indiqué.",
+      "price": 900000,
+      "surface": 180,
+      "unitsAnnounced": 5,
+      "peb": "E annoncé",
+      "works": "Sans travaux selon agence",
+      "status": "Réponse reçue",
+      "marketStatus": "unknown",
+      "composition": "Cinq studios meublés avec pièce de vie/espace nuit, cuisine américaine et salle de bain.",
+      "urbanism": "Ordre urbanistique et pompier annoncé ; aucune pièce justificative jointe aux emails de JAM.",
+      "technical": "L’agence estime une location possible à 1 000 €/studio ; il ne s’agit pas d’un revenu encaissé vérifié.",
+      "occupancy": "Baux, loyers réels, charges et numéro de rue non fournis.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": 7,
+      "documents": [],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://immovlan.be/fr/detail/immeuble-mixte/a-vendre/1040/etterbeek/vbe38992"
+        },
+        {
+          "label": "Annonce correspondante",
+          "url": "https://immovlan.be/en/detail/mixed-building/for-sale/1040/etterbeek/vbe38992"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a17fde820c3e87e"
+        }
+      ],
+      "photos": [
+        "https://api-image.immovlan.be/v1/property/VBE38992/images/f8e0cb7db20942ce9e5eae771dac856e.jpg/size/800x533?mode=crop"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "28/10",
+          "type": "Réponse reçue",
+          "text": "Deux envois identiques de la description commerciale : cinq studios déclarés en ordre urbanistique et pompier, prix de 900 000 €. Aucun RU ni PEB joint. Le numéro de rue n’est pas indiqué."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Cinq studios meublés annoncés en ordre urbanistique et pompier, PEB E.",
+        "Cinq chambres, cinq salles de bain, trois façades.",
+        "Le loyer de 1 000 €/studio est un potentiel annoncé, pas un revenu encaissé vérifié.",
+        "Réf. vendeur 7747920 ; numéro de rue non communiqué."
+      ],
+      "uncertainties": [],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "askingPricePerM2": 5000
+    },
+    {
+      "id": "contact-22",
+      "address": "Ixelles",
+      "title": "Ixelles · réf. Century 21 3034 B",
+      "commune": "Ixelles",
+      "reference": "21817446",
+      "responseDates": "02/11",
+      "contactName": "Century 21 Boondael",
+      "contactDetails": "info@century21boondael.be · 02 660 21 21",
+      "emails": [
+        "info@century21boondael.be"
+      ],
+      "phones": [
+        "02 660 21 21"
+      ],
+      "responseSummary": "Réponse : bien sous option . Invitation à rappeler la semaine suivante pour suivre le dossier. Aucun document transmis. Trois logements reconnus et cinq studios aménagés selon la demande initiale ; rue non identifiée .",
+      "price": 579000,
+      "surface": 190,
+      "unitsAnnounced": 3,
+      "peb": "F à G annoncés",
+      "works": "À chiffrer",
+      "status": "Sous option",
+      "marketStatus": "option",
+      "composition": "Trois logements reconnus annoncés, cinq studios aménagés.",
+      "urbanism": "Répartition exacte des trois unités et statut des deux studios supplémentaires non éclaircis.",
+      "technical": "Chauffage central gaz annoncé ; cour et caves.",
+      "occupancy": "Agence : sous option au 02/11, rappeler pour évolution.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [],
+      "links": [
+        {
+          "label": "Immoweb 21817446",
+          "url": "https://www.immoweb.be/fr/annonce/21817446"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19b855cbc9dd3e"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "Réponse : bien sous option . Invitation à rappeler la semaine suivante pour suivre le dossier. Aucun document transmis. Trois logements reconnus et cinq studios aménagés selon la demande initiale ; rue non identifiée ."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Sous option"
+      ],
+      "photoEvidence": null,
+      "askingPricePerM2": 3047
+    },
+    {
+      "id": "contact-23",
+      "address": "Auderghem",
+      "title": "Auderghem · Hermann-Debroux · réf. 2969 B",
+      "commune": "Auderghem",
+      "reference": "2969 B",
+      "responseDates": "02/11",
+      "contactName": "Century 21 Boondael",
+      "contactDetails": "info@century21boondael.be · 02 660 21 21",
+      "emails": [
+        "info@century21boondael.be"
+      ],
+      "phones": [
+        "02 660 21 21"
+      ],
+      "responseSummary": "Réponse : bien vendu . L’agence propose à sa place le dossier de l’avenue de la Couronne 276, repris dans la première partie. Adresse exacte du bien vendu non communiquée dans cet échange.",
+      "price": 790000,
+      "surface": null,
+      "unitsAnnounced": null,
+      "peb": null,
+      "works": "Non analysé",
+      "status": "Vendu",
+      "marketStatus": "sold",
+      "composition": "Deux studios et trois appartements mentionnés dans la demande initiale.",
+      "urbanism": "Bien vendu selon réponse ; documents d’un autre bien fournis en alternative.",
+      "technical": "Dossier alternatif : Couronne 276, réf. 3062 B.",
+      "occupancy": "Vendu ; conserver uniquement l’historique.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [],
+      "links": [
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19b94fa6dad33b"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "Réponse : bien vendu . L’agence propose à sa place le dossier de l’avenue de la Couronne 276, repris dans la première partie. Adresse exacte du bien vendu non communiquée dans cet échange."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Commune de la sélection secondaire",
+        "Vendu"
+      ],
+      "photoEvidence": null
+    },
+    {
+      "id": "contact-24",
+      "address": "Etterbeek",
+      "title": "Etterbeek · quartier européen · réf. 2406.09",
+      "commune": "Etterbeek",
+      "reference": "2406.09",
+      "responseDates": "30/10",
+      "contactName": "Franck Duponchel · Respectea",
+      "contactDetails": "franck@respectea.be · 0474 76 40 66 · 02 770 54 81",
+      "emails": [
+        "franck@respectea.be"
+      ],
+      "phones": [
+        "0474 76 40 66",
+        "02 770 54 81"
+      ],
+      "responseSummary": "Réponse : immeuble plus à vendre . Propose de recevoir vos critères pour présenter d’autres biens. Aucun dossier transmis ; adresse exacte non communiquée.",
+      "price": null,
+      "surface": null,
+      "unitsAnnounced": 3,
+      "peb": null,
+      "works": "Rénové selon présentation initiale",
+      "status": "Retiré de la vente",
+      "marketStatus": "removed",
+      "composition": "Trois unités mentionnées dans la demande. Adresse exacte non transmise.",
+      "urbanism": "Ne plus traiter comme opportunité active.",
+      "technical": "L’agent propose de recevoir les critères pour d’autres biens.",
+      "occupancy": "Plus à vendre selon réponse du 30/10.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [],
+      "links": [
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a18bc0cc6629b90"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "30/10",
+          "type": "Réponse reçue",
+          "text": "Réponse : immeuble plus à vendre . Propose de recevoir vos critères pour présenter d’autres biens. Aucun dossier transmis ; adresse exacte non communiquée."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Retiré de la vente"
+      ],
+      "photoEvidence": null
+    },
+    {
+      "id": "contact-25",
+      "address": "Dossier suivi avec The Resident Brussels",
+      "title": "Dossier suivi avec The Resident Brussels",
+      "commune": "À identifier",
+      "reference": null,
+      "responseDates": "02/11",
+      "contactName": "Ilan Perry · The Resident Brussels",
+      "contactDetails": "Ilan@theresidentbrussels.com · 02 445 19 89",
+      "emails": [
+        "Ilan@theresidentbrussels.com"
+      ],
+      "phones": [
+        "02 445 19 89"
+      ],
+      "responseSummary": "Décision officielle sur le changement d’affectation du bureau encore attendue. Vente séparée du 2e étage en préparation, qui empêcherait ensuite la vente du bâtiment entier. Pas de nouveau document. Adresse non indiquée dans ce fil.",
+      "price": null,
+      "surface": null,
+      "unitsAnnounced": null,
+      "peb": null,
+      "works": "Permis en attente",
+      "status": "Urbanisme en attente",
+      "marketStatus": "unknown",
+      "composition": "Bureau et appartements ; adresse absente de l’échange consulté.",
+      "urbanism": "Décision officielle du changement d’affectation du bureau non reçue au 02/11.",
+      "technical": "Vente séparée du 2e étage en préparation : risque que l’ensemble ne soit plus disponible.",
+      "occupancy": "Aucun nouveau document transmis.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [],
+      "links": [
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19cb198fa80d1d"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "Décision officielle sur le changement d’affectation du bureau encore attendue. Vente séparée du 2e étage en préparation, qui empêcherait ensuite la vente du bâtiment entier. Pas de nouveau document. Adresse non indiquée dans ce fil."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null
+    },
+    {
+      "id": "contact-26",
+      "address": "Avenue Georges Henri 463, boîte 2",
+      "title": "Avenue Georges Henri 463, boîte 2 · WSL",
+      "commune": "Woluwe-Saint-Lambert",
+      "reference": "21919457",
+      "responseDates": "30/10",
+      "contactName": "Michael Grégoire · CRE",
+      "contactDetails": "Michael@cre.be · 0451 08 61 49 · 02 660 50 50",
+      "emails": [
+        "Michael@cre.be"
+      ],
+      "phones": [
+        "0451 08 61 49",
+        "02 660 50 50"
+      ],
+      "responseSummary": "PEB, RU, certificats électriques et baux . Confirme un seul appartement reconnu, divisé de fait en deux. Siham demande de l’écarter : appartement et non immeuble entier .",
+      "price": null,
+      "surface": null,
+      "unitsAnnounced": 1,
+      "peb": null,
+      "works": "À confirmer",
+      "status": "Hors critères",
+      "marketStatus": "unknown",
+      "composition": "Un appartement reconnu, divisé de fait en deux logements séparés.",
+      "urbanism": "Agent : un seul appartement reconnu au 2e étage. Deux portes ne prouvent pas deux unités légales.",
+      "technical": "PEB, RU, attestations électriques et deux baux reçus.",
+      "occupancy": "Écarté par Siham : appartement, pas immeuble entier.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [
+        "RU",
+        "PEB",
+        "Certificats électriques",
+        "Baux des deux logements"
+      ],
+      "links": [
+        {
+          "label": "Immoweb 21919457",
+          "url": "https://www.immoweb.be/fr/annonce/21919457"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a18bd5f57893b7f"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-biens-a-appeler#bien-21919457"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-documents#bien-21919457"
+        }
+      ],
+      "photos": [
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/1df4d3856a4f407c2aef67490a7a4ada.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/c7b2408d8cdc8c123513b38de8f633d1.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/4b9ee41fe2a641928838a17aa15eadd0.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/7e222151fee7010eaa674a675510bc3b.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/7c1239fef8ee20955c485aaecd3af47c.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/f1b41211e8aaa70665d792975755ed1c.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/8fd5069815f4647b1ac753a6bb329197.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/bbf12e793bc7a21c0b813df59729843d.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/a9fd8267d013b3f39b87bd2477dd97f6.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/056ff2d52ac010b8cb005872cb473b57.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/b5c009d1258534bd6c06ce726e86d1d2.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/13428902fe73bf77e6efa568cc9e0c6f.jpg",
+        "https://media-resize.immowebstatic.be/classifieds/2d5b4123-bdbe-4094-b074-c13b533c20d0/736x736/dcf3a2a5eb9ce7fa055916ce3870ece1.jpg"
+      ],
+      "archiveDetails": [
+        {
+          "title": "À voir avant d’appeler",
+          "text": "Hors de ton critère d’au moins trois logements reconnus. La rubrique « immeuble à appartements » du portail est trompeuse pour ton projet : ce n’est pas l’immeuble entier. La classe automatique D a été écartée au profit du descriptif E, à vérifier sur l’original. Composition par étage / lot Niveau / lot Composition annoncée Surface annoncée PEB / statut Studio avant Hall, séjour, cuisine, espace nuit, salle de bains / WC ±36 m² Non reconnu séparément Studio arrière Configuration similaire · terrasse ±41 m² Non reconnu séparément"
+        },
+        {
+          "title": "État, équipements et énergie",
+          "text": "Élément Information annoncée Étage / bâtiment 2e étage · immeuble de 3 étages · sans ascenseur Extérieurs Terrasse arrière ±7 à 7,5 m², sud ; caves Chauffage / vitrage Chaudières individuelles au gaz · double vitrage Électricité À mettre en conformité, notamment schémas Charges ±60 €/mois par unité annoncés RC / PEB 508 € · réf. PEB 20230227-0000635641-01-1"
+        },
+        {
+          "title": "Locations et revenus",
+          "text": "Deux unités louées selon l’agence. Rendements annoncés : ±4,6 % brut et ±3,9 % net ; méthode et montants des baux non fournis. Ces pourcentages ne sont pas validés ici."
+        },
+        {
+          "title": "Urbanisme",
+          "text": "L’annonce indique explicitement un seul appartement reconnu par étage. Les deux studios sont vendus ensemble ; régularisation éventuelle à charge de l’acquéreur. Les mentions de l’annonce ne constituent pas une preuve de conformité. Les documents effectivement consultés sont identifiés dans les sources ci-dessous."
+        },
+        {
+          "title": "Contact et références",
+          "text": "Crescendimmo · Bruxelles Sud +3226605050 info.sud@cre.be Réf. agence : 6826 - 5697 Statut public : annonce proposée à la vente lors de la collecte ; disponibilité à confirmer par téléphone."
+        },
+        {
+          "title": "Questions prioritaires",
+          "text": "Demander RU et plans de l’appartement autorisé. Obtenir les deux baux, charges de copropriété, PV d’AG et décomptes. Chiffrer la conformité électrique et clarifier le statut de la division. Acceptez-vous des options croisées cessibles et divisibles ? Documents à obtenir et données encore manquantes Aucun PDF directement téléchargeable n’a été récupéré depuis cette annonce. Cela ne signifie pas que le vendeur n’en possède pas. RU complets et récents ; permis, plans autorisés et état actuel. PEB originaux par lot et contrôles électriques. Baux, avenants, garanties, tableau des loyers et charges. Plans cotés, surfaces privatives, communs, caves et extérieurs. Acte de base / division, titre, servitudes et dossier de copropriété s’il existe. Avis SIAMU, travaux prescrits, factures et devis disponibles. Inconnus tant que les pièces ne sont pas reçues : marge nette de revente, prix de sortie par lot, coût total de l’opération et acceptation du montage par le vendeur."
+        },
+        {
+          "title": "À voir avant d’appeler",
+          "text": "Hors de ton critère d’au moins trois logements reconnus. La rubrique « immeuble à appartements » du portail est trompeuse pour ton projet : ce n’est pas l’immeuble entier. La classe automatique D a été écartée au profit du descriptif E, à vérifier sur l’original. Composition par étage / lot Niveau / lot Composition annoncée Surface annoncée PEB / statut Studio avant Hall, séjour, cuisine, espace nuit, salle de bains / WC ±36 m² Non reconnu séparément Studio arrière Configuration similaire · terrasse ±41 m² Non reconnu séparément"
+        },
+        {
+          "title": "État, équipements et énergie",
+          "text": "Élément Information annoncée Étage / bâtiment 2e étage · immeuble de 3 étages · sans ascenseur Extérieurs Terrasse arrière ±7 à 7,5 m², sud ; caves Chauffage / vitrage Chaudières individuelles au gaz · double vitrage Électricité À mettre en conformité, notamment schémas Charges ±60 €/mois par unité annoncés RC / PEB 508 € · réf. PEB 20230227-0000635641-01-1"
+        },
+        {
+          "title": "Locations et revenus",
+          "text": "Deux unités louées selon l’agence. Rendements annoncés : ±4,6 % brut et ±3,9 % net ; méthode et montants des baux non fournis. Ces pourcentages ne sont pas validés ici."
+        },
+        {
+          "title": "Urbanisme",
+          "text": "L’annonce indique explicitement un seul appartement reconnu par étage. Les deux studios sont vendus ensemble ; régularisation éventuelle à charge de l’acquéreur. Les mentions de l’annonce ne constituent pas une preuve de conformité. Les documents effectivement consultés sont identifiés dans les sources ci-dessous."
+        },
+        {
+          "title": "Contact et références",
+          "text": "Crescendimmo · Bruxelles Sud +3226605050 info.sud@cre.be Réf. agence : 6826 - 5697 Statut public : annonce proposée à la vente lors de la collecte ; disponibilité à confirmer par téléphone."
+        },
+        {
+          "title": "Questions prioritaires",
+          "text": "Demander RU et plans de l’appartement autorisé. Obtenir les deux baux, charges de copropriété, PV d’AG et décomptes. Chiffrer la conformité électrique et clarifier le statut de la division. Acceptez-vous des options croisées cessibles et divisibles ? Documents à obtenir et données encore manquantes Aucun PDF directement téléchargeable n’a été récupéré depuis cette annonce. Cela ne signifie pas que le vendeur n’en possède pas. RU complets et récents ; permis, plans autorisés et état actuel. PEB originaux par lot et contrôles électriques. Baux, avenants, garanties, tableau des loyers et charges. Plans cotés, surfaces privatives, communs, caves et extérieurs. Acte de base / division, titre, servitudes et dossier de copropriété s’il existe. Avis SIAMU, travaux prescrits, factures et devis disponibles. Inconnus tant que les pièces ne sont pas reçues : marge nette de revente, prix de sortie par lot, coût total de l’opération et acceptation du montage par le vendeur."
+        },
+        {
+          "title": "📁 Documents reçus — 30/10/2026",
+          "text": "📄 2 certificats PEB Reçu 📄 2 baux Reçu 📄 2 contrôles électriques Reçu 📄 Plan Reçu 📄 Document de précompte Reçu Originaux identifiés dans les e-mails. Téléchargement direct non activé avant mise en place du stockage privé. Contrôle juridique : Ne pas confondre les deux appartements documentés avec un immeuble comprenant trois logements reconnus. Nombre d’unités légalement reconnues : vérification sur les documents originaux nécessaire. ↗ Voir l’annonce originale et toutes les photos (Immoweb)"
+        }
+      ],
+      "history": [
+        {
+          "date": "30/10",
+          "type": "Réponse reçue",
+          "text": "PEB, RU, certificats électriques et baux . Confirme un seul appartement reconnu, divisé de fait en deux. Siham demande de l’écarter : appartement et non immeuble entier ."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Moins de trois unités reconnues ou annoncées comme telles"
+      ],
+      "photoEvidence": "Photographies déjà associées à cette adresse dans les archives Argus ; disponibilité externe variable."
+    },
+    {
+      "id": "contact-27",
+      "address": "Chaussée de Drogenbos 104",
+      "title": "Chaussée de Drogenbos 104 · Uccle",
+      "commune": "Uccle",
+      "reference": "21960529",
+      "responseDates": "02/11",
+      "contactName": "Simon De Muynck · Immobilière du Lycée Français",
+      "contactDetails": "simdemuynck@gmail.com · 0470 59 72 88",
+      "emails": [
+        "simdemuynck@gmail.com"
+      ],
+      "phones": [
+        "0470 59 72 88"
+      ],
+      "responseSummary": "PEB D joint , commentaire sur les RU et propositions de visite. Confirme explicitement une maison unifamiliale, un seul logement . Les plans seraient présentés lors d’une visite.",
+      "price": 600000,
+      "surface": 205,
+      "unitsAnnounced": 1,
+      "peb": "D",
+      "works": "À confirmer",
+      "status": "Hors critères",
+      "marketStatus": "unknown",
+      "composition": "Maison unifamiliale, garage ±35 m², séjour ±38 m², trois chambres et grenier aménagé ±38 m².",
+      "urbanism": "Un seul logement confirmé par Simon De Muynck. Adaptations façade/châssis mentionnées dans son commentaire des RU.",
+      "technical": "Permis de 1966 ; triple vitrage récent selon agent. PEB brut 205 m².",
+      "occupancy": "Offre à partir de 600 000 €, sous réserve d’acceptation vendeur.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [
+        "PEB Chaussée de Drogenbos 104.pdf"
+      ],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://www.immoweb.be/fr/annonce/maison-bel-etage/a-vendre/uccle/1180/21960529"
+        },
+        {
+          "label": "Immoweb 21960529",
+          "url": "https://www.immoweb.be/fr/annonce/21960529"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19e10d80853ac9"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "PEB D joint , commentaire sur les RU et propositions de visite. Confirme explicitement une maison unifamiliale, un seul logement . Les plans seraient présentés lors d’une visite."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Moins de trois unités reconnues ou annoncées comme telles"
+      ],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Faire offre à partir de600 000 €, sous réserve d'accord du vendeur.",
+        "Maison unifamiliale ; garage35 m² ; séjour38 m² ; grenier aménagé38 m² ; jardin sud.",
+        "PEB D ; électricité annoncée conforme ; chaudière gaz condensation, dix panneaux photovoltaïques."
+      ],
+      "uncertainties": [
+        "Aucune photo exacte du bien exposée par la récupération ; images de recommandations non utilisées."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "askingPricePerM2": 2927
+    },
+    {
+      "id": "contact-28",
+      "address": "Schuman",
+      "title": "Schuman · Bruxelles · réf. Everest 26795",
+      "commune": "Bruxelles",
+      "reference": "26795",
+      "responseDates": "26/10",
+      "contactName": "Everest Properties",
+      "contactDetails": "info@everestproperties.be · 0488 04 06 93 · 02 733 70 70",
+      "emails": [
+        "info@everestproperties.be"
+      ],
+      "phones": [
+        "0488 04 06 93",
+        "02 733 70 70"
+      ],
+      "responseSummary": "Fiche commerciale à 630 000 €. Le texte précise une maison reconnue unifamiliale , actuellement aménagée en trois appartements. Aucun RU joint à cet envoi ; adresse exacte non communiquée.",
+      "price": 630000,
+      "surface": 190,
+      "unitsAnnounced": 1,
+      "peb": "E annoncé",
+      "works": "Régularisation éventuelle",
+      "status": "Hors critères",
+      "marketStatus": "unknown",
+      "composition": "Maison actuellement divisée en trois appartements une chambre.",
+      "urbanism": "Reconnaissance unifamiliale explicitement indiquée par Everest ; trois logements non prouvés.",
+      "technical": "Châssis octobre 2025 ; jardin ±20 m² ; précompte ±1 500 €/an selon fiche.",
+      "occupancy": "Loyers annoncés : 1 200 + 850 + 900 = 2 950 €, alors que le texte évoque ±3 200 €. Incohérence à vérifier.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://www.everestproperties.be/fr/a-vendre/bruxelles/quartier-schumann-maison-unifamiliale-avec-potentiel-de-rapport/26795/"
+        },
+        {
+          "label": "Fiche agence",
+          "url": "https://www.everestproperties.be/property?id=26795"
+        },
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a1785e1f693572e"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "26/10",
+          "type": "Réponse reçue",
+          "text": "Fiche commerciale à 630 000 €. Le texte précise une maison reconnue unifamiliale , actuellement aménagée en trois appartements. Aucun RU joint à cet envoi ; adresse exacte non communiquée."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [
+        "Moins de trois unités reconnues ou annoncées comme telles"
+      ],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Texte indexé : maison reconnue unifamiliale, trois logements aménagés. Régularisation seulement potentielle."
+      ],
+      "uncertainties": [],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "askingPricePerM2": 3316
+    },
+    {
+      "id": "contact-29",
+      "address": "Avenue Brugmann 403",
+      "title": "Avenue Brugmann 403 · Uccle",
+      "commune": "Uccle",
+      "reference": "87320864",
+      "responseDates": "26/10",
+      "contactName": "Daniel Ahrend · Barnes",
+      "contactDetails": "d.ahrend@barnes-international.com · 0475 73 64 81 · 02 880 15 15",
+      "emails": [
+        "d.ahrend@barnes-international.com"
+      ],
+      "phones": [
+        "0475 73 64 81",
+        "02 880 15 15"
+      ],
+      "responseSummary": "Proposition supplémentaire : fiche d’un immeuble de bureaux , réf. 87320864, à 1 490 000 €. Il ne s’agit pas d’un dossier d’appartements.",
+      "price": 1490000,
+      "surface": 507,
+      "unitsAnnounced": null,
+      "peb": null,
+      "works": "Bureaux",
+      "status": "Hors critères",
+      "marketStatus": "unknown",
+      "composition": "Immeuble de bureaux proposé en complément par Barnes.",
+      "urbanism": "Pas de preuve de logements reconnus ; ne pas traiter comme immeuble d’appartements.",
+      "technical": "Fiche commerciale reçue.",
+      "occupancy": "À confirmer.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [],
+      "links": [
+        {
+          "label": "Annonce source vérifiée le 04/11",
+          "url": "https://immovlan.be/fr/detail/immeuble-de-rapport/a-vendre/1180/uccle/vbe64637"
+        },
+        {
+          "label": "Email de présentation",
+          "url": "https://mail.google.com/mail/u/0/#all/1a178b0c640a8c51"
+        }
+      ],
+      "photos": [
+        "https://api-image.immovlan.be/v1/property/VBE64637/images/8595763f9e414e87a01aae5ac6efc402.jpg/size/800x533?mode=crop"
+      ],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "26/10",
+          "type": "Réponse reçue",
+          "text": "Proposition supplémentaire : fiche d’un immeuble de bureaux , réf. 87320864, à 1 490 000 €. Il ne s’agit pas d’un dossier d’appartements."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null,
+      "sourceFacts": [
+        "Immeuble de bureaux occupé par des cabinets d'avocats, sans reconnaissance résidentielle établie.",
+        "Quatre niveaux plus sous-sol ; ascenseur ; année1910.",
+        "Description : environ578 m² totaux, dont345 m² de bureaux et54 m² communs. Champ de surface507 m² : incohérence à vérifier.",
+        "Transformation en trois logements seulement évoquée oralement, sous réserve de permis."
+      ],
+      "uncertainties": [
+        "Surfaces source incohérentes ; pas d'attestation électrique dans les champs annonce ; aucune transformation résidentielle acquise."
+      ],
+      "photoDisclosure": null,
+      "sourceCheckedAt": "2026-11-04",
+      "askingPricePerM2": 2939
+    },
+    {
+      "id": "contact-30",
+      "address": "Rue Keyenveld 28",
+      "title": "Rue Keyenveld 28 · Ixelles",
+      "commune": "Ixelles",
+      "reference": null,
+      "responseDates": "02/11",
+      "contactName": "Équipe des renseignements urbanistiques · Commune d’Ixelles",
+      "contactDetails": "RU@ixelles.brussels",
+      "emails": [
+        "RU@ixelles.brussels"
+      ],
+      "phones": [],
+      "responseSummary": "Réponse à la demande de Siham du 16/10 : demander les RU au propriétaire . Aucun document transmis et aucune confirmation du nombre d’unités. Demande initiale hors période ; réponse reçue pendant la période.",
+      "price": null,
+      "surface": null,
+      "unitsAnnounced": null,
+      "peb": null,
+      "works": "Non évalué",
+      "status": "Réponse de la commune",
+      "marketStatus": "unknown",
+      "composition": "Composition non documentée dans la réponse du 02/11.",
+      "urbanism": "La commune renvoie vers le propriétaire pour obtenir les RU. Aucun nombre d’unités confirmé.",
+      "technical": "Aucune pièce reçue de la commune dans cet échange.",
+      "occupancy": "Demande initiale de Siham : 16/10.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [],
+      "links": [
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19b97821439ce4"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "Réponse à la demande de Siham du 16/10 : demander les RU au propriétaire . Aucun document transmis et aucune confirmation du nombre d’unités. Demande initiale hors période ; réponse reçue pendant la période."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null
+    },
+    {
+      "id": "contact-31",
+      "address": "Avenue Émile de Beco 125",
+      "title": "Avenue Émile de Beco 125 · Ixelles",
+      "commune": "Ixelles",
+      "reference": null,
+      "responseDates": "02/11",
+      "contactName": "Équipe des renseignements urbanistiques · Commune d’Ixelles",
+      "contactDetails": "RU@ixelles.brussels",
+      "emails": [
+        "RU@ixelles.brussels"
+      ],
+      "phones": [],
+      "responseSummary": "Même réponse : demander les RU au propriétaire . Aucun document ni confirmation du nombre d’unités. La demande initiale de Siham date du 16/10 ; la réponse entre dans la période étudiée.",
+      "price": null,
+      "surface": null,
+      "unitsAnnounced": null,
+      "peb": null,
+      "works": "Non évalué",
+      "status": "Réponse de la commune",
+      "marketStatus": "unknown",
+      "composition": "Composition non documentée dans la réponse du 02/11.",
+      "urbanism": "La commune renvoie vers le propriétaire pour obtenir les RU. Aucun nombre d’unités confirmé.",
+      "technical": "Aucune pièce jointe au retour communal. Ne pas confondre avec des pièces d’archives antérieures.",
+      "occupancy": "Demande initiale de Siham : 16/10.",
+      "monthlyRentAnnounced": null,
+      "bridgePriority": null,
+      "documents": [],
+      "links": [
+        {
+          "label": "Email",
+          "url": "https://mail.google.com/mail/u/0/#all/1a19b970208eb6e3"
+        },
+        {
+          "label": "Fiche Argus antérieure",
+          "url": "/immo-documents#documents-11"
+        }
+      ],
+      "photos": [],
+      "archiveDetails": [
+        {
+          "title": "📁 Documents reçus — 06/10/2026",
+          "text": "📄 Réponse urbanistique du 11/02/2026.pdf Reçu Originaux identifiés dans les e-mails. Téléchargement direct non activé avant mise en place du stockage privé. Contrôle juridique : Les autres certificats ne sont pas identifiés dans les pièces reçues. Nombre d’unités légalement reconnues : vérification sur les documents originaux nécessaire."
+        }
+      ],
+      "history": [
+        {
+          "date": "02/11",
+          "type": "Réponse reçue",
+          "text": "Même réponse : demander les RU au propriétaire . Aucun document ni confirmation du nombre d’unités. La demande initiale de Siham date du 16/10 ; la réponse entre dans la période étudiée."
+        }
+      ],
+      "lastReviewedAt": "2026-11-04",
+      "evidence": "Synthèse du PDF et des réponses reçues ; données commerciales déclarées, non certifiées.",
+      "criteriaNotes": [],
+      "photoEvidence": null
+    }
+  ]
+}
