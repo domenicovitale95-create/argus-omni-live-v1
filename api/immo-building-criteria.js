@@ -1,8 +1,9 @@
+import {userExclusionReasons} from './immo-user-exclusions.js';
 import {BRUSSELS_COMMUNES,brusselsCommune,brusselsSector} from './immo-brussels-zones.js';
-export const BUILDING_MIN_PRICE=450000;
-export const BUILDING_MAX_PRICE=1400000;
-export const BUILDING_MIN_UNITS=3;
-export const BUILDING_MAX_UNITS=99;
+export const BUILDING_MIN_PRICE=0;
+export const BUILDING_MAX_PRICE=2000000;
+export const BUILDING_MIN_UNITS=0;
+export const BUILDING_MAX_UNITS=null; // No unit-count ceiling in the current search brief.
 
 export const BUILDING_TARGET_COMMUNES=BRUSSELS_COMMUNES;
 export const BUILDING_TARGET_ZONES=BUILDING_TARGET_COMMUNES.map(c=>c.name);
@@ -46,14 +47,11 @@ export function buildingUnitCount(x={}){
 
 export function matchesBuildingCriteria(x={}){
   const price=Number(x.price);
-  const units=buildingUnitCount(x);
   return Number.isFinite(price)
+    && price>0
     && price>=BUILDING_MIN_PRICE
     && price<=BUILDING_MAX_PRICE
-    && BUILDING_TARGET_ZONES.includes(buildingZone(x))
-    && units!==null
-    && units>=BUILDING_MIN_UNITS
-    && units<=BUILDING_MAX_UNITS;
+    && BUILDING_TARGET_ZONES.includes(buildingZone(x));
 }
 
 export function enrichBuildingCriteria(x={}){
@@ -69,6 +67,7 @@ export function enrichBuildingCriteria(x={}){
   const recognizedUnits=recognitionEvidence&&Number.isFinite(explicitRecognized)&&explicitRecognized>0?Math.round(explicitRecognized):null;
   return {
     ...x,
+    selectionWarnings:userExclusionReasons(x,'building'),
     // Never promote an advertised/detected unit count to a legally recognized count.
     // recognizedUnits is populated only when a source explicitly proves recognition.
     recognizedUnits,

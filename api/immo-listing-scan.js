@@ -1,4 +1,7 @@
 export const ALLOWED_DOMAINS = [
+  "immoferco.be","propertyweb.be",
+  "skyimmo.be","sorimo.be","immo.trior.be","switchimmo.be","pearlimmo.eu","tribel-immo.be","era.be","immoabita.be","cap-sud.com","col-vert.be","immo2a.be",
+  "trianon-invest.be","jj-properties.be","viabilis.be","residency.be","brikman.be","hyimmo.com","cre.be","immo-lelion.be",
   'agimo.be',
   'fierceimmo.com','immo2-0.com','immobpc.be','sothebysrealty.be','century21.be','weinvest.be','victoire.be','properstar.be','barnes-international.com','realo.be','go-investuccle.be',
   'pavimmo.be','charlesimmo.be','soinvest.be','propertyone.be','espaceimmobrussels.be','findimmo.be','fhimmobiliere.be','barnes-brussels.com','direct-immo.be','immobalcaen.be','clavisimmo.be','immoschmidt.be',
@@ -40,7 +43,7 @@ function walk(obj,fn){
 }
 function inferType(text){
   const s=text.toLowerCase();
-  if(/immeuble de rapport|opbrengsteigendom|investment property|appartements? building|gebouw.*appartement/.test(s))return 'building';
+  if(/immeuble mixte|immeuble à appartements|immeuble a appartements|bâtiment de rapport|batiment de rapport|immeuble de rapport|opbrengsteigendom|investment property|appartements? building|gebouw.*appartement/.test(s))return 'building';
   if(/terrain|bouwgrond|building plot|grond te koop/.test(s))return 'land';
   if(/studio|kot\b/.test(s))return 'studio';
   if(/maison|huis|woning|villa|townhouse/.test(s))return 'house';

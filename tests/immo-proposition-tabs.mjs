@@ -18,8 +18,8 @@ for(const path of ['/immo-opportunities','/immo-proposition-2']){
  assert.ok(html.includes('href="/immo-proposition-2"'));
  assert.ok(html.includes(`aria-current="page" href="${path}"`));
 }
-assert.equal(sets[0].size,15);assert.equal(sets[1].size,4);
+assert.equal(sets[0].size,19);assert.equal(sets[1].size,4);
 assert.deepEqual([...sets[1]].sort(),['Anderlecht','Auderghem','Saint-Josse-ten-Noode','Schaerbeek']);
-assert.equal([...sets[0]].filter(c=>sets[1].has(c)).length,0);
+assert.equal([...sets[0]].filter(c=>sets[1].has(c)).length,4);
 assert.equal(new Set([...sets[0],...sets[1]]).size,19);
-console.log('PASS: 15 main communes, 4 secondary communes, no overlap, all postcodes and active tabs');
+console.log('PASS: 19 main communes, 4 secondary shortcut communes, all postcodes and active tabs');

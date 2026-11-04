@@ -16,8 +16,8 @@ const APARTMENT_SOURCES=[
 
 const BUILDING_SOURCES=[
   ...BUILDING_AGENCY_SOURCES,
-  {id:'immoweb-building',name:'Immoweb · immeubles',url:'https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?maxprice=1400000',match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
-  {id:'immovlan-building',name:'Immovlan · immeubles',url:'https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?maxprice=1400000&provinces=bruxelles',match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20}
+  {id:'immoweb-building',name:'Immoweb · immeubles',url:'https://www.immoweb.be/fr/recherche/immeuble-a-appartements/a-vendre/bruxelles/arrondissement?maxprice=2000000',match:/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i,pages:20},
+  {id:'immovlan-building',name:'Immovlan · immeubles',url:'https://immovlan.be/fr/immobilier/immeuble-de-rapport/a-vendre?maxprice=2000000&provinces=bruxelles',match:/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i,pages:20}
 ];
 
 const MAX_SOURCE_PAGES=20;
@@ -93,7 +93,7 @@ function likelyDetailUrl(u,source){
   if(source.id==='immoweb-building'&&!/\/fr\/annonce\/immeuble-a-appartements\/a-vendre\//i.test(p))return false;
   if(source.id==='immovlan-building'&&!/\/fr\/detail\/immeuble-de-rapport\/a-vendre\//i.test(p))return false;
   if(/[?&](?:page|sort|offset)=/i.test(u.search))return false;
-  if(u.searchParams.has('view')&&!(u.searchParams.get('view')==='detail'&&/^\d+$/.test(u.searchParams.get('id')||'')))return false;
+  if(u.searchParams.has('view')&&!(['detail','details'].includes(u.searchParams.get('view'))&&/^\d+$/.test(u.searchParams.get('id')||'')))return false;
   return p.split('/').filter(Boolean).length>=(source.minPathSegments||3);
 }
 export function linksFrom(html,base,source){
@@ -169,11 +169,11 @@ export function evaluateEligibility(x,maxPrice,category){
   const price=x.price===null||x.price===undefined||String(x.price).trim()===''?NaN:Number(x.price),surface=Number(x.surface);
   const type=String(x.type||'unknown'),text=(String(x.title||'')+' '+String(x.description||'')).toLowerCase();
   const categoryMatch=category==='building'
-    ? type==='building'||/(immeuble de rapport|immeuble à appartements|maison de rapport|investment property|opbrengsteigendom)/i.test(text)
+    ? type==='building'||/(immeuble mixte|immeuble de rapport|immeuble à appartements|maison de rapport|investment property|opbrengsteigendom)/i.test(text)
     : type==='apartment'||/(appartement|apartment|flat|duplex|penthouse)/i.test(text);
   if(category!=='building'&&(type==='studio'||/\b(studio|kot)\b/i.test(String(x.title||''))))return {eligible:false,review:false,reason:'STUDIO_EXCLUDED'};
-  if(Number.isFinite(price)&&(price<(category==='building'?BUILDING_MIN_PRICE:40000)||price>maxPrice))return {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'};
-  if(Number.isFinite(surface)&&(surface<12||surface>800))return {eligible:false,review:false,reason:'IMPLAUSIBLE_SURFACE'};
+  if(Number.isFinite(price)&&((category==='building'?price<=0:price<40000)||price>maxPrice))return {eligible:false,review:false,reason:'OUTSIDE_PRICE_BOX'};
+  if(category!=='building'&&Number.isFinite(surface)&&(surface<12||surface>800))return {eligible:false,review:false,reason:'IMPLAUSIBLE_SURFACE'};
   if(!categoryMatch&&type!=='unknown')return {eligible:false,review:false,reason:'WRONG_PROPERTY_TYPE'};
   if(!Number.isFinite(price))return {eligible:false,review:true,reason:'PRICE_NOT_PARSED'};
   if(!categoryMatch)return {eligible:false,review:true,reason:'TYPE_NOT_CONFIRMED'};
@@ -266,8 +266,8 @@ export default async function handler(req,res){
   try{
     const raw=typeof req.body==='string'?JSON.parse(req.body||'{}'):(req.body||{});
     const category=raw.category==='building'?'building':'apartment';
-    const defaultMax=category==='building'?1400000:150000;
-    const maxPrice=Math.max(50000,Math.min(category==='building'?1400000:1000000,Number(raw.maxPrice)||defaultMax));
+    const defaultMax=category==='building'?BUILDING_MAX_PRICE:150000;
+    const maxPrice=Math.max(50000,Math.min(category==='building'?BUILDING_MAX_PRICE:1000000,Number(raw.maxPrice)||defaultMax));
     const sources=category==='building'?BUILDING_SOURCES:APARTMENT_SOURCES;
     const results=await Promise.all(sources.map(s=>scanSource(s,maxPrice,category)));
     const map=new Map(),reviewMap=new Map();

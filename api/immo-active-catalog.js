@@ -41,12 +41,12 @@ export default async function handler(req,res){
       category,
       refreshedAt:data.refreshedAt||null,
       minPrice:category==='building'?BUILDING_MIN_PRICE:data.minPrice||null,
-      maxPrice:data.maxPrice||null,
-      criteria:category==='building'?{zones:BUILDING_TARGET_ZONES,sectors:['NORD','SUD'],apartments:'3+',minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,
+      maxPrice:category==='building'?BUILDING_MAX_PRICE:data.maxPrice||null,
+      criteria:category==='building'?{zones:BUILDING_TARGET_ZONES,sectors:['NORD','SUD'],apartments:'sans minimum',minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,
       counts:{...(data.counts||{}),active:listings.length,filteredOutsideScope,filteredUserCriteria},
       discovery:data.discovery||null,
       listings,
-      notice:category==='building'?'Immeubles : 19 communes de Bruxelles, 3–6 logements annoncés; preuves urbanistiques à contrôler.':'Catalogue ARGUS appartements actif.'
+      notice:category==='building'?'Immeubles de rapport : 19 communes de Bruxelles, jusqu’à 2 M€, sans minimum de logements; preuves urbanistiques à contrôler.':'Catalogue ARGUS appartements actif.'
     });
   }catch(e){
     return res.status(500).json({ok:false,error:String(e?.message||e)});

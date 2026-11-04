@@ -89,5 +89,7 @@ export function userExclusionReasons(x={},category='apartment'){
 }
 
 export function isUserExcludedListing(x={},category='apartment'){
+  // Building searches retain these as visible warnings, not search exclusions.
+  if(category==='building')return false;
   return userExclusionReasons(x,category).length>0;
 }

@@ -47,7 +47,7 @@ function verifiedPremium(x,quality,units,recognized,signals,price){
  const approved=v=>['VERIFIED','CONFIRMED','COMPLIANT','CONFORME','VALIDATED','VALIDÉ','VALIDEE'].includes(String(v||'').toUpperCase());
  const check=(ok,reason)=>ok?null:reason;
  const missing=[
- check(Number(price)>0&&Number(price)<=1400000,'Prix valide, maximum 1 400 000 €'),
+ check(Number(price)>0&&Number(price)<=2000000,'Prix valide, maximum 2 000 000 €'),
  check(units>=3&&recognized===units,'Au moins 3 logements officiellement reconnus, identiques aux lots proposés'),
  check(quality.legal&&approved(x.urbanismVerificationStatus),'Renseignements urbanistiques, permis et situation de droit contrôlés'),
  check(quality.docs&&approved(x.approvedPlansVerificationStatus),'Plans autorisés et conformité de la configuration actuelle contrôlés'),
@@ -68,7 +68,7 @@ function detailedAudit(x,quality,legal,signals,price,area,units,recognized){
  const approved=v=>['VERIFIED','CONFIRMED','COMPLIANT','CONFORME','VALIDATED','VALIDE'].includes(norm(v).toUpperCase());
  const checks=[
   {key:'source',label:'Annonce originale et source traçable',ok:has(x.canonical||x.source),proof:x.canonical||x.source||null},
-  {key:'price',label:'Prix affiché et budget ≤ 1,4 M€',ok:price>0&&price<=1400000,proof:null},
+  {key:'price',label:'Prix affiché et budget ≤ 2 M€',ok:price>0&&price<=2000000,proof:null},
   {key:'address',label:'Adresse exacte et commune identifiées',ok:addressKnown(x),proof:null},
   {key:'units',label:'Au moins 3 logements reconnus (pas seulement annoncés)',ok:units>=3&&recognized===units&&quality.legal,proof:x.urbanismDocumentUrl||x.urbanismEvidenceUrl||null},
   {key:'urbanism',label:'Renseignements urbanistiques et permis vérifiés',ok:quality.legal&&approved(x.urbanismVerificationStatus),proof:x.urbanismDocumentUrl||x.urbanismEvidenceUrl||null},

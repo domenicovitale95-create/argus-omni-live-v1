@@ -4,6 +4,9 @@ import {linksFrom,fetchSourcePage} from '../api/immo-discovery-scan.js';
 import {hostAllowed} from '../api/immo-listing-scan.js';
 assert.equal(sources.length,new Set(sources.map(s=>s.id)).size);
 for(const source of sources)assert.ok(hostAllowed(new URL(source.url).hostname),source.id);
+for(const source of sources.filter(s=>s.exampleDetailUrl)){
+ assert.deepEqual(linksFrom('<a href="'+source.exampleDetailUrl+'">Bien</a>',source.url,source),[source.exampleDetailUrl],source.name+' verified route');
+}
 const fixtures={
  'pavimmo-building':'/fr/bien/house-saint-gilles-7919789',
  'charlesimmo-building':'/fr/a-vendre?view=detail&amp;id=637',
