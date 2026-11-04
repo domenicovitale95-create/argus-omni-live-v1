@@ -3,7 +3,7 @@ import {isStudioListing} from './immo-property-type.js';
 import {readJsonFresh} from './_report-store.js';
 import {isBrusselsListing,hasDeferredPriceStructure} from './immo-region.js';
 import {isUserExcludedListing} from './immo-user-exclusions.js';
-import {matchesBuildingCriteria,enrichBuildingCriteria,BUILDING_TARGET_ZONES} from './immo-building-criteria.js';
+import {matchesBuildingCriteria,enrichBuildingCriteria,BUILDING_TARGET_ZONES,BUILDING_MIN_PRICE,BUILDING_MAX_PRICE} from './immo-building-criteria.js';
 
 const PATHS={
   apartment:'argus/immo/active-catalog-apartment.json',
@@ -40,9 +40,9 @@ export default async function handler(req,res){
       ready:true,
       category,
       refreshedAt:data.refreshedAt||null,
-      minPrice:data.minPrice||null,
+      minPrice:category==='building'?BUILDING_MIN_PRICE:data.minPrice||null,
       maxPrice:data.maxPrice||null,
-      criteria:category==='building'?{zones:BUILDING_TARGET_ZONES,sectors:['NORD','SUD'],apartments:'3+',minPrice:40000,maxPrice:1400000,sort:'price_asc'}:null,
+      criteria:category==='building'?{zones:BUILDING_TARGET_ZONES,sectors:['NORD','SUD'],apartments:'3+',minPrice:BUILDING_MIN_PRICE,maxPrice:BUILDING_MAX_PRICE,sort:'price_asc'}:null,
       counts:{...(data.counts||{}),active:listings.length,filteredOutsideScope,filteredUserCriteria},
       discovery:data.discovery||null,
       listings,

@@ -410,6 +410,14 @@
       "host": "househunter.immo",
       "discovery": "live",
       "url": "https://househunter.immo/fr/a-vendre/bruxelles/immeuble-de-rapport"
+    },
+    {
+      "id": "agimo-building",
+      "name": "Agimo · immeubles",
+      "category": "portal",
+      "host": "agimo.be",
+      "discovery": "live",
+      "url": "https://agimo.be/fr/"
     }
   ]
 }
