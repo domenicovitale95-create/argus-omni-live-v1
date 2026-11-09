@@ -2,6 +2,16 @@ import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE} from './immo-building-criteria.js
 
 // Direct agency catalogues: links verified against the agencies’ public routes.
 export const EXTENDED_BUILDING_SOURCES = [
+  {id:'immobiliere-georges-building',name:'Immobilière Georges',url:'https://www.immobilieregeorges.be/a-vendre',match:/^\/(?:fr\/)?(?:bien|biens|a-vendre|vente|property)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'address-re-building',name:'Address Real Estate',url:'https://www.address-re.be/fr/a-vendre/',match:/^\/fr\/(?:a-vendre|bien|biens)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'bytheway-building',name:'By the Way',url:'https://bytheway.immo/biens-a-vendre/',match:/^\/(?:biens-a-vendre|bien|biens|property)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'adsathome-building',name:'ADS at Home',url:'https://adsathome.be/biens',match:/^\/(?:biens|bien|property)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'uptownproperties-building',name:'Uptown Properties',url:'https://www.uptownproperties.be/fr',match:/^\/fr\/bien\/a-vendre\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'parvissimmo-building',name:'Parvissimmo',url:'https://www.parvissimmo.be/?action=V&p=listerBiens',match:/\b(?:bien=\d+|p=listerDetailsBiens)\b/i,minPathSegments:2,pages:3},
+  {id:'immofox-building',name:'Immofox',url:'https://immofox.be/fr/',match:/^\/fr\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'bettencourt-building',name:'Bettencourt Real Estate',url:'https://www.immoweb.be/fr/agence/bettencourt-real-estate',match:/^\/fr\/annonce\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'immoscoop-building',name:'Immoscoop · portail',url:'https://www.immoscoop.be/fr/chercher/a-vendre/ixelles',match:/^\/fr\/a-vendre\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'immobrussels-building',name:'ImmoBrussels · portail',url:'https://www.immobrussels.be/fr/immo-a-vendre/immeuble-a-appartements/province-bruxelles-capitale/',match:/^\/fr\/immo-a-vendre\/[^?#]+/i,minPathSegments:2,pages:3},
   {id:'serenimmo-building',name:'Serenimmo · immeubles de rapport',url:'https://www.serenimmo.be/fr/10003/biens/immeubles-de-rapport',match:/^\/fr\/(?:\d+\/)?(?:biens|bien)\/[^?#]+/i,minPathSegments:3,pages:3},
   {id:'redimmobilier-building',name:'RED immobilier',url:'https://www.redimmobilier.be/fr/agence-immobiliere-bruxelles',match:/^\/fr\/(?:bien|biens|a-vendre|vente|property|propriete)\/[^?#]+/i,minPathSegments:2,pages:3},
   {id:'b2bestate-building',name:'B2B Estate · immeubles de rapport',url:'https://www.b2bestate.be/',match:/^\/(?:fr\/)?(?:bien|biens|a-vendre|vente|property|immeuble)\/[^?#]+/i,minPathSegments:2,pages:3},
