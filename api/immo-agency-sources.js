@@ -2,6 +2,10 @@ import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE} from './immo-building-criteria.js
 
 // Direct agency catalogues: links verified against the agencies’ public routes.
 export const EXTENDED_BUILDING_SOURCES = [
+  {id:'serenimmo-building',name:'Serenimmo · immeubles de rapport',url:'https://www.serenimmo.be/fr/10003/biens/immeubles-de-rapport',match:/^\/fr\/(?:\d+\/)?(?:biens|bien)\/[^?#]+/i,minPathSegments:3,pages:3},
+  {id:'redimmobilier-building',name:'RED immobilier',url:'https://www.redimmobilier.be/fr/agence-immobiliere-bruxelles',match:/^\/fr\/(?:bien|biens|a-vendre|vente|property|propriete)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'b2bestate-building',name:'B2B Estate · immeubles de rapport',url:'https://www.b2bestate.be/',match:/^\/(?:fr\/)?(?:bien|biens|a-vendre|vente|property|immeuble)\/[^?#]+/i,minPathSegments:2,pages:3},
+
   {id:'rea-brussels-building',name:'REA Real Estate Associates',url:'https://www.rea.brussels/fr/2/chercher-bien/a-vendre',match:/^\/fr\/bien\/a-vendre\/[^?#]+/i,minPathSegments:3,pages:3},
   {id:'hermanns-building',name:'Hermanns Real Estate',url:'https://www.hermanns.be/',match:/^\/(?:fr\/)?(?:bien|biens|a-vendre|vente|property)\/[^?#]+/i,minPathSegments:2,pages:3},
   {id:'so-estates-building',name:'So Estates',url:'https://www.soestates.be/',match:/^\/(?:fr\/)?(?:bien|biens|a-vendre|vente|property)\/[^?#]+/i,minPathSegments:2,pages:3},
