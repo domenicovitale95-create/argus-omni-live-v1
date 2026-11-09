@@ -11,13 +11,13 @@ function key(x){return x.catalogKey||x.canonical||x.source||x.id}
 function recentDiscovery(x){const time=Date.parse(x.firstSeenAt||x.discoveredAt||'');return Number.isFinite(time)&&time<=Date.now()&&Date.now()-time<=7*86400000}
 function dedupeListings(items){
   const byKey=new Map();
-  const normalize=s=>String(s||'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  const normalize=s=>String(s||'').normalize('NFD').replace(new RegExp('[\\u0300-\\u036f]','g'),'').toLowerCase().replace(new RegExp('[^a-z0-9]+','g'),' ').trim();
   for(const x of items){
     const addressText=normalize(x.exactAddress||x.address||'');
-    // A precise street address is stable across agencies, unlike an ad URL or price.
-    const precise=/\\b\\d{1,4}\\b/.test(addressText)&&/\\b(rue|avenue|av|chaussee|boulevard|place|straat|laan|weg)\\b/.test(addressText);
-    let urlKey='';try{const u=new URL(x.canonical||x.source||'');urlKey=u.hostname.replace(/^www\\./,'')+u.pathname.replace(/\\/$/,'')}catch{}
-    const k=precise?'address:'+addressText+'|'+normalize(city(x)):'url:'+ (urlKey||normalize(x.catalogKey||x.id||x.title));
+    const precise=new RegExp('\\\\b\\\\d{1,4}\\\\b').test(addressText)&&new RegExp('\\\\b(rue|avenue|av|chaussee|boulevard|place|straat|laan|weg)\\\\b').test(addressText);
+    let urlKey='';
+    try{const u=new URL(x.canonical||x.source||'');urlKey=u.hostname.replace('www.','')+u.pathname.replace(new RegExp('/$'),'')}catch{}
+    const k=precise?'address:'+addressText+'|'+normalize(city(x)):'url:'+(urlKey||normalize(x.catalogKey||x.id||x.title));
     const old=byKey.get(k);
     if(!old){byKey.set(k,x);continue}
     const score=v=>(v.lastVerifiedAt?4:0)+(v.recognizedUnits!=null?2:0)+(v.documents?.length||0)+(v.photos?.length||0);
