@@ -2,6 +2,11 @@ import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE} from './immo-building-criteria.js
 
 // Direct agency catalogues: links verified against the agencies’ public routes.
 export const EXTENDED_BUILDING_SOURCES = [
+  {id:'rea-brussels-building',name:'REA Real Estate Associates',url:'https://www.rea.brussels/fr/2/chercher-bien/a-vendre',match:/^\/fr\/bien\/a-vendre\/[^?#]+/i,minPathSegments:3,pages:3},
+  {id:'hermanns-building',name:'Hermanns Real Estate',url:'https://www.hermanns.be/',match:/^\/(?:fr\/)?(?:bien|biens|a-vendre|vente|property)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'so-estates-building',name:'So Estates',url:'https://www.soestates.be/',match:/^\/(?:fr\/)?(?:bien|biens|a-vendre|vente|property)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'globalty-building',name:'Globalty',url:'https://www.globalty.be/',match:/^\/(?:fr\/)?(?:bien|biens|a-vendre|vente|property)\/[^?#]+/i,minPathSegments:2,pages:3},
+
   {id:'nadimmo-building',name:'Nadimmo',url:'https://www.nadimmo.be/fr/a-vendre/bruxelles/',match:/^\/fr\/(?:a-vendre|bien|biens)\/[^?#]+/i,minPathSegments:2,pages:3},
   {id:'ravelestate-building',name:'Ravel Estate',url:'https://www.ravelestate.be/fr',match:/^\/fr\/bien\/a-vendre\/[^?#]+/i,minPathSegments:3,pages:3},
   {id:'oralis-building',name:'Oralis Real Estate',url:'https://www.oralis.be/',match:/^\/(?:fr\/)?(?:bien|a-vendre|vente|property|properties)\/[^?#]+/i,minPathSegments:2,pages:3},
