@@ -2,6 +2,11 @@ import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE} from './immo-building-criteria.js
 
 // Direct agency catalogues: links verified against the agencies’ public routes.
 export const EXTENDED_BUILDING_SOURCES = [
+  // Prestige / publicly visible off-market teasers. Private inventories require agency access.
+  {id:'found-baker-brussels-building',name:'Found & Baker · Bruxelles',url:'https://www.found-baker.com/en/brussels',match:/^\/(?:en|fr|nl)\/(?:property|properties|real-estate|for-sale|a-vendre|te-koop)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'found-baker-selection-building',name:'Found & Baker · sélection',url:'https://www.found-baker.com/en',match:/^\/(?:en|fr|nl)\/(?:property|properties|real-estate|for-sale|a-vendre|te-koop)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'vaneau-lecobel-prestige-building',name:'Vaneau Lecobel · prestige',url:'https://www.lecobel-vaneau.be/en/discover-lecobel-vaneau',match:/^\/(?:en|fr|nl)\/(?:property|properties|bien|immobilier|for-sale|a-vendre)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'barnes-brussels-offmarket-building',name:'BARNES Brussels · Off Market public',url:'https://barnes-brussels.com/en/off-market/',match:/^\/(?:en|fr|nl)?\/?(?:property|bien|properties|immobilier|vente)\/[^?#]+/i,minPathSegments:2,pages:2},
   {id:'immobiliere-georges-building',name:'Immobilière Georges',url:'https://www.immobilieregeorges.be/a-vendre',match:/^\/(?:fr\/)?(?:bien|biens|a-vendre|vente|property)\/[^?#]+/i,minPathSegments:2,pages:3},
   {id:'address-re-building',name:'Address Real Estate',url:'https://www.address-re.be/fr/a-vendre/',match:/^\/fr\/(?:a-vendre|bien|biens)\/[^?#]+/i,minPathSegments:2,pages:3},
   {id:'bytheway-building',name:'By the Way',url:'https://bytheway.immo/biens-a-vendre/',match:/^\/(?:biens-a-vendre|bien|biens|property)\/[^?#]+/i,minPathSegments:2,pages:3},
