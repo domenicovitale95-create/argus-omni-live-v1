@@ -3859,6 +3859,23 @@
       ],
       "source_date": "2026-11-04",
       "outcomes": {}
+    },
+    {
+      "date": "2026-11-09",
+      "asset_id": "europe",
+      "asset": "European Equities",
+      "signal": "WATCH",
+      "score": 70,
+      "price": 89.25,
+      "conviction": "Medium",
+      "horizon": "Years",
+      "reasoning_summary": [
+        "3-month momentum: -3.3%",
+        "Distance vs 200-day average: +1.5%",
+        "20-day annualised volatility: 19.1%"
+      ],
+      "source_date": "2026-11-09",
+      "outcomes": {}
     }
   ]
 }
