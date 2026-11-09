@@ -2,6 +2,10 @@ import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE} from './immo-building-criteria.js
 
 // Direct agency catalogues: links verified against the agencies’ public routes.
 export const EXTENDED_BUILDING_SOURCES = [
+  {id:'nadimmo-building',name:'Nadimmo',url:'https://www.nadimmo.be/fr/a-vendre/bruxelles/',match:/^\/fr\/(?:a-vendre|bien|biens)\/[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'ravelestate-building',name:'Ravel Estate',url:'https://www.ravelestate.be/fr',match:/^\/fr\/bien\/a-vendre\/[^?#]+/i,minPathSegments:3,pages:3},
+  {id:'oralis-building',name:'Oralis Real Estate',url:'https://www.oralis.be/',match:/^\/(?:fr\/)?(?:bien|a-vendre|vente|property|properties)\/[^?#]+/i,minPathSegments:2,pages:3},
+
   {id:'fierce-building',name:'Fierce Immo',url:'https://www.fierceimmo.com/fr/a-vendre',match:/^\/fr\/a-vendre\/\d+\//i,minPathSegments:2,pages:3},
   {id:'immo20-building',name:'Immo 2.0',url:'https://immo2-0.com/buy',match:/^\/buy\/[^?]+\/\d+/i,minPathSegments:2,pages:3},
   {id:'immobpc-building',name:'Immo BPC',url:'https://immobpc.be/fr/a-vendre/',match:/^\/fr\/propriete\/\d+\//i,minPathSegments:2,pages:3},
