@@ -2,6 +2,12 @@ import {BUILDING_MIN_PRICE,BUILDING_MAX_PRICE} from './immo-building-criteria.js
 
 // Direct agency catalogues: links verified against the agencies’ public routes.
 export const EXTENDED_BUILDING_SOURCES = [
+  // Additional BRIDGE sources: public catalogue pages only; private off-market stock requires access.
+  {id:'recap-investment-building',name:'RECAP · immeubles de rapport',url:'https://www.re-capital.be/a-vendre',match:/(?:\/bien\/|\/property\/|\/a-vendre\/|\/vente\/|\/detail\/)[^?#]+/i,minPathSegments:2,pages:3},
+  {id:'castimmo-public-building',name:'Castimmo · annonces publiques',url:'https://castimmo.be/',match:/(?:\/bien\/|\/property\/|\/a-vendre\/|\/vente\/|\/detail\/)[^?#]+/i,minPathSegments:2,pages:2},
+  {id:'immoffmarket-public-building',name:'ImmOffMarket · vitrine publique',url:'https://immoffmarket.be/',match:/(?:\/bien\/|\/property\/|\/a-vendre\/|\/vente\/|\/detail\/)[^?#]+/i,minPathSegments:2,pages:2},
+  {id:'rodfolio-public-building',name:'Rodfolio · vitrine publique',url:'https://rodfolio.com/',match:/(?:\/bien\/|\/property\/|\/a-vendre\/|\/vente\/|\/detail\/)[^?#]+/i,minPathSegments:2,pages:2},
+
   // Prestige / publicly visible off-market teasers. Private inventories require agency access.
   {id:'found-baker-brussels-building',name:'Found & Baker · Bruxelles',url:'https://www.found-baker.com/en/brussels',match:/^\/(?:en|fr|nl)\/(?:property|properties|real-estate|for-sale|a-vendre|te-koop)\/[^?#]+/i,minPathSegments:2,pages:3},
   {id:'found-baker-selection-building',name:'Found & Baker · sélection',url:'https://www.found-baker.com/en',match:/^\/(?:en|fr|nl)\/(?:property|properties|real-estate|for-sale|a-vendre|te-koop)\/[^?#]+/i,minPathSegments:2,pages:3},
