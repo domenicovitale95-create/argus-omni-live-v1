@@ -2,87 +2,16 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
-  "ignoreCommand": "node scripts/vercel-ignore-build.cjs",
-  "github": {"autoJobCancelation": true},
-  "redirects": [
-    {"source": "/immo-m2", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-m2.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-opportunities.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-italia.html", "destination": "/immo-italia", "permanent": false},
-    {"source": "/argus-immo", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/argus-immo.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-bridge", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-bridge.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-dossiers", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-dossiers.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-recherche", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-recherche.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-premium", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-premium.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-stars", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-stars.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-option-pro", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-option-pro.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-flip-pro", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-flip-pro.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immobilier", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immobilier.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/strategic-brussels", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/strategic-brussels.html", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-bien", "destination": "/immo-opportunities", "permanent": false},
-    {"source": "/immo-bien.html", "destination": "/immo-opportunities", "permanent": false}
-  ],
+  "crons": [],
   "headers": [
-    {"source": "/", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]},
-    {"source": "/index.html", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]},
-    {"source": "/immo-opportunities", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]},
-    {"source": "/immo-italia", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]},
-    {"source": "/sw.js", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]},
-    {"source": "/app.js", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]},
-    {"source": "/mobile-scan-fix.js", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]},
-    {"source": "/src/providers.js", "headers": [{"key": "Cache-Control", "value": "no-store, max-age=0, must-revalidate"},{"key": "CDN-Cache-Control", "value": "no-store"},{"key": "Vercel-CDN-Cache-Control", "value": "no-store"}]}
-  ],
-  "crons": [
-    {"path": "/api/autonomous-supervisor", "schedule": "23 * * * *"},
-    {"path": "/api/site-self-test", "schedule": "7 */6 * * *"},
-    {"path": "/api/deployment-verifier", "schedule": "17 */6 * * *"},
-    {"path": "/api/historical-recent-backfill", "schedule": "31 2 * * *"},
-    {"path": "/api/streak-intelligence", "schedule": "47 2 * * *"},
-    {"path": "/api/shadow-settlement-cron", "schedule": "23 8 * * *"},
-    {"path": "/api/daily-cron", "schedule": "53 21,22 * * *"},
-    {"path": "/api/fast-cycle", "schedule": "2,32 * * * *"},
-    {"path": "/api/prediction-ledger-cron", "schedule": "12,42 * * * *"},
-    {"path": "/api/autopilot", "schedule": "5 * * * *"},
-    {"path": "/api/training-bets-cron", "schedule": "8 */4 * * *"},
-    {"path": "/api/immo-catalog-refresh-apartment", "schedule": "12 */4 * * *"},
-    {"path": "/api/immo-catalog-refresh-building", "schedule": "42 */6 * * *"},
-    {"path": "/api/immo-italia-refresh", "schedule": "18 5 * * *"}
-  ],
-  "functions": {
-    "api/live.js": {"maxDuration": 60},
-    "api/immo-map-listings.js": {"maxDuration": 120},
-    "api/historical-shard-migrate.js": {"maxDuration": 300},
-    "api/historical-walk-forward.js": {"maxDuration": 300},
-    "api/historical-recent-backfill.js": {"maxDuration": 120},
-    "api/streak-intelligence.js": {"maxDuration": 120},
-    "api/autonomous-supervisor.js": {"maxDuration": 120},
-    "api/fast-cycle.js": {"maxDuration": 180},
-    "api/deployment-verifier.js": {"maxDuration": 60},
-    "api/shadow-settlement-cron.js": {"maxDuration": 60},
-    "api/daily-cron.js": {"maxDuration": 120},
-    "api/autopilot.js": {"maxDuration": 180},
-    "api/training-bets-cron.js": {"maxDuration": 180},
-    "api/prediction-ledger-cron.js": {"maxDuration": 180},
-    "api/player-memory.js": {"maxDuration": 120},
-    "api/tactical-backfill.js": {"maxDuration": 120},
-    "api/immo-discovery-scan.js": {"maxDuration": 300},
-    "api/immo-market-catalog-scan.js": {"maxDuration": 300},
-    "api/immo-catalog-refresh.js": {"maxDuration": 300},
-    "api/immo-catalog-refresh-apartment.js": {"maxDuration": 300},
-    "api/immo-catalog-refresh-building.js": {"maxDuration": 300},
-    "api/immo-italia.js": {"maxDuration": 120},
-    "api/immo-italia-refresh.js": {"maxDuration": 120}
-  }
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ]
 }
