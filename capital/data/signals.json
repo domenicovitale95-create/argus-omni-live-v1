@@ -4080,6 +4080,23 @@
       ],
       "source_date": "2026-11-12",
       "outcomes": {}
+    },
+    {
+      "date": "2026-11-13",
+      "asset_id": "cash_proxy",
+      "asset": "US T-Bills",
+      "signal": "WATCH",
+      "score": 70,
+      "price": 91.53,
+      "conviction": "Medium",
+      "horizon": "Months / Years",
+      "reasoning_summary": [
+        "3-month momentum: -0.0%",
+        "Distance vs 200-day average: +0.0%",
+        "20-day annualised volatility: 1.2%"
+      ],
+      "source_date": "2026-11-13",
+      "outcomes": {}
     }
   ]
 }

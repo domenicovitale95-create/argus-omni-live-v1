@@ -1,6 +1,6 @@
 {
   "asset_id": "europe",
-  "generated_at": "2026-11-13T06:30:15.265116+00:00",
+  "generated_at": "2026-11-13T15:17:08.569680+00:00",
   "frequency": "monthly_close",
   "data": [
     {
@@ -484,8 +484,8 @@
       "price": 87.54
     },
     {
-      "date": "2026-11-12",
-      "price": 88.91
+      "date": "2026-11-13",
+      "price": 88.945
     }
   ]
 }
