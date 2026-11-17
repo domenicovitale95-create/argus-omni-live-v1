@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-17T00:43:55.686765+00:00",
+  "generated_at": "2026-11-17T09:01:32.757517+00:00",
   "data_quality": {
     "fresh_series": 18,
     "total_series": 18,
@@ -17,7 +17,7 @@
   "global_market": {
     "status": "HIGH RISK",
     "score": 50,
-    "trend": "Deteriorating ↓",
+    "trend": "Stable →",
     "regime": "MIXED",
     "regime_confidence": "Medium",
     "components": {
@@ -555,12 +555,12 @@
       "data_type": "OBSERVED"
     },
     "btc": {
-      "price": 64787.64,
-      "date": "2026-11-15",
-      "ret_1d": 3.02,
-      "ret_1m": -18.93,
-      "last_update": "2026-11-15",
-      "delay_days": 2,
+      "price": 64537.93,
+      "date": "2026-11-16",
+      "ret_1d": -0.39,
+      "ret_1m": -19.38,
+      "last_update": "2026-11-16",
+      "delay_days": 1,
       "fresh": true,
       "label": "Bitcoin / USD",
       "unit": "USD",
