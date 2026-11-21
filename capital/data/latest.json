@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-21T00:45:10.286729+00:00",
+  "generated_at": "2026-11-21T06:55:42.555653+00:00",
   "data_quality": {
     "fresh_series": 17,
     "total_series": 18,
@@ -534,12 +534,12 @@
       "data_type": "OBSERVED"
     },
     "btc": {
-      "price": 62017.68,
-      "date": "2026-11-19",
-      "ret_1d": -1.83,
-      "ret_1m": -20.43,
-      "last_update": "2026-11-19",
-      "delay_days": 2,
+      "price": 58830.52,
+      "date": "2026-11-20",
+      "ret_1d": -5.14,
+      "ret_1m": -23.79,
+      "last_update": "2026-11-20",
+      "delay_days": 1,
       "fresh": true,
       "label": "Bitcoin / USD",
       "unit": "USD",
