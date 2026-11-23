@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-22T23:32:53.537026+00:00",
+  "generated_at": "2026-11-23T07:20:29.153063+00:00",
   "data_quality": {
     "fresh_series": 17,
     "total_series": 18,
@@ -104,7 +104,7 @@
         ],
         "entry_approach": "Gradual accumulation is more robust than a single all-in entry when timing uncertainty is meaningful.",
         "invalidation": "Trend deterioration below the long-term average, worsening macro risk, or materially weaker evidence would reduce conviction.",
-        "evidence_quality": "Strong",
+        "evidence_quality": "Moderate",
         "data_date": "2026-11-20"
       }
     ],
@@ -116,7 +116,7 @@
       "label": "US T-Bills",
       "score": 70,
       "status": "WATCH",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     },
     {
       "id": "cash_eur",
@@ -130,63 +130,63 @@
       "label": "US Treasuries 7-10Y",
       "score": 57,
       "status": "NEUTRAL",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     },
     {
       "id": "corp_bonds",
       "label": "Investment Grade Bonds",
       "score": 56,
       "status": "NEUTRAL",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     },
     {
       "id": "europe",
       "label": "European Equities",
       "score": 47,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     },
     {
       "id": "global_equity",
       "label": "Global Equities",
       "score": 45,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     },
     {
       "id": "sp500",
       "label": "S&P 500",
       "score": 44,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     },
     {
       "id": "nasdaq",
       "label": "Nasdaq 100",
       "score": 33,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     },
     {
       "id": "gold",
       "label": "Gold",
       "score": 33,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     },
     {
       "id": "emerging",
       "label": "Emerging Markets",
       "score": 32,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     },
     {
       "id": "semis",
       "label": "Semiconductors",
       "score": 19,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong"
+      "evidence": "Moderate"
     }
   ],
   "market": {
@@ -205,7 +205,7 @@
       "max_drawdown": -33.53,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/ACWI?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Global Equities",
@@ -228,7 +228,7 @@
       "max_drawdown": -34.1,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "S&P 500",
@@ -251,7 +251,7 @@
       "max_drawdown": -35.62,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/QQQ?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Nasdaq 100",
@@ -274,7 +274,7 @@
       "max_drawdown": -41.57,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/VGK?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "European Equities",
@@ -297,7 +297,7 @@
       "max_drawdown": -41.46,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/EEM?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Emerging Markets",
@@ -320,7 +320,7 @@
       "max_drawdown": -45.3,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/SMH?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Semiconductors",
@@ -343,7 +343,7 @@
       "max_drawdown": -34.89,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/GLD?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Gold",
@@ -366,7 +366,7 @@
       "max_drawdown": -27.74,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/IEF?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "US Treasuries 7-10Y",
@@ -389,7 +389,7 @@
       "max_drawdown": -29.37,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/LQD?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Investment Grade Bonds",
@@ -412,7 +412,7 @@
       "max_drawdown": -0.7,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/BIL?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "US T-Bills",
@@ -435,7 +435,7 @@
       "max_drawdown": -37.56,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "Microsoft",
@@ -458,7 +458,7 @@
       "max_drawdown": -66.36,
       "source": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=10y&interval=1d&events=history&includeAdjustedClose=true",
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "data_type": "OBSERVED_PROXY",
       "fresh": true,
       "label": "NVIDIA",
@@ -474,7 +474,7 @@
       "ret_1d": -0.03,
       "ret_1m": -0.08,
       "last_update": "2026-11-19",
-      "delay_days": 3,
+      "delay_days": 4,
       "fresh": true,
       "label": "US 10Y Treasury Yield",
       "unit": "%",
@@ -487,7 +487,7 @@
       "ret_1d": -0.04,
       "ret_1m": -0.03,
       "last_update": "2026-11-19",
-      "delay_days": 3,
+      "delay_days": 4,
       "fresh": true,
       "label": "US 2Y Treasury Yield",
       "unit": "%",
@@ -500,7 +500,7 @@
       "ret_1d": 15.8,
       "ret_1m": 70.5,
       "last_update": "2026-11-19",
-      "delay_days": 3,
+      "delay_days": 4,
       "fresh": true,
       "label": "VIX",
       "unit": "index",
@@ -513,7 +513,7 @@
       "ret_1d": 0.09,
       "ret_1m": 0.53,
       "last_update": "2026-11-13",
-      "delay_days": 9,
+      "delay_days": 10,
       "fresh": false,
       "label": "Broad US Dollar Index",
       "unit": "index",
@@ -526,7 +526,7 @@
       "ret_1d": 0.0,
       "ret_1m": 0.0,
       "last_update": "2026-11-20",
-      "delay_days": 2,
+      "delay_days": 3,
       "fresh": true,
       "label": "ECB Deposit Facility Rate",
       "unit": "%",
@@ -534,11 +534,11 @@
       "data_type": "OBSERVED"
     },
     "btc": {
-      "price": 60071.14,
-      "date": "2026-11-21",
-      "ret_1d": 2.11,
-      "ret_1m": -22.39,
-      "last_update": "2026-11-21",
+      "price": 60991.86,
+      "date": "2026-11-22",
+      "ret_1d": 1.53,
+      "ret_1m": -21.92,
+      "last_update": "2026-11-22",
       "delay_days": 1,
       "fresh": true,
       "label": "Bitcoin / USD",
@@ -551,7 +551,7 @@
     "global_equity": {
       "score": 45,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 27,
@@ -572,7 +572,7 @@
     "sp500": {
       "score": 44,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 28,
@@ -593,7 +593,7 @@
     "nasdaq": {
       "score": 33,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 17,
@@ -614,7 +614,7 @@
     "europe": {
       "score": 47,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 33,
@@ -635,7 +635,7 @@
     "emerging": {
       "score": 32,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 13,
@@ -656,7 +656,7 @@
     "semis": {
       "score": 19,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 0,
@@ -677,7 +677,7 @@
     "gold": {
       "score": 33,
       "status": "EXPENSIVE / RISK HIGH",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 8,
@@ -698,7 +698,7 @@
     "treasuries": {
       "score": 57,
       "status": "NEUTRAL",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 49,
@@ -719,7 +719,7 @@
     "corp_bonds": {
       "score": 56,
       "status": "NEUTRAL",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 46,
@@ -740,7 +740,7 @@
     "cash_proxy": {
       "score": 70,
       "status": "WATCH",
-      "evidence": "Strong",
+      "evidence": "Moderate",
       "coverage": 100,
       "components": {
         "momentum": 50,
